@@ -1,0 +1,756 @@
+<?php
+class user_parterner extends STpl{
+	private $domain;
+	public function __construct(){
+		$domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","domain");
+		$this->domain = $domain_conf->domain;
+		$this->assign('domain', $this->domain);
+        $org=user_organization::subdomain();
+        if(!empty($org)){
+            $this->orgOwner = $org->userId; //机构所有者id 以后会根据域名而列取
+        }else{
+            $this->orgOwner=0;
+        }
+	}	
+	public function pageLoginAjax($inPath){
+		$result=new stdclass;
+		if(empty($_REQUEST['mobile'])){
+			$result->error="手机号码不能为空";
+			$result->field="mobile";
+			return $result;
+		}
+		if(utility_valid::mobile($_REQUEST['mobile'])==false){
+			$result->error="手机号码格式不正确";
+			$result->field="mobile";
+			return $result;
+		}
+		//图片验证-TODO
+		if(SCaptcha::check(strtolower($_REQUEST['verify_code_img']))===false){
+			$result->error="图片验证码错误";
+			$result->field="verify_code_img";
+			return $result;
+		}
+        SCaptcha::del(strtolower($_REQUEST['verify_code_img']));
+		if(empty($_REQUEST['verify_code'])){
+			$result->error="手机验证码不能为空";
+			$result->field="verify_code";
+			return $result;
+		}
+		if(verify_api::verifyMobile($_REQUEST['mobile'],$_REQUEST['verify_code'])==false){
+			$result->error="手机验证码错误";
+			$result->field="verify_code";
+			return $result;
+		}
+		//获取parter_info
+		$parter_login_info = user_api::getParternerLogin();
+		if(empty($parter_login_info['id'])){
+			$result->error="第3方登录错误";
+			return $result;
+		}
+		$parter_info= user_api::getParternerById($parter_login_info['id']);
+		if(empty($parter_info)){
+			$result->error="第3方登录错误";
+			return $result;
+		}
+		//获取uid
+		$uid = user_api::isRegister($_REQUEST['mobile']);
+		if(empty($uid)){
+			$uid = user_api::registerByMobile($parter_info->nickname,$_REQUEST['mobile'],$pwd='',$this->orgOwner);
+		}
+		if(empty($uid)){
+			$result->error="绑定失败-2";
+		}
+		//绑定手机号
+		$ret = user_api::bindParterner($parter_login_info['id'],$uid);
+		if($ret){
+			user_api::loginByUid($uid);
+		}else{
+			$result->error="失败，请重试";
+		}
+		return $result;
+	}
+/*
+	public function pageVerifyCode($inPath){
+		$result=new stdclass;
+		if(empty($_REQUEST['mobile'])){
+			$result->field="mobile";
+			$result->error="手机号码不能为空";
+			return $result;
+		}
+		if(utility_valid::mobile($_REQUEST['mobile'])==false){
+			$result->field="mobile";
+			$result->error="手机号码格式不正确";
+			return $result;
+		}
+		//发送
+		$r = verify_api::sendMobileCode($_REQUEST['mobile'],$ret);
+		if($r!==false){
+			$result->error="验证码已经发送到您的手机";
+			$result->field="verify_code";
+			return $result;
+		}else{
+			$result->error="发送验证码错误,[".$ret->result->msg."]";
+			$result->field="verify_code";
+			return $result;
+		}
+	}
+*/
+	/**
+	 * WEB-209 智慧校第3方登录
+	 * 根据用户名密码等完成自动注册和登录
+	 */
+	public function pageZhihuiXiao($inPath){
+		//1.判断参数
+		if(
+			empty($_REQUEST['mobile']) || 
+			empty($_REQUEST['name']) || 
+			empty($_REQUEST['password']) || 
+			empty($_REQUEST['timestamp']) || 
+			empty($_REQUEST['hash'])
+		){
+			return $this->redirect("/site.main.login?error=-1");
+		}
+		//2.检验参数
+		$hash = $_REQUEST['hash'];
+		unset($_REQUEST['hash']);
+		$name = urldecode($_REQUEST['name']);
+		$hash_check = self::zhihuixiao_passwd($_REQUEST,"www.gn100.com/zhihuixiao");
+		if($hash !=$hash_check){
+			return $this->redirect("/site.main.login?error=-2");
+		}
+		if(utility_valid::mobile($_REQUEST['mobile'])===false){
+			return $this->redirect("/site.main.login?error=-3");
+		}
+		//3.判断用户是否注册
+		user_api::logout();
+		$uid = user_api::isRegister($_REQUEST['mobile']);
+		if(!empty($uid)){
+			//验证密码登录
+			$parter_info = user_api::getParterner(user_const::SOURCE_ZHIHUIXIAO,$_REQUEST['mobile']);
+			if(!empty($parter_info)){
+				//如果是智慧校用户，直接登录
+				user_api::loginByUid($uid,true);
+			}else{
+				//通过密码登录 
+				$islogin = user_api::login($_REQUEST['mobile'],$_REQUEST['password'],$forever=1,$ret);
+				//同步密码
+				if($islogin){
+					user_api::updatePassword($uid,$_REQUEST['password']);
+				}
+			}
+			if(user_api::logined()){
+				if(!empty($_REQUEST['url']) && $_REQUEST['url']!="/site.main.login" && $_REQUEST['url']!="/site.main.register"){
+					return $this->redirect($_REQUEST['url']);
+				}
+				if(!empty(utility_session::get()['login_url'])){
+					$url = utility_session::get()['login_url'];
+					unset(utility_session::get()['login_url']);
+					return $this->redirect($url);
+				}
+				return $this->redirect("/site");
+			}else{
+				return $this->redirect("/site.main.login?error=-4");
+			}
+		}else{
+			$uid = user_api::registerByMobile($name,$_REQUEST['mobile'],$_REQUEST['password'],$this->orgOwner);
+		}
+		if(empty($uid)){
+			return $this->redirect("/site.main.login?error=-5");
+		}
+		//4.如果是新用户，注册
+		//5.如果已经注册，判断用户来源是不是智慧校的
+		//6.是的话自动登录，不是的话，跳到我们的登录页
+		$parter_info = user_api::getParterner(user_const::SOURCE_ZHIHUIXIAO,$_REQUEST['mobile']);
+
+		//新来的用户,注册parterner
+		//或者已经登录的用户，但是parter.uid为0的时候，重新绑定
+		if( empty($parter_info->parterner_id) ){
+			$ret_set = user_api::setParterner($uid,
+				$name,
+				user_const::SOURCE_ZHIHUIXIAO,
+				$_REQUEST['mobile'],
+				SJson::encode($_REQUEST),
+				$_REQUEST['password'],
+				""
+			);
+			if(empty($ret_set->parterner_id)){
+				return $this->redirect("/site.main.login?error=-6");
+			}
+			//绑定手机号
+			$ret = user_api::bindParterner($ret_set->parterner_id,$uid);
+			if($ret){
+				user_api::loginByUid($uid);
+				return $this->redirect("/site");
+			}else{
+				return $this->redirect("/site.main.login?error=-7");
+			}
+		}else{
+			user_api::loginByUid($uid);
+			if(user_api::logined()){
+				if(!empty($_REQUEST['url']) && $_REQUEST['url']!="/site.main.login" && $_REQUEST['url']!="/site.main.register"){
+					return $this->redirect($_REQUEST['url']);
+				}
+				if(!empty(utility_session::get()['login_url'])){
+					$url = utility_session::get()['login_url'];
+					unset(utility_session::get()['login_url']);
+					return $this->redirect($url);
+				}
+				return $this->redirect("/site");
+			}else{
+				return $this->redirect("/site/main/login?error=-8");
+			}
+		}
+
+	}
+	/**
+	 * WEB-2924 智慧校第3方登录
+	 * 根据用户名密码等完成自动注册和登录
+	 */
+	public function pageYunxiaoyuan($inPath){
+		//1.判断参数
+		if(
+			empty($_REQUEST['mobile']) || 
+			empty($_REQUEST['name']) || 
+			empty($_REQUEST['password']) || 
+			empty($_REQUEST['timestamp']) || 
+			empty($_REQUEST['hash'])
+		){
+			return $this->redirect("/site.main.login?error=-1");
+		}
+		//2.检验参数
+		$hash = $_REQUEST['hash'];
+		unset($_REQUEST['hash']);
+		$name = urldecode($_REQUEST['name']);
+		$hash_check = self::zhihuixiao_passwd($_REQUEST,"www.gn100.com/yunxiaoyuan");
+		if($hash !=$hash_check){
+			return $this->redirect("/site.main.login?error=-2");
+		}
+		if(utility_valid::mobile($_REQUEST['mobile'])===false){
+			return $this->redirect("/site.main.login?error=-3");
+		}
+		//3.判断用户是否注册
+		user_api::logout();
+		$uid = user_api::isRegister($_REQUEST['mobile']);
+		if(!empty($uid)){
+			//验证密码登录
+			$parter_info = user_api::getParterner(user_const::SOURCE_YUNXIAOYUAN,$_REQUEST['mobile']);
+			if(!empty($parter_info)){
+				//如果是云校园用户，直接登录
+				user_api::loginByUid($uid,true);
+			}/*else{
+				//通过密码登录 
+				$islogin = user_api::login($_REQUEST['mobile'],$_REQUEST['password'],$forever=1,$ret);
+				//同步密码
+				if($islogin){
+					user_api::updatePassword($uid,$_REQUEST['password']);
+				}
+			}*/
+			if(user_api::logined()){
+				if(!empty($_REQUEST['url']) && $_REQUEST['url']!="/site.main.login" && $_REQUEST['url']!="/site.main.register"){
+					return $this->redirect($_REQUEST['url']);
+				}
+				if(!empty(utility_session::get()['login_url'])){
+					$url = utility_session::get()['login_url'];
+					unset(utility_session::get()['login_url']);
+					return $this->redirect($url);
+				}
+				return $this->redirect("/site");
+			}else{
+				return $this->redirect("/site.main.login?error=-4");
+			}
+		}else{
+            $uid = user_api::registerByMobile($name,$_REQUEST['mobile'],$_REQUEST['password'],$this->orgOwner);
+		}
+		if(empty($uid)){
+			return $this->redirect("/site.main.login?error=-5");
+		}
+		//4.如果是新用户，注册
+		//5.如果已经注册，判断用户来源是不是智慧校的
+		//6.是的话自动登录，不是的话，跳到我们的登录页
+		$parter_info = user_api::getParterner(user_const::SOURCE_YUNXIAOYUAN,$_REQUEST['mobile']);
+
+		//新来的用户,注册parterner
+		//或者已经登录的用户，但是parter.uid为0的时候，重新绑定
+		if( empty($parter_info->parterner_id) ){
+			$ret_set = user_api::setParterner($uid,
+				$name,
+				user_const::SOURCE_YUNXIAOYUAN,
+				$_REQUEST['mobile'],
+				SJson::encode($_REQUEST),
+				$_REQUEST['password'],
+				""
+			);
+			if(empty($ret_set->parterner_id)){
+				return $this->redirect("/site.main.login?error=-6");
+			}
+			//绑定手机号
+			$ret = user_api::bindParterner($ret_set->parterner_id,$uid);
+			if($ret){
+				user_api::loginByUid($uid);
+				return $this->redirect("/site");
+			}else{
+				return $this->redirect("/site.main.login?error=-7");
+			}
+		}else{
+			user_api::loginByUid($uid);
+			if(user_api::logined()){
+				if(!empty($_REQUEST['url']) && $_REQUEST['url']!="/site.main.login" && $_REQUEST['url']!="/site.main.register"){
+					return $this->redirect($_REQUEST['url']);
+				}
+				if(!empty(utility_session::get()['login_url'])){
+					$url = utility_session::get()['login_url'];
+					unset(utility_session::get()['login_url']);
+					return $this->redirect($url);
+				}
+				return $this->redirect("/site");
+			}else{
+				return $this->redirect("/site/main/login?error=-8");
+			}
+		}
+
+	}
+	public function pageChangZheng($inPath){
+		//1.判断参数
+		if(
+			empty($_REQUEST['mobile']) || 
+			empty($_REQUEST['name']) || 
+			empty($_REQUEST['password']) || 
+			empty($_REQUEST['timestamp']) || 
+			empty($_REQUEST['hash'])
+		){
+			return $this->redirect("/site.main.login?error=-1");
+		}
+		//2.检验参数
+		$hash = $_REQUEST['hash'];
+		unset($_REQUEST['hash']);
+		$name = urldecode($_REQUEST['name']);
+		$hash_check = self::zhihuixiao_passwd($_REQUEST,"www.gn100.com/changzhengedu");
+		if($hash !=$hash_check){
+			return $this->redirect("/site.main.login?error=-2");
+		}
+		if(utility_valid::mobile($_REQUEST['mobile'])===false){
+			return $this->redirect("/site.main.login?error=-3");
+		}
+		//3.判断用户是否注册
+		user_api::logout();
+		$uid = user_api::isRegister($_REQUEST['mobile']);
+		if(!empty($uid)){
+			//验证密码登录
+			$parter_info = user_api::getParterner(user_const::SOURCE_CHANGZHENG,$_REQUEST['mobile']);
+			if(!empty($parter_info)){
+				//如果是云校园用户，直接登录
+				user_api::loginByUid($uid,true);
+				user_api::updatePassword($uid,$_REQUEST['password']);
+			}else{
+				//通过密码登录 
+				$islogin = user_api::login($_REQUEST['mobile'],$_REQUEST['password'],$forever=1,$ret);
+				//同步密码
+				//if($islogin){
+				//	user_api::updatePassword($uid,$_REQUEST['password']);
+				//}
+			}
+			if(user_api::logined()){
+				if(!empty($_REQUEST['url']) && $_REQUEST['url']!="/site.main.login" && $_REQUEST['url']!="/site.main.register"){
+					return $this->redirect($_REQUEST['url']);
+				}
+				if(!empty(utility_session::get()['login_url'])){
+					$url = utility_session::get()['login_url'];
+					unset(utility_session::get()['login_url']);
+					return $this->redirect($url);
+				}
+				return $this->redirect("/site");
+			}else{
+				return $this->redirect("/site.main.login?error=-4");
+			}
+		}else{
+			$uid = user_api::registerByMobile($name,$_REQUEST['mobile'],$_REQUEST['password'],$this->orgOwner);
+		}
+		if(empty($uid)){
+			return $this->redirect("/site.main.login?error=-5");
+		}
+		//4.如果是新用户，注册
+		//5.如果已经注册，判断用户来源是不是智慧校的
+		//6.是的话自动登录，不是的话，跳到我们的登录页
+		$parter_info = user_api::getParterner(user_const::SOURCE_CHANGZHENG,$_REQUEST['mobile']);
+
+		//新来的用户,注册parterner
+		//或者已经登录的用户，但是parter.uid为0的时候，重新绑定
+		if( empty($parter_info->parterner_id) ){
+			$ret_set = user_api::setParterner($uid,
+				$name,
+				user_const::SOURCE_CHANGZHENG,
+				$_REQUEST['mobile'],
+				SJson::encode($_REQUEST),
+				$_REQUEST['password'],
+				""
+			);
+			if(empty($ret_set->parterner_id)){
+				return $this->redirect("/site.main.login?error=-6");
+			}
+			//绑定手机号
+			$ret = user_api::bindParterner($ret_set->parterner_id,$uid);
+			if($ret){
+				user_api::loginByUid($uid);
+				return $this->redirect("/site");
+			}else{
+				return $this->redirect("/site.main.login?error=-7");
+			}
+		}else{
+			user_api::loginByUid($uid);
+			if(user_api::logined()){
+				if(!empty($_REQUEST['url']) && $_REQUEST['url']!="/site.main.login" && $_REQUEST['url']!="/site.main.register"){
+					return $this->redirect($_REQUEST['url']);
+				}
+				if(!empty(utility_session::get()['login_url'])){
+					$url = utility_session::get()['login_url'];
+					unset(utility_session::get()['login_url']);
+					return $this->redirect($url);
+				}
+				return $this->redirect("/site");
+			}else{
+				return $this->redirect("/site/main/login?error=-8");
+			}
+		}
+
+	}
+	private function zhihuixiao_passwd($params,$key){
+		ksort($params);
+		$hash_c = "";
+		foreach($params as $k=>$v){
+			$hash_c.= $k.":".$v.";";
+		}
+		return md5($hash_c.$key);
+
+	}
+	/**
+	 * 新浪登录
+	 */
+	public function pageSina($inPath){
+		require_once(ROOT_LIBS."/weibo/config.php");
+		define( "WB_CALLBACK_URL" , utility_services::url("parterner_callbak",'/user/parterner/sinaCallback' ));
+		require_once(ROOT_LIBS."/weibo/saetv2.ex.class.php");
+		$o = new SaeTOAuthV2( WB_AKEY , WB_SKEY );
+		$code_url = $o->getAuthorizeURL( WB_CALLBACK_URL );
+		$this->redirect($code_url);
+	}
+	public function pageSinaCallback($inPath){
+		require_once(ROOT_LIBS."/weibo/config.php");
+		define( "WB_CALLBACK_URL" , utility_services::url("parterner_callbak",'/user/parterner/sinaCallback' ));
+		require_once(ROOT_LIBS."/weibo/saetv2.ex.class.php");
+		$o = new SaeTOAuthV2( WB_AKEY , WB_SKEY );
+		if (isset($_REQUEST['code'])) {
+			$keys = array();
+			$keys['code'] = $_REQUEST['code'];
+			$keys['redirect_uri'] = WB_CALLBACK_URL;
+			try {
+				$token = $o->getAccessToken( 'code', $keys ) ;
+				if(!empty($token['access_token'])){
+					$c = new SaeTClientV2( WB_AKEY , WB_SKEY , $token['access_token'] );
+					$uid = $token['uid'];
+					//获取个人资料
+					$user_message = $c->show_user_by_id( $uid);//根据ID获取用户等基本信息
+					if(!empty($user_message['id'])){
+						$parter_info = user_api::getParterner(user_const::SOURCE_WEIBO,$user_message['id']);
+
+						//新来的用户,注册parterner
+						//或者已经登录的用户，但是parter.uid为0的时候，重新绑定
+						if(
+							empty($parter_info->parterner_id) || 
+							(user_api::getLoginUid()>0 && $parter_info->uid!=user_api::getLoginUid())
+						){
+							$ret_set = user_api::setParterner(user_api::getLoginUid(),
+								$user_message['name'],
+								user_const::SOURCE_WEIBO,
+								$user_message['id'],
+								SJson::encode($user_message),
+								$token['access_token'],
+								$user_message['profile_image_url']
+							);
+							if(empty($ret_set->parterner_id)){
+								die("接口错误");
+							}
+							user_api::parternerLogin($ret_set->parterner_id,
+								$user_message['name'],
+								$user_message['profile_image_url']
+							);
+						}else{
+							user_api::parternerLogin($parter_info->parterner_id,
+								$user_message['name'],
+								$user_message['profile_image_url']
+							);
+						}
+					}
+				}
+			} catch (OAuthException $e) {
+			}
+		}
+		return $this->render("user/parterner.ok.html");
+	}
+	/**
+	 * QQ登录
+	 */
+	public function pageQQ($inPath){
+		$appid=101173081;
+		$scope="get_user_info,add_share";
+		$callback=utility_services::url("parterner_callbak","user/parterner/qqCallback");
+		utility_session::get()['qq_state'] = md5(uniqid(rand(), TRUE)); //CSRF protection
+		$code_url= "https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=" . $appid . "&redirect_uri=" . urlencode($callback) . "&state=" . utility_session::get()['qq_state'] . "&scope=".$scope;
+        utility_session::get()['url']=$_SERVER['HTTP_HOST'];
+		if(!empty($_SERVER['HTTP_REFERER'])){
+			utility_session::get()['referer']=$_SERVER['HTTP_REFERER'];
+		}
+		if(!empty($_REQUEST['from'])){
+			utility_session::get()['referer']=$_REQUEST['from'];
+		}
+		$this->redirect($code_url);
+	}
+	public function pageQQCallback($inPath){
+		if($_REQUEST['state'] == utility_session::get()['qq_state']){
+			$appid=101173081;
+			$appkey="6ffc145bb0f739663ce470106db5953a";
+			$callback=utility_services::url("parterner_callbak","/user/parterner/qqCallback");
+			$token_url = "https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&" . "client_id=" . $appid. "&redirect_uri=" . urlencode($callback) . "&client_secret=" . $appkey. "&code=" . $_REQUEST["code"]."&format=json";
+			$result = SHttp::get($token_url);
+			parse_str($result,$ret);
+			//获取open_id
+			//获取用户资料
+			if(!empty($ret['access_token'])){
+				$graph_url = "https://graph.qq.com/oauth2.0/me?access_token=" . $ret['access_token']."&format=json";
+				$str  = SHttp::get( $graph_url, $params=array(), $cookies=array(), $returnHeader=false, $timeout=2);
+				if (strpos($str, "callback") !== false)
+				{
+					$lpos = strpos($str, "(");
+					$rpos = strrpos($str, ")");
+					$str  = substr($str, $lpos + 1, $rpos - $lpos -1);
+				}
+
+				$open_info = SJson::decode($str);
+				if(!empty($open_info->openid)){
+					$get_user_info = "https://graph.qq.com/user/get_user_info?"
+						. "access_token=" . $ret['access_token']
+						. "&oauth_consumer_key=" . $appid
+						. "&openid=" . $open_info->openid
+						. "&format=json";
+
+					$info = file_get_contents($get_user_info);
+					$arr = SJson::decode($info);
+					if(!empty($arr->nickname)){
+
+						$parter_info = user_api::getParterner(user_const::SOURCE_QQ,$open_info->openid);
+
+						//新来的用户,注册parterner
+						//或者已经登录的用户，但是parter.uid为0的时候，重新绑定
+						if(!empty($parter_info->parterner_id) && !empty($parter_info->uid)){
+							//这里应该直接登录
+							user_api::parternerLogin($parter_info->parterner_id,
+								$arr->nickname,
+								$arr->figureurl_qq_2
+							);
+							if(user_api::loginByUid($parter_info->uid)){
+							}
+						}else{
+							$ret_set = user_api::setParterner(user_api::getLoginUid(),
+								$arr->nickname,
+								user_const::SOURCE_QQ,
+								$open_info->openid,
+								SJson::encode($arr),
+								$ret['access_token'],
+								$arr->figureurl_qq_2
+							);
+							if(empty($ret_set->parterner_id)){
+								die("接口错误");
+							}
+							user_api::parternerLogin($ret_set->parterner_id,
+								$arr->nickname,
+								$arr->figureurl_qq_2
+							);
+							//需要绑定
+							$url = "/";
+							if(!empty(utility_session::get()['url'])){
+								$url = '//'.utility_session::get()['url']."/user.main.login.parterner";
+							}
+							if(!empty(utility_session::get()['referer'])){
+								utility_session::get()['login_url'] = utility_session::get()['referer'];
+							}
+							$this->assign('url',$url);
+							return $this->render("user/parterner.ok.html");
+						}
+					}
+				}
+			}
+		}
+        $url='';
+        if(!empty(utility_session::get()['url'])){
+            $url='//'.utility_session::get()['url'];
+        }
+        if(!empty(utility_session::get()['referer'])){
+            $url=utility_session::get()['referer'];
+        }else{
+			$url='/parterner';
+		}
+        $this->assign('url',$url);
+		return $this->render("user/parterner.ok.html");
+	}
+	public function pageAlipay($inPath){
+		require_once(ROOT_LIBS."/alipay/alipay.config.php");
+		require_once(ROOT_LIBS."/alipay/lib/alipay_submit.class.php");
+		//目标服务地址
+		$target_service = "user.auth.quick.login";
+		//必填
+		//必填，页面跳转同步通知页面路径
+		$return_url = utility_services::url("parterner_callbak","/user/parterner/alipayCallback");
+		//需http://格式的完整路径，不允许加?id=123这类自定义参数
+		//防钓鱼时间戳
+		$anti_phishing_key = time();
+		//若要使用请调用类文件submit中的query_timestamp函数
+		//客户端的IP地址
+		$exter_invoke_ip = "115.29.137.244";
+		//非局域网的外网IP地址，如：221.0.0.1
+		$parameter = array(
+			"service" => "alipay.auth.authorize",
+			"partner" => trim($alipay_config['partner']),
+			"target_service"	=> $target_service,
+			"return_url"	=> $return_url,
+			"anti_phishing_key"	=> $anti_phishing_key,
+			"exter_invoke_ip"	=> $exter_invoke_ip,
+			"_input_charset"	=> trim(strtolower($alipay_config['input_charset']))
+		);
+		//建立请求
+		$alipaySubmit = new AlipaySubmit($alipay_config);
+		$url = $alipaySubmit->alipay_gateway_new. $alipaySubmit->buildRequestParaToString($parameter);
+		$this->redirect($url);
+	}
+	public function pageAlipayCallback($inPath){
+		require_once(ROOT_LIBS."/alipay/alipay.config.php");
+		require_once(ROOT_LIBS."/alipay/lib/alipay_notify.class.php");
+		$alipayNotify = new AlipayNotify($alipay_config);
+		$verify_result = $alipayNotify->verifyReturn();
+		if($verify_result) {//验证成功
+			$parter_info = user_api::getParterner(user_const::SOURCE_ALIPAY,$_GET['user_id']);
+
+			//新来的用户,注册parterner
+			//或者已经登录的用户，但是parter.uid为0的时候，重新绑定
+			if(
+				empty($parter_info->parterner_id) || 
+				(user_api::getLoginUid()>0 && $parter_info->uid!=user_api::getLoginUid())
+			){
+				$ret_set = user_api::setParterner(user_api::getLoginUid(),
+					$_GET['real_name'],
+					user_const::SOURCE_ALIPAY,
+					$_GET['user_id'],
+					SJson::encode($_GET),
+					$_GET['token'],
+					""
+				);
+				if(empty($ret_set->parterner_id)){
+					die("接口错误");
+				}
+				user_api::parternerLogin($ret_set->parterner_id,
+					$_GET['real_name'],
+					""
+				);
+			}else{
+				user_api::parternerLogin($parter_info->parterner_id,
+					$_GET['real_name'],
+					""
+				);
+			}
+		}
+		return $this->render("user/parterner.ok.html");
+	}
+	//这是微信网页扫码登录及回调
+	public function pageWeixin($inPath){
+		utility_session::get()['weixin_state'] = $state = md5(uniqid(rand(), TRUE)); //CSRF protection
+        utility_session::get()['url']=$_SERVER['HTTP_HOST'];
+		$url = "https://open.weixin.qq.com/connect/qrconnect?appid=wx079b98eef983e832&redirect_uri=".urlencode("https://www.".$this->domain."/user.parterner.weixinCallback")."&response_type=code&scope=snsapi_login&state=$state#wechat_redirect";
+        utility_session::get()['url']=$_SERVER['HTTP_HOST'];
+		if(!empty($_SERVER['HTTP_REFERER'])){
+			utility_session::get()['referer']=$_SERVER['HTTP_REFERER'];
+		}
+		if(!empty($_REQUEST['from'])){
+			utility_session::get()['referer']=$_REQUEST['from'];
+		}
+		$this->redirect($url);
+	}
+	public function pageWeixinCallback($inPath){
+		if($_REQUEST['state']!=utility_session::get()['weixin_state'] || empty($_REQUEST['code'])){
+			die("ERROR!@");
+		}
+		$url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx079b98eef983e832&secret=3325f5ca027fdf94a5b53314ef358d08&code={$_REQUEST['code']}&grant_type=authorization_code";
+		$ct = SHttp::get($url);
+		$ct = SJson::decode($ct);
+		if(!empty($ct->access_token) && !empty($ct->openid)){
+			$url = "https://api.weixin.qq.com/sns/userinfo?access_token={$ct->access_token}&openid={$ct->openid}";
+			$user_info = SJson::decode(SHttp::get($url));
+			$parter_info = user_api::getParterner(user_const::SOURCE_WEIXIN,$user_info->unionid);
+
+			//新来的用户,注册parterner
+			//或者已经登录的用户，但是parter.uid为0的时候，重新绑定
+			if(!empty($parter_info->parterner_id) && !empty($parter_info->uid)){
+				/**
+				 * 如果信息有变化，更新parter_info，因为这个只涉及到登录，所以完全不用修改uinfo
+				 * 不然有可能网页登录后，在微信App里已经登录的情况下会支付失败
+				 * 2种情况下登录的的openid不一样，只有App里的openid才可以能过js调用微信直接支付，所以，下面代码必须注释
+				 * http://jira.gn100.com/browse/WEB-1942
+				 */
+				/**
+				if($parter_info->parterner_uinfo != SJson::encode($user_info)){
+					$ret_set = user_api::setParterner($parter_info->uid,
+						$user_info->nickname,
+						user_const::SOURCE_WEIXIN,
+						$user_info->unionid,
+						SJson::encode($user_info),
+						$ct->access_token,
+						$user_info->headimgurl
+					);
+				}
+				 */
+				user_api::parternerLogin($parter_info->parterner_id,
+					$user_info->nickname,
+					$user_info->headimgurl
+				);
+				//这里应该直接登录
+				if(user_api::loginByUid($parter_info->uid)){
+				}
+			}else{
+				$ret_set = user_api::setParterner(user_api::getLoginUid(),
+					$user_info->nickname,
+					user_const::SOURCE_WEIXIN,
+					$user_info->unionid,
+					SJson::encode($user_info),
+					$ct->access_token,
+					$user_info->headimgurl
+				);
+				if(empty($ret_set->parterner_id)){
+					die("接口错误");
+				}
+				user_api::parternerLogin($ret_set->parterner_id,
+					$user_info->nickname,
+					$user_info->headimgurl
+				);
+				//需要绑定
+				$url = "/";
+				if(!empty(utility_session::get()['url'])){
+					$url = '//'.utility_session::get()['url']."/user.main.login.parterner";
+				}
+				if(!empty(utility_session::get()['referer'])){
+					utility_session::get()['login_url'] = utility_session::get()['referer'];
+				}
+				$this->assign('url',$url);
+				return $this->render("user/parterner.ok.html");
+			}
+		}
+        $url='';
+        if(!empty(utility_session::get()['url'])){
+            $url='//'.utility_session::get()['url'];
+        }
+        if(!empty(utility_session::get()['referer'])){
+            $url=utility_session::get()['referer'];
+        }else{
+			$url='/parterner';
+		}
+        $this->assign('url',$url);
+		return $this->render("user/parterner.ok.html");
+	}
+}
+

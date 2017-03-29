@@ -1,0 +1,11 @@
+<?php
+
+class common_api
+{
+    public static function getIdStr($param)
+    {
+        return utility_services::call('/common/list/getIdStr', $param);
+    }
+
+}
+

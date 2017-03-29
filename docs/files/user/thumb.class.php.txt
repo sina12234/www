@@ -1,0 +1,94 @@
+<?php
+/**
+ * 用户头像生成类
+ */
+class user_thumb{
+	public static function genByFile($filename){
+		//生成3种大小的文件 128*128 64*64 24*24
+		$thumbnail = new SThumbnail($filename, 100); 
+		$thumbnail->setMaxSize(128, 128);
+		$filename_128 = utility_file::tempname("thumb");
+		if($thumbnail->genFile($filename_128)===false){
+			return false;
+		};
+		$thumbnail = new SThumbnail($filename, 100); 
+		$thumbnail->setMaxSize(64, 64);
+		$filename_64 = utility_file::tempname("thumb");;
+		if($thumbnail->genFile($filename_64)===false){
+			return false;
+		};
+		$thumbnail = new SThumbnail($filename, 100); 
+		$thumbnail->setMaxSize(24, 24);
+		$filename_24 = utility_file::tempname("thumb");
+		if($thumbnail->genFile($filename_24)===false){
+			return false;
+		};
+		//上传3个文件
+		$ret = array("large"=>"","medium"=>"","small"=>"");
+		$file = utility_file::instance();
+		$r1 = $file->upload($filename_128,user_api::getLoginUid(),"image");
+		if(!empty($r1)){
+			$ret['large']=$r1->fid;
+		}
+		$r1 = $file->upload($filename_64,user_api::getLoginUid(),"image");
+		if(!empty($r1)){
+			$ret['medium']=$r1->fid;
+		}
+		$r1 = $file->upload($filename_24,user_api::getLoginUid(),"image");
+		if(!empty($r1)){
+			$ret['small']=$r1->fid;
+		}
+		@unlink($filename_24);
+		@unlink($filename_64);
+		@unlink($filename_128);
+		return $ret;
+	}
+	public static function genByFileLOGO($filename){
+		//生成3种大小的文件 128*128 64*64 24*24
+		$thumbnail = new SThumbnail($filename, 100); 
+		$thumbnail->setMaxSize(129, 48);
+		$filename_128 = utility_file::tempname("thumb");
+		if($thumbnail->genFile($filename_128)===false){
+			return false;
+		};
+		$thumbnail = new SThumbnail($filename, 100); 
+		$thumbnail->setMaxSize(129, 48);
+		$filename_64 = utility_file::tempname("thumb");
+		if($thumbnail->genFile($filename_64)===false){
+			return false;
+		};
+		$thumbnail = new SThumbnail($filename, 100); 
+		$thumbnail->setMaxSize(129, 48);
+		$filename_24 = utility_file::tempname("thumb");
+		if($thumbnail->genFile($filename_24)===false){
+			return false;
+		};
+		//上传3个文件
+		$ret = array("large"=>"","medium"=>"","small"=>"");
+		$file = utility_file::instance();
+		$r1 = $file->upload($filename_128,user_api::getLoginUid(),"image");
+		if(!empty($r1)){
+			$ret['large']=$r1->fid;
+		}
+		$r1 = $file->upload($filename_64,user_api::getLoginUid(),"image");
+		if(!empty($r1)){
+			$ret['medium']=$r1->fid;
+		}
+		$r1 = $file->upload($filename_24,user_api::getLoginUid(),"image");
+		if(!empty($r1)){
+			$ret['small']=$r1->fid;
+		}
+		@unlink($filename_24);
+		@unlink($filename_64);
+		@unlink($filename_128);
+		return $ret;
+	}
+	public static function genByUrl($url){
+		$data=SHttp::get( $url, $params=array(), $cookies=array(), $returnHeader=false, $timeout=2);
+		if(empty($data))return false;
+		$filename = utility_file::tempname("thumb");;
+		file_put_contents($filename,$data);
+		return self::genByFile($filename);
+	}
+}
+

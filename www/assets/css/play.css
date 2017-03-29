@@ -1,0 +1,75 @@
+		.title{margin:22px 0 22px 0 ;}
+		.title p{color: #666666;font-weight: normal; }
+		.title p b{color: #333333; font-weight: normal;}
+		.play-count{ max-width: 1000px; height:575px;}
+		.play-count .play-left{float: left; background: #0f0;width: 730px;height: 410px; margin-right: 10px; background: url(../images/playbg.png)no-repeat; position: relative;}
+		.play-count .play-left .control{ position: absolute; right:0px; bottom: 11px;background:url(../images/playbj.png) repeat-x;}
+		.play-count .play-left .control .yl{ float: left; margin-left:20px; cursor: pointer;}
+		.play-count .play-left .stop{position: absolute;bottom: 0px; cursor: pointer;}
+		.play-count .play-left .playthecher{position: absolute;right: 10px; top:10px; cursor: pointer;}
+		.play-count .play-right{height: 565px;width:260px; float: right;}
+		.play-count .play-right .message{ border:1px solid #ccc;height: 128px;width: 260px; background: #fff;}
+		.play-count .play-right .message .mes span{font-size: 14px; color: #666666;}
+		.play-count .play-right .message .mes{height: 30px; line-height: 30px; border-bottom:1px dashed #ccc;}
+		.play-count .play-left1 .message .mes{height: 30px; line-height: 30px; border-bottom:1px dashed #ccc;}
+		.play-count .play-left1 .message{ border:1px solid #ccc;height: 128px;width: 260px; background: #fff;}
+		.play-count .play-left1 .message .mes{height: 30px; line-height: 30px; border-bottom:1px dashed #ccc;}
+		.count{ background: #F7F7F7;}
+
+		.dalong{height: 537px;}
+		.dalong .daleft{float: left;width: 730px; margin-right: 10px; margin-top: -155px;}
+		.dalong .daleft .message{border:1px solid #ccc; width: 246px;height: 144px; background: #fff; float: left;}
+		.dalong .daleft .message .mes{height: 30px;line-height: 30px; border-bottom:1px dashed #ccc;}
+		.dalong .daleft .message .playtou span img{ margin-top: 9px; margin-left: 15px; float: left; margin-right: 20px;}
+		.dalong .daleft .message .mee{ padding-top: 20px; line-height: 20px;}
+		.dalong .daleft .message .mee .lan { width: 70px; height: 20px; background: #30ABD8; color: #fff; border-radius: 5px; float: left;text-align: center; margin-left: -5px; margin-top: 5px;}
+
+		.dalong .daleft .message .mee{ padding-top: 20px; line-height: 20px;}
+		.dalong .daleft .message .mee .lan { width: 80px; height: 30px; background:#FFA81E; color: #fff; border-radius: 5px; float: left;text-align: center; margin-left: -5px; margin-top: 5px; line-height: 30px; cursor: pointer;}
+		.dalong .daleft .message .mee .lan span img{ margin-top: 10px; margin-right: 8px;}
+		.dalong .daleft .message .mee .lan .tutu span { float: left; width: 80px; height:30px; background: #EDEDED; border-radius: 5px; color: #000;}
+		.dalong .daleft .message .mee .lan .tutu {display: none;}
+
+		.dalong .daright{float:right;margin-right: 7px;}
+		.dalong .daright .message{border:1px solid #ccc; width: 260px;height: 144px; background: #fff; float: left; margin-bottom: 10px;}
+		.dalong .daright .message .mes{height: 30px;line-height: 30px; border-bottom:1px dashed #ccc;}
+		.dalong .daright .message .playtou span img{ masnsiconsrgin-top: 9px; margin-left: 15px; float: left; margin-right: 20px;}
+		.dalong .daright .message .mee{ padding-top: 20px; line-height: 20px;}
+		.dalong .daright .message .mee .lan { width: 80px; height: 30px; background:#FFA81E; color: #fff; border-radius: 5px; float: left;text-align: center; margin-left: -5px; margin-top: 5px; line-height: 30px; cursor: pointer;}
+		.dalong .daright .message .mee .lan span img{ margin-top: 10px; margin-right: 8px;}
+		.dalong .daright .message .mee .lan .tutu span { float: left; width: 80px; height:30px; background: #EDEDED; border-radius: 5px; color: #000;}
+		.dalong .daright .message .mee .lan .tutu {display: none;}
+		.student-mes .teta li{ float: left;}
+		.student-mes .teta li div img{ border-radius: 20px; margin: 10px 0 0 6px;width: 40px; height: 40px;}
+
+
+
+		/*.dialog .bg1{width:100%;height:100%;position:fixed;left:0;top:0;z-index:1001;background:#000;opacity: 0.7;}
+		.dialog .content1{width: 520px;height: 325px;background: #fff;z-index: 1002;position: absolute; top:0%;margin-left:400px;margin-top: 200px;border-radius: 5px;}
+		.dialog .content1 .cont-top{height: 45px; background:#F6F6F6;border-radius: 5px;}
+		.dialog .content1 .cont-top p{ float: right; font-size: 28px;padding-top: 10px;padding-right: 10px; cursor: pointer;}
+		.cont-left .snsicons a.snsi, b.snsi{display:inline-block; background:url(/assets/images/login_icon.png) no-repeat;}
+		.cont-left .snsicons li{width: 50px;height: 50px;}
+		.cont-left .snsicons h1{font-size:16px;}
+		.cont-left .snsicons a.si_weixin, b.si_weixin{background-position:0 0px;}
+		.cont-left .snsicons a.si_weibo, b.si_weibo{background-position:0 -60px;}
+		.cont-left .snsicons a.si_qq, b.si_qq{background-position:0 -120px;}
+		.cont-left .snsicons a.si_taobao, b.si_taobao{background-position:0 -180px;}*/
+
+		.bg, .bg2, .bg3{width:100%;height:100%;position:fixed;left:0;top:0;z-index:1001;background:#000;opacity: 0.7; display: none;}
+		.dialog .box1, .dialog .box2, .dialog .box3{width:100%;height:100%;position:absolute;top:0px;left:0px;z-index:1001;display: none;}
+
+		.bg, .bg2, .bg3, .bg4, .bg5{width:100%;height:100%;position:fixed;left:0;top:0;z-index:1001;background:#000;opacity: 0.7; display: none;}
+		.dialog .box1, .dialog .box2, .dialog .box3, .dialog .box4, .dialog .box5{width:100%;height:100%;position:absolute;top:0px;left:0px;z-index:1001;display: none;}
+
+		
+		.content{border-radius:5px;background: #fff; top: 20%; margin:0 auto; z-index:1002;margin-top:200px;}
+		.content .d-tittle{border-radius:5px;height: 45px;background:#f6f6f6;}
+		.content .d-tittle span{float: right;font-size: 30px;margin-right: 10px; cursor: pointer;}
+		.content .d-img{margin: 20px 180px;}
+		.content .d-matter{margin:40px auto 0 auto;padding-right:0;}
+		.content .d-matter p{font-size: 16px;}
+		.content .d-but{margin:14px 0px 12px 80px;}
+		/*.content .d-but input{height: 45px;background: #FFA81E;border:none;border-radius: 5px;color: #fff;}*/
+		.diaw_1{max-width:450px;min-height: 230px;}
+

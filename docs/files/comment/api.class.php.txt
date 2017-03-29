@@ -1,0 +1,370 @@
+<?php
+
+class comment_api
+{
+    public static function getComment($data, $user)
+    {
+        if (empty($data["course_id"])) {
+            return false;
+        }
+        $params            = new stdclass;
+        $params->course_id = $data["course_id"];
+        $params->user_id   = $user;
+        if (isset($data["plan_id"])) {
+            $params->plan_id = $data["plan_id"];
+        }
+        $ret = utility_services::call("/comment/course/getcomment", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getCommentNum($data, $user)
+    {
+        if (empty($data["course_id"])) {
+            return false;
+        }
+        $params            = new stdclass;
+        $params->course_id = $data["course_id"];
+        $params->user_id   = $user;
+        $ret               = utility_services::call("/comment/course/getcommentnum", $params);
+        if (!empty($ret->data)) {
+            return $ret->data[0]->total;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getComments($data, $user)
+    {
+        if (empty($data["course_id"]) || !isset($data["start"]) || empty($data["num"])) {
+            return false;
+        }
+        $params            = new stdclass;
+        $params->course_id = $data["course_id"];
+        $params->start     = $data["start"];
+        $params->num       = $data["num"];
+        $params->user_id   = $user;
+        $ret               = utility_services::call("/comment/course/getcomments", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getCommentsDesc($data, $user)
+    {
+        if (empty($data["course_id"]) || empty($data["num"])) {
+            return false;
+        }
+        $params            = new stdclass;
+        $params->course_id = $data["course_id"];
+        $params->num       = $data["num"];
+        $params->user_id   = $user;
+        if (isset($data["max"])) {
+            $params->max = $data["max"];
+        }
+        $ret = utility_services::call("/comment/course/getcommentsdesc", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getDetail($data, $user)
+    {
+        if (empty($data["course_id"])) {
+            return false;
+        }
+        $params            = new stdclass;
+        $params->course_id = $data["course_id"];
+        $params->user_id   = $data["user_id"];
+        if (isset($data["plan_id"])) {
+            $params->plan_id = $data["plan_id"];
+        }
+        $ret = utility_services::call("/comment/course/getdetail", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getTotal($data)
+    {
+        if (empty($data["course_id"])) {
+            return false;
+        }
+        $params            = new stdclass;
+        $params->course_id = $data["course_id"];
+        $ret               = utility_services::call("/comment/course/gettotal", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function addComment($data, $user)
+    {
+        if (empty($data["course_id"]) || !isset($data["comment"]) || "" === $data["comment"]) {
+            return false;
+        }
+        $params               = new stdclass;
+        $params->course_id    = $data["course_id"];
+        $params->user_id      = $user;
+        $params->comment      = $data["comment"];
+        $params->user_teacher = $data["user_teacher"];
+        $params->plan_id      = $data["plan_id"];
+        $params->user_owner   = $data["user_owner"];
+        $ret                  = utility_services::call("/comment/course/addcomment", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return $ret->result->data;
+        }
+
+        return false;
+    }
+
+    public static function addDetail($data, $user)
+    {
+        //	if(empty($data["course_id"]) || !isset($data["student_score"]) || !isset($data["desc_score"]) || !isset($data["explain_score"]) || !isset($data["service_score"])){
+        if (empty($data["course_id"]) || !isset($data["student_score"]) || !isset($data["desc_score"]) || !isset($data["explain_score"])) {
+            return false;
+        }
+        $params                = new stdclass;
+        $params->user_id       = $user;
+        $params->course_id     = $data["course_id"];
+        $params->student_score = $data["student_score"];
+        $params->desc_score    = $data["desc_score"];
+        $params->explain_score = $data["explain_score"];
+        $params->user_teacher  = $data["user_teacher"];
+        $params->plan_id       = $data["plan_id"];
+        $params->user_owner    = $data["user_owner"];
+        //	$params->service_score = $data["service_score"];
+        $ret = utility_services::call("/comment/course/adddetail", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            $ret = utility_services::call("/comment/course/addtotal", $params);
+
+            return $ret;
+        }
+
+        return true;
+    }
+
+    public static function getCommentList($params)
+    {
+        return utility_services::call('/comment/course/getCommentList', $params);
+    }
+
+    public static function checkIsComment($courseId, $uid, $planId)
+    {
+        $data = [
+            'courseId' => $courseId,
+            'uid'      => $uid,
+            'planId'   => $planId,
+        ];
+        $res  = utility_services::call('/comment/course/CheckIsComment', $data);
+
+        return $res->code ? false : true;
+    }
+
+    public static function checkIsCommentByPlanId($planIdArr, $uid)
+    {
+        $data = [
+            'planIdArr' => $planIdArr,
+            'uid'       => $uid
+        ];
+
+
+        $res = utility_services::call('/comment/course/checkIsCommentByPlanId', $data);
+
+        return $res;
+
+    }
+
+    /**
+     * @desc add user experience
+     *
+     * @param $uid
+     * @param string $ruleName
+     * @return array|bool
+     */
+    public static function addUserExperience($uid, $ruleName = 'COMMENT')
+    {
+        if (!intval($uid)) return false;
+
+        $res = user_api::changeUserLevelAndScore($uid, $ruleName);
+
+        if ($res->code == 0) {
+            return [
+                'upType'       => $res->data->up_type, // 1:Small upgrade, 2:Big upgrade
+                'userId'       => $res->data->fk_user, // current login user id
+                'userLevel'    => $res->data->fk_level, // user current level
+                'title'        => $res->data->title, // user current level title
+                'currentScore' => $res->data->score, // user current score
+                'addScore'     => $res->data->add_score // user added score when comment
+            ];
+        }
+
+        return false;
+    }
+
+    public static function getCommentListByCourseId($courseId, $teacherId = 0, $page = 1, $length = 20)
+    {
+        if (!$courseId) return [];
+
+        $data = [
+            'courseId'  => $courseId,
+            'teacherId' => $teacherId ?: 0,
+            'page'      => $page ?: 1,
+            'length'    => $length ?: 20
+        ];
+
+        $commentDetail = utility_services::call('/comment/course/ListCommentsByCourseId', $data);
+        if ($commentDetail->code) return [];
+
+        $result = $userIdArr = $planIdArr = $planInfo = $userInfo = $userLevelInfo = [];
+        foreach ($commentDetail->result->data as $v) {
+            $userIdArr[$v->fk_user] = $v->fk_user;
+            $planIdArr[$v->fk_plan] = $v->fk_plan;
+            $result[]               = [
+                'userId'       => $v->fk_user,
+                'planId'       => $v->fk_plan,
+                'comment'      => !empty($v->comment) ? $v->comment : '',
+                'time'         => $v->last_updated,
+                'studentScore' => $v->student_score,
+            ];
+        }
+
+
+        $planData = [
+            'q' => [
+                'course_id' => $courseId,
+                'plan_id'   => implode(',', array_values($planIdArr)),
+                'status'    => '1,2,3'
+            ],
+            'f' => [
+                'plan_id',
+                'course_name',
+                'class_name',
+                'section_name'
+            ]
+        ];
+
+        $planData = seek_api::seekPlan($planData);
+        if (!empty($planData)) {
+            foreach ($planData->data as $plan) {
+                $planInfo[$plan->plan_id] = [
+                    'courseName'  => $plan->course_name,
+                    'className'   => $plan->class_name,
+                    'sectionName' => $plan->section_name
+                ];
+            }
+        }
+
+        $userData = [
+            'userIdArr' => $userIdArr,
+            'scope'     => [
+                'profile' => true
+            ]
+        ];
+
+        $userData = utility_services::call('/common/list/GetUsersInfo', $userData);
+        if (!empty($userData->result)) {
+            foreach ($userData->result as $user) {
+                $userInfo[$user->pk_user] = [
+                    'name'  => !empty($user->real_name)
+                        ? $user->real_name
+                        : (!empty($user->name) ? $user->name : SLanguage::tr('未设置', 'message')),
+                    'thumb' => !empty($user->thumb_med)
+                        ? interface_func::imgUrl($user->thumb_med)
+                        : ''
+                ];
+            }
+        }
+
+        $userLevel = utility_services::call('/user/score/listByUidArr', ['userIdArr' => $userIdArr]);
+        foreach ($userIdArr as $userId) {
+            $userLevelInfo[$userId] = [
+                'level' => 1,
+                'title' => '书生',
+                'score' => 0
+            ];
+        }
+
+        if (!empty($userLevel->result)) {
+            foreach ($userLevel->result as $val) {
+                $userLevelInfo[$val->fk_user] = [
+                    'level' => $val->fk_level,
+                    'title' => $val->title,
+                    'score' => $val->score
+                ];
+            }
+        }
+
+        $data = [];
+        foreach ($result as $r) {
+            $data[] = [
+                'userId'       => $r['userId'],
+                'planId'       => $r['planId'],
+                'comment'      => $r['comment'],
+                'time'         => $r['time'],
+                'ymd'          => (date('Y') != date('Y', strtotime($r['time']))) ? date('Y-m-d', strtotime($r['time'])) : date('m-d', strtotime($r['time'])),
+                'his'          => date('H:i', strtotime($r['time'])),
+                'studentScore' => $r['studentScore'],
+                'className'    => !empty($planInfo[$r['planId']]['className']) ? $planInfo[$r['planId']]['className'] : '',
+                'courseName'   => !empty($planInfo[$r['planId']]['courseName']) ? $planInfo[$r['planId']]['courseName'] : '',
+                'sectionName'  => !empty($planInfo[$r['planId']]['sectionName']) ? $planInfo[$r['planId']]['sectionName'] : '',
+                'userName'     => !empty($userInfo[$r['userId']]['name']) ? $userInfo[$r['userId']]['name'] : '',
+                'userThumb'    => !empty($userInfo[$r['userId']]['thumb']) ? $userInfo[$r['userId']]['thumb'] : '',
+                'userLevel'    => $userLevelInfo[$r['userId']]['level'],
+                'userTitle'    => $userLevelInfo[$r['userId']]['title'],
+                'userScore'    => $userLevelInfo[$r['userId']]['score']
+            ];
+        }
+
+        return $data;
+    }
+
+    public static function getCommentAndScore($courseId, $uid, $planId)
+    {
+        $data = [
+            'course_id' => $courseId,
+            'plan_id'   => $planId
+        ];
+
+        $param = [
+            'course_id' => $courseId,
+            'plan_id'   => $planId,
+            'user_id'   => $uid
+        ];
+
+        $commentInfo = comment_api::getComment($data, $uid);
+
+        $commentStr = '';
+        if (isset($commentInfo[0]->comment) && strlen($commentInfo[0]->comment)) {
+            $commentStr = $commentInfo[0]->comment;
+        }
+
+        $scoreInfo = comment_api::getDetail($param, $uid);
+        $studentScore = !empty($scoreInfo[0]->student_score) ? $scoreInfo[0]->student_score : 0;
+        $descScore = !empty($scoreInfo[0]->desc_score) ? $scoreInfo[0]->desc_score : 0;
+        $explainScore = !empty($scoreInfo[0]->explain_score) ? $scoreInfo[0]->explain_score : 0;
+        $avgScore = !empty($scoreInfo[0]->avg_score) ? $scoreInfo[0]->avg_score : 0;
+
+        return [
+            'commentStr'   => $commentStr,
+            'studentScore' => $studentScore,
+            'descScore'    => $descScore,
+            'explainScore' => $explainScore,
+            'avgScore'     => $avgScore
+        ];
+    }
+
+}
+
+

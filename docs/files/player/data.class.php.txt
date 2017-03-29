@@ -1,0 +1,225 @@
+<?php
+class player_data{
+	var $plan;
+	var $section;
+	var $course;
+	private $planid;
+	private $perms;
+	private $plan_info;
+	private $course_info;
+	private $logined;
+	var $clearConfig=array(
+		array("name"=>"标清","bitrate"=>160000),
+		array("name"=>"高清","bitrate"=>280000),
+		array("name"=>"超清","bitrate"=>360000),
+		array("name"=>"原画","bitrate"=>640000),
+	);
+	/**
+	 * live , recorded
+	 */
+	var $streamType="live"; 
+	/**
+	 * hls , rtmp
+	 */
+	var $playmode="rtmp"; 
+	var $rtmp;
+	var $chat;
+	var $publish_chat;
+	var $hls;
+	var $user;
+	private $sc="http:";
+	private $isTeacher=false;
+	public function __construct($planid){
+		$this->planid = $planid;
+		if(utility_net::isHTTPS()){
+			$this->sc="https:";
+		}
+	}
+	public function getPlan(){
+		$plan_info_s = course_api::listPlan(array("plan_id"=>$this->planid,"allcourse"=>true));
+		if(!empty($plan_info_s->data[0])){
+			$this->plan_info = $plan_info = $plan_info_s->data[0];
+		}else{
+			$this->error=array("code"=>"-200","msg"=>"上课信息错误","linktip"=>"","link"=>"");
+			return ;
+		}
+		{
+			$big = utility_cdn::file($plan_info->user_plan->thumb_big);
+			$med = utility_cdn::file($plan_info->user_plan->thumb_med);
+			$small = utility_cdn::file($plan_info->user_plan->thumb_small);
+			$this->plan = array(
+				"plan_id"=>$plan_info->plan_id,
+				"class_id"=>$plan_info->class_id,
+				"section_id"=>$plan_info->section_id,
+				"course_id"=>$plan_info->course_id,
+				"teacher_id"=>$plan_info->user_plan_id,
+				"teacher_info" => array(
+					"user_id"=>$plan_info->user_plan->user_id,
+					"name"=>$plan_info->user_plan->name,
+					"thumb_big"		=>"{$this->sc}{$big}",
+					"thumb_med"		=>"{$this->sc}{$med}",
+					"thumb_small"	=>"{$this->sc}{$small}",
+				),
+
+				"organization_user_id"=>$plan_info->user_id,
+			);
+		}
+		$section_info = course_api::getSection($plan_info->section_id);
+		$this->course_info = $course_ret = course_api::getCourseOne($plan_info->course_id);
+		$subdomain = user_organization::course_domain(user_organization::getSubdomainByUid($course_ret->user_id)->subdomain);
+		$this->plan['play_url'] = "{$this->sc}//{$subdomain}/course.plan.play/{$plan_info->plan_id}";
+		$this->plan['login_url'] = "{$this->sc}//{$subdomain}/site.main.login";
+		$this->plan['apply_url'] = "{$this->sc}//{$subdomain}/course.info.show/{$plan_info->course_id}";
+		if(empty($course_ret) || empty($section_info)){
+			$this->error=array("code"=>"-200","msg"=>"课程获取失败","linktip"=>"","link"=>"");
+			return;
+		}else{
+			$this->course = array(
+				"course_id"=>$course_ret->course_id,
+				"title"=>$course_ret->title,
+				"user_total"=>$course_ret->user_total,
+				"thumb_big"=>interface_func::imgUrl($course_ret->thumb_big),
+				"thumb_med"=>interface_func::imgUrl($course_ret->thumb_med),
+				"thumb_small"=>interface_func::imgUrl($course_ret->thumb_small),
+			);
+			$this->section = array(
+				"section_id"=>$section_info->section_id,
+				"name"=>$section_info->name,
+				"desc"=>$section_info->descript,
+				"status"=>$section_info->status,
+			);
+			if(!empty($course_ret->fee)){
+				$this->course['fee'] = $course_ret->fee;
+			}
+
+		}
+
+
+		$user = user_api::loginedUser();
+		$this->logined = false;
+		$this->playmode="rtmp";
+		$user_id = 0;
+		if(!empty($user)){
+			$this->logined=true;
+			$user_id = $user['uid'];
+		}
+		if($plan_info->user_plan_id == $user_id || $plan_info->user_id == $user_id){
+			$this->isTeacher=true;
+		}
+		$this->perms = course_api::verifyPlan($user_id,$plan_info->plan_id);
+		if(empty($this->perms->ok)){
+			if(!empty($this->perms->trial_type) && $this->perms->trial_type==-2){
+				$this->error=array("code"=>"-201","msg"=>"视频没有公开，暂不能观看","link"=>"","linktip"=>"");
+				return;
+			}elseif(empty($this->perms->reg)){
+				$this->error=array("code"=>"-202","msg"=>"请报名后观看","link"=>"/course.info.show/{$this->course_info->course_id}","linktip"=>"报名");
+				return;
+			}else{
+				$this->error=array("code"=>"-201","msg"=>"请登录后观看","link"=>"/site.main/login?url=/course.plan.play/{$this->planid}","linktip"=>"登录后观看");
+				return;
+			}
+		}else{
+			if(!empty($this->perms->live_public_type)){
+				$this->plan['live_public_type'] = $this->perms->live_public_type;
+			}
+			if(!empty($this->perms->video_public_type)){
+				$this->plan['video_public_type'] = $this->perms->video_public_type;
+			}
+			if(!empty($this->perms->time)){
+				$this->plan['video_trial_time'] = (int)$this->perms->time;
+			}
+			if(!empty($this->perms->reg)){
+			}
+		}
+
+		if($plan_info->plan_status=="finished"){
+			$this->playmode="hls";
+			$this->streamType="recorded";
+			$this->getVodStream();
+		}elseif($plan_info->plan_status=="living"){
+			$this->getLiveStream();
+		}else{
+			$this->error=array("code"=>"-200","msg"=>"还没有开始上课","linktip"=>"","link"=>"");
+		}
+	}
+	public function getLiveStream(){
+
+		$playInfo = player_live::getLiveUrl($this->planid);
+		if(!empty($playInfo) && $playInfo->live_call!="publish_done"){
+			$this->rtmp=new stdclass;
+			$this->rtmp->url = "rtmp://".$playInfo->host.":1936/play";
+			$this->rtmp->cdn_id= $playInfo->cdn_id;
+			$stream_name = $playInfo->stream_name;
+			$this->rtmp->streamList=array( 
+				//array("name"=>"标清","stream"=>$stream_name."_low","bitrate"=>160000),
+				array("name"=>"原画","stream"=>$stream_name,"bitrate"=>640000),
+			);
+			$this->hls=new stdclass;
+			$this->hls->url=$this->sc."//".$playInfo->host."/play";
+			$this->hls->stream=$stream_name."/index.m3u8";
+			$this->hls->cdn_id=$playInfo->cdn_id;
+			$this->hls->detail=array(
+				array("name"=>"直播","stream"=>$stream_name."/index.m3u8")
+			);
+			$this->chat=array("url"=>"rtmp://".$playInfo->host_chat.":1936/chat","stream"=>$stream_name);
+			$this->publish_chat=array("url"=>"rtmp://".$playInfo->host_chat_publish."/chat","stream"=>$stream_name);
+			/* WEB-3737 
+				if(!$this->isTeacher){
+					if(!empty($playInfo->host_chat_publish) && $this->logined){
+						$this->publish_chat=array("url"=>"rtmp://".$playInfo->host_chat_publish."/chat","stream"=>$stream_name);
+					}   
+					}
+			 */
+		}else{
+			$this->error=array("code"=>"-203","msg"=>"还没有开始上课，请稍后再来","linktip"=>"","link"=>"");
+		}
+	}
+	public function getVodStream(){
+		$playInfo = player_live::getVodUrl($this->planid);
+		if(!empty($playInfo) && !empty($playInfo->video_id)){
+			$this->hls=new stdclass;
+			$this->hls->url=$this->sc."//".$playInfo->host."/";
+			$this->hls->cdn_id=$playInfo->cdn_id;
+
+			$this->hls->stream=$playInfo->stream_name;
+			$this->hls->video_id=$playInfo->video_id;
+			$this->hls->updatetime=strtotime($playInfo->updatetime);
+			$this->hls->detail=array(
+				array("name"=>"原画","stream"=>pathinfo($playInfo->stream_name,PATHINFO_DIRNAME)."/org.m3u8"),
+				array("name"=>"流畅","stream"=>pathinfo($playInfo->stream_name,PATHINFO_DIRNAME)."/low.m3u8")
+			);
+		}else{
+			$this->error=array("code"=>"-203","msg"=>"视频正在处理中，请稍后再来","linktip"=>"","link"=>"");
+		}
+	}
+	public function getChart(){
+	}
+	public function getUserInfo(){
+		$this->user= new stdclass;
+		$this->user->info = new stdclass;
+		$this->user->token = "";
+		$this->user->ip= new stdclass;
+		$ipinfo = utility_ip::info(utility_ip::realIp());
+		if(!empty($ipinfo->ok)){
+			$this->user->ip->ip = $ipinfo->ip;
+			$this->user->ip->area_name = $ipinfo->area_name;
+			$this->user->ip->op_name= $ipinfo->op_name;
+		}
+		$this->user->token = user_api::getCookieToken();
+		$user = user_api::loginedUser();
+		if(!empty($user['uid'])){
+			$this->user->info=array(
+				"uid"=>$user['uid'],
+				"name"=>$user['name'],
+				"large"=> $this->sc.$user['large'],
+				"medium"=>$this->sc.$user['medium'],
+				"small"=> $this->sc.$user['small'],
+			);
+		}
+	}
+	public function getPlayLog(){
+		$this->playLog = utility_cdn::playlog(null);
+		$this->playLog = "{$this->sc}{$this->playLog}";
+	}
+}
+

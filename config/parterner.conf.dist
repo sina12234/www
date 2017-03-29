@@ -1,0 +1,30 @@
+1:{
+	name:'QQ';
+	appid:"1";
+	appkey:"";
+}
+2:{
+	name:'WEIXIN';
+	appid:"2";
+	appkey:"";
+}
+10001:{
+	name:'陕西和校园';
+	appid:"10001";
+	appkey:"";
+}
+10002:{
+	name:'湖南和校园';
+	appid:"10002";
+	appkey:"";
+}
+10100:{
+	name:"名校100";
+	appid:"10100";
+	appkey:"";
+}
+10101:{
+	name:"福建名师工作室";
+	appid:"10101";
+	appkey:"";
+}

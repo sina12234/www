@@ -1,0 +1,16 @@
+<?php
+class user_user extends STpl{
+	public function pageGetBasicUser($inPath){
+		if(!empty($_POST) && !empty($_POST["user_id"])){
+			return user_api::getBasicUser($_POST["user_id"]);
+		}
+		return false;
+	}
+	public function pageGetBasicUserAndMobile($inPath){
+		if(!empty($_POST) && !empty($_POST["user_id"])){
+			return user_api::getBasicUserAndMobile($_POST["user_id"]);
+		}
+		return false;
+	}
+}
+

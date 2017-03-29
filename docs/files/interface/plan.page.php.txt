@@ -1,0 +1,973 @@
+<?php
+
+class interface_plan extends interface_base
+{
+
+	public function pageStartPlay()
+	{
+		if (!isset($this->paramsInfo['userInfo']['uid']) || !$this->paramsInfo['userInfo']['uid'])
+			$this->setMsg(1000);
+
+		$cleanFile = false;
+
+		if (!utility_tool::check_int($this->paramsInfo['params']['planId'])) {
+			$this->setMsg(1010);
+		}
+
+		if (
+			!empty($this->paramsInfo['params']['cleanFile'])
+			&& $this->paramsInfo['params']['cleanFile'] == 'yes'
+		) {
+			$cleanFile = true;
+		}
+
+		$tPlanInfo = course_api::listPlan(
+			array(
+				'plan_id'   => $this->paramsInfo['params']['planId'],
+				'allcourse' => true
+			)
+		);
+
+		if (empty($tPlanInfo->data[0]))
+			$this->setMsg(2001);
+
+		$planInfo = $tPlanInfo->data[0];
+
+		$publish = live_publish::getByuid($this->paramsInfo['userInfo']['uid']);
+
+		if (empty($publish))
+			$this->setMsg(2002);
+
+		if ($publish->live_call == 'publish_done')
+			$this->setMsg(2003);
+
+		if ($publish->plan_id > 0 && $publish->plan_id != $this->paramsInfo['params']['planId'])
+			$this->setMsg(2004);
+
+		$ret = course_plan_api::startPlan(
+			$this->paramsInfo['userInfo']['uid'],
+			$this->paramsInfo['token'],
+			$this->paramsInfo['params']['planId']
+		);
+
+		if ($ret) {
+			$this->setData(array());
+		}
+
+		$this->setMsg(2005);
+	}
+
+    public function pageClosePlay()
+    {
+        $this->v(
+            [
+                'planId' => 1000,
+                'uid' => 1000,
+                'token' => 1000
+            ]
+        );
+
+        $planInfo = course_api::getPlan($this->paramsInfo['params']['planId']);
+        empty($planInfo) && $this->setMsg(2001);
+		$ret = course_plan_api::stopPlan(
+				$this->paramsInfo['userInfo']['uid'],
+				$this->paramsInfo['token'],
+				$this->paramsInfo['params']['planId']
+				);
+
+
+        if ($ret) {
+            $this->setMsg(0);
+        }
+
+        $this->setMsg(2030);
+    }
+
+    /*
+     * 学生上课详情
+     * @author  zhengtianlong
+    */
+    public function pageListV2()
+    {
+        $this->v([
+            'uid' => 1000,
+            'planId' => 1000
+        ]);
+
+        $page = empty($this->paramsInfo['params']['page']) ? 1 : $this->paramsInfo['params']['page'];
+		$uid  = $this->paramsInfo['params']['uid'];
+		$pid  = explode(',',trim($this->paramsInfo['params']['planId'],','));
+		$planId = implode(',',$pid);
+        $params = [
+            'q' => [
+                'plan_id'=> $planId,
+                'status' => '1,2,3'
+                ],
+            'p' => $page,
+            'f' => [
+                'plan_id',
+                'course_name',
+                'class_name',
+                'section_name',
+                'section_desc',
+                'start_time',
+                'teacher_name',
+                'teacher_id',
+                'teacher_thumb_med',
+                'owner_id',
+                'status'
+            ]
+        ];
+        $result = seek_api::seekPlan($params);
+        empty($result->data) && $this->setMsg(3002);
+        foreach($result->data as $v)
+        {
+            $owner_id_arr[] = $v->owner_id;
+        }
+		$domain_ret = user_api::getSubdomainByUidArr($owner_id_arr);
+
+		$domainlist = array();
+		if( $domain_ret->result->code == 0 && $domain_ret->result->data){
+			$subdomains = $domain_ret->result->data->items;
+			foreach($subdomains as $so){
+				$domainlist[$so->fk_user] = $this->httpHeader() .'://'.$so->subdomain.'.gn100.com';
+			}
+		}
+
+
+        $data = [];
+        foreach($result->data  as $val)
+        {
+            $data[] = [
+                'planId'      => $val->plan_id,
+                'courseTitle' => $val->course_name,
+                'className'   => $val->class_name,
+                'sectionName' => $val->section_name,
+                'sectionDesc' => $val->section_desc,
+                'startTime'   => date('Y-m-d H:i',strtotime($val->start_time)),
+                'status'      => $val->status,
+                'courseType'  => 0,
+                'teacherName' => !empty($val->teacher_real_name)?$val->teacher_real_name:$val->teacher_name,
+                'teacherId'   => $val->teacher_id,
+                'teacherImage'=> $this->imgUrl($val->teacher_thumb_med),
+				'playUrl'     => !empty($domainlist[$val->owner_id])?$domainlist[$val->owner_id].'/course.plan.play/'.$val->plan_id:''
+            ];
+        }
+
+        $this->setData($data);
+    }
+
+
+	/*
+	 * 老师上课详情
+	 * @author zhengtianlong
+	 */
+	public function pageTeacherDetail()
+    {
+        $this->v([
+            'uid' => 1000,
+            'planId' => 1000
+        ]);
+
+        $page = empty($this->paramsInfo['params']['page']) ? 1 : $this->paramsInfo['params']['page'];
+		$uid  = $this->paramsInfo['params']['uid'];
+		$pid  = explode(',',trim($this->paramsInfo['params']['planId'],','));
+		$planId = implode(',',$pid);
+		//排课的信息
+        $planParams = [
+            'q' => [
+                'plan_id'=> $planId,
+                'status' => '1,2,3'
+                ],
+            'p' => $page,
+            'f' => [
+				'course_id',
+                'plan_id',
+                'course_name',
+                'class_name',
+                'section_name',
+                'section_desc',
+                'start_time',
+                'owner_id',
+                'status'
+            ]
+        ];
+        $res_plan = seek_api::seekPlan($planParams);
+        empty($res_plan->data) && $this->setMsg(3002);
+
+        foreach($res_plan->data as $v)
+        {
+            $owner_id_arr[] = $v->owner_id;
+			$course_id_arr[] = $v->course_id;
+        }
+
+		$courseIdStr = implode(',',$course_id_arr);
+		//课程信息
+		$courseParams = [
+			'q'  => ['course_id'=>$courseIdStr],
+			'f'  => ['course_id','thumb_med'],
+			'pl' => 1000
+		];
+		$res_course = seek_api::seekCourse($courseParams);
+
+		$courseImgs = array();
+		if(!empty($res_course->data))
+		{
+			foreach($res_course->data as $val)
+			{
+				$courseImgs[$val->course_id] = $this->imgUrl($val->thumb_med);
+			}
+		}
+
+		//机构信息
+		$domain_ret = user_api::getSubdomainByUidArr($owner_id_arr);
+		$domainlist = array();
+		if( $domain_ret->result->code == 0 && $domain_ret->result->data){
+			$subdomains = $domain_ret->result->data->items;
+			foreach($subdomains as $so){
+				$domainlist[$so->fk_user] = $this->httpHeader() .'://'.$so->subdomain.'.gn100.com';
+			}
+		}
+
+        $data = [];
+        foreach($res_plan->data  as $val)
+        {
+            $data[] = [
+                'planId'      => $val->plan_id,
+                'courseTitle' => $val->course_name,
+				'courseImage' => !empty($courseImgs[$val->course_id])?$courseImgs[$val->course_id]:'',
+                'className'   => $val->class_name,
+                'sectionName' => $val->section_name,
+                'sectionDesc' => $val->section_desc,
+                'startTime'   => date('Y-m-d H:i',strtotime($val->start_time)),
+                'status'       => $val->status,
+                'courseType'  => 0,
+                'address'      => '北京市海淀区北四环48号',
+            ];
+        }
+
+        $this->setData($data);
+    }
+
+	/*
+	 * 章节列表
+	 */
+	public function pageGetPlanList()
+	{
+		$this->v([
+			'courseId' => 1000,
+			'classId'  => 1000
+		]);
+		$courseId = $this->paramsInfo['params']['courseId'];
+		$classId  = $this->paramsInfo['params']['classId'];
+		$params = [
+			'q' => ['course_id'=>$courseId,'class_id'=>$classId,'status'=>'1,2,3'],
+			'f' => ['plan_id','section_id','section_name','section_desc','start_time',
+					'status','video_public_type','owner_id'],
+			'ob'=> ['plan_id'=>'asc']
+		];
+		$res_plan = seek_api::seekPlan($params);
+		empty($res_plan->data) && $this->setMsg(3002);
+
+		foreach($res_plan->data as $v)
+        {
+            $owner_id_arr[] = $v->owner_id;
+        }
+
+		$domain_ret = user_api::getSubdomainByUidArr($owner_id_arr);
+
+		$domainlist = array();
+		if( $domain_ret->result->code == 0 && $domain_ret->result->data)
+		{
+			$subdomains = $domain_ret->result->data->items;
+			foreach($subdomains as $so)
+			{
+				$domainlist[$so->fk_user] = $this->httpHeader() .'://'.$so->subdomain.'.gn100.com';
+			}
+		}
+
+		$data = array();
+		foreach($res_plan->data as $v)
+		{
+			$data['data'][] = [
+				"planId"    => $v->plan_id,
+                "status"    => $v->status,
+                "sectionId" => $v->section_id,
+                "name"      => $v->section_name,
+                "desc"      => $v->section_desc,
+                "startTime" => date('m-d H:i',strtotime($v->start_time)),
+				"videoPublicType" => $v->video_public_type,
+                "playUrl"   => !empty($domainlist[$v->owner_id])?$domainlist[$v->owner_id].'/course.plan.play/'.$v->plan_id:''
+			];
+		}
+
+		$this->setData($data);
+	}
+
+	/*
+	 * 发送评价
+	 */
+	public function pageAddComment()
+	{
+		$this->v([
+			'planId' => 1000,
+			'uid'    => 1000,
+			'content'=> 1000
+		]);
+
+		$planId       = intval($this->paramsInfo['params']['planId']);
+		$uid          = intval($this->paramsInfo['params']['uid']);
+		$this->uidTokenValid($this->paramsInfo['token'], $uid);
+		$content      = $this->paramsInfo['params']['content'];
+		$satisfaction = isset($this->paramsInfo['params']['satisfaction'])?intval($this->paramsInfo['params']['satisfaction']):5;
+		$conform      = isset($this->paramsInfo['params']['conform'])?intval($this->paramsInfo['params']['conform']):5;
+		$expression   = intval($this->paramsInfo['params']['expression'])?intval($this->paramsInfo['params']['expression']):5;
+
+		$params = [
+			'q' => ['plan_id'=>$planId],
+			'f' => ['course_id','teacher_id','plan_id','owner_id']
+		];
+		$res_plan = seek_api::seekPlan($params);
+		empty($res_plan->data) && $this->setMsg(3002);
+
+		$data = [
+			'course_id'    => $res_plan->data[0]->course_id,
+			'user_id'      => $uid,
+			'plan_id'      => $res_plan->data[0]->plan_id,
+			'user_owner'   => $res_plan->data[0]->owner_id,
+			'user_teacher' => $res_plan->data[0]->teacher_id,
+			'comment'      => $content,
+			'student_score'=> $satisfaction,
+			'desc_score'   => $conform,
+			'explain_score'=> $expression
+		];
+
+		$res_content = comment_api::addComment($data, $uid);
+		$res_score   = comment_api::addDetail($data, $uid);
+
+		if($res_content && $res_score)
+		{
+			$data = [
+				'code'    => 0,
+				'message' => 'success',
+				'result'  => 1
+			];
+		}else{
+			$data = [
+				'code'    => 1,
+				'message' => 'failure',
+				'result'  => 0
+			];
+		}
+		
+		return json_encode($data);
+	}
+
+	/*
+	 * 排名列表
+	 */
+	public function pagePlanGood()
+	{
+		$this->v(['planId'=>1000]);
+		$planId = intval($this->paramsInfo['params']['planId']);
+
+		$params = [
+			'q' => ['plan_id'=>$planId],
+			'f' => ['course_id','class_id']
+		];
+		$res_plan = seek_api::seekPlan($params);
+		empty($res_plan->data) && $this->setMsg(3002);
+
+		$courseId = $res_plan->data[0]->course_id;
+		$classId  = $res_plan->data[0]->class_id;
+
+		$courseResult = course_api::listRegistration(array('course_id'=>$courseId,'class_id'=>$classId));
+		empty($courseResult->data) && $this->setMsg(3002);
+
+		$userIdArr = array_reduce($courseResult->data, create_function('$v,$w', '$v[$w->uid]=$w->uid;return $v;'));
+		$userIds   = implode(',',$userIdArr);
+
+		$res_user = user_organization::getTeacherRealName($userIds);
+
+		$userName = array();
+		if(!empty($res_user))
+		{
+			$userName = array_reduce($res_user, create_function('$v,$w', '$v[$w->fk_user]=$w->real_name;return $v;'));
+		}
+
+		$res_message = message_api::getPlanGoodByPidArr(array($planId));
+
+		$praiseArr = array();
+		if(!empty($res_message->data)){
+			$praiseArr = array_reduce($res_message->data, create_function('$v,$w', '$v[$w->fk_user]=$w->num;return $v;'));
+		}
+
+		foreach($courseResult->data as $v)
+		{
+			$praise = (!empty($praiseArr) && !empty($praiseArr[$v->uid]))?$praiseArr[$v->uid]:0;
+			$resData[] = [
+				'name'  => (!empty($userName) && !empty($userName[$v->uid]))?$userName[$v->uid]:(!empty($v->user_info->name)?$v->user_info->name:''),
+				'stuId' => $v->uid,
+				'image' => !empty($v->user_info->thumb_big)?$this->imgUrl($v->user_info->thumb_big):'',
+				'praise'=> $praise
+			];
+		}
+		empty($resData) && $this->setMsg(3002);
+		$data['data'] = $this->mysort($resData,'SORT_DESC','praise');
+		$this->setData($data);
+	}
+
+	/*
+	 * 根据某个字段排序
+	 * @params $data $orderBy(排序顺序标志 SORT_DESC 降序；SORT_ASC 升序) $field(排序字段)
+	 */
+	private function mysort($data,$orderBy,$field)
+	{
+		$sort = [
+			'direction' => $orderBy,
+			'field'     => $field
+		];
+
+		$arrSort = array();
+
+		foreach($data AS $uniqid => $row)
+		{
+			foreach($row AS $key=>$value)
+			{
+				$arrSort[$key][$uniqid] = $value;
+			}
+		}
+
+		if($sort['direction'])
+		{
+			array_multisort($arrSort[$sort['field']], constant($sort['direction']), $data);
+		}
+
+		return $data;
+	}
+
+
+    public function pageCheck()
+    {
+        $this->v(
+            [
+                'uid' => 1000,
+                'planId' => 1000
+            ]
+        );
+
+        $publish = live_publish::getByuid($this->paramsInfo['params']['uid']);
+
+        if (empty($publish))
+            $this->setMsg(2002);
+
+        if ($publish->live_call == 'publish_done')
+            $this->setMsg(2003);
+
+        if ($publish->plan_id > 0 && $publish->plan_id != $this->paramsInfo['params']['planId'])
+            $this->setMsg(2004);
+
+        $this->setMsg(0);
+    }
+
+    public function pageGetPlanExam()
+    {
+        $this->v(
+            [
+                'planId' => 1000,
+                'uid' => 1000
+            ]
+        );
+
+        $data = interface_planApi::getPlanExam($this->paramsInfo['params']['planId'], $this->paramsInfo['params']['uid']);
+
+        !empty($data) && $this->setData($data);
+
+        $this->setMsg(1);
+    }
+
+
+    public function pageTable()
+    {
+
+        $this->v([
+            'uid' => 1000
+        ]);
+
+        $index = !empty($this->paramsInfo['params']['index']) ? $this->paramsInfo['params']['index']+0 : 0;
+        $length = !empty($this->paramsInfo['params']['length']) ? $this->paramsInfo['params']['length']+0 : 5;
+        $identity = isset($this->paramsInfo['params']['identity']) ? $this->paramsInfo['params']['identity'] : 0;
+
+        $start = date("Y-m-d H:i:s", mktime(0, 0, 0, date('m'), date('d')-7, date('Y')));
+        $end = date("Y-m-d H:i:s", mktime(23, 59, 59, date('m'), date('d')-8 + $length*7, date('Y')));
+
+        if ($index) {
+            $start = date("Y-m-d H:i:s", mktime(0, 0, 0, date('m'), date('d')-7 + $index*$length*7, date('Y')));
+            $end = date("Y-m-d H:i:s", mktime(23, 59, 59, date('m'), date('d')-8 + ($index+1)*$length*7, date('Y')));
+        }
+        $d = date('w', strtotime($start));
+        if ($d) {
+            $start = date("Y-m-d H:i:s", mktime(0, 0, 0, date('m'), date('d')-$d-7 + $index*$length*7, date('Y')));
+            $end = date("Y-m-d H:i:s", mktime(23, 59, 59, date('m'), date('d')-$d-8 + ($index+1)*$length*7, date('Y')));
+        }
+
+        //$start = '2015-10-10 00:00:00';
+        //$end = '2015-10-15 23:59:59';
+        $timeArr = $this->_timeFormat($start, $end);
+
+        $res = $this->_getData(
+            $start,
+            $end,
+            $this->paramsInfo['params']['uid'],
+            $identity
+        );
+        empty($res) && $this->setMsg(3002);
+
+        $amPlans = $pmPlans = $ngPlans = $status = [];
+
+        list($amS, $amE, $pmS, $pmE) = [
+            strtotime('00:00'),
+            strtotime('13:00'),
+            strtotime('13:00'),
+            strtotime('19:00')
+        ];
+
+        $result['today'] = date('Y-m-d', time());
+        foreach ($timeArr as $k=>$m) {
+            $result['data'][$k] = [
+                'day' => date('w', strtotime($m)),
+                'date' => date('Y-m-d', strtotime($m)),
+                //'am' => [],
+                //'pm' => [],
+                //'night' => [],
+            ];
+
+            foreach ($res as $v) {
+                if ($m == date('Y-m-d', strtotime($v->start_time))) {
+                    $time = date('H:i', strtotime($v->start_time));
+                    $tTime = strtotime($time);
+
+                    if ($tTime >= $amS && $tTime < $amE) {
+                        $status[$m][] = $v->status;
+                        $ps = array_values($status[$m]);
+
+                        if (in_array(2, $ps)) {
+                            $st = 2;
+                        } elseif (in_array(1, $ps)) {
+                            $st = 1;
+                        } else {
+                            $st = 3;
+                        }
+
+                        $result['data'][$k]['am'] = [
+                            'startTime' => $time,
+                            'status' => $st
+                        ];
+
+                        $amPlans[$m][] = [
+                            'planId' => $v->plan_id,
+                            'time' => $v->start_time,
+                            'courseId' => $v->course_id
+                        ];
+
+                        $result['data'][$k]['am']['plans'] = $amPlans[$m];
+                    } elseif ($tTime >= $pmS && $tTime < $pmE) {
+                        $status[$m][] = $v->status;
+                        $ps = array_values($status[$m]);
+
+                        if (in_array(2, $ps)) {
+                            $st = 2;
+                        } elseif (in_array(1, $ps)) {
+                            $st = 1;
+                        } else {
+                            $st = 3;
+                        }
+
+                        $result['data'][$k]['pm'] = [
+                            'startTime' => $time,
+                            'status' => $st
+                        ];
+
+                        $pmPlans[$m][] = [
+                            'planId' => $v->plan_id,
+                            'courseId' => $v->course_id
+                        ];
+
+                        $result['data'][$k]['pm']['plans'] = $pmPlans[$m];
+                    } else {
+                        $status[$m][] = $v->status;
+                        $ps = array_values($status[$m]);
+
+                        if (in_array(2, $ps)) {
+                            $st = 2;
+                        } elseif (in_array(1, $ps)) {
+                            $st = 1;
+                        } else {
+                            $st = 3;
+                        }
+
+                        $result['data'][$k]['night'] = [
+                            'startTime' => $time,
+                            'status' => $st,
+                        ];
+
+                        $ngPlans[$m][] = [
+                            'planId' => $v->plan_id,
+                            'courseId' => $v->course_id
+                        ];
+
+                        $result['data'][$k]['night']['plans'] = $ngPlans[$m];
+                    }
+                }
+            }
+        }
+        $result['data'] = array_chunk($result['data'], 7);
+
+        foreach ($result['data'] as $k => $n) {
+            $i = 0;
+            foreach ($n as $b) {
+                if (empty($b['am']) && empty($b['pm']) && empty($b['night'])) {
+                    $i++;
+                }
+            }
+            if ($i == 7) {
+                $result['data'][$k][0]['weekStatus'] = '0';
+            } else {
+                $result['data'][$k][0]['weekStatus'] = '1';
+            }
+        }
+
+        $this->setData($result);
+    }
+
+    private function _getData($start, $end, $uid, $type)
+    {
+        $query                 = [
+            'status'       => '1,2,3',
+            'start_time'   => "{$start},{$end}"
+        ];
+
+        // 身份为学生时
+        if ($type == 0) {
+            $courseClassIdArr          = $this->_getCourseStrByUser($uid);
+            if (!empty($courseClassIdArr['courseIdArr'])) {
+                $query['course_id'] = implode(',', $courseClassIdArr['courseIdArr']);
+                $query['class_id'] = implode(',', $courseClassIdArr['classIdArr']);
+            } else {
+                return [];
+            }
+        }
+        // 身份为老师时
+        if ($type == 1) {
+            // 查询主讲老师(班主任)
+            $query['admin_id'] = $uid;
+        }
+
+        $params = [
+            'f' => [
+                'plan_id',
+                'course_id',
+                'start_time',
+                'status'
+            ],
+            'q' => $query,
+            'ob' => ['start_time' => 'asc'],
+            'p' =>1,
+            'pl'=>10000,
+        ];
+
+        $res = seek_api::seekPlan($params);
+        if (empty($res->data)) return [];
+
+        return $res->data;
+    }
+
+    private function _getCourseStrByUser($uid)
+    {
+        //$org = user_organization::subdomain();
+
+        //$orgOwner = !empty($org) ? $org->userId : 0;
+        $queryArr = array(
+            'dbName' => 'db_course',
+            'table' => 't_course_user',
+            'pk' => 'fk_course',
+            'condition' => " status=1 AND fk_user={$uid}"
+        );
+
+        $data['courseIdArr'] = $data['classIdArr'] = [];
+        $res = common_api::getIdStr($queryArr);
+
+        if (empty($res->result->items)){
+            return $data;
+        }
+
+        foreach ($res->result->items  as $v) {
+            $data['courseIdArr'][] = $v->fk_course;
+            $data['classIdArr'][] = $v->fk_class;
+        }
+
+
+        return $data;
+    }
+
+    private function _timeFormat($start, $end)
+    {
+        $time = range(strtotime($start), strtotime($end), 24*60*60);
+
+        return array_map(create_function('$v', 'return date("Y-m-d", $v);'), $time);
+    }
+
+    private function _pageArray($arr, $page=1, $length=5)
+    {
+        $page = $page ?: 1;
+        $start = ($page-1) * $length;
+        $totalSize = count($arr);
+        $totalPage = ceil($totalSize/$length);
+
+        $result['totalPage'] = $totalPage;
+        $result['totalSize'] = $totalSize;
+        $result['data'] = array_slice($arr, $start, $length);
+
+        return $result;
+    }
+
+    public function pageCopyUrl()
+    {
+        $data = [];
+        if (isset($this->paramsInfo['params']['courseId'])) {
+            $data['courseId'] = $this->paramsInfo['params']['courseId'];
+        }
+
+        if (isset($this->paramsInfo['params']['planId'])) {
+            $data['planId'] = $this->paramsInfo['params']['planId'];
+        }
+
+        if (count($data) < 1)
+            interface_func::setMsg(1000);
+
+        interface_func::setData(
+            [
+                'url' => interface_courseApi::getDomainUrl($data)
+            ]
+        );
+    }
+
+	public function pageGetComment(){
+
+		$this->v(['planId'=>1000,'uid'=>1000]);
+
+		$planId = $this->paramsInfo['params']['planId'];
+		$uid    = $this->paramsInfo['params']['uid'];
+
+		$params = [
+            'condition' => "fk_user={$uid} and fk_plan={$planId}"
+		];
+
+		$planParams = [
+			'q' => ['plan_id'=>$planId],
+			'f' => ['course_id','section_name','section_desc']
+		];
+		$resPlan = seek_api::seekPlan($planParams);
+
+		$planName    = !empty($resPlan->data[0]->section_name) ? $resPlan->data[0]->section_name : '';
+		$sectionName = !empty($resPlan->data[0]->section_desc) ? $resPlan->data[0]->section_desc : '';
+
+        $resComment = comment_api::getCommentList($params);
+
+		empty($resComment->items[0]) && $this->setMsg(3002);
+
+		$comment  = $resComment->items[0];
+		$courseId = $comment->fk_course;
+
+		$detail = comment_api::getDetail(array('course_id'=>$courseId,'plan_id'=>$planId,'user_id'=>$uid),'');
+
+		$data = [
+		   "content"      => !empty($comment->comment) ? html_entity_decode($comment->comment) : '',
+		   "satisfaction" => $detail[0]->student_score,
+		   "conform"      => $detail[0]->desc_score,
+		   "expression"   => $detail[0]->explain_score,
+		   "commentTime"  => $detail[0]->last_updated,
+		   "planName"     => $planName.' '.$sectionName
+		];
+
+		$this->setData($data);
+
+	}
+
+    /*
+     * 直播列表
+     * @param uid     用户Id
+     * @param condition 兴趣筛选Id
+     * @param living    0 即将直播(后7天) 1 正在直播或已播放(前3天)
+     */
+    public function pageLives(){
+        $uid      = isset($this->paramsInfo['params']['uid']) ? intval($this->paramsInfo['params']['uid']) : 0;
+        $living   = isset($this->paramsInfo['params']['living']) ? intval($this->paramsInfo['params']['living']) : 0;
+        $condition= !empty($this->paramsInfo['params']['condition']) ? $this->paramsInfo['params']['condition'] : '';
+        
+        $courseQuery = [
+            'admin_status' => 1,
+            'third_cate'   => $condition,
+            'status'       => '1,2,3'
+        ];
+        
+        $courseParams = [
+            'f' => ['course_id','second_cate','thumb_med','fee_type','price'],
+            'q' => $courseQuery,
+            'p' => 1,
+            'pl'=> 10000
+        ];
+
+        $courseRes = seek_api::seekCourse($courseParams);
+		
+        empty($courseRes->data) && $this->setMsg(3002);
+		
+        $courseId = '';
+		foreach($courseRes->data as $v){
+			$courseIdArr[$v->course_id]  = $v->course_id;
+			$courseImgArr[$v->course_id] = $v->thumb_med;
+			$feeType[$v->course_id]      = $v->fee_type;
+			$price[$v->course_id]        = $v->price;
+		}
+
+        if(!empty($courseIdArr)){
+            $courseId = implode(',',$courseIdArr);
+        }  
+        
+        if($living == 0){
+            $startTime = date('Y-m-d 00:00:00').','.date('Y-m-d 23:59:59',strtotime('+7 days'));
+            $planQuery = [
+                'start_time'   => $startTime,
+                'course_id'    => $courseId,
+                'status'       => '1,2,3',
+                'couorse_type' =>1
+            ];
+			$ob = ['start_time'=>'asc'];
+        }else{
+            $startTime = date('Y-m-d 23:59:59',strtotime('-7 days')).','.date('Y-m-d 00:00:00');
+            $planQuery = [
+                'start_time' => $startTime,
+                'course_id'=>$courseId,
+                'status'=>'3',
+                'couorse_type'=>1
+            ];
+			$ob = ['start_time'=>'desc'];
+        }
+
+        $planParams = [
+            'q' => $planQuery,
+            'f' => ['plan_id','class_id','class_name','course_id','course_name','status','start_time',
+                    'teacher_name','teacher_real_name','section_name','live_public_type', 
+                   ],
+            'ob'=> $ob,
+            'p' => 1,
+            'pl'=> 100000
+        ];
+
+        $planRes = seek_api::seekPlan($planParams);
+		
+        empty($planRes->data) && $this->setMsg(3002);
+
+        $userCourse = array();
+        if($uid > 0){
+            $regis = course_api::listRegistration(array('uid'=>$uid));
+            if(!empty($regis->data)){
+                foreach($regis->data as $v){
+                    $userCourse[$v->cid] = $v->cid;
+                }
+            }
+        }
+
+        foreach($planRes->data as $v){
+            $stime = date('Y-m-d',strtotime($v->start_time));
+
+            $data['data'][$stime]['date'] = $stime;
+            $data['data'][$stime]['courses'][] = [
+                'planId'     => $v->plan_id,
+                'classId'    => $v->class_id,
+                'className'  => $v->class_name,
+                'setionName' => $v->section_name,
+                'courseId'   => $v->course_id,
+                'courseName' => $v->course_name,
+                'courseImage'=> !empty($courseImgArr[$v->course_id]) ? $this->imgUrl($courseImgArr[$v->course_id]) : '',
+                'teacherName'=> !empty($v->teacher_real_name) ? $v->teacher_real_name : (!empty($v->teacher_name) ? $v->teacher_name : ''),
+                'status'     => $v->status,
+                'time'       => date('H:i',strtotime($v->start_time)),
+                'userStatus' => !empty($userCourse[$v->course_id]) ? 1 : 0,
+				'feeType'    => !empty($feeType[$v->course_id]) ? $feeType[$v->course_id] : 0,
+				'price'      => !empty($price[$v->course_id]) ? $price[$v->course_id]/100 : 0,
+                'livePublicType'=>$v->live_public_type
+            ];
+        }
+        
+        $data['data'] = array_values($data['data']);
+
+        $this->setData($data);
+    }
+	
+	/*
+	 * 章节信息
+	 * @param  courseId 课程id
+	 * @param  uid      用户id
+	 */
+	 public function pageInfo(){
+		$this->v(['courseId'=>1000,'uid'=>1000]);
+		$courseId = intval($this->paramsInfo['params']['courseId']);
+		$uid      = intval($this->paramsInfo['params']['uid']);
+		
+		$params = [
+			'q' => ['course_id'=>$courseId,'status'=>'1,2,3'],
+			'f' => ['plan_id','course_name','section_id','section_name','section_desc','course_type',
+					'teacher_name','teacher_real_name','start_time','status','comment','class_name'
+                ],
+            'p' => 1,
+            'pl'=> 20
+		];
+		
+		$planRes = seek_api::seekPlan($params);
+		empty($planRes->data) && $this->setMsg(3002);
+		
+		
+		$planIdArr = array_reduce($planRes->data, create_function('$v,$w', '$v[$w->plan_id]=$w->plan_id;return $v;'));
+		
+		
+		$videoTime = array();
+		$videoTimeList = utility_services::call('/course/video/GetTotalTimeByPlanIdArr', ['planIdArr' => $planIdArr]);
+		if (!empty($videoTimeList->result)) {
+			foreach ($videoTimeList->result as $video) {
+				$videoTime[$video->fk_plan] = $video->totaltime;
+			}
+		}
+		
+		
+		$commentRet = comment_api::checkIsCommentByPlanId($planIdArr,$uid);
+		
+		$checkComm  = array();
+		if(!empty($commentRet->result->items)){
+			foreach($commentRet->result->items as $v){
+				$checkComm[$v->fk_plan] = 1;
+			}
+		}
+		
+		foreach($planRes->data as $v){
+			$data[] = [
+				'planId'       => $v->plan_id,
+				'courseName'   => $v->course_name,
+				'className'    => $v->class_name,
+				'sectionId'    => $v->section_id,
+				'sectionName'  => $v->section_name,
+				'sectionDesc'  => $v->section_desc,
+				'teacher'      => !empty($v->teacher_real_name) ? $v->teacher_real_name : (!empty($v->teacher_name) ? $v->teacher_name : ''),
+				'time'         => date('m月d日 H:i',strtotime($v->start_time)),
+				'type'         => $v->course_type,
+				'address'      => ($v->status==3) ? '线下课' : '',
+				'status'       => $v->status,
+				'hasVideo'     => !empty($videoTime[$v->plan_id]) ? 1 : 0,
+				'common'       => ($v->status == 1) ? 2 : (!empty($checkComm[$v->plan_id]) && $checkComm[$v->plan_id] > 0 ? 1 : 0)
+			];
+		}
+		
+		$this->setData($data);
+	 }
+}
+

@@ -1,0 +1,543 @@
+<?php
+class user_organization{
+	//获取课程的连接
+	public static function course_domain($subdomain){
+		if(stripos($subdomain, ".")!==false){
+			//全域名路径
+			return $subdomain;
+		}else{
+			//二级域名路径
+			$domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","domain");
+			return $subdomain.".".$domain_conf->domain;
+		}
+	}
+	//获取domain
+	public static function domain(){
+		return $_SERVER['HTTP_HOST'];
+	}
+	//获取2级域名信息，如果是yunke的，只取前缀
+	public static function subdomain(){
+		//把100也当成100.yunke.com去机构域名里去获取，方便以后升级
+		$domain = self::domain();
+		$params=array(
+			'subdomain'=>$domain,
+		);
+		$ret = utility_services::call("/user/organization/GetUserIdBySubDomain/",$params);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+
+		//库里没有数据，走兼容模式
+		$domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","domain");
+		$domain = $domain_conf->domain;
+		if(utility_net::getDomainRoot()!=$domain){
+			$subdomain = $_SERVER['HTTP_HOST'];
+		}else{
+			$host=explode('.',$_SERVER['HTTP_HOST']);
+			$subdomain=$host[0];
+			$count=count($host);
+			if($count!=3){
+				return false;
+			}
+		}
+		$params=array(
+			'subdomain'=>$subdomain,
+		);
+		$ret = utility_services::call("/user/organization/GetUserIdBySubDomain/",$params);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+	public static function getSubdomainByUid($uid){
+		$ret = utility_services::call("/user/organization/getSubDomainByUserId/".$uid);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+	public static function getRegionList($params){
+		$ret = utility_services::call("/region/main/ListRegion/",$params);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+	/*
+	 *获取机构信息没有则创建一个仅有id的记录
+	 */
+	public static function getOrg($oid){
+		$ret = utility_services::call("/user/organization/get/$oid");
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+	public static function getOrgByUid($uid){
+		$ret = utility_services::call("/user/organization/getByUid/$uid");
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+	public static function getOrgByOwner($uid){
+		$ret = utility_services::call("/user/organization/getOrgByOwner/$uid");
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+
+	
+	public static function getOrgByUidTmp($uid){
+		$ret = utility_services::call("/user/organization/getByUidTmp/$uid");
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+	
+	public static function getOrgByOwnerTmp($uid){
+		$ret = utility_services::call("/user/organization/getOrgByOwnerTmp/$uid");
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+	public static function getApplyOrgSubdomainOfUser($userId){
+		$ret = utility_services::call("/user/organization/getApplyOrgSubdomainOfUser/".$userId);
+		return !empty($ret->data) ? $ret->data : false;
+		
+	}
+	public static function setOrgProfileTmp($uid,$data){
+
+		$ret = utility_services::call("/user/organization/setInfoStatus/$uid",$data);
+		if(!empty($ret->result) && $ret->result->code==0){
+			return $ret->result;
+		}
+		return false;
+	}
+	
+	public static function getOrgByTeacher($uid){
+		$ret = utility_services::call("/user/organization/getByTeacher/$uid");
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+	/**
+	 * 设置机构信息
+	 **/
+	public static function setOrg($uid,$data){
+		/*$params=new stdclass;
+		$params->name        =empty($data['name'])?"":$data['name'];
+		$params->thumb_big   =empty($data['thumb_big']  )?"":$data['thumb_big'];
+		$params->thumb_mid   =empty($data['thumb_mid']  )?"":$data['thumb_mid'];
+		$params->thumb_small =empty($data['thumb_small'])?"":$data['thumb_small'];
+		$params->status        =empty($data['status'])?0:$data['status'];
+		$params->desc        =$data['desc'];*/
+		$ret = utility_services::call("/user/organization/set/$uid",$data);
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+    //修改机构信息 新版
+	public static function setOrgProfile($uid,$data){
+		/*$params=new stdclass;
+		$params->subname=$data['subname'];
+		$params->company=$data['company'];
+		$params->scopes=$data['scopes'];
+		$params->province=$data['province'];
+		$params->city=$data['city'];
+		$params->county=$data['county'];
+		$params->address=$data['address'];
+		$params->email=$data['email'];
+		$params->areacode=$data['areacode'];
+		$params->hotline=$data['hotline'];
+		//$params->extension=$data['extension'];
+		$params->policy=$data['policy'];*/
+		$ret = utility_services::call("/user/organization/setOrgProfile/$uid",$data);
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+    public static function setOrgProfileRelateInfo($uid,$data){
+        $ret = utility_services::call("/user/organization/setOrgProfileRelateInfo/$uid",$data);
+        if(!empty($ret->result) && $ret->result->code==0){
+            return true;
+        }
+        return false;
+    }
+    //设置机构轮播图
+	public static function setOrgSlide($sid,$uid,$params,$act){
+        if($act=='edit'){
+		    $ret = utility_services::call("/user/organization/updateOrgSlide/$sid",$params);
+        }else{
+		    $ret = utility_services::call("/user/organization/addOrgSlide/$uid",$params);
+        }
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+	public static function delOrgSlide($sid){
+		$ret = utility_services::call("/user/organization/delOrgSlide/$sid");
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+
+	public static function delCheckInfo($bid){
+		$ret = utility_services::call("/user/organization/delCheckInfo/$bid");
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+
+	public static function setOrgLogo($uid,$data){
+		$params=new stdclass;
+		$params->thumb_small=$data['thumb_small'];
+		$params->thumb_med=$data['thumb_med'];
+		$params->thumb_big=$data['thumb_big'];
+		$ret = utility_services::call("/user/organization/updateOrgLogo/$uid",$params);
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+
+	public static function updatehotType($uid,$data){
+		$params=new stdclass;
+		$params->hot_type=$data['hot_type'];
+		$ret = utility_services::call("/user/organization/updatehotType/$uid",$params);
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+
+	public static function getOrgLogo($uid){
+		$ret = utility_services::call("/user/organization/getOrgLogo/$uid");
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+	public static function getOrgSlide($sid){
+		$ret = utility_services::call("/user/organization/getOrgSlide/$sid");
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+	public static function getOrgSlideList($uid,$page=1,$size=5){
+		$ret = utility_services::call("/user/organization/getOrgSlideList/$uid/$page/$size");
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+    //获取机构关于我们
+	public static function getOrgAbout($uid){
+		$ret = utility_services::call("/user/organization/getOrgAbout/$uid");
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+    //修改机构关于我们
+	public static function setOrgAbout($uid,$data){
+		$params=new stdclass;
+		$params->name=$data['name'];
+		$params->desc=$data['desc'];
+		$ret = utility_services::call("/user/organization/setTmp/$uid",$params);
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * 修改LOGO图像
+	 **/
+	public static function updateLOGO($uid,$avatar = array(),&$ret=""){
+		$params=new stdclass;
+	//	$params->name        =$data['name'];
+	//	$params->thumb_big   =empty($data['thumb_big']  )?"":$data['thumb_big'];
+	//	$params->thumb_mid   =empty($data['thumb_mid']  )?"":$data['thumb_mid'];
+	//	$params->thumb_small =empty($data['thumb_small'])?"":$data['thumb_small'];
+		if($avatar['large']){
+			$params->thumb_big=$avatar['large'];
+		}
+		if($avatar['medium']){
+			$params->thumb_med=$avatar['medium'];
+		}
+		if($avatar['small']){
+			$params->thumb_small=$avatar['small'];
+		}
+		$ret = utility_services::call("/user/organization/setlogo/$uid",$params);
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+	//课在未来扩展为列取本机构下的明星教师
+	public static function listOrgUser($oid,$all=0,$is_star=0,$page=1,$size=5){
+		$params=new stdclass;
+		$params->all = $all;
+		$params->is_star = $is_star;
+		$ret = utility_services::call("/user/organization/userlist/$oid/$page/$size",$params);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+
+    public static function getTeacherList($oid, $page=1, $length=100, $data)
+    {
+        $params = new stdclass;
+        $params->orderBy = $data['orderBy'];
+        $params->condition = $data['condition'];
+
+        return utility_services::call("/user/organization/getOrgUserList/$oid/$page/$length", $params);
+    }
+
+	public static function getOrgUserinfo($oid,$uid,$page=1,$size=5){
+		$params=new stdclass;
+		$params->uid = $uid;
+		$ret = utility_services::call("/user/organization/getorguserinfo/$oid/$page/$size",$params);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+	public static function delUser($oid,$uid){
+		$ret = utility_services::call("/user/organization/userdel/$oid/$uid",$params=null);
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+	public static function addUser($oid,$uid,$data){
+		$params=new stdclass;
+		$params->is_star = empty($data["is_star"])?0:$data["is_star"];
+		$params->sort = empty($data["sort"])?0:$data["sort"];
+		$params->user_role = empty($data["user_role"])?0:$data["user_role"];
+		$ret = utility_services::call("/user/organization/userset/$oid/$uid",$params);
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+	public static function Usersetsort($oid,$uid,$data){
+		$params=new stdclass;
+		$params->is_star = empty($data["is_star"])?0:1;
+		$params->sort = empty($data["sort"])?0:$data["sort"];
+		$ret = utility_services::call("/user/organization/usersetdata/$oid/$uid",$params);
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+    public static function setStarteacher($oid,$uid,$params){
+        $ret = utility_services::call("/user/organization/setOrgUserData/$oid/$uid",$params);
+        if(!empty($ret->result) && $ret->result->code==0){
+            return true;
+        }
+        return false;
+    }
+    public static function delHistoryStarTeacher($oid,$is_star){
+        $ret = utility_services::call("/user/organization/delHistoryStarteacher/".$oid,array('is_star'=>$is_star));
+        if(!empty($ret->result) && $ret->result->code==0){
+            return true;
+        }
+        return false;
+    }
+    public static function setOrgUser($oid,$uid,$params){
+        $ret = utility_services::call("/user/organization/setOrgUser/$oid/$uid",$params);
+        if(!empty($ret->result) && $ret->result->code==0){
+            return true;
+        }
+        return false;
+    }
+	public static function countOrgRole($oid){
+		$ret = utility_services::call("/user/organization/countOrgRole/$oid");
+        return $ret;
+	}
+	public static function getOrgFeeOrderList($owner,$page,$length,$params){
+		$ret = utility_services::call("/course/feeorder/getOrgFeeOrderList/$owner/$page/$length",$params);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+	public static function addOrg($params){
+		return utility_services::call("/user/organization/addOrg",$params);
+	}
+	public static function addOrgVerify($params){
+		$ret = utility_services::call("/user/organization/addOrgVerify",$params);
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+	public static function getOrgVerify($uid){
+		$ret = utility_services::call("/user/organization/getOrgVerify/$uid");
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+	public static function getOrgVerifyBySubDomain($subdomain){
+        $params=array('subdomain'=>$subdomain);
+		$ret = utility_services::call("/user/organization/getOrgVerifyBySubDomain/",$params);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+    public static function getUserIdBySubDomain($subdomain){
+        $params=array(
+                'subdomain'=>$subdomain,
+            );
+		$ret = utility_services::call("/user/organization/GetUserIdBySubDomain/",$params);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+    }
+	public static function getCourseCateSomeName($params){
+		$ret = utility_services::call("/user/organization/getCourseCateSomeName/",$params);
+		if(!empty($ret->items)){
+			return $ret->items;
+		}
+		return false;
+    }
+	public static function getOrgIdsByUid($uid){
+		$ret = utility_services::call("/user/organization/getOrgIdsByUid/$uid");
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+	public static function getSubDomainByOid($oid){
+		$ret = utility_services::call("/user/organization/getSubDomainByOid/$oid");
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+    public static function getOrgInfoByOidArr($oidArr){
+        $url = '/user/organization/getOrgInfoByOidArr';
+        $ret=utility_services::call($url, $oidArr);
+		if(!empty($ret->items)){
+			return $ret->items;
+		}
+		return false;
+    }
+	public static function orgAboutProfileInfo($ownerId){
+        $url = "/user/organization/orgAboutProfileInfo/$ownerId";
+        $ret=utility_services::call($url);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+    }
+    public static function getOrgInfoByUidArr($uidArr){
+        $url = '/user/organization/getOrgInfoByUidArr';
+        $ret=utility_services::call($url, $uidArr);
+		if(!empty($ret->items)){
+			return $ret->items;
+		}
+		return false;
+    }
+	public static function getTeacherRealName($uidArr){
+       $ret = utility_services::call("/user/organization/getTeacherRealName/$uidArr");
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+    }
+	
+	public static function getOrgShowInfo($oid)
+	{
+		$ret = utility_services::call("user/organization/GetOrgShowInfo/".$oid);
+		return $ret;
+	}
+    /**
+     * 获取机构模版
+     * @param $uid 
+     * @return false or obiect
+     * @author Panda <zhangtaifeng@gn100.com>
+     */ 
+	public static function getOrgTemplate($ownerId){
+		$ret = utility_services::call("/user/organization/getOrgTemplate/".$ownerId);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+    /**
+     * 获取机构模版信息
+     * @param $tid 
+     * @return false or obiect
+     * @author Panda <zhangtaifeng@gn100.com>
+     */ 
+    public static function getOrgTemplateInfo($tid){
+        $ret = utility_services::call("/user/organization/getOrgTemplateInfo/".$tid);
+        if(!empty($ret->data)){
+            return $ret->data;
+        }
+        return false;
+    }
+	public static function updateOrgTemplate($tid,$params){
+		$ret = utility_services::call("/user/organization/updateOrgTemplate/$tid",$params);
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+	public static function addOrgTemplate($params){
+		$ret = utility_services::call("/user/organization/addOrgTemplate",$params);
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+	public static function deleteOrgTemplate($tid){
+		$ret = utility_services::call("/user/organization/deleteOrgTemplate/$tid");
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+
+	public static function dataOrgTeacherCount($orgId){
+		$ret = utility_services::call("/user/organization/dataOrgTeacherCount/".$orgId);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+
+    /*
+     * 查询机构教师数量
+     * @param $owner,$status
+     * @return int
+     * @author Panda <zhangtaifeng@gn100.com>
+     */
+    public static function countTeacherByOid($oid, $status){
+        $params= new stdCLass;
+        $params->status=$status;
+        $ret=utility_services::call("/user/organization/countTeacherByOid/$oid", $params);
+        if (!empty($ret->data)) {
+            return $ret->data->count;
+        }
+        return 0;
+    }
+
+}
+

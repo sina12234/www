@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#666666;stroke-linecap:round;stroke-miterlimit:10;vector-effect:non-scaling-stroke}
+	.st1{fill:#666666;vector-effect:non-scaling-stroke}
+	.st2{fill:none;stroke:#666666;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:10.0571,10.0571,10.0571,10.0571;vector-effect:non-scaling-stroke}
+	
+		.st3{fill:none;stroke:#666666;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:10.0571,10.0571,10.0571,10.0571,10.0571,10.0571;vector-effect:non-scaling-stroke}
+</style>
+<g>
+	<line class="st0" x1="119" y1="201" x2="244" y2="201"/>
+	<polygon class="st1" points="167.2,201 152,192.2 152,209.7 	"/>
+	<line class="st0" x1="119" y1="306" x2="244" y2="306"/>
+	<polygon class="st1" points="167.2,306 152,297.2 152,314.7 	"/>
+	<ellipse class="st0" cx="257.5" cy="246.5" rx="13.5" ry="130.5"/>
+	<line class="st0" x1="270.5" y1="200.5" x2="414.5" y2="274.5"/>
+	<line class="st0" x1="269.8" y1="305.3" x2="415.8" y2="232.3"/>
+	<polygon class="st1" points="428.2,226 410.7,225.8 419.3,241.1 	"/>
+	<polygon class="st1" points="426.9,284 419.1,268.2 409.4,282.8 	"/>
+	<g>
+		<g>
+			<line class="st0" x1="77" y1="253" x2="82" y2="253"/>
+			<line class="st2" x1="92.1" y1="253" x2="127.3" y2="253"/>
+			<line class="st3" x1="132.3" y1="253" x2="429" y2="253"/>
+			<line class="st0" x1="434" y1="253" x2="439" y2="253"/>
+		</g>
+	</g>
+	<line class="st0" x1="255.3" y1="119" x2="266.3" y2="148"/>
+	<line class="st0" x1="251.9" y1="128" x2="268.5" y2="176.6"/>
+	<line class="st0" x1="249.9" y1="143.5" x2="269.9" y2="199.5"/>
+	<line class="st0" x1="247.8" y1="157" x2="270.8" y2="222"/>
+	<line class="st0" x1="246.5" y1="172.2" x2="270.5" y2="241.2"/>
+	<line class="st0" x1="245.3" y1="189.5" x2="270.3" y2="261.5"/>
+	<line class="st0" x1="244.5" y1="206.7" x2="270.5" y2="281.7"/>
+	<line class="st0" x1="244" y1="225.9" x2="270" y2="296.9"/>
+	<line class="st0" x1="244.7" y1="245.3" x2="268.7" y2="317.3"/>
+	<line class="st0" x1="244.5" y1="266.1" x2="267.5" y2="333.1"/>
+	<line class="st0" x1="244.8" y1="287.7" x2="265.8" y2="347.7"/>
+	<line class="st0" x1="245.8" y1="308.9" x2="264.8" y2="360.9"/>
+	<line class="st0" x1="247.9" y1="335.8" x2="259.9" y2="371.8"/>
+</g>
+</svg>

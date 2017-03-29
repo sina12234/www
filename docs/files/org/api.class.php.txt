@@ -1,0 +1,193 @@
+<?php
+
+class org_api
+{
+	public static function voteList($page,$length,$param=''){
+		$ret = utility_services::call("/poll/vote/voteList/".$page."/".$length, $param);
+		return $ret;
+	}
+	
+	public static function voteOne($voteId){
+		$ret = utility_services::call("/poll/vote/voteOne/".$voteId);
+		return $ret;
+	}
+	
+	public static function voteAdd($param){
+		$ret = utility_services::call("/poll/vote/voteAdd/",$param);
+		return $ret;
+	}
+	
+	public static function optionAdd($param){
+		$ret = utility_services::call("/poll/vote/optionAdd/",$param);
+		return $ret;
+	}
+	
+	public static function optionList($voteId){
+		$ret = utility_services::call("/poll/vote/optioByVoteId/".$voteId);
+		return $ret;
+	}
+	
+	public static function userLogAdd($param){
+		$ret = utility_services::call("/poll/vote/userLogAdd/",$param);
+		return $ret;
+	}
+	
+	public static function voteUpdate($param){
+		$ret = utility_services::call("/poll/vote/voteUpdate/",$param);
+		return $ret;
+	}
+	
+	public static function userLogList($param,$page='',$length=''){
+		$ret = utility_services::call("/poll/vote/userLogList/".$page."/".$length,$param);
+		return $ret;
+	}
+	
+	public static function customerServicesQqList($orgId){
+		$ret = utility_services::call("/user/organization/customerServicesQqList/".$orgId);
+		return $ret;
+	}
+	public static function addOrgCustomerInfo($param){
+		$ret = utility_services::call("/user/organization/addOrgCustomerInfo/",$param);
+		return $ret;
+	}
+	public static function updateOrgCustomerInfo($tid,$param){
+		$ret = utility_services::call("/user/organization/updateOrgCustomerInfo/".$tid,$param);
+		return $ret;
+	}
+	public static function delOrgCustomerInfo($tid){
+		$ret = utility_services::call("/user/organization/delOrgCustomerInfo/".$tid);
+		return $ret;
+	}
+	public static function getOrgCustomerInfo($param){
+		$ret = utility_services::call("/user/organization/getOrgCustomerInfo/",$param);
+		return $ret;
+	}
+    public static function getOrgTemplateMaxSort($owner){
+        $ret=utility_services::call("/user/organization/getOrgTemplateMaxSort/$owner");
+        if (!empty($ret->data)) {
+            return $ret->data->sort;
+        }
+        return 0;
+    }
+	public static function getOrgCourseProjectInfo($templatesInfo,$plan1,$planinfo){
+			$underCourse = array();
+			if(!empty($templatesInfo)){
+				foreach($templatesInfo as $x=>$y){
+					if($y->course_type=='3'){
+						$underCourse[$y->course_id] = $y;
+					}
+				}
+			}
+			$underCoursePlanInfoTmp = array();
+			if(!empty($planinfo)){
+				foreach($planinfo as $t=>$r){
+					if(!empty($underCourse[$t])){
+						$underCoursePlanInfoTmp[$t] = $planinfo[$t];
+					}	
+				}
+			}
+			$under = array();
+			if(!empty($underCoursePlanInfoTmp)){
+				foreach($underCoursePlanInfoTmp as $k=>$p){
+					foreach($p as $j){
+						foreach($j as $v){
+								if(strtotime($v->start_time) >time()){
+									$under[$k]['section_name'] = $v->section_name;
+									$under[$k]['class_name'] = $v->class_name;
+									$under[$k]['start_time'] = $v->start_time;
+									break;
+								}else{
+									$under[$k]['section_name'] = "";
+									$under[$k]['class_name'] = $v->class_name;
+									$under[$k]['start_time'] = "已完结";
+								}
+						}
+					}
+				}
+			}
+			
+			foreach($plan1 as $k=>$v){
+				foreach($v as $m=>$n){
+						if(!empty($v[$m][3])){
+							$lastSection = end($v[$m][3]);
+							if(!empty($v[$m][1])){
+								foreach($v[$m][1] as $a=>$b){			
+									if(strtotime($lastSection->start_time) < strtotime($b->start_time)){
+										$b->section_name = $b->section_name;
+										if(!empty($v[$m][1][0])){
+											$v[$m][1][0]->section_name = $b->section_name; 
+											$v[$m][1][0]->start_time = $b->start_time;
+										}
+										break;
+									}else{
+										if(!empty($v[$m][1][0])){
+											$v[$m][1][0]->section_name = '';
+											$v[$m][1][0]->start_time = "待定";
+										}
+									}
+								}
+							}else{
+								$v[$m][3][0]->section_name = "";
+								$v[$m][3][0]->start_time = "课程完结";
+							}
+							
+						}else{
+							if(!empty($v[$m][1])){
+								$lastSection = end($v[$m][1]);
+								if(time() > strtotime($lastSection->start_time)){
+									$v[$m][1][0]->section_name = $lastSection->section_name; 
+									$v[$m][1][0]->start_time = $lastSection->start_time;
+                                    if(!empty($under[$k])){
+                                        $v[$m][1][0]->start_time = isset($under[$k]['start_time']) ? $under[$k]['start_time'] : '';
+                                    }  
+								}else{
+									$lastSection = $v[$m][1][0];
+									$v[$m][1][0]->section_name = $lastSection->section_name;
+									$v[$m][1][0]->start_time = $lastSection->start_time;
+                                    if(!empty($under[$k])){
+                                        $v[$m][1][0]->section_name = isset($under[$k]['section_name']) ? $under[$k]['section_name'] : '';
+                                        $v[$m][1][0]->start_time = isset($under[$k]['start_time']) ? $under[$k]['start_time'] : '';
+                                        
+                                    }
+								}	
+							}	
+						}				
+				}
+			}
+            $plan=array();
+            if(!empty($plan1)){
+                foreach($plan1 as $k=>$v){
+                    $arr=array_chunk($v,2,true);
+                    $plan[$k]=$arr[0]; 
+                }
+            }
+			return $plan;
+	}
+	
+	public static function addMsgTask($param){
+		$ret = utility_services::call("/poll/vote/addMsgTask/",$param);
+		return $ret;
+	}
+	public static function ajaxAddNoticeCategory($param){
+		$ret = utility_services::call("/user/organization/ajaxAddNoticeCategory/",$param);
+		return $ret;
+	}
+	public static function noticeCategoryList($param){
+		$ret = utility_services::call("/user/organization/noticeCategoryList/",$param);
+		return $ret;
+	}
+	public static function getCateNameInfo($param){
+		$ret = utility_services::call("/user/organization/getCateNameInfo/",$param);
+		return $ret;
+	}
+	public static function updateNoticeCate($param){
+		$ret = utility_services::call("/user/organization/updateNoticeCate/",$param);
+		return $ret;
+	}
+	public static function delnoticeCateInfo($param){
+		$ret = utility_services::call("/user/organization/delnoticeCateInfo/",$param);
+		return $ret;
+	}
+}
+?>
+

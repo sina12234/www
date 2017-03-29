@@ -1,0 +1,64 @@
+<?php
+/*
+ * chat传递消息接口
+ */
+class exam_log extends STpl{
+	var $user;
+	public function __construct($inPath){
+		$this->user = user_api::loginedUser();
+	}
+	public function pageLogIssue($inPath){
+		if(empty($this->user)){
+			return false;
+		}
+		if(!empty($_POST)){
+			return exam_api::logIssue($_POST, $this->user["uid"]);
+		}
+		return false;
+	}
+	public function pageLogUserQues($inPath){
+		if(empty($this->user)){
+			return false;
+		}
+		if(!empty($_POST)){
+			$data = array();
+			$data["plan_id"] = $_POST["plan_id"];
+			$user_id = $_POST["user_id"];
+			$ret = exam_api::logUserQues($data, $this->user["uid"]);
+			$returndata = new stdclass;
+			if(!empty($ret->data)){
+				$all = count($ret->data);
+				$correct = array();
+				$mistake = array();
+				$miss = array();
+				foreach($ret->data as $k=>$v){
+					if(empty($v->options)){
+						$miss[] = $v;
+					}elseif($v->correct ==1){
+						$correct[] = $v;
+					}else{
+						$mistake[] = $v;
+					}
+				}
+				$countAll = $all;
+				$countCorrect = count($correct);
+				$countMistake = count($mistake);
+				$countMiss = count($miss);
+				$returndata->all = $countAll;
+				$returndata->correct = $countCorrect;
+				$returndata->mistake = $countMistake;
+				$returndata->miss = $countMiss;
+			}else{
+				$returndata->all = 0;
+				$returndata->correct = 0;
+				$returndata->mistake = 0;
+				$returndata->miss = 0;
+			//	$returndata = array("all"=>"0","correct"=>"0","mistake"=>"0","miss"=>"0");
+			}
+			return SJSON::encode($returndata);
+		}
+		return false;
+	}
+}
+?>
+

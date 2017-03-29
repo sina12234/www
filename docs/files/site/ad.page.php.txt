@@ -1,0 +1,493 @@
+<?php
+
+class site_ad extends STpl
+{
+
+    public function __construct()
+    {
+        $user = user_api::loginedUser();
+        $this->uid = !empty($user['uid']) ? $user['uid'] : 0;
+        $this->isLogin = !empty($this->user) ? 1 : 0;
+    }
+
+    public function pagePrimary()
+    {
+        $courseIdArr = [209,218,219,210,223,244,224,427];
+
+        $this->assign('courseId', $this->_getCid($this->uid, $courseIdArr));
+        $this->assign('isLogin', $this->isLogin);
+        $this->assign('list', $this->_getCourseList($courseIdArr));
+        $this->render('/ad/grade.html');
+    }
+
+    public function pageSenior()
+    {
+        $courseIdArr = [211,279,238,225,428];
+
+        $this->assign('courseId', $this->_getCid($this->uid, $courseIdArr));
+        $this->assign('isLogin', $this->isLogin);
+        $this->assign('list', $this->_getCourseList($courseIdArr));
+        $this->render('/ad/senior.html');
+    }
+
+    public function pageJunior()
+    {
+        $courseIdArr = [204,207,198,228,205,231,234,237,206,236,245,243];
+
+        $this->assign('courseId', $this->_getCid($this->uid, $courseIdArr));
+        $this->assign('isLogin', $this->isLogin);
+        $this->assign('list', $this->_getCourseList($courseIdArr));
+        $this->render('/ad/junior.html');
+    }
+
+    public function pageSc($inPath)
+    {
+        $user = user_api::loginedUser();
+        $uid = empty($user) ? 0 : $user['uid'];
+        $cid = !empty($inPath[3]) ? intval($inPath[3]) : 0;
+        $dc = !empty($inPath[4]) ? trim($inPath[4]) : '';
+
+        if ($this->_checkSc($cid, $uid, $dc)) {
+            $this->_CLog("SC 报名成功cid[{$cid}],uid[{$uid}],dc[{$dc}]\n", 3, "/tmp/wen.yue.log");
+        } else {
+            $this->_CLog("SC 报名失败id[{$cid}],uid[{$uid}],dc[{$dc}]\n", 3, "/tmp/wen.yue.log");
+        }
+
+        $this->redirect("/course/info/show/{$cid}");
+    }
+
+    public function pageBm($inPath)
+    {
+        $user = user_api::loginedUser();
+        $uid = empty($user) ? 0 : $user['uid'];
+        $cid = !empty($inPath[3]) ? intval($inPath[3]) : 0;
+        $classId = !empty($inPath[4]) ? trim($inPath[4]) : 0;
+
+        if (!$cid || !$uid || !$classId) {
+            SLog::fatal("课程id[%d]或者uid[%d]或者班级id[%d]为空", $cid, $uid, $classId);
+            $this->redirect('/');
+        }
+
+        $courseInfo = course_api::getCourseone($cid);
+        if (empty($courseInfo)) {
+            SLog::fatal('课程不存在,课程id[%s]', $cid);
+            $this->redirect('/');
+        }
+
+        if (!empty(course_api::checkIsRegistration($uid, $cid))) {
+            SLog::fatal('已经报名,uid[%d],courseId[%d]', $uid, $cid);
+            $this->redirect("/course/info/show/{$cid}?error=hasReg");
+        }
+
+        $data = [
+            'class_id' => $classId,
+            'course_id' => $cid,
+            'uid' => $uid,
+            'user_owner' => $courseInfo->user_id,
+            'status' => 1
+        ];
+
+        if ($courseInfo->fee_type == 1) {
+            //生成订单
+            $orderInfo = course_api::addFeeOrder(
+                $uid,
+                $courseInfo->user_id,
+                $cid,
+                $courseInfo->fee->price,
+                $courseInfo->fee->price_market,
+                $classId
+            );
+
+            if (empty($orderInfo)) {
+                SLog::fatal("付费课程，生成订单失败,params[%s]", var_export($orderInfo, 1));
+                $this->redirect("/course/info/show/{$cid}?error=orderFail");
+            }
+            $this->redirect("/course.info.Pay/{$orderInfo->unique_order_id}");
+        }
+
+        if (course_api::addregistration($data)) {
+            $this->redirect("/course/info/show/{$cid}");
+        } else {
+            SLog::fatal("课程报名失败,params[%s]", var_export($data, 1));
+            $this->redirect("/course/info/show/{$cid}?error=addRegFail");
+        }
+    }
+
+    private function _checkSc($cid, $uid, $dc='')
+    {
+        $this->_CLog("\n----------SC begin param[{var_export(['cid'=>$cid,'uid'=>$uid, 'dc'=>$dc], 1)}]------------\n");
+        if (!$cid || !$uid) {
+            $this->_CLog("SC 课程id或者uid为空\n");
+            return false;
+        }
+
+        $courseInfo = course_api::getCourseone($cid);
+        if (empty($courseInfo)) {
+            $this->_CLog("SC 课程不存在\n");
+            return false;
+        }
+
+        if (!empty(course_api::checkIsRegistration($uid, $cid))) {
+            $this->_CLog("SC 已经报名\n");
+            return false;
+        }
+
+        $classId = $this->_getClassData($cid);
+        if (!$classId) {
+            $this->_CLog("sc classId 不存在\n");
+            return false;
+        }
+
+        $data = [
+            'class_id' => $classId,
+            'course_id' => $cid,
+            'uid' => $uid,
+            'user_owner' => $courseInfo->user_id,
+            'status' => 1
+        ];
+
+        if ($courseInfo->fee_type && $dc) {
+            $checkDiscountCode = utility_services::call("/course/discount/CheckDiscountCode/{$dc}");
+            if (isset($checkDiscountCode->code) && $checkDiscountCode->code) {
+                $this->_CLog("SC disCountCode{$dc}不存在\n");
+                return false;
+            }
+
+            //生成订单
+            $orderInfo = course_api::addFeeOrder(
+                $uid,
+                $courseInfo->user_id,
+                $cid,
+                $courseInfo->fee->price,
+                $courseInfo->fee->price_market,
+                $classId
+            );
+            if (empty($orderInfo)) {
+                $this->_CLog("SC 生成订单错误\n");
+                return false;
+            }
+            // 记录订单日志 2015-12-02 15:29:36
+            log_userAgent::addUserAgentInfo(
+                [
+                    'status'  => 1,
+                    'payType' => 3,
+                    'source'  => 3,
+                    'orderId' => $orderInfo->order_id
+                ]
+            );
+
+            $retCode = course_api::useDiscountCode($dc, $uid, $orderInfo->unique_order_id);
+            if ($retCode->result->code == 0) {
+                course_api::confirmDiscountCode($orderInfo->order_id);
+                $newOrderInfo = course_api::getFeeOrder($orderInfo->unique_order_id);
+
+                if ($newOrderInfo->price > 0) {
+                    $this->_CLog("SC优惠之后的价格大于0\n".var_export($newOrderInfo, 1));
+                    return false;
+                }
+
+                // 更新订单状态 ，报名成功
+                if (course_api::updateFeeOrder($newOrderInfo->order_id, ['status'=>'success', 'pay_type'=>'free'])) {
+                    if (course_api::addregistration($data)) {
+                        return true;
+                    } else {
+                        $this->_CLog("SC 更新订单成功之后，付费课程报名失败\n".var_export($data, 1));
+                        return false;
+                    }
+                } else {
+                    $this->_CLog("更新订单失败\n".var_export($newOrderInfo, 1));
+                    return false;
+                }
+            } else {
+                $this->_CLog("SC优惠码使用错误\n".var_export($retCode, 1));
+                return false;
+            }
+        } elseif ($courseInfo->fee_type == 1) {
+            //生成订单
+            $orderInfo = course_api::addFeeOrder(
+                $uid,
+                $courseInfo->user_id,
+                $cid,
+                $courseInfo->fee->price,
+                $courseInfo->fee->price_market,
+                $classId
+            );
+
+            if (empty($orderInfo)) {
+                $this->_CLog("SC 微信登陆付费课程，生成订单失败\n");
+                return false;
+            }
+            $this->redirect("/course.info.Pay/{$orderInfo->unique_order_id}");
+        } elseif ($courseInfo->fee_type == 0) {
+            if (course_api::addregistration($data)) {
+                return true;
+            } else {
+                $this->_CLog("SC 免费课程报名失败\n");
+                return false;
+            }
+        } else {
+            $this->_CLog("参数错误,报名失败\n".var_export(['dc'=>$dc], 1));
+            return false;
+        }
+    }
+
+    private function _CLog($str)
+    {
+        $url = $_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];
+        error_log('['.date('Y-m-d H:i:s', time()).']'."url[{$url}]".$str, 3, "/tmp/wen.yue.log");
+    }
+
+    private function _getCid($uid, $courseIdArr)
+    {
+        if (!$uid) return 0;
+
+        $list = course_api::listRegistration(['uid'=>$uid], 1, 1000);
+        $courseId = 0;
+
+        if (!empty($list->data)) {
+            foreach ($list->data as $v) {
+                if (in_array($v->cid, $courseIdArr)) {
+                    $courseId = $v->cid;
+                }
+            }
+        }
+
+        if (!$this->isLogin) {
+            $courseId = 0;
+        }
+
+        return $courseId;
+    }
+
+    public function _getCourseList($courseIdArr)
+    {
+        $qqArr = [
+            '209' => [
+                'title' => '四年级学习交流群',
+                'qqGroup' => '192710039',
+                'idKey' => '4529305df35a76f3e3fc23a1ea2ff1dfffc6799cb2745376c80c5183d24bca2a',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=YwWnTX'
+            ],
+            '218' => [
+                'title' => '',
+                'qqGroup' => '192710039',
+                'idKey' => '4529305df35a76f3e3fc23a1ea2ff1dfffc6799cb2745376c80c5183d24bca2a',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=YwWnTX'
+            ],
+            '219' => [
+                'title' => '',
+                'qqGroup' => '192710039',
+                'idKey' => '4529305df35a76f3e3fc23a1ea2ff1dfffc6799cb2745376c80c5183d24bca2a',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=YwWnTX'
+            ],
+
+            '210' => [
+                'title' => '五年级学习交流群',
+                'qqGroup' => '178718837',
+                'idKey' => '9326788b7b13e75f50a00ff5f7bc045d024a9d22a8f0ba6121628f1aa701ad28',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=aWnV66'
+            ],
+            '223' => [
+                'title' => '',
+                'qqGroup' => '178718837',
+                'idKey' => '9326788b7b13e75f50a00ff5f7bc045d024a9d22a8f0ba6121628f1aa701ad28',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=aWnV66'
+            ],
+            '244' => [
+                'title' => '',
+                'qqGroup' => '178718837',
+                'idKey' => '9326788b7b13e75f50a00ff5f7bc045d024a9d22a8f0ba6121628f1aa701ad28',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=aWnV66'
+            ],
+            '224' => [
+                'title' => '',
+                'qqGroup' => '178718837',
+                'idKey' => '9326788b7b13e75f50a00ff5f7bc045d024a9d22a8f0ba6121628f1aa701ad28',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=aWnV66'
+            ],
+            '427' => [
+                'title' => '',
+                'qqGroup' => '178718837',
+                'idKey' => '9326788b7b13e75f50a00ff5f7bc045d024a9d22a8f0ba6121628f1aa701ad28',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=aWnV66'
+            ],
+
+            '211' => [
+                'title' => '小升初学习交流群',
+                'qqGroup' => '155360017',
+                'idKey' => '866357050aa10b58e89cd410852530cad00f22dfeb1c8439a3f6978a8a6e509f',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=ayA1QK'
+            ],
+            '279' => [
+                'title' => '',
+                'qqGroup' => '155360017',
+                'idKey' => '866357050aa10b58e89cd410852530cad00f22dfeb1c8439a3f6978a8a6e509f',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=ayA1QK'
+            ],
+            '238' => [
+                'title' => '',
+                'qqGroup' => '155360017',
+                'idKey' => '866357050aa10b58e89cd410852530cad00f22dfeb1c8439a3f6978a8a6e509f',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=ayA1QK'
+            ],
+            '225' => [
+                'title' => '',
+                'qqGroup' => '155360017',
+                'idKey' => '866357050aa10b58e89cd410852530cad00f22dfeb1c8439a3f6978a8a6e509f',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=ayA1QK'
+            ],
+            '428' => [
+                'title' => '',
+                'qqGroup' => '155360017',
+                'idKey' => '866357050aa10b58e89cd410852530cad00f22dfeb1c8439a3f6978a8a6e509f',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=ayA1QK'
+            ],
+
+            '204' => [
+                'title' => '初一学习交流群',
+                'qqGroup' => '142787595',
+                'idKey' => '57becc1d2ed26e9c197d35435fef47c1c592236040a42abed15b92be4a85433f',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=jg6yXq'
+            ],
+            '207' => [
+                'title' => '',
+                'qqGroup' => '142787595',
+                'idKey' => '57becc1d2ed26e9c197d35435fef47c1c592236040a42abed15b92be4a85433f',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=jg6yXq'
+            ],
+            '198' => [
+                'title' => '',
+                'qqGroup' => '142787595',
+                'idKey' => '57becc1d2ed26e9c197d35435fef47c1c592236040a42abed15b92be4a85433f',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=jg6yXq'
+            ],
+
+            '228' => [
+                'title' => '初二学习交流群',
+                'qqGroup' => '479895487',
+                'idKey' => '8e4c845449c1cad711b72a82844dd9d060ca04ecb7f8fe63b89ec31e4b6908ae',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=eBpgbW'
+            ],
+            '205' => [
+                'title' => '',
+                'qqGroup' => '479895487',
+                'idKey' => '8e4c845449c1cad711b72a82844dd9d060ca04ecb7f8fe63b89ec31e4b6908ae',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=eBpgbW'
+            ],
+            '231' => [
+                'title' => '',
+                'qqGroup' => '479895487',
+                'idKey' => '8e4c845449c1cad711b72a82844dd9d060ca04ecb7f8fe63b89ec31e4b6908ae',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=eBpgbW'
+            ],
+            '234' => [
+                'title' => '',
+                'qqGroup' => '479895487',
+                'idKey' => '8e4c845449c1cad711b72a82844dd9d060ca04ecb7f8fe63b89ec31e4b6908ae',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=eBpgbW'
+            ],
+
+            '237' => [
+                'title' => '初三学习交流群',
+                'qqGroup' => '177879346',
+                'idKey' => 'a699996b990cc9a0c9bee47de1f1bf23019d41a9f08301d25f2eadbe2b10d33e',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=csnjCu'
+            ],
+            '206' => [
+                'title' => '',
+                'qqGroup' => '177879346',
+                'idKey' => 'a699996b990cc9a0c9bee47de1f1bf23019d41a9f08301d25f2eadbe2b10d33e',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=csnjCu'
+            ],
+            '236' => [
+                'title' => '',
+                'qqGroup' => '177879346',
+                'idKey' => 'a699996b990cc9a0c9bee47de1f1bf23019d41a9f08301d25f2eadbe2b10d33e',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=csnjCu'
+            ],
+            '245' => [
+                'title' => '',
+                'qqGroup' => '177879346',
+                'idKey' => 'a699996b990cc9a0c9bee47de1f1bf23019d41a9f08301d25f2eadbe2b10d33e',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=csnjCu'
+            ],
+            '243' => [
+                'title' => '',
+                'qqGroup' => '177879346',
+                'idKey' => 'a699996b990cc9a0c9bee47de1f1bf23019d41a9f08301d25f2eadbe2b10d33e',
+                'link' => 'http://jq.qq.com/?_wv=1027&k=csnjCu'
+            ]
+        ];
+
+        $courseIdStr = implode(',', $courseIdArr);
+        $param = [
+            'q' => [
+                'course_id' => $courseIdStr,
+            ],
+            'f' => [
+                'course_id',
+                'user_total',
+                'section_count',
+            ]
+        ];
+
+        $res = seek_api::seekCourse($param);
+        if (empty($res->data)) {
+            return [];
+        }
+
+        $data = $result = [];
+        foreach ($res->data as $v) {
+            $data[$v->course_id] = array(
+                'cid'          => $v->course_id,
+                'userTotal'      => $v->user_total,
+                'sectionNum'        => $v->section_count,
+                'qqGroup' => !empty($qqArr[$v->course_id]) ? $qqArr[$v->course_id]['qqGroup'] : '',
+                'title' => !empty($qqArr[$v->course_id]) ? $qqArr[$v->course_id]['title'] : '',
+                'idKey' => !empty($qqArr[$v->course_id]) ? $qqArr[$v->course_id]['idKey'] : '',
+                'link' => !empty($qqArr[$v->course_id]) ? $qqArr[$v->course_id]['link'] : '',
+            );
+        }
+
+        foreach ($courseIdArr as $v) {
+            if (!empty($data[$v])) {
+                $result[$v] = $data[$v];
+            }
+        }
+
+        return array_values($result);
+    }
+
+    private function _getClassData($cid)
+    {
+        $params = [
+            'q' => [
+                'course_id' => $cid
+            ],
+            'f' => [
+                'course_id',
+                'class'
+            ]
+        ];
+
+        $res = seek_api::seekCourse($params);
+
+        if (empty($res->data)) return 0;
+
+        $class = [];
+        foreach ($res->data as $v) {
+            if (!empty($v->class)) {
+                foreach ($v->class as $m) {
+                    $class[] = $m->class_id;
+                }
+            }
+        }
+
+        if (count($class) > 1) return false;
+
+        return $class[0];
+    }
+
+}
+
+

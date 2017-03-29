@@ -1,0 +1,98 @@
+<?php
+/**
+  *  by fanbin
+  *  判断权限方法
+  */
+ 
+class utility_teacherreg{
+
+
+	/*  TODO  this
+	 *  判断当前课程是否属于该机构
+	 *  判断当前用户是否属于该机构
+	 *  $course_id 课程id 
+	 *  $user_id    机构所有者id
+	 *	$user_class_id
+	 */
+	public static function teacherClassList($user_id=null,$user_class_id=null,$course_id=null,$page=null,$length=null){
+		if(empty($length)) {$length=0;}
+		if(empty($page)) {$page=0;}
+		if($user_class_id){
+			$user_class_id = $user_class_id;
+		}else{
+			$user_class_id = 0;
+		}
+
+		if($user_id){
+			$user_id = $user_id;
+		}else{
+			$user_id = 0;
+		}
+
+		if($course_id){
+			$course_id = $course_id;
+		}else{
+			$course_id = 0;
+		}
+		$classCond = array("user_id"=>$user_id,"user_class_id"=>$user_class_id,"course_id"=>$course_id);
+		$classList = course_api::classlistbycond($classCond);
+		if(empty($classList->data)){
+			return 0;
+		}
+
+		//return $classList;
+
+		if(!empty($classList->data)){
+			foreach($classList->data as $k=>$v){
+				if($v->course_id !=0){
+					$course[$v->course_id] = $v;
+				}
+			}
+			//前端的显示配对class数组
+			foreach($classList->data as $ck=>$cv){
+				if(!empty($cv->name)){
+					$classShowdata[$cv->class_id]=$cv;
+				}
+			}
+			if(!empty($classShowdata)){
+				$class_id = array_keys($classShowdata);
+			}
+			if(!empty($course)){
+				foreach($course as $k=>$v){ 
+					foreach($classList->data as $ck=>$cv){
+						if($k==$cv->course_id){
+							$classdata[$k][]=$cv;
+						}
+					}
+				}
+			}
+		}
+		if(!empty($class_id)){
+			if($class_id){
+				$regdata = array(
+					'course_ids'=>$course_id,
+					'class_id'=>$class_id,
+					//'uids'=>$list_reg_uid_arr2,
+				);
+				//获取courseid是这些的老师的报名学生
+				$reglist = course_api::listRegistrationBycond($regdata,$page,$length);
+				foreach($reglist->data as $k=>$v){
+					$reglist->data[$k]->class_name = $classShowdata[$v->class_id]->name;
+					$reglist->data[$k]->course_name = $course[$v->cid]->course_title;
+				}
+			}
+		}else{
+			$reglist = 0;
+		}
+		return $reglist;
+
+
+
+
+
+
+
+
+	}
+}
+

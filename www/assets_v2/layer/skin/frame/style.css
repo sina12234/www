@@ -1,0 +1,46 @@
+html #layui_layer_skinframestylecss{
+	display:none;
+ 	position: absolute; 
+ 	width:1989px;
+}
+body .layer-ext-frame .layui-layer-title{
+	height:36px;
+	font-size:14px;
+	color:#666;
+	background-color:#f1f1f1;
+	border:1px solid #dcdcdc;
+	line-height: 34px;
+}
+
+body .layer-ext-frame .layui-layer-content{
+	font-size: 14px;
+	color: #666;
+	text-align: center;
+}
+body .layer-ext-frame  .layui-layer-btn{
+	padding-bottom: 20px;
+} 
+body .layer-ext-frame .layui-layer-setwin .layui-layer-close1,body .layer-ext-frame .layui-layer-setwin .layui-layer-close2 {
+	background: url(close.png) no-repeat center;
+}
+body .layer-ext-frame  .layui-layer-btn a{
+	height: 35px;
+	padding: 0 25px;
+	border-radius: 3px;
+	line-height: 35px;
+}
+body .layer-ext-frame  .layui-layer-btn a:hover{
+	opacity: 0.8;
+}
+body .layer-ext-frame .layui-layer-btn .layui-layer-btn0 {
+	background-color: #ffa81e;
+	font-size: 14px;
+	color: #fff;
+}
+body .layer-ext-frame .layui-layer-btn .layui-layer-btn1 {
+	height: 35px;
+	background-color: #f1f1f1;
+	border:1px solid #dbdbdb;
+	font-size: 14px;
+	color: #999;
+}

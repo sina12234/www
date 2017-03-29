@@ -1,0 +1,166 @@
+<?php
+
+class interface_value extends interface_base
+{
+    public function pageGetUserBalance()
+    {
+        $this->v(
+            [
+                'userId' => 1000,
+            ]
+        );
+        $this->uidTokenValid($this->paramsInfo['token'], $this->paramsInfo['params']['userId']);
+
+        // interface_user_api 142-151
+        $priceSetting = [
+            ['id ' => 'com.yunke.yd20', 'price' => 30, 'yundian' => 20],
+            ['id ' => 'com.yunke.yd50', 'price' => 73, 'yundian' => 50],
+            ['id ' => 'com.yunke.yd225', 'price' => 328, 'yundian' => 225],
+            ['id ' => 'com.yunke.yd719', 'price' => 1048, 'yundian' => 719],
+            ['id ' => 'com.yunke.yd2056', 'price' => 2998, 'yundian' => 2056],
+            ['id ' => 'com.yunke.yd4458', 'price' => 6498, 'yundian' => 4458],
+            ['id ' => 'com.yunke.free1', 'price' => 150, 'yundian' => 100],
+            ['id ' => 'com.yunke.free2', 'price' => 160, 'yundian' => 1000],
+        ];
+
+        $balance = interface_user_api::getUserBalance($this->paramsInfo['params']['userId']);
+
+        interface_func::setData(
+            [
+                'balance'      => $balance,
+                'priceSetting' => $priceSetting
+            ]
+        );
+    }
+
+    public function pageValid()
+    {
+        $this->v(
+            [
+                'userId'  => 1000,
+                'payCert' => 1000,
+                'transactionId' => 1000
+            ]
+        );
+        $this->uidTokenValid($this->paramsInfo['token'], $this->paramsInfo['params']['userId']);
+
+        $sandBox = false;
+        if (!empty($this->paramsInfo['params']['sandBox'])) {
+            $sandBox = true;
+        }
+
+        // check transactionId exists?
+        $existsTransactionId = interface_user_api::exists($this->paramsInfo['params']['transactionId']);
+        if ($existsTransactionId) {
+            // get balance
+            $balance = interface_user_api::getUserBalance($this->paramsInfo['params']['userId']);
+            interface_func::setData(['balance' => $balance]);
+        }
+
+        try {
+            $info = utility_iap::getReceiptData($this->paramsInfo['params']['payCert'], $sandBox);
+
+            if (!empty($info->receipt)) {
+                $productValue = interface_user_api::getProductValue($info, $this->paramsInfo['params']['transactionId']);
+                !$productValue && interface_func::setMsg(2044);
+                
+                // recharge
+                $rechargeData = [
+                    'userId'  => $this->paramsInfo['params']['userId'],
+                    'iosCoin' => $productValue
+                ];
+                // add recharge log
+                if (interface_user_api::addLog($rechargeData) === false) {
+                    interface_func::setMsg(2046); // recharge records failed
+                }
+
+                if (interface_user_api::add($rechargeData) === false) {
+                    interface_func::setMsg(2047); // recharge failed
+                }
+
+                // add userThirdParty log
+                $thirdPartyData = [
+                    'userId'          => $this->paramsInfo['params']['userId'],
+                    'transactionId'   => $this->paramsInfo['params']['transactionId'],
+                    'transactionInfo' => json_encode($info)
+                ];
+                interface_user_api::addThirdPartyLog($thirdPartyData);
+
+                // get balance
+                $balance = interface_user_api::getUserBalance($this->paramsInfo['params']['userId']);
+                interface_func::setData(['balance' => $balance]);
+            }
+        } catch(Exception $e) {
+            exit(json_encode(
+                [
+                    'code' => $e->getCode(),
+                    'msg'  => $e->getMessage()
+                ]
+            ));
+        }
+    }
+
+    public function pageYunPay()
+    {
+        $this->v(
+            [
+                'userId'  => 1000,
+                'orderId' => 1000
+            ]
+        );
+        $userId = $this->paramsInfo['params']['userId'];
+        $orderId = $this->paramsInfo['params']['orderId'];
+
+        $this->uidTokenValid($this->paramsInfo['token'], $userId);
+
+        $orderInfo = interface_user_api::getOrderInfo($orderId);
+
+        empty($orderInfo) && interface_func::setMsg(2025); // 订单不存在
+        ($orderInfo['orderStatus'] == 'expired') && interface_func::setMsg(2024); // 订单过期
+        $balance = interface_user_api::getUserBalance($userId);
+
+        if ($balance * 100 < $orderInfo['price'] * 100) {
+            interface_func::setMsg(2045); // 用户余额不足
+        }
+
+        // 购买课程 消费成功，更新余额
+        if (interface_user_api::updateBalance($userId, -$orderInfo['price'] * 100)) {
+            // 记录消费记录
+            $logData = [
+                'userId'  => $userId,
+                'iosCoin' => $orderInfo['price'] * 100,
+                'orderId' => $orderInfo['orderId'],
+                'source'  => 1,
+                'type'    => 2
+            ];
+            interface_user_api::addLog($logData);
+
+            // 报名
+            $reg['uid']        = $orderInfo['userId'];
+            $reg['course_id']  = $orderInfo['courseId'];
+            $reg['user_owner'] = $orderInfo['userOwner'];
+            $reg['class_id']   = $orderInfo['classId'];
+            $reg['status']     = 1;
+            if (course_api::addregistration($reg) === false) {
+                SLog::fatal('yun pay add reg failed,params[%s]', var_export($reg, 1));
+            }
+
+            // 更新订单状态
+            $orderUpdateData = [
+                'status'   => 'success',
+                'pay_type' => 'inapp'
+            ];
+            if (course_api::updateFeeOrder($orderInfo['orderId'], $orderUpdateData) === false) {
+                SLog::fatal('yun pay update fee order failed,params[%s]', var_export($orderUpdateData, 1));
+            }
+
+            $orderInfo['payType'] = 4;
+            $orderInfo['balance'] = interface_user_api::getUserBalance($userId);
+
+            $this->setData($orderInfo);
+        }
+
+        $this->setMsg(2048);
+    }
+}
+

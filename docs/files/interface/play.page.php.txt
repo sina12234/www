@@ -1,0 +1,28 @@
+<?php
+
+class interface_play extends interface_base
+{
+
+    public function pageStream()
+    {
+        if (!utility_tool::check_int($this->paramsInfo['params']['planId'])) {
+            $this->setMsg(1010);
+        }
+
+        $playInfo = player_live::getLiveUrl($this->paramsInfo['params']['planId']);
+
+        if (!empty($playInfo) && $playInfo->live_call != 'publish_done') {
+            $this->setData(
+                [
+                    'url' => "rtmp://".$playInfo->host_chat.":1936/chat",
+                    'stream' => $playInfo->stream_name
+                ]
+            );
+        }
+
+        $this->setMsg(1011);
+    }
+
+
+}
+

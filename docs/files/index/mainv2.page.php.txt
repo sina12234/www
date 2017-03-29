@@ -1,0 +1,195 @@
+<?php
+class index_mainv2 extends STpl{
+	function __construct(){
+		$org=user_organization::subdomain();
+		if(!empty($org)){
+			$this->orgOwner = $org->userId; //机构所有者id 以后会根据域名而列取 
+		}else{
+            header('Location: https://www.gn100.com');
+		}
+		$this->orgInfo = user_organization::getOrgByOwner($this->orgOwner);
+	}
+	function __destruct(){
+	}
+	function pageEntry($inPath){
+		$noticeList=user_api::getNoticeList(1,5,$this->orgOwner);
+		$slideList = user_organization::getOrgSlideList($this->orgOwner);
+		$this->assign("noticeList",$noticeList);
+		$this->assign("slideList",$slideList);
+		//直播课堂
+		$plan_con = array(
+			"week"=>"1",
+			"page"=>"1",
+			"length"=>"9",
+			"orgUserId"=>$this->orgOwner,
+		);
+		$timetable1 = course_api::listPlan($plan_con);
+		if(!empty($timetable1->data)){
+			$timetable = $timetable1->data;
+		}else{
+		    $plan_con = array(
+		    	"week"=>"-1",
+		    	"page"=>"1",
+		    	"length"=>9,
+		    	"orgUserId"=>$this->orgOwner,
+		    );
+		    $timetable2 = course_api::listPlan($plan_con);
+            if(!empty($timetable2->data)){
+			    $timetable = $timetable2->data;
+            }else{
+			    $timetable = $timetable2->data;
+            }
+        }
+	    $this->assign("timetable",$timetable);
+        //从中间层获取首页课程
+		$page=isset($_GET['page'])?$_GET['page']:1;
+		$size = 8;
+		$shelf = 1;
+        $f_array = array("tags","course_id","title","create_time","desc","start_time","cate_id","thumb_big","thumb_sma","recomm_weight",
+                "course_type","grade_id","user_id","public_type","fee_type","price","market_price","max_user","min_user","user_total",
+                "status","admin_status","system_status","class_id","section_id","end_time","create_time","last_updated",
+                "section","class", 
+                //新加上的
+                'top'=>'top',
+            );
+        $q_array1=array(
+                'course_type'=>1,
+                'admin_status'=>1,
+                'user_id'=>$this->orgOwner,
+            );
+        $q_array2=array(
+                'fee_type'=>0,
+                'admin_status'=>1,
+                'user_id'=>$this->orgOwner,
+            );
+        $q_array3=array(
+                'fee_type'=>1,
+                'admin_status'=>1,
+                'user_id'=>$this->orgOwner,
+            );
+        $ob_array = array(
+                'top'=>'desc',
+            );
+        $seek_arr1 = array(
+                "f"=>$f_array,
+                "q"=>$q_array1,
+                "ob"=>array('recomm_weight'=>'desc'),
+                "p"=>1,
+                "pl"=>4,
+            );
+        $seek_arr2 = array(
+                "f"=>$f_array,
+                "q"=>$q_array2,
+                "ob"=>$ob_array,
+                "p"=>$page,
+                "pl"=>$size,
+            );
+        $seek_arr3 = array(
+                "f"=>$f_array,
+                "q"=>$q_array3,
+                "ob"=>$ob_array,
+                "p"=>$page,
+                "pl"=>$size,
+            );
+        //热门课程
+        $ret_seek1 = course_api::seekcourse($seek_arr1);
+        if(!empty($ret_seek1->data)){
+		    $hotclist = course_api::getcourselist($page=1,$size=4,'',$grade_id=0,0,$this->orgOwner,$shelf);
+        }else{
+            $hotclist=$ret_seek1->data; 
+        } 
+		$this->assign("hotclist",$hotclist);
+        //公开课
+        $ret_seek2 = course_api::seekcourse($seek_arr2);
+        $tidArr=array();
+        if(empty($ret_seek2->data)){
+		    $pfclist = course_api::getcourselist($page,$size,'free',$grade_id=0,0,$this->orgOwner,$shelf);
+        }else{
+            $pfclist=$ret_seek2->data; 
+            foreach($pfclist as $arr2){
+                foreach($arr2->class as $arr3){
+                    $tidArr[$arr3->class_admin_id]=$arr3->class_admin_id;
+                }
+            }
+        } 
+		$this->assign("pfclist",$pfclist);
+        //精品课
+        $ret_seek3 = course_api::seekcourse($seek_arr3);
+        if(empty($ret_seek3->data)){
+		    $mfclist = course_api::getcourselist($page,$size,'fee',$grade_id,0,$this->orgOwner,$shelf);
+        }else{
+            $mfclist=$ret_seek3->data; 
+            foreach($mfclist as $arr4){
+                foreach($arr4->class as $arr5){
+                    $tidArr[$arr5->class_admin_id]=$arr5->class_admin_id;
+                }
+            }
+        } 
+		$this->assign("mfclist",$mfclist);
+
+        //获取教师信息
+        if(!empty($tidArr)){
+            $ret_teacher=user_api::getTeacherInfoByIds($tidArr);
+            $teacher=json_decode(json_encode($ret_teacher),true);
+		    $this->assign("teacher",$teacher);
+        }
+		//获取明星教师
+		$teachers = user_organization::listOrgUser($this->orgInfo->oid,$all=0,$star=1,$page=1,$length=6);
+		$this->assign("teachers",$teachers);
+		return $this->render("index_v2/index.html");
+	}
+	function pageWeixin($inPath){
+		if(weixin_api::is_weixin()){
+			$options = (weixin_api::getJsOptions());
+			$this->assign("signPackage",$options);
+			return $this->render("index_v2/header.weixin.html");
+		}
+	}
+	function pageHeader($inPath){
+		$config = ROOT_CONFIG."/site.conf";
+		$ssl_flag  = false;
+		if(is_file($config)){
+			$ssl= SConfig::getConfig($config,"ssl");
+			if(isset($ssl->flag) && $ssl->flag){
+				$ssl_flag=true;
+			}
+		}
+		$this->assign("ssl_flag",$ssl_flag);
+		return $this->render("index_v2/header.html");
+	}
+	function pageNav($inPath){
+        $user=user_api::loginedUser();
+        if(!empty($user)){
+            $userInfo = user_api::getUser($user['uid']);
+            $ret = message_api::getUnreadInstationNum($user['uid'],$user['token']);
+            $this->assign("num", $ret);
+            if($this->orgOwner!= $userInfo->uid || $userInfo->types->organization != TRUE){
+                $userInfo->types->organization = FALSE;
+            }
+            if( $userInfo->types->teacher == TRUE){
+                $orgDataTeacher = user_api::getTeacherOrg($user['uid']);
+                $orgData = user_api::getUserOwnerOrg($this->orgOwner);
+                if(empty($orgDataTeacher) || empty($orgData) || $orgDataTeacher->org_id != $orgData->oid){
+                    $userInfo->types->teacher = FALSE;
+                }
+            }   
+            $this->assign("user",$userInfo);
+        }else{
+            $this->assign("num", 0);
+        }
+        $subnav="";
+        if(!empty($inPath[3]))$subnav=$inPath[3];
+        $this->assign("subnav",$subnav);
+		$this->assign("orgInfo",$this->orgInfo);
+		return $this->render("index_v2/nav.html");
+	}
+	function pageFooter($inPath){
+		$this->assign("orgInfo",$this->orgInfo);
+		return $this->render("index_v2/footer.html");
+	}
+    function page404($inPath){
+       return $this->render("index_v2/404.html");
+   }
+}
+?>
+

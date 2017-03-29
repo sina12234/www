@@ -1,0 +1,107 @@
+<?php
+class student_discount extends STpl
+{
+	private $user,$domain,$orgOwner;
+	function __construct()
+	{
+		$domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","domain");
+		$this->domain = $domain_conf->domain;
+		$this->assign('domain', $this->domain);
+
+		$this->user = user_api::loginedUser();
+		if(empty($this->user))
+		{
+			if(!empty($_SERVER['REQUEST_URI']))
+			{
+				$this->redirect("/site.main.login?url=".$_SERVER['REQUEST_URI']);
+			}
+			else
+			{
+				$this->redirect("/site.main.login");
+			}
+		}
+        $org=user_organization::subdomain();
+        if(!empty($org))
+		{
+            $this->orgOwner=$org->userId;
+        }
+		else
+		{
+            header('Location: https://www.'.$this->domain);
+        }
+	}
+
+	public function pageMyDiscount()
+	{
+		$owner_id = $this->orgOwner; //= 159;
+		$uid = $this->user['uid']; //= 249;
+		$path = '/student.discount.mydiscount';
+		$page = isset($_GET['page'])?$_GET['page']:1;
+		$code = !empty($_POST['keyword']) ? htmlspecialchars($_POST['keyword']) : '';
+		$num  = 15;
+		
+		//t_discount_code_used
+		$userCodeParams = array('user_id'=>$uid,'limit'=> -1,'page'=>1);
+		$res_discounts = course_api::listUserByCode($userCodeParams);
+		$disCodeIdStr = '';
+		$disCodeIdArr = array();
+		if(!empty($res_discounts->data))
+		{
+		    $disCodeIdArr = array_reduce($res_discounts->data, create_function('$v,$w', '$v[$w->discount_code]=$w->discount_code;return $v;')); 
+			$disCodeIdStr = implode(',',$disCodeIdArr);
+		}
+		 
+		 //t_discount_code
+		 $disCodeParams = array('dis_ids'=>$disCodeIdStr,'owner'=>$owner_id,'code'=>$code,'limit'=>$num,'page'=>$page);
+		 $res_discount_code = course_api::ListDiscountByIds($disCodeParams);
+		 $discountIdArr = array();
+		 $discountIdStr = '';
+		 if(!empty($res_discount_code->data))
+		 {
+			 $discountIdArr = array_reduce($res_discount_code->data, create_function('$v,$w', '$v[$w->fk_discount]=$w->fk_discount;return $v;')); 
+			 $discountIdStr = implode(',',$discountIdArr);
+		 }
+		 
+		//t_discount
+		$disParams = array('discountid'=>$discountIdStr,'limit'=> -1,'page'=>1);
+		$res_discount = course_api::getDiscountByIds($disParams);
+		if(!empty($res_discount->data))
+		{
+		    $names         = array_reduce($res_discount->data, create_function('$v,$w', '$v[$w->pk_discount]=$w->name;return $v;'));
+			$discount_type = array_reduce($res_discount->data, create_function('$v,$w', '$v[$w->pk_discount]=$w->discount_type;return $v;'));
+			$discount_value= array_reduce($res_discount->data, create_function('$v,$w', '$v[$w->pk_discount]=$w->discount_value;return $v;'));
+			$min_fee       = array_reduce($res_discount->data, create_function('$v,$w', '$v[$w->pk_discount]=$w->min_fee;return $v;'));
+		}
+		$data = ['page'  => 1,'total' => 0];
+		if(!empty($res_discount_code->data))
+		{
+			$data = [
+				'page'  => $res_discount_code->page,
+				'total' => $res_discount_code->totalPage
+			];
+			foreach($res_discount_code->data as $val)
+			{
+				 $data['data'][] = [
+					'owner'         => $val->owner,
+					'fk_discount'   => $val->fk_discount,
+					'endtime'       => date('Y年m月d日',strtotime($val->endtime)),
+					'status'        => $val->status,
+					'discount_code' => $val->discount_code,
+					'used_num'      => $val->used_num,
+					'name'          => $names[$val->fk_discount],
+					'discount_type' => $discount_type[$val->fk_discount],
+					'discount_value'=> $discount_value[$val->fk_discount],
+					'min_fee'       => $min_fee[$val->fk_discount]
+				];
+			}
+		}
+		
+		$this->assign('data', $data);	
+		$this->assign('num', $num);
+		$this->assign('path', $path);
+		$this->assign('code',$code);
+		$this->render('student/my.discount.html');
+	} 
+}
+?>
+

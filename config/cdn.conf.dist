@@ -1,0 +1,13 @@
+sms{
+	gateway http://yunpian.com/v1/sms/tpl_send.json;
+	apikey 44a401d4734d91ea918efaa0d23379f4;
+}
+chat_pull{
+	url //dev.gn100.com:8001/message.plan.pull;
+}
+chat_ws{
+	url ws://dev.gn100.com:8001/message.plan.ws;
+}
+chat_pullset{
+	url //dev.gn100.com:8001/message.plan.add;
+}

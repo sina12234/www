@@ -1,0 +1,62 @@
+<?php
+class player_plan{
+	public function pageEntry($inPath){
+	}
+	public function pageInfo($inPath){
+		if(empty($inPath[3])){
+			die("{}");
+		}
+		$plan_id=$inPath[3];
+		header('Content-type: application/json; charset=utf-8');
+		$data = new player_data($plan_id);
+		$data->getPlan();
+		$data->getUserInfo();
+		$data->getChart();
+		$data->getPlayLog();
+		if(!empty($_GET['callback'])){
+			return $_GET['callback']."(".SJson::encode($data).");";
+		}
+		return $data;
+	}
+}
+/*
+{
+	"plan":{
+		"planid":3
+	},
+	"clearConfig":[
+		{"name":"标清", "bitrate":160000},
+		{"name":"高清", "bitrate":280000},
+		{"name":"超清", "bitrate":360000},
+		{"name":"原画", "bitrate":640000}
+	],
+	"streamType":"live",
+	"playmode":"rtmp",
+	"rtmp":{
+		"url":"rtmp://121.42.56.177/play",
+		"cdn_id":"1",
+		"streamList":[
+			{"name":"标清", "stream":"xxx_low", "bitrate":160000},
+			{"name":"原画", "stream":"xxx_org", "bitrate":640000}
+		],
+		"char":{
+			"url":"rtmp://121.42.56.177/chart",
+			"stream":"xxx"
+		}
+	},
+	"hls":{
+			"url":"http://121.42.56.177/play",
+			"stream":"xxx.m3u8",
+			"cdn_id":"1"
+	},
+	"user":{
+		"info":{"Name":"xx"},
+		"token":"bbbbbbbbbb",
+		"ip":{
+			"AreaName":"北京",
+			"OpName":"电信"
+		}
+	}
+}
+ */
+

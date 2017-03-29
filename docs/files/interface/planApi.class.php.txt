@@ -1,0 +1,23 @@
+<?php
+
+class interface_planApi
+{
+
+    public static function getPlanExam($planId, $userId)
+    {
+        $res = course_api::getPlanExamsByPlan($planId, $userId);
+
+        return $res;
+    }
+
+
+
+
+
+
+
+
+
+
+}
+

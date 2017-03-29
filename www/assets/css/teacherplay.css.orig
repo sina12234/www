@@ -1,0 +1,98 @@
+        .title{margin:22px 0 22px 0 ;}
+		.title p{color: #999999;font-weight: normal; }
+		.title p b{color: #333333; font-weight: normal;}
+		.play-count{ max-width: 1000px; height:575px;}
+		.play-count .play-left{float: left; background: #0f0;width: 730px;height: 565px; margin-right: 10px; background: url(../images/playbg.png)no-repeat; position: relative;}
+		.play-count .play-left .control{ position: absolute; right:0px; bottom: 11px;background:url(../images/playbj.png) repeat-x;}
+		.play-count .play-left .control .yl{ float: left; margin-left:20px; cursor: pointer;}
+		.play-count .play-left .stop{position: absolute;bottom: 0px; cursor: pointer;}
+		.play-count .play-left .playthecher{position: absolute;right: 10px; top:10px; cursor: pointer;}
+		.play-count .play-right{height: 565px;width:260px; float: right;}
+		.play-count .play-right .message{ border:1px solid #e4e4e4;height: 128px;width: 260px; background: #fff;}
+		.play-count .play-right .message .mes{height: 30px; line-height: 30px; border-bottom:1px dashed #ccc;}
+		.play-count .play-left1 .message .mes{height: 30px; line-height: 30px; border-bottom:1px dashed #ccc;}
+		.play-count .play-left1 .message{ border:1px solid #ccc;height: 128px;width: 260px; background: #fff;}
+		.play-count .play-left1 .message .mes{height: 30px; line-height: 30px; border-bottom:1px dashed #ccc;}
+		.count{ background: #F7F7F7;}
+		.xinxi span{ line-height: 25px;}
+		.xinxi span p img{ margin-top: 6px;}
+		.box{padding-right: 10px;}
+		.dhk .mess p{ background:#f3fff4;max-width:211px;border-radius: 13px;}
+		.message .mes span{ font-size: 14px; color: #999999;}
+		.play-right .aks{ height: 65px;width:260px; border:1px solid #e4e4e4;border-bottom: none;}
+		.play-right .aks input{ width: 240px; height: 44px; border-radius: 5px; border:none;margin-top: 10px;margin-left: 10px;background: #78BE4E; color: #fff;}
+		.dalong{height:730px;}
+
+		.play-right .aks .we{ height: 65px;width:260px;}
+		.play-right .aks .we input{ width: 240px; height: 44px; border-radius: 5px; border:none;margin-top: 10px;margin-left: 10px;background: #f00; color: #fff; display: none;}
+
+		.dalong{height:730px;}
+
+		.dalong .daleft .student-mes{border:1px solid #e4e4e4; width:730px;height: 455px; background: #fff; margin-left: -15px;}
+		.dalong .daleft .student-mes .mes{line-height: 30px; border-bottom:1px dashed #ccc;}
+		.dalong .daleft .student-mes .mes span{ color: #999999; float: left;}
+		.dalong .daleft .student-mes .mes p{ color: #FFA81E;}
+		.dalong .daleft .student-mes .mes span b{ color:#00CC00; font-weight: normal;}
+
+		.dalong .daleft .student-mes .teta{border:none; width: 730px; position: relative;}
+		.student-mes .teta li{ float: left;}
+		.student-mes .teta li div img{ border-radius: 20px; margin: 10px 0 0 5px;width: 40px; height: 40px;}
+		.dalong .daleft .student-mes .teta dl{height: 50px; margin-top: 25px; margin-left: 15px; float: left;width: 160px;}
+		.dalong .daleft .student-mes .teta dt img{ float: left; border-radius: 30px;margin-right: 10px;}
+		.dalong .daleft .student-mes .teta dd{ line-height: 20px;}
+		.dalong .daleft .student-mes .teta dd span b{color:#FFB43D; font-weight: normal;} 
+		.dalong .daleft .student-mes .teta .xians{ width: 215px;height: 117px;background: #fff; border:1px solid #999999; position: absolute;left:27%;top:70%;}
+		.dalong .daleft .student-mes .teta .xians .tqa{ float: left; margin-top: 20px; margin-left: 10px;margin-right: 10px;}
+		.dalong .daleft .student-mes .teta .xians .cot{line-height: 20px; margin-top: 15px;} 
+		.dalong .daleft .student-mes .teta .xians .cot span b{color: #FFB43D;font-weight: normal;}
+		.dalong .daleft .student-mes .teta .xians .bbut li{ width: 60px; height: 25px; background: #FFA81E; border-radius: 5px; text-align: center; line-height: 25px; margin-left: 7px;margin-top: -7px;}
+		.dalong .daleft .student-mes .teta .xians .bbut li a{ color: #fff;}
+		.count .play-count .play-right .xinxi span{ line-height: 25px;}
+		.count .play-count .play-right .xinxi span h1{ font-size: 14px;}
+		.count .play-count .play-right .xinxi span p{ color:#666666;}
+		.count .play-count .play-right .xinxi span p img{ margin-top: 7px;}
+		.count .play-count .play-right .xinxi .time{text-align: center;color: #ccc;}
+		.count .play-count .play-right .message .dhk span{float: left;}
+		.count .play-count .play-right .message .dhk  { position: relative;margin-left: 10px;}
+		.count .play-count .play-right .message .dhk .jjj{ position: absolute; background: url(../assets/images/playjt.png) no-repeat; height: 44px; width:15px; left: 29px;top:10px;}
+		.count .play-count .play-right .message .dhk .mess{min-height: 33px;  border-radius: 10px; width:180px; background: #F3FFF4; margin-left: 40px; border:1px solid #CCE5CE; background: url(../iamges/duihjt.png)no-repeat;}
+		.count .play-count .play-right .message .dhk .mess p{ line-height: 20px; width: 181px; padding-left: 5px; color: #6ACD73;}
+		.count .play-count .play-right .message .dhk .mess p b{ color: #000;font-weight: normal;}
+		.count .play-count .play-right .message .dhk2 span{float: left; }
+		.count .play-count .play-right .message .dhk2  { position: relative;margin-left: 10px;}
+		.count .play-count .play-right .message .dhk2 .jjj{ position: absolute; background: url(../assets/images/playjt.png) no-repeat; height: 44px; width:15px; left: 29px;top:10px;}
+		.count .play-count .play-right .message .dhk2 .mess{ line-height: 33px; min-height: 33px;border-radius: 10px; width:180px; background: #F3FFF4; margin-left: 40px; border:1px solid #CCE5CE; background: url(../iamges/duihjt.png)no-repeat;}
+		.count .play-count .play-right .message .dhk2 .mess p{ line-height: 20px; width: 181px; padding-left: 5px; color:#FCBE54;}
+		.count .play-count .play-right .message .dhk2 .mess p b{ color: #000;font-weight: normal;}
+		.count .play-count .play-right .message .box{ height:167px; }
+		
+		.count .play-count .play-right .message .dhk1 span{float:right;}
+		.count .play-count .play-right .message .dhk1  { position: relative;margin-right: 10px;}
+		.count .play-count .play-right .message .dhk1 .ddd{ position: absolute; background: url(../assets/images/playjty.png) no-repeat; height: 44px; width:15px; right:17px;top:10px;}
+		.count .play-count .play-right .message .dhk1 .mess{min-height: 33px;min-height: 20px; border-radius: 10px; width:180px; background: #F3FFF4; border:1px solid #CCE5CE; background: url(../iamges/duihjt.png)no-repeat; }
+		.count .play-count .play-right .message .dhk1 .mess p{line-height: 20px; width: 181px; padding-left: 5px; color:#FD1FE7;}
+		.count .play-count .play-right .message .dhk1 .mess p b{ color: #000;font-weight: normal;}
+		.daright{ float: right;}
+		.daright .message{border:1px solid #e4e4e4; width:260px;height:300px; background: #fff; margin-left: -15px; margin-right: -15px; margin-bottom: 10px;}
+		.daright .message .mes{height: 30px; line-height: 30px; border-bottom:1px dashed #e4e4e4;}
+		.daright{ float: right;}
+		.daright .message{border:1px solid #e4e4e4; width:260px;height:300px; background: #fff; margin-left: -10px; margin-bottom: 10px;}
+		.daright .message .mes{height: 30px; line-height: 30px; border-bottom:1px dashed #e4e4e4;} 
+		.daright .message .message{ height: 380px;width: 260px; }
+		.daright .message .Ranking-p p{ float: left; margin-top: 15px; margin-left: 14px;}
+		.daright .message .Ranking-p .dy{ width: 16px; height: 16px; background: #FF6745; text-align: center; color: #fff; font-weight: bold; margin-left: 15px;margin-top: 30px;}
+		.daright .message .Ranking-p .dy1{ margin-top:30px; }
+		.daright .message .Ranking-p .dz{margin-top:30px; }
+		.daright .message .Ranking-p .dz b{font-weight: normal;}
+		.daright .message .Ranking-p .jushou{ margin-top: 30px; color: #FFA81E;}
+		.daright .message .Ranking-p p img{ border-radius: 50px;}
+		.daright .message .Ranking-p .yunx{width: 60px;height: 25px; background: #FFA81E; margin-top: 25px;margin-right: 0px; text-align: center;line-height:25px;color: #fff;border-radius: 5px;}
+
+
+		 .daright .Ranking .message{ height: 380px;width: 260px; }
+		 .daright .Ranking .Ranking-p p{ float: left; margin-top: 15px; margin-left: 15px;}
+		 .daright .Ranking .Ranking-p .dy{ width: 16px; height: 16px; background: #FF6745; text-align: center; color: #fff; font-weight: bold; margin-left: 15px;margin-top: 30px;}
+		 .daright .Ranking .Ranking-p .dy1{ margin-top:30px; }
+		 .daright .Ranking .Ranking-p .dz{margin-top:30px; }
+		 .daright .Ranking .Ranking-p .dz b{ color: #FF8468;}
+		 .daright .Ranking .Ranking-p p img{ border-radius: 50px;}

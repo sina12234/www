@@ -1,0 +1,126 @@
+<?php
+
+class comment_course extends STpl{
+	var $user;
+	public function __construct($inPath){
+		$this->user = user_api::loginedUser();
+	}
+	public function pageGetComment($inPath){
+		if(empty($this->user)){
+			return false;
+		}
+		if(!empty($_POST)){
+			return comment_api::getComment($_POST, $this->user["uid"]);
+		}
+		return false;
+	}
+	public function pageGetCommentNum($inPath){
+		if(empty($this->user)){
+			return false;
+		}
+		if(!empty($_POST)){
+			return comment_api::getCommentNum($_POST, $this->user["uid"]);
+		}
+		return false;
+	}
+	public function pageGetComments($inPath){
+		$uid = 0;
+		if(!empty($this->user)){
+			$uid = $this->user["uid"];
+		}
+		if(!empty($_POST)){
+			return comment_api::getComments($_POST, $uid);
+		}
+		return false;
+	}
+	public function pageGetCommentsDesc($inPath){
+		$uid = 0;
+		if(!empty($this->user)){
+			$uid = $this->user["uid"];
+		}
+		if(!empty($_POST)){
+			return comment_api::getCommentsDesc($_POST, $uid);
+		}
+		return false;
+	}
+	public function pageGetDetail($inPath){
+		if(empty($this->user)){
+			return false;
+		}
+		if(!empty($_POST)){
+			return comment_api::getDetail($_POST, $this->user["uid"]);
+		}
+		return false;
+	}
+	public function pageGetTotal($inPath){
+		if(empty($this->user)){
+			return false;
+		}
+		if(!empty($_POST)){
+			return comment_api::getTotal($_POST);
+		}
+		return false;
+	}
+	public function pageAddComment($inPath){
+		if(empty($this->user)){
+			return false;
+		}
+		if(!empty($_POST)){
+			return comment_api::addComment($_POST, $this->user["uid"]);
+		}
+		return false;
+	}
+	public function pageAddDetail($inPath){
+		if(empty($this->user)){
+			return false;
+		}
+		if(!empty($_POST)){
+			return comment_api::addDetail($_POST, $this->user["uid"]);
+		}
+		return false;
+	}
+
+	public function pageAddCommentScore($inPath)
+	{
+		empty($this->user) && interface_func::setMsg(1021);
+		empty($_POST) && interface_func::setMsg(1000);
+
+		if (empty($this->user['uid'])) interface_func::setMsg(1021);
+		//检测是否评论
+		if (empty($_POST['course_id']) || !intval($_POST['course_id']))
+			interface_func::setMsg(1000);
+
+		if (comment_api::checkIsComment(intval($_POST['course_id']), $this->user['uid'], $_POST['plan_id'])) {
+			interface_func::setMsg(2043);
+		}
+
+		comment_api::addComment($_POST, $this->user["uid"]);
+		comment_api::addDetail($_POST, $this->user["uid"]);
+		$res = comment_api::addUserExperience($this->user["uid"]);
+
+		$res && interface_func::setData($res);
+
+		interface_func::setMsg(1);
+	}
+
+    public function pageCheckUserIsComment()
+    {
+        if (!isset($_POST['courseId']) || !intval($_POST['courseId']))
+            interface_func::setMsg(1000);
+
+        if (!isset($_POST['planId']) || !intval($_POST['planId']))
+            interface_func::setMsg(1000);
+
+        if (empty($this->user['uid'])) interface_func::setMsg(1021);
+
+        if (comment_api::checkIsComment(intval($_POST['courseId']), $this->user['uid'], intval($_POST['planId']))) {
+            $commentAndScore = comment_api::getCommentAndScore(intval($_POST['courseId']), $this->user['uid'], intval($_POST['planId']));
+            interface_func::setData($commentAndScore);
+        }
+
+        interface_func::setMsg(2043);
+    }
+
+}
+
+

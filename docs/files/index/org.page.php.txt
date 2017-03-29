@@ -1,0 +1,71 @@
+<?php
+class index_org extends STpl{
+
+	
+	private $domain;
+	public function __construct(){
+		$domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","domain");
+		$this->domain = $domain_conf->domain;
+		$this->assign('domain', $this->domain);
+	}	
+	public function pageList($inPath){
+		$page = isset($_GET['page'])?$_GET['page']:1;
+		$org_data = user_api::getNewJoinOrg($page,10);
+		$org_list = array();
+		if(!empty($org_data)){
+			$org_list = $org_data->items;
+			$oid_arr  = array();
+			$uid_arr  = array();
+			foreach($org_list as &$vo ){
+				$oid_arr[] = $vo->pk_org;
+				$uid_arr[] = $vo->fk_user_owner;
+				$vo->teacher_count = 0;
+				$vo->course_count  = 0;
+			}
+			$sublist = array();
+			$teacher_count = array();
+			$course_count = array();
+			$teacher_ret = user_api::getOrgTeacherCount($oid_arr);	
+			$course_ret = course_api::getOrgCourseCount($uid_arr);	
+			if( $teacher_ret->result->code == 0 && !empty($teacher_ret->result->data)){
+				foreach($teacher_ret->result->data->items as $to){
+					$teacher_count[$to->fk_org] = $to->teacher_count;
+				}
+			}
+			if( $course_ret->result->code == 0 && !empty($course_ret->result->data)){
+				foreach($course_ret->result->data->items as $to){
+					$course_count[$to->fk_user] = $to->course_count;
+				}
+			}
+			$sub_ret = user_api::getSubdomainByUidArr($uid_arr);
+       		if( $sub_ret->result->code == 0 && !empty($sub_ret->result->data->items)){
+       			$subdomains = $sub_ret->result->data->items;
+            	foreach($subdomains as $so){
+            		$sublist[$so->fk_user] = $so->subdomain;
+            	}
+			}
+			foreach($org_list as &$vo ){
+				if(!empty($teacher_count) && !empty($teacher_count[$vo->pk_org])){
+					$vo->teacher_count = $teacher_count[$vo->pk_org];
+				}
+				if(!empty($course_count) && !empty($course_count[$vo->fk_user_owner])){
+					$vo->course_count = $course_count[$vo->fk_user_owner];
+				}
+				if(!empty($sublist) && !empty($sublist[$vo->fk_user_owner])){
+        			$vo->show_url = "//" . $sublist[$vo->fk_user_owner].".".$this->domain;
+				}else{
+					$vo->show_url = '//www.'.$this->domain;
+				}
+				$vo->desc = strip_tags($vo->desc);
+			}
+		}
+		$this->assign('path','/index.org.list');
+		$this->assign('org_data',$org_data);
+		$this->assign('org_list',$org_list);
+		$this->render('index/org.list.html');
+	}
+
+}
+
+
+

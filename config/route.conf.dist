@@ -1,0 +1,5 @@
+[site]
+pattern = "index(.*)"
+zone="/"
+page="main"
+entry="entry"

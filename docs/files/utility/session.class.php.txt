@@ -1,0 +1,13 @@
+<?php
+class utility_session{
+	static public $instance;
+	static public function &get(){
+		if(!self::$instance){
+			if(session_status()!=PHP_SESSION_ACTIVE)session_start();
+			self::$instance=$_SESSION;
+		}
+		return self::$instance;
+	}
+}
+
+

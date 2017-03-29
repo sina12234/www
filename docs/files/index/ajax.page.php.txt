@@ -1,0 +1,353 @@
+<?php
+
+class index_ajax
+{
+
+    public function pageAddArticleComment()
+    {
+        $uid     = isset($_POST['uid']) && (int)$_POST['uid'] ? (int)$_POST['uid'] : 0;
+        $aid     = isset($_POST['aid']) && (int)$_POST['aid'] ? (int)$_POST['aid'] : 0;
+        $comment = isset($_POST['content']) && trim($_POST['content']) ? trim($_POST['content']) : 0;
+
+        $user = user_api::loginedUser();
+        if (!isset($user['uid']) || !intval($user['uid']) || $uid != $user['uid'])
+            interface_func::setMsg(1021);
+
+        $data = [
+            'userId'    => $uid,
+            'articleId' => $aid,
+            'comment'   => $comment
+        ];
+
+        $res = utility_services::call('blog/article/AddComment', $data);
+
+        ($res->code) && interface_func::setmsg(1);
+
+        interface_func::setMsg(0);
+    }
+
+    public function pageAddFav()
+    {
+        $uid       = isset($_POST['uid']) && (int)$_POST['uid'] ? (int)$_POST['uid'] : 0;
+        $teacherId = isset($_POST['tid']) && (int)$_POST['tid'] ? (int)$_POST['tid'] : 0;
+
+        if ($uid == $teacherId) interface_func::setMsg(1025);
+
+        $user = user_api::loginedUser();
+        if (!isset($user['uid']) || !intval($user['uid']) || $uid != $user['uid'])
+            interface_func::setMsg(1021);
+
+        teacher_api::addFavTeacher($uid, $teacherId) && interface_func::setmsg(0);
+
+        interface_func::setMsg(1);
+    }
+
+    public function pageCancelFav()
+    {
+        $uid       = isset($_POST['uid']) && (int)$_POST['uid'] ? (int)$_POST['uid'] : 0;
+        $teacherId = isset($_POST['tid']) && (int)$_POST['tid'] ? (int)$_POST['tid'] : 0;
+
+        if ($uid == $teacherId) interface_func::setMsg(1025);
+
+        $user = user_api::loginedUser();
+        if (!isset($user['uid']) || !intval($user['uid']) || $uid != $user['uid'])
+            interface_func::setMsg(1021);
+
+        $data = [
+            'userId'    => $uid,
+            'teacherId' => $teacherId
+        ];
+
+        $res = utility_services::call('/blog/article/CancelFav', $data);
+
+        ($res->code) && interface_func::setmsg(1);
+
+        interface_func::setMsg(0);
+    }
+
+    public function pageArticleImgUpload($inPath)
+    {
+        $editor = $_POST['editor'];
+
+        $tid = isset($inPath[3]) && intval($inPath[3]) ? intval($inPath[3]) : 0;
+        $uid = user_api::getLoginUid();
+
+        (!$uid || !$tid) && interface_func::setMsg(1000);
+        ($uid != $tid) && interface_func::setMsg(1021);
+
+        empty($_FILES['userfile']['tmp_name']) && interface_func::setMsg(1027);
+
+        /*$thumbNail = new SThumbnail($_FILES['userfile']['tmp_name']);
+        $thumbNail->setMaxSize(240, 135);
+        $tmpFileName = utility_file::tempname('thumb');
+
+        ($thumbNail->genFile($tmpFileName) === false) && interface_func::setMsg(1028);*/
+
+        $file = utility_file::instance();
+
+        $res = $file->upload($_FILES['userfile']['tmp_name'], $uid, 'image', $_FILES['userfile']['name']);
+        empty($res->fid) && interface_func::setMsg(1029);
+
+        //unlink($tmpFileName);
+        $src = utility_cdn::filecdn().'/'.$res->fid;
+
+        echo '<script>';
+        echo 'window.parent.'.$editor.'.insertContent("<img src=\''.$src.'\' />");';
+        echo '</script>';
+        exit;
+    }
+
+    public function pageTeacherImgUpload($inPath)
+    {
+        $tid = isset($inPath[3]) && intval($inPath[3]) ? intval($inPath[3]) : 0;
+        $uid = user_api::getLoginUid();
+
+        (!$uid || !$tid) && interface_func::setMsg(1000);
+        ($uid != $tid) && interface_func::setMsg(1021);
+
+        empty($_FILES['file']['tmp_name']) && interface_func::setMsg(1027);
+
+        $thumbNail = new SThumbnail($_FILES['file']['tmp_name']);
+        $thumbNail->setMaxSize(820, 464);
+        $fileName820 = utility_file::tempname('thumb_820_464');
+
+        ($thumbNail->genFile($fileName820) === false) && interface_func::setMsg(1028);
+
+        $thumbNail->setMaxSize(220, 124);
+        $fileName220 = utility_file::tempname('thumb_220_124');
+
+        ($thumbNail->genFile($fileName220) === false) && interface_func::setMsg(1028);
+
+        $file = utility_file::instance();
+
+        $res820    = $file->upload($fileName820, $uid, 'image', $_FILES['file']['name']);
+        $res220    = $file->upload($fileName220, $uid, 'image', $_FILES['file']['name']);
+        $resOrigin = $file->upload($_FILES['file']['tmp_name'], $uid, "image", $_FILES['file']['name']);
+
+        if (!empty($res220->fid) && !empty($res820->fid)) {
+            unlink($fileName820);
+            unlink($fileName220);
+
+            $addImg = teacher_api::addTeacherImg(
+                [
+                    'teacherId' => $uid,
+                    'imgName' => $_FILES['file']['name'],
+                    'thumbMed' => $res220->fid,
+                    'thumbBig' => $res820->fid,
+                    'thumbOrigin' => $resOrigin->fid
+                ]
+            );
+
+            $addImg && interface_func::setMsg(0);
+
+            interface_func::setMsg(1029);
+        }
+
+        interface_func::setMsg(1029);
+    }
+
+    public function pageUpdateImgPath()
+    {
+        $tid     = intval($_POST['tid']);
+        $imgPath = trim($_POST['src']);
+
+        if (!$tid || !$imgPath) {
+            interface_func::setMsg(1000);
+        }
+
+        $uid = user_api::getLoginUid();
+        if (!$uid || $uid != $tid) {
+            interface_func::setMsg(1021);
+        }
+
+        teacher_api::updateBannerImg($tid, $imgPath) ? interface_func::setMsg(0) : interface_func::setMsg(1);
+    }
+
+    public function pageUpdateTeacherImgName()
+    {
+        $tid     = intval($_POST['tid']);
+        $imgName = trim($_POST['name']);
+        $imgId = intval($_POST['imgId']);
+
+        if (!$tid || !$imgName || !$imgId) {
+            interface_func::setMsg(1000);
+        }
+
+        $uid = user_api::getLoginUid();
+        if (!$uid || $uid != $tid) {
+            interface_func::setMsg(1021);
+        }
+
+        teacher_api::updateTeacherImgName($imgId, $imgName) ? interface_func::setMsg(0) : interface_func::setMsg(1);
+    }
+
+    public function pagePublish()
+    {
+        $uid = user_api::getLoginUid();
+        if (!$uid || $uid != intval($_POST['tid'])) {
+            interface_func::setMsg(1021);
+        }
+
+        $status = 1;
+        if (isset($_POST['button']) && $_POST['button'] == '存草稿') {
+            $status = 0;
+        }
+
+        $content = trim($_POST['content']);
+        !$content && interface_func::setMsg(1000);
+
+        $summary = $content;
+        if (mb_strlen($content) > 200) {
+            $summary = utility_tool::cut_str(strip_tags($content), 200);
+        }
+
+        if (intval($_POST['tagId'])) {
+            $tagId = intval($_POST['tagId']);
+        } elseif ($_POST['tagName']) {
+            $tagId = teacher_api::addTag($uid, trim($_POST['tagName']));
+            !$tagId && interface_func::setMsg(1);
+        } else {
+            interface_func::setMsg(1030);
+        }
+
+        $data = [
+            'teacherId'  => intval($_POST['tid']),
+            'title'      => isset($_POST['title']) ? $_POST['title'] : '',
+            'summary'    => $summary,
+            'content'    => $content,
+            'thumb'      => utility_tool::regularImgMatch($content),
+            'tagId'      => $tagId,
+            'type'       => isset($_POST['type']) ? (int)$_POST['type'] : 1,
+            'status'     => $status,
+            'top'        => isset($_POST['top']) && ($_POST['top'] == 'true') ? 1 : 0
+        ];
+
+        // 文章更新操作
+        if (isset($_POST['button'], $_POST['articleId']) && ($_POST['button']) == '保存' && (int)$_POST['articleId']) {
+            $articleInfo = teacher_api::getArticleDetail((int)$_POST['articleId']);
+            $data['articleId'] = $articleInfo->pk_article;
+            empty($articleInfo) && interface_func::setMsg(1033);
+
+            if ($tagId == $articleInfo->fk_tag) {
+                $articleUpdateRes = utility_services::call('/blog/article/Update', $data);
+                $articleUpdateRes->code ? interface_func::setMsg(1) : interface_func::setMsg(0);
+            } else {
+                $articleUpdateRes = utility_services::call('/blog/article/Update', $data);
+
+                if ($articleUpdateRes->code == 0) {
+                    // 更新tag id 先删除
+                    $delMapTagArticleRes = teacher_api::delMapTagArticle($uid, $articleInfo->pk_article, $articleInfo->fk_tag);
+
+                    if ($delMapTagArticleRes === false) {
+                        $delInfo = [
+                            'delArticleData' => $data,
+                            'delArticleRes' => $articleUpdateRes,
+                            'articleInfo' => $articleInfo,
+                        ];
+                        SLog::write('更新t_mapping_tag_article表错误,t_article表更新成功,info['.var_export($delInfo, 1).']');
+                        interface_func::setMsg(1035);
+                    }
+
+                    // 更新tag id 删除成功之后,在新增
+                    $addMapTagArticleRes = teacher_api::addMapTagArticle(
+                        [
+                            'userId' => $uid,
+                            'tagId' => $tagId,
+                            'articleId' => $articleInfo->pk_article,
+                            'status' => $status
+                        ]
+                    );
+
+                    if ($addMapTagArticleRes === false) {
+                        SLog::write('删除t_mapping_tag_article表成功之后,插入失败');
+                        interface_func::setMsg(1034);
+                    }
+                    interface_func::setMsg(0);
+                }
+                interface_func::setMsg(1);
+            }
+        } else { // 文章插入操作
+            $res = utility_services::call('/blog/article/Add', $data);
+            if ($res->code == 0 && !empty($res->result->articleId)) {
+                // 同步tag mapping article 表
+                $addMapTagArticleRes = teacher_api::addMapTagArticle(
+                    [
+                        'userId' => $uid,
+                        'tagId' => $tagId,
+                        'articleId' => $res->result->articleId,
+                        'status' => $status
+                    ]
+                );
+
+                // 记录插入错误日志
+                if ($addMapTagArticleRes === false) {
+                    $insertInfo = [
+                        'insertArticleData' => $data,
+                        'insertArticleRes' => $res,
+                        'uid' => $uid,
+                        'tagId' => $tagId
+                    ];
+                    SLog::write('插入t_mapping_tag_article表错误,t_article表插入成功,info['.var_export($insertInfo, 1).']');
+                    interface_func::setMsg(1036);
+                }
+                interface_func::setMsg(0);
+            }
+            interface_func::setMsg(1);
+        }
+    }
+
+    public function pageDelArticle()
+    {
+        $articleId = intval($_POST['dataId']);
+
+        $uid = user_api::getLoginUid();
+        if (!$uid || $uid != $_POST['tid']) {
+            interface_func::setMsg(1021);
+        }
+
+        $articleInfo = teacher_api::getArticleDetail($articleId);
+        empty($articleInfo) && interface_func::setMsg(1033);
+
+        $data = ['articleId' => $articleId];
+        $res = utility_services::call('/blog/article/DelArticle', $data);
+        if ($res->code == 0) {
+            $delMapTagArticleRes = teacher_api::delMapTagArticle($uid, $articleInfo->pk_article, $articleInfo->fk_tag);
+            $delMapTagArticleRes && interface_func::setMsg(0);
+            SLog::write('删除t_mapping_tag_article表成功之后,插入失败');
+        }
+
+        interface_func::setMsg(1);
+    }
+
+    public function pageDelImg()
+    {
+        $imgId = intval($_POST['imgId']);
+
+        $uid = user_api::getLoginUid();
+        if (!$uid || $uid != $_POST['tid']) {
+            interface_func::setMsg(1021);
+        }
+
+        $data = ['imgId' => $imgId];
+        $res = utility_services::call('/blog/teacher/DelImg', $data);
+
+        $res->code ? interface_func::setMsg(1) : interface_func::setMsg(0);
+    }
+
+    public function pageUpdateCommentNum()
+    {
+        $articleId = intval($_POST['articleId']);
+
+        $uid = user_api::getLoginUid();
+        if (!$uid || $uid != $_POST['tid']) {
+            interface_func::setMsg(1021);
+        }
+
+        $data = ['articleId' => $articleId];
+        $res = utility_services::call('/blog/article/UpdateCommentNum', $data);
+
+        $res->code ? interface_func::setMsg(1) : interface_func::setMsg(0);
+    }
+}
+
+

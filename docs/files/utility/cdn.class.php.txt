@@ -1,0 +1,50 @@
+<?php
+class utility_cdn{
+	public static function filecdn($cdnname="file",$file=""){
+		$conf = SConfig::getConfig(ROOT_CONFIG."/cdn.conf",$cdnname);
+		if(isset($conf->url)){
+			$ver = isset($conf->version)?"?ver=".$conf->version:"";
+			if(empty($file)){
+				return $conf->url;
+			}else{
+				$path = $file{0}=="/"?"":"/";
+				return $conf->url.$path.$file.$ver;
+			}
+		}
+		return ;
+	}
+	public static function file($f){
+		return self::filecdn("file",$f);
+	}
+	public static function css($f){
+		return self::filecdn("css",$f);
+	}
+	public static function img($f){
+		return self::filecdn("img",$f);
+	}
+	public static function js($f){
+		return self::filecdn("js",$f);
+	}
+	public static function swf($f){
+		return self::filecdn("swf",$f);
+	}
+	public static function qrcode($f){
+		return self::filecdn("qrcode",$f);
+	}
+	public static function playlog($f){
+		return self::filecdn("playlog",$f);
+	}
+	public static function upload_video(){
+		return self::filecdn("upload_video");
+	}
+	public static function chat_pull(){
+		return self::filecdn("chat_pull");
+	}
+	public static function chat_ws(){
+		return self::filecdn("chat_ws");
+	}
+	public static function chat_pullset(){
+		return self::filecdn("chat_pullset");
+	}
+}
+

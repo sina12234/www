@@ -1,0 +1,25 @@
+default{
+    windows {
+		download  /assets_v2/app/pc/gn100_teacher_client_v_1_0_8.exe,  http://dev.gn100.com ;
+        version '1,0,8';
+        min_version '1,0,8';
+        description '1.初级版本。';
+        dependency{ directx11 'http://www.directx11download.com';}
+     }
+	 android {
+	    versionCode  12;
+        versionName  0.0.12;
+	    minVersion  1;
+	    download {1 'http://dev.gn100.com'; 2 'https://www.gn100.com/';};
+	    description  '1.初始版本。';
+	 }
+	 xiaowo {
+        versionCode 1;
+		versionName 1.0;
+		minVersion 1;
+		download {release 'https://www.yunke.com/assets_v2/app/xiaowo/v1.4.0_yunke.apk';};
+		description '1.支持用户自定义主页<br>2.支持课程搜索<br>3.支持课程内互动<br>4.支持课程会员包';
+    }
+	 
+}
+

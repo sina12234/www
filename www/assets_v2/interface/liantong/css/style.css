@@ -1,0 +1,360 @@
+html
+{
+    background:#F2EEE8;
+    /* font-size: 2rem; */
+}
+body
+{
+   font-size: 30px;
+   background:#f3f3f3;
+   overflow-x: hidden;
+}
+.page
+{
+    height: 800px;
+    min-height: 800px;
+}
+.onepage
+{
+    background: url("../img/back1024.jpg") no-repeat left 80px #FAF6DD;
+}
+.oneunorder
+{
+    color: #47B8E3;
+    padding: 32rem 0 8rem;
+    width:54%;
+    margin: 0 auto;
+    line-height: 180%;
+    display:none;
+}
+.topbar
+{
+    height:80px;
+    line-height: 80px;
+    background:#000;
+    color: #fff;
+    text-align: center;
+    position: relative;
+}
+.btn_topbarclose
+{
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    width:100px;
+    height: 50px;
+    line-height: 50px;
+    border:1px solid #ccc;
+    border-radius: 10px;
+}
+.userinfo
+{
+    width:86.4%;
+    margin: 2rem auto;
+    background:#FBFAF9;
+    padding: 4%;
+    border-radius: 5px;
+}
+.imgyd
+{
+    position: absolute;
+    left: 16%;
+    top:10px;
+    width:538px;
+    height:108px;
+    z-index: 19891015;
+    display:none;
+}
+/* .succtipform
+{
+    position: absolute;
+    left: 50%;
+    top: 12rem;
+    width:400px;
+    margin-left: -200px;
+    z-index: 99;
+    display:none;
+} */
+.userphoneform
+{
+    margin-bottom: 2rem;
+}
+.txt_userphone
+{
+    display: block;
+    border: 1px solid #E0E0DE;
+    border-radius: 2px;
+    box-shadow: 0 0 5px #eee inset;
+    width:96%;
+    height:80px;
+    line-height: 80px;
+    padding-left: 4%;
+}
+.txt_usercode
+{
+    border: 1px solid #E0E0DE;
+    border-radius: 2px;
+    box-shadow: 0 0 5px #eee inset;
+    width:56%;
+    height:80px;
+    line-height: 80px;
+    padding-left: 4%;
+    vertical-align: top;
+}
+.btn_getcode
+{
+    display: inline-block;
+    border:1px solid #4abdcc;
+    width: 35%;
+    height: 80px;
+    line-height: 80px;
+    color: #fff;
+    border-radius: 2px;
+    text-align: center;
+    float:right;
+    font-size: 2.5rem;
+    background:#4abdcc;
+    vertical-align: top;
+}
+.btn_submit
+{
+    display: inline-block;
+    width: 100%;
+    height: 82px;
+    line-height: 82px;
+    background: #4abdcc;
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 2.5rem;
+}
+.btn_paused
+{
+    background: #DFF6FF;
+    color: #12B7F5;
+}
+.link_haveorder
+{
+    text-align: right;
+    padding-right: 10px;
+    margin-top: 30px;
+}
+.link_haveorder a
+{
+    color: #4abdcc;
+    text-decoration: underline;
+}
+.packageinfo
+{
+    color:#999;
+    line-height: 180%;
+    padding: 30px 30px 0;
+}
+.poptopimg
+{
+    position: relative;
+    z-index: 99;
+}
+.pfcontentform
+{
+    background: #fff;
+    border-radius: 10px;
+    margin: -33px 6px 0;
+    padding: 30px 30px 90px;
+    line-height: 200%;
+    position: relative;
+}
+/* .pfcontentform1
+{
+    background: #fff;
+    border-radius: 10px;
+    margin: -33px 6px 0;
+    padding: 60px 30px 60px;
+    line-height: 200%;
+    position: relative;
+} */
+.btn_yes
+{
+    position: absolute;
+    width:160px;
+    height:30px;
+    line-height: 30px;
+    left: 50%;
+    bottom: 20px;
+    margin-left: -80px;
+    text-align: center;
+    border:4px solid #CFE5EE;
+    background: #47B8E3;
+    color: #fff;
+    border-radius: 44px;
+    font-size: 16px;
+}
+.btn_closepage
+{
+    display:block;
+    width:160px;
+    height:36px;
+    line-height: 36px;
+    text-align: center;
+    background: #4abdcc;
+    color: #fff;
+    border-radius: 20px;
+    font-size: 16px;
+    margin: 0 auto;
+}
+.msgform
+{
+    font-size: 18px;
+    color: #4abdcc;
+    text-align: center;
+    line-height: 250%;
+}
+.counttip
+{
+    color: #a8b8bf;
+    line-height: 200%;
+}
+
+
+/*--------查询流量页面---------*/
+.pagebody
+{
+    height: 850px;
+    background: #4abdcc;
+}
+.pagetitle
+{
+    text-align: center;
+    color:#fff;
+    padding: 30px 0;
+}
+.canvasform
+{
+    position:relative;
+    margin: 20px auto 0;
+    height:440px;
+    width:440px;
+}
+.cavasback
+{
+    position:absolute;
+    left: 50%;
+    top:0;
+    margin-left: -220px;
+    width:440px;
+    height: 440px;
+    background: url('../img/cavasback.png') no-repeat;
+}
+.mycanvas
+{
+    position:absolute;
+    left: 50%;
+    top:20px;
+    margin-left: -200px;
+}
+.flowinfo
+{
+    position: absolute;
+    left: 0;
+    top: 140px;
+    width:100%;
+    font-size: 3rem;
+    color: #fff;
+    text-align: center;
+    color:#FFF;
+}
+.lastflow
+{
+    font-size: 7rem;
+    color:#fff;
+}
+.totalflow
+{
+    position: absolute;
+    left: 0;
+    bottom: 70px;
+    width: 100%;
+    text-align: center;
+    color:#FFF;
+    font-size: 2.6rem;
+}
+.flowstatusform
+{
+    width: 60%;
+    margin: 4rem auto;
+    color:#fff;
+    line-height: 150%;
+    font-size: 3rem;
+}
+.flowstatus
+{
+    text-align: center;
+    color:#fff;
+    font-size: 4rem;
+    line-height: 200%;
+}
+.pagefoot
+{
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 6rem;
+    position: relative;
+    height:100px;
+}
+.link_btnsform
+{
+    position: absolute;
+    left: 0;
+    bottom:3rem;
+    width: 100%;
+}
+.leftlink
+{
+    float: left;
+    color:#999;
+}
+.rightlink
+{
+    float: right;
+    color: #4abdcc;
+}
+.unordertip
+{
+    color:#4abdcc;
+    padding: 3rem 0;
+}
+.packagetitle
+{
+    padding: 0 0 3rem;
+    margin-left: 9rem;
+    color:#666;
+}
+.packagetitle .selected
+{
+    color:#4abdcc;
+}
+.tb_gou
+{
+    display:inline-block;
+    width: 24px;
+    height:26px;
+    vertical-align: middle;
+}
+/*--------客服按钮--------*/
+.kefubtn
+{
+    position:fixed;
+    bottom: 20px;
+    right: 0px;
+    width: 50px;
+    height:50px;
+}
+
+.goback
+{
+    position: absolute;
+    left:3rem;
+    top: 3rem;
+    width: 3.6rem;
+    height: 4.1rem;
+}

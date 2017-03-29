@@ -1,0 +1,993 @@
+<?php
+class site_main extends STpl{
+	private static $domain;
+	private static $org;
+	private static $orgInfo;
+	private static $orgOwner;
+	function __construct(){
+		$domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","domain");
+		if(empty(self::$domain)){
+			self::$domain = $domain_conf->domain;
+		}
+
+		if(empty(self::$org)){
+			self::$org=user_organization::subdomain();
+			if(empty(self::$org)){
+				header('Location: https://www.'.self::$domain);
+			}
+			self::$orgOwner = self::$org->userId; //机构所有者id 以后会根据域名而列取 
+			self::$orgInfo = user_organization::getOrgByOwner(self::$orgOwner);
+		}
+		$this->assign('domain', self::$domain);
+	}
+    function pageOrgName($inPath){
+        if(empty(self::$orgInfo->name) && empty(self::$orgInfo->subname)){
+            $orgName='高能壹佰';
+        }else{
+            $orgName=!empty(self::$orgInfo->subname)?self::$orgInfo->subname:mb_substr(self::$orgInfo->name,0,6,'utf-8');
+        }
+       echo  $orgName;
+    }
+	function pageRedirect($inPath){
+		$domain = $_SERVER['HTTP_HOST'];
+		header("Location: https://$domain");	
+	}
+	public function pageLoginAjax($inPath){
+        $url = !empty($_REQUEST['url'])?$_REQUEST['url']:(!empty($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'');
+        if(!empty($_REQUEST['forever'])){
+            $forever=true;
+        }else{
+            $forever=false;
+        }
+        $result=new stdClass;
+        if(!empty($_POST['uname']) && !empty($_POST['pass'])){
+            $islogin = user_api::login($_POST['uname'],$_POST['pass'],$forever,$ret);
+            if(user_api::logined()){
+                $result->url=$url;
+            }else{
+                if(!empty($ret->result->code)&&$ret->result->code==-2){
+                    $result->field="pass";
+                }else{
+                    $result->field="uname";
+                }
+                $ret->result->msg=!empty($ret->result->msg)?$ret->result->msg:'';
+                $result->error=SLanguage::tr($ret->result->msg,"site.login");
+            }
+        }
+        return $result;
+	}
+    function pageCheckLoginAjax($inPath){
+        if(user_api::logined()==true){
+            return 'yes';
+        }else{
+            return 'no';
+        }
+        
+    }
+    function pageTest($inPath){
+        $tpl = user_menu::instance()->create();
+        //return $this->render("/site/test.html");
+    }
+    function pageRegister($inPath){
+        if(empty(utility_session::get()['login_url'])){
+            utility_session::get()['login_url']= !empty($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
+        }
+        $logined=user_api::logined();
+        if($logined){
+			$url = $this->getRedirectUrl();
+            return $this->redirect($url);
+        }
+        //统计
+        if(isset($_GET['pr'])){
+            $promote_id = trim($_GET['pr']);
+            $this->assign('pr',$promote_id);
+            if($logined){
+                    $loginedUser = user_api::loginedUser();
+                    log_api::insertPromoteLog($promote_id,log_api::register_page,$loginedUser['uid']);
+                }else{
+                    log_api::insertPromoteLog($promote_id,log_api::register_page);
+                }
+         }
+        
+        $error="";
+        $this->assign("error",$error);
+        if(!empty($inPath[3]) && $inPath[3]=="parterner"){
+            $parter_login_info = user_api::getParternerLogin();
+            if(!empty($parter_login_info['id'])){
+                $parter_info= user_api::getParternerById($parter_login_info['id']);
+                if(!empty($parter_info->parterner_id) && empty($parter_info->uid)){
+                    $this->assign("parter_info",$parter_info);
+                    $url="/site.main.entry";
+                    if(!empty(utility_session::get()['login_url'])){
+                        $url=utility_session::get()['login_url'];
+                    }
+                    $this->assign("url",$url);
+                    return $this->render("user/parterner.bind.html");
+                }else{
+                    if(user_api::loginByUid($parter_info->uid)){
+                        if(!empty($_REQUEST['url'])){
+                            return $this->redirect($_REQUEST['url']);
+                        }
+                        if(!empty(utility_session::get()['login_url'])){
+                            $url = utility_session::get()['login_url'];
+                            return $this->redirect($url);
+                        }
+                        return $this->redirect("/");
+                    }
+                }
+            }
+        }
+        if(weixin_api::is_weixin()){
+                return $this->redirect("/weixin.user.login/");
+        }
+        
+         if(isset($_REQUEST['url']) && $_REQUEST['url']){
+                $url = urldecode($_REQUEST['url']);
+                $domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","domain");
+                $domain = $domain_conf->domain;
+                $parseUrl = parse_url($url);
+                if(isset($parseUrl['scheme'])){
+                    if(preg_match("/$domain/",$parseUrl['host'])){
+                        $this->assign('url',$url);
+                    }
+                }elseif(isset($parseUrl['path'])){
+                    if(preg_match("/$domain/",$parseUrl['path'])){
+                        $this->assign('url','https://'.$url);
+                    }
+                }
+                
+         }
+        $time=!empty(utility_session::get()['register_site']['time'])?time()-utility_session::get()['register_site']['time']:0;
+        if($time>60||$time<=0){
+            $time=60;
+        }
+        if($time>0){
+        }
+        $this->assign("time",60-$time);
+        return $this->render("/site/register.html");
+    }
+    function pageLogin($inPath){
+        if(empty(utility_session::get()['login_url'])){
+            utility_session::get()['login_url']= !empty($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
+        }
+		if(!empty($_REQUEST['url'])){
+			utility_session::get()['login_url'] = $_REQUEST['url'];
+		}
+        $logined=user_api::logined();
+        if($logined){
+			$url = $this->getRedirectUrl();
+            return $this->redirect($url);
+        }
+        if(!empty($inPath[3]) && $inPath[3]=="parterner"){
+            $parter_login_info = user_api::getParternerLogin();
+            if(!empty($parter_login_info['id'])){
+                $parter_info= user_api::getParternerById($parter_login_info['id']);
+                if(!empty($parter_info->parterner_id) && empty($parter_info->uid)){
+                    $this->assign("parter_info",$parter_info);
+                    $url="/site.main.entry";
+                    if(!empty(utility_session::get()['login_url'])){
+                        $url=utility_session::get()['login_url'];
+                    }
+                    $this->assign("url",$url);
+                    return $this->render("user/parterner.bind.html");
+                }else{
+                    if(user_api::loginByUid($parter_info->uid)){
+                        if(!empty($_REQUEST['url'])){
+                            return $this->redirect($_REQUEST['url']);
+                        }
+                        if(!empty(utility_session::get()['login_url'])){
+                            $url = utility_session::get()['login_url'];
+                            return $this->redirect($url);
+                        }
+                        return $this->redirect("/");
+                    }
+                }
+            }
+        }
+        if(weixin_api::is_weixin()){
+                return $this->redirect("/weixin.user.login/");
+        }
+        $error1="";
+        $error2="";
+        $forever=false;
+        if(!empty($_REQUEST['forever'])){
+            $forever=true;
+        }
+        if(!empty($_POST['uname']) && !empty($_POST['password'])){
+            $islogin = user_api::login($_POST['uname'],$_POST['password'],$forever,$ret);
+            if(!empty($islogin)){
+                if(!empty($_REQUEST['url']) && $_REQUEST['url']!="/site/main/login" && $_REQUEST['url']!="/site/main/register"){
+                    return $this->redirect($_REQUEST['url']);
+                }
+                if(!empty(utility_session::get()['login_url'])){
+                    $url = utility_session::get()['login_url'];
+                    return $this->redirect($url);
+                }
+                return $this->redirect("/");
+            }else{
+                if($ret->result->code!=-2){
+                    $error1=SLanguage::tr("登录失败","site.login")."[".SLanguage::tr($ret->result->msg,"site.login")."]!";
+                }else{
+                    $error2=SLanguage::tr("登录失败","site.login")."[".SLanguage::tr($ret->result->msg,"site.login")."]!";
+                }
+            }
+        }
+        $url = !empty($_REQUEST['url'])?$_REQUEST['url']:(!empty($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'');
+        $uname=!empty($_POST['uname'])?$_POST['uname']:'';
+        $this->assign("url",$url);
+        $this->assign("uname",$uname);
+        $this->assign("error1",$error1);
+        $this->assign("error2",$error2);
+
+        return $this->render("/site/login.html");
+    }
+    function pageLogout($inPath){
+		user_api::logout();
+        if(!empty($_REQUEST['url'])){
+            return $this->redirect($_REQUEST['url']);
+        }
+		if(isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER']){
+			$url = $_SERVER['HTTP_REFERER'];
+			$url = parse_url($url);
+			if(isset($url['path']) && $url['path']){
+				$this->redirect($url['path']);
+			}
+		}
+        return $this->redirect("/");
+    }
+    public function pageVerifyCodePwd($inPath){
+        $result=new stdclass;
+        //发送验证码
+        $r = verify_api::sendMobileCode(utility_session::get()['findpwd']['uname'],$ret);
+        if($r===false){
+            $result->error="发送验证码错误,[".$ret->result->msg."]";
+            $result->field="code";
+            return $result;
+        }
+        utility_session::get()['findpwd']['time']=time();
+        $result->field="code";
+        $result->ok = 1;
+        return $result;
+    }
+    function pageForget1($inPath){
+        if(!empty(user_api::loginedUser())){
+            $this->redirect("/site.main.entry");
+            exit;
+        }
+		return $this->render("/site/forget.step1.html");
+    }
+    function pageForget1Ajax($inPath){
+        $result=new stdclass;
+        if(utility_valid::mobile($_REQUEST['uname'])==false){
+            $result->error="手机号码格式不正确";
+            $result->field="uname";
+            return $result;
+        }
+		$_REQUEST['code'] = str_replace(' ','',$_REQUEST['code']);
+        if(SCaptcha::check(strtolower($_REQUEST['code']))===false){
+            $result->error="验证码错误";
+            $result->field="code";
+            return $result;
+        }
+        SCaptcha::del(strtolower($_REQUEST['code']));
+        $uname = $_REQUEST['uname'];
+        $uid = user_api::isRegister($uname);
+        if($uid===false){
+            $result->error="手机号没有注册!";
+            $result->field="uname";
+            return $result;
+        }
+        //发送手机验证码
+        if(utility_valid::mobile($uname)!==false){
+            $r = verify_api::sendMobileCode($uname,$ret);
+            if($r===false){
+                $result->error="发送验证码错误,[".$ret->result->msg."]";
+                $result->field="code";
+                return $result;
+            }
+        }
+        utility_session::get()['findpwd']=array("uname"=>$uname,"uid"=>$uid,'time'=>time());
+        return $result;
+    }
+    function pageForget2($inPath){
+        if(!empty(user_api::loginedUser())){
+            $this->redirect("/site.main.entry");
+            exit;
+        }
+        if(empty(utility_session::get()['findpwd']['uname'])){
+            $this->redirect("/site.main.forget1");
+            exit;
+        }
+        $uname = utility_session::get()['findpwd']['uname'];
+        $uname{3}="*";
+        $uname{4}="*";
+        $uname{5}="*";
+        $uname{6}="*";
+        $time=!empty(utility_session::get()['findpwd']['time'])?time()-utility_session::get()['findpwd']['time']:0;
+        if($time>60||$time<0){
+           $time=60; 
+        }
+        $this->assign("uname",$uname);
+        $this->assign("time",60-$time);
+		return $this->render("/site/forget.step2.html");
+    }
+    function pageForget2Ajax($inPath){
+        $result=new stdclass;
+        if(empty(utility_session::get()['findpwd']['uname'])){
+            $this->redirect("/site.main.forget1");
+            exit;
+        }
+        $uname = utility_session::get()['findpwd']['uname'];
+		$_REQUEST['code'] = str_replace(' ','',$_REQUEST['code']);
+        if(verify_api::verifyMobile($uname,$_REQUEST['code'])==false){
+            $result->error="验证码错误";
+            $result->field="code";
+            return $result;
+        }
+        utility_session::get()['findpwd']['checked']=true;
+        return $result;
+    }
+    function pageForget3($inPath){
+        if(!empty(user_api::loginedUser())){
+            $this->redirect("/site.main.entry");
+            exit;
+        }
+        if(empty(utility_session::get()['findpwd']['uname'])){
+            $this->redirect("/site.main.forget1");
+            exit;
+        }
+        if(empty(utility_session::get()['findpwd']['checked'])){
+            $this->redirect("/site.main.forget2");
+            exit;
+        }
+		return $this->render("/site/forget.step3.html");
+    }
+    function pageForget3Ajax($inPath){
+        $result=new stdclass;
+        if(empty(utility_session::get()['findpwd']['uname']) || empty(utility_session::get()['findpwd']['checked'])){
+            $this->redirect("/site.main.forget1");
+            exit;
+        }
+        if(empty($_REQUEST['password'])){
+            $result->error="密码不能为空";
+            $result->field="password";
+            return $result;
+        }
+        if(!preg_match( '/^[\\x20-\\x7e]+$/' ,$_REQUEST['password'])){
+            $result->error="密码不能为中文或者特殊字符";
+            $result->field="password";
+            return $result;
+        }
+        if(strlen($_REQUEST['password'])<6 || strlen($_REQUEST['password'])>20){
+            $result->error="密码不能少于6个字符，不能多于20个字符";
+            $result->field="password";
+            return $result;
+        }
+        if(empty($_REQUEST['password2'])){
+            $result->error="确认密码不能为空";
+            $result->field="password2";
+            return $result;
+        }
+        if($_REQUEST['password'] != $_REQUEST['password2']){
+            $result->error="两次密码输入不一致，请重新输入";
+            $result->field="password2";
+            return $result;
+        }
+        //修改密码
+        $uid = utility_session::get()['findpwd']['uid'];
+        $r = user_api::updatePassword($uid,$_REQUEST['password']);
+        if($r===false){
+            $result->error="密码修改失败，请重试";
+            $result->field="password";
+        }else{
+            unset(utility_session::get()['findpwd']);
+            //TODO clear session
+        }
+        return $result;
+    }
+    function pageForget4($inPath){
+        if(!empty(user_api::loginedUser())){
+            $this->redirect("/site.main.entry");
+            exit;
+        }
+		return $this->render("/site/forget.step4.html");
+    }
+	function pageWeixin($inPath){
+		if(weixin_api::is_weixin()){
+			$options = (weixin_api::getJsOptions());
+			$this->assign("signPackage",$options);
+			return $this->render("site/header.weixin.html");
+		}
+	}
+	function pageHeader($inPath){
+		return $this->render("site/header.html");
+	}
+
+    public function pageHeaderPlatform()
+    {
+        $this->render("site/HeaderPlatform.html");
+    }
+	function pageNav($inPath){
+        $subnav="";
+        if(!empty($inPath[3]))$subnav=$inPath[3];
+        $this->assign("subnav",$subnav);
+		$this->assign("orgInfo",self::$orgInfo);
+		return $this->render("site/nav.html");
+	}
+	/**
+	只有动态部分
+	**/
+	function pageUserNav2($inPath){
+        //判断登录
+        $user=user_api::loginedUser();
+        //判断管理员
+        $isAdmin=user_api::isAdmin(self::$orgOwner,$user['uid']);
+        //判断老师
+        $isTeacher=user_api::isTeacher(self::$orgOwner,$user['uid']);
+        if(!empty($user)){
+            //$userInfo = user_api::getUser($user['uid']);
+            $retMessagesNum = message_api::getUnreadInstationNum($user['uid'],$user['token']);
+            $this->assign("retMessagesNum", $retMessagesNum);
+        }else{
+            $this->assign("retMessagesNum", 0);
+        }
+        $this->assign("isAdmin",$isAdmin);
+        $this->assign("isTeacher",$isTeacher);
+        $this->assign("user",$user);
+        $subnav="";
+        if(!empty($inPath[3]))$subnav=$inPath[3];
+        $this->assign("subnav",$subnav);
+		return $this->render("site/nav.user.2.html");
+	}
+	function pageUserNav($inPath){
+		return $this->pageNav($inPath);
+/*
+        //判断登录
+        $user=user_api::loginedUser();
+        //判断管理员
+        $isAdmin=user_api::isAdmin($this->orgOwner,$user['uid']);
+        //判断老师
+        $isTeacher=user_api::isTeacher($this->orgOwner,$user['uid']);
+        if(!empty($user)){
+            //$userInfo = user_api::getUser($user['uid']);
+            $retMessagesNum = message_api::getUnreadInstationNum($user['uid'],$user['token']);
+            $this->assign("retMessagesNum", $retMessagesNum);
+        }else{
+            $this->assign("retMessagesNum", 0);
+        }
+        $this->assign("isAdmin",$isAdmin);
+        $this->assign("isTeacher",$isTeacher);
+        $this->assign("user",$user);
+        $subnav="";
+        if(!empty($inPath[3]))$subnav=$inPath[3];
+        $this->assign("subnav",$subnav);
+		$this->assign("orgInfo",$this->orgInfo);
+		return $this->render("site/nav.user.html");
+*/
+	}
+	function pageFooter($inPath){
+		$domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","platform");
+		$platform_url = $domain_conf->platform;
+		$this->assign('platform_url',$platform_url);
+		$this->assign("orgInfo",self::$orgInfo);
+		return $this->render("site/footer.html");
+	}
+    function page404($inPath){
+       return $this->render("site/404.html");
+   }
+    private function getRedirectUrl(){
+        $url = '/';
+        if(!empty(utility_session::get()['login_url'])){
+            $url = utility_session::get()['login_url'];
+            if(preg_match('/R|register/',$url)||preg_match('/L|login/',$url)){
+                $url = '/';
+            }
+        }
+        return $url;
+    }
+    public function pageALertLogin($inPath){
+        $url = !empty($_REQUEST['url'])?$_REQUEST['url']:(!empty($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'');
+        $this->assign('url',$url);
+        $from = !empty($_REQUEST['from'])?$_REQUEST['from']:"";
+        $this->assign('from',$from);
+        return $this->render("/site/login.alert.html");
+    }
+	/**
+	 * 机构自定义首页 
+	 * @author Panda <zhangtaifeng@gn100.com>
+	 */
+	function pageEntry($inPath){
+		utility_cache::pageCache(300);
+        //如果用户已登录 取出报名的课程 
+        $grades = tag_api::getTagByGroupId(2);
+        $this->assign("grades",$grades);
+        $subjects = tag_api::getTagByGroupId(1);
+        $this->assign("subjects",$subjects);
+		$slideList = user_organization::getOrgSlideList(self::$orgOwner);
+		$orgInfo = user_organization::getOrgByOwner(self::$orgOwner);
+		$this->assign("org_hot_type",$orgInfo);
+		$this->assign("slideList",$slideList);
+        //即将直播 一周内
+        //查询机构现有课程模版  
+        $templates=user_organization::getOrgTemplate(self::$orgOwner);
+        $cidArr=array();
+		$attrValues = array();
+		$temp = array();
+        if(!empty($templates)){
+            foreach($templates as $tk=>$tv){
+                if($tv->recommend==1){
+                    $queryArr=array();
+                    $query='';
+                    foreach($tv->query_arr as $qk=>$qv){
+                        if($qk=='grade_id'&&$qv==0){continue;}
+                        if($qk=='subject_id'&&$qv==0){continue;}
+                        $queryArr[$qk]=$qv;
+                        $query.=$qk.'='.$qv.'&';
+                    }
+                    $queryArr['user_id']=self::$orgOwner;
+                    $templates[$tk]->query=trim($query,'&');
+                    $queryArr['admin_status']=1;
+                    $seekArr = array(
+                        "f"=>array(
+                            "tags","course_id","title","create_time",
+                            "start_time","subject_id","thumb_big","thumb_med",
+                            "thumb_sma","course_type","grade_id","user_id",
+                            "public_type","fee_type","price","market_price",
+                            "max_user","min_user","user_total","status",
+                            "admin_status","system_status","class_id",
+                            "section_id","end_time","create_time","last_updated",
+                            "section","class", 'top','try','vv',"third_cate_name","course_attr"
+                        ),
+                        "q" => $queryArr,
+                        "p"=>1,
+                        "pl"=>$tv->row_count*4,
+                    );
+                    $seekRet=seek_api::seekcourse($seekArr);
+                    if(!empty($seekRet->data)){
+                        foreach($seekRet->data as $rsk=>$rsv){
+                            $cidArr[$rsv->course_id]=$rsv->course_id;
+							
+							$rsv->sectionNum = count($rsv->section);
+							if(!empty($rsv->course_attr)){
+								foreach($rsv->course_attr as $val){
+									if(!empty($val->attr_value)){
+										foreach($val->attr_value as $v){
+											$temp[$rsv->course_id][$v->attr_value_id] = $v->attr_value_name;
+										}
+									}
+								}
+							}
+
+							if(!empty($temp)){
+								foreach($temp as $k=>$v){
+									$attrValues[$k] = implode(",",$v);
+								}
+							}
+                        }
+                        $templates[$tk]->courses=$seekRet->data; 
+                    }
+                }
+                if($tv->recommend==2){
+                    $seekArr = array(
+                        "f"=>array(
+                            "tags","course_id","title","create_time",
+                            "start_time","subject_id","thumb_big","thumb_med",
+                            "thumb_sma","course_type","grade_id","user_id",
+                            "public_type","fee_type","price","market_price",
+                            "max_user","min_user","user_total","status",
+                            "admin_status","system_status","class_id",
+                            "section_id","end_time","create_time","last_updated",
+                            "section","class", 'top','try','vv',"third_cate_name","course_attr"
+                        ),
+                        "q" => array('course_id'=>$tv->course_ids),
+                        "p"=>1,
+                        "pl"=>$tv->row_count*4,
+                    );
+                    if(!empty($tv->course_arr)){
+                        foreach($tv->course_arr as $ck=>$cv){
+                            $cidArr[$cv]=$cv;
+                        }
+                    }
+                    $seekRet=seek_api::seekcourse($seekArr);
+                    if(!empty($seekRet->data)){
+                        //按照存的顺序取出来
+                        $data1=array();
+                        $data2=array();
+                        foreach($seekRet->data as $sdk=>$sdv){
+                            $data1[$sdv->course_id]=$sdv;
+							$sdv->sectionNum = count($sdv->section);
+							if(!empty($sdv->course_attr)){
+								foreach($sdv->course_attr as $val){
+									if(!empty($val->attr_value)){
+										foreach($val->attr_value as $v){
+											$temp[$sdv->course_id][$v->attr_value_id] = $v->attr_value_name;
+										}
+									}
+								}
+							}
+                        } 
+						
+						if(!empty($temp)){
+							foreach($temp as $k=>$v){
+								$attrValues[$k] = implode(",",$v);
+							}
+						}
+
+                        foreach($tv->course_arr as $tcv){
+                            if(!empty($data1[$tcv])){
+                                $data2[$tcv]=$data1[$tcv];
+                            }
+                        } 
+                        $templates[$tk]->courses=$data2; 
+                    }					
+                }
+            }
+        }else{
+            $seekArr = array(
+                "f"=>array(
+                    "tags","course_id","title","create_time",
+                    "start_time","subject_id","thumb_big","thumb_med",
+                    "thumb_sma","course_type","grade_id","user_id",
+                    "public_type","fee_type","price","market_price",
+                    "max_user","min_user","user_total","status",
+                    "admin_status","system_status","class_id",
+                    "section_id","end_time","create_time","last_updated",
+                    "section","class", 'top','vv','try',"third_cate_name","course_attr"
+                ),
+                "q" => array(
+                    'admin_status'=>1,
+                    'user_id'=>self::$orgOwner,
+                ),
+                "ob" => array(
+                    'start_time'=>'desc',
+                ),
+                "p"=>1,
+                "pl"=>12,
+            );
+            $seekRet=seek_api::seekcourse($seekArr);
+			
+            if(!empty($seekRet->data)){
+				
+				foreach($seekRet->data as $value){
+					$value->sectionNum = count($value->section);
+					if(!empty($value->course_attr)){
+						foreach($value->course_attr as $val){
+							if(!empty($val->attr_value)){
+								foreach($val->attr_value as $v){
+									$temp[$value->course_id][$v->attr_value_id] = $v->attr_value_name;
+								}
+							}
+						}
+					}
+					$cidArr[$value->course_id]=$value->course_id;
+				}
+				
+				if(!empty($temp)){
+					foreach($temp as $k=>$v){
+						$attrValues[$k] = implode(",",$v);
+					}
+				}
+            }
+            $templates=array();
+            $templates[0]=new stdClass;
+            $templates[0]->title='全部课程'; 
+            $templates[0]->courses=$seekRet->data; 
+        }
+
+		$this->assign("templates",$templates);
+        //从中间层获取排课
+        if(!empty($cidArr)){
+            $planArr=array(
+                "f"=>array(
+                    'course_id',
+                    'plan_id',
+                    'class_id',
+                    'class_name',
+                    'section_name',
+                    'admin_id',
+                    'admin_name',
+                    'admin_real_name',
+                    'start_time',
+                    'max_user',
+                    'user_total',
+                    'try',
+                    'status',
+                ),  
+                "q"=>array(
+                    'course_id'=>implode(',',$cidArr),
+                    'status'=>'1,2,3',
+                ),  
+                "ob"=>array(
+                    'start_time'=>'asc',
+                ),  
+                "p"=>1,
+                "pl"=>1000,
+            );  
+            $seekPlan=seek_api::seekPlan($planArr);    
+            $retPlan=!empty($seekPlan->data)?$seekPlan->data:false;
+            //$ret_plan1=course_api::getPlanByCids($cidArr1);
+            //排课信息每个班取一个 每个课程最多显示两个
+            $plan1=array();
+			$planinfo = array();
+            if(!empty($retPlan)){
+                foreach($retPlan as $rp){
+                    $plan1[$rp->course_id][$rp->class_id][$rp->status][]=$rp;
+                    $planinfo[$rp->course_id][$rp->class_id][]=$rp;
+                }   
+            }
+			if(!empty($templates[1])){
+				$templatesInfo = $templates[1]->courses;
+			}else{
+				$templatesInfo = $templates[0]->courses;
+			}
+			
+			$plan = org_api::getOrgCourseProjectInfo($templatesInfo,$plan1,$planinfo);
+            $this->assign("plan",$plan);
+        } 
+		//获取明星教师
+		$retStar1 = user_organization::listOrgUser(self::$orgInfo->oid,$all=0,$star=1,$page=1,$length=5);
+        $arr1=array();
+        $arr2=array();
+        if(!empty($retStar1)){
+            $arr1=utility_tool::objToArray($retStar1);
+        }
+        if(count($arr1)<5){
+		    $retStar2 = user_organization::listOrgUser(self::$orgInfo->oid,$all=0,$star=0,$page=1,$length=5-count($arr1));
+        }
+        if(!empty($retStar2)){
+            $arr2=utility_tool::objToArray($retStar2);
+        }
+        $teachers=array_merge($arr1,$arr2); 
+		//$this->assign("teachers",$teachers);
+		$this->assign("teachers",$teachers);
+        //学习资讯(原公告列表)
+		$cateId = isset($_GET['c']) ? (int)$_GET['c'] : 0;
+        $noticeList=user_api::getNoticeList(1,8,self::$orgOwner,$cateId,self::$orgInfo->oid);
+        if(!empty($noticeList->data)){
+            foreach($noticeList->data as $nlk=>$nlv){
+                //取出图片 
+                preg_match('/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i',$nlv->notice_content,$match);
+                //过滤php、html标签
+                $tmpStr=strip_tags($nlv->notice_content);
+                //有图片时截取54个字，无图片时截取67个字
+                if(!empty($match[2])){
+                    $noticeList->data[$nlk]->thumb=$match[2];
+                    //$noticeList->data[$nlk]->sub_content=mb_substr($tmpStr,0,54,'utf-8').'...';
+                }else{
+                    $noticeList->data[$nlk]->thumb=''; 
+                    //$noticeList->data[$nlk]->sub_content=mb_substr($tmpStr,0,67,'utf-8').'...';
+                }
+                $noticeList->data[$nlk]->sub_content=$tmpStr;
+                //不显示当年年份
+                //获取年份
+                $year=date('Y',strtotime($nlv->update_time));
+                if($year==date('Y')){
+                    $noticeList->data[$nlk]->update_time=date('m-d H:i',strtotime($nlv->update_time));
+                }else{
+                    $noticeList->data[$nlk]->update_time=date('Y-m-d H:i',strtotime($nlv->update_time));
+                }
+
+            } 
+        }
+        $this->assign("noticeList",$noticeList);
+		$config = ROOT_CONFIG."/site.conf";
+		$ssl_flag  = false;
+		if(is_file($config)){
+			$ssl= SConfig::getConfig($config,"ssl");
+			if(isset($ssl->flag) && $ssl->flag){
+				$ssl_flag=true;
+			}
+		}
+		$this->assign("ssl_flag",$ssl_flag);
+		$this->assign("attrValues",$attrValues);
+
+		return $this->render("site/index.html");
+	}
+	function pageUserInfo($inPath){
+        $from = !empty($_REQUEST['from'])?$_REQUEST['from']:"";
+        $this->assign('from',$from);
+        //首页登录框显示日期
+        $month=date('n'); 
+        $day=date('j'); 
+        $weekarray=array("日","一","二","三","四","五","六");
+        $w=date('w');
+        $week='星期'.$weekarray[$w];
+        $this->assign('month',$month);
+        $this->assign('day',$day);
+        $this->assign('week',$week);
+		$user=user_api::loginedUser();
+		if(!empty($user['uid'])){
+			//获取成长值
+			$userLevel = user_api::getUserLevel($user['uid']);
+			$this->assign('userLevel',$userLevel);
+			//获取签到
+			$day = date('Y-m-d');
+			$yesterday = date('Y-m-d',time()-3600*24);
+			$signInfo = user_api::getUserSignByDay($day,$user['uid']);
+			$lastSign = user_api::getLastUserSign($user['uid']);
+			if(!empty($lastSign) && !empty($signInfo)){
+				$userCombo = $signInfo->combo;
+			}elseif(!empty($lastSign) && empty($signInfo)){
+				if($lastSign->day != $yesterday ){
+					$userCombo = 0;
+				}elseif($lastSign->day == $yesterday ){
+					$userCombo = $lastSign->combo;
+				}
+			}else{
+				$userCombo = 0;
+			}
+			$this->assign('signInfo',$signInfo);
+			$this->assign('userCombo',$userCombo);
+			//判断是否有机构权限
+			$isAdmin=user_api::isAdmin(self::$orgOwner,$user['uid']);
+			$this->assign('isAdmin',$isAdmin);
+			//判断是否有教师权限
+			$isTeacher=user_api::isTeacher(self::$orgOwner,$user['uid']);
+			$this->assign('isTeacher',$isTeacher);
+			//机构身份
+			if(!empty($isAdmin)){
+				//课程数量查询
+				$allCourse=course_api::countCourseByOwner(self::$orgOwner,$status=1);
+				$this->assign('allCourse',$allCourse);
+				//教师数量查询
+				$allTeacher=user_organization::countTeacherByOid(self::$orgInfo->oid,$status=1);
+				$this->assign('allTeacher',$allTeacher);
+				//学生数量查询
+				$allStudent=course_api::countStudentByOwner(self::$orgOwner,$status=1);
+				$this->assign('allStudent',$allStudent);
+				//总订单数量
+				$allOrder=course_api::countFeeOrderByOwner(self::$orgOwner,$status=0);
+				//昨日订单数量
+				$yestodayOrder=course_api::countFeeOrderByOwner(self::$orgOwner,$status=2,date('Y-m-d 00:00:00',strtotime('-1 day')),date('Y-m-d 23:59:59',strtotime('-1 day')));
+				$this->assign('allOrder',$allOrder);
+				$this->assign('yestodayOrder',$yestodayOrder);
+				//总收入查询
+				$allIncome=course_api::getOrgIncome(self::$orgOwner);
+				//本月收入查询
+				$monthIncome=course_api::getOrgIncome(self::$orgOwner,date('Y-m-01 00:00:00'),date('Y-m-d 23:59:59'));
+				$this->assign('allIncome',$allIncome);
+				$this->assign('monthIncome',$monthIncome);
+				$this->assign('org',self::$orgInfo);
+			}
+			//教师身份
+			if(!empty($isTeacher)){
+				//班级数量查询 
+				$allClass=course_api::countTeacherClassByUid(self::$orgOwner,$user['uid'],1); 
+				$this->assign('allClass',$allClass);
+				//学生数量、课程数量查询
+				$teacherStat=stat_api::getOrgTeacherStat(self::$orgOwner,$user['uid']);
+				if(!empty($teacherStat)){
+					$countStudent=$teacherStat->student_count; 
+					$remainCourse=$teacherStat->course_remain_count; 
+					$this->assign('countStudent',$countStudent);
+					$this->assign('remainCourse',$remainCourse);
+				}
+				//待上课
+				$remainPlan=course_api::countTeacherPlanByUid(self::$orgOwner,$user['uid'],1);
+				$this->assign('remainPlan',$remainPlan);
+				//未备课 题库上了之后再加
+			}
+			//查询学习时长等
+			$studentStat=stat_api::getOrgStudentStat(self::$orgOwner,$user['uid']);
+			if(!empty($studentStat)){
+				$studyTime=ceil(($studentStat->vt_live+$studentStat->vt_record)/3600);
+				$this->assign('studyTime',$studyTime);
+			}
+			//查询课程数量
+			$studentCourse=course_api::countStudentCourseByUid(self::$orgOwner,$user['uid'],1); 
+			$startTime=date('Y-m-d 00:00:00');
+			$endTime=date('Y-m-d 23:59:59');
+			$studentPlan=course_api::countStudentPlanByUid(self::$orgOwner,$user['uid'],1,$startTime,$endTime); 
+			$this->assign('studentCourse',$studentCourse);
+			$this->assign('studentPlan',$studentPlan);
+		}
+		$this->assign("user",$user);
+
+		return $this->render("site/index.user.html");
+	}
+	/**
+	 * 直播模块，不能缓存
+	 */
+	function pageLiving($inPath){
+        $userCourseList = array();
+        $user=user_api::loginedUser();
+        if(!empty($user['uid'])){
+			//这里需要优化 TODO
+            $reg_info = course_api::listRegistration(array("uid"=>$user['uid']));
+            if(!empty($reg_info->data)){
+                foreach($reg_info->data as $rv){
+                    $userCourseList[] = $rv->cid;
+                    $userClassList[] = $rv->class_id;
+                }
+            }
+        }
+        //即将直播 一周内
+        $time1=date('Y-m-d 00:00:00').','.date('Y-m-d 23:59:59',strtotime('+7 days'));
+        $timeArr1=array(
+            "f"=>array(
+                'course_id',
+                'course_name',
+                'plan_id',
+                'class_name',
+                'section_name',
+                'admin_name',
+                'admin_real_name',
+                'start_time',
+                'fee_type',
+                'try',
+                'status',
+            ),  
+            "q"=>array(
+                'start_time'=>$time1, 
+                'status'=>'1,2',
+                'course_type'=>1,
+                'admin_status'=>1,
+                'owner_id'=>self::$orgOwner,
+            ),  
+            "ob"=>array(
+                'start_time'=>'asc',
+            ),  
+            "p"=>1,
+            "pl"=>4,
+        );  
+        $unStartedPlan=seek_api::seekPlan($timeArr1);
+        //精彩回放
+        $timeArr2=array(
+            "f"=>array(
+                'course_id',
+                'course_name',
+                'plan_id',
+                'class_name',
+                'section_name',
+                'admin_name',
+                'admin_real_name',
+                'start_time',
+                'fee_type',
+                'try',
+                'status',
+            ),  
+            "q"=>array(
+                'status'=>'3',
+                'course_type'=>1,
+                'admin_status'=>1,
+                'owner_id'=>self::$orgOwner,
+            ),  
+            "ob"=>array(
+                'start_time'=>'desc',
+            ),  
+            "p"=>1,
+            "pl"=>4,
+        );  
+        $finishedPlan=seek_api::seekPlan($timeArr2);
+
+		$planList = array();
+        //处理即将直播数据
+		if(!empty($unStartedPlan->data)){
+			foreach($unStartedPlan->data as $usv){
+                //是否已报名
+                if(!empty($userCourseList) && in_array($usv->course_id,$userCourseList)){
+                    $usv->register=1;
+                }else{
+                    $usv->register=0; 
+                }
+                $planList['unstarted'][]=$usv;
+			}
+		}
+        //处理精彩回放数据
+		if(!empty($finishedPlan->data)){
+			foreach($finishedPlan->data as $fv){
+                //是否已报名
+                if(!empty($userCourseList) && in_array($fv->course_id,$userCourseList)){
+                    $fv->register=1;
+                }else{
+                    $fv->register=0; 
+                }
+                $planList['finished'][]=$fv;
+			}
+		}
+		
+		$this->assign("planList",$planList);
+		return $this->render("site/index.living.html");
+	}
+}
+

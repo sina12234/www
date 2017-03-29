@@ -1,0 +1,41 @@
+<?php
+class index_api{
+
+	public static function getPlatformBanner($status){
+		$url = '/platform/banner/getBannerList';
+		$params = new stdclass;
+		$params->status = $status;
+		return utility_services::call($url,$params);
+	}
+
+
+	public static function getTeacherClassByUidArr($tid_arr){
+
+		$url = '/course/class/getTeacherClassByUidArr';
+		return utility_services::call($url,$tid_arr);
+
+	}
+
+
+	public static function getTeacherScoreByTidArr($tid_arr){
+
+		$url = '/message/score/getTeacherScoreByTidArr';
+		return utility_services::call($url,$tid_arr);
+
+	}
+	public static function getBlockInfo(){
+
+		$url = '/platform/setting/getBlockInfo/';
+		return utility_services::call($url);
+
+	}
+	public static function getOrgSubdomainName($fk_user){
+		$url = '/user/organization/getOrgSubdomainName/'.$fk_user;
+		return utility_services::call($url);
+	}
+	public static function getCourseFirstCateInfo($level){
+		$url = '/user/organization/getCourseFirstCateInfo/';
+		return utility_services::call($url,$level);
+	}
+}
+

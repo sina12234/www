@@ -1,0 +1,346 @@
+<?php
+
+class interface_org extends interface_base
+{
+	/*
+	 * 本地机构列表
+	 */
+	public function pageLocalOrg()
+	{
+		$grade  = array(1=>'小学',2=>'初中',3=>'高中');
+		$page   = empty($this->paramsInfo['params']['page']) ? 1 : $this->paramsInfo['params']['page'];
+        $length = empty($this->paramsInfo['params']['length']) ? 20 : $this->paramsInfo['params']['length'];
+		$cityId = !empty($this->paramsInfo['params']['cityId'])?$this->paramsInfo['params']['cityId']:0;
+		
+        $res_org = user_api::getOrgByProvince($cityId);
+        empty($res_org->data->items) && $this->setMsg(3002);
+		
+		//课程总数
+        $ownerStr = '';
+		$ownerArr = array_reduce($res_org->data->items, create_function('$v,$w', '$v[$w->fk_user_owner]=$w->fk_user_owner;return $v;'));
+        if(!empty($ownerArr)){
+            $ownerArr = array_filter($ownerArr);
+            $ownerStr = implode(',',$ownerArr);
+        }
+
+        $courseNumArr = $this->getCourseByOid($ownerStr);
+		//老师总数
+        $orgStr = '';
+		$orgArr = array_reduce($res_org->data->items, create_function('$v,$w', '$v[$w->pk_org]=$w->pk_org;return $v;'));
+        if(!empty($orgArr)){
+            $orgArr = array_filter($orgArr);
+            $orgStr = implode(',',$orgArr);
+        }
+		$teacherNumArr = $this->getTeacherByOid($orgStr);
+        $orgInfo = array();
+
+		foreach($res_org->data->items as $v)
+        {
+            $courseNum = !empty($courseNumArr['courseNum'][$v->fk_user_owner])?$courseNumArr['courseNum'][$v->fk_user_owner]:0;
+            
+            if($courseNum > 0){
+                $orgInfo[] = [
+				    "org"        => !empty($v->subname)?$v->subname:$v->name,
+                    "orgId"      => $v->pk_org,
+				    "com"        => !empty($v->company)?$v->company:'',
+                    "orgImage"   => $this->imgUrl($v->thumb_med),
+                    "teacherNum" => !empty($teacherNumArr[$v->pk_org])?$teacherNumArr[$v->pk_org]:0,
+                    "courseNum"  => $courseNum,
+                    "commonNum"  => !empty($courseNumArr['commentNum'][$v->fk_user_owner])?$courseNumArr['commentNum'][$v->fk_user_owner]:0,
+                    "grade"      => ($v->scopes==0)?implode(' ',$grade):$grade[$v->scopes]
+                ];
+            }
+             
+        }
+
+
+        empty($orgInfo) && $this->setMsg(3002);
+        $data['total']     = count($orgInfo);
+        $data['totalPage'] = ceil($data['total']/$length);
+        $data['page']      = $page;
+        $data['data']      = $this->mysort($orgInfo,'SORT_DESC','courseNum');
+        $offset            = ($page-1)*$length;
+        $data['data']      = array_slice($data['data'],$offset,$length);
+
+		$this->setData($data);
+	}
+	
+	/*
+	 * 机构下的老师
+	 */
+	public function pageGetTeacherByOrg()
+	{
+		$this->v(['org'=>1000]);
+		$gradeName = [1000=>'小学',2000=>'初中',3000=>'高中'];
+		$page   = empty($this->paramsInfo['params']['page']) ? 1 : $this->paramsInfo['params']['page'];
+        $length = empty($this->paramsInfo['params']['length']) ? 20 : $this->paramsInfo['params']['length'];
+		$org = intval($this->paramsInfo['params']['org']);
+		
+		$params   = [
+            'q'  => ['org_id'=>$org,'visiable'=>1],
+            'f'  => ['teacher_id','name','thumb_med','totaltime','subject','grade_id','avg_score','student_count'],
+            'pl' => $length,
+			'p'  => $page
+        ]; 
+        $res_teacher = seek_api::seekTeacher($params);
+		empty($res_teacher->data) && $this->setMsg(3002);
+		
+		$data = [
+			'page'      => $res_teacher->page,
+			'total'     => $res_teacher->total,
+			'pageTotal' => $res_teacher->pagelength
+		];
+		
+		$grade = array();
+		foreach($res_teacher->data as $v)
+		{
+			if(!empty($v->grade_id))
+			{
+				foreach($gradeName as $key=>$val)
+				{
+					$gradeId = $v->grade_id;
+					if(in_array($key,$gradeId))
+					{
+						$grade[$v->teacher_id][$key] = $val;
+					}
+				}
+			}
+			$data['data'][] = [
+				"teacherId"   => $v->teacher_id,
+				"name"        => $v->name,
+				"thumbMed"    => $this->imgUrl($v->thumb_med),
+				"subjectName" => !empty(teacher_api::getSubjectName($v->subject))?str_replace(',',' ',teacher_api::getSubjectName($v->subject)):'',
+				"userTotal"   => (string)$v->student_count,
+				"score"       => floatval($v->avg_score/10),
+				"grade"       => (!empty($grade) && !empty($grade[$v->teacher_id]))?implode(' ',$grade[$v->teacher_id]):'',
+				"courseTotalTime" => (string)$v->totaltime
+			];
+		}
+		
+		$this->setData($data);
+	}
+	
+	/*
+	 * 机构下的课程
+	 */
+	public function pageGetCourseByOrg()
+	{
+		$this->v(['org'=>1000]);
+		$gradeArr  = array(3000,2000,1000);
+		$page   = empty($this->paramsInfo['params']['page']) ? 1 : $this->paramsInfo['params']['page'];
+        $length = empty($this->paramsInfo['params']['length']) ? 20 : $this->paramsInfo['params']['length'];
+		$org    = intval($this->paramsInfo['params']['org']);
+		
+		$orgInfo = user_api::getOrgInfo($org);
+		empty($orgInfo) && $this->setMsg(3002);
+
+		$ownerId   = $orgInfo->fk_user_owner;
+		$ownerName = !empty($orgInfo->name)?$orgInfo->name:'';
+		$params   = [
+            'q'  => ['user_id'=>$ownerId,'admin_status'=>1,'status'=>'1,2,3'],
+            'f'  => ['course_id','title','grade','subject','thumb_med','user_total','comment','avg_score','status','fee_type','price'],
+            'pl' => $length,
+			'p'  => $page
+        ]; 
+        $res_course = seek_api::seekCourse($params);
+		empty($res_course->data) && $this->setMsg(3002);
+		
+		$ownerSubName = '';
+		$res_subdomain = user_api::getSubdomainByUidArr(array($ownerId));
+
+		if(!empty($res_subdomain->result->data->items) && !empty($res_subdomain->result->data->items[0]->subdomain))
+		{
+			$ownerSubName = $res_subdomain->result->data->items[0]->subdomain;
+		}
+		
+		$data = [
+			"total"     => $res_course->total,
+			"page"      => $res_course->page,
+			"pageTotal" => $res_course->pagelength
+		];
+		
+		$res_grade = array_reduce($res_course->data, create_function('$v,$w', '$v[$w->course_id]=$w->grade;return $v;'));
+		$grade = array();
+		if(!empty($res_grade))
+		{
+			foreach($res_grade as $key=>$val)
+			{
+				foreach($val as $k=>$v)
+				{
+					if(in_array($v->grade_id,$gradeArr))
+					{
+						$grade[$key] = $v->grade_name;
+					}
+				}
+			}
+		}
+		
+		foreach($res_course->data as $v)
+		{
+			$data['data'][] = [
+				"courseId"  => $v->course_id,
+                "title"     => $v->title,
+                "thumbMed"  => !empty($v->thumb_med)?$this->imgUrl($v->thumb_med):'',
+                'cate'      => teacher_api::getSubjectName($v->subject),
+                "grade"     => (!empty($grade) && !empty($grade[$v->course_id]))?$grade[$v->course_id]:'',
+                "userTotal" => (string)$v->user_total,
+                "comment"   => (string)$v->comment,
+                "org"       => !empty($ownerSubName)?$ownerSubName:$ownerName,
+                "score"     => (string)($v->avg_score/10),
+                "status"    => $v->status,
+                "courseType"=>"线上",
+                "feeType"   => (string)$v->fee_type,
+                "price"     => floatval($v->price/100)
+			];
+		}
+		
+		$this->setData($data);
+	}
+	
+	/*
+	 * 机构详情
+	 */
+	public function pageGetOrgInfo()
+	{
+		$this->v(['org'=>1000]);
+		$org = intval($this->paramsInfo['params']['org']);
+		$grade = array(1=>'小学',2=>'初中',3=>'高中');
+		$org_info = user_organization::getOrgShowInfo($org);
+		
+		empty($org_info) && $this->setMsg(3002);
+		if(!isset($org_info->status) || $org_info->status==0){
+			$this->setMsg(3002);
+		}
+		
+		$orgArrTeacherNum = $this->getTeacherByOid($org);
+		$orgArrCourseNum  = $this->getCourseByOid($org_info->fk_user_owner);
+		
+		$province = !empty(region_geo::$region[$org_info->province])?region_geo::$region[$org_info->province]:'';
+		$city     = !empty(region_geo::$region[$org_info->city])?region_geo::$region[$org_info->city]:'';
+			
+		$data['data'] = [
+			"org"        => !empty($org_info->subname)?$org_info->subname:(!empty($org_info->name)?$org_info->name:''),
+			"orgId"      => $org_info->pk_org,
+			"com"        => !empty($org_info->company)?$org_info->company:'',
+			"orgImage"   => !empty($org_info->thumb_med)?$this->imgUrl($org_info->thumb_med):'',
+			"grade"      => ($org_info->scopes==0)?implode(' ',$grade):$grade[$org_info->scopes],
+			"teacherNum" => (!empty($orgArrTeacherNum) && !empty($orgArrTeacherNum[$org_info->pk_org]))?$orgArrTeacherNum[$org_info->pk_org]:'0',
+			"courseNum"  => (!empty($orgArrCourseNum) && !empty($orgArrCourseNum['courseNum'][$org_info->fk_user_owner]))?$orgArrCourseNum['courseNum'][$org_info->fk_user_owner]:'0',
+			"commonNum"  => (!empty($orgArrCourseNum) && !empty($orgArrCourseNum['commentNum'][$org_info->fk_user_owner]))?$orgArrCourseNum['commentNum'][$org_info->fk_user_owner]:'0',
+			"visitNum"   => !empty($org_info->hotline)?$org_info->hotline:'0',
+			"studentNum" => (!empty($orgArrCourseNum) && !empty($orgArrCourseNum['userNum'][$org_info->fk_user_owner]))?$orgArrCourseNum['userNum'][$org_info->fk_user_owner]:'0',
+			"place"      => $province.$city,
+			"address"    => !empty($org_info->address)?$org_info->address:'',
+			"mobile"     => !empty($org_info->hotline)?$org_info->hotline:'',
+			"email"      => !empty($org_info->email)?$org_info->email:'',
+			"desc"       => !empty($org_info->company)?$org_info->company:''
+		];
+		
+		$this->setData($data);
+	}
+	
+	/*
+	 * 机构下的老师总数
+	 * @params $orgStr 机构id
+	 */
+	private function getTeacherByOid($orgStr)
+	{
+		$total = array();
+		$org   = array();
+		$params   = [
+            'q'  => ['org_id'=>$orgStr,'visiable'=>1],
+            'f'  => ['teacher_id','org_id'],
+            'pl' => 1000
+        ]; 
+        $res_teacher = seek_api::seekTeacher($params);
+		
+		if(empty($res_teacher->data)){
+			$total = array();
+		}
+		
+		foreach($res_teacher->data as $val)
+		{
+			foreach($val->org_id as $v)
+			{
+				$org[$v][] = $val->teacher_id;
+			}
+		}
+		
+		foreach($org as $k=>$v)
+		{
+			$total[$k] = (string)count($v);
+		}
+		
+		return $total;
+	}
+	
+	/*
+	 * 机构下的课程总数评论数
+	 * @params 机构所有者id
+	 */
+	private function getCourseByOid($ownerStr)
+    {
+        if($ownerStr == '') return array();
+		$total = array();
+		$params   = [
+            'q'  => ['user_id'=>$ownerStr,'admin_status'=>1],
+            'f'  => ['user_id','course_id','comment','user_total'],
+            'pl' => 10000
+        ]; 
+        $res_course = seek_api::seekCourse($params);
+
+		if(empty($res_course->data)){
+			$total = array();
+		}
+	
+		$course    = array_reduce($res_course->data, create_function('$v,$w', '$v[$w->user_id][]=$w->course_id;return $v;'));
+		$comment   = array_reduce($res_course->data, create_function('$v,$w', '$v[$w->user_id][]=$w->comment;return $v;'));
+		$userTotal = array_reduce($res_course->data, create_function('$v,$w', '$v[$w->user_id][]=$w->user_total;return $v;'));
+		
+		if($course){
+			foreach($course as $k=>$v)
+			{
+				$total['courseNum'][$k] = (string)count($v);
+			}
+		}
+		
+		if($comment){
+			foreach($comment as $k=>$v)
+			{
+				$total['commentNum'][$k] = (string)array_sum($v);
+			}
+		}
+		
+		if($userTotal){
+			foreach($userTotal as $k=>$v)
+			{
+				$total['userNum'][$k] = (string)array_sum($v);
+			}
+		}
+		return $total;
+    }
+
+    private function mysort($data,$orderBy,$field){
+		$sort = [
+			'direction' => $orderBy,
+			'field'     => $field
+		];
+
+		$arrSort = array();
+
+		foreach($data AS $uniqid => $row){
+			foreach($row AS $key=>$value){
+				$arrSort[$key][$uniqid] = $value;
+			}
+		}
+
+		if($sort['direction']){
+			array_multisort($arrSort[$sort['field']], constant($sort['direction']), $data);
+		}
+
+		return $data;
+	}
+
+}
+?>
+

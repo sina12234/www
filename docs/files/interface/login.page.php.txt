@@ -1,0 +1,82 @@
+<?php
+
+class interface_login
+{
+
+    public $paramsInfo = [
+        'u' => '',
+        'v' => '',
+        'time' => '',
+        'params' => [],
+        'key' => ''
+    ];
+
+
+    public function __construct()
+    {
+        $param = SJson::decode(utility_net::getPostData(), true);
+
+        empty($param) && interface_func::setMsg(1000);
+
+        foreach ($param as $k=>$v) {
+            if (isset($this->paramsInfo[$k])) {
+                $this->paramsInfo[$k] = $v;
+            }
+        }
+
+        $this->paramsInfo = interface_func::validParam($this->paramsInfo);
+
+    }
+
+
+    public function pageEntry()
+    {
+        if (!utility_valid::mobile($this->paramsInfo['params']['name'])) {
+            interface_func::setMsg(1012);
+        }
+
+        $uid = user_api::isRegister($this->paramsInfo['params']['name']);
+        if ($uid === false) {
+            interface_func::setMsg(2014);
+        }
+
+        $res = user_api::login($this->paramsInfo['params']['name'], $this->paramsInfo['params']['password'], 1);
+        
+        if ($res) {
+            $header = (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) ? "https" : "http";
+
+            $data = utility_session::get()['user'];
+            $userProfileInfo = utility_services::call("/user/profile/info/{$data['uid']}");
+            !empty($userProfileInfo->result->real_name) && $data['name'] = $userProfileInfo->result->real_name;
+
+            $data['large'] = $header.':'.utility_session::get()['user']['large'];
+            $data['medium'] = $header.':'.utility_session::get()['user']['medium'];
+            $data['small'] = $header.':'.utility_session::get()['user']['small'];
+
+            if (
+                !empty($this->paramsInfo['params']['streamInfo']) &&
+                $this->paramsInfo['params']['streamInfo'] == 'yes'
+            ) {
+                $token = live_auth::getPublishAuth($data['uid']);
+
+                if (empty($token)) {
+                    $ret = live_auth::setPublishAuth($data['uid']);
+                    $ret && $token = live_auth::getPublishAuth($data['uid']);
+                }
+
+                $data['streamInfo'] = array(
+                    'server' => $token->server,
+                    'stream' => $token->stream_name
+                );
+
+                $data['host'] = $header.'://'.$_SERVER['HTTP_HOST'];
+                $data['imgHost'] = $header . ':'.utility_cdn::file('');
+            }
+
+            interface_func::setData($data);
+        }
+
+        interface_func::setMsg(1038);
+    }
+}
+

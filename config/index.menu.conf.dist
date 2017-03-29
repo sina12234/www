@@ -1,0 +1,72 @@
+default{
+    menu {
+        title '个人资料';
+        url '/index.user.info';
+        icon_class 'icon icon1 c-fl';
+    }
+    menu {
+        title '修改头像';
+        url '/index.user.uploadPic/1';
+        icon_class 'icon icon9 c-fl';
+    }
+    menu {
+        title '我的消息';
+        url '/index.user.message';
+        icon_class 'icon icon3 c-fl';
+    }
+    menu {
+        title '安全设置';
+        url '/index.user.password';
+        icon_class 'icon icon2 c-fl';
+    }
+
+}
+student{
+	menu {
+        title '我的首页';
+        url '/index.growth.entry';
+        icon_class 'icon-web icon12 c-fl';
+    }
+    menu {
+        title '我的课程';
+        url '/index.student.course';
+        icon_class 'icon icon5 c-fl';
+    }
+    menu {
+        title '我的订单';
+        url '/index.student.order';
+        icon_class 'icon icon6 c-fl';
+    }
+    menu {
+        title '我的收藏';
+        url '/index.student.fav';
+        icon_class 'icon icon10 c-fl';
+    }
+    menu {
+        title '我的优惠券';
+        url '/index.student.discount';
+        icon_class 'icon icon11 c-fl';
+    }
+    menu {
+        title '我的作业';
+        url '/index.task.studentTaskListShow';
+        icon_class 'icon icon11 c-fl';
+    }
+}
+teacher{
+    menu {
+        title '我的课程';
+        url '/index.teacher.timetable';
+        icon_class 'icon icon5 c-fl';
+    }
+    menu {
+        title '我的学生';
+        url '/index.teacher.student';
+        icon_class 'icon icon6 c-fl';
+    }
+    menu {
+        title '如何上课';
+        url '/index.teacher.help';
+        icon_class 'icon icon8 c-fl';
+    }
+}

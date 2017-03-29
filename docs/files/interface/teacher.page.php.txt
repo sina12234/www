@@ -1,0 +1,954 @@
+<?php
+
+class interface_teacher extends interface_base
+{
+    /*
+     * 老师筛选与查询
+     * @author zhengtianlong
+     */
+    public function pageListV2()
+    {
+		$sortType = [
+			2001 => 'student_count',
+			2002 => 'avg_score'
+		];
+		
+		$gradeName = [1000=>'小学',2000=>'初中',3000=>'高中'];
+        $page   = empty($this->paramsInfo['params']['page']) ? 1 : $this->paramsInfo['params']['page'];
+        $length = empty($this->paramsInfo['params']['length']) ? 20 : $this->paramsInfo['params']['length'];
+        $params = [
+            'p'  => $page,
+            //'q'  => ['teacher_status'=>1,'is_star'=>1,'visiable'=>1,'org_id' => "1,10,14,15,35",],
+            'q'  => ['teacher_status'=>1,'visiable'=>1, 'course_count'=>'1, 5000'],
+            'pl' => $length,
+            'f'  => [
+                    'teacher_id',
+                    'name',
+                    'real_name',
+                    'thumb_big',
+                    'subject_id',
+                    'totaltime',
+                    'student_count',
+                    'avg_score',
+                    'mobile',
+                    'grade',
+                    'grade_id',
+                    'subject',
+                    'course_count'
+                ],
+        ];
+        if(!empty($this->paramsInfo['params']['city']) && $this->paramsInfo['params']['city']!='全国' )
+        {
+            $params['q']['city'] = $this->paramsInfo['params']['city'];
+        }
+        if(!empty($this->paramsInfo['params']['subjectId']))
+        {
+            $params['q']['subject_id'] = $this->paramsInfo['params']['subjectId'];
+        }
+        if(!empty($this->paramsInfo['params']['gradeId']))
+        {
+            $params['q']['grade_id'] = $this->paramsInfo['params']['gradeId'];
+        }
+        if(!empty($this->paramsInfo['params']['keywords']))
+        {
+            $params['q']['search_field'] = $this->paramsInfo['params']['keywords'];
+        }		
+		if(!empty($this->paramsInfo['params']['sort']))
+        {
+			$sort = explode(',',$this->paramsInfo['params']['sort']);
+			foreach ($sortType as $k=>$v)
+			{
+				if (in_array($k, $sort))
+				{
+					$params['ob'][$v] = 'desc';
+				}
+			}
+			if(empty($params['ob'])){
+				$params['ob']['weight'] = 'desc';
+			}
+        }else{
+			$params['ob']['weight'] = 'desc';
+		}
+		
+        $res_teacher = seek_api::seekTeacher($params);
+		
+        empty($res_teacher->data) && $this->setMsg(3002);
+		
+		$data = [
+			"total"     => $res_teacher->total,
+			"page"      => $res_teacher->page,
+			"pageTotal" => ceil($res_teacher->total/$res_teacher->pagelength)
+		];
+		$grade = array();
+		foreach($res_teacher->data as $k=>$v)
+		{
+			if(!empty($v->grade_id))
+			{
+				foreach($gradeName as $key=>$val)
+				{
+					$gradeId = $v->grade_id;
+					if(in_array($key,$gradeId))
+					{
+						$grade[$v->teacher_id][$key] = $val;
+					}
+				}
+			}
+			$data['data'][$k] = [
+				"teacherId"       => $v->teacher_id,
+				"name"            => !empty($v->real_name)?$v->real_name:(!empty($v->name)?mb_substr($v->name,0,15):SLanguage::tr('未设置', 'message')),
+				"thumbMed"        => $this->imgUrl($v->thumb_big),
+				"subjectName"     => !empty(teacher_api::getSubjectName($v->subject))?str_replace(',',' ',teacher_api::getSubjectName($v->subject)):'',
+				"courseTotalTime" => number_format($v->totaltime/3600,1),
+				"userTotal"       => $v->student_count,
+				"score"           => $v->avg_score/10,
+				"grade"           => (!empty($grade) && !empty($grade[$v->teacher_id]))?implode(' ',$grade[$v->teacher_id]):''
+			];
+		}
+		
+        $this->setData($data);
+    }
+
+	/*
+     * 老师信息接口
+     * @author zhengtianlong
+     */
+    public function pageDetailV2()
+    {
+        $this->v(['teacherId' => 1000]);
+		$sexArr = array(1=>'男',2=>'女');
+		$gradeName = [1000=>'小学',2000=>'初中',3000=>'高中'];
+        $params = [
+            'q' => ['teacher_id'=>$this->paramsInfo['params']['teacherId']],
+            'f' => [
+                'teacher_id',
+                'name',
+            	'real_name',
+                'org_name',
+                'diploma',
+                'college',
+                'thumb_big',
+                'years',
+                'subject_id',
+                'desc',
+                'title',
+                'gender',
+                'org_id',
+				'totaltime',
+				'avg_score',
+				'student_count',
+				'desc_score',
+				'student_score',
+				'explain_score',
+                'org_teacher',
+				'subject',
+				'grade',
+				'grade_id'
+            ]
+        ];
+
+        $res_teacher = seek_api::seekTeacher($params);
+		
+        empty($res_teacher->data) && $this->setMsg(3002);
+        $t = $res_teacher->data[0];
+		
+		$grade = array();
+		if(!empty($t->grade_id))
+		{
+			foreach($gradeName as $key=>$val)
+			{
+				$gradeId = $t->grade_id;
+				if(in_array($key,$gradeId))
+				{
+					$grade[$t->teacher_id][$key] = $val;
+				}
+			}
+		}
+		$header = (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) ? "https://" : "http://";
+        $data = [
+            'teacherId' => $t->teacher_id,
+            'name'      => !empty($t->real_name)?$t->real_name:(!empty($t->name)?mb_substr($t->name,0,15):SLanguage::tr('未设置', 'message')),
+            'thumbMed'  => !empty($t->thumb_big) ? $this->imgUrl($t->thumb_big) : '',
+            'diploma'   => !empty(teacher_major::$diploma[$t->diploma])?teacher_major::$diploma[$t->diploma]: '',
+            'years'     => !empty($t->years) ? $t->years : '',
+            'college'   => !empty($t->college) ? $t->college : '',
+            'subject'   => !empty(teacher_api::getSubjectName($t->subject))?str_replace(',',' ',teacher_api::getSubjectName($t->subject)):'',
+            'desc'      => !empty($t->desc) ? $t->desc : '',
+            'title'     => !empty($t->title) ? $t->title : '',
+			'sex'       => !empty($t->gender) ? $sexArr[$t->gender] : '',
+            'userTotal' => $t->student_count,
+            'score'     => ($t->avg_score/10),
+			'taughtGrade'=> (!empty($grade) && !empty($grade[$t->teacher_id]))?implode(' ',$grade[$t->teacher_id]):'',
+            'conform'   => ($t->desc_score/10),
+			'satisfaction'=> ($t->student_score/10),
+            'expression'  => ($t->explain_score/10),
+			'courseTotalTime' => number_format($t->totaltime/3600,1)
+        ];
+		
+        if(!empty($t->org_teacher[0]))
+        {
+            $ownerId = $t->org_teacher[0]->fk_user_owner;
+            $orgInfo = user_organization::getOrgByOwner($ownerId);
+			$domainInfo = user_organization::getSubdomainByUid($ownerId);
+			
+			if(!empty($domainInfo) && !empty(user_organization::course_domain($domainInfo->subdomain))){
+				$data['url'] = $header.user_organization::course_domain($domainInfo->subdomain)."/index/teacherblog/entry/".$t->teacher_id;
+			}else{
+				$data['url'] = '';
+			}
+			
+            $data['org'] = !empty($orgInfo->subname)?$orgInfo->subname:$t->org_name;
+        }
+
+        $this->setData($data);
+    }
+
+	/*
+     * 老师评论接口
+     * @author zhengtianlong
+     */
+    public function pageCommentV2()
+    {
+        $this->v(['teacherId' => 1000]);
+
+        $page   = empty($this->paramsInfo['params']['page']) ? 1 : $this->paramsInfo['params']['page'];
+        $length = empty($this->paramsInfo['params']['length']) ? 20 : $this->paramsInfo['params']['length'];
+        $tid    = $this->paramsInfo['params']['teacherId'];
+		$commentParam = [
+			'page'      => $page,
+            'limit'     => $length,
+            'condition' => "fk_user_teacher={$tid} and fk_plan!=0",
+            'orderBy'   => 'pk_comment desc'
+		];
+
+		//老师的评论信息
+        $res_comment = comment_api::getCommentList($commentParam);
+
+		empty($res_comment->items) && $this->setMsg(3002);
+
+		foreach($res_comment->items as $val)
+		{
+			$planIdArr[] = $val->fk_plan;
+		}
+		$planIdStr = implode(',',$planIdArr);
+		//排课信息
+		$planParams = [
+			'q' => ['plan_id'=>$planIdStr],
+			'f' => ['course_id','course_name','section_name','class_name'],
+			'pl'=> 10000
+		];
+
+		$res_plan = seek_api::seekPlan($planParams);
+		
+		$planInfo = array();
+		if(!empty($res_plan->data))
+		{
+			foreach($res_plan->data as $v)
+			{
+				$planInfo[$v->course_id] = [
+					'course_name'  => $v->course_name,
+					'section_name' => $v->section_name,
+					'class_name'   => $v->class_name
+				];
+			}
+		}
+
+        $data   = [];
+        if (!empty($res_comment->items))
+		{
+			$data = [
+				'total'    => $res_comment->totalSize,
+				'page'     => $res_comment->page,
+				'totalPage'=> $res_comment->totalPage
+			];
+
+            foreach ($res_comment->items as $v)
+			{
+                $data['data'][] = [
+					'courseId'  => $v->fk_course,
+                    'commentId' => $v->pk_comment,
+                    'userId'    => $v->fk_user,
+                    'userName'  => $v->user_name,
+                    'userImage' => $this->imgUrl($v->user_thumb),
+                    'content'   => html_entity_decode($v->comment),
+                    'score'     => !empty($this->_getScoreInfo($v->fk_course)->avg_score)?$this->_getScoreInfo($v->fk_course)->avg_score:0,
+                    'time'      => date('Y-m-d',strtotime($v->last_updated)),
+					'course'    => !empty($planInfo[$v->fk_course]['course_name'])?$planInfo[$v->fk_course]['course_name']:'',
+					'class'     => !empty($planInfo[$v->fk_course]['class_name'])?$planInfo[$v->fk_course]['class_name']:'',
+					'section'   => !empty($planInfo[$v->fk_course]['section_name'])?$planInfo[$v->fk_course]['section_name']:''
+                ];
+            }
+        }
+        $this->setData($data);
+    }
+
+	private function _getScoreInfo($cid)
+    {
+        $res = comment_api::getTotal(array('course_id'=>$cid));
+        if (!empty($res)) {
+            $student_score = (int)ceil($res[0]->student_score/$res[0]->total_user);
+            $desc_score = (int)ceil($res[0]->desc_score/$res[0]->total_user);
+            $explain_score = (int)ceil($res[0]->explain_score/$res[0]->total_user);
+            $avg_score = (int)ceil($res[0]->avg_score/$res[0]->total_user);
+
+            $data = [
+                'student_score' => $student_score > 5 ? 5 : $student_score,
+                'desc_score' => $desc_score > 5 ? 5 : $desc_score,
+                'explain_score' => $explain_score > 5 ? 5 : $explain_score,
+                'avg_score' => $avg_score > 5 ? 5 : $avg_score
+            ];
+            return $data;
+        }
+        return array();
+    }
+
+    public function subject()
+    {
+        $data = [
+            'grade' => [
+                ['name' => '小学', 'id' => '1000'],
+                ['name' => '初中', 'id' => '2000'],
+                ['name' => '高中', 'id' => '3000'],
+            ],
+            'subject' => [
+              ['name' => '数学', 'id' => '1'],
+              ['name' => '英语', 'id' => '2'],
+              ['name' => '语文', 'id' => '3'],
+              ['name' => '物理', 'id' => '4'],
+              ['name' => '化学', 'id' => '5'],
+              ['name' => '生物', 'id' => '6'],
+              ['name' => '历史', 'id' => '7'],
+              ['name' => '地理', 'id' => '8'],
+              ['name' => '政治', 'id' => '9']
+            ],
+            'others' => [
+              'nolimit' => '不限',
+              'courseType' => [
+                ['name' => '线上课', 'id' => '1001'],
+                ['name' => '线下课', 'id' => '1002']
+              ],
+              'sortType' => [
+                ['name' => '人气排序', 'id' => '2001'],
+                ['name' => '评分排序', 'id' => '2002']
+              ]
+            ]
+        ];
+
+        $this->setData($data);
+    }
+
+    /*
+     * 教师数/课程数/机构数
+     * @author zhengtianlong
+     */
+    public function pageGetNum()
+    {
+		
+        $cityId   = isset($this->paramsInfo['params']['cityId'])?$this->paramsInfo['params']['cityId']:0;
+        $cityName = !empty($this->paramsInfo['params']['city'])?$this->paramsInfo['params']['city']:'全国';
+        $org      = user_api::getOrgByProvince($cityId);
+		
+		$orgNum     = 0;
+		$courseNum  = 0;
+		$teacherNum = 0;
+		
+		$ownerArr = array();
+		if(!empty($org->data->items)){
+			$ownerArr = array_reduce($org->data->items, create_function('$v,$w', '$v[$w->fk_user_owner]=$w->fk_user_owner;return $v;'));
+		}
+		$ownerArr = array_filter($ownerArr);
+		
+		//课程数
+		if($ownerArr){
+			$ownerStr = implode(',',$ownerArr);
+			$params   = [
+				'q'  => ['user_id'=>$ownerStr,'admin_status'=>1],
+				'f'  => ['course_id','user_id'],
+				'pl' => 10000
+			]; 
+            $courseRes = seek_api::seekCourse($params);
+
+            //机构对应的课程Id
+            $orgCourseNum = array();
+            if(!empty($courseRes->data)){
+                $orgCourseId = array_reduce($courseRes->data,create_function('$v,$w','$v[$w->user_id][]=$w->course_id;return $v;'));
+                foreach($orgCourseId as $k=>$v){
+                    $orgCourseNum[$k] = count($v);
+                }
+            }
+
+			$courseNum = $courseRes->total;
+		}
+
+		//机构数
+		if(!empty($org)){
+			$orgNum = !empty($orgCourseNum) ? count($orgCourseNum) : 0;
+		}
+		
+		//老师数
+		if($cityName == '全国')
+		{
+			$TeacherParams = [
+                'q' => ['teacher_status'=>1,'visiable'=>1, 'course_count'=>'1, 5000'],
+				'f' => ['teacher_id'],
+                'pl'=> 10000
+			];
+		}else{
+			$TeacherParams = [
+				'q' => ['city'=>$cityName,'teacher_status'=>1,'visiable'=>1, 'course_count'=>'1, 5000'],
+				'f' => ['teacher_id'],
+                'pl'=> 10000
+			];
+		}
+		$teacherRes = seek_api::seekTeacher($TeacherParams);
+	
+		if(!empty($teacherRes->data)){
+			$teacherNum = $teacherRes->total;
+		}
+		
+		$data = [
+            'teacherTotal' => $teacherNum,
+            'courseTotal'  => $courseNum,
+            'orgTotal'     => $orgNum
+        ];
+
+        $this->setData($data);
+    }
+
+       /*
+        * 老师首页接口
+        * @author zhengtianlong
+        */
+        public function pageTeacherInfoCourse()
+        {
+			$this->v(['uid'=>1000]);
+			$page   = empty($this->paramsInfo['params']['page']) ? 1 : $this->paramsInfo['params']['page'];
+			$length = empty($this->paramsInfo['params']['length']) ? 20 : $this->paramsInfo['params']['length'];
+			$uid    = $this->paramsInfo['params']['uid'];
+			$startTime   = date('Y-m-d H:i:s');
+            $endTime = date('Y-m-d H:i:s',strtotime("+30 day"));
+			//老师信息
+			$teacherParams = [
+                'q' => ['teacher_id'=>$uid],
+                'f' => [
+                        'teacher_id',
+                        'name',
+                        'thumb_big',
+                        'student_count',
+                        'totaltime',
+						'course_count',
+						'student_score',
+                        'desc'
+                    ]
+            ];
+            $res_teacher = seek_api::seekTeacher($teacherParams);
+			empty($res_teacher->data) && $this->setMsg(3002);
+			$t = $res_teacher->data[0];
+			//课程信息
+			$planParams = [
+				'q' => ['teacher_id'=>$uid,'status'=>'1,2','start_time'=> "{$startTime},{$endTime}"],
+				'f' => ['course_id','class_id','course_name','class_name','start_time'],
+				'ob'=> ['start_time'=>'asc'],
+				'p' => $page,
+				'pl'=> $length
+			];
+			$res_plan = seek_api::seekPlan($planParams);
+
+			$course = array();
+			if(!empty($res_plan->data))
+			{
+
+                foreach($res_plan->data as $val)
+                {
+                    $courseId[$val->course_id] = $val->course_id;
+                }
+                $courseIdStr = implode(',',$courseId);
+                $courseParams = [
+                    'q' => ['course_id'=>$courseIdStr],
+                    'f' => ['course_id','thumb_med'],
+                    'pl'=> 10000
+                ];
+                $res_course = seek_api::seekcourse($courseParams);
+                if(!empty($res_course->data))
+                {
+                   foreach($res_course->data as $c)
+                   {
+                        $courseImg[$c->course_id] = $this->imgUrl($c->thumb_med);
+                   }
+                }
+				$course = [
+					'page'      => $res_plan->page,
+					'totalPage' => $res_plan->pagelength,
+					'total'     => $res_plan->total
+				];
+
+				foreach($res_plan->data as $v)
+				{
+					$course['data'][] = [
+						'classId'   => $v->class_id,
+						'className' => $v->class_name,
+						'courseId'  => $v->course_id,
+						'courseName'=> $v->course_name,
+						'startTime' => date("m-d H:i",strtotime($v->start_time)),
+                        'courseImage'=>!empty($courseImg[$v->course_id])?$courseImg[$v->course_id]:'',
+						'courseType'=> '线上课',
+						'address'   => ''
+					];
+				}
+			}
+
+			//老师详情
+			$info = [
+                'uid'          => $t->teacher_id,
+                'name'         => $t->name,
+                'image'        => $this->imgUrl($t->thumb_big),
+                'desc'         => $t->desc,
+                'pv'           => $t->course_count, //教师总课程数
+                'ranking'      => ($t->student_score/10), //学生满意度
+                'courseTime'   => number_format($t->totaltime/3600,1),
+                'class'        => !empty($course['total'])?$course['total']:0,
+                'studentTotal' => $t->student_count,
+                'courseTask'   => 0
+            ];
+
+			if(!empty($course['page']) && $course['page']!=1)
+			{
+				$data = $course;
+			}else
+			{
+				if(!empty($course))
+				{
+					$data = [
+						'info'   => $info,
+						'course' => $course
+					];
+				}else
+				{
+					$data = ['info'=>$info];
+				}
+			}
+
+			$this->setData($data);
+        }
+
+        /*
+         * 老师的课程接口
+         * @author zhengtianlong
+        */
+        public function pageTeacherCourse()
+        {
+            $page   = empty($this->paramsInfo['params']['page']) ? 1 : $this->paramsInfo['params']['page'];
+            $length = empty($this->paramsInfo['params']['length']) ? 20 : $this->paramsInfo['params']['length'];
+            $this->v(['teacherId' => 1000]);
+            $tid = $this->paramsInfo['params']['teacherId'];
+            //老师下所有的课
+			$planParams = [
+				'q' => ['teacher_id'=>$tid,'status'=>'1,2,3'],
+				'f' => ['course_id'],
+                'ob' => ['start_time' => 'asc'],
+				'pl'=> 1000
+			];
+
+			$res_plan = seek_api::seekPlan($planParams);
+			empty($res_plan->data) && $this->setMsg(3002);
+			//老师下的所有课程id
+			foreach($res_plan->data as $v)
+			{
+				$cid[] = $v->course_id;
+			}
+			$cidStr = implode(',',$cid);
+			//学生报的课程
+			$userCourseId = array();
+			if(!empty($this->paramsInfo['params']['uid']))
+			{
+				$res_usercourse = course_api::listregistration(array('uid'=>$this->paramsInfo['params']['uid']));
+				if(!empty($res_usercourse->data))
+				{
+					foreach($res_usercourse->data as $val)
+					{
+						$userCourseId[$val->cid] = $val->cid;
+					}
+				}
+			}
+
+			//课程的信息
+			$courseParams = [
+				'q' => ['course_id'=>$cidStr,'admin_status'=>'1'],
+				'f' => ['course_id','title','price','start_time','status','fee_type'],
+                'p' => $page,
+                'pl'=> $length
+			];
+			$res_course = seek_api::seekCourse($courseParams);
+			empty($res_course->data) && $this->setMsg(3002);
+			$data = [
+                'page'     => $res_course->page,
+                'total'    => $res_course->total,
+                'totalPage'=> $res_course->pagelength
+            ];
+
+			foreach($res_course->data as $v)
+			{
+                //apple check
+                /*if ($this->paramsInfo['u'] == 'i') {
+                    if ($v->fee_type > 0 || $v->price > 0) continue;
+                }*/
+                // end
+				$data['data'][] = array(
+                    'courseId'     => $v->course_id,
+                    'title'        => $v->title,
+                    'feeTyep'      => $v->fee_type,
+                    'price'        => floatval($v->price / 100),
+                    'courseStatus' => $v->status,
+                    'startTime'    => date('Y年m月d日 H:i',strtotime($v->start_time)),
+                    'userStatus'   => empty($userCourseId[$v->course_id])?'0':'1',
+                    'address'      => '',
+                    'courseType'   => 0
+                );
+			}
+			$this->setData($data);
+        }
+
+        /*
+         * 老师下的订单接口
+         * @author zhengtianlong
+        */
+        public function pageTeacherOrder()
+        {
+            $page   = empty($this->paramsInfo['params']['page']) ? 1 : $this->paramsInfo['params']['page'];
+            $length = empty($this->paramsInfo['params']['length']) ? 20 : $this->paramsInfo['params']['length'];
+            $uid    = empty($this->paramsInfo['params']['uid']) ? $this->setMsg(1009) : $this->paramsInfo['params']['uid'];
+
+			$params = [
+                'q' => ['teacher_id'=>$uid],
+                'f' => ['course_id','class_name'],
+				'pl'=> 10000
+            ];
+            $res = seek_api::seekplan($params);
+			
+            empty($res->data) && $this->setMsg(3002);
+			
+			$courseIdArr = array();
+			$classInfo   = array();
+			foreach($res->data as $v){
+				$courseIdArr[$v->course_id] = $v->course_id;
+				$classInfo[$v->course_id]   = $v->class_name;
+			}
+			
+            $courseId = implode(',',$courseIdArr);
+			
+            $condition = [
+                'course_id' => [$courseId],
+                'status'    => 2
+            ];
+            $result = course_api::listFeeOrder($condition,$page,$length);
+			
+            empty($result->data) && $this->setMsg(3002);
+            $data = [
+                'page'      => $result->page,
+                'total'     => $result->totalSize,
+                'totalPage' => $result->total
+            ];
+
+            foreach($result->data as $key=>$val)
+            {
+				$userInfo = user_api::getStudentProfile($val->user_id);
+                $data['data'][$key] = [
+                    'orderId'     => $val->order_id,
+                    'price'       => $val->price/100,
+                    'orderStatus' => $val->status,
+                    'startTime'   => empty($val->course->start_time)?'':date("n月d日 H:i",strtotime($val->course->start_time)),
+                    'studentId'   => $val->user_id,
+                    'courseId'    => $val->course_id,
+                    'courseTitle' => !empty($val->course->course_name) ? $val->course->course_name : '',
+                    'orderTime'   => date('Y-m-d H:i',strtotime($val->create_time)),
+                    'className'   => !empty($classInfo[$val->course_id])?$classInfo[$val->course_id]:'',
+                    'studentMobile'=> !empty($userInfo->mobile)?$userInfo->mobile:'',
+                    'studentImage' => !empty($userInfo->thumb_med)?$this->imgUrl($userInfo->thumb_med):'',
+                    'courseType'   => '线上课'
+                ];
+
+                if(!empty($userInfo->student_name))
+                {
+                    $data['data'][$key]['studentName'] = $userInfo->student_name;
+                }else
+                {
+                    $data['data'][$key]['studentName'] = !empty($userInfo->name)?$userInfo->name:"";
+                }
+            }
+
+            $this->setData($data);
+        }
+
+
+        public function pageStudent()
+        {
+            $data = interface_courseApi::getTeacherStudent(
+                $this->paramsInfo['params']['courseId'],
+                $this->paramsInfo['params']['classId']
+            );
+
+            !empty ($data) && interface_func::setData($data);
+            interface_func::setMsg(1);
+        }
+
+        /*
+         * 老师下的学生列表
+         * @author zhengtianlong
+         */
+        public function pageStudentV2()
+        {
+            $this->v(['uid' => 1000]);
+            $uid      = $this->paramsInfo['params']['uid'];
+            $page     = !empty($this->paramsInfo['params']['page'])?$this->paramsInfo['params']['page']:1;
+            $length   = !empty($this->paramsInfo['params']['length'])?$this->paramsInfo['params']['length']:20;
+            $courseId = !empty($this->paramsInfo['params']['courseId'])?$this->paramsInfo['params']['courseId']:0;
+            $classId  = !empty($this->paramsInfo['params']['classId'])?$this->paramsInfo['params']['classId']:0;
+            $data = array();
+            //老师下的课程
+            $planParams = [
+                'q' => ['admin_id'=>$uid,'status'=>'1,2,3'],
+                'f' => ['course_id','class_id','course_name','class_name','teacher_id'],
+                'pl'=> 100000
+            ];
+            $tresult = seek_api::seekPlan($planParams);
+            empty($tresult->data) && $this->setMsg(3002);
+            if($courseId==0 && $classId==0)
+            {
+			   $res_user = utility_teacherreg::teacherClassList(0,$uid,0,$page,$length);
+			   empty($res_user->data) && $this->setMsg(3002);
+			   
+			   $data = [
+					'page' => $res_user->page,
+					'totalPage' => $res_user->total,
+					'total' => $res_user->size
+				];
+			   
+			   foreach($res_user->data as $val)
+			   {
+				   $data['data'][] = [
+						"stuId"      => $val->uid,
+                        "name"	     => !empty($val->user_info->student_name)?$val->user_info->student_name:(!empty($val->user_info->name) ? $val->user_info->name : SLanguage::tr('未设置', 'message')),
+                        "mobile"     => !empty($val->user_info->mobile)?$val->user_info->mobile:'',
+                        "image"      => !empty($val->user_info->thumb_med)?$this->imgUrl($val->user_info->thumb_med):'',
+                        "courseId"   => $val->cid,
+                        "courseName" => !empty($val->course_name)?$val->course_name:'',
+                        "classId"	 => $val->class_id,
+                        "className"  => !empty($val->class_name)?$val->class_name:'',
+                        "teacherCourseCount"=>$tresult->total
+				   ];
+			   }
+            }else
+            {
+                foreach($tresult->data as $v)
+                {
+                    $cids[] = $v->course_id;
+                    $course[$v->course_id] = [
+                        'course_name' => $v->course_name,
+                        'class_name'  => $v->class_name
+                    ];
+                }
+			if(!in_array($courseId,$cids))
+			{
+				$this->setMsg(3002);
+			}
+			$courseResult = course_api::listRegistration(array('course_id'=>$courseId,'class_id'=>$classId),$page,$length);
+			empty($courseResult) && $this->setMsg(3002);
+			$data = [
+				'page' => $courseResult->page,
+				'totalPage' => $courseResult->total,
+				'total' => $courseResult->size
+			];
+			foreach($courseResult->data as $val)
+			{
+				$data['data'][] = [
+					"stuId"        => $val->uid,
+					"name"	     => !empty($val->user_info->student_name)?$val->user_info->student_name:(!empty($val->user_info->name) ? $val->user_info->name : SLanguage::tr('未设置', 'message')),
+					"mobile"     => !empty($val->user_info->mobile)?$val->user_info->mobile:'',
+					"image"      => !empty($val->user_info->thumb_med)?$this->imgUrl($val->user_info->thumb_med):'',
+					"courseId"   => $val->cid,
+					"courseName" => !empty($course[$val->cid]['course_name'])?$course[$val->cid]['course_name']:'',
+					"classId"	 => $val->class_id,
+					"className"  => !empty($course[$val->cid]['class_name'])?$course[$val->cid]['class_name']:'',
+                    "teacherCourseCount"=>$tresult->total
+				];
+			}
+		}
+		$this->setData($data);
+	}
+
+    /*
+     * 老师的课程于班级
+     * @author zhengtianlong
+     */
+    public function pageGetCourseAndClass()
+    {
+        $this->v(['uid'=>1000]);
+        $uid = $this->paramsInfo['params']['uid'];
+        $planParams = [
+                'q' => ['teacher_id'=>$uid,'status'=>'1,2,3'],
+                'f' => ['course_id'],
+                'pl'=> 100000
+            ];
+        $res_plan = seek_api::seekPlan($planParams);
+        empty($res_plan->data) && $this->setMsg(3002);
+        foreach($res_plan->data as $v)
+        {
+           $courseId[$v->course_id] = $v->course_id;
+        }
+        $courseIdStr = implode(',',$courseId);
+        $courseParams = [
+            'q'  => ['course_id'=>$courseIdStr],
+            'f'  => ['course_id','title','class'],
+            'pl' => 100000
+        ];
+
+        $res_course = seek_api::seekCourse($courseParams);
+        empty($res_course->data) && $this->setMsg(3002);
+        $data  = array();
+        $class = array();
+        foreach($res_course->data as $val)
+        {
+            if(!empty($val->class))
+            {
+               foreach($val->class as $v)
+               {
+                    $class[$val->course_id][] = [
+                        'classId'   => $v->class_id,
+                        'className' => $v->name
+                    ];
+               }
+            }
+            $data['data'][$val->course_id] = [
+                'courseId'   => $val->course_id,
+                'courseName' => $val->title,
+                'classes'    => !empty($class[$val->course_id])?$class[$val->course_id]:''
+            ];
+
+        }
+        $data['data'] = array_values($data['data']);
+        $this->setData($data);
+    }
+	
+	/*
+	 * 获取老师信息
+	 */
+	public function pageGetTeacherInf()
+	{
+		$this->v(['uid'=>1000]);
+		$diploma = array(1=>'大专',2=>'本科',3=>'硕士',4=>'博士');
+		$gradeName = [1000=>'小学',2000=>'初中',3000=>'高中','4000'=>'学前'];
+		$uid = intval($this->paramsInfo['params']['uid']);
+		
+		$params = [
+            'q'  => ['teacher_id'=>$uid,'teacher_status'=>1,'visiable'=>1],
+            'f'  => ['teacher_id','diploma','college','years','subject','subject_id','grade','grade_id','title','desc']
+        ];
+
+        $res_teacher = seek_api::seekTeacher($params);
+		empty($res_teacher->data) && $this->setMsg(3002);
+		
+		$data = array();
+		$grade = array();
+		foreach($res_teacher->data as $v)
+		{
+			if(!empty($v->grade_id))
+			{
+				foreach($gradeName as $key=>$val)
+				{
+					$gradeId = $v->grade_id;
+					if(in_array($key,$gradeId))
+					{
+						$grade[$key] = $val;
+					}
+				}
+			}
+			
+			$data['data'] = [
+				"diploma"       => !empty($diploma[$v->diploma])?$diploma[$v->diploma]:'',
+				"diplomaId"     => $v->diploma,
+				"graduaction"   => !empty($v->college)?$v->college:'',
+				"seniority"     => $v->years,
+				"teachingField" => !empty($grade)?implode(',',$grade):'',
+				"subject"       => !empty(teacher_api::getSubjectName($v->subject))?teacher_api::getSubjectName($v->subject):'',
+				"subjectId"     => !empty($v->subject_id)?implode(',',$v->subject_id):'',
+				"title"         => !empty($v->title)?$v->title:'',
+				"desc"          => !empty($v->desc)?$v->desc:'',
+				"teachingFieldId" => !empty($grade)?implode(',',array_keys($grade)):'',
+			];
+		}
+		
+		$this->setData($data);
+	}
+	
+	/*
+	 * 修改老师信息
+	 */
+	public function pageEditTeacher()
+	{
+		$this->v(['uid'=>1000]);
+		$uid     = intval($this->paramsInfo['params']['uid']);
+		
+		$data = array();
+		//毕业院校
+		if(!empty($this->paramsInfo['params']['graduaction'])){
+			$data['college'] = $this->paramsInfo['params']['graduaction'];
+			if(mb_strlen($data['college'],'utf-8')>15){
+				$this->setMsg(1);
+			}
+		}
+		//学历ID
+		if(!empty($this->paramsInfo['params']['diplomaId'])){
+			$data['diploma'] = intval($this->paramsInfo['params']['diplomaId']);
+		}
+		//教龄  
+		if(!empty($this->paramsInfo['params']['seniority'])){
+			$data['years'] = intval($this->paramsInfo['params']['seniority']);
+		}
+		//科目对应ID
+		if(!empty($this->paramsInfo['params']['subjectId'])){
+			$data['good_subject'] = $this->paramsInfo['params']['subjectId'];
+		}
+		//教学领域对应ID
+		if(!empty($this->paramsInfo['params']['teachingFieldId'])){
+			$scope = explode(',',$this->paramsInfo['params']['teachingFieldId']);
+			
+			$scopeArr=array(
+				4000 => 0x01,
+                1000 => 0x02,
+                2000 => 0x04,
+                3000 => 0x08,
+            );
+			$scopes=0;
+			if(!empty($scope))
+			{
+				foreach($scope as $v)
+				{
+					if(isset($scopeArr[$v]))
+					{
+						$scopes+=$scopeArr[$v];
+					}
+				}
+			}
+			$data['scopes'] = $scopes;
+		}
+		//头衔
+		if(!empty($this->paramsInfo['params']['title'])){
+			$data['title'] = trim($this->paramsInfo['params']['title']);
+		}
+		//个人介绍
+		if(!empty($this->paramsInfo['params']['desc'])){
+			$data['desc'] = htmlspecialchars($this->paramsInfo['params']['desc']);
+		}
+		
+		$res1 = user_api::setTeacherInfoV2($uid,$data);
+        //更新t_user表中的last_updated字段
+        $res2 = user_api::updateUser($uid,array('last_updated'=>date('Y-m-d H:i:s',time())));
+		
+        if($res1 && $res2){
+           $this->setMsg(0);
+        }
+
+		$this->setMsg(1);
+	}
+	
+}
+

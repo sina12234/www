@@ -1,0 +1,127 @@
+<?php
+
+class course_discount_api
+{
+    const COURSE_DISCOUNT_CHECK_DISCOUNT_CODE_VALID_V2 = '/course/discount/CheckDiscountCodeValidV2/';
+
+    const COURSE_DISCOUNT_USE_DISCOUNT_CODE_V2 = '/course/discount/UseDiscountCodeV2/';
+
+    const COURSE_DISCOUNT_GET_CODE_INFO = '/course/discount/GetCodeInfo/';
+
+    /**
+     * @desc check discount code valid (version v2)
+     *
+     * @param $userId
+     * @param $orderId
+     * @param $discount
+     * @return array
+     */
+    public static function checkDiscountCodeValidV2($userId, $orderId, $discount)
+    {
+        $url = self::COURSE_DISCOUNT_CHECK_DISCOUNT_CODE_VALID_V2;
+        $params = [
+            'userId'       => intval($userId),
+            'orderId'      => $orderId,
+            'discountCode' => $discount
+        ];
+
+        $res =  interface_func::requestApi($url, $params);
+        if (!empty($res['code'])) {
+            return interface_func::error($res['code'], $res['msg']);
+        }
+
+        return [
+            'couponCode' =>!empty($res['result']['discountCodeInfo']['discount_code']) ? $res['result']['discountCodeInfo']['discount_code'] : '',
+            'useLimit' => !empty($res['result']['discountRules']['name']) ? $res['result']['discountRules']['name'] : '',
+            'favourablePrice' => !empty($res['result']['discountRules']['discount_value']) ? $res['result']['discountRules']['discount_value'] / 100 : ''
+        ];
+    }
+
+    /**
+     * @desc use discount
+     *
+     * @param $userId
+     * @param $orderId
+     * @param $discountCode
+     * @return array
+     */
+    public static function useDiscountCode($userId, $orderId, $discountCode)
+    {
+        $url    = self::COURSE_DISCOUNT_USE_DISCOUNT_CODE_V2;
+        $params = [
+            'userId'   => intval($userId),
+            'orderId'  => $orderId,
+            'discountCode' => $discountCode
+        ];
+
+        $res = interface_func::requestApi($url, $params);
+        if (!empty($res['code'])) {
+            return interface_func::error($res['code'], $res['msg']);
+        }
+
+        $orderInfo = interface_user_api::getOrderInfo($orderId);
+
+        // 报名
+        $reg['uid']        = $orderInfo['userId'];
+        $reg['course_id']  = $orderInfo['courseId'];
+        $reg['user_owner'] = $orderInfo['userOwner'];
+        $reg['class_id']   = $orderInfo['classId'];
+        $reg['status']     = 1;
+        if (course_api::addregistration($reg) === false) {
+            SLog::fatal('android pay add reg failed,params[%s]', var_export($reg, 1));
+        }
+
+        // 更新订单状态
+        $orderUpdateData = [
+            'status'   => 'success',
+        ];
+        if (course_api::updateFeeOrder($orderInfo['orderId'], $orderUpdateData) === false) {
+            SLog::fatal('android pay update fee order failed,params[%s]', var_export($orderUpdateData, 1));
+        }
+
+        $orderInfo['couponCode']      = !empty($res['result']['discountCodeInfo']['discount_code']) ? $res['result']['discountCodeInfo']['discount_code'] : '';
+        $orderInfo['useLimit']        = !empty($res['result']['discountRules']['name']) ? $res['result']['discountRules']['name'] : '';
+        $orderInfo['favourablePrice'] = !empty($res['result']['discountRules']['discount_value']) ? $res['result']['discountRules']['discount_value'] / 100 : 0;
+
+        return $orderInfo;
+    }
+
+    /**
+     * @desc get order detail (version v2)
+     *
+     * @param $orderId
+     * @return array|bool
+     */
+    public static function orderDetailV2($orderId)
+    {
+        $orderInfo = interface_user_api::getOrderInfo($orderId);
+        if (empty($orderInfo)) return [];
+        $codeInfo = self::getCodeInfo($orderId);
+
+        $orderInfo['couponCode']      = !empty($codeInfo['couponCode']) ? $codeInfo['couponCode'] : '';
+        $orderInfo['useLimit']        = !empty($codeInfo['useLimit']) ? $codeInfo['useLimit'] : '';
+        $orderInfo['favourablePrice'] = !empty($codeInfo['favourablePrice']) ? $codeInfo['favourablePrice'] : 0;
+
+        return $orderInfo;
+    }
+
+    public static function getCodeInfo($orderId)
+    {
+        $url = self::COURSE_DISCOUNT_GET_CODE_INFO.$orderId;
+
+        // discountCodeUsedInfo table,discountCodeInfo table, discountInfo table
+        $res = interface_func::requestApi($url);
+        if (!empty($res['code'])) {
+            return interface_func::error($res['code'], $res['msg']);
+        }
+
+        $data = [
+            'couponCode'      => $res['result']['discountCodeInfo']['discount_code'],
+            'useLimit'        => $res['result']['discountInfo']['name'],
+            'favourablePrice' => $res['result']['discountInfo']['discount_value'] / 100
+        ];
+
+        return $data;
+    }
+}
+

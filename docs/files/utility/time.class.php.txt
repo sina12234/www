@@ -1,0 +1,35 @@
+<?php
+/**
+  * 2014/12/20 by hetao
+  * 文件上传的类,上传到weedfs
+  */
+ 
+class utility_time{
+	public static function cnweek($date){
+		$arr = array('天','一','二','三','四','五','六');
+		if(is_numeric($date)){
+			return $arr[date('w',$date)];
+		}else{
+			return $arr[date('w',strtotime($date))];
+		}
+	}
+	/**
+	 * 把这整数变成 MM:SS 格式
+	 */
+	public static function toMS($seconds){
+		$s = str_pad($seconds % 60 , 2 ,"0",STR_PAD_LEFT );
+		$m = str_pad(floor($seconds/60),2,"0",STR_PAD_LEFT );
+		return $m.":".$s;
+	}
+	public static function toSec($mmss){
+		$ret = 0;
+		$tmp = explode(":",$mmss);
+		if(count($tmp)>2)return false;
+		$len = count($tmp);
+		if($len==2){
+			return $tmp[0]*60+$tmp[1];
+		}
+		return $tmp[0];
+	}
+}
+

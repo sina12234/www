@@ -1,0 +1,126 @@
+<?php
+class teacher_list extends STpl{
+
+    public $orgOwner = 2;
+
+    public function __construct()
+    {
+        $org = user_organization::subdomain();
+        $org && $this->orgOwner = $org->userId;
+   }
+
+    public function pageEntry($inPath)
+    {
+		utility_cache::pageCache(600);
+		$groupId= 1; //科目id
+		//$major  = isset($inPath[3]) && isset($this->_major[$inPath[3]]) ? $inPath[3] : 0;
+        //$page   = isset($inPath[4]) && intval($inPath[4]) ? intval($inPath[4]) : 1;
+        //$length = isset($inPath[5]) && intval($inPath[5]) ? intval($inPath[5]) : 100;
+
+		//机构信息
+        $orgInfo = user_organization::getOrgByUid($this->orgOwner);
+		$oid     = empty($orgInfo) ? 0 : $orgInfo->oid;
+		
+		//机构下的老师信息
+        $data    = [
+            'orderBy'   => 'is_star desc',
+            'condition' => "fk_org={$oid} and status<>-1 and visiable>0",
+        ];
+        $res_teacher = user_organization::getTeacherList($oid, 1, -1, $data);
+		
+
+		$tIdStr = '';
+		if(!empty($res_teacher->data))
+		{
+			//$tIdArr = array_reduce($res_teacher->data, create_function('$v,$w', '$v[$w->fk_user]=$w->fk_user;return $v;'));
+            foreach($res_teacher->data as $rtv){
+                $tidArr[$rtv->fk_user]=$rtv->fk_user; 
+            }
+			$tIdStr = implode(',',$tidArr);
+		}
+		
+		//t_mapping_tag_user关联的老师信息
+		$mappingParams   = array('ids'=>$tIdStr,'groupId'=>$groupId);
+		$res_mappingUser = teacher_api::getTagUserInUids($mappingParams);
+
+		$tagIdArr        = array();
+		if(!empty($res_mappingUser->data))
+		{
+			$tagIdArr = array_reduce($res_mappingUser->data, create_function('$v,$w', '$v[$w->fk_user][$w->fk_tag]=$w->fk_tag;return $v;'));
+		}
+		
+		//tag信息
+        $res_tag = teacher_api::getBelongTagByGropId($groupId);
+		if(!empty($res_tag->data))
+		{
+			$tagNames = array_reduce($res_tag->data, create_function('$v,$w', '$v[$w->pk_tag]=$w->name;return $v;'));
+		}
+
+		//拼装tag数据
+		$tag = array();
+        $subject=array();
+		foreach($tagIdArr as $key=>$val)
+		{
+			foreach($val as $k=>$v)
+			{
+				$tag[$k][$key] = $k;
+				$subject[$k]   = $tagNames[$k];
+			}
+		}
+
+		//拼装老师列表数据
+		$teacher = array();
+		if(!empty($res_teacher->data))
+		{
+			foreach($res_teacher->data as $k=>$v)
+			{
+                $desc='';
+                if(!empty($v->desc)){
+                    $desc=$v->desc;
+                }
+                if(!empty($v->desc)&&mb_strlen($v->desc,'utf-8')>20){
+                    $desc=mb_substr($v->desc,0,20,'utf-8').'...';     
+                }
+                //现实真实姓名
+				$teacher[$v->fk_user] = [
+					'fk_user'   => $v->fk_user,
+					'name'      => !empty($v->real_name)?$v->real_name:$v->name,
+					'thumb_big' => utility_cdn::file($v->thumb_big),
+					'title'     => !empty($v->title)?$v->title:'',
+					'college'   => !empty($v->college)?$v->college:'',
+					'desc'   => $desc,
+				];
+			}
+		}
+
+		$data    = array();
+        
+		if(!empty($teacher))
+		{
+			$data[0] = $teacher;
+		}
+		
+		if(!empty($tag))
+		{
+			foreach($tag as $key=>$val)
+			{
+				foreach($val as $k=>$v)
+				{
+					$data[$key][$k] = [
+					'fk_user'   => $k,
+					'name'      => $teacher[$k]['name'],
+					'thumb_big' => $teacher[$k]['thumb_big'],
+					'title'     => $teacher[$k]['title'],
+					'college'   => $teacher[$k]['college'],
+					'desc'   => $teacher[$k]['desc'],
+					];
+				}
+			}
+		}
+
+		$this->assign('subject',$subject);
+        $this->assign('data', json_encode($data));
+        $this->render("teacher/teacher.html");
+    }
+}
+

@@ -1,0 +1,12 @@
+<?php
+class index_special extends STpl{
+	public function pageEntry($inPath){
+		$this->render('special/teac_spi.html');
+	}
+	public function pageHanjia($inPath){
+		$this->render('special/hanjiabaoming.html');
+	}
+}
+
+
+

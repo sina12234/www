@@ -1,0 +1,36 @@
+.steacbox{max-width:1000px;background: #f7f7f7 ;margin: 0 auto;margin-top: 100px;position: relative;}
+.steachea .steacbt{position: fixed;top:100px;z-index: 999;width:100%;height: 50px;padding-top: 13px;padding-left: 175px;}
+.steachea .steacbt{position: fixed;top:130px;z-index: 999;width:100%;height: 50px;padding-top: 13px;padding-left: 165px; opacity: 0.7;}
+.steachea .steacbt li{float: left;padding-left: 10px;line-height: 20px;color: #333333;}
+.steachea .steacbt .qb{font-size: 20px;}
+.steachea .steacbt li a{display: inline-block;text-decoration: none;padding:0 10px;}
+.steachea .steacbt li a:hover{color: #fff;background-color: #FFA91C;}
+.steacpd{z-index: 888; width: 1020px;}
+.steaczuo{width: 490px;height: 272px;border: 1px solid #ccc;background-color:#fff;margin:5px; float: left}
+.steacjs{margin-top: -30px;}
+.steaczuo dl dt{margin: 20px 20px 0px 20px;float: left;height: 230px;}
+.steaczuo dl dt img{position: relative; border-radius: 110px;}
+.steaczuo dl dt span img{position: absolute;top:-6px;left:-7px;}
+.steaczuo dl dd{ padding: 20px 20px 0px 0px;}
+.steaczuo dl dd .border{height: 142px;border-bottom: 1px dashed #ccc;overflow: hidden;}
+.steaczuo dl dd .border h1{font-size: 20px;}
+.steaczuo dl dd .border h1 b{font-size: 16px;font-weight: normal;padding-left: 10px;}
+.steaczuo dl dd .border p{font-size: 16px;padding-top: 10px;}
+.steaczuo dl dd .border .zym{font-size: 14px;}
+.steaczuo dl dd .steac-nav{margin-top: 20px;}
+.steaczuo dl dd .steac-nav ul li{height: 23px;line-height: 23px;}
+.steaczuo dl dd .steac-nav ul li img{margin-right: 5px;margin-top: -4px;}
+.steaczuo dl dd .steac-nav ul li a{color:#0033CC;text-decoration: none;}
+.steacsx .steactop{margin-top: 20px;z-index: 888;}
+.steacsx .steactop .gd{ float: right; cursor: pointer;}
+.steacsx .steactop li{float: left;padding-left: 10px;line-height: 20px;}
+.steacsx .steactop .qb{font-size: 20px;}
+.steacsx .steactop li a{display: inline-block;color: #666666;text-decoration: none;padding:0 10px;}
+.steacsx .steactop li a:hover{color: #fff;background-color: #FFA91C;}
+.steacsx .steac-1{ width: 240px;height: 280px;border:1px solid #ccc;background-color: #fff;margin: 20px 5px 0px 5px;}
+.steacsx .steac-1 .steacimg img{margin:20px 0px 10px 50px; display: inline-block; border-radius: 70px;}
+.steacsx .steac-1 p{text-align:center;font-size: 20px;line-height: 25px;}
+.steacsx .steac-1 .p1{display: block;width: 120px;height: 25px; background-color: #67ABFF;font-size: 14px;margin: 5px 0px 0px 60px;color: #fff;}
+.steacsx .steac-1 .p2{color: #333333;}
+.steacsx .steac-1 .p3{font-size: 16px;}
+.limithis{   overflow: hidden;text-overflow: ellipsis; white-space: nowrap;}

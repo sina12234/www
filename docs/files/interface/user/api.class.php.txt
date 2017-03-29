@@ -1,0 +1,275 @@
+<?php
+
+class interface_user_api
+{
+    const USER_VALUE_GET_USER_BALANCE = '/user/value/GetUserBalance/';
+
+    const USER_VALUE_ADD = '/user/value/Add/';
+
+    const USER_VALUE_ADD_LOG = '/user/value/AddLog/';
+
+    const USER_VALUE_ADD_THIRD_PARTY_LOG = '/user/value/AddThirdPartyLog/';
+
+    const USER_VALUE_EXISTS = '/user/value/Exists/';
+
+    const USER_VALUE_UPDATE_BALANCE = '/user/value/UpdateBalance/';
+
+    /**
+     * @desc get user balance
+     *
+     * @param $userId
+     * @return float|int
+     */
+    public static function getUserBalance($userId)
+    {
+        $url = self::USER_VALUE_GET_USER_BALANCE.$userId;
+        $res = interface_func::requestApi($url);
+        if (!empty($res['code'])) return 0;
+
+        return $res['result']['iosCoin']/100;
+    }
+
+    /**
+     * @desc recharge
+     *
+     * @param $data
+     * @return bool
+     */
+    public static function add($data)
+    {
+        if (empty($data['userId']) || empty($data['iosCoin'])) {
+            return false;
+        }
+
+        $data = [
+            'userId'      => (int)$data['userId'],
+            'iosCoin'     => (int)$data['iosCoin'],
+            'balance'     => 0,
+            'virtualCoin' => 0,
+            'status'      => 1
+        ];
+
+        $res = interface_func::requestApi(self::USER_VALUE_ADD, $data);
+        if (!empty($res['code'])) {
+            SLog::fatal('ios charge failed,params[%s]', var_export($data, 1));
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @desc add recharge log
+     *
+     * @param $data
+     * @return bool
+     */
+    public static function addLog($data)
+    {
+        if (empty($data['userId']) || empty($data['iosCoin'])) {
+            return false;
+        }
+
+        $data = [
+            'userId'      => (int)$data['userId'],
+            'iosCoin'     => (int)$data['iosCoin'],
+            'orderId'     => isset($data['orderId']) ? $data['orderId'] : 0,
+            'source'      => isset($data['source']) ? $data['source'] : 1,
+            'type'        => isset($data['type']) ? $data['type'] : 1,
+            'balance'     => 0,
+            'virtualCoin' => 0,
+            'status'      => 1
+        ];
+
+        $res = interface_func::requestApi(self::USER_VALUE_ADD_LOG, $data);
+        if (!empty($res['code'])) {
+            SLog::fatal('add ios charge log failed,params[%s]', var_export($data, 1));
+            return false;
+        }
+
+        return true;
+    }
+
+    public static function addThirdPartyLog($data)
+    {
+        if (empty($data['userId']) || empty($data['transactionId'])) {
+            return false;
+        }
+
+        $data = [
+            'userId'          => (int)$data['userId'],
+            'transactionId'   => $data['transactionId'],
+            'transactionInfo' => isset($data['transactionInfo']) ? $data['transactionInfo'] : '',
+            'source'          => isset($params['source']) ? $params['source'] : 1,
+        ];
+
+        $res = interface_func::requestApi(self::USER_VALUE_ADD_THIRD_PARTY_LOG, $data);
+        if (!empty($res['code'])) {
+            SLog::fatal('add third party log failed,params[%s]', var_export($data, 1));
+            return false;
+        }
+
+        return true;
+    }
+
+    public static function exists($transactionId)
+    {
+        $url = self::USER_VALUE_EXISTS.$transactionId;
+        $res = interface_func::requestApi($url);
+
+        return !empty($res['code']) ? false : true;
+    }
+
+    /**
+     * @desc get product value
+     *
+     * @param $receiptData
+     * @param $transactionId
+     * @return int
+     */
+    public static function getProductValue($receiptData, $transactionId)
+    {
+        $productId = '';
+
+        if (!empty($receiptData->receipt->in_app)) {
+            foreach ($receiptData->receipt->in_app as $item) {
+                if ($item->transaction_id == $transactionId && !empty($item->product_id)) {
+                    $productId = $item->product_id;
+                }
+            }
+        }
+
+        $productIdValueArr = [
+            'com.yunke.yd20'   => 20,
+            'com.yunke.yd50'   => 50,
+            'com.yunke.yd225'  => 225,
+            'com.yunke.yd719'  => 719,
+            'com.yunke.yd2056' => 2056,
+            'com.yunke.yd4458' => 4458,
+            'com.yunke.free1'  => 100,
+            'com.yunke.free2'  => 1000
+        ];
+
+
+        $productIdValue = 0;
+
+        if ($productId && !empty($productIdValueArr[$productId])) {
+            $productIdValue = $productIdValueArr[$productId];
+        }
+
+        return $productIdValue;
+    }
+
+    /**
+     * @desc get user order info
+     *
+     * @param $orderId
+     * @return array|bool
+     */
+    public static function getOrderInfo($orderId)
+    {
+        $res = course_api::getFeeOrder($orderId);
+        if (empty($res) || !intval($res->ext)) {
+            return false;
+        }
+
+        $courseArr = [
+            'q' => [
+                'course_id' => (int)$res->course_id,
+                'class_id'  => (int)$res->ext
+            ],
+            'f' => [
+                'title',
+                'course_id',
+                'class',
+                'thumb_med',
+                'start_time'
+            ]
+        ];
+
+        // get course class info
+        $search = seek_api::seekCourse($courseArr);
+        if (empty($search->data)) {
+            return false;
+        }
+
+        $planInfo = course_api::getClassPlan([(int)$res->ext]);
+        $startTime = '';
+        if (!empty($planInfo)) {
+            $tmpClass = [];
+            foreach ($planInfo as $plan) {
+                if (!in_array($plan->fk_class, $tmpClass)) {
+                    $tmpClass[] = $plan->fk_class;
+                    $planList[$plan->fk_class] = $plan->start_time;
+                }
+            }
+            $startTime = !empty($planList[$res->ext]) ? $planList[$res->ext] : '';
+        }
+
+        $class = [];
+        if (!empty($search->data[0]->class)) {
+            foreach ($search->data[0]->class as $v) {
+                $class[$v->class_id] = [
+                    'name' => $v->name,
+                    'adminId' => $v->class_admin_id
+                ];
+            }
+        }
+
+        //get user name
+        if (!empty($class[$res->ext]['adminId'])) {
+            $name = user_api::getBasicUser($class[$res->ext]['adminId']);
+        }
+
+        $domainUrl = interface_courseApi::getDomainUrl(['courseId' => $res->course_id]);
+        $data = [
+            'userId'          => $res->user_id,
+            'userOwner'       => $res->user_owner,
+            'classId'         => $res->ext,
+            'orderId'         => $res->order_id,
+            'orderNumber'     => date('Ymd', strtotime($res->create_time)).$res->order_id,
+            'orderOutTradeId' => $res->out_trade_id,
+            'uniqueOrderId'   => $res->unique_order_id,
+            'payType'         => $res->pay_type,
+            'orderStatus'     => $res->status,
+            'orderTime'       => date('Y-m-d H:i', strtotime($res->create_time)),
+            'price'           => $res->price,
+            'priceOld'        => $res->price_old,
+            'courseId'        => $res->course_id,
+            'courseTitle'     => $search->data[0]->title,
+            'className'       => !empty($class[$res->ext]['name']) ? $class[$res->ext]['name'] : '',
+            'imgUrl'          => interface_func::imgUrl($search->data[0]->thumb_med),
+            'teacherName'     => !empty($name->name) ? $name->name : '空',
+            'startTime'       => date('n月d日 H:i', strtotime($startTime)),
+            'courseType'      => '线上课',
+            'address'         => '北京市海淀区北四环银谷大厦',
+            'payUrl'          => $domainUrl.'/course/info/pay/'.$res->unique_order_id
+        ];
+
+        return $data;
+    }
+
+    /**
+     * @desc update balance
+     *
+     * @param $userId
+     * @param $balance
+     * @return bool
+     */
+    public static function updateBalance($userId, $balance)
+    {
+        $url = self::USER_VALUE_UPDATE_BALANCE;
+        $params = [
+            'userId'  => $userId,
+            'balance' => $balance
+        ];
+        $res = interface_func::requestApi($url, $params);
+        if (!empty($res['code'])) {
+            SLog::fatal('update user balance failed,params[%s]', var_export([$userId, $balance, $url], 1));
+            return false;
+        }
+
+        return true;
+    }
+}
+

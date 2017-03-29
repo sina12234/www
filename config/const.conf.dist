@@ -1,0 +1,12 @@
+domain{
+	domain yunke.com;
+}
+platform{
+	platform www.yunke.com;
+}
+alipay{
+    domain dev.gn100.com;
+}
+present{
+    domain dev;  
+}

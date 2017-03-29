@@ -1,0 +1,72 @@
+<?php
+
+class course_ajax
+{
+    public function pageDelComment()
+    {
+        $user = user_api::loginedUser();
+        empty($user['uid']) && interface_func::setMsg(1021);
+
+        interface_func::isValidId(['userId', 'planId', 'courseId'], $_POST);
+        if ($user['uid'] != $_POST['userId']) {
+            interface_func::setMsg(1024);
+        }
+
+        $params = [
+            'userId' => $_POST['userId'],
+            'planId' => $_POST['planId'],
+            'courseId' => $_POST['courseId']
+        ];
+
+        $res = utility_services::call('/comment/course/DelComment', $params);
+
+        !empty($res->code) && interface_func::setMsg(1);
+
+        interface_func::setMsg(0);
+    }
+
+    public function pageGetNextPlanId()
+    {
+        interface_func::isValidId(['planId'], $_POST);
+
+        $res = utility_services::call("/course/plan/getNextPlanId/{$_POST['planId']}");
+
+        $res->code && interface_func::setMsg(3002);
+        interface_func::setData(['planId' => $res->result->planId]);
+    }
+
+    public function getCourseDetailComment()
+    {
+        utility_cache::pageCache(1200);
+        $page = isset($_REQUEST['page']) && $_REQUEST['page'] ? intval($_REQUEST['page']) : 1;
+        $courseId = 0;
+        if (!empty(intval($_POST['cid']))) {
+            $courseId = intval($_POST['cid']);
+        }
+
+        !$courseId && interface_func::setMsg(1000);
+
+        $info = comment_api::getCommentListByCourseId($courseId, 0, $page, 10);
+        !empty($info) && interface_func::setData($info);
+
+        interface_func::setMsg(3002);
+    }
+
+    public function pageGetCourseRegUser()
+    {
+        utility_cache::pageCache(1200);
+        $page = isset($_REQUEST['page']) && $_REQUEST['page'] ? intval($_REQUEST['page']) : 1;
+        $courseId = 0;
+        if (!empty($_POST['cid'])) {
+            $courseId = intval($_POST['cid']);
+        }
+
+        !$courseId && interface_func::setMsg(1000);
+
+        $info = course_plan_api::getCourseRegUser($courseId, 0, $page, 8);
+        !empty($info) && interface_func::setData($info);
+
+        interface_func::setMsg(3002);
+    }
+}
+

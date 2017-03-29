@@ -1,0 +1,217 @@
+<?php
+
+class course_pay extends STpl
+{
+    public function __construct()
+    {
+        $org = user_organization::subdomain();
+
+        $this->orgOwner = !empty($org) ? $org->userId : 0;
+
+        $this->user = user_api::loginedUser();
+
+        empty($this->user) && interface_func::setMsg(1001);
+    }
+
+    public function pageInfo($inPath)
+    {
+        if (empty($inPath[3])) {
+            $this->redirect("/course/list");
+        }
+
+        if ($inPath[3] && empty($inPath[4])) {
+            $this->redirect("/course/info/show/{$inPath[3]}");
+        }
+
+        $uniqueOrderId = $inPath[4];
+        $orderInfo     = $this->_validOrderStatus($uniqueOrderId);
+
+        if (!is_object($orderInfo) && !empty($orderInfo['errCode'])) {
+            $errorInfo = interface_func::setError($orderInfo['errCode']);
+        } else {
+            $courseClassInfo = $this->_validCourseClass($orderInfo->course_id, $orderInfo->ext);
+            if (!is_object($courseClassInfo) && !empty($courseClassInfo['errCode'])) {
+                $errorInfo = interface_func::setError($courseClassInfo['errCode']);
+            }
+
+            $aliPayUrl = course_api::genPayUrl($orderInfo, $courseClassInfo['courseInfo']);
+
+            if (weixin_api::is_weixin()) {
+                //公众号支付
+                $jsApiParameters = weixin_api::getJsParameters($orderInfo, $courseClassInfo['courseInfo']);
+                $this->assign("jsApiParameters", $jsApiParameters);
+            } else {
+                //扫码支付
+                $wXQrCode = course_api::genWeixinPayQrcodeUrl($orderInfo, $courseClassInfo['courseInfo']);
+                $qrCode   = utility_cdn::qrcode("qr?s=200&t=".urlencode($wXQrCode));
+                $this->assign("qrCode", $qrCode);
+            }
+        }
+
+
+
+
+        //$order_info->price_discount = $orderInfo->price_old - $orderInfo->price * 100;
+
+        $this->assign('payUrl', $aliPayUrl);
+        $this->assign('errorInfo', $errorInfo);
+        $this->assign("info", $courseClassInfo);
+        $this->assign("orderInfo", $orderInfo);
+
+        $this->render("course/newpay.info.html");
+    }
+
+    /**
+     * 第一次使用优惠码占位
+     *
+     * @param $param
+     */
+    public function pageUseDiscount($param)
+    {
+        $obj     = (object)$param;
+        $retCode = course_api::useDiscountCode($obj->code, $this->user["uid"], $obj->uqOId);
+
+        if ($retCode->result->code == 0) {
+            $orderInfo = course_api::getFeeOrder($obj->uqOId);
+            $aliPayUrl = course_api::genPayUrl($orderInfo, $obj->title);
+
+            interface_func::setData(['payUrl' => $aliPayUrl]);
+        }
+
+        exit(json_encode($retCode, JSON_UNESCAPED_UNICODE));
+    }
+
+    /**
+     * 确定优惠码(更新优惠码使用状态)
+     *
+     * @param $orderId
+     */
+    public function pageConfirmDiscountCode($orderId)
+    {
+        $res = course_api::confirmDiscountCode($orderId);
+
+        !empty($res) ? interface_func::setMsg(0) : interface_func::setMsg(1);
+    }
+
+    /**
+     * 取消使用优惠码
+     *
+     * @param $param
+     */
+    public function pageCancelDiscountCode($param)
+    {
+        $obj     = (object)$param;
+        $retCode = course_api::cancelDiscountCode($obj->orderId);
+
+        if ($retCode->result->code == 0) {
+            $orderInfo = course_api::getFeeOrder($obj->uqOId);
+            $aliPayUrl = course_api::genPayUrl($orderInfo, $obj->title);
+
+            interface_func::setData(['payUrl' => $aliPayUrl]);
+        }
+
+        exit(json_encode($retCode, JSON_UNESCAPED_UNICODE));
+    }
+
+    /**
+     * 付费课程报名
+     */
+    public function pageCheck()
+    {
+        (isset($_POST['cid']) && intval($_POST['cid'])) || interface_func::setMsg('1000');
+        (isset($_POST['classId']) && intval($_POST['classId'])) || interface_func::setMsg('1000');
+        $courseId = intval($_POST['cid']);
+        $classId  = intval($_POST['classId']);
+
+        $courseInfo = course_api::getCourseone($courseId);
+        empty($courseInfo) && interface_func::setMsg(2017);
+
+        // 免费课直接报名(正常逻辑下免费课，代码运行不到这里)
+        ($courseInfo->fee_type == 0) && interface_func::setMsg(2018);
+
+        // 判断班级人数是否还允许报名
+        $classInfo = course_api::getclass($classId);
+        empty($classInfo) && interface_func::setMsg(2020);
+
+        if($classInfo->user_total >= $classInfo->max_user)
+            interface_func::setMsg(2041);
+
+        if ($classInfo->course_id != $courseInfo->course_id || $classInfo->status == 'invalid') {
+            interface_func::setMsg(2021);
+        }
+
+        //判断是不是已经购买
+        $regInfo = course_api::listRegistration(
+            [
+                'course_id' => $courseInfo->course_id,
+                'uid'       => $this->user['uid']
+            ]
+        );
+        !empty($regInfo->data) && interface_func::setMsg(2019);
+
+        //生成订单
+        $orderInfo = course_api::addFeeOrder(
+            $this->user['uid'],
+            $courseInfo->user_id,
+            $courseId,
+            $courseInfo->fee->price,
+            $courseInfo->fee->price_market,
+            $classId
+        );
+
+        empty($orderInfo) && interface_func::setMsg(2022);
+
+        interface_func::setData(['uniqueOrderId' => $orderInfo->unique_order_id]);
+    }
+
+    private function _validOrderStatus($uniqueOrderId)
+    {
+        $orderInfo = course_api::getFeeOrder($uniqueOrderId);
+        if (empty($orderInfo)) {
+            return ['errCode' => 2016];
+        }
+        if ($orderInfo->status == "expired") {
+            return ['errCode' => 2024];
+        }
+
+        if ($orderInfo->status == "success") {
+            return ['errCode' => 2027];
+        }
+
+        if ($orderInfo->status == "deleted") {
+            return ['errCode' => 2025];
+        }
+
+        if ($orderInfo->status == "fail") {
+            return ['errCode' => 2026];
+        }
+
+        return $orderInfo;
+    }
+
+    private function _validCourseClass($cid, $classId)
+    {
+        $courseInfo = course_api::getCourseone($cid);
+
+        if (empty($courseInfo)) {
+            return ['errCode' => 2017];
+        }
+
+        // 免费课直接报名(正常逻辑下免费课，代码运行不到这里)
+        if ($courseInfo->fee_type == 0) {
+            return ['errCode' => 2018];
+        }
+
+        $classInfo = course_api::getClass($classId);
+        if (empty($classInfo)) {
+            return ['errCode' => 2020];
+        }
+
+        if ($classInfo->course_id != $cid || $classInfo->status == 'invalid') {
+            return ['errCode' => 2021];
+        }
+
+        return ['classInfo' => $classInfo, 'courseInfo' => $courseInfo];
+    }
+}
+

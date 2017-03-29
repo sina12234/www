@@ -1,0 +1,11 @@
+<?php
+class user_js extends STpl{
+	public function pageLogin($inPath){
+		utility_cache::pageCache(3600);
+		header("Content-Type:application/javascript");
+		$uidname = user_api::uidName();
+		$this->assign("uidname",$uidname);
+		return $this->render("user/login.js");
+	}
+}
+

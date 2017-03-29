@@ -1,0 +1,23 @@
+<?php
+class course_test{
+	public function pageTest($inPath){
+		
+		$r = course_api::create();
+		var_dump($r);
+	}
+
+	public function pageTest1($inPath){
+		
+		$r = course_api::delete1();
+		var_dump($r);
+		echo "hello world!";
+	}
+
+	public function pageTest2($inPath){
+		
+		$r = course_api::delete1();
+		var_dump($r);
+		echo "hello world!";
+	}
+}
+

@@ -1,0 +1,2131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>Www Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">Www Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">3890</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">37</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">1</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1944571169"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-1944571169" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/about_main.html">about_main</a></li>
+                                                    <li class="class"><a href="../classes/activity_2015.html">activity_2015</a></li>
+                                                    <li class="class"><a href="../classes/activity_api.html">activity_api</a></li>
+                                                    <li class="class"><a href="../classes/activity_main.html">activity_main</a></li>
+                                                    <li class="class"><a href="../classes/activity_score.html">activity_score</a></li>
+                                                    <li class="class"><a href="../classes/captcha_gen.html">captcha_gen</a></li>
+                                                    <li class="class"><a href="../classes/comment_api.html">comment_api</a></li>
+                                                    <li class="class"><a href="../classes/comment_course.html">comment_course</a></li>
+                                                    <li class="class"><a href="../classes/common_api.html">common_api</a></li>
+                                                    <li class="class"><a href="../classes/course_ajax.html">course_ajax</a></li>
+                                                    <li class="class"><a href="../classes/course_api.html">course_api</a></li>
+                                                    <li class="class"><a href="../classes/course_buy.html">course_buy</a></li>
+                                                    <li class="class"><a href="../classes/course_change.html">course_change</a></li>
+                                                    <li class="class"><a href="../classes/course_detailed.html">course_detailed</a></li>
+                                                    <li class="class"><a href="../classes/course_discount_api.html">course_discount_api</a></li>
+                                                    <li class="class"><a href="../classes/course_fee.html">course_fee</a></li>
+                                                    <li class="class"><a href="../classes/course_grade.html">course_grade</a></li>
+                                                    <li class="class"><a href="../classes/course_info.html">course_info</a></li>
+                                                    <li class="class"><a href="../classes/course_layerplan.html">course_layerplan</a></li>
+                                                    <li class="class"><a href="../classes/course_list.html">course_list</a></li>
+                                                    <li class="class"><a href="../classes/course_live.html">course_live</a></li>
+                                                    <li class="class"><a href="../classes/course_pay.html">course_pay</a></li>
+                                                    <li class="class"><a href="../classes/course_plan.html">course_plan</a></li>
+                                                    <li class="class"><a href="../classes/course_plan_api.html">course_plan_api</a></li>
+                                                    <li class="class"><a href="../classes/course_public.html">course_public</a></li>
+                                                    <li class="class"><a href="../classes/course_rec.html">course_rec</a></li>
+                                                    <li class="class"><a href="../classes/course_seekcourse.html">course_seekcourse</a></li>
+                                                    <li class="class"><a href="../classes/course_status.html">course_status</a></li>
+                                                    <li class="class"><a href="../classes/course_video.html">course_video</a></li>
+                                                    <li class="class"><a href="../classes/exam_ajax.html">exam_ajax</a></li>
+                                                    <li class="class"><a href="../classes/exam_api.html">exam_api</a></li>
+                                                    <li class="class"><a href="../classes/exam_log.html">exam_log</a></li>
+                                                    <li class="class"><a href="../classes/file_main.html">file_main</a></li>
+                                                    <li class="class"><a href="../classes/imgbrowse.html">imgbrowse</a></li>
+                                                    <li class="class"><a href="../classes/index_about.html">index_about</a></li>
+                                                    <li class="class"><a href="../classes/index_ajax.html">index_ajax</a></li>
+                                                    <li class="class"><a href="../classes/index_api.html">index_api</a></li>
+                                                    <li class="class"><a href="../classes/index_course.html">index_course</a></li>
+                                                    <li class="class"><a href="../classes/index_feedback.html">index_feedback</a></li>
+                                                    <li class="class"><a href="../classes/index_growth.html">index_growth</a></li>
+                                                    <li class="class"><a href="../classes/index_help.html">index_help</a></li>
+                                                    <li class="class"><a href="../classes/index_join.html">index_join</a></li>
+                                                    <li class="class"><a href="../classes/index_layer.html">index_layer</a></li>
+                                                    <li class="class"><a href="../classes/index_log.html">index_log</a></li>
+                                                    <li class="class"><a href="../classes/index_main.html">index_main</a></li>
+                                                    <li class="class"><a href="../classes/index_menu.html">index_menu</a></li>
+                                                    <li class="class"><a href="../classes/index_org.html">index_org</a></li>
+                                                    <li class="class"><a href="../classes/index_plan.html">index_plan</a></li>
+                                                    <li class="class"><a href="../classes/index_rank.html">index_rank</a></li>
+                                                    <li class="class"><a href="../classes/index_special.html">index_special</a></li>
+                                                    <li class="class"><a href="../classes/index_student.html">index_student</a></li>
+                                                    <li class="class"><a href="../classes/index_teacher.html">index_teacher</a></li>
+                                                    <li class="class"><a href="../classes/index_teacherblog.html">index_teacherblog</a></li>
+                                                    <li class="class"><a href="../classes/index_user.html">index_user</a></li>
+                                                    <li class="class"><a href="../classes/interface_ajax.html">interface_ajax</a></li>
+                                                    <li class="class"><a href="../classes/interface_base.html">interface_base</a></li>
+                                                    <li class="class"><a href="../classes/interface_code.html">interface_code</a></li>
+                                                    <li class="class"><a href="../classes/interface_course.html">interface_course</a></li>
+                                                    <li class="class"><a href="../classes/interface_courseApi.html">interface_courseApi</a></li>
+                                                    <li class="class"><a href="../classes/interface_dict.html">interface_dict</a></li>
+                                                    <li class="class"><a href="../classes/interface_discount.html">interface_discount</a></li>
+                                                    <li class="class"><a href="../classes/interface_func.html">interface_func</a></li>
+                                                    <li class="class"><a href="../classes/interface_login.html">interface_login</a></li>
+                                                    <li class="class"><a href="../classes/interface_message.html">interface_message</a></li>
+                                                    <li class="class"><a href="../classes/interface_messageApi.html">interface_messageApi</a></li>
+                                                    <li class="class"><a href="../classes/interface_org.html">interface_org</a></li>
+                                                    <li class="class"><a href="../classes/interface_pay.html">interface_pay</a></li>
+                                                    <li class="class"><a href="../classes/interface_plan.html">interface_plan</a></li>
+                                                    <li class="class"><a href="../classes/interface_planApi.html">interface_planApi</a></li>
+                                                    <li class="class"><a href="../classes/interface_play.html">interface_play</a></li>
+                                                    <li class="class"><a href="../classes/interface_search.html">interface_search</a></li>
+                                                    <li class="class"><a href="../classes/interface_teacher.html">interface_teacher</a></li>
+                                                    <li class="class"><a href="../classes/interface_tmp.html">interface_tmp</a></li>
+                                                    <li class="class"><a href="../classes/interface_user.html">interface_user</a></li>
+                                                    <li class="class"><a href="../classes/interface_user_api.html">interface_user_api</a></li>
+                                                    <li class="class"><a href="../classes/interface_value.html">interface_value</a></li>
+                                                    <li class="class"><a href="../classes/interface_version.html">interface_version</a></li>
+                                                    <li class="class"><a href="../classes/layer_main.html">layer_main</a></li>
+                                                    <li class="class"><a href="../classes/live_auth.html">live_auth</a></li>
+                                                    <li class="class"><a href="../classes/live_file.html">live_file</a></li>
+                                                    <li class="class"><a href="../classes/live_list.html">live_list</a></li>
+                                                    <li class="class"><a href="../classes/live_live.html">live_live</a></li>
+                                                    <li class="class"><a href="../classes/live_publish.html">live_publish</a></li>
+                                                    <li class="class"><a href="../classes/log_api.html">log_api</a></li>
+                                                    <li class="class"><a href="../classes/log_hz.html">log_hz</a></li>
+                                                    <li class="class"><a href="../classes/log_log.html">log_log</a></li>
+                                                    <li class="class"><a href="../classes/log_userAgent.html">log_userAgent</a></li>
+                                                    <li class="class"><a href="../classes/message_ajax.html">message_ajax</a></li>
+                                                    <li class="class"><a href="../classes/message_api.html">message_api</a></li>
+                                                    <li class="class"><a href="../classes/message_chat.html">message_chat</a></li>
+                                                    <li class="class"><a href="../classes/message_http.html">message_http</a></li>
+                                                    <li class="class"><a href="../classes/message_instation.html">message_instation</a></li>
+                                                    <li class="class"><a href="../classes/message_type.html">message_type</a></li>
+                                                    <li class="class"><a href="../classes/org_api.html">org_api</a></li>
+                                                    <li class="class"><a href="../classes/org_class.html">org_class</a></li>
+                                                    <li class="class"><a href="../classes/org_customerServices.html">org_customerServices</a></li>
+                                                    <li class="class"><a href="../classes/org_discount.html">org_discount</a></li>
+                                                    <li class="class"><a href="../classes/org_exam.html">org_exam</a></li>
+                                                    <li class="class"><a href="../classes/org_info.html">org_info</a></li>
+                                                    <li class="class"><a href="../classes/org_main.html">org_main</a></li>
+                                                    <li class="class"><a href="../classes/org_poll.html">org_poll</a></li>
+                                                    <li class="class"><a href="../classes/org_rightWindow.html">org_rightWindow</a></li>
+                                                    <li class="class"><a href="../classes/org_student.html">org_student</a></li>
+                                                    <li class="class"><a href="../classes/org_teacher.html">org_teacher</a></li>
+                                                    <li class="class"><a href="../classes/org_vote.html">org_vote</a></li>
+                                                    <li class="class"><a href="../classes/phpexcel_coursedetailstudent.html">phpexcel_coursedetailstudent</a></li>
+                                                    <li class="class"><a href="../classes/phpexcel_main.html">phpexcel_main</a></li>
+                                                    <li class="class"><a href="../classes/phpexcel_platformstu.html">phpexcel_platformstu</a></li>
+                                                    <li class="class"><a href="../classes/phpexcel_platformstusearch.html">phpexcel_platformstusearch</a></li>
+                                                    <li class="class"><a href="../classes/player_data.html">player_data</a></li>
+                                                    <li class="class"><a href="../classes/player_live.html">player_live</a></li>
+                                                    <li class="class"><a href="../classes/player_plan.html">player_plan</a></li>
+                                                    <li class="class"><a href="../classes/promote_api.html">promote_api</a></li>
+                                                    <li class="class"><a href="../classes/region_api.html">region_api</a></li>
+                                                    <li class="class"><a href="../classes/region_area.html">region_area</a></li>
+                                                    <li class="class"><a href="../classes/region_geo.html">region_geo</a></li>
+                                                    <li class="class"><a href="../classes/seek_api.html">seek_api</a></li>
+                                                    <li class="class"><a href="../classes/seek_course.html">seek_course</a></li>
+                                                    <li class="class"><a href="../classes/seek_plan.html">seek_plan</a></li>
+                                                    <li class="class"><a href="../classes/seek_teacher.html">seek_teacher</a></li>
+                                                    <li class="class"><a href="../classes/site_ad.html">site_ad</a></li>
+                                                    <li class="class"><a href="../classes/site_main.html">site_main</a></li>
+                                                    <li class="class"><a href="../classes/site_special.html">site_special</a></li>
+                                                    <li class="class"><a href="../classes/sms_api.html">sms_api</a></li>
+                                                    <li class="class"><a href="../classes/stat_api.html">stat_api</a></li>
+                                                    <li class="class"><a href="../classes/student_course.html">student_course</a></li>
+                                                    <li class="class"><a href="../classes/student_discount.html">student_discount</a></li>
+                                                    <li class="class"><a href="../classes/student_fav.html">student_fav</a></li>
+                                                    <li class="class"><a href="../classes/student_main.html">student_main</a></li>
+                                                    <li class="class"><a href="../classes/student_order.html">student_order</a></li>
+                                                    <li class="class"><a href="../classes/student_security.html">student_security</a></li>
+                                                    <li class="class"><a href="../classes/tag_api.html">tag_api</a></li>
+                                                    <li class="class"><a href="../classes/teacher_ajax.html">teacher_ajax</a></li>
+                                                    <li class="class"><a href="../classes/teacher_api.html">teacher_api</a></li>
+                                                    <li class="class"><a href="../classes/teacher_course.html">teacher_course</a></li>
+                                                    <li class="class"><a href="../classes/teacher_detail.html">teacher_detail</a></li>
+                                                    <li class="class"><a href="../classes/teacher_list.html">teacher_list</a></li>
+                                                    <li class="class"><a href="../classes/teacher_major.html">teacher_major</a></li>
+                                                    <li class="class"><a href="../classes/teacher_manage.html">teacher_manage</a></li>
+                                                    <li class="class"><a href="../classes/user_api.html">user_api</a></li>
+                                                    <li class="class"><a href="../classes/user_const.html">user_const</a></li>
+                                                    <li class="class"><a href="../classes/user_course.html">user_course</a></li>
+                                                    <li class="class"><a href="../classes/user_home.html">user_home</a></li>
+                                                    <li class="class"><a href="../classes/user_homework.html">user_homework</a></li>
+                                                    <li class="class"><a href="../classes/user_info.html">user_info</a></li>
+                                                    <li class="class"><a href="../classes/user_js.html">user_js</a></li>
+                                                    <li class="class"><a href="../classes/user_login.html">user_login</a></li>
+                                                    <li class="class"><a href="../classes/user_main.html">user_main</a></li>
+                                                    <li class="class"><a href="../classes/user_main.html">user_main</a></li>
+                                                    <li class="class"><a href="../classes/user_menu.html">user_menu</a></li>
+                                                    <li class="class"><a href="../classes/user_message.html">user_message</a></li>
+                                                    <li class="class"><a href="../classes/user_mydiscount.html">user_mydiscount</a></li>
+                                                    <li class="class"><a href="../classes/user_org.html">user_org</a></li>
+                                                    <li class="class"><a href="../classes/user_organization.html">user_organization</a></li>
+                                                    <li class="class"><a href="../classes/user_parterner.html">user_parterner</a></li>
+                                                    <li class="class"><a href="../classes/user_profile.html">user_profile</a></li>
+                                                    <li class="class"><a href="../classes/user_security.html">user_security</a></li>
+                                                    <li class="class"><a href="../classes/user_teacher.html">user_teacher</a></li>
+                                                    <li class="class"><a href="../classes/user_thumb.html">user_thumb</a></li>
+                                                    <li class="class"><a href="../classes/user_token.html">user_token</a></li>
+                                                    <li class="class"><a href="../classes/user_user.html">user_user</a></li>
+                                                    <li class="class"><a href="../classes/utility_cache.html">utility_cache</a></li>
+                                                    <li class="class"><a href="../classes/utility_cdn.html">utility_cdn</a></li>
+                                                    <li class="class"><a href="../classes/utility_countbySphinx.html">utility_countbySphinx</a></li>
+                                                    <li class="class"><a href="../classes/utility_feestatus.html">utility_feestatus</a></li>
+                                                    <li class="class"><a href="../classes/utility_file.html">utility_file</a></li>
+                                                    <li class="class"><a href="../classes/utility_iap.html">utility_iap</a></li>
+                                                    <li class="class"><a href="../classes/utility_ip.html">utility_ip</a></li>
+                                                    <li class="class"><a href="../classes/utility_judgeid.html">utility_judgeid</a></li>
+                                                    <li class="class"><a href="../classes/utility_net.html">utility_net</a></li>
+                                                    <li class="class"><a href="../classes/utility_services.html">utility_services</a></li>
+                                                    <li class="class"><a href="../classes/utility_session.html">utility_session</a></li>
+                                                    <li class="class"><a href="../classes/utility_tag.html">utility_tag</a></li>
+                                                    <li class="class"><a href="../classes/utility_teacherreg.html">utility_teacherreg</a></li>
+                                                    <li class="class"><a href="../classes/utility_test.html">utility_test</a></li>
+                                                    <li class="class"><a href="../classes/utility_time.html">utility_time</a></li>
+                                                    <li class="class"><a href="../classes/Utility_Tool.html">Utility_Tool</a></li>
+                                                    <li class="class"><a href="../classes/utility_valid.html">utility_valid</a></li>
+                                                    <li class="class"><a href="../classes/utility_weedfs.html">utility_weedfs</a></li>
+                                                    <li class="class"><a href="../classes/verify_api.html">verify_api</a></li>
+                                                    <li class="class"><a href="../classes/verify_sms.html">verify_sms</a></li>
+                                                    <li class="class"><a href="../classes/verify_test.html">verify_test</a></li>
+                                                    <li class="class"><a href="../classes/WeedFSCurl.html">WeedFSCurl</a></li>
+                                                    <li class="class"><a href="../classes/weixin_api.html">weixin_api</a></li>
+                                                    <li class="class"><a href="../classes/weixin_main.html">weixin_main</a></li>
+                                                    <li class="class"><a href="../classes/weixin_user.html">weixin_user</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/default.html">\</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\</small>message_api</h1>
+                    <p><em></em></p>
+                    
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/message_api.html#method_updateInstation" class="">updateInstation()</a><br />
+                                                                    <a href="../classes/message_api.html#method_deleteInstation" class="">deleteInstation()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getUnreadInstationNum" class="">getUnreadInstationNum()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getInstation" class="">getInstation()</a><br />
+                                                                    <a href="../classes/message_api.html#method_addMsgV2" class="deprecated">addMsgV2()</a><br />
+                                                                    <a href="../classes/message_api.html#method_startCloseClass" class="">startCloseClass()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getSingleForbid" class="">getSingleForbid()</a><br />
+                                                                    <a href="../classes/message_api.html#method_checkForbid" class="">checkForbid()</a><br />
+                                                                    <a href="../classes/message_api.html#method_addDialog" class="">addDialog()</a><br />
+                                                                    <a href="../classes/message_api.html#method_listDialog" class="">listDialog()</a><br />
+                                                                    <a href="../classes/message_api.html#method_updateDialog" class="">updateDialog()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getDialogLastTotalList" class="">getDialogLastTotalList()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getPlanGoodByPidArr" class="">getPlanGoodByPidArr()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getPlanScoreByPidArr" class="">getPlanScoreByPidArr()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getGroupListByUid" class="">getGroupListByUid()</a><br />
+                                                                    <a href="../classes/message_api.html#method_addGroup" class="">addGroup()</a><br />
+                                                                    <a href="../classes/message_api.html#method_changeGroupName" class="">changeGroupName()</a><br />
+                                                                    <a href="../classes/message_api.html#method_delGroup" class="">delGroup()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getContactsListByGroupId" class="">getContactsListByGroupId()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getDefaultAndBlackGroupList" class="">getDefaultAndBlackGroupList()</a><br />
+                                                                    <a href="../classes/message_api.html#method_checkUserIsBlack" class="">checkUserIsBlack()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getLatestUser" class="">getLatestUser()</a><br />
+                                                                    <a href="../classes/message_api.html#method_contactsMove" class="">contactsMove()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getMyMessages" class="">getMyMessages()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getMsgUserInfo" class="">getMsgUserInfo()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getMsgDetail" class="">getMsgDetail()</a><br />
+                                                                    <a href="../classes/message_api.html#method_msgDel" class="">msgDel()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getChatDetail" class="">getChatDetail()</a><br />
+                                                                    <a href="../classes/message_api.html#method_searchContacts" class="">searchContacts()</a><br />
+                                                                    <a href="../classes/message_api.html#method_delContact" class="">delContact()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getUserContact" class="">getUserContact()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getEachGroupNum" class="">getEachGroupNum()</a><br />
+                                                                    <a href="../classes/message_api.html#method_getRemindOption" class="">getRemindOption()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No constants found</em>
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <em>No protected methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No protected properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <em>No private methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No private properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/message.api.class.html"><div class="path-wrapper">message/api.class.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">Default</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\message_api</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                        
+                        
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_updateInstation" name="method_updateInstation" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">updateInstation()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">updateInstation(  <span class="argument">$data</span>,   <span class="argument">$user</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$user </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_deleteInstation" name="method_deleteInstation" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">deleteInstation()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">deleteInstation(  <span class="argument">$idStr</span>,   <span class="argument">$user</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$idStr </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$user </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getUnreadInstationNum" name="method_getUnreadInstationNum" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getUnreadInstationNum()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getUnreadInstationNum(  <span class="argument">$uid</span>,   <span class="argument">$token</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$token </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getInstation" name="method_getInstation" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getInstation()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getInstation(  <span class="argument">$data</span>,   <span class="argument">$user</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$user </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addMsgV2" name="method_addMsgV2" class="anchor"></a>
+            <article class="method">
+                <h3 class="public deprecated">addMsgV2()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addMsgV2(  <span class="argument">$data</span>,   <span class="argument">$user_id</span>,   <span class="argument">$user_token</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$user_id </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$user_token </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                                <aside class="alert alert-block alert-error">
+                    <h4>Deprecated</h4>
+                    发送消息，信号，点赞
+不推荐使用，请直接调用golang agent
+                </aside>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            docs
+                        </th>
+                        <td>
+                                                                                            <p><a href="https://wiki.gn100.com/doku.php?id=docs:message:plan">https://wiki.gn100.com/doku.php?id=docs:message:plan</a></p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_startCloseClass" name="method_startCloseClass" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">startCloseClass()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">startCloseClass(  <span class="argument">$plan_id</span>,   <span class="argument">$user_id</span>,   <span class="argument">$user_token</span>,   <span class="argument">$isStart</span>) </pre>
+                <p><em>上下课信号</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$plan_id </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$user_id </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$user_token </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$isStart </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getSingleForbid" name="method_getSingleForbid" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getSingleForbid()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getSingleForbid(  <span class="argument">$data</span>,   <span class="argument">$user_id</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$user_id </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_checkForbid" name="method_checkForbid" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">checkForbid()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">checkForbid(  <span class="argument">$plan_id</span>,   <span class="argument">$user_id</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$plan_id </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$user_id </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addDialog" name="method_addDialog" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">addDialog()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addDialog(  <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_listDialog" name="method_listDialog" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">listDialog()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">listDialog(  <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_updateDialog" name="method_updateDialog" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">updateDialog()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">updateDialog(  <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getDialogLastTotalList" name="method_getDialogLastTotalList" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getDialogLastTotalList()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getDialogLastTotalList(  <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getPlanGoodByPidArr" name="method_getPlanGoodByPidArr" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getPlanGoodByPidArr()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getPlanGoodByPidArr(  <span class="argument">$pid_arr</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$pid_arr </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getPlanScoreByPidArr" name="method_getPlanScoreByPidArr" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getPlanScoreByPidArr()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getPlanScoreByPidArr(  <span class="argument">$pid_arr</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$pid_arr </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getGroupListByUid" name="method_getGroupListByUid" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getGroupListByUid()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getGroupListByUid(  <span class="argument">$uid</span>, array  <span class="argument">$except = array()</span>) : array</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$except </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>get group list by uid</p>
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>wen</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addGroup" name="method_addGroup" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">addGroup()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addGroup(  <span class="argument">$uid</span>,   <span class="argument">$groupName</span>) : boolean</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$groupName </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>add group</p>
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>wen</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_changeGroupName" name="method_changeGroupName" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">changeGroupName()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">changeGroupName(  <span class="argument">$uid</span>,   <span class="argument">$groupId</span>,   <span class="argument">$groupName</span>) : boolean</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$groupId </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$groupName </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>change group name</p>
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>wen</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_delGroup" name="method_delGroup" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">delGroup()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">delGroup(  <span class="argument">$uid</span>,   <span class="argument">$groupId</span>) : boolean</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$groupId </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>delete group by group id</p>
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>wen</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getContactsListByGroupId" name="method_getContactsListByGroupId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getContactsListByGroupId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getContactsListByGroupId(  <span class="argument">$groupId</span>,   <span class="argument">$userId</span>) : array</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$groupId </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$userId </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>get contacts list by group id</p>
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>wen</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getDefaultAndBlackGroupList" name="method_getDefaultAndBlackGroupList" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getDefaultAndBlackGroupList()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getDefaultAndBlackGroupList(  <span class="argument">$userId</span>) : array</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$userId </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>get default and black group list</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_checkUserIsBlack" name="method_checkUserIsBlack" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">checkUserIsBlack()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">checkUserIsBlack(  <span class="argument">$from</span>,   <span class="argument">$loginUser</span>) : boolean</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$from </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$loginUser </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>check user is black</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getLatestUser" name="method_getLatestUser" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getLatestUser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getLatestUser(  <span class="argument">$to</span>, integer  <span class="argument">$page = 1</span>, integer  <span class="argument">$length = 20</span>) : array</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$to </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$page </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$length </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>get latest user info</p>
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>wen</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_contactsMove" name="method_contactsMove" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">contactsMove()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">contactsMove(array  <span class="argument">$userId</span>,   <span class="argument">$groupId</span>,   <span class="argument">$loginUser</span>) : boolean</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$userId </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$groupId </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$loginUser </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>group user contacts move</p>
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>wen</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getMyMessages" name="method_getMyMessages" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getMyMessages()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getMyMessages(  <span class="argument">$userToId</span>, integer  <span class="argument">$page = 1</span>, integer  <span class="argument">$length = 50</span>) : array</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$userToId </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$page </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$length </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>get my messages</p>
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>wen</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getMsgUserInfo" name="method_getMsgUserInfo" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getMsgUserInfo()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getMsgUserInfo(  <span class="argument">$usersIdArr</span>) : array</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$usersIdArr </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>get message user info</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getMsgDetail" name="method_getMsgDetail" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getMsgDetail()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getMsgDetail(  <span class="argument">$from</span>,   <span class="argument">$to</span>,   <span class="argument">$type</span>, integer  <span class="argument">$page = 1</span>, integer  <span class="argument">$length = 50</span>) : array</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$from </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$to </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$type </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$page </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$length </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>get message detail list</p>
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>wen</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_msgDel" name="method_msgDel" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">msgDel()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">msgDel(  <span class="argument">$from</span>,   <span class="argument">$to</span>,   <span class="argument">$msgType</span>) : boolean</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$from </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$to </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$msgType </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>delete message by message type</p>
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>wen</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getChatDetail" name="method_getChatDetail" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getChatDetail()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getChatDetail(  <span class="argument">$from</span>,   <span class="argument">$to</span>,   <span class="argument">$maxId</span>, integer  <span class="argument">$page = 1</span>, integer  <span class="argument">$length = 50</span>) : array</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$from </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$to </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$maxId </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$page </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$length </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>get chat detail list</p>
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>wen</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_searchContacts" name="method_searchContacts" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">searchContacts()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">searchContacts(  <span class="argument">$keyword</span>) : array</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$keyword </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>search contacts</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_delContact" name="method_delContact" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">delContact()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">delContact(  <span class="argument">$userId</span>,   <span class="argument">$linkMan</span>) : boolean</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$userId </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$linkMan </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>delete contact</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getUserContact" name="method_getUserContact" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getUserContact()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getUserContact(  <span class="argument">$userId</span>,   <span class="argument">$linkMan</span>) : array</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$userId </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$linkMan </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>get user contact</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getEachGroupNum" name="method_getEachGroupNum" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getEachGroupNum()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getEachGroupNum(  <span class="argument">$userId</span>) : array|boolean</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$userId </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array|boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>get each group num by login user id</p>
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>wen</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getRemindOption" name="method_getRemindOption" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getRemindOption()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getRemindOption() : array</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            desc
+                        </th>
+                        <td>
+                                                                                            <p>get remind option</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">api.class.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/message/api.class.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on March 8th, 2016 at 12:05.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

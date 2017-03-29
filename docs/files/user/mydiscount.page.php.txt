@@ -1,0 +1,42 @@
+<?php
+/*
+ * chat传递消息接口
+ */
+class user_mydiscount extends STpl{
+	var $user;
+	public function __construct($inPath){
+		$this->user = user_api::loginedUser();
+		if(!$this->user){
+			$this->redirect("/site.main.login");
+		}
+	}
+	public function pageList($inPath){
+		if(empty($inPath[3])){
+			$cmd = false;
+			if(empty($_POST["code"])){
+				$code = false;
+			}else{
+				$code = $_POST["code"];
+				$used = course_api::getUsedsByCodeIdUserId($_POST["code"], $this->user["uid"]);
+				$this->assign("used", $used);
+			}
+			$this->assign("code", $code);
+		}else{
+			$cmd = $inPath[3];
+			if("nofee" == $cmd){
+				$used = course_api::getUsedsByUserId($this->user["uid"], array(0, 3));
+			}else if("used" == $cmd){
+				$used = course_api::getUsedsByUserId($this->user["uid"], array(0, 1, 3));
+			}else if("unused" == $cmd){
+				$used = false;
+			}else{
+				$this->redirect("/");
+			}
+			$this->assign("used", $used);
+		}
+		$this->assign("cmd", $cmd);
+		return $this->render("user/mydiscount.list.html");
+	}
+}
+?>
+

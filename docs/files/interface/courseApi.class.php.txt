@@ -1,0 +1,74 @@
+<?php
+
+class interface_courseApi
+{
+    public static function getTeacherStudent($cid, $classId)
+    {
+        if (!utility_tool::check_int($cid)) return false;
+
+        if (!utility_tool::check_int($classId)) return false;
+
+        $courseUser = course_api::listRegistration(
+            [
+                'course_id' => $cid,
+                'class_id' => $classId,
+            ]
+        );
+
+        $data = [];
+        if (!empty($courseUser->data)) {
+            foreach($courseUser->data as $v) {
+                $data[] = [
+                    'uid' => $v->uid,
+                    'name' => !empty($v->user_info->student_name)
+                        ? $v->user_info->student_name
+                        : !empty($v->user_info->name)
+                            ? $v->user_info->name
+                            : SLanguage::tr('未设置', 'message'),
+                    'thumb' => !empty($v->user_info->thumb_med)
+                        ? interface_func::imgUrl($v->user_info->thumb_med)
+                        : ''
+                ];
+            }
+        }
+
+        return $data;
+    }
+
+    public static function getDomainUrl($data)
+    {
+        $param['f'] = ['owner_id'];
+
+        if (!empty($data['courseId'])) {
+            $param['q'] = ['course_id'=>$data['courseId']];
+        }
+
+        if (!empty($data['planId'])) {
+            $param['q'] = ['plan_id'=>$data['planId']];
+        }
+
+        $res = seek_api::seekPlan($param);
+
+        $header = (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) ? "https://" : "http://";
+        $url = '';
+
+        if (!empty($res->data[0]->owner_id)) {
+            $domainInfo =user_organization::getSubdomainByUid($res->data[0]->owner_id);
+            if (!empty($domainInfo->subdomain)) {
+                $url = $header.user_organization::course_domain($domainInfo->subdomain);
+            }
+        }
+
+        return $url;
+
+    }
+
+
+
+
+
+
+
+
+}
+

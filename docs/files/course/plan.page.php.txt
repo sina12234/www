@@ -1,0 +1,491 @@
+<?php
+/**
+ * 上课页
+ */
+class course_plan extends STpl{
+	
+	private $orgOwner;
+	/**通过课程ID找到当前正在播放的plan_id**/
+	public function pagePlayByCid($inPath){
+		if(empty($inPath[3])){
+			$this->redirect("/");
+		}
+		$course_id = $inPath[3];
+		$plan_info_s = course_api::listPlan(array("cid"=>$course_id,"allcourse"=>true));
+		if(empty($plan_info_s->data)){
+			return "参数错误";
+		}
+		foreach($plan_info_s->data as $plan){
+			if($plan->plan_status=="living"){
+				$this->redirect("/course.plan.play/".$plan->plan_id);
+			}
+		}
+		$this->redirect("/course.info.show/".$course_id);
+	}
+	public function pageStart($inPath){
+		if(empty($inPath[3])){
+			$this->redirect("/");
+		}
+		$plan_id = $inPath[3];
+		//获取课程信息，判断老师有没有权限上课
+		$plan_info_s = course_api::listPlan(array("plan_id"=>$plan_id,"allcourse"=>true));
+		if(empty($plan_info_s->data[0])){
+			$this->redirect("/");
+		};
+		$plan_info = $plan_info_s->data[0];
+		$user = user_api::loginedUser();
+		if(empty($user['uid'])){
+			$this->redirect("/site.main.login?url=/course.plan.start/$plan_id");
+		}
+		$user_id = $user['uid'];
+		if($user_id!=$plan_info->user_plan_id){
+			//不是当前的上课老师,到学生页面
+			$this->redirect("/course.plan.play/$plan_id");
+		};
+		$user_token = $user['token'];
+		if(empty($user['small'])){
+			$user_thumb = '';
+		}else{
+			$user_thumb = $user['small'];
+		}
+		//获取plan的状态，如果已经结束，提示是否重新上课，重新上课的视频录制会被覆盖
+		$teacher= user_api::getUser($plan_info->user_plan_id);
+		$course_users = array();
+		$course_users1 = course_api::listRegistration(array("course_id"=>$plan_info->course_id,"class_id"=>$plan_info->class_id));
+		if(!empty($course_users1->data)){
+			$course_users = $course_users1->data;
+		}
+
+
+		foreach($course_users as $k=>$v){
+			if (!empty($v->user_info->user_id)) {
+				$uidArr[] = $v->user_info->user_id;
+			}
+		}
+
+		if(!empty($uidArr)){
+			$stuProfile = user_api::getUserProfileByUidArr($uidArr);
+			if(!empty($stuProfile)){
+				foreach($stuProfile as $stk=>$stv){
+					$stuProfileArr[$stv->user_id] = $stv;
+				}
+			}
+
+			foreach($course_users as $ck=>$cv){
+				if(!empty($cv->user_info->user_id) && !empty($stuProfileArr[$cv->user_info->user_id]->real_name)){
+					$cv->user_info->name = $stuProfileArr[$cv->user_info->user_id]->real_name;
+					$cv->user_info->student_name = $stuProfileArr[$cv->user_info->user_id]->real_name;
+				}
+			}
+		}
+
+		//获取真实姓名
+		$exams = course_api::getPlanExamsByPlan($plan_id, $user_id);
+		$filecdn = utility_cdn::filecdn();
+		$this->assign("exams",json_encode($exams));
+		$this->assign("course_users",$course_users);
+		$this->assign("teacher",$teacher);
+		$this->assign("plan_id",$plan_id);
+		$this->assign("class_id",$plan_info->class_id);
+		$this->assign("course_id",$plan_info->course_id);
+		$this->assign("user_id",$user_id);
+		$this->assign("user_token",$user_token);
+		$this->assign("plan_info",$plan_info);
+		$this->assign("user_thumb",$user_thumb);
+		$this->assign("filecdn",$filecdn);
+		return $this->render("course/plan.start.v5.html");
+	}
+	public function pageStartPlan($inPath){
+		$ret=new stdclass;
+		$cleanFile = false;
+		if(empty($inPath[3])){
+			$ret->error="参数错误";
+			return $ret;
+		}
+		if(!empty($inPath[4]) && $inPath[4]=='cleanFile'){
+			$cleanFile=true;
+		}
+		$plan_id = $inPath[3];
+		// 为题目排序
+		$orderexam = $this->orderExams($plan_id);
+		//获取课程信息，判断老师有没有权限上课
+		$plan_info_s = course_api::listPlan(array("plan_id"=>$plan_id,"allcourse"=>true));
+		if(empty($plan_info_s->data[0])){
+			return $this->redirect("/");
+		};
+		$plan_info = $plan_info_s->data[0];
+		$user = user_api::loginedUser();
+
+		//设置当前plan_id的上课状态
+		//开始录制
+		//获取发布流信息，如果没有，或者user_id和当前用户不一样，说明没有发布
+		$publish = live_publish::getByUid($user['uid']);
+		if(empty($publish)){
+			$ret->error="您还没有开始直播";
+			return $ret;
+		}
+		if($publish->live_call=="publish_done"){
+			$ret->error="直播已经结束";
+			return $ret;
+		}
+		if($publish->plan_id>0 && $publish->plan_id!=$plan_id){
+			$ret->error="同一时间只能上同一节课，你当前正在上课{$publish->plan_id}";
+			return $ret;
+		}
+		$ret_up = course_plan_api::startPlan($user['uid'], $user["token"], $plan_id);
+		if($ret_up){
+			$ret->code=0;
+			$ret->error="更新成功";
+		}
+		return $ret;
+	}
+	public function pageStopPlan($inPath){
+		$ret=new stdclass;
+		if(empty($inPath[3])){
+			$ret->error="参数错误";
+			return $ret;
+		}
+		$plan_id = $inPath[3];
+		//获取课程信息，判断老师有没有权限上课
+		$plan_info = course_api::getPlan($plan_id);
+		$user = user_api::loginedUser();
+		if(empty($plan_info->user_plan_id) || $plan_info->user_plan_id !=$user['uid']){
+			$ret->error="您没有权限";
+			return $ret;
+		}
+
+		$ret_up = course_plan_api::stopPlan($user['uid'], $user["token"], $plan_id);
+		if($ret_up){
+			$ret->code=0;
+			$ret->error="关闭成功";
+		}
+		return $ret;
+	}
+	public function pageUserStatus($inPath){
+		if(empty($inPath[3])){
+			return false;
+		}
+		$plan_id = $inPath[3];
+		return  course_api::listPlanUser($plan_id);
+	}
+	public function pageGetStudentsForClass($inPath){
+		if(!empty($_POST) && !empty($_POST["class_id"])){
+			$ret = course_api::listRegistration(array("class_id"=>$_POST["class_id"]));
+			if(!empty($ret->data)){
+				return $ret->data;
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}
+
+    public function pagePlay($inPath)
+    {
+        $org = user_organization::subdomain();
+        if (!empty($org->userId)) {
+            $this->orgOwner = $org->userId;
+        }
+        $orgInfo = user_organization::getOrgByOwner($this->orgOwner);
+
+        $subNav="";
+        if(!empty($inPath[3])) $subNav=$inPath[3];
+        $this->assign("subnav", $subNav);
+        $this->assign("orgInfo", $orgInfo);
+
+        if (empty(intval($inPath[3]))) {
+            $this->redirect("/");
+        }
+        $planId   = (int)$inPath[3];
+        $userInfo = user_api::loginedUser();
+
+        if (empty($userInfo['uid'])) {
+            $userId    = 0;
+            $userToken = user_api::getTokenDirect();
+        } else {
+            $userId    = $userInfo['uid'];
+            $userToken = $userInfo['token'];
+        }
+        if (empty($userToken)) $userToken = 0;
+        $userThumb = !empty($userInfo['medium']) ? $userInfo['medium'] : '';
+
+        $planInfos = course_api::listPlan(array("plan_id" => $planId, "allcourse" => true));
+
+        if (empty($planInfos->data[0])) {
+            $this->redirect("/");
+        };
+
+
+        $planInfo = $planInfos->data[0];
+        $cid      = $planInfo->course_id;
+        $classId  = $planInfo->class_id;
+        $plist = [
+            "cid"       => $cid,
+            "class_id"  => $classId,
+            "order_by"  => "asc",
+            "allcourse" => true,
+        ];
+        $plansInfos = course_api::listPlan($plist);
+        $plansInfo = $plansInfos->data;
+
+        //获取上课老师信息
+        $teacher = user_api::getUser($planInfo->user_plan_id);
+        $filecdn = utility_cdn::filecdn();
+        $this->assign("teacher", $teacher);
+
+        $param      = [
+            'classId' => $planInfo->class_id, //295
+            'page'    => 1,
+            'length'  => -1
+        ];
+        $courseUser = utility_services::call('/course/courseuser/listsByCourseClass', $param);
+
+        $uidArr = [];
+        $courseUserTotal = 0;
+        if (!empty($courseUser->result->items)) {
+            foreach ($courseUser->result->items as $regUser) {
+                $uidArr[$regUser->fk_user] = $regUser->fk_user;
+            }
+            $courseUserTotal = $courseUser->result->totalSize;
+        }
+        $isReg = array_key_exists($userId, $uidArr) ? 1 : 0;
+
+        $uidArr[$userId] = $userId;
+        $tmpStudentInfo = $this->_getUserInfoAndLevel($uidArr);
+        //拆分出自己的level
+        $levelShow = !empty($tmpStudentInfo[$userId]['user_level']['fk_level']) ? $tmpStudentInfo[$userId]['user_level']['fk_level'] : 0 ;
+        $levelTitle = !empty($tmpStudentInfo[$userId]['user_level']['title']) ? $tmpStudentInfo[$userId]['user_level']['title'] : '书生1' ;
+        if (!$isReg) unset($tmpStudentInfo[$userId]);
+        $studentInfoLevel = array_values($tmpStudentInfo);
+
+        $retListAtt = course_api::listPlanAttach($classId);
+        $listAtt    = 0;
+        if (!empty($retListAtt->data)) {
+            $listAtt = $retListAtt->data;
+        }
+
+        //禁言初始化
+        $inputText = message_api::checkforbid($planId, $userId) ? 1 : 0;
+
+        //判断该章节观看权限
+        $isLogin    = !empty($userInfo) ? 1 : 0;
+        $planStatus = $plansInfos->data[0]->status;
+        $livePub    = $planInfos->data[0]->live_public_type; //直播课
+        $videoPub   = $planInfos->data[0]->video_public_type;//录播课
+
+        $needLogin = $needSign = 0;
+
+        if ($planStatus != 3) { //直播课
+            if ($livePub == 0) { //直播不公开
+                !$isLogin && $needLogin = 1; //弹登录层
+                !$isReg && $needSign = 1; //弹报名层
+            }
+        } else {
+            if ($videoPub == 0) {
+                !$isLogin && $needLogin = 1; //弹登录层
+                !$isReg && $needSign = 1; //弹报名层
+            }
+        }
+
+        $needDataInfo = 0;
+        if (($needSign) || ($needLogin)) {
+            $needDataInfo = 1;
+        }
+
+        /*判断是否是讲课老师班主任机构管理员*/
+        $planCanSearch = utility_judgeid::planCanSearch($userId, $this->orgOwner, $classId, $planId);
+        if ($planCanSearch) {
+            $needDataInfo = 0;
+            $needSign     = 0;
+        }
+
+        //播放页新增头部导航
+        $retMessagesNum = 0;
+        if ($userId) {
+            $retMessagesNum = message_api::getUnreadInstationNum($userId, $userInfo['token']);
+        }
+        //判断管理员
+        $isAdmin = user_api::isAdmin($this->orgOwner, $userId);
+        //判断老师
+        $isTeacher = user_api::isTeacher($this->orgOwner, $userId);
+        //播放页新增头部导航结束
+
+        //获取当前页面url
+        $http = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
+        if (!empty($org->subdomain)) {
+            $myHost  = user_organization::course_domain($org->subdomain);
+            $curHost = $myHost.'/course.plan.play/'.$planId;
+        } else {
+            $curHost = $myHost = 'www.yunke.com';
+        }
+
+        $curUrl = $http.$curHost;
+
+        // 获取分享图片真实地址
+        $shareImg  = '';
+        $volumeRes = utility_file::getFileByFid($planInfo->thumb_med);
+        if (!empty($volumeRes->fk_volume)) {
+            $volume = utility_file::getUrlByVolume($volumeRes->fk_volume);
+            //publicUrl
+            if (!empty($volume->url)) {
+                $shareImg = $volume->publicUrl.'/'.$planInfo->thumb_med;
+            }
+        }
+
+        $isWxLogin = weixin_api::is_weixin() ? 1 : 0;
+        $this->assign("wxlogined", $isWxLogin);
+        $this->assign("needlogin", $needLogin);
+        $this->assign("planCanSearch", $planCanSearch);
+        $this->assign("needdatainfo", $needDataInfo);
+        $this->assign("needsign", $needSign);
+        $this->assign("logined", $isLogin);
+        $this->assign("beforeStart", $this->_getBeforeStartInfo($planInfo));
+        $this->assign("inputText", $inputText);
+        $this->assign("listAtt", $listAtt);
+        $this->assign("courseUserTotal", $courseUserTotal);
+        $this->assign("isAdmin", $isAdmin);
+        $this->assign("isTeacher", $isTeacher);
+        $this->assign('retMessagesNum', $retMessagesNum);
+        $this->assign("levelshow", $levelShow);
+        $this->assign("leveltitle", $levelTitle);
+        $this->assign("studentInfos", SJSON::encode($studentInfoLevel));
+        $this->assign("isReg", $isReg);
+        $this->assign("plan_id", $planId);
+        $this->assign("class_id", $planInfo->class_id);
+        $this->assign("user_info", $userInfo);
+        $this->assign('shareImg', $shareImg);
+        $this->assign("plan_info", $planInfo);
+        $this->assign("plans_info", $plansInfo);
+        $this->assign("user_id", $userId);
+        $this->assign("user_owner", $this->orgOwner);
+        $this->assign("user_token", $userToken);
+        $this->assign("user_thumb", $userThumb);
+        $this->assign("filecdn", $filecdn);
+
+        $this->assign('qrCode', utility_cdn::qrcode("qr?s=200&t=".urlencode($curUrl)));
+        $this->assign('curUrl', $curUrl);
+        $this->assign('myHost', $http.$myHost);
+        $this->render("course/plan.play.v2.html");
+    }
+
+	public function orderExams($plan_id){
+		$data = array(
+			"plan_id"=>$plan_id,
+		);
+		$retQuesdata = course_api::coursePlanExamList($data);
+		if(!empty($retQuesdata->data)){
+			$examdata = $retQuesdata->data;
+			foreach($examdata as $k=>$v){
+				$examid = $v->plan_exam_id;
+				$orderno = $k;
+				$dataup = array(
+					"order_no"=>$orderno,
+				);
+				$retupexam = course_api::updateCoursePlanExam($examid,$dataup);
+			}
+		}
+	}
+	public function pageUpdatePlanExamStatus($inPath){
+		$user = user_api::loginedUser();
+		if(empty($user)){
+			return false;
+		}
+		if(empty($_POST)){
+			return false;
+		}
+		return course_api::updatePlanExamStatus($_POST, $user["uid"]);
+	}
+
+    /**
+     * @desc 获取用户信息和等级,兼容学生播放页字段
+     *
+     * @param $uidArr
+     * @return array
+     */
+    private function _getUserInfoAndLevel($uidArr)
+    {
+        $result = [];
+        foreach ($uidArr as $userId) {
+            $result[$userId]['user_info'] = [
+                'name'      => 'Bill',
+                'thumb_med'     => '/assets_v2/img/defaultPhoto.gif'
+            ];
+
+            $result[$userId]['uid'] = $userId;
+
+            $result[$userId]['user_level'] = [
+                'fk_user'      => $userId,
+                'fk_level'     => 1,
+                'title'        => '书生',
+                'score'        => 0,
+                'last_updated' => 0
+            ];
+        }
+
+        $userData = utility_services::call('/common/list/GetUsersInfo', ['userIdArr' => $uidArr, 'length' => -1]);
+        if (!empty($userData->result)) {
+            foreach ($userData->result as $user) {
+                $result[$user->pk_user]['user_info'] = [
+                    'name' => !empty($user->real_name)
+                        ? $user->real_name
+                        : (!empty($user->name) ? $user->name : SLanguage::tr('未设置', 'message')),
+                    'thumb_med' => $user->thumb_med
+                ];
+            }
+
+            $userLevel = utility_services::call('/user/score/listByUidArr', ['userIdArr' => $uidArr, 'length' => -1]);
+
+            if (!empty($userLevel->result)) {
+                foreach ($userLevel->result as $val) {
+                    $result[$val->fk_user]['user_level'] = [
+                        'fk_user'      => $val->fk_user,
+                        'fk_level'     => $val->fk_level,
+                        'title'        => $val->title,
+                        'score'        => $val->score,
+                        'last_updated' => $val->last_updated
+                    ];
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * ＠desc 获取开课前的信息
+     *
+     * @param $planInfo
+     * @return stdclass
+     */
+    private function _getBeforeStartInfo($planInfo)
+    {
+        $startTime   = strtotime($planInfo->start_time);
+        $seconds     = $startTime - time();
+        $beforeStart = new stdclass;
+        if (($seconds < 86400) && ($seconds > 0)) {
+            $hours   = floor($seconds / 3600);
+            $minutes = floor($seconds % 3600 / 60);
+            if ($minutes <= 0) {
+                $minutes = 0;
+            }
+
+            if ($hours > 0) {
+                $beforeStart->seconds        = $seconds;
+                $beforeStart->time_countdown = "离开课时间:".$hours."小时".$minutes."分";
+                $beforeStart->img            = "/assets_v2/img/icon-clock.png";
+            } else {
+                $beforeStart->seconds        = $seconds;
+                $beforeStart->time_countdown = "离开课时间:".$minutes."分";
+                $beforeStart->img            = "/assets_v2/img/icon-clock.png";
+            }
+        } else {
+            $beforeStart->plandesc       = "还没有开课哦！";
+            $beforeStart->time_countdown = $planInfo->start_time;
+            $beforeStart->img            = "/assets_v2/img/icon-coffee.png";
+            $beforeStart->section_name   = $planInfo->section_name;
+            $beforeStart->section_desc   = $planInfo->section_descipt;
+        }
+
+        return $beforeStart;
+    }
+}
+

@@ -1,0 +1,4 @@
+sms{
+	gateway http://yunpian.com/v1/sms/tpl_send.json;
+	apikey 44a401d4734d91ea918efaa0d23379f4;
+}

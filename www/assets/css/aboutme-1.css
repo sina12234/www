@@ -1,0 +1,30 @@
+.big-box{max-width: 1000px;margin: auto;}
+
+.big-box .tittle{margin:22px 0 22px 0 ;}
+.big-box .tittle p{color: #333333; font-weight: normal; }
+.big-box .tittle p b{color: #999999;font-weight: normal;}
+
+.big-box .count{width: 1000px;height: 950px;border: 1px solid #ccc;background: #fff;}
+.big-box .count .count-l{width: 200px;height: 890px;float: left;background: #F7F7F7; margin:20px 5px 20px 20px; float: left;}
+.big-box .count .count-l .nco ul .oo{width: 200px;background: #FFA81E; text-align: center;line-height: 52px;height: 52px;border: 1px solid #eeeeee; border-top:none;}
+.big-box .count .count-l .nco ul .oo a{ color: #fff;}
+.big-box .count .count-l .nco ul li{width: 200px;; text-align: center;line-height: 52px;height: 52px;border: 1px solid #eeeeee; border-top:none;}
+.big-box .count .count-l .nco ul li a{color: #333333;}
+
+.big-box .count .count-r{width: 720px;height: 675px;float:left; margin: 19px 19px 19px 19px;}
+.big-box .count .count-r .count-r-t{ width: 730px;height: 330px;border-bottom: 1px dashed #ccc;}
+.big-box .count .count-r .count-r-t dl dt{float: left; margin-right: 20px;}
+.big-box .count .count-r .count-r-t dl dd{font-size: 14px;line-height: 25px;color: #666666;}
+.big-box .count .count-r .count-r-t p{margin-top: 10px;font-size: 14px;color: #666666;line-height: 25px;}
+.big-box .count .count-r .count-b{ margin-top: 20px;max-height: 350px;min-height: 120px;}
+.big-box .count .count-r .count-b .tp{width: 180px;height: 35px;background: #f3f3f3;margin-bottom: 20px;}
+.big-box .count .count-r .count-b .tp p{font-size: 14px;line-height: 35px;padding-left: 20px; color: #333333;}
+.big-box .count .count-r .count-b .tp p img{margin-right: 10px;}
+.big-box .count .count-r .count-b .tp1 .p1{font-size: 14px;font-weight: normal;padding-bottom:8px;}
+.big-box .count .count-r .count-b .tp1 .p2{margin-top: 5px; line-height: 20px;}
+.big-box .count .count-r .count-b .tp1 .p2 b{font-weight: normal;line-height: 20px;}
+.big-box .count .count-r .count-b .count-rig{ float: right;margin-top:-40px;}
+
+.big-box .count .count-r .count-b .tp1 li { color: #666666; line-height: 25px;}
+.big-box .count .count-r .count-b .tp1 li img{ margin-right: 10px;}
+.big-box .count .count-r .count-b .tp1 li p{float: right; color: #999999;}

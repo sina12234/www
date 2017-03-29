@@ -1,0 +1,159 @@
+<?php
+class teacher_main extends STpl{
+	private $major = array(
+		"1"  =>  "数学",
+		"2"  =>  "英语",
+		"3"  =>  "语文",
+		"4"  =>  "物理",
+		"5"  =>  "化学",
+		"6"  =>  "生物",
+		"7"  =>  "历史",
+		"8"  =>  "地理",
+		"9"  =>  "政治",
+	);
+
+	public function pageStartDetail($inPath){
+		//	oid 以后要根据域名之类信息做映射筛选出来；
+		// 现在先写死
+		//$oid = 104;
+		// 0 就是说把所有的筛选出来
+		$org=user_organization::subdomain();
+		if(!empty($org)){
+			$this->orgOwner = $org->userId; //机构所有者id 以后会根据域名而列取 
+		}else{
+			$this->orgOwner = 2; //机构所有者id 以后会根据域名而列取  
+		}
+		$orgOwnerid = $this->orgOwner;
+		$orgInfo = user_organization::getOrgByOwner($orgOwnerid);
+		if(!empty($orgInfo)) $oid = $orgInfo->oid;
+
+		//$oid = 104; 
+	//	$teachers = user_organization::listOrgUser($oid);
+		if(!empty($inPath[3])){
+			$teacher_id=$inPath[3];
+		}else{
+			$teacher_id=$teachers[0]->user_id;
+		}
+		$teacher = user_organization::getOrgUserinfo($oid,$teacher_id);
+		$plans = course_api::listPlan(array("user_plan_id"=>$teacher_id,"orgUserId"=>$orgOwnerid,"status"=>"end","length"=>3));
+		if(empty($plans)){
+			$plans = course_api::listPlan(array("user_plan_id"=>0,"orgUserId"=>$orgOwnerid,"status"=>"end","length"=>3));
+		}
+		$this->assign("teacher_id",$teacher_id);
+		$this->assign("teacher",$teacher);
+		$this->assign("plans",$plans);
+		return $this->render("teacher/teacher.html");
+	}
+	public function pageEntry($inPath){
+		$org=user_organization::subdomain();
+		if(!empty($org)){
+			$this->orgOwner = $org->userId; //机构所有者id 以后会根据域名而列取 
+		}else{
+			$this->orgOwner = 153; //机构所有者id 以后会根据域名而列取  
+		}
+		$orgOwnerid = $this->orgOwner;
+		$orgInfo = user_organization::getOrgByOwner($orgOwnerid);
+		if(!empty($orgInfo)) $oid = $orgInfo->oid;
+
+		//	$oid = 0; // 0 就是说把所有的筛选出来
+		$teacher_id=0;
+		$major = 0;
+		$all=0;
+		$teacher=array();
+
+		//用户点击学科时筛选时
+		$teachers = user_organization::listOrgUser($oid,$all,$star=0,$page=1,$size=1000);
+		$teacount = count($teachers);
+		if((!empty($inPath[3]))&& ($teacount>=2) ){
+			$mathTea = array();
+			foreach($this->major as $mk=>$mv){
+				if($mk == $inPath[3]){
+					//扩展为根据学科列取
+				//	$teachers = user_organization::listOrgUserv2($oid);
+					$major = $mk;
+					if(!empty($teachers)){
+						foreach($teachers as $tk=>$tv){
+							if(isset($tv->major)){
+								if($tv->major == $major){
+									$mathTea[$this->major[$major]][] = $tv;
+									continue;
+								}
+							}
+						}
+					}
+				}
+			}
+			$this->assign("mathTea",$mathTea);
+		//用户未点击学科 刚进来的首页
+		}elseif($teacount>=2){
+			//	这里取了两次数据以后一定要优化
+			for($i = 0;$i<=1;$i++){
+				$teachers[$i]->plan = course_api::listPlan(array("user_plan_id"=>$teachers[$i]->user_id,"status"=>"end","length"=>3));
+			}
+			//	数学老师
+			$mathTea = array();
+			$enTea = array();
+			$chTea = array();
+			if(!empty($teachers)){
+				foreach($teachers as $tk=>$tv){
+					if(isset($tv->major)){
+						foreach($this->major as $mak=>$mav){
+							if($tv->major == $mak){
+								$mathTea[$mav][] = $tv;
+								continue;
+							}
+						}
+					}
+
+				}
+			}
+			$this->assign("mathTea",$mathTea);
+		}
+		$daohangs=$teachers;
+		$checked=array();
+		if(!empty($daohangs)){
+			foreach($daohangs as $tk=>$tv){
+				if(isset($tv->major)){
+					foreach($this->major as $mak=>$mav){
+						if($tv->major == $mak){
+							$checked[$mav][] = 1;
+							continue;
+						}
+					}
+				}
+
+			}
+		}
+		$this->assign("checked",$checked);
+
+	/*
+		if(!empty($teachers)){
+			if(!empty($inPath[3])){
+				$teacher_id=$inPath[3];
+			}else{
+				$teacher_id=$teachers[0]->user_id;
+			}
+			foreach($teachers as $_teacher){
+				if($_teacher->user_id == $teacher_id){
+					$teacher = $_teacher;
+					break;
+				}
+			}
+
+		}
+	*/	
+		//	$plans = course_api::listPlan(array("user_plan_id"=>$teacher_id,"status"=>"end","length"=>3));
+		//	这里取了两次数据以后一定要优化
+	/*	for($i = 0;$i<=1;$i++){
+			$teachers[$i]->plan = course_api::listPlan(array("user_plan_id"=>$teachers[$i]->user_id,"status"=>"end","length"=>3));
+		}
+	 */
+		//	print_r($teachers);
+		$this->assign("teacher_id",$teacher_id);
+		$this->assign("teachers",$teachers);
+		$this->assign("major",$major);
+		$this->assign("majors",$this->major);
+		return $this->render("teacher/teacherv2.html");
+	}
+}
+

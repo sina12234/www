@@ -1,0 +1,46 @@
+<?php
+/*
+ * chat传递消息接口
+ */
+class message_instation extends STpl{
+	var $user;
+	public function __construct($inPath){
+		$this->user = user_api::loginedUser();
+	}
+	public function pageGetUnreadNum($inPath){
+		if(empty($this->user)){
+			return false;
+		}
+		$ret = message_api::getUnreadInstationNum($this->user["uid"], utility_session::get()["user"]["token"]);
+		$data = new stdclass;
+		$data->num = $ret;
+		return $data;
+	}
+	public function pageUpdateInstation($inPath){
+		if(empty($this->user)){
+			return false;
+		}
+		if(!empty($_POST)){
+			return message_api::updateInstation($_POST, $this->user["uid"]);
+		}
+		return false;
+	}
+	public function pageDeleteInstation($inPath){
+		if(empty($this->user)){
+			return false;
+		}
+		$idStr=!empty($_POST['msg_id']) ? rtrim($_POST['msg_id'],",") : 0;
+		if(!empty($idStr)){
+			$result = message_api::deleteInstation($idStr, $this->user["uid"]);
+			if($result !=false){
+				echo json_encode(array("code"=>100,"msg"=>"删除成功"));
+			}else{
+				echo json_encode(array("code"=>-101,"msg"=>"删除失败"));
+			}
+		}else{
+			echo json_encode(array("code"=>-102,"msg"=>"无效的参数"));
+		}
+	}
+}
+
+

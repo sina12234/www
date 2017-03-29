@@ -1,0 +1,150 @@
+default{
+	menu {
+        grade '小学';
+        url '/course.list?fc=1&sc=7';
+		children{ 
+			name '一年级'; 
+			url '/course.list?fc=1&sc=7&tc=29'; 
+			attr_count '3';
+			
+		}
+		children{ 
+			name '二年级'; 
+			url '/course.list?fc=1&sc=7&tc=30';
+			attr_count '3';
+		}
+		children{ 
+			name '三年级'; 
+			url '/course.list?fc=1&sc=7&tc=31';
+			attr_count '3';
+		}
+		children{ 
+			name '四年级'; 
+			url '/course.list?fc=1&sc=7&tc=32'; 
+			attr_count '3';
+		}
+		children{ 
+			name '五年级'; 
+			url '/course.list?fc=1&sc=7&tc=33';
+			attr_count '3';
+		}
+		children{ 
+			name '六年级'; 
+			url '/course.list?fc=1&sc=7&tc=34';
+			attr_count '3';
+		}
+		children{ 
+			name '小升初'; 
+			url '/course.list?fc=1&sc=7&tc=35';
+			attr_count '3';	
+		}
+    }
+	menu {
+        grade '初中';
+        url '/course.list?fc=1&sc=8';
+		children{ 
+			name '初一'; 
+			url '/course.list?fc=1&sc=8&tc=36';
+			attr_count '3';	
+		}
+		children{ 
+			name '初二'; 
+			url '/course.list?fc=1&sc=8&tc=37'; 
+			attr_count '4';
+		}
+		children{ 
+			name '初三'; 
+			url '/course.list?fc=1&sc=8&tc=38'; 
+			attr_count '5';
+		}
+		children{ 
+			name '中考'; 
+			url '/course.list?fc=1&sc=8&tc=39';
+			attr_count '5';
+		}
+		children{ 
+			name '竞赛'; 
+			url '/course.list?fc=1&sc=8&tc=39';
+			attr_count '5';
+		}
+    }
+	menu {
+        grade '高中';
+        url '/course.list?fc=1&sc=9';
+		children{ 
+			name '高一'; 
+			url '/course.list?fc=1&sc=9&tc=40';
+			attr_count '9';
+		}
+		children{ 
+			name '高二'; 
+			url '/course.list?fc=1&sc=9&tc=41'; 
+			attr_count '9';
+		}
+		children{ 
+			name '高三'; 
+			url '/course.list?fc=1&sc=9&tc=42'; 
+			attr_count '9';
+			attr{name '语文'; url '/course.list?fc=1&sc=9&tc=42&vid=16|165';}
+			attr{name '数学'; url '/course.list?fc=1&sc=9&tc=42&vid=16|166';}
+			attr{name '英语'; url '/course.list?fc=1&sc=9&tc=42&vid=16|167';}
+			attr{name '物理'; url '/course.list?fc=1&sc=9&tc=42&vid=16|168';}
+			attr{name '化学'; url '/course.list?fc=1&sc=9&tc=42&vid=16|169';}
+			attr{name '生物'; url '/course.list?fc=1&sc=9&tc=42&vid=16|170';}
+			attr{name '历史'; url '/course.list?fc=1&sc=9&tc=42&vid=16|171';}
+			attr{name '地理'; url '/course.list?fc=1&sc=9&tc=42&vid=16|172';}
+			attr{name '政治'; url '/course.list?fc=1&sc=9&tc=42&vid=16|173';}
+		}
+		children{ 
+			name '高考'; 
+			url '/course.list?fc=1&sc=9&tc=43'; 
+			attr_count '10';
+			attr{name '语文'; url '/course.list?fc=1&sc=9&tc=43&vid=17|177';}
+			attr{name '数学'; url '/course.list?fc=1&sc=9&tc=43&vid=17|178';}
+			attr{name '英语'; url '/course.list?fc=1&sc=9&tc=43&vid=17|179';}
+			attr{name '物理'; url '/course.list?fc=1&sc=9&tc=43&vid=17|180';}
+			attr{name '化学'; url '/course.list?fc=1&sc=9&tc=43&vid=17|181';}
+			attr{name '全科辅导'; url '/course.list?fc=1&sc=9&tc=43&vid=17|187';}
+			attr{name '志愿填报'; url '/course.list?fc=1&sc=9&tc=43&vid=17|472';}
+			attr{name '职业规划'; url '/course.list?fc=1&sc=9&tc=43&vid=17|473';}
+			attr{name '自主招生'; url '/course.list?fc=1&sc=9&tc=43&vid=17|474';}
+			attr{name '更多'; url '/course.list?fc=1&sc=9&tc=43';}
+		}
+		children{ 
+			name '竞赛'; 
+			url '/course.list?fc=1&sc=9&tc=43'; 
+			attr_count '10';
+			attr{name '语文'; url '/course.list?fc=1&sc=9&tc=43&vid=17|177';}
+			attr{name '数学'; url '/course.list?fc=1&sc=9&tc=43&vid=17|178';}
+			attr{name '英语'; url '/course.list?fc=1&sc=9&tc=43&vid=17|179';}
+			attr{name '物理'; url '/course.list?fc=1&sc=9&tc=43&vid=17|180';}
+			attr{name '化学'; url '/course.list?fc=1&sc=9&tc=43&vid=17|181';}
+			attr{name '全科辅导'; url '/course.list?fc=1&sc=9&tc=43&vid=17|187';}
+			attr{name '志愿填报'; url '/course.list?fc=1&sc=9&tc=43&vid=17|472';}
+			attr{name '职业规划'; url '/course.list?fc=1&sc=9&tc=43&vid=17|473';}
+			attr{name '自主招生'; url '/course.list?fc=1&sc=9&tc=43&vid=17|474';}
+			attr{name '更多'; url '/course.list?fc=1&sc=9&tc=43';}
+		}
+    }
+	menu {
+        grade '其它';
+        url '/course.list';
+		children{ 
+			name '学前'; 
+			url '/course.list?fc=1&sc=6';
+			attr_count '2';
+			attr{name '早教';   url '/course.list?fc=1&sc=6&tc=27';}
+			attr{name '幼儿园'; url '/course.list?fc=1&sc=6&tc=28';}			
+		}
+		children{ 
+			name '专硕'; 
+			url '/course.list?fc=2&sc=14';
+			attr_count '4';
+			attr{name '工商管理'; url '/course.list?fc=2&sc=14&tc=58';}
+			attr{name '会计'; url '/course.list?fc=2&sc=14&tc=57';}
+			attr{name '金融'; url '/course.list?fc=2&sc=14&tc=60';}
+			attr{name '审计'; url '/course.list?fc=2&sc=14&tc=59';}
+		}
+    }
+}
+

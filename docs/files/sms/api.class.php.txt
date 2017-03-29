@@ -1,0 +1,14 @@
+<?php
+class sms_api{
+    public static function yunpianCallback($data){
+        $params = new stdclass;
+        $params->sms_status = $data["sms_status"];
+		$ret = utility_services::call("/sms/task/yunpianreturn", $params);
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+    }
+}
+?>
+

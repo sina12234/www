@@ -1,0 +1,73 @@
+<?php
+
+class interface_discount extends interface_base
+{
+    public function pageValid()
+    {
+        $this->v(
+            [
+                'couponCode' => 1000,
+                'orderId'    => 1000,
+                'userId'     => 1000
+            ]
+        );
+
+        $userId = $this->paramsInfo['params']['userId'];
+        $orderId = $this->paramsInfo['params']['orderId'];
+        $discountCode = $this->paramsInfo['params']['couponCode'];
+        $this->uidTokenValid($this->paramsInfo['token'], $userId);
+
+        $res = course_discount_api::checkDiscountCodeValidV2($userId, $orderId, $discountCode);
+
+        if (!empty($res['code'])) {
+            return interface_func::error($res['code'], $res['msg']);
+        }
+
+        interface_func::setData($res);
+    }
+
+    public function pagePay()
+    {
+        $this->v(
+            [
+                'couponCode' => 1000,
+                'orderId'    => 1000,
+                'userId'     => 1000
+            ]
+        );
+
+        $userId       = $this->paramsInfo['params']['userId'];
+        $orderId      = $this->paramsInfo['params']['orderId'];
+        $discountCode = $this->paramsInfo['params']['couponCode'];
+        $this->uidTokenValid($this->paramsInfo['token'], $userId);
+
+        $res = course_discount_api::useDiscountCode($userId, $orderId, $discountCode);
+
+        if (!empty($res['code'])) {
+            return interface_func::error($res['code'], $res['msg']);
+        }
+
+        interface_func::setData($res);
+    }
+
+    public function pageOrderDetailV2()
+    {
+        $this->v(
+            [
+                'orderId'    => 1000,
+                'userId'     => 1000
+            ]
+        );
+
+        $userId       = $this->paramsInfo['params']['userId'];
+        $orderId      = $this->paramsInfo['params']['orderId'];
+        $this->uidTokenValid($this->paramsInfo['token'], $userId);
+
+        $res = course_discount_api::orderDetailV2($orderId);
+
+        empty($res) && interface_func::setMsg(3002);
+
+        interface_func::setData($res);
+    }
+}
+

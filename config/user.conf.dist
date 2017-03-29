@@ -1,0 +1,101 @@
+#默认头像，新用户创建时
+thumb_default{
+	big 6,0de91a96cb0d95;
+	med	5,0de91bb3c9dbaf;
+	small 4,0de91c7f178228;
+}
+thumb_select{
+	big 6,0de91ddf1919f9;
+	med	3,0de91e127ff68e;
+	small 7,0de91f20a3c88d;
+}
+thumb_select{
+	big 1,0de920f58e65b5;
+	med	5,0de921579d5405;
+	small 1,0de922551a2a34;
+}
+thumb_select{
+	big 3,0de924965ce660;
+	med	2,0de9257c4e5a18;
+	small 5,0de926abb2ad6f;
+}
+thumb_select{
+	big 6,0de9279cd08de0;
+	med	3,0de92887ebcc1a;
+	small 2,0de92981f28acc;
+}
+thumb_select{
+	big 5,0de92a15c2ba1e;
+	med	4,0de92b22fba657;
+	small 6,0de92c619b354d;
+}
+thumb_select{
+	big 3,0de92e681c052c;
+	med	7,0de92f62ac82d4;
+	small 4,0de930488ff040;
+}
+thumb_select{
+	big 7,0de931c4b0d240;
+	med	1,0de932720f6904;
+	small 1,0de933628b728d;
+}
+thumb_select{
+	big 3,0de9376ba5d331;
+	med	3,0de9382e1e4158;
+	small 5,0de9396ca3906e;
+}
+thumb_select{
+	big 6,0de93afd616dce;
+	med	5,0de93b6a72f6dc;
+	small 4,0de93c1cdaf26a;
+}
+thumb_select{
+	big 7,0de93d51f716d3;
+	med	7,0de93e7b3e7f57;
+	small 1,0de93f7d190034;
+}
+thumb_select{
+	big 5,0de940b4a0dc37;
+	med	4,0de94150fe2c42;
+	small 2,0de942661abde1;
+}
+thumb_select{
+	big 3,0de943af75737b;
+	med	1,0de944dd4b7709;
+	small 6,0de945fe8e614f;
+}
+thumb_select{
+	big 4,0de9499c8cca9c;
+	med	6,0de94a4956c54a;
+	small 7,0de94b1cf19399;
+}
+thumb_select{
+	big 3,0de94ca150b58e;
+	med	7,0de94de80e3b9e;
+	small 3,0de94eea9e1d5e;
+}
+thumb_select{
+	big 3,0de94f31a561d3;
+	med	3,0de950f53e0e00;
+	small 7,0de95188708a37;
+}
+thumb_select{
+	big 3,0de952e7bab497;
+	med	4,0de953e14b256c;
+	small 5,0de9540f4fe3f5;
+}
+thumb_select{
+	big 2,0de9563f0452d7;
+	med	3,0de9572ec1f3da;
+	small 5,0de95869cead71;
+}
+thumb_select{
+	big 3,0de9594082c398;
+	med	2,0de95a6f23aed8;
+	small 3,0de95bfbbba17a;
+}
+thumb_select{
+	big 4,0de95fb97e8019;
+	med	6,0de960a82a143d;
+	small 4,0de9610868bf97;
+}

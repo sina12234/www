@@ -1,0 +1,19 @@
+weedfs{
+	master http://10.165.61.79:9333;
+}
+ip{
+	gateway http://127.0.0.1:9002;
+}
+api{
+	gateway http://api.gn100.com;
+}
+weixin_pay{
+	gateway https://www.yunke.com;
+}
+parterner_callbak{
+	gateway https://www.yunke.com;
+	
+}
+message{
+	gateway http://127.0.0.1:8001;
+}

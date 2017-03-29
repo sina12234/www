@@ -1,0 +1,191 @@
+<?php
+
+class course_layerplan extends STpl{
+
+	/*    function __construct(){
+            $org = user_organization::subdomain();
+            if (!empty($org)) {
+                $this->orgOwner = $org->userId; //机构所有者id
+            } else {
+                $this->orgOwner;
+            }
+            //TODO,如果不是机构用户，退出管理
+        }
+    */
+	public function pageUserLogin($inPath){
+		$cid = !empty($inPath[3]) ? intval($inPath[3]) : 0;
+		$classId = !empty($inPath[4]) ? intval($inPath[4]) : 0;
+		$url = !empty($_REQUEST['url']) ? $_REQUEST['url'] : "/";
+		if(empty(utility_session::get()['login_url'])){
+			utility_session::get()['login_url']= !empty($url)?$url:'';
+		}
+		$this->assign('cid', $cid);
+		$this->assign('url', $url);
+		$this->assign('classId', $classId);
+		$this->render("course/user.login.html");
+	}
+
+    public function pagePlanLogin($inPath){
+        $cid = !empty($inPath[3]) ? intval($inPath[3]) : 0;
+        $classId = !empty($inPath[4]) ? intval($inPath[4]) : 0;
+        $url = !empty($_REQUEST['url']) ? $_REQUEST['url'] : "/";
+		if(empty(utility_session::get()['login_url'])){
+			utility_session::get()['login_url']= !empty($url)?$url:'';
+		}
+        $this->assign('cid', $cid);
+        $this->assign('url', $url);
+        $this->assign('classId', $classId);
+        $this->render("course/plan.login.html");
+    }
+
+
+	private function _setMsg($msg, $code=0){
+		exit(json_encode(['code'=>$code, 'message'=>$msg]));
+	}
+
+
+	public function pageLoginAjax($inPath){
+		$cid = !empty($inPath[3]) ? intval($inPath[3]) : 0;
+		$classId = !empty($inPath[4]) ? intval($inPath[4]) : 0;
+
+		if(empty($_REQUEST['uname'])){
+			$this->_setMsg('请输入账号', 1);
+		}
+		if(empty($_REQUEST['password'])){
+			$this->_setMsg('请输入密码', 2);
+		}
+
+		if(utility_valid::mobile($_REQUEST['uname'])==false){
+			$this->_setMsg('手机号码格式不正确', 3);
+		}
+
+		if(user_api::isRegister($_REQUEST['uname'])==false){
+			$this->_setMsg('该手机号未注册', 4);
+		}
+		$forever=false;
+		if(!empty($_REQUEST['forever'])){
+			$forever=true;
+		}
+		$ret = user_api::login($_REQUEST['uname'],$_REQUEST['password'],$forever);
+		if(user_api::logined()){
+			if ($cid && $classId ) {
+				$regInfo = $this->_addRegistration($cid, $classId);
+				if ($regInfo) {
+					if($regInfo == -2){
+						return $this->_setMsg('请先支付', -2);
+					}elseif($regInfo==-5){
+						return $this->_setMsg('已报名别的班', -5);
+					}else{
+						$this->_setMsg('success');
+					}
+				} else {
+					$this->_setMsg('登录之后报名失败', -4);
+				}
+			} else {
+				$this->_setMsg('缺少班级和课程编号', -4);
+			}
+		}else{
+			$this->_setMsg('密码错误', 5);
+		}
+		$this->_setMsg('登录失败', 6);
+	}
+
+	public function pagePlanLoginAjax($inPath){
+		$cid = !empty($inPath[3]) ? intval($inPath[3]) : 0;
+		$classId = !empty($inPath[4]) ? intval($inPath[4]) : 0;
+
+		if(empty($_REQUEST['uname'])){
+			$this->_setMsg('请输入账号', 1);
+		}
+		if(empty($_REQUEST['password'])){
+			$this->_setMsg('请输入密码', 2);
+		}
+
+		if(utility_valid::mobile($_REQUEST['uname'])==false){
+			$this->_setMsg('手机号码格式不正确', 3);
+		}
+
+		if(user_api::isRegister($_REQUEST['uname'])==false){
+			$this->_setMsg('该手机号未注册', 4);
+		}
+		$forever=false;
+		if(!empty($_REQUEST['forever'])){
+			$forever=true;
+		}
+		$ret = user_api::login($_REQUEST['uname'],$_REQUEST['password'],$forever);
+		if(user_api::logined()){
+			$this->_setMsg('success');
+		}else{
+			$this->_setMsg('密码错误', 5);
+		}
+		$this->_setMsg('登录失败', 6);
+	}
+
+
+	public function pageLoginedRegAjax($inPath){
+		$cid = !empty($_POST["courseid"]) ? intval($_POST["courseid"]) : 0;
+		$classId = !empty($_POST["classid"]) ? intval($_POST["classid"]) : 0;
+		$user   = user_api::loginedUser();
+		if(user_api::logined()){
+			if ($cid && $classId ) {
+				$isReg = course_api::checkIsRegistration($user["uid"],$cid);
+				if($isReg){
+					$this->_setMsg('已报名', -6);
+				}
+				$regInfo = $this->_addRegistration($cid, $classId);
+				if ($regInfo) {
+					if($regInfo === -2){
+						$this->_setMsg('请先支付', -2);
+					}elseif($regInfo === -5){
+						$this->_setMsg('名额已满', -5);
+					}else{
+						$this->_setMsg('success');
+					}
+				} else {
+					$this->_setMsg('登录之后报名失败', -4);
+				}
+			} else {
+				$this->_setMsg('缺少班级和课程编号', -4);
+			}
+		}else{
+			$this->_setMsg('密码错误', 5);
+		}
+		$this->_setMsg('登录失败', 6);
+	}
+
+	private function _addRegistration($cid, $classId){
+		$user     = user_api::loginedUser();
+		if (empty($user)) {
+			return false;
+		}
+
+		$courseInfo = course_api::getCourseone($cid);
+		if (empty($courseInfo)) {
+			return false;
+		}
+
+		if ($courseInfo->fee_type == 1) {
+			return -2;
+		}
+
+		$ClassData = course_api::getclass($classId);
+		if (empty($ClassData)) {
+			return false;
+		}
+
+		if ($ClassData->user_total >= $ClassData->max_user) {
+			return -5;
+		}
+
+        $data = array(
+            "class_id"   => $classId,
+            "course_id"  => $cid,
+            "uid"        => $user['uid'],
+            "user_owner" => $courseInfo->user_id,
+            "status"     => 1,
+        );
+
+		return course_api::addregistration($data);
+    }
+}
+

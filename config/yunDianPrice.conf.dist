@@ -1,0 +1,64 @@
+priceSetting{
+    value{
+        id 'com.yunke.yd20';
+        price 30;
+        yundian 20;
+    }
+    value{
+        id 'com.yunke.yd50';
+        price 73;
+        yundian 50;
+    }
+    value{
+        id 'com.yunke.yd225';
+        price 328;
+        yundian 225;
+    }
+    value{
+        id 'com.yunke.yd719';
+        price 1048;
+        yundian 719;
+    }
+    value{
+        id 'com.yunke.yd2056';
+        price 2998;
+        yundian 2056;
+    }
+    value{
+        id 'com.yunke.yd4458';
+        price 6498;
+        yundian 4458;
+    }
+}
+xiaoVoPriceSetting{
+	value{
+        id 'com.yunke.wostore.yd20';
+        price 30;
+        yundian 20;
+    }
+	value{
+        id 'com.yunke.wostore.yd50';
+        price 73;
+        yundian 50;
+    }
+	value{
+        id 'com.yunke.wostore.yd225';
+        price 328;
+        yundian 225;
+    }
+	value{
+        id 'com.yunke.wostore.yd719';
+        price 1048;
+        yundian 719;
+    }
+	value{
+        id 'com.yunke.wostore.yd2056';
+        price 2998;
+        yundian 2056;
+    }
+	value{
+        id 'com.yunke.wostore.yd4458';
+        price 6498;
+        yundian 4458;
+    }
+}

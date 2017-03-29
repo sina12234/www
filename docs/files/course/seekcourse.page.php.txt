@@ -1,0 +1,112 @@
+<?php
+/**
+ * 上课页
+ */
+class course_seekcourse extends STpl{
+	public function pageSeeklist($inPath){
+	 $attrs = array(
+		'course_id'=>'course_id',
+		'title'=>'title',
+		'tags'=>'tags',
+		'desc'=>'desc',
+		'thumb_big'=>'thumb_big',
+		'thumb_med'=>'thumb_med',
+		'thumb_sma'=>'thumb_small',
+		'user_thumb_big'=>'user_thumb_big',
+		'user_thumb_med'=>'user_thumb_med',
+		'user_thumb_sma'=>'user_thumb_sma',
+		'user_name'=>'user_name',
+		'cate_id'=>'cate_id',
+		'recomm_weight'=>'recomm_weight',
+		'course_type'=>'course_type',
+		'grade_id'=>'grade_id',
+		'user_id'=>'user_id',
+		'public_type'=>'public_type',
+		'fee_type'=>'fee_type',
+		'max_user'=>'max_user',
+		'min_user'=>'min_user',
+		'user_total'=>'user_total',
+		'status'=>'status',
+		'admin_status'=>'admin_status',
+		'system_status'=>'system_status',
+		'start_time'=>'start_time',
+		'end_time'=>'end_time',
+		'create_time'=>'create_time',
+		'last_updated'=>'last_updated',
+		'class_id'=>'class_id',
+		'section_id'=>'section_id',
+		'price'=>'price',
+		'market_price'=>'market_price',
+		//新加上的
+		'top'=>'top',
+	);
+	 $f_array = array("tags","course_id","title","create_time","desc","start_time","cate_id","thumb_big","recomm_weight",
+		 "course_type","grade_id","user_id","public_type","fee_type","price","market_price","max_user","min_user","user_total",
+		 "status","admin_status","system_status","class_id","section_id","end_time","create_time","last_updated",
+		 "section","class", 
+		 //新加上的
+		 'top'=>'top',
+	 );
+	 //	设置f
+	 if(!empty($f)){
+		 $f = $_POST["f"];
+		 $f_array = explode(",",$f);
+	 }
+	 //	设置q
+	 $q_array = array();
+	 foreach($attrs as $attrk=>$attrv){ 
+		 if(!empty($_POST[$attrk])){
+			 $q_array[$attrk] = $_POST[$attrk];
+		 }else{
+			 $q_array["fee_type"] = 0;
+		 }
+	 }
+	 // 设置ob
+	 $obNewarray = array();
+	 if(!empty($_POST["ob"])){
+		 $ob = $_POST["ob"];
+		 $obArrayEx = explode(" ",$ob);
+		 foreach($obArrayEx as $obk=>$obv){
+			 $obvArrayEx = explode(":",$obv);
+			 $obNewarray[$obvArrayEx[0]] = $obvArrayEx[1];
+		 }
+	 }
+	 $ob_array = array();
+	 $ob_array = $obNewarray;
+	 if(empty($ob_array)){
+		 $ob_array["course_id"] = "desc";
+	 }
+	 // 设置p
+	 if(!empty($_POST["p"])){
+		 $p = $_POST["p"];
+	 }else{
+		 $p = 1;	 
+	 }
+	 // 设置pl
+	 if(!empty($_POST["pl"])){
+		 $pl = $_POST["pl"];
+	 }else{
+		 $pl = 20;	 
+	 }
+
+	 $seek_arr = array(
+		 "f"=>$f_array,
+		 "q"=>$q_array,
+		 "ob"=>$ob_array,
+		 "p"=>$p,
+		 "pl"=>$pl,
+	 );
+	 echo"<br>";
+	 $ret_seek= course_api::seekcourse($seek_arr);
+	 $this->assign("ret_seek",$ret_seek);
+	 return $this->render("course/seeklist.html");
+
+	}
+	/**
+	 * 老师页面
+	 */
+	public function pageSeekcourse($inPath){
+	 return $this->render("course/seeksearch.html");
+	}
+}
+

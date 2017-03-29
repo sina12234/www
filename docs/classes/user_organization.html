@@ -1,0 +1,2779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>Www Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">Www Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">3890</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">37</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">1</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-119090107"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-119090107" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/about_main.html">about_main</a></li>
+                                                    <li class="class"><a href="../classes/activity_2015.html">activity_2015</a></li>
+                                                    <li class="class"><a href="../classes/activity_api.html">activity_api</a></li>
+                                                    <li class="class"><a href="../classes/activity_main.html">activity_main</a></li>
+                                                    <li class="class"><a href="../classes/activity_score.html">activity_score</a></li>
+                                                    <li class="class"><a href="../classes/captcha_gen.html">captcha_gen</a></li>
+                                                    <li class="class"><a href="../classes/comment_api.html">comment_api</a></li>
+                                                    <li class="class"><a href="../classes/comment_course.html">comment_course</a></li>
+                                                    <li class="class"><a href="../classes/common_api.html">common_api</a></li>
+                                                    <li class="class"><a href="../classes/course_ajax.html">course_ajax</a></li>
+                                                    <li class="class"><a href="../classes/course_api.html">course_api</a></li>
+                                                    <li class="class"><a href="../classes/course_buy.html">course_buy</a></li>
+                                                    <li class="class"><a href="../classes/course_change.html">course_change</a></li>
+                                                    <li class="class"><a href="../classes/course_detailed.html">course_detailed</a></li>
+                                                    <li class="class"><a href="../classes/course_discount_api.html">course_discount_api</a></li>
+                                                    <li class="class"><a href="../classes/course_fee.html">course_fee</a></li>
+                                                    <li class="class"><a href="../classes/course_grade.html">course_grade</a></li>
+                                                    <li class="class"><a href="../classes/course_info.html">course_info</a></li>
+                                                    <li class="class"><a href="../classes/course_layerplan.html">course_layerplan</a></li>
+                                                    <li class="class"><a href="../classes/course_list.html">course_list</a></li>
+                                                    <li class="class"><a href="../classes/course_live.html">course_live</a></li>
+                                                    <li class="class"><a href="../classes/course_pay.html">course_pay</a></li>
+                                                    <li class="class"><a href="../classes/course_plan.html">course_plan</a></li>
+                                                    <li class="class"><a href="../classes/course_plan_api.html">course_plan_api</a></li>
+                                                    <li class="class"><a href="../classes/course_public.html">course_public</a></li>
+                                                    <li class="class"><a href="../classes/course_rec.html">course_rec</a></li>
+                                                    <li class="class"><a href="../classes/course_seekcourse.html">course_seekcourse</a></li>
+                                                    <li class="class"><a href="../classes/course_status.html">course_status</a></li>
+                                                    <li class="class"><a href="../classes/course_video.html">course_video</a></li>
+                                                    <li class="class"><a href="../classes/exam_ajax.html">exam_ajax</a></li>
+                                                    <li class="class"><a href="../classes/exam_api.html">exam_api</a></li>
+                                                    <li class="class"><a href="../classes/exam_log.html">exam_log</a></li>
+                                                    <li class="class"><a href="../classes/file_main.html">file_main</a></li>
+                                                    <li class="class"><a href="../classes/imgbrowse.html">imgbrowse</a></li>
+                                                    <li class="class"><a href="../classes/index_about.html">index_about</a></li>
+                                                    <li class="class"><a href="../classes/index_ajax.html">index_ajax</a></li>
+                                                    <li class="class"><a href="../classes/index_api.html">index_api</a></li>
+                                                    <li class="class"><a href="../classes/index_course.html">index_course</a></li>
+                                                    <li class="class"><a href="../classes/index_feedback.html">index_feedback</a></li>
+                                                    <li class="class"><a href="../classes/index_growth.html">index_growth</a></li>
+                                                    <li class="class"><a href="../classes/index_help.html">index_help</a></li>
+                                                    <li class="class"><a href="../classes/index_join.html">index_join</a></li>
+                                                    <li class="class"><a href="../classes/index_layer.html">index_layer</a></li>
+                                                    <li class="class"><a href="../classes/index_log.html">index_log</a></li>
+                                                    <li class="class"><a href="../classes/index_main.html">index_main</a></li>
+                                                    <li class="class"><a href="../classes/index_menu.html">index_menu</a></li>
+                                                    <li class="class"><a href="../classes/index_org.html">index_org</a></li>
+                                                    <li class="class"><a href="../classes/index_plan.html">index_plan</a></li>
+                                                    <li class="class"><a href="../classes/index_rank.html">index_rank</a></li>
+                                                    <li class="class"><a href="../classes/index_special.html">index_special</a></li>
+                                                    <li class="class"><a href="../classes/index_student.html">index_student</a></li>
+                                                    <li class="class"><a href="../classes/index_teacher.html">index_teacher</a></li>
+                                                    <li class="class"><a href="../classes/index_teacherblog.html">index_teacherblog</a></li>
+                                                    <li class="class"><a href="../classes/index_user.html">index_user</a></li>
+                                                    <li class="class"><a href="../classes/interface_ajax.html">interface_ajax</a></li>
+                                                    <li class="class"><a href="../classes/interface_base.html">interface_base</a></li>
+                                                    <li class="class"><a href="../classes/interface_code.html">interface_code</a></li>
+                                                    <li class="class"><a href="../classes/interface_course.html">interface_course</a></li>
+                                                    <li class="class"><a href="../classes/interface_courseApi.html">interface_courseApi</a></li>
+                                                    <li class="class"><a href="../classes/interface_dict.html">interface_dict</a></li>
+                                                    <li class="class"><a href="../classes/interface_discount.html">interface_discount</a></li>
+                                                    <li class="class"><a href="../classes/interface_func.html">interface_func</a></li>
+                                                    <li class="class"><a href="../classes/interface_login.html">interface_login</a></li>
+                                                    <li class="class"><a href="../classes/interface_message.html">interface_message</a></li>
+                                                    <li class="class"><a href="../classes/interface_messageApi.html">interface_messageApi</a></li>
+                                                    <li class="class"><a href="../classes/interface_org.html">interface_org</a></li>
+                                                    <li class="class"><a href="../classes/interface_pay.html">interface_pay</a></li>
+                                                    <li class="class"><a href="../classes/interface_plan.html">interface_plan</a></li>
+                                                    <li class="class"><a href="../classes/interface_planApi.html">interface_planApi</a></li>
+                                                    <li class="class"><a href="../classes/interface_play.html">interface_play</a></li>
+                                                    <li class="class"><a href="../classes/interface_search.html">interface_search</a></li>
+                                                    <li class="class"><a href="../classes/interface_teacher.html">interface_teacher</a></li>
+                                                    <li class="class"><a href="../classes/interface_tmp.html">interface_tmp</a></li>
+                                                    <li class="class"><a href="../classes/interface_user.html">interface_user</a></li>
+                                                    <li class="class"><a href="../classes/interface_user_api.html">interface_user_api</a></li>
+                                                    <li class="class"><a href="../classes/interface_value.html">interface_value</a></li>
+                                                    <li class="class"><a href="../classes/interface_version.html">interface_version</a></li>
+                                                    <li class="class"><a href="../classes/layer_main.html">layer_main</a></li>
+                                                    <li class="class"><a href="../classes/live_auth.html">live_auth</a></li>
+                                                    <li class="class"><a href="../classes/live_file.html">live_file</a></li>
+                                                    <li class="class"><a href="../classes/live_list.html">live_list</a></li>
+                                                    <li class="class"><a href="../classes/live_live.html">live_live</a></li>
+                                                    <li class="class"><a href="../classes/live_publish.html">live_publish</a></li>
+                                                    <li class="class"><a href="../classes/log_api.html">log_api</a></li>
+                                                    <li class="class"><a href="../classes/log_hz.html">log_hz</a></li>
+                                                    <li class="class"><a href="../classes/log_log.html">log_log</a></li>
+                                                    <li class="class"><a href="../classes/log_userAgent.html">log_userAgent</a></li>
+                                                    <li class="class"><a href="../classes/message_ajax.html">message_ajax</a></li>
+                                                    <li class="class"><a href="../classes/message_api.html">message_api</a></li>
+                                                    <li class="class"><a href="../classes/message_chat.html">message_chat</a></li>
+                                                    <li class="class"><a href="../classes/message_http.html">message_http</a></li>
+                                                    <li class="class"><a href="../classes/message_instation.html">message_instation</a></li>
+                                                    <li class="class"><a href="../classes/message_type.html">message_type</a></li>
+                                                    <li class="class"><a href="../classes/org_api.html">org_api</a></li>
+                                                    <li class="class"><a href="../classes/org_class.html">org_class</a></li>
+                                                    <li class="class"><a href="../classes/org_customerServices.html">org_customerServices</a></li>
+                                                    <li class="class"><a href="../classes/org_discount.html">org_discount</a></li>
+                                                    <li class="class"><a href="../classes/org_exam.html">org_exam</a></li>
+                                                    <li class="class"><a href="../classes/org_info.html">org_info</a></li>
+                                                    <li class="class"><a href="../classes/org_main.html">org_main</a></li>
+                                                    <li class="class"><a href="../classes/org_poll.html">org_poll</a></li>
+                                                    <li class="class"><a href="../classes/org_rightWindow.html">org_rightWindow</a></li>
+                                                    <li class="class"><a href="../classes/org_student.html">org_student</a></li>
+                                                    <li class="class"><a href="../classes/org_teacher.html">org_teacher</a></li>
+                                                    <li class="class"><a href="../classes/org_vote.html">org_vote</a></li>
+                                                    <li class="class"><a href="../classes/phpexcel_coursedetailstudent.html">phpexcel_coursedetailstudent</a></li>
+                                                    <li class="class"><a href="../classes/phpexcel_main.html">phpexcel_main</a></li>
+                                                    <li class="class"><a href="../classes/phpexcel_platformstu.html">phpexcel_platformstu</a></li>
+                                                    <li class="class"><a href="../classes/phpexcel_platformstusearch.html">phpexcel_platformstusearch</a></li>
+                                                    <li class="class"><a href="../classes/player_data.html">player_data</a></li>
+                                                    <li class="class"><a href="../classes/player_live.html">player_live</a></li>
+                                                    <li class="class"><a href="../classes/player_plan.html">player_plan</a></li>
+                                                    <li class="class"><a href="../classes/promote_api.html">promote_api</a></li>
+                                                    <li class="class"><a href="../classes/region_api.html">region_api</a></li>
+                                                    <li class="class"><a href="../classes/region_area.html">region_area</a></li>
+                                                    <li class="class"><a href="../classes/region_geo.html">region_geo</a></li>
+                                                    <li class="class"><a href="../classes/seek_api.html">seek_api</a></li>
+                                                    <li class="class"><a href="../classes/seek_course.html">seek_course</a></li>
+                                                    <li class="class"><a href="../classes/seek_plan.html">seek_plan</a></li>
+                                                    <li class="class"><a href="../classes/seek_teacher.html">seek_teacher</a></li>
+                                                    <li class="class"><a href="../classes/site_ad.html">site_ad</a></li>
+                                                    <li class="class"><a href="../classes/site_main.html">site_main</a></li>
+                                                    <li class="class"><a href="../classes/site_special.html">site_special</a></li>
+                                                    <li class="class"><a href="../classes/sms_api.html">sms_api</a></li>
+                                                    <li class="class"><a href="../classes/stat_api.html">stat_api</a></li>
+                                                    <li class="class"><a href="../classes/student_course.html">student_course</a></li>
+                                                    <li class="class"><a href="../classes/student_discount.html">student_discount</a></li>
+                                                    <li class="class"><a href="../classes/student_fav.html">student_fav</a></li>
+                                                    <li class="class"><a href="../classes/student_main.html">student_main</a></li>
+                                                    <li class="class"><a href="../classes/student_order.html">student_order</a></li>
+                                                    <li class="class"><a href="../classes/student_security.html">student_security</a></li>
+                                                    <li class="class"><a href="../classes/tag_api.html">tag_api</a></li>
+                                                    <li class="class"><a href="../classes/teacher_ajax.html">teacher_ajax</a></li>
+                                                    <li class="class"><a href="../classes/teacher_api.html">teacher_api</a></li>
+                                                    <li class="class"><a href="../classes/teacher_course.html">teacher_course</a></li>
+                                                    <li class="class"><a href="../classes/teacher_detail.html">teacher_detail</a></li>
+                                                    <li class="class"><a href="../classes/teacher_list.html">teacher_list</a></li>
+                                                    <li class="class"><a href="../classes/teacher_major.html">teacher_major</a></li>
+                                                    <li class="class"><a href="../classes/teacher_manage.html">teacher_manage</a></li>
+                                                    <li class="class"><a href="../classes/user_api.html">user_api</a></li>
+                                                    <li class="class"><a href="../classes/user_const.html">user_const</a></li>
+                                                    <li class="class"><a href="../classes/user_course.html">user_course</a></li>
+                                                    <li class="class"><a href="../classes/user_home.html">user_home</a></li>
+                                                    <li class="class"><a href="../classes/user_homework.html">user_homework</a></li>
+                                                    <li class="class"><a href="../classes/user_info.html">user_info</a></li>
+                                                    <li class="class"><a href="../classes/user_js.html">user_js</a></li>
+                                                    <li class="class"><a href="../classes/user_login.html">user_login</a></li>
+                                                    <li class="class"><a href="../classes/user_main.html">user_main</a></li>
+                                                    <li class="class"><a href="../classes/user_main.html">user_main</a></li>
+                                                    <li class="class"><a href="../classes/user_menu.html">user_menu</a></li>
+                                                    <li class="class"><a href="../classes/user_message.html">user_message</a></li>
+                                                    <li class="class"><a href="../classes/user_mydiscount.html">user_mydiscount</a></li>
+                                                    <li class="class"><a href="../classes/user_org.html">user_org</a></li>
+                                                    <li class="class"><a href="../classes/user_organization.html">user_organization</a></li>
+                                                    <li class="class"><a href="../classes/user_parterner.html">user_parterner</a></li>
+                                                    <li class="class"><a href="../classes/user_profile.html">user_profile</a></li>
+                                                    <li class="class"><a href="../classes/user_security.html">user_security</a></li>
+                                                    <li class="class"><a href="../classes/user_teacher.html">user_teacher</a></li>
+                                                    <li class="class"><a href="../classes/user_thumb.html">user_thumb</a></li>
+                                                    <li class="class"><a href="../classes/user_token.html">user_token</a></li>
+                                                    <li class="class"><a href="../classes/user_user.html">user_user</a></li>
+                                                    <li class="class"><a href="../classes/utility_cache.html">utility_cache</a></li>
+                                                    <li class="class"><a href="../classes/utility_cdn.html">utility_cdn</a></li>
+                                                    <li class="class"><a href="../classes/utility_countbySphinx.html">utility_countbySphinx</a></li>
+                                                    <li class="class"><a href="../classes/utility_feestatus.html">utility_feestatus</a></li>
+                                                    <li class="class"><a href="../classes/utility_file.html">utility_file</a></li>
+                                                    <li class="class"><a href="../classes/utility_iap.html">utility_iap</a></li>
+                                                    <li class="class"><a href="../classes/utility_ip.html">utility_ip</a></li>
+                                                    <li class="class"><a href="../classes/utility_judgeid.html">utility_judgeid</a></li>
+                                                    <li class="class"><a href="../classes/utility_net.html">utility_net</a></li>
+                                                    <li class="class"><a href="../classes/utility_services.html">utility_services</a></li>
+                                                    <li class="class"><a href="../classes/utility_session.html">utility_session</a></li>
+                                                    <li class="class"><a href="../classes/utility_tag.html">utility_tag</a></li>
+                                                    <li class="class"><a href="../classes/utility_teacherreg.html">utility_teacherreg</a></li>
+                                                    <li class="class"><a href="../classes/utility_test.html">utility_test</a></li>
+                                                    <li class="class"><a href="../classes/utility_time.html">utility_time</a></li>
+                                                    <li class="class"><a href="../classes/Utility_Tool.html">Utility_Tool</a></li>
+                                                    <li class="class"><a href="../classes/utility_valid.html">utility_valid</a></li>
+                                                    <li class="class"><a href="../classes/utility_weedfs.html">utility_weedfs</a></li>
+                                                    <li class="class"><a href="../classes/verify_api.html">verify_api</a></li>
+                                                    <li class="class"><a href="../classes/verify_sms.html">verify_sms</a></li>
+                                                    <li class="class"><a href="../classes/verify_test.html">verify_test</a></li>
+                                                    <li class="class"><a href="../classes/WeedFSCurl.html">WeedFSCurl</a></li>
+                                                    <li class="class"><a href="../classes/weixin_api.html">weixin_api</a></li>
+                                                    <li class="class"><a href="../classes/weixin_main.html">weixin_main</a></li>
+                                                    <li class="class"><a href="../classes/weixin_user.html">weixin_user</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/default.html">\</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\</small>user_organization</h1>
+                    <p><em></em></p>
+                    
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/user_organization.html#method_course_domain" class="">course_domain()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_domain" class="">domain()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_subdomain" class="">subdomain()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getSubdomainByUid" class="">getSubdomainByUid()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getRegionList" class="">getRegionList()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrg" class="">getOrg()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgByUid" class="">getOrgByUid()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgByOwner" class="">getOrgByOwner()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgByUidTmp" class="">getOrgByUidTmp()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgByOwnerTmp" class="">getOrgByOwnerTmp()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getApplyOrgSubdomainOfUser" class="">getApplyOrgSubdomainOfUser()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_setOrgProfileTmp" class="">setOrgProfileTmp()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgByTeacher" class="">getOrgByTeacher()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_setOrg" class="">setOrg()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_setOrgProfile" class="">setOrgProfile()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_setOrgProfileRelateInfo" class="">setOrgProfileRelateInfo()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_setOrgSlide" class="">setOrgSlide()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_delOrgSlide" class="">delOrgSlide()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_delCheckInfo" class="">delCheckInfo()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_setOrgLogo" class="">setOrgLogo()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_updatehotType" class="">updatehotType()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgLogo" class="">getOrgLogo()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgSlide" class="">getOrgSlide()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgSlideList" class="">getOrgSlideList()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgAbout" class="">getOrgAbout()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_setOrgAbout" class="">setOrgAbout()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_updateLOGO" class="">updateLOGO()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_listOrgUser" class="">listOrgUser()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getTeacherList" class="">getTeacherList()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgUserinfo" class="">getOrgUserinfo()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_delUser" class="">delUser()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_addUser" class="">addUser()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_Usersetsort" class="">Usersetsort()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_setStarteacher" class="">setStarteacher()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_delHistoryStarTeacher" class="">delHistoryStarTeacher()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_setOrgUser" class="">setOrgUser()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_countOrgRole" class="">countOrgRole()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgFeeOrderList" class="">getOrgFeeOrderList()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_addOrg" class="">addOrg()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_addOrgVerify" class="">addOrgVerify()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgVerify" class="">getOrgVerify()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgVerifyBySubDomain" class="">getOrgVerifyBySubDomain()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getUserIdBySubDomain" class="">getUserIdBySubDomain()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getCourseCateSomeName" class="">getCourseCateSomeName()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgIdsByUid" class="">getOrgIdsByUid()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getSubDomainByOid" class="">getSubDomainByOid()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgInfoByOidArr" class="">getOrgInfoByOidArr()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_orgAboutProfileInfo" class="">orgAboutProfileInfo()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgInfoByUidArr" class="">getOrgInfoByUidArr()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getTeacherRealName" class="">getTeacherRealName()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgShowInfo" class="">getOrgShowInfo()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgTemplate" class="">getOrgTemplate()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_getOrgTemplateInfo" class="">getOrgTemplateInfo()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_updateOrgTemplate" class="">updateOrgTemplate()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_addOrgTemplate" class="">addOrgTemplate()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_deleteOrgTemplate" class="">deleteOrgTemplate()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_dataOrgTeacherCount" class="">dataOrgTeacherCount()</a><br />
+                                                                    <a href="../classes/user_organization.html#method_countTeacherByOid" class="">countTeacherByOid()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No constants found</em>
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <em>No protected methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No protected properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <em>No private methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No private properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/user.organization.class.html"><div class="path-wrapper">user/organization.class.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">Default</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\user_organization</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                        
+                        
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_course_domain" name="method_course_domain" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">course_domain()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">course_domain(  <span class="argument">$subdomain</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$subdomain </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_domain" name="method_domain" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">domain()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">domain() </pre>
+                <p><em></em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_subdomain" name="method_subdomain" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">subdomain()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">subdomain() </pre>
+                <p><em></em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getSubdomainByUid" name="method_getSubdomainByUid" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getSubdomainByUid()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getSubdomainByUid(  <span class="argument">$uid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getRegionList" name="method_getRegionList" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getRegionList()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getRegionList(  <span class="argument">$params</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrg" name="method_getOrg" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrg()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrg(  <span class="argument">$oid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$oid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgByUid" name="method_getOrgByUid" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgByUid()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgByUid(  <span class="argument">$uid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgByOwner" name="method_getOrgByOwner" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgByOwner()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgByOwner(  <span class="argument">$uid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgByUidTmp" name="method_getOrgByUidTmp" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgByUidTmp()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgByUidTmp(  <span class="argument">$uid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgByOwnerTmp" name="method_getOrgByOwnerTmp" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgByOwnerTmp()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgByOwnerTmp(  <span class="argument">$uid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getApplyOrgSubdomainOfUser" name="method_getApplyOrgSubdomainOfUser" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getApplyOrgSubdomainOfUser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getApplyOrgSubdomainOfUser(  <span class="argument">$userId</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$userId </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setOrgProfileTmp" name="method_setOrgProfileTmp" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setOrgProfileTmp()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setOrgProfileTmp(  <span class="argument">$uid</span>,   <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgByTeacher" name="method_getOrgByTeacher" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgByTeacher()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgByTeacher(  <span class="argument">$uid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setOrg" name="method_setOrg" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setOrg()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setOrg(  <span class="argument">$uid</span>,   <span class="argument">$data</span>) </pre>
+                <p><em>设置机构信息</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setOrgProfile" name="method_setOrgProfile" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setOrgProfile()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setOrgProfile(  <span class="argument">$uid</span>,   <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setOrgProfileRelateInfo" name="method_setOrgProfileRelateInfo" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setOrgProfileRelateInfo()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setOrgProfileRelateInfo(  <span class="argument">$uid</span>,   <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setOrgSlide" name="method_setOrgSlide" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setOrgSlide()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setOrgSlide(  <span class="argument">$sid</span>,   <span class="argument">$uid</span>,   <span class="argument">$params</span>,   <span class="argument">$act</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$sid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$act </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_delOrgSlide" name="method_delOrgSlide" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">delOrgSlide()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">delOrgSlide(  <span class="argument">$sid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$sid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_delCheckInfo" name="method_delCheckInfo" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">delCheckInfo()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">delCheckInfo(  <span class="argument">$bid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$bid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setOrgLogo" name="method_setOrgLogo" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setOrgLogo()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setOrgLogo(  <span class="argument">$uid</span>,   <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_updatehotType" name="method_updatehotType" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">updatehotType()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">updatehotType(  <span class="argument">$uid</span>,   <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgLogo" name="method_getOrgLogo" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgLogo()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgLogo(  <span class="argument">$uid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgSlide" name="method_getOrgSlide" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgSlide()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgSlide(  <span class="argument">$sid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$sid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgSlideList" name="method_getOrgSlideList" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgSlideList()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgSlideList(  <span class="argument">$uid</span>,   <span class="argument">$page = 1</span>,   <span class="argument">$size = 5</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$page </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$size </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgAbout" name="method_getOrgAbout" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgAbout()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgAbout(  <span class="argument">$uid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setOrgAbout" name="method_setOrgAbout" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setOrgAbout()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setOrgAbout(  <span class="argument">$uid</span>,   <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_updateLOGO" name="method_updateLOGO" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">updateLOGO()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">updateLOGO(  <span class="argument">$uid</span>,   <span class="argument">$avatar = array()</span>,   <span class="argument">$ret = &quot;&quot;</span>) </pre>
+                <p><em>修改LOGO图像</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$avatar </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$ret </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_listOrgUser" name="method_listOrgUser" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">listOrgUser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">listOrgUser(  <span class="argument">$oid</span>,   <span class="argument">$all</span>,   <span class="argument">$is_star</span>,   <span class="argument">$page = 1</span>,   <span class="argument">$size = 5</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$oid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$all </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$is_star </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$page </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$size </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTeacherList" name="method_getTeacherList" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getTeacherList()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTeacherList(  <span class="argument">$oid</span>,   <span class="argument">$page = 1</span>,   <span class="argument">$length = 100</span>,   <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$oid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$page </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$length </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgUserinfo" name="method_getOrgUserinfo" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgUserinfo()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgUserinfo(  <span class="argument">$oid</span>,   <span class="argument">$uid</span>,   <span class="argument">$page = 1</span>,   <span class="argument">$size = 5</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$oid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$page </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$size </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_delUser" name="method_delUser" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">delUser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">delUser(  <span class="argument">$oid</span>,   <span class="argument">$uid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$oid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addUser" name="method_addUser" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">addUser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addUser(  <span class="argument">$oid</span>,   <span class="argument">$uid</span>,   <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$oid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Usersetsort" name="method_Usersetsort" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">Usersetsort()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Usersetsort(  <span class="argument">$oid</span>,   <span class="argument">$uid</span>,   <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$oid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setStarteacher" name="method_setStarteacher" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setStarteacher()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setStarteacher(  <span class="argument">$oid</span>,   <span class="argument">$uid</span>,   <span class="argument">$params</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$oid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_delHistoryStarTeacher" name="method_delHistoryStarTeacher" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">delHistoryStarTeacher()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">delHistoryStarTeacher(  <span class="argument">$oid</span>,   <span class="argument">$is_star</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$oid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$is_star </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setOrgUser" name="method_setOrgUser" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setOrgUser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setOrgUser(  <span class="argument">$oid</span>,   <span class="argument">$uid</span>,   <span class="argument">$params</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$oid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_countOrgRole" name="method_countOrgRole" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">countOrgRole()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">countOrgRole(  <span class="argument">$oid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$oid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgFeeOrderList" name="method_getOrgFeeOrderList" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgFeeOrderList()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgFeeOrderList(  <span class="argument">$owner</span>,   <span class="argument">$page</span>,   <span class="argument">$length</span>,   <span class="argument">$params</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$owner </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$page </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$length </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addOrg" name="method_addOrg" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">addOrg()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addOrg(  <span class="argument">$params</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addOrgVerify" name="method_addOrgVerify" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">addOrgVerify()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addOrgVerify(  <span class="argument">$params</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgVerify" name="method_getOrgVerify" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgVerify()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgVerify(  <span class="argument">$uid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgVerifyBySubDomain" name="method_getOrgVerifyBySubDomain" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgVerifyBySubDomain()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgVerifyBySubDomain(  <span class="argument">$subdomain</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$subdomain </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getUserIdBySubDomain" name="method_getUserIdBySubDomain" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getUserIdBySubDomain()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getUserIdBySubDomain(  <span class="argument">$subdomain</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$subdomain </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getCourseCateSomeName" name="method_getCourseCateSomeName" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getCourseCateSomeName()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getCourseCateSomeName(  <span class="argument">$params</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgIdsByUid" name="method_getOrgIdsByUid" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgIdsByUid()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgIdsByUid(  <span class="argument">$uid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getSubDomainByOid" name="method_getSubDomainByOid" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getSubDomainByOid()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getSubDomainByOid(  <span class="argument">$oid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$oid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgInfoByOidArr" name="method_getOrgInfoByOidArr" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgInfoByOidArr()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgInfoByOidArr(  <span class="argument">$oidArr</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$oidArr </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_orgAboutProfileInfo" name="method_orgAboutProfileInfo" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">orgAboutProfileInfo()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">orgAboutProfileInfo(  <span class="argument">$ownerId</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$ownerId </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgInfoByUidArr" name="method_getOrgInfoByUidArr" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgInfoByUidArr()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgInfoByUidArr(  <span class="argument">$uidArr</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uidArr </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTeacherRealName" name="method_getTeacherRealName" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getTeacherRealName()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTeacherRealName(  <span class="argument">$uidArr</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$uidArr </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgShowInfo" name="method_getOrgShowInfo" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgShowInfo()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgShowInfo(  <span class="argument">$oid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$oid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgTemplate" name="method_getOrgTemplate" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgTemplate()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgTemplate(  <span class="argument">$ownerId</span>) : false</pre>
+                <p><em>获取机构模版</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$ownerId </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    false
+                                            &mdash; <p>or obiect</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>Panda <a href="mailto:zhangtaifeng@gn100.com">zhangtaifeng@gn100.com</a></p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOrgTemplateInfo" name="method_getOrgTemplateInfo" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOrgTemplateInfo()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOrgTemplateInfo(  <span class="argument">$tid</span>) : false</pre>
+                <p><em>获取机构模版信息</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$tid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    false
+                                            &mdash; <p>or obiect</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>Panda <a href="mailto:zhangtaifeng@gn100.com">zhangtaifeng@gn100.com</a></p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_updateOrgTemplate" name="method_updateOrgTemplate" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">updateOrgTemplate()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">updateOrgTemplate(  <span class="argument">$tid</span>,   <span class="argument">$params</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$tid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addOrgTemplate" name="method_addOrgTemplate" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">addOrgTemplate()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addOrgTemplate(  <span class="argument">$params</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_deleteOrgTemplate" name="method_deleteOrgTemplate" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">deleteOrgTemplate()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">deleteOrgTemplate(  <span class="argument">$tid</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$tid </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_dataOrgTeacherCount" name="method_dataOrgTeacherCount" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">dataOrgTeacherCount()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">dataOrgTeacherCount(  <span class="argument">$orgId</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$orgId </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_countTeacherByOid" name="method_countTeacherByOid" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">countTeacherByOid()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">countTeacherByOid(  <span class="argument">$oid</span>,   <span class="argument">$status</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$oid </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$status </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">organization.class.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/user/organization.class.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on March 8th, 2016 at 12:05.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

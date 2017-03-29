@@ -1,0 +1,43 @@
+{
+	"version": "1.9.1",
+	"min_version": "1.6.0",
+	"description": "1.本地录制的视频格式更改为mp4<br/>2.增加课间休息功能<br/>3.上课界面整体调整<br/>4.支持学生端登陆平台图标的显示<br/>5.修正升级相关缺陷<br/>",
+	"white_list": {
+		"phone_number" : [],
+		"version": "0.0.2",
+		"min_version": "1.3.4",
+		"description": "1.白名单用户依照此策略升级<br/>"
+	},
+	"black_list": {
+		"phone_number": ["13261232131"],
+		"version": "1.9.1",
+		"min_version": "1.5.0",
+		"description": "1.本地录制的视频格式更改为mp4<br/>2.增加课间休息功能<br/>3.上课界面整体调整<br/>4.支持学生端登陆平台图标的显示<br/>5.修正升级相关缺陷<br/>"
+	},
+	"install":{
+		"min_version": "0.0.0",
+		"version": ["1.6.0", "1.6.1", "1.6.2", "1.7.0", "1.7.1", "1.7.2", "1.7.3", "1.8.0", "1.8.1", "1.8.2", "1.9.0"],
+		"data": {
+			"windows": {
+				"version": [
+					"1",
+					"9",
+					"1"
+				],
+				"description": "1.本地录制的视频格式更改为mp4<br/>2.增加课间休息功能<br/>3.上课界面整体调整<br/>4.支持学生端登陆平台图标的显示<br/>5.修正升级相关缺陷<br/>",
+				"min_version": [
+					"1",
+					"6",
+					"0"
+				],
+				"download": [
+					"https://www.yunke.com/upload/pc/gn100_teacher_client_v_1_9_1.exe",
+					"http://pan.baidu.com/s/1ntrierJ"
+				],
+				"dependency": {
+					"directx11": "http://www.directx11download.com"
+				}
+			}
+		}
+	}
+}

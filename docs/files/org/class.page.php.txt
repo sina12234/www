@@ -1,0 +1,100 @@
+<?php
+
+class org_class extends STpl
+{
+    public function __construct()
+    {
+        $user = user_api::loginedUser();
+        if (empty($user)) {
+            $this->redirect("/user.main.login");
+        }
+
+        $org = user_organization::subdomain();
+
+        $this->orgOwner = !empty($org) ? $org->userId : 0;
+    }
+
+    public function pageDetail($inPath)
+    {
+        if (empty($inPath[3])) {
+            $this->redirect('/');
+        }
+
+        $page = empty($inPath[4]) ? 1 : intval($inPath[4]);
+        $classId = intval($inPath[3]);
+
+        $param = array(
+            'q' => array('class_id'=>$classId),
+            'f' => array(
+				'course_id',
+                'title',
+                'class',
+                'start_time',
+                'end_time',
+                'section_count',
+                'min_user',
+                'max_user'
+            )
+        );
+
+        $res = seek_api::seekCourse($param);
+
+        if (empty($res->data)) {
+             $this->redirect('/');
+        }
+
+        $info = $res->data[0];
+
+
+        $data = array(
+            'title' => $info->title,
+            'start_time' => date('n月j日', strtotime($info->start_time)),
+            'end_time' => date('n月j日', strtotime($info->start_time)),
+            'section_count' => $info->section_count,
+            'min_user' => $info->min_user,
+            'max_user' => $info->max_user,
+            'course_id' => $info->course_id,
+        );
+
+        $adminId = 0;
+        foreach( $info->class as $v ) {
+            if ($v->class_id == $classId) {
+                $data['name'] = $v->name;
+                $adminId = $v->class_admin_id;
+            }
+        }
+
+        $this->assign('thumb', user_api::getBasicUser($adminId));
+        $this->assign('list', $this->_getClassUserList($classId), $page);
+        $this->assign('class_id', $classId);
+        $this->assign('data', $data);
+        $this->render('org/course.class.html');
+    }
+
+    private function _getClassUserList($classId, $page=1, $length=20)
+    {
+        $param = array(
+            'condition' => "fk_class={$classId}",
+            'page' => $page,
+            'length' => $length
+         );
+
+        $res = utility_services::call('/course/class/getuserlist', $param);
+
+        if (empty($res->data))
+            return array();
+
+        $data = [];
+        foreach($res->data as $v) {
+            $data[] = array(
+                'name' => $v->name,
+                'gender' => $v->gender ? '男' : '女',
+                'mobile' => empty($v->mobile) ? '' : $v->mobile
+            );
+        }
+
+        return $data;
+    }
+
+}
+

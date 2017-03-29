@@ -1,0 +1,226 @@
+/*##################################################################*/
+/* Tablet - portrait ###############################################*/
+/*##################################################################*/
+
+@media (min-width:480px) and (max-width: 1000px) {
+.tit{margin-top:40px;}
+#home .tit{margin-top:70px;}
+.tit img{width:100%;}
+
+#home {
+	background-image: url(../images/bg_1.png);
+	background-position:center;
+	background-repeat:no-repeat;
+	background-attachment:fixed;
+	background-size:  1000px 1800px;         
+}
+#home .turnli, #about .turnli, #clients .turnli{ display:none;}
+.plist{margin:40px auto;padding:0;width:100%;display:inline-block; clear:both;overflow:hidden;}
+.plist li{float:left;padding:10px 0;text-align:center;}
+.homepl li{width:33.33%;}
+.homepl li img{width:90%;}
+.aboutpl li img{width:92%;}
+
+#services{
+	background-image: url(../images/bg_2.png);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size:  1000px 1500px; 
+	}
+	
+#services p {
+	margin-top:30px;
+	text-align:left;
+	font-size:22px;
+	line-height:45px;
+    color:white;   
+}   
+
+
+#tel{
+	background-image: url(../images/bg_4.png);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size:  1000px 1000px; 
+	} 
+#tel img{width:60%;} 
+	
+	
+    .tlt {
+        letter-spacing: 2px;
+        font-size: 48px;
+        line-height:50px;
+    }
+    blockquote p {
+        font-size: 19px;
+        line-height:29px;
+    }
+	
+	
+/*Adden##################################################################*/
+
+.tit_1 strong{
+	font-size:22px;
+	}
+.whotxt{margin-top:40px;line-height:40px;}
+.whotxt_1{font-size:18px;}
+
+.howpic img{width:80%;}
+.howtxt{margin-top:80px; text-align:center;line-height:36px;font-size:18px;}
+.howtxt em{font-size:22px;}
+
+.rzcon{margin-top:50px;text-align:center;}
+.rzpic{width:100%;}
+.rzpic img{width:60%;}
+.rztxt{margin-top:15px;line-height:24px;font-size:14px;}
+.rztxt strong{font-size:16px;}
+
+.lcpic{margin-top:50px;width:100%;}
+.lcpic img{width:100%;}
+}
+
+@media (min-width:768px) and (max-width: 992px) {
+
+    
+    .service_box p {
+        width:220px;
+        margin: 0 auto;    
+    }
+    
+    #service_boxes ul {
+        width:220px;
+
+    }
+    
+    .animbox {
+        width: 220px;
+    }
+	
+    
+}
+
+
+/*##################################################################*/
+/* Smartphone - portrait ###########################################*/
+/*##################################################################*/
+
+@media (max-width: 479px) {
+	
+	
+.tit{margin-top:35px;}
+
+nav{height:110px;}
+nav #logo{margin-top:30px;}
+nav #logo a {font-size:13px;}
+nav #logo .lcity{clear:both;}
+nav #logo .lcity p{float:left;}
+nav #logo .lcity a{margin-top:4px;margin-left:10px;}
+nav #logo .limg{width:120px;}  
+nav #logo .limg img{width:100%;}  
+
+.nrlink a{font-size: 13px;margin:0 8px;}
+.button_nav {
+    padding:3px 5px 5px 5px;
+    width:26px;
+	height:26px;
+    outline: none;
+}
+#navigation_mobile{margin-top:12px;}
+#navigation_mobile .nrlink{margin-top:22px;margin-left:6px;}
+
+
+.ftbox-1{font-size:15px;}
+.ftbox-1 i{margin:0 10px;color:#777;}
+.ftbox-2{margin-top:30px;font-size:12px;}
+
+
+#tel img{width:80%;} 
+.tit img{width:100%;}
+
+#services{background-size:700px 1000px;}
+#services p{font-size:16px;line-height:30px; background-size:800px 1500px;}
+
+    #home {
+        background-image: url(../images/bg_1.png);
+        background-position:center;
+        background-repeat:no-repeat;
+        background-size: 800px 1200px;         
+    }
+#home .tit img{width:90%;}
+#home .turnli, #about .turnli, #clients .turnli{ display:none;}
+
+.plist{margin:40px auto;padding:0;width:100%;display:inline-block; clear:both;overflow:hidden;}
+.plist li{float:left;padding:10px 0;text-align:center;}
+
+.homepl li{width:33.33%;}
+.homepl li img{width:90%;}
+
+.aboutpl li img{width:92%;}
+	
+    #clients {
+        height:450  px;
+    }
+    
+    #clients .client_logo {
+        border-width:2px;
+    }
+    .md-content {
+    padding-top:10px;     
+    }    
+    .md-content h3, .md-content p{
+    margin-bottom:10px;
+    margin-top:10px;
+    width:90%;    
+    }
+    
+    .flex-direction-nav li .next {right: 20px}
+    .flex-direction-nav li .prev {left: 20px}
+    
+    .contact_details p{
+    margin-top:20px;
+    margin-bottom: 50px;
+    }
+    .social_icons {
+    margin-top:25px;
+    }
+}
+
+
+
+/*##################################################################*/
+/* Retina - desktop + tablet #######################################*/
+/*##################################################################*/
+
+@media all and (-webkit-min-device-pixel-ratio: 2), all and (-moz-min-device-pixel-ratio: 1.5), all and (min-device-pixel-ratio: 2), all and (-o-min-device-pixel-ratio: 2/1) {
+    #home {    
+        background: url(../images/images/home-bg@2x.jpg);
+        background-size: 2500px 574px;
+        background-position:center;
+        background-repeat:no-repeat;
+    }
+    
+    #clients {
+        background: url(../images/images/clients_bg@2x.jpg);
+        background-size: 1000px 500px;
+        background-position:top;
+        background-repeat:no-repeat;
+    }
+    
+
+      
+}
+
+
+/*##################################################################*/
+/* Retina - smartphone #############################################*/
+/*##################################################################*/
+
+@media (max-width: 479px) and (-webkit-min-device-pixel-ratio: 2), all and (-moz-min-device-pixel-ratio: 1.5), all and (min-device-pixel-ratio: 2), all and (-o-min-device-pixel-ratio: 2/1) {
+  #home {    
+    background: url(../images/bg_1.png@2x.png);
+    background-size: 480px 400px;
+    background-position:center;
+  }
+}

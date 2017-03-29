@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+	<title>Www Documentation</title>
+	<parser>
+		<target>/home/hetao/www/app/</target>
+		 <encoding>utf8</encoding>
+		 <extensions>
+			 <extension>php</extension>
+		 </extensions>
+	</parser>
+	<transformer>
+	    <target>/home/hetao/www/docs</target>
+	</transformer>
+	<files>
+		<directory>/home/hetao/www/app</directory>
+	</files>
+</phpdoc>

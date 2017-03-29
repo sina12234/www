@@ -1,0 +1,47 @@
+<?php
+class activity_main extends STpl{
+	function __construct(){
+		$org=user_organization::subdomain();
+        if(!empty($org)){
+	        $this->orgOwner = $org->userId; 	
+        }else{
+	        $this->orgOwner = 2; 	
+        }
+
+	}
+	function pageList($inPath){
+		utility_cache::pageCache(60);
+        $page=isset($_GET['page'])?$_GET['page']:1;
+        $num=20;
+        $cateId = isset($_GET['c']) ? (int)$_GET['c'] : 0;
+        $path="/activity.main.list?c=".$cateId."";
+        $orgInfo=user_organization::getOrgByOwner($this->orgOwner);
+        $data = array( "fk_org"=>$orgInfo->oid);
+        $list=user_api::getNoticeList($page,$num,$this->orgOwner,$cateId,$orgInfo->oid);
+		if(!empty($cateId)){
+			$catename = !empty($list->data[0]->name) ? $list->data[0]->name : '';
+			$li = "";
+			$this->assign('catename',$catename);
+			$this->assign('catename',$catename);
+		}else{
+			$catename = "全部文章";
+			$this->assign('catename',$catename);
+		}
+        $cateList = org_api::noticeCategoryList($data);
+		$this->assign('cateList',$list->cateInfo);        
+		$this->assign('cateId',$list->cateInfo);      
+		$this->assign('c',$cateId);        
+        $this->assign('list',$list);
+        $this->assign('path',$path);
+        $this->assign("num",$num);
+		return $this->render("activity/noticeList.html");
+	}
+	function pageInfo($inPath){
+		utility_cache::pageCache(600);
+        $notice=user_api::getNotice($inPath[3]); 
+        $this->assign('notice',$notice);
+		return $this->render("activity/info.html");
+	}
+	
+}
+

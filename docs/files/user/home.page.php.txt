@@ -1,0 +1,102 @@
+<?php
+class user_home extends STpl{
+	var $user;
+	function __construct(){
+		//如果没有登陆到登陆界面
+		$this->user = user_api::loginedUser();
+		if(empty($this->user)){
+			$this->redirect("/site.main.login");
+		}
+		$org=user_organization::subdomain();
+		if(!empty($org)){
+			$this->orgOwner = $org->userId;
+		}else{
+			$this->orgOwner = 2;
+		}
+	}
+	public function pageEntry($inPath){
+		$userInfo = user_api::getUser($this->user['uid']);
+		if($userInfo->types->organization){
+			return $this->pageOrg($inPath);
+		}elseif($userInfo->types->teacher){
+			return $this->pageTeacher($inPath);
+		}elseif($userInfo->types->student){
+			return $this->pageStudent($inPath);
+		}
+		return $this->render("user/home.html");
+	}
+	public function pageOrg($inPath){
+		$course = course_api::getOrgStat(array("user_id"=>$this->user["uid"]));
+		$this->assign("course_num", $course->course_num);
+		$this->assign("user_num", $course->user_num);
+		$this->assign("class_num", $course->class_num);
+		$this->assign("fav_num", $course->fav_num);
+		$this->assign("instation_num", $course->instation_num);
+		return $this->render("user/home.org.html");
+	}
+	public function pageTeacher($inPath){
+		$course = course_api::getTeacherStat(array("user_id"=>$this->user["uid"]));
+		$this->assign("course_num", $course->course_num);
+		$this->assign("user_num", $course->user_num);
+		$this->assign("class_num", $course->class_num);
+		$this->assign("fav_num", $course->fav_num);
+		$this->assign("instation_num", $course->instation_num);
+		return $this->render("user/home.teacher.html");
+	}
+	public function pageStudent($inPath){
+		$course = course_api::getStudentStat(array("user_id"=>$this->user["uid"]));
+		$this->assign("course_num", $course->course_num);
+		$this->assign("fav_num", $course->fav_num);
+		$this->assign("fee_num", $course->fee_num);
+		$this->assign("order_num", $course->order_num);
+		$this->assign("instation_num", $course->instation_num);
+		return $this->render("user/home.student.html");
+	}
+	public function pageMenu($inPath){
+		$userinfo=user_api::getUser($this->user['uid']);
+		$ipinfo = utility_ip::info(utility_ip::realIp());
+		if(isset($userinfo->profile->desc) && strlen($userinfo->profile->desc)>7){
+			$userinfo->profile->desc = mb_substr($userinfo->profile->desc,0,7,'utf-8').'..';
+		}
+		$orgUserId = $this->orgOwner ;
+        $user=$this->user;
+        $orgInfo = user_organization::getOrgByUid($this->orgOwner);
+        //查询老师与当前机构是否有关系 role oid等
+        $special = user_api::getTeacherSpecial($orgInfo->oid,$user['uid']);
+        if($user['types']->organization == TRUE ){
+            if($this->orgOwner!= $user['uid']&&(empty($special)||$special->role!=2)){
+                $user['types']->organization = FALSE;
+            }
+        }
+        if( $user['types']->teacher == TRUE){
+            if(empty($special)){
+                $user['types']->teacher = FALSE;
+            }
+        }   
+		$this->assign("userInfoMenu",$userinfo);
+		$this->assign("ipinfo",$ipinfo);
+		return $this->render("user/menu.html");
+	}
+	public function pageMenuOrg($inPath){
+		$userinfo=user_api::getUser($this->user['uid']);
+		$ipinfo = utility_ip::info(utility_ip::realIp());
+		if(isset($userinfo->profile->desc) && strlen($userinfo->profile->desc)>7){
+			$userinfo->profile->desc = mb_substr($userinfo->profile->desc,0,7,'utf-8').'..';
+		}
+		$orgUserId = $this->orgOwner ;
+		if($orgUserId != $userinfo->uid || $userinfo->types->organization != TRUE){
+			$userinfo->types->organization = FALSE;
+		}
+		if( $userinfo->types->teacher == TRUE){
+			$orgTeacherData = user_api::getTeacherOrg($userinfo->uid);
+			$orgData = user_api::getUserOwnerOrg($orgUserId);
+			if(!$orgTeacherData || !$orgData || $orgData->oid != $orgTeacherData->org_id){
+				$userinfo->types->teacher = FALSE;
+			}
+		}
+		$this->assign("userInfoMenu",$userinfo);
+		$this->assign("ipinfo",$ipinfo);
+		return $this->render("user/menu.org.html");
+	}
+}
+

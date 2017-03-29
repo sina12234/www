@@ -1,0 +1,552 @@
+<?php
+
+class course_detailed
+{
+    public static function getCoursePlan($param)
+    {
+        $courseType = 1;
+        if (isset($param['courseType'])) {
+            $courseType = $param['courseType'];
+        }
+
+        $planArr = [
+            'q'  => [
+                'course_id' => $param['cid'],
+                'status'    => '1,2,3'
+            ],
+            'f'  => [
+                'course_name',
+                'course_id',
+                'class_name',
+                'address',
+                'region_level0',
+                'region_level1',
+                'region_level2',
+                'class_id',
+                'plan_id',
+                'teacher_id',
+                'admin_id',
+                'teacher_name',
+                'course_type',
+                'admin_real_name',
+                'teacher_real_name',
+                'admin_name',
+                'section_name',
+                'section_desc',
+                'start_time',
+                'end_time',
+                'status',
+                'max_user',
+                'user_total',
+                'live_public_type',
+                'video_public_type',
+                'teacher_thumb_med'
+            ],
+            'ob' => ['start_time' => 'asc'],
+            'pl' => 100
+        ];
+
+        $ret = seek_api::seekPlan($planArr);
+        if (empty($ret->data)) {
+            return [];
+        }
+
+        $data = [];
+        foreach ($ret->data as $k => $v) {
+            if ($v->admin_id != $v->teacher_id) {
+                $v->section_desc .= '('.$v->teacher_real_name  .SLanguage::tr('代讲', 'course.info').')';
+            }
+
+            $regionLevel0 = !empty(region_geo::$region[$v->region_level0]) ? region_geo::$region[$v->region_level0] : '';
+            $regionLevel1 = !empty(region_geo::$region[$v->region_level1]) ? region_geo::$region[$v->region_level1] : '';
+            $regionLevel2 = !empty(region_geo::$region[$v->region_level2]) ? region_geo::$region[$v->region_level2] : '';
+
+            $data[$v->course_id][$v->class_id][$v->plan_id] = array(
+                'planId'          => $v->plan_id,
+                'sectionDesc'     => $v->section_desc.self::getTryIconOrPlanId($v->video_public_type, $v->live_public_type, '', $v->course_type),
+                'sectionName'     => SLanguage::tr($v->section_name, 'site.index'),
+                'startTime'       => $v->start_time,
+                'endTime'         => $v->end_time,
+                'planStatus'      => $v->status,
+                'className'       => SLanguage::tr($v->class_name, 'site.index'),
+                'classAddress'    => $regionLevel0.$regionLevel1.$regionLevel2.$v->address,
+                'teacherName'     => $v->teacher_real_name,
+                'adminName'       => $v->admin_real_name.' '.SLanguage::tr('主讲', 'course.list'),
+                'adminId'         => $v->admin_id,
+                'teacherId'       => $v->teacher_id,
+                'classId'         => $v->class_id,
+                'teacherThumb'    => $v->teacher_thumb_med,
+                'videoPublicType' => $v->video_public_type,
+                'tryPlayId'       => self::getTryIconOrPlanId($v->video_public_type, $v->live_public_type, $v->plan_id, $v->course_type)
+            );
+
+            $data[$v->course_id][$v->class_id][$v->plan_id]['sectionNum'] = count($data[$v->course_id][$v->class_id]);
+            $plan[$v->course_id][$v->class_id][$v->status][]              = $v;
+
+            // 获取班级下的课程状态
+            if (!empty($plan[$v->course_id][$v->class_id][2])) { // 获取直播课程
+                $total                                                               = $data[$v->course_id][$v->class_id][$v->plan_id]['sectionNum'];
+                $data[$v->course_id][$v->class_id][$v->plan_id]['progress']          = SLanguage::tr('课程进度', 'course.info')."(1/{$total})";
+                $data[$v->course_id][$v->class_id][$v->plan_id]['courseClassStatus'] = self::getCourseClassStatus(2, $v->max_user, $v->user_total, $courseType);
+            } elseif (
+                !empty($plan[$v->course_id][$v->class_id][1]) &&
+                empty($plan[$v->course_id][$v->class_id][2]) &&
+                empty($plan[$v->course_id][$v->class_id][3])
+            ) {
+                $time[$v->course_id][$v->class_id][]                                 = self::getClassTime($v->start_time);
+                $data[$v->course_id][$v->class_id][$v->plan_id]['progress']          = $time[$v->course_id][$v->class_id][0]. SLanguage::tr('开课', 'course.info');
+                $data[$v->course_id][$v->class_id][$v->plan_id]['courseClassStatus'] = self::getCourseClassStatus(1, $v->max_user, $v->user_total, $courseType);
+            } elseif (
+                empty($plan[$v->course_id][$v->class_id][1]) &&
+                empty($plan[$v->course_id][$v->class_id][2]) &&
+                !empty($plan[$v->course_id][$v->class_id][3])
+            ) {
+                $data[$v->course_id][$v->class_id][$v->plan_id]['progress']          = SLanguage::tr('课程直播完结', 'course.info');
+                $data[$v->course_id][$v->class_id][$v->plan_id]['courseClassStatus'] = self::getCourseClassStatus(3, $v->max_user, $v->user_total, $courseType);
+            } else {
+                $total                                                               = $data[$v->course_id][$v->class_id][$v->plan_id]['sectionNum'];
+                $normalNum                                                           = count($plan[$v->course_id][$v->class_id][1]);
+                $num                                                                 = $total + 1 - $normalNum;
+                $data[$v->course_id][$v->class_id][$v->plan_id]['progress']          = SLanguage::tr('课程进度', 'course.info')."({$num}/{$total})";
+                $data[$v->course_id][$v->class_id][$v->plan_id]['courseClassStatus'] = self::getCourseClassStatus(1, $v->max_user, $v->user_total, $courseType);
+            }
+
+        }
+
+        return $data;
+    }
+
+    public static function getCourseClass($param)
+    {
+        $param = [
+            'q' => [
+                'course_id' => $param['cid'],
+            ],
+            'f' => [
+                'course_id',
+                'title',
+                'desc',
+                'status',
+                'max_user',
+                'user_total',
+                'thumb_med',
+                'section_count',
+                'class_count',
+                'fee_type',
+                'comment',
+                'price',
+                'class'
+            ]
+        ];
+
+        $res = seek_api::seekCourse($param);
+        if (empty($res->data)) {
+            return [];
+        }
+
+        $data = [];
+        foreach ($res->data as $v) {
+            $data[$v->course_id] = array(
+                'cid'          => $v->course_id,
+                'feeType'      => $v->fee_type,
+                'title'        => $v->title,
+                'desc'         => $v->desc,
+                'thumb'        => utility_cdn::file($v->thumb_med),
+                'sectionNum'   => $v->section_count,
+                'classNum'     => $v->class_count,
+                'commentNum'   => $v->comment,
+                'courseStatus' => $v->status,
+                'maxUser'      => $v->max_user,
+                'userTotal'    => $v->user_total,
+                'price'        => $v->price ? '￥'.$v->price : SLanguage::tr('免费', 'course.info')
+            );
+
+            if (!empty($v->class)) {
+                foreach ($v->class as $m) {
+                    $data[$v->course_id]['class'][$m->class_id] = [
+                        'classId'     => $m->class_id,
+                        'adminId'     => $m->class_admin_id,
+                        'teacherId'   => $m->class_teacher_id,
+                        'className'   => SLanguage::tr($m->name, 'site.index'),
+                        'classStatus' => $m->status,
+                        'maxUser'     => $m->max_user,
+                        'minUser'     => $m->min_user,
+                        'userTotal'   => $m->user_total,
+                        'classType'   => $m->type,
+                        'classDesc'   => $m->desc
+                    ];
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    public static function getCourseClassStatus($courseStatus, $maxUser, $userTotal, $courseType = 1)
+    {
+        $result = '';
+
+        if ($courseStatus == 1) {
+            $num = $maxUser - $userTotal;
+
+            if ($num == 0) {
+                $result = "<span class='cRed'>".SLanguage::tr('报名已满', 'course.info')."</span>";
+            } else if ($num > 5) {
+                $result = "<span class='g-icon8'></span>";
+            } else {
+                $result = "<span class='cGreen'>".SLanguage::tr('剩余名额', 'course.info')."</span>".($num < 0 ? 1 : $num);
+            }
+        }
+
+        if ($courseStatus == 3) {
+            //$result = "<span class='cRed'>已完结</span>";
+            $result = ($courseType == 2) ? "<span class='course-icon2' style='height:26px;margin:4px;padding:0 20px;'></span>" : "<span class='course-icon5' style='height:23px;margin:5px;padding:3px 19px;'></span>";
+        }
+
+        if ($courseStatus == 2) {
+            $result = "<span class='cRed'>".SLanguage::tr('正在上课', 'course.info')."</span>";
+        }
+
+        return $result;
+    }
+
+    public static function getClassStatus($maxUser, $userTotal)
+    {
+        $num = $maxUser - $userTotal;
+
+        if ($num == 0) {
+            $result = "<span class='cRed'>".SLanguage::tr('报名已满', 'course.info')."</span>";
+        } else if ($num > 5) {
+            $result = "<span class='g-icon8'></span>";
+        } else {
+            $result = "<span class='cGreen'>".SLanguage::tr('剩余名额', 'course.info')."</span>".($num < 0 ? 1 : $num);
+        }
+
+        return $result;
+    }
+
+    public static function getTryIconOrPlanId($vpt, $lpt, $planId = '', $courseType=3)
+    {
+        if ($courseType == 3) {
+            return '';
+        }
+
+        //录播课video_public_type = 1,2 直播课 live_public_type=1为试看
+        if (in_array($vpt, [1,2]) || $lpt == 1) {
+            return $planId ? $planId : "<span class='try-icon video-try-icon'></span>";
+        }
+
+        return '';
+    }
+
+    public static function getPlanTimeAndStatus($planStatus, $courseType=1, $videoPublicType=1, $begin, $last, $videoTime=0)
+    {
+        $startTime = strtotime($begin);
+        $endTime   = strtotime($last);
+        $nowYear   = date('Y');
+
+        $tStart = $start = ($nowYear == date('Y', $startTime)) ? date('m-d H:i', $startTime) : date('Y-m-d H:i', $startTime);
+        $end   = (date('d', $startTime) == date('d', $endTime)) ? date('H:i', $endTime) : date('d H:i', $endTime);
+
+        if ($nowYear != date('Y', $endTime)) {
+            $end = date('Y-m-d H:i', $endTime);
+        }
+
+        if (
+            date('y', $startTime) == date('y', $endTime)
+            &&
+            date('m', $startTime) == date('m', $endTime)
+            &&
+            date('d', $startTime) == date('d', $endTime)
+        ) {
+            $end = date('H:i', $endTime);
+        }
+
+        if (date('d', $endTime) - date('d', $startTime) > 1) {
+            $end = date('d H:i', $endTime);
+        }
+
+        if (date('m', $endTime) - date('m', $startTime) > 1) {
+            $end = date('m-d H:i', $endTime);
+        }
+
+        if ($startTime >= $endTime || (ceil(($endTime - $startTime) / 3600) > 3)) {
+            $start = $tStart;
+            $planStatusStr = $start;
+        } else {
+            $planStatusStr = $start.'-'.$end;
+        }
+
+        if ($courseType == 2) $planStatusStr = '';
+
+        $result = '';
+        switch ($planStatus) {
+            case 1 :
+                $result = ($courseType == 1 || $courseType == 3) ? "<div class='col-sm-10 col-lg-10 col-xs-10 tec'>".SLanguage::tr('未开课', 'course.info')."</div>" : '';
+                break;
+            case 2 :
+                $result = "<div class='course-icon3 fs14' style='margin-left:90px'>".SLanguage::tr('正在上课', 'course.info')."</div>";
+                break;
+            case 3 :
+                if ($videoPublicType == -2) {
+                    $result = '';
+                } else if ($courseType == 1) {
+                    $result = "<div class='course-icon5 fs14' style='margin-left:90px'>".SLanguage::tr('可回看', 'course.info')."</div>";
+                } else if ($videoTime) {
+                    $result =  "<div class='course-icon2 fs14' style='margin-left:90px'>观看</div>";
+                }
+                break;
+        }
+
+        if ($courseType == 3 && strtotime($end) < time()) {
+            $result = "<div class='col-sm-10 col-xs-10 tec'>".SLanguage::tr('已结束', 'course.info')."</div>";
+        }
+
+        return [
+            'planStatus' => $planStatusStr,
+            'planTime'   => $result
+        ];
+    }
+
+    public static function getClassTime($time)
+    {
+        $time = strtotime($time);
+        if (date('Y') != date('Y', $time)) {
+            self::dateChange(date('Y年n月j日', $time));
+        }
+
+        return self::dateChange(date('n月j日', $time));
+    }
+
+    public static function dateChange($str)
+    {
+        if (isset($_COOKIE['language']) && $_COOKIE['language'] == 'en') {
+            return strtr($str, ['年' => '-', '月' => '-', '日' => '']);
+        }
+
+        return $str;
+    }
+
+    public static function getClassAndPlan($cid)
+    {
+        $param = [
+            'q' => [
+                'course_id' => $cid,
+            ],
+            'f' => [
+                'course_id',
+                'title',
+                'desc',
+                'status',
+                'max_user',
+                'user_total',
+                'thumb_med',
+                'section_count',
+                'class_count',
+                'fee_type',
+                'course_type',
+                'avg_score',
+                'try',
+                'comment',
+                'price',
+                'class',
+                'vv'
+            ]
+        ];
+
+        $courseInfo = seek_api::seekCourse($param);
+        if (empty($courseInfo->data)) return [];
+        $courseType = $courseInfo->data[0]->course_type;
+
+        $data['courseInfo'] = [
+            'courseId'     => $courseInfo->data[0]->course_id,
+            'feeType'      => $courseInfo->data[0]->fee_type,
+            'courseType'   => $courseType,
+            'title'        => $courseInfo->data[0]->title,
+            'desc'         => $courseInfo->data[0]->desc,
+            'vv'           => $courseInfo->data[0]->vv,
+            'thumb'        => utility_cdn::file($courseInfo->data[0]->thumb_med),
+            'sectionNum'   => $courseInfo->data[0]->section_count,
+            'classNum'     => $courseInfo->data[0]->class_count,
+            'commentNum'   => $courseInfo->data[0]->comment,
+            'courseStatus' => $courseInfo->data[0]->status,
+            'maxUser'      => $courseInfo->data[0]->max_user,
+            'userTotal'    => $courseInfo->data[0]->user_total,
+            'score'        => $courseInfo->data[0]->avg_score,
+            'try'          => $courseInfo->data[0]->try,
+            'price'        => $courseInfo->data[0]->price ? '￥'.$courseInfo->data[0]->price : SLanguage::tr('免费', 'course.info')
+        ];
+
+        $planArr = [
+            'q'  => [
+                'course_id' => $cid,
+                'status'    => '1,2,3'
+            ],
+            'f'  => [
+                'course_name',
+                'course_id',
+                'class_name',
+                'address',
+                'region_level0',
+                'region_level1',
+                'region_level2',
+                'class_id',
+                'plan_id',
+                'teacher_id',
+                'admin_id',
+                'teacher_name',
+                'course_type',
+                'admin_real_name',
+                'teacher_real_name',
+                'admin_name',
+                'section_name',
+                'section_desc',
+                'start_time',
+                'end_time',
+                'status',
+                'max_user',
+                'user_total',
+                'live_public_type',
+                'video_public_type',
+                'teacher_thumb_med'
+            ],
+            'ob' => ['start_time' => 'asc'],
+            'pl' => 100
+        ];
+
+        $res = seek_api::seekPlan($planArr);
+        if (empty($res->data)) return [];
+
+        $jinDu         = SLanguage::tr('进度：', 'course.info');
+        $master        = SLanguage::tr('主讲', 'course.list');
+        $replaceMaster = SLanguage::tr('代讲', 'course.info');
+        $address       = '';
+
+        $planIdArr = $videoTime = $planStatus = $classStatus = [];
+        foreach ($res->data as $item) {
+            $planIdArr[]               = $item->plan_id;
+            $videoTime[$item->plan_id] = 0;
+            $progress[$item->class_id] = '';
+
+            $planStatus[$item->class_id][$item->status] = $item->status;
+            $classStatus[$item->class_id]               = self::getClassStatus($item->max_user, $item->user_total);
+            $planInfo[$item->plan_id]                   = [
+                'sectionName' => $item->section_name,
+                'startTime'   => $item->start_time
+            ];
+        }
+
+        if ($courseType == 1 || $courseType == 2) {
+            $tmpVideoTime = self::getVideoTime($planIdArr);
+            if (!empty($tmpVideoTime)) {
+                $videoTime = $tmpVideoTime;
+            }
+        }
+
+        foreach ($res->data as $v) {
+            if ($v->admin_id != $v->teacher_id) {
+                $v->section_desc .= '('.$v->teacher_real_name.$replaceMaster.')';
+            }
+
+            if (in_array(2, $planStatus[$v->class_id], true)) {// 正在直播
+                $progress[$v->class_id] = self::getProgress($courseType, 2).' '.$v->section_name;
+            } elseif (!in_array(3, $planStatus[$v->class_id], true)) {// 全部未开课
+                $planId[$v->class_id][] = $v->plan_id; // 获取所有未开课id
+                $progress[$v->class_id] = $planInfo[$planId[$v->class_id][0]]['startTime'].' '.self::getProgress($courseType, 1);
+            } elseif (!in_array(1, $planStatus[$v->class_id], true)) {// 全部已完结
+                $progress[$v->class_id] = self::getProgress($courseType, 3);
+            } else {// 有未开课，有已完结(只取未开课的)
+                if ($v->status == 1) {
+                    $planId[$v->class_id][] = $v->plan_id;// 获取(有未开课，已完结)课中,未开课的id
+                    $progress[$v->class_id] = self::getProgress($courseType, 4) ?: $jinDu.' '.$planInfo[$planId[$v->class_id][0]]['sectionName'].' '.$planInfo[$planId[$v->class_id][0]]['startTime'];
+                }
+            }
+
+            // 线下课显示地址
+            if ($courseType === 3) {
+                $regionLevel0 = !empty(region_geo::$region[$v->region_level0]) ? region_geo::$region[$v->region_level0] : '';
+                $regionLevel1 = !empty(region_geo::$region[$v->region_level1]) ? region_geo::$region[$v->region_level1] : '';
+                $regionLevel2 = !empty(region_geo::$region[$v->region_level2]) ? region_geo::$region[$v->region_level2] : '';
+
+                $address = $regionLevel0.$regionLevel1.$regionLevel2.$v->address;
+            }
+
+            $data['planList'][$v->class_id][$v->plan_id] = [
+                'planId'          => $v->plan_id,
+                'sectionName'     => SLanguage::tr($v->section_name, 'site.index'),
+                'startTime'       => $v->start_time,
+                'endTime'         => $v->end_time,
+                'videoTime'       => $videoTime[$v->plan_id],
+                'planStatus'      => $v->status,
+                'className'       => SLanguage::tr($v->class_name, 'site.index'),
+                'teacherName'     => $v->teacher_real_name,
+                'adminName'       => $v->admin_real_name.' '.$master,
+                'adminId'         => $v->admin_id,
+                'teacherId'       => $v->teacher_id,
+                'classId'         => $v->class_id,
+                'videoPublicType' => $v->video_public_type,
+            ];
+
+            $data['teacherMasterList'][$v->teacher_id] = [
+                'teacherName'  => $v->teacher_real_name,
+                'teacherId'    => $v->teacher_id,
+                'teacherThumb' => $v->teacher_thumb_med
+            ];
+
+            $data['classList'][$v->class_id] = [
+                'className'    => $v->class_name,
+                'classId'      => $v->class_id,
+                'teacherId'    => $v->teacher_id,
+                'admin_id'     => $v->admin_id,
+                'teacherName'  => $v->admin_name,
+                'classStatus'  => $classStatus[$v->class_id],
+                'progress'     => $progress[$v->class_id],
+                'classAddress' => $address
+            ];
+        }
+
+        return $data;
+    }
+
+    public static function getVideoTime($planIdArr)
+    {
+        $videoTimeList = utility_services::call('/course/video/GetTotalTimeByPlanIdArr', ['planIdArr' => $planIdArr]);
+        $videoTime     = [];
+        if (!empty($videoTimeList->result)) {
+            foreach ($videoTimeList->result as $video) {
+                $totalTime                  = $video->segs_totaltime ? $video->segs_totaltime : $video->totaltime;
+                $videoTime[$video->fk_plan] = $totalTime;
+            }
+        }
+
+        return $videoTime;
+    }
+
+    private static function getProgress($courseType, $courseStatus)
+    {
+        $str        = '';
+        $kaiKe      = SLanguage::tr('开课', 'course.info');
+        $classIng   = SLanguage::tr('正在上课', 'course.info');
+        $hasEnd     = SLanguage::tr('课程直播完结', 'course.info');
+        $backLook   = SLanguage::tr('可回看', 'course.info');
+        $courseOver = SLanguage::tr('课程已结束', 'course.info');
+        $classOver  = SLanguage::tr('本班已结束', 'course.info');
+
+        if ($courseType == 1) {// 直播课
+            if ($courseStatus == 2) {// 正在直播
+                $str = $classIng;
+            } elseif ($courseStatus == 1) {// 全部未开课
+                $str = $kaiKe;
+            } elseif ($courseStatus == 3) {// 全部已完结
+                $str = $hasEnd.' '.$backLook;
+            } else {// 有未开课，有已完结 courseStatus =4
+                $str = '';
+            }
+        } elseif ($courseType == 3 && $courseStatus == 4) {
+            $str = $courseOver.' '.$classOver;
+        }
+
+        return $str;
+    }
+}
+

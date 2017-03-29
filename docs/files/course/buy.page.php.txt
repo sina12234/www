@@ -1,0 +1,287 @@
+<?php
+class course_buy extends STpl{
+	public function pageNotify($inPath){
+		if(empty($_REQUEST['out_trade_no'])||empty($_REQUEST['trade_no'])){
+			//TODO
+			return "参数错误";
+		}
+		//计算得出通知验证结果
+		require_once(ROOT_LIBS."/alipay/alipay.config.php");
+		require_once(ROOT_LIBS."/alipay/lib/alipay_notify.class.php");
+		$alipayNotify = new AlipayNotify($alipay_config);
+		$verify_result = $alipayNotify->verifyNotify();
+		//$unique_order_id = $_REQUEST['out_trade_no'];
+		$out_trade_id = $_REQUEST['out_trade_no'];
+		error_log("Start pageNotify"."\n",3,"/tmp/course.pay.log");
+		$ret = $this->dealOrder($out_trade_id,$_REQUEST,$verify_result, "zhifubao");
+		if($ret) {
+			error_log("Result ok"."\n",3,"/tmp/course.pay.log");
+			echo "success";		//请不要修改或删除
+		}else {
+			error_log("Result fail"."\n",3,"/tmp/course.pay.log");
+			echo "fail";
+		}
+	}
+	/**
+	 * 支付宝返回
+	 */
+	public function pageReturn($inPath){
+		if(empty($_REQUEST['out_trade_no'])||empty($_REQUEST['trade_no'])){
+			//TODO
+			return "参数错误";
+		}
+		require_once(ROOT_LIBS."/alipay/alipay.config.php");
+		require_once(ROOT_LIBS."/alipay/lib/alipay_notify.class.php");
+		$alipayNotify = new AlipayNotify($alipay_config);
+		$verify_result = $alipayNotify->verifyReturn();
+		//$unique_order_id = $_REQUEST['out_trade_no'];
+		$out_trade_id = $_REQUEST['out_trade_no'];
+		error_log("Start return"."\n",3,"/tmp/course.pay.log");
+		//$ret = $this->dealOrder($unique_order_id,$_REQUEST,$verify_result);
+		$ret = $this->dealOrder($out_trade_id,$_REQUEST,$verify_result, "zhifubao");
+		if($ret) {
+			error_log("Result ok"."\n",3,"/tmp/course.pay.log");
+			echo "success";		//请不要修改或删除
+		}else {
+			error_log("Result fail"."\n",3,"/tmp/course.pay.log");
+			echo "fail";
+		}
+		$order_info = course_api::getFeeOrderByOutTradeId($out_trade_id);
+		$unique_order_id = $order_info->unique_order_id;
+		return $this->redirect("/course.info.Pay/$unique_order_id");
+	}
+	/**
+	 * 微信支付NativeCall
+	 */
+	public function pageWeixinNativeCall($inPath){
+		$postData = utility_net::getPostData();
+		error_log("Start pageWeixinNativeCall"."\n",3,"/tmp/course.pay.app.log");
+		if(empty($postData)){
+			return ;
+		}
+		$postData = weixin_api::xmlToArray($postData);
+		error_log(var_export($postData,true)."\n",3,"/tmp/course.pay.app.log");
+		$checkSign = weixin_api::checkSign($postData);
+		error_log("checkSign".var_export($checkSign,true)."\n",3,"/tmp/course.pay.app.log");
+		if(!$checkSign){
+			return weixin_api::createXml(array("return_code"=>"FAIL","return_msg"=>"签名失败"));
+		}else{
+			$out_trade_id = $postData['product_id'];
+			$order_info = course_api::getFeeOrderByOutTradeId($out_trade_id);
+			if(empty($order_info)){
+				$ret=weixin_api::createXml(array("return_code"=>"FAIL","return_msg"=>"订单失效"));
+				return $ret;
+				return false;
+			}
+			$course_info = course_api::getCourseone($order_info->course_id);
+			$ret = array(
+				"body"=>$course_info->title,
+				//"out_trade_no"=>$order_info->unique_order_id,
+				"out_trade_no"=>$order_info->out_trade_id,
+				"total_fee"=>$order_info->price*100,//变成分
+				"notify_url"=>"http://".$_SERVER['HTTP_HOST']."/course.buy.weixinReturn",
+				"trade_type"=>"NATIVE",
+				//"product_id"=>$order_info->unique_order_id,
+				"product_id"=>$order_info->out_trade_id,
+			);
+			$prepay_id = weixin_api::getPrepayId($ret,$error);
+			if(empty($prepay_id)){
+				return weixin_api::createXml(array("return_code"=>"FAIL","return_msg"=>$error['err_code_des']));
+			}
+			if(!empty($order_info->callback_status) && !empty($order_info->third_order_id)){
+				//订单已经做过处理
+				return weixin_api::createXml(array(
+							"return_code"=>"SUCCESS",
+							"result_code"=>"FAIL",
+							"err_code_des"=>"订单已经支付",
+							"prepay_id"=>$prepay_id)
+						);
+			}
+			if($order_info->status=="expired"){
+				return weixin_api::createXml(array(
+							"return_code"=>"SUCCESS",
+							"result_code"=>"FAIL",
+							"err_code_des"=>"订单已经过期",
+							"prepay_id"=>$prepay_id)
+						);
+			}
+			if($order_info->status=="success"){
+				return weixin_api::createXml(array(
+							"return_code"=>"SUCCESS",
+							"result_code"=>"FAIL",
+							"err_code_des"=>"订单已经支付",
+							"prepay_id"=>$prepay_id)
+						);
+			}
+			if($order_info->status=="deleted"){
+				return weixin_api::createXml(array(
+							"return_code"=>"SUCCESS",
+							"result_code"=>"FAIL",
+							"err_code_des"=>"订单不存在",
+							"prepay_id"=>$prepay_id)
+						);
+			}
+			$ret["return_code"]="SUCCESS";
+			$ret["result_code"]="SUCCESS";
+			$ret["prepay_id"]="$prepay_id";
+			$ret = weixin_api::createXml($ret);
+			return $ret;
+		}
+
+	}
+	/**
+	 * 微信支付-公众号/网站扫码支付
+	 */
+	public function pageWeixinReturn($inPath){
+		error_log("Start pageWeixinReturn"."\n",3,"/tmp/course.pay.log");
+		$postData = utility_net::getPostData();
+		//if(empty($postData)){
+		//	return ;
+		//}
+		$postData = weixin_api::xmlToArray($postData);
+		error_log(var_export($postData,true)."\n",3,"/tmp/course.pay.app.log");
+		$checkSign = weixin_api::checkSign($postData);
+		error_log("checkSign".var_export($checkSign,true)."\n",3,"/tmp/course.pay.app.log");
+		if(!$checkSign){
+			return weixin_api::createXml(array("return_code"=>"FAIL","return_msg"=>"签名失败"));
+		}
+		if(!empty($postData)){
+			if($postData['return_code']=="FAIL" || $postData['result_code']=="FAIL"){
+				return ;
+			}
+			//$unique_order_id = $postData['out_trade_no'];
+			$out_trade_id = $postData['out_trade_no'];
+			$ret = $this->dealOrder($out_trade_id,array("trade_no"=>$postData['transaction_id'],"trade_status"=>$postData['result_code']),true, "weixin");
+			if($ret) {
+				return weixin_api::createXml(array("return_code"=>"SUCCESS"));
+				error_log("Result ok"."\n",3,"/tmp/course.pay.log");
+				echo "success";		//请不要修改或删除
+			}else {
+				return weixin_api::createXml(array("return_code"=>"FAIL"));
+				error_log("Result fail"."\n",3,"/tmp/course.pay.log");
+				echo "fail";
+			}
+		}
+	}
+	public function pageFreeOrder($inPath){
+		if(empty($inPath[3])){
+			return $this->redirect("/");
+		}
+		print "1\n";
+		$user = user_api::loginedUser();	
+		if(empty($user)){
+			return $this->redirect("/");
+		}
+		print "2\n";
+		$unique_order_id = $inPath[3];
+		$order_info = course_api::getFeeOrder($unique_order_id);
+		if(empty($order_info)){
+			return $this->redirect("/");
+		}
+		print "3\n";
+		if(0 != $order_info->price){
+			return $this->redirect("/course.info.Pay/$unique_order_id");
+		}
+		print "4\n";
+		if($user["uid"] != $order_info->user_id){
+			return $this->redirect("/");
+		}
+		print "5\n";
+		$reg=array();
+		$reg['uid'] = $order_info->user_id;
+		$reg['course_id'] = $order_info->course_id;
+        $reg['user_owner'] = $order_info->user_owner;
+		$reg['class_id'] = $order_info->ext;
+		$reg['status'] = 1;
+		$reg_status = course_api::addregistration($reg);
+		if($reg_status===false){
+			error_log("Add course user Fail\n",3,"/tmp/course.pay.log");
+		}else{
+			error_log("Add course user Ok\n",3,"/tmp/course.pay.log");
+		}
+		error_log(var_export($reg,true)."\n",3,"/tmp/course.pay.log");
+		$update=array();
+		$update['status'] = "success";
+		$update['pay_type'] = "free";
+		$ret_update = course_api::updateFeeOrder($order_info->order_id, $update);
+		if($ret_update===false){
+			error_log("Update Order Fail"."\n",3,"/tmp/course.pay.log");
+		}else{
+			error_log("Update Order Ok "."\n",3,"/tmp/course.pay.log");
+		}
+		error_log(var_export($update,true)."\n",3,"/tmp/course.pay.log");
+		print "6\n";
+		$this->redirect("/course.info.show/$order_info->course_id");
+	}
+	private function dealOrder($out_trade_id,$params,$verify_result, $pay_type){
+		$third_order_id = $params['trade_no'];
+		//$order_info = course_api::getFeeOrder($unique_order_id);
+		$order_info = course_api::getFeeOrderByOutTradeId($out_trade_id);
+		if(empty($order_info)){
+			return false;
+		}
+		if(!empty($order_info->callback_status) && !empty($order_info->third_order_id)){
+			error_log("Aleay Deal Order{$order_info->order_id}\n",3,"/tmp/course.pay.log");
+			error_log(var_export($order_info,true)."\n",3,"/tmp/course.pay.log");
+			error_log("request info :\n",3,"/tmp/course.pay.log");
+			error_log(var_export($params,true)."\n",3,"/tmp/course.pay.log");
+			return true;
+			//订单已经做过处理
+		}
+		$update=array();
+		$order_id = $order_info->order_id;
+		$update['callback_status'] = $params['trade_status'];
+		$update['third_return_params'] = SJson::encode($params);
+		$update['third_order_id'] = $params['trade_no'];
+
+		$order_status = "fail";
+		if($verify_result) {
+			error_log("Verify Ok {$order_info->order_id}\n",3,"/tmp/course.pay.log");
+			//请在这里加上商户的业务逻辑程序代码
+			//——请根据您的业务逻辑来编写程序（以下代码仅作参考）——
+			//获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表
+			//判断是否在商户网站中已经做过了这次通知返回的处理
+			//如果没有做过处理，那么执行商户的业务程序
+			//如果有做过处理，那么不执行商户的业务程序
+			$class_id = $order_info->ext;
+			$order_status = "success";
+			$reg=array();
+			$reg['uid'] = $order_info->user_id;
+			$reg['course_id'] = $order_info->course_id;
+			$reg['class_id'] = $class_id;
+            $reg['user_owner'] = $order_info->user_owner;
+			$reg['status'] = 1;
+			$reg_status = course_api::addregistration($reg);
+			if($reg_status===false){
+				error_log("Add course user Fail\n",3,"/tmp/course.pay.log");
+			}else{
+				error_log("Add course user Ok\n",3,"/tmp/course.pay.log");
+			}
+			error_log(var_export($reg,true)."\n",3,"/tmp/course.pay.log");
+		}else{
+			error_log("Verify fail {$order_info->order_id}\n",3,"/tmp/course.pay.log");
+		}
+		$update['status'] = $order_status;
+		$update['pay_type'] = $pay_type;
+
+        // 记录订单日志 2015-12-02 15:39:36
+        log_userAgent::addUserAgentInfo(
+            [
+                'status'  => $order_status,
+                'payType' => $pay_type,
+                'source'  => 1, // todo
+                'orderId' => $order_id
+            ]
+        );
+
+		$ret_update = course_api::updateFeeOrder($order_id,$update);
+		if($ret_update===false){
+			error_log("Update Order Fail"."\n",3,"/tmp/course.pay.log");
+		}else{
+			error_log("Update Order Ok "."\n",3,"/tmp/course.pay.log");
+		}
+		error_log(var_export($update,true)."\n",3,"/tmp/course.pay.log");
+		return $ret_update;
+	}
+}
+

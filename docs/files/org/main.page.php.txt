@@ -1,0 +1,1558 @@
+<?php
+class org_main extends STpl{
+	private $domain;
+	private $orgOwner;
+	private $orgInfo;
+	function __construct(){
+        //如果没有登陆到登陆界面
+        $this->user = user_api::loginedUser();
+        if(empty($this->user)){
+            $this->redirect("/site.main.login");
+        }
+		$domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","domain");
+		$this->domain = $domain_conf->domain;
+        $org=user_organization::subdomain();
+        if(!empty($org)){
+            $this->orgOwner=$org->userId; //机构所有者id 以后会根据域名而列取
+        }else{
+            header('Location: https://www.'.$this->domain);
+        }
+        $this->orgInfo=user_organization::getOrgByOwner($this->orgOwner);
+        //判断管理员
+        $isAdmin=user_api::isAdmin($this->orgOwner,$this->user['uid']);
+        if($isAdmin===false){			
+            header('Location: //'.$org->subdomain.'.'.$this->domain);
+        }
+	}
+	public function pageMenu($inPath){
+        $subnav="";
+        if(!empty($inPath[3])){
+            $subnav=$inPath[3];
+        }
+        $this->assign("subnav",$subnav);
+		return $this->render("/org/menu.html");
+	}
+	public function pageEntry($inPath){
+		$uid = $this->user['uid'];
+        $tips=true;
+        //机构引导fk_guide:5
+        $userGuide=user_api::getUserGuideByUid($uid,5);  
+        if(!empty($userGuide)&&$userGuide->status==1){
+            $tips=false; 
+        }
+        if(empty($userGuide)){
+            $guideArr=array(
+                'uid'=>$uid, 
+                'gid'=>5, 
+            );
+            //添加不需要返回值
+            user_api::addUserGuide($guideArr); 
+        };
+        $this->assign('tips',$tips);
+        $month=date('n');
+        $day=date('j');
+        $weekarray=array("日","一","二","三","四","五","六");
+        $w=date('w');
+        $week='星期'.$weekarray[$w];
+        $this->assign('month',$month);
+        $this->assign('day',$day);
+        $this->assign('week',$week); 
+        //收入查询
+        $allIncome=course_api::getOrgIncome($this->orgOwner);
+        $todayIncome=course_api::getOrgIncome($this->orgOwner,date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59'));
+        $yestodayIncome=course_api::getOrgIncome($this->orgOwner,date('Y-m-d 00:00:00',strtotime('-1 day')),date('Y-m-d 23:59:59',strtotime('-1 day')));
+        $this->assign('allIncome',$allIncome);
+        $this->assign('todayIncome',$todayIncome);
+        $this->assign('yestodayIncome',$yestodayIncome);
+        //订单数量查询
+        $allOrder=course_api::countFeeOrderByOwner($this->orgOwner,$status=0);
+        $yestodayOrder=course_api::countFeeOrderByOwner($this->orgOwner,$status=2,date('Y-m-d 00:00:00',strtotime('-1 day')),date('Y-m-d 23:59:59',strtotime('-1 day')));
+        $this->assign('allOrder',$allOrder);
+        $this->assign('yestodayOrder',$yestodayOrder);
+        //排课数量查询
+        $allNormalPlan=course_api::countPlanByOwner($this->orgOwner,$status=1);
+        $todayAllPlan=course_api::countPlanByOwner($this->orgOwner,$status=0,date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59'));
+        $todayFinishPlan=course_api::countPlanByOwner($this->orgOwner,$status=3,date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59'));
+        $this->assign('allNormalPlan',$allNormalPlan);
+        $this->assign('todayAllPlan',$todayAllPlan);
+        $this->assign('todayFinishPlan',$todayFinishPlan);
+        //学生数量查询
+        $allStudent=course_api::countStudentByOwner($this->orgOwner,$status=1);
+        $todayStudent=course_api::countStudentByOwner($this->orgOwner,$status=1,date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59'));
+        $this->assign('allStudent',$allStudent);
+        $this->assign('todayStudent',$todayStudent);
+        //排课列表查询
+        $tidArr=array();
+        $todayPlanList=course_api::getPlanListByOwner($this->orgOwner,$status=0,date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59'));
+        if(!empty($todayPlanList)){
+            foreach($todayPlanList as $td){
+                $tidArr[$td->fk_user_plan]=$td->fk_user_plan;
+            }
+        }
+        $tomorrowPlanList=course_api::getPlanListByOwner($this->orgOwner,$status=0,date('Y-m-d 00:00:00',strtotime('+1 day')),date('Y-m-d 23:59:59',strtotime('+1 day')));
+        if(!empty($tomorrowPlanList)){
+            foreach($tomorrowPlanList as $tm){
+                $tidArr[$tm->fk_user_plan]=$tm->fk_user_plan;
+            }
+        }
+        if(!empty($tidArr)){
+            $ret_teachers=user_api::getTeacherInfoByIds($tidArr);
+            $teachers=json_decode(json_encode($ret_teachers),true);
+            $this->assign("teachers",$teachers);
+        }
+        $this->assign('todayPlanList',$todayPlanList);
+        $this->assign('tomorrowPlanList',$tomorrowPlanList);
+		return $this->render("org/home.html");
+	}
+	public function pageInfo($inPath){
+        $act=!empty($_GET['act'])?$_GET['act']:'';
+        // 先获取机构审核表中的信息
+        $checkInfo = user_organization::getOrgByOwnerTmp($this->orgOwner);
+        //获取机构主表信息
+	    $masterInfo= user_organization::getOrgByOwner($this->orgOwner);
+		$data = array();
+		if($act=="edit"){
+			if(!empty($checkInfo->scopes)){
+				$data['cate_id'] = trim($checkInfo->scopes);
+				$cate = user_organization::getCourseCateSomeName($data);
+			}
+		}else{
+			if(!empty($masterInfo->scopes)){
+				$data['cate_id'] = trim($masterInfo->scopes);
+				$cate = user_organization::getCourseCateSomeName($data);
+			}
+		}
+		$nameArr = array();
+		$idArr = array();
+		if(!empty($cate)){
+			foreach($cate as $k=>$v){
+				$nameArr[] = isset($v->name_display) ? $v->name_display : '';
+				$idArr[] = isset($v->pk_cate) ? $v->pk_cate : '';
+			}
+			$scopesStr = implode(",",$nameArr);
+			$idStr = implode(",",$idArr);
+			$masterInfo->scopes = $scopesStr;
+			$masterInfo->idStr = $idStr;
+			$checkInfo->scopes = $scopesStr;
+			$checkInfo->idStr = $idStr;
+		}
+        //获取所有的省
+        $province_list=user_organization::getRegionList(array('level'=>0));
+        //判断机构审核状态 
+        if(!empty($checkInfo)&&$checkInfo->tmp_status!=1){
+            $this->assign('org',$checkInfo);
+        }else{
+            $this->assign('org',$masterInfo);
+        }
+        $this->assign('act',$act);
+        $this->assign("province_list",$province_list);
+        return $this->render("org/info.html");
+	}
+    public function pageorgCourseRange($inPath){
+		$orgVerify=user_organization::getOrgVerify($this->orgOwner);
+		if(!empty($orgVerify->scopes)){
+			$selectScopes = explode(",",$orgVerify->scopes);
+			$this->assign('selectScopes',$selectScopes);
+		}
+		$level = array("level"=>1);
+        $cate = index_api::getCourseFirstCateInfo($level);
+		$this->assign('cate',$cate);
+        $this->render("/org/orgCourseRange.html");
+	}
+	//修改机构信息
+	public function pageupdateOrgProfileAjax($inPath){
+		$result=new stdClass;
+        $path = ROOT_WWW."/upload/tmp";
+        $filename = $path."/".$this->user['uid'].".org.jpg";
+        if(empty($this->orgInfo->thumb_big)&&!is_file($filename)){
+			$result->error="请上传机构logo";
+			return $result;
+        }  
+		if(strlen(iconv('utf-8','gb2312',trim($_POST['name'])))>90){
+            $result->error="机构全称不能超过30汉字或90个字符";
+            $result->field="name";
+            return $result;
+        }		
+		if(empty($_POST['subname'])){
+			$result->error="机构简称不能为空";
+			$result->field="subname";
+			return $result;
+		}
+		if(empty($_POST['scopes'])){
+			$result->error="机构培训范围不能为空";
+			$result->field="scopes";
+			return $result;
+		}
+		if(empty($_POST['hotline'])){
+			$result->error="服务电话不能为空";
+			$result->field="hotline";
+			return $result;
+		}
+		if(!preg_match('/\d{8,15}/',$_POST['hotline'])){
+			$result->error = "请填写正确的服务电话格式";
+			$result->field = "hotline";
+			return $result;
+		}
+        //处理上传图片
+        if(is_file($filename)&&!empty($_REQUEST['w'])){
+            list($width, $height, $type, $attr) = getimagesize($filename);
+            $filename_dst = $path."/".$this->user['uid'].".dst.png";
+            $targ_w = $_REQUEST['w'];
+            $targ_h = $_REQUEST['h'];
+
+            //$src = 'demo_files/flowers.jpg';
+            switch($type){
+            case 1: $img_r = imagecreatefromgif($filename);break;
+            case 2: $img_r = imagecreatefromjpeg($filename);break;
+            default:
+                $img_r = imagecreatefrompng($filename);
+            }
+            $dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
+            //$dst_r = ImageCreate( $targ_w, $targ_h );
+
+            //$bg = imagecolorallocatealpha($dst_r, 0 , 0 , 0 , 127);
+            //imagealphablending($dst_r,false);
+
+            imagecopyresampled($dst_r,$img_r,0,0,$_POST['x'],$_POST['y'],$targ_w,$targ_h,$_REQUEST['w'],$_REQUEST['h']);
+            //imagesavealpha($dst_r,true);
+
+            $r = imagejpeg($dst_r, $filename_dst);
+            if($r){
+                $thumbnail = new SThumbnail($filename_dst, 100);
+                $thumbnail->setMaxSize(180, 48);
+                $filename_180 = utility_file::tempname("thumb");
+                if($thumbnail->genFile($filename_180)===false){
+                    $result->error = "不是有效果的图片";
+                    return $result;
+                };
+                $file = utility_file::instance();
+                $r1 = $file->upload($filename_180,user_api::getLoginUid(),"image",""); 
+                if(empty($r1)){
+                    $result->error = "图片处理失败";
+                    return $result;
+                }
+                //图片尺寸都是一样的 
+                $_POST['thumb_small']=$r1->fid;
+                $_POST['thumb_med']=$r1->fid;
+                $_POST['thumb_big']=$r1->fid;
+                unlink($filename);
+                unlink($filename_dst);
+                unlink($filename_180);
+            }
+        }
+        //组装数据   
+        $data=array();
+        $data['subname'] = !empty($_POST['subname'])?$_POST['subname']:'';
+        //$data['company'] = !empty($_POST['company'])?$_POST['company']:'';
+        $data['scopes'] = !empty($_POST['scopes'])?trim($_POST['scopes']):'';
+        $data['province'] = !empty($_POST['province'])?$_POST['province']:0;
+        $data['city'] = !empty($_POST['city'])?$_POST['city']:0;
+        $data['county'] = !empty($_POST['county'])?$_POST['county']:0;
+        $data['address'] = !empty($_POST['address'])?$_POST['address']:'';
+        $data['email'] = !empty($_POST['email'])?$_POST['email']:'';
+        //$data['areacode'] = !empty($_POST['areacode'])?$_POST['areacode']:'';
+        $data['hotline'] = !empty($_POST['hotline'])?$_POST['hotline']:'';
+        //$data['extension'] = !empty($_POST['extension'])?$_POST['extension']:'';
+        $data['policy'] = !empty($_POST['policy'])?$_POST['policy']:'';
+        $data['thumb_big'] = !empty($_POST['thumb_big']) ? $_POST['thumb_big'] : $this->orgInfo->thumb_big;
+        $data['thumb_med'] = !empty($_POST['thumb_med']) ? $_POST['thumb_med'] : $this->orgInfo->thumb_med;
+        $data['thumb_small'] = !empty($_POST['thumb_small']) ? $_POST['thumb_small'] : $this->orgInfo->thumb_small;
+        $data['tmp_status']=0;
+        $data['name'] = !empty($_POST['name']) ? $_POST['name'] : '';
+        $data['desc'] = !empty($_POST['desc']) ? $_POST['desc'] : '';
+        $r = user_organization::setOrgProfileRelateInfo($this->orgOwner,$data);
+        if($r){
+            $result->status="Success!";
+            return $result;
+        }else{
+            $result->error="修改失败!";
+            return $result;
+        }
+	}
+	
+	//修改机构关于我们
+	public function pageupdateAboutAjax($inPath){
+		$result=new stdClass;
+		if(empty($_POST['name'])){
+			$result->error="机构名称名不能为空";
+			$result->field="name";
+			return $result;
+		}else{
+			$data=array();
+			$data['name'] = !empty($_POST['name'])?$_POST['name']:'';
+			$data['desc'] = !empty($_POST['desc'])?$_POST['desc']:'';
+			$r = user_organization::setOrgAbout($this->orgOwner,$data);
+			if($r==false){
+				$result->status="Success!";
+				return $result;
+			}elseif($r==true){
+				$result->status="Success!";   
+				return $result;
+			}else{
+				$result->error="修改失败!";
+				return $result;
+			}
+		}
+	}
+	
+    public function pagedelCheckInfo($inPath){
+        $st = !empty($_GET['sk']) ? $_GET['sk'] : '';
+		if($st=='tag'){
+           $del_status = user_organization::delCheckInfo($this->orgOwner);
+        }
+        $this->render('org/info.html');
+    }
+    public function pageIframeLogo(){
+        // 机构基本信息
+        $orgInfo = user_organization::getOrgByUid($this->orgOwner);
+        $this->assign('orgInfo',$orgInfo);
+        $this->render('org/iframe.logo.html');
+    }
+
+    public function pageIframeAbout(){
+        // 机构基本信息
+        $orgInfo = user_organization::getOrgByUid($this->orgOwner);
+        $res_info = user_organization::getOrgByOwnerTmp($this->orgOwner);
+        $this->assign('orgInfo',$orgInfo);
+        $this->assign('res_info',$res_info);
+        $this->render('org/iframe.about.html');
+    }
+    public function pageSetting($inPath){
+        //查询机构基本信息
+        $orgInfo=user_organization::getOrgByUid($this->orgOwner);
+        $hot_type = user_organization::getOrgByOwner($this->orgOwner);
+        $this->assign('hot_type',$hot_type);
+        //幻灯片
+        $slideList = user_organization::getOrgSlideList($this->orgOwner);
+        $this->assign('slideList',$slideList);
+        //公告列表
+        $num=10;
+        $path='/org.main.setting';
+        $page=isset($_GET['page'])?$_GET['page']:1;
+        $this->assign('path',$path);
+        $this->assign('length',$num);
+        $this->assign('page',$page);
+        //课程推荐
+        $topCourse=array();
+        $topCourseRet= course_api::getTopCourseByOwner($this->orgOwner);
+        if(!empty($topCourseRet)){
+            foreach($topCourseRet as $k=>$v){
+                $topCourse[$v->top]=$v;
+            }
+        }
+        $this->assign('topCourse',$topCourse);
+        //获取明星教师
+        $starTeacher=array();
+        $starTeacherRet = user_organization::listOrgUser($orgInfo->oid,$all=0,$star=1,$page=1,$length=5);
+        if(!empty($starTeacherRet)){
+            foreach($starTeacherRet as $k2=>$v2){
+                $starTeacher[$v2->is_star]=$v2;
+            }
+        }
+		
+		utility_session::get()['noticeToken'] = md5(time().'noticeToken'.time());
+		$this->assign('noticeToken',utility_session::get()['noticeToken']);
+        $this->assign('starTeacher',$starTeacher);
+        return $this->render("/org/setting.html");
+	}
+	//课程热度展示
+	public function pageupdatehot($inPath){
+		$hot_type = !empty($_POST['hot_type']) ? $_POST['hot_type'] : '';
+		$data = array();
+		$data['hot_type'] = $hot_type;
+        $orgInfo=user_organization::getOrgByUid($this->orgOwner);
+		$res = user_organization:: updatehotType($orgInfo->user_owner_id,$data);
+        $result=new stdClass;
+		if($res){
+            $result->status="Success!";
+            return $result;
+        }else{
+            $result->error="设置失败!";
+            return $result;
+        } 
+		
+	}
+    public function pageIframeSLide($inPath){
+        $slide=user_organization::getOrgSlide($inPath[3]); 
+        if(!empty($slide)){
+            $act='edit';
+        }else{
+            $act='add';
+        }
+        $this->assign('act',$act);
+        $this->assign('slide',$slide);
+        $this->render('org/iframe.slide.html');
+    }
+    public function pageUpdateSlideAjax($inPath){
+		$result=new stdClass;
+		$act = !empty($_POST['act'])?'add':'edit';
+		$sid = !empty($_POST['sid'])?$_POST['sid']:0;
+		
+		if(empty($_POST['fid'])){
+			$result->error="请先上传图片";
+			return $result;
+		}
+		$sid=!empty($_POST['sid'])?$_POST['sid']:0;
+		$data=array();
+		
+		$data['slide_link']=!empty($_POST['slide_link'])?$_POST['slide_link']:'';
+		$data['slide_url']=!empty($_POST['fid'])?$_POST['fid']:'';
+		
+		if($act == 'add'){
+			if($_POST['noticeToken'] != '' && $_POST['noticeToken'] == utility_session::get()['noticeToken']){
+				utility_session::get()['noticeToken'] = '';
+				$r = user_organization::setOrgSlide($sid,$this->orgOwner,$data,$act);
+				   
+			}else{
+				$result->error="请不要重复提交!";
+				return $result;
+			}
+		}else{
+			$r = user_organization::setOrgSlide($sid,$this->orgOwner,$data,$act);
+		}
+
+		if($r){
+			$result->status="Success!";
+			return $result;
+		}else{
+			$result->error="设置失败!";
+			return $result;
+		} 
+    }    
+    public function pagedelOrgSlideAjax($inPath){
+        $result=new stdClass;
+        if(empty($_POST['sid'])){
+            $result->error="参数错误";
+            return $result;
+        }else{
+            $r = user_organization::delOrgSlide((int)$_POST['sid']);
+            if($r){
+                $result->status="Success!";
+                return $result;
+            }else{
+                $result->error="删除失败!";
+                return $result;
+            }
+        }
+    }
+	public function pageIframeNotice($inPath){
+        $nid=!empty($inPath[3])?$inPath[3]:0;
+        $notice=user_api::getNotice($nid); 
+        if(!empty($notice)){
+            $act='edit';
+        }else{
+            $act='add';
+        }
+        $this->assign('act',$act);
+        $this->assign('notice',$notice);
+        $this->render('org/iframe.notice.html');
+	}
+	public function pageIframeCourse($inPath){
+        $top=$inPath[3];
+        $this->assign('top',$top);
+        $this->render('org/iframe.course.html');
+	}
+    public function pageSetcourseTopAjax($inPath){
+        $result=new stdClass;
+        if(empty($_POST['cid'])||empty($_POST['top'])){
+            $result->error="参数错误";
+            return $result;
+        }else{
+            //删除历史推荐课程
+            $history=course_api::delHistoryTopCourse($this->orgOwner,$_POST['top']); 
+            
+            $r = course_api::setCourse($_POST['cid'],array('top'=>$_POST['top']));
+            if($r){
+                $result->status="Success!";
+                return $result;
+            }else{
+                $result->error="修改失败!";
+                return $result;
+            }
+        }
+    }
+    public function pageDownCourseAjax($inPath){
+        $result=new stdClass;
+        if(empty($_POST['cid'])){
+            $result->error="参数错误";
+            return $result;
+        }else{
+            $r = course_api::setCourse($_POST['cid'],array('top'=>0));
+            if($r){
+                $result->status="Success!";
+                return $result;
+            }else{
+                $result->error="修改失败!";
+                return $result;
+            }
+        }
+    }
+    public function pageSearchCourseAjax($inPath){
+        $keyword=!empty($_POST['keyword'])?$_POST['keyword']:'';
+        $f_array = array(
+                'title',
+                'course_id',
+                'fee_type',
+                'price',
+                'thumb_big',
+                'subject',
+            );
+        $q_array=array(
+                'title'=>$keyword,
+                //'top'=>'0',
+                'admin_status'=>1,
+                'user_id'=>$this->orgOwner,
+            );
+        $ob_array = array(
+                'create_time'=>'desc',
+            );
+        $seek_arr = array(
+                "f"=>$f_array,
+                "q"=>$q_array,
+                "ob"=>$ob_array,
+                "p"=>1,
+                "pl"=>4,
+            );
+        $ret_seek = seek_api::seekcourse($seek_arr);
+        //课程搜索改版
+        if(!empty($ret_seek->data)){
+            foreach($ret_seek->data as $key=>$value){
+                if($value->fee_type==0){
+                    $ret_seek->data[$key]->fee=SLanguage::tr('免费','course.list'); 
+                }else{
+                    $ret_seek->data[$key]->fee='￥'.number_format($value->price/100,2); 
+                }
+                if(!empty($value->thumb_big)){
+                    $ret_seek->data[$key]->thumb_big=utility_cdn::file($value->thumb_big);
+                }else{
+                    $ret_seek->data[$key]->thumb_big='/assets_v2/img/1.png';
+                }
+                $subject='';
+                if($ret_seek->data[$key]->subject){
+                    foreach($value->subject as $tmpv){
+                        $subject.=SLanguage::tr($tmpv->subject_name,'course.list').',';
+                    } 
+                    $ret_seek->data[$key]->subject=trim($subject,',');  
+                } 
+            } 
+        }
+        return json_encode($ret_seek);
+    }
+	public function pageIframeTeacher($inPath){
+        $is_star=$inPath[3];
+        $this->assign('is_star',$is_star);
+        $this->render('org/iframe.teacher.html');
+	}
+    public function pageSetTeacherStarAjax($inPath){
+        $result=new stdClass;
+        if(empty($_POST['tid'])||empty($_POST['is_star'])){
+            $result->error="参数错误";
+            return $result;
+        }else{
+            //查询机构基本信息
+            $orgInfo=user_organization::getOrgByUid($this->orgOwner);
+            //删除历史明星老师
+            $history=user_organization::delHistoryStarTeacher($orgInfo->oid,$_POST['is_star']); 
+            $r=user_organization::setStarteacher($orgInfo->oid,$_POST['tid'],array('is_star'=>$_POST['is_star'],'visiable'=>1));
+            if($r){
+                $result->status="Success!";
+                return $result;
+            }else{
+                $result->error="修改失败!";
+                return $result;
+            }
+        }
+    }
+    public function pageDownTeacherAjax($inPath){
+        $result=new stdClass;
+        if(empty($_POST['tid'])){
+            $result->error="参数错误";
+            return $result;
+        }else{
+            //查询机构基本信息
+            $orgInfo=user_organization::getOrgByUid($this->orgOwner);
+            $r=user_organization::setStarteacher($orgInfo->oid,$_POST['tid'],array('is_star'=>0));
+            if($r){
+                $result->status="Success!";
+                return $result;
+            }else{
+                $result->error="修改失败!";
+                return $result;
+            }
+        }
+    }
+    public function pageSearchTeacherAjax($inPath){
+        $keyword=!empty($_POST['keyword'])?$_POST['keyword']:'';
+        //查询机构基本信息
+        $orgInfo=user_organization::getOrgByUid($this->orgOwner);
+        $f_array = array("real_name","teacher_id","thumb_big");
+        $q_array=array(
+                //'name'=>$keyword,
+                'real_name'=>$keyword,
+                'org_id'=>$orgInfo->oid,
+                //'is_star'=>0,
+                //'visiable'=>1,
+                'teacher_status'=>1,
+            );
+        $ob_array = array(
+                'teacher_id'=>'desc',
+            );
+        $seek_arr = array(
+                "f"=>$f_array,
+                "q"=>$q_array,
+                "ob"=>$ob_array,
+                "p"=>1,
+                "pl"=>10,
+            );
+        $ret_seek = seek_api::seekTeacher($seek_arr);
+        if(!empty($ret_seek->data)){
+            foreach($ret_seek->data as $k=>$v){
+                if(!empty($v->thumb_big)){
+                    $ret_seek->data[$k]->thumb_big=utility_cdn::file($v->thumb_big);
+                }else{
+                    $ret_seek->data[$k]->thumb_big='/assets_v2/img/defaultPhoto.gif';
+                }
+            }
+        }
+        return json_encode($ret_seek);
+    }
+    public function pageDefault(){
+         $this->render('org/404.html');
+    }
+    public function pageOrder($inPath){
+   
+		$page = !empty($_REQUEST['page']) ? (int)$_REQUEST['page'] : 1;
+		$size = 10;
+		
+		$type = false;
+		$flag = !empty($_REQUEST['shelf']) ? $_REQUEST['shelf'] : 'all';
+        $conf = ['expired'=>-2,'cancel'=>-4,'success'=>2];
+		$path = 'org.main.order?shelf='.$flag;
+        $params['status'] = !empty($conf[$flag]) ? $conf[$flag] : array();
+		
+		//关键字筛选
+		$search   = '';
+		$keywords = '';
+		$discount = '';
+		if(!empty($_REQUEST['keywords'])){
+			$search   = $_REQUEST['search'];
+			$keywords = trim($_REQUEST['keywords']);
+			if($search==1){
+				$params['order_sn'] = $keywords;
+			}elseif($search==2){
+				$params['title'] = $keywords;
+			}elseif($search==3){
+				$params['userId'] = $this->search(3,$params,$keywords);
+			}
+			$path .= "&search={$search}&keywords={$keywords}";
+		}
+		
+		//时间筛选
+		if(!empty($_REQUEST['start_time']) && !empty($_REQUEST['end_time'])){
+			$type = true;
+			$params['start_time'] = $_REQUEST['start_time'];
+            $params['end_time']   = $_REQUEST['end_time'];
+            $path .= "&start_time={$params['start_time']}&end_time={$params['end_time']}";
+		}
+		//价格筛选
+		if(isset($_REQUEST['price1']) && isset($_REQUEST['price2'])){
+			$type = true;
+			$params['price1'] = intval($_REQUEST['price1']);
+			$params['price2'] = intval($_REQUEST['price2']);
+			$path .= "&price1={$params['price1']}&price2={$params['price2']}";
+	    }
+		//优惠券筛选
+        if(isset($_REQUEST['discount'])){
+			$type = true;
+			$discount = $_REQUEST['discount'];
+			$params['orderId'] = $this->search($discount,$params,'');
+			$params['orderType'] = $discount;
+			$path .= "&discount={$discount}";
+        }
+		
+		$orderRes = user_organization::getOrgFeeOrderList($this->orgOwner,$page,$size,$params);
+		
+		$totalPage = 0;
+		$totalSize = 0;
+		$orderList = array();
+		if(!empty($orderRes->items)){
+			$totalPage = $orderRes->totalPage;
+			$totalSize = $orderRes->totalSize;
+			$pageUserId = array();
+			$pageUserOrderId =	 array();
+			foreach($orderRes->items as $val){
+				$pageUserId[$val->user_id]       = $val->user_id;
+				$pageUserOrderId[$val->order_id] = $val->order_id;
+			}
+			//获取用户信息
+			if(!empty($pageUserId)){
+				$userInfo = user_api::listUsersByUserIds($pageUserId);
+				if(!empty($userInfo->result)){
+					 foreach($userInfo->result as $val){
+						  $stuArr[$val->pk_user] = [
+							'name'   => !empty($val->real_name) ? $val->real_name : '',
+							'mobile' => !empty($val->mobile) ? $val->mobile : ''
+						  ];
+					 }
+				}
+			}
+			//获取用户优惠码
+			if(!empty($pageUserOrderId)){
+				$orderIds = implode(',',$pageUserOrderId);
+				$discountRes = course_api::getDiscountCodeByOrder($orderIds);
+				if(!empty($discountRes->data)){
+					foreach($discountRes->data as $val){
+						$usedCode[$val->fk_order] = $val->discount_code;
+					}
+				}
+			}
+			
+			$payType = [1=>'支付宝',2=>'微信',3=>'免费',4=>'苹果'];
+			$orderList = $orderRes->items;
+			foreach($orderList as &$value){
+				$value->stuName  = !empty($stuArr[$value->user_id]['name'])?$stuArr[$value->user_id]['name']:'';
+				$value->mobile   = !empty($stuArr[$value->user_id]['mobile'])?$stuArr[$value->user_id]['mobile']:'';
+				$value->thumbMed = !empty($value->thumb_med)?utility_cdn::file($value->thumb_med):'';
+				$value->usedCode = !empty($usedCode[$value->order_id])?$usedCode[$value->order_id]:'';
+				$value->payType  = !empty($payType['$value->pay_type'])?$payType['$value->pay_type']:'';
+				if($value->pay_type==1){
+					$value->uniqueOrderId = $value->unique_order_id;
+				}elseif($value->pay_type==2){
+					$value->uniqueOrderId = $value->unique_order_id;
+				}elseif($value->pay_type==3){
+					$value->uniqueOrderId = '优惠券';
+				}elseif($value->pay_type==4){
+					$value->uniqueOrderId = $value->unique_order_id;
+				}else{
+					$value->uniqueOrderId = '';
+				}
+			}			
+		}
+
+		
+		$orderStatus = course_status::$orderStatus;
+
+		$this->assign('orderStatus',$orderStatus);
+		$this->assign('orderList',$orderList);
+		$this->assign('totalPage',$totalPage);
+		$this->assign('totalSize',$totalSize);
+		$this->assign('length',$size);
+        $this->assign('page',$page);
+		$this->assign('params',$params);
+		$this->assign('flag',$flag);
+		$this->assign('search',$search);
+		$this->assign('keywords',$keywords);
+		$this->assign('discount',$discount);
+		$this->assign('path',$path);
+		$this->assign('type',$type);
+        $this->render('org/order.list.html');
+    }
+	
+	
+	//筛选订单数据 
+	private function search($type,$params,$keywords){
+		$orderRes = user_organization::getOrgFeeOrderList($this->orgOwner,1,-1,$params);
+		if(empty($orderRes->items)) return array();
+	
+		$orderIdArr = array();
+		$userIdArr  = array();
+		$usedIdArr  = array();
+		foreach($orderRes->items as $val){
+			$orderIdArr[$val->order_id] = $val->order_id;
+			$userIdArr[$val->user_id]   = $val->user_id;
+		}
+		
+		//优惠券筛选
+		if(!empty($orderIdArr)&&($type=1||$type==2)){
+			$orderIds = implode(',',$orderIdArr);
+			$discountRes = course_api::getDiscountCodeByOrder($orderIds);
+			if(!empty($discountRes->data)){
+				foreach($discountRes->data as $val){
+					$usedIdArr[$val->fk_order] = $val->fk_order;
+				}
+			}
+		}
+
+		//手机号筛选
+		if($type == 3 && !empty($userIdArr) && $keywords!=''){
+			$userInfo = user_api::listUserIdsBylikeMobileArr($userIdArr,$keywords);
+			if(!empty($userInfo->data)){
+				foreach($userInfo->data as $val){
+					$usedIdArr[$val->user_id] = $val->user_id;
+				}
+			}
+		}
+		
+		return $usedIdArr;
+	}
+    /**
+     * 首页模版设置
+     * @author Panda <zhangtaifeng@gn100.com>
+     */
+	public function pageTemplate($inPath){
+        //查询现有课程模版  
+        $templates=user_organization::getOrgTemplate($this->orgOwner);
+        if(!empty($templates)){
+            foreach($templates as $tk=>$tv){
+                if($tv->recommend==1){
+                    $queryArr=array();
+                    foreach($tv->query_arr as $qk=>$qv){
+                        if($qk=='grade_id'&&$qv==0){continue;}
+                        if($qk=='subject_id'&&$qv==0){continue;}
+                        $queryArr[$qk]=$qv;
+                    }
+                    $queryArr['user_id']=$this->orgOwner;
+                    $queryArr['admin_status']=1;
+                    //查询排序
+                    if(!empty($tv->order_by)){
+                        $obArr=explode(':',$tv->order_by);
+                        $orderArr=array($obArr[0]=>$obArr[1]);
+                    }else{
+                        $orderArr=array('create_time'=>'desc');
+                    }
+                    $seekArr = array(
+                        "f"=>array(
+                            'course_id',
+                            'title',
+                            'thumb_big',
+                            'subject_id',
+                        ),
+                        "q" => $queryArr,
+                        "ob" => $orderArr,
+                        "p"=>1,
+                        "pl"=>$tv->row_count*4,
+                    );
+                    $seekRet=seek_api::seekcourse($seekArr);
+                    $templates[$tk]->courses=$seekRet->data; 
+                }
+                if($tv->recommend==2){
+                    $seekArr = array(
+                        "f"=>array(
+                            'course_id',
+                            'title',
+                            'thumb_big',
+                            'subject_id',
+                        ),
+                        "q" => array('course_id'=>$tv->course_ids),
+                        "p"=>1,
+                        "pl"=>$tv->row_count*4,
+                    );
+                    $seekRet=seek_api::seekcourse($seekArr);
+                    if(!empty($seekRet->data)){
+                        //按照存的顺序取出来
+                        $data1=array();
+                        $data2=array();
+                        foreach($seekRet->data as $sdk=>$sdv){
+                            $data1[$sdv->course_id]=$sdv;
+                        } 
+                        foreach($tv->course_arr as $tcv){
+                            if(!empty($data1[$tcv])){
+                                $data2[]=$data1[$tcv];
+                            }
+                        } 
+                        $templates[$tk]->courses=$data2; 
+                    }
+                }
+            }
+        }
+        $group = SConfig::getConfig(ROOT_CONFIG."/group.conf","group");
+        $subjects=user_api::getsubjectTag($group->subject);
+        $subjectArr=array();
+        foreach($subjects as $sv){
+            $subjectArr[$sv->pk_tag]=$sv->name;
+        }
+        $grades=user_api::getsubjectTag($group->grade);
+        $gradeArr=array();
+        foreach($grades as $gv){
+            $gradeArr[$gv->pk_tag]=$gv->name;
+        }
+        $this->assign('subjects',$subjectArr);
+        $this->assign('grades',$gradeArr);
+        $this->assign('templates',$templates);
+        $this->render('org/template.html');
+    }
+	public function pageSystemSet($inPath){
+        if(!empty($inPath[3])){
+            $tid=$inPath[3];
+            $act='edit';
+            $template=user_organization::getOrgtemplateInfo($tid); 
+            $recommend=$template->recommend;
+            $this->assign('template',$template);
+        }else{
+            $recommend=1;
+            $act='add';
+        }
+        $group = SConfig::getConfig(ROOT_CONFIG."/group.conf","group");
+        $subjects=user_api::getsubjectTag($group->subject);
+        $grades=user_api::getsubjectTag($group->grade);
+        $this->assign('act',$act);
+        $this->assign('recommend',$recommend);
+        $this->assign('subjects',$subjects);
+        $this->assign('grades',$grades);
+        $this->render('org/iframe.systemset.html');
+    }
+	public function pageAddTemplateAjax($inPath){
+        $title=!empty($_POST['title'])?$_POST['title']:'';
+        $result=new stdClass;
+        if(empty($title)){
+			$result->error="标题不能为空";
+			return $result;
+        }
+        if(strlen(iconv('utf-8','gb2312',$title))>16){
+			$result->error="标题不能超过8个汉字或16个英文字符";
+			return $result;
+        }
+        $rowCount=!empty($_POST['rowCount'])?(int)$_POST['rowCount']:0;
+        if($rowCount<1||$rowCount>4){
+			$result->error="行数错误";
+			return $result;
+        }
+        $recommend=!empty($_POST['recommend'])?(int)$_POST['recommend']:0;
+        if(empty($recommend) || !in_array($recommend,array(1,2))){
+			$result->error="非法参数";
+			return $result;
+        }
+        //自动推荐
+        $queryStr='';
+		$orderBy='create_time:desc';
+        if($recommend==1){
+            $grade=!empty($_POST['grade'])?(int)$_POST['grade']:0;
+            $subject=!empty($_POST['subject'])?(int)$_POST['subject']:0;
+            $courseType=!empty($_POST['courseType'])?(int)$_POST['courseType']:0;
+            $feeType=isset($_POST['feeType'])?(int)$_POST['feeType']:0;
+            $queryStr='grade_id:'.$grade.',subject_id:'.$subject.',course_type:'.$courseType.',fee_type:'.$feeType; 
+            //新增查询排序
+            if(empty($_POST['orderBy'])){
+                $orderBy='create_time:desc';
+            }else if($_POST['orderBy']=='crtasc'){
+                $orderBy='create_time:asc';
+            }else if($_POST['orderBy']=='regdesc'){
+                $orderBy='register:desc';
+            }else if($_POST['orderBy']=='regasc'){
+                $orderBy='register:asc';
+            }else{
+                $orderBy='create_time:desc';
+            }
+            //判断此搜索条件下是否有课程
+            $queryArr=array();
+            $tmpArr=explode(',',$queryStr);
+            foreach($tmpArr as $tv){
+                $arr=explode(':',$tv);
+                if($arr[0]=='grade_id'&&$arr[1]==0){continue;}
+                if($arr[0]=='subject_id'&&$arr[1]==0){continue;}
+                $queryArr[$arr[0]]=$arr[1];
+            }
+            $queryArr['user_id']=$this->orgOwner;
+            $queryArr['admin_status']=1;
+            //查询排序
+            $obArr=explode(':',$orderBy);
+            $orderArr=array($obArr[0]=>$obArr[1]);
+            $seekArr = array(
+                "f"=>array(
+                    'course_id',
+                ),
+                "q" =>$queryArr,
+                "ob"=>$orderArr,
+                "p"=>1,
+                "pl"=>$rowCount*4,
+            );
+            $seekRet=seek_api::seekcourse($seekArr);
+            if(empty($seekRet->data)){
+                $result->error="您还没有创建此类型的课程";
+                return $result;
+            }
+        }
+        //手动推荐
+        $courseIds='';
+        if($recommend==2){
+            $seekArr = array(
+                "f"=>array(
+                    'course_id',
+                ),
+                "q" =>array(
+                    'user_id'=>$this->orgOwner,
+                    'admin_status'=>1,
+                ),
+                "ob"=>array('create_time'=>'desc'),
+                "p"=>1,
+                "pl"=>$rowCount*4,
+            );
+            $seekRet=seek_api::seekcourse($seekArr);
+            if(empty($seekRet->data)){
+                $result->error="您还没有创建课程";
+                return $result;
+            }
+            $cidArr=array();
+            foreach($seekRet->data as $cv){
+                $cidArr[$cv->course_id]=$cv->course_id;
+            }
+            $courseIds=implode(',',$cidArr);
+        }
+        //查询当前排序最大值
+        $maxSort=org_api::getOrgTemplateMaxSort($this->orgOwner);
+        $params=array(
+                'title'=>$title,
+                'fk_user_owner'=>$this->orgOwner,
+                'row_count'=>$rowCount,
+                'recommend'=>$recommend,
+                'query_str'=>$queryStr,
+                'order_by'=>$orderBy,
+                'sort'=>$maxSort+1,
+                'course_ids'=>$courseIds,
+                'last_updated'=>date('Y-m-d H:i:s'),
+            );
+        $r=user_organization::addOrgTemplate($params);
+        if(!empty($r)){
+            $result->status="Success!";
+            return $result;
+        }else{
+            $result->error="添加失败!";
+            return $result;
+        }
+    }
+	public function pageUpdateTemplateAjax($inPath){
+        $tid=!empty($_POST['tid'])?$_POST['tid']:0;
+        //判断能否修改
+        $template=user_organization::getOrgTemplateInfo($tid);
+        $result=new stdClass;
+        if(empty($template)||$template->owner_id!=$this->orgOwner){
+			$result->error="模版不存在或无权限修改";
+			return $result;
+        }
+        $title=!empty($_POST['title'])?$_POST['title']:'';
+        if(empty($title)){
+			$result->error="标题不能为空";
+			return $result;
+        }
+        if(strlen(iconv('utf-8','gb2312',$title))>16){
+			$result->error="标题不能超过8个汉字或16个英文字符";
+			return $result;
+        }
+        $rowCount=!empty($_POST['rowCount'])?(int)$_POST['rowCount']:0;
+        if($rowCount<1||$rowCount>4){
+			$result->error="行数错误";
+			return $result;
+        }
+        $recommend=!empty($_POST['recommend'])?(int)$_POST['recommend']:0;
+        if(empty($recommend) || !in_array($recommend,array(1,2))){
+			$result->error="非法参数";
+			return $result;
+        }
+        //自动推荐
+        $queryStr='';
+        if($recommend==1){
+            $grade=!empty($_POST['grade'])?(int)$_POST['grade']:0;
+            $subject=!empty($_POST['subject'])?(int)$_POST['subject']:0;
+            $courseType=!empty($_POST['courseType'])?(int)$_POST['courseType']:0;
+            $feeType=!empty($_POST['feeType'])?(int)$_POST['feeType']:0;
+            $queryStr='grade_id:'.$grade.',subject_id:'.$subject.',course_type:'.$courseType.',fee_type:'.$feeType; 
+            //新增查询排序
+            if(empty($_POST['orderBy'])){
+                $orderBy='create_time:desc';
+            }else if($_POST['orderBy']=='crtasc'){
+                $orderBy='create_time:asc';
+            }else if($_POST['orderBy']=='regdesc'){
+                $orderBy='register:desc';
+            }else if($_POST['orderBy']=='regasc'){
+                $orderBy='register:asc';
+            }else{
+                $orderBy='create_time:desc';
+            }
+            //判断此搜索条件下是否有课程
+            $queryArr=array();
+            $tmpArr=explode(',',$queryStr);
+            //查询排序
+            $obArr=explode(':',$orderBy);
+            $orderArr=array($obArr[0]=>$obArr[1]);
+            foreach($tmpArr as $tv){
+                $arr=explode(':',$tv);
+                if($arr[0]=='grade_id'&&$arr[1]==0){continue;}
+                if($arr[0]=='subject_id'&&$arr[1]==0){continue;}
+                $queryArr[$arr[0]]=$arr[1];
+            }
+            $queryArr['user_id']=$this->orgOwner;
+            $queryArr['admin_status']=1;
+            $seekArr = array(
+                "f"=>array(
+                    'course_id',
+                ),
+                "q" =>$queryArr,
+                "ob"=>$orderArr,
+                "p"=>1,
+                "pl"=>$rowCount*4,
+            );
+            $seekRet=seek_api::seekcourse($seekArr);
+            if(empty($seekRet->data)){
+                $result->error="您还没有创建此类型的课程";
+                return $result;
+            }
+        }
+        //手动推荐
+        $courseIds='';
+        if($recommend==2){
+            //已设置的课程
+            $tmpArr=array();
+            foreach($template->course_arr as $ck=>$cv){
+                if($ck<$rowCount*4){
+                    $tmpArr[]=$cv; 
+                }
+            }
+            if(!empty($tmpArr)){
+                $courseIds=implode(',',$tmpArr); 
+            }else{
+                $courseIds=$template->course_ids; 
+            }
+            /*此处代码先保留$seekArr = array(
+                "f"=>array(
+                    'course_id',
+                ),
+                "q" =>array(
+                    'user_id'=>$this->orgOwner,
+                    'admin_status'=>1,
+                ),
+                "ob"=>array('create_time'=>'desc'),
+                "p"=>1,
+                "pl"=>$rowCount*4,
+            );
+            $seekRet=seek_api::seekcourse($seekArr);
+            if(empty($seekRet->data)){
+                $result->error="您还没有创建课程";
+                return $result;
+            }
+            $cidArr=array();
+            foreach($seekRet->data as $cv){
+                $cidArr[$cv->course_id]=$cv->course_id;
+            }
+            $courseIds=implode(',',$cidArr);*/
+        }
+        $params=array(
+                'title'=>$title,
+                'row_count'=>$rowCount,
+                'recommend'=>$recommend,
+                'query_str'=>$queryStr,
+                'order_by'=>$orderBy,
+                'course_ids'=>$courseIds,
+                'last_updated'=>date('Y-m-d H:i:s'),
+            );
+        $r=user_organization::updateOrgTemplate($tid,$params);
+        if(!empty($r)){
+            $result->status="Success!";
+            return $result;
+        }else{
+            $result->error="修改失败!";
+            return $result;
+        }
+    }
+    public function pageAddRowsAjax($inPath){
+        $tid=!empty($_POST['tid'])?$_POST['tid']:0;
+        //判断能否修改
+        $template=user_organization::getOrgTemplateInfo($tid);
+        $result=new stdClass;
+        if(empty($template)||$template->owner_id!=$this->orgOwner){
+			$result->error="模版不存在或无权限修改";
+			return $result;
+        }
+        if($template->row_count>=4){
+			$result->error="最多添加四行";
+			return $result;
+        } 
+        $queryArr=array();
+        if($template->query_arr){
+            foreach($template->query_arr as $qk=>$qv){
+                if($qk=='grade_id'&&$qv==0){continue;}
+            if($qk=='subject_id'&&$qv==0){continue;}
+            $queryArr[$qk]=$qv;
+            }
+        }
+        $queryArr['user_id']=$this->orgOwner;
+        $queryArr['admin_status']=1;
+        $rowCount=$template->row_count+1;
+        $seekArr = array(
+            "f"=>array(
+                'course_id',
+                'title',
+                'thumb_big',
+                'subject_id',
+            ),
+            "q" => $queryArr,
+            "p"=>$rowCount,
+            "pl"=>4,
+        );
+        $seekRet=seek_api::seekcourse($seekArr);
+        $courses=$seekRet->data; 
+        if(empty($courses)){
+			$result->error="课程数量不足，无法添加";
+			return $result;
+        }
+        $params=array(
+                'row_count'=>$rowCount,
+                'last_updated'=>date('Y-m-d H:i:s'),
+            );
+        $r=user_organization::updateOrgTemplate($tid,$params);
+        if(!empty($r)){
+            foreach($courses as $ck=>$cv){
+                $courses[$ck]->thumb_big=utility_cdn::file($cv->thumb_big);
+            }
+            return $courses;
+        }else{
+            $result->error="修改失败!";
+            return $result;
+        }
+    }
+	public function pageIframeTemplateCourse($inPath){
+        $top=$inPath[3];
+        $templateId=$inPath[4];
+        $this->assign('top',$top);
+        $this->assign('tid',$templateId);
+        $this->render('org/iframe.template.course.html');
+	}
+    public function pageAddTemplateCourseAjax($inPath){
+        $result=new stdClass;
+        if(empty($_POST['tid'])||!isset($_POST['top'])||empty($_POST['cid'])){
+            $result->error="参数错误";
+            return $result;
+        }else{
+            //判断能否修改
+            $template=user_organization::getOrgTemplateInfo($_POST['tid']);
+            $result=new stdClass;
+            if(empty($template)||$template->owner_id!=$this->orgOwner){
+                $result->error="模版不存在或无权限修改";
+                return $result;
+            }
+            //判断课程是否已设置
+            if(in_array($_POST['cid'],$template->course_arr)){
+                $result->error="课程已存在";
+                return $result;
+            }
+            $template->course_arr[$_POST['top']]=$_POST['cid'];
+            $course_ids=implode(',',$template->course_arr);
+            $count=count($template->course_arr);
+            //重新计算行数
+            $rowCount=ceil($count/4);
+            $params=array(
+                'row_count'=>$rowCount,
+                'course_ids'=>$course_ids,
+                'last_updated'=>date('Y-m-d H:i:s'),
+            );
+            $r=user_organization::updateOrgTemplate($_POST['tid'],$params);
+            if($r){
+                $result->status="Success!";
+                return $result;
+            }else{
+                $result->error="修改失败!";
+                return $result;
+            }
+        }
+    }
+    /**
+     * 自定义首页
+     * @author Panda <zhangtaifeng@gn100.com>
+     */
+    public function pageDeleteTemplateAjax($inPath){
+        $result=new stdClass;
+        if(empty($_POST['tid'])){
+            $result->error="参数错误";
+            return $result;
+        }
+        //判断能否修改
+        $template=user_organization::getOrgTemplateInfo($_POST['tid']);
+        $result=new stdClass;
+        if(empty($template)||$template->owner_id!=$this->orgOwner){
+            $result->error="模版不存在或无权限删除";
+            return $result;
+        }
+        $r = user_organization::deleteOrgTemplate((int)$_POST['tid']);
+        if($r){
+            $result->status="Success!";
+            return $result;
+        }else{
+            $result->error="删除失败!";
+            return $result;
+        }
+    }
+	//删除公告
+	public function pageDelNoticeAjax($inPath){
+		$result=new stdclass;
+		$user_id=$this->orgOwner;
+		if(empty($_REQUEST['nid'])){
+			$result->error="参数错误";
+			return $result;
+		}
+		$notice_info=user_api::getNotice($_REQUEST['nid']); 
+		if(empty($notice_info) || $notice_info->fk_user_id!=$user_id){
+			$result->error="非法操作";
+			return $result;
+		}
+		$r=user_api::delNotice($_REQUEST['nid']);
+		if($r){
+			$result->status="Success!";
+			return $result;
+		}else{
+			$result->error="删除失败!";
+			return $result;
+		}
+
+	}
+	//置顶公告
+	public function pageTopNoticeAjax($inPath){
+		$result=new stdclass;
+		$user_id=$this->orgOwner;
+		if(empty($_REQUEST['nid'])){
+			$result->error="参数错误";
+			return $result;
+		}
+		$notice_info=user_api::getNotice($_REQUEST['nid']); 
+		if(empty($notice_info) || $notice_info->fk_user_id!=$user_id){
+			$result->error="非法操作";
+			return $result;
+		}
+		$r=user_api::topNotice($_REQUEST['nid'],$user_id);
+		if($r){
+			$result->status="Success!";
+			return $result;
+		}else{
+			$result->error="置顶失败!";
+			return $result;
+		}
+
+	}
+	//取消置顶公告
+	public function pageDownNoticeAjax($inPath){
+		$result=new stdclass;
+		$user_id=$this->orgOwner;
+		if(empty($_REQUEST['nid'])){
+			$result->error="参数错误";
+			return $result;
+		}
+		$notice_info=user_api::getNotice($_REQUEST['nid']); 
+		if(empty($notice_info) || $notice_info->fk_user_id!=$user_id){
+			$result->error="非法操作";
+			return $result;
+		}
+		$r=user_api::noTopNotice($_REQUEST['nid']);
+		if($r){
+			$result->status="Success!";
+			return $result;
+		}else{
+			$result->error="取消置顶失败!";
+			return $result;
+		}
+
+	}
+    //模版上移
+    public function pageMoveUpAjax($inPath){
+        $result=new stdClass;
+        if(empty($_POST['tid'])){
+            $result->error="参数错误";
+            return $result;
+        }else{
+            $tid=$_POST['tid'];
+            $old=!empty($_POST['old'])?$_POST['old']:0;
+            $sort=!empty($_POST['sort'])?(int)$_POST['sort']:0;
+            if($sort<1){
+                $sort=1; 
+            }else{
+                $sort=$sort+1;  
+            }
+            //判断能否修改
+            $template=user_organization::getOrgTemplateInfo($tid);
+            if(empty($template)||$template->owner_id!=$this->orgOwner){
+                $result->error="模版不存在或无权限修改";
+                return $result;
+            }
+            //设置新模版
+            $newArr=array(
+                    'sort'=>$sort-1,
+                    'last_updated'=>date('Y-m-d H:i:s'),
+                );
+            $r1=user_organization::updateOrgTemplate($tid,$newArr);
+            //修改老模版
+            $oldArr=array(
+                    'sort'=>$sort,
+                    'last_updated'=>date('Y-m-d H:i:s'),
+                );
+            $r2=user_organization::updateOrgTemplate($old,$oldArr);
+            if(!empty($r1)&&!empty($r2)){
+                $result->status="Success!";
+                return $result;
+            }else{
+                $result->error="修改失败!";
+                return $result;
+            }
+        }
+    }
+    //模版下移
+    public function pageMoveDownAjax($inPath){
+        $result=new stdClass;
+        if(empty($_POST['tid'])){
+            $result->error="参数错误";
+            return $result;
+        }else{
+            $tid=$_POST['tid'];
+            $sort=!empty($_POST['sort'])?$_POST['sort']:0;
+            $old=!empty($_POST['old'])?(int)$_POST['old']:0;
+            if($sort<1){
+                $sort=1; 
+            }else{
+                $sort=$sort+1;  
+            }
+            //判断能否修改
+            $template=user_organization::getOrgTemplateInfo($tid);
+            if(empty($template)||$template->owner_id!=$this->orgOwner){
+                $result->error="模版不存在或无权限修改";
+                return $result;
+            }
+            //设置新模版
+            $newArr=array(
+                    'sort'=>$sort+1,
+                    'last_updated'=>date('Y-m-d H:i:s'),
+                );
+            $r1=user_organization::updateOrgTemplate($tid,$newArr);
+            //修改老模版
+            $oldArr=array(
+                    'sort'=>$sort,
+                    'last_updated'=>date('Y-m-d H:i:s'),
+                );
+            $r2=user_organization::updateOrgTemplate($old,$oldArr);
+            if(!empty($r1)&&!empty($r2)){
+                $result->status="Success!";
+                return $result;
+            }else{
+                $result->error="修改失败!";
+                return $result;
+            }
+        }
+    }
+    //保存排序
+    public function pageSaveSortAjax($inPath){
+        $result=new stdClass;
+        if(empty($_POST['tid'])||empty($_POST['cids'])){
+            $result->error="参数错误";
+            return $result;
+        }else{
+            $tid=$_POST['tid'];
+            $cids=trim($_POST['cids'],',');
+            //判断能否修改
+            $template=user_organization::getOrgTemplateInfo($tid);
+            if(empty($template)||$template->owner_id!=$this->orgOwner){
+                $result->error="模版不存在或无权限修改";
+                return $result;
+            }
+            //保存排序
+            $newArr=array(
+                    'course_ids'=>$cids,
+                    'last_updated'=>date('Y-m-d H:i:s'),
+                );
+            $r=user_organization::updateOrgTemplate($tid,$newArr);
+            if(!empty($r)){
+                $result->status="Success!";
+                return $result;
+            }else{
+                $result->error="修改失败!";
+                return $result;
+            }
+        }
+    }
+	 //关闭机构左侧引导
+    public function pageCloseGrowthTips($inPath){
+        //用户点击关闭提示条
+        $user=user_api::loginedUser();
+        if(!empty($user)){ 
+            $guide=array(
+                    'status'=>1, 
+                );
+            $updateUserGuide=user_api::updateUserGuide($user['uid'],5,$guide);
+            return $updateUserGuide;
+        }else{
+            return false;
+        }
+    }
+	//公告列表
+	public function pageactiveNoticeList($inPath){
+		$num  =20;
+		$cateId = isset($_GET['c']) ? (int)$_GET['c'] : 0;
+		$cate_name = isset($_GET['cate_name']) ? trim($_GET['cate_name']) : '';
+        $path = "/org.main.activeNoticeList?c=".$cateId."";
+        $page = isset($_GET['page'])?$_GET['page']:1;
+        $noticeList = user_api::getNoticeList($page,$num,$this->orgOwner,$cateId,$this->orgInfo->oid);
+		$data = array( "fk_org"=>$this->orgInfo->oid);
+		$cateList = org_api::noticeCategoryList($data);
+		$this->assign('cateList',$cateList);
+		$this->assign('cate_name',$cate_name);
+        $this->assign('noticeList',$noticeList);
+        $this->assign('path',$path);
+        $this->assign('length',$num);
+        $this->assign('page',$page);
+		return $this->render("org/noticeList.html");
+	}
+	public function pageactiveNoticeAdd($inPath){
+        $data = array( "fk_org"=>$this->orgInfo->oid);
+		$cateList = org_api::noticeCategoryList($data);
+		$this->assign('cateList',$cateList);
+		return $this->render("org/noticeAdd.html");
+	}
+	public function pageactiveNoticeEdit($inPath){
+		$nid = !empty($inPath[3]) ? $inPath[3] : 0;
+		$notice=user_api::getNotice($nid);
+		$data = array( "fk_org"=>$this->orgInfo->oid);
+		$cateList = org_api::noticeCategoryList($data);
+		$this->assign('cateList',$cateList);
+        $this->assign('notice',$notice);
+		return $this->render("org/noticeEdit.html");
+	}
+	//显示分类
+	public function pagenoticeAddCate($inPath){
+		$data = array( "fk_org"=>$this->orgInfo->oid);
+		$cateList = org_api::noticeCategoryList($data);
+		$this->assign('cateList',$cateList);
+		return $this->render("org/noticeAddCate.html");
+	}
+	
+	//增加文章资讯分类
+	public function pageajaxAddCate($inPath){
+		$name = !empty($_POST['catename']) ? trim($_POST['catename']) : '';
+		$data = array("name" =>$name,
+					  "fk_org"=>$this->orgInfo->oid,
+					  "fk_user"=>$this->user['uid']
+					  );
+		$addCate = org_api::ajaxAddNoticeCategory($data);
+		if($addCate->result->code > 0){
+			$result = array("status"=>100,"data"=>$addCate->result->data,"msg"=>"添加成功");
+		}else{
+			$result = array("status"=>-1,"msg"=>"添加失败");
+		}
+		echo json_encode($result);
+	}
+	public function pageupdateNoticeCate(){
+		$data = array();
+		$data = array("pk_cate"=>!empty($_POST['cid']) ? $_POST['cid'] : '',
+					  "name"=>!empty($_POST['cate_name']) ? $_POST['cate_name'] : '',
+					  "fk_org"=>$this->orgInfo->oid,
+					  "fk_user"=>$this->user['uid']
+				);
+		$cateInfo=org_api::getCateNameInfo($data);
+		if($cateInfo->result->code>0){
+			$info = org_api::updateNoticeCate($data);
+			$result = array("status"=>100,"msg"=>"修改成功");
+		}else{
+			$result = array("status"=>-1,"msg"=>"修改失败");
+		}
+		echo json_encode($result);
+	}
+	public function pagedelnoticeCateInfo(){
+		$data = array();
+		$data = array("pk_cate"=>!empty($_POST['cid']) ? $_POST['cid'] : '',
+					  "fk_org"=>$this->orgInfo->oid,
+                      "fk_user_id"=>$this->orgOwner
+				);
+		$delInfo = org_api::delnoticeCateInfo($data);
+		if($delInfo->result->code>0){
+			$result = array("status"=>100,"msg"=>"删除成功");
+		}else{
+			$result = array("status"=>-1,"msg"=>"删除失败");
+		}
+		echo json_encode($result);
+	}
+}
+
+

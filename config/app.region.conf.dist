@@ -1,0 +1,34 @@
+default{
+  reg{ id 0; name '全国';}
+  reg{ id 29; name '安徽';}   
+  reg{ id 1; name '北京';}
+  reg{ id 4; name '重庆';}
+  reg{ id 31; name '福建';}
+  reg{ id 18; name '广东';}
+  reg{ id 19; name '广西';}
+  reg{ id 21; name '贵州';}
+  reg{ id 25; name '甘肃';}
+  reg{ id 15; name '海南';}
+  reg{ id 12; name '河南';}
+  reg{ id 13; name '湖北';}
+  reg{ id 14; name '湖南';}
+  reg{ id 11; name '河北';}
+  reg{ id 5; name '黑龙江';}
+  reg{ id 16; name '江苏';}
+  reg{ id 17; name '江西';}
+  reg{ id 6; name '吉林';}
+  reg{ id 7; name '辽宁';}
+  reg{ id 23; name '内蒙古';}
+  reg{ id 24; name '宁夏';}
+  reg{ id 26; name '青海';}
+  reg{ id 10; name '陕西';}
+  reg{ id 22; name '四川';}
+  reg{ id 2; name '上海';}
+  reg{ id 9; name '山西';}
+   reg{ id 8; name '山东';}
+  reg{ id 3; name '天津';}
+  reg{ id 28; name '新疆';}
+  reg{ id 27; name '西藏';}
+  reg{ id 20; name '云南';}
+  reg{ id 30; name '浙江';}
+}

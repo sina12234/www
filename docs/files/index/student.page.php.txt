@@ -1,0 +1,1437 @@
+<?php
+class index_student extends STpl{
+	var $user;
+	var $domain;
+    function __construct(){
+		$this->user = user_api::loginedUser();
+        if(empty($this->user)){
+			if(!empty($_SERVER['REQUEST_URI'])){
+            	$this->redirect("/index.main.login?url=".$_SERVER['REQUEST_URI']);
+            }else{
+                $this->redirect("/index.main.login");
+            }
+        }
+        $domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","domain");
+        $this->domain = $domain_conf->domain;
+    }
+	public function pageCourse($inPath){
+		$uid = $this->user['uid'];
+		$currDate  = date('m.d',time());
+		$num  = 10;
+		$page = isset($_GET['page']) ? $_GET['page']:1;
+		$size = isset($_GET['size']) ? $_GET['size']:0;		
+		$searchTitle = isset($_GET['title'])?$_GET['title']:'';
+		$searchDel = isset($_GET['del'])?$_GET['del']:0;		
+		$params = !empty($inPath[3])?$inPath[3]:0;
+		if($params == 2){
+			$searchDel = 1;
+		}
+		if(!empty($searchTitle)){
+			$path = "/index.student.course?del={$searchDel}&title={$searchTitle}";
+		}else{
+			$path = '/index.student.course';
+		}
+		//获取直播列表内容
+		$planlist = array();
+		$startTime = date('Y-m-d',time()).' 00:00:00';
+		$userLivingCourse = course_api::getUserLivingCourse($uid,1,$startTime);
+		if(!empty($userLivingCourse)){
+			foreach($userLivingCourse as $course){
+				$livingCourseIdArr[] = $course->fk_course;
+				$livingClassIdArr[]  = $course->fk_class;
+        		$livingCourse[$course->fk_course] = $course;
+            	if( $course->fee_type == 0 ) {
+            		$livingCourse[$course->fk_course]->fee_type = "免费";
+					$livingCourse[$course->fk_course]->fee_class = 'cGreen';
+            	}else{
+                	$livingCourse[$course->fk_course]->fee_type = '￥'.$course->price/100;
+					$livingCourse[$course->fk_course]->fee_class = 'cYellow';
+           		}
+			}
+			$livingPlan = $this->getLivingPlan($livingCourseIdArr,$livingClassIdArr,1,20);				
+			$planlist   = $this->handlePlan($livingPlan, $currDate, $livingCourse);			
+		}
+		
+		//获取报名课程
+		$courseCount = 0;
+		$totalPage   = 0;
+		$courseInfo  = array();
+		$regInfo = course_api::getUserRegisterCourseList($uid,$page,$num,0,$searchTitle);
+		if(!empty($regInfo->data)){
+			$courseCount = $regInfo->totalSize;
+			$totalPage   = $regInfo->totalPage;
+			foreach($regInfo->data as $rv){
+				$courseIdArr[] = $rv->fk_course;
+				$classIdArr[]  = $rv->fk_class;
+				$courseInfo[] = $rv; 
+			}
+			$coursePlan  = $this->getCoursePlanList($courseIdArr,$classIdArr);
+			$coursePlanList = array();
+			$coursePlanTemp = array();
+			if(!empty($coursePlan)){
+				foreach($coursePlan as $vo){
+					$coursePlanList[$vo->course_id][$vo->status][] = $vo;
+					$coursePlanTemp[$vo->course_id][] = $vo;
+				}
+			}			
+			foreach($courseInfo as &$co){
+				$co->teacher_url = '/index.teacherblog.entry/'.$co->fk_user_class;
+				$co->thumb_sma = utility_cdn::file($co->thumb_small);
+				if( $co->fee_type == 0 ) {
+            		$co->fee_type = '免费';
+					$co->fee_class = 'cGreen';
+            	}else{
+                	$co->fee_type = '￥'.$co->price/100;
+					$co->fee_class = 'cYellow';
+           		}
+				$co->section_url  = '/index.student.detail/'.$co->fk_course.'/'.$co->fk_class;
+				$temp = array();
+				if(!empty($coursePlanList[$co->fk_course][2])){
+					$temp = $coursePlanList[$co->fk_course][2][0];
+				}
+				if(empty($temp)){
+					$finishPlan = array();
+					if(!empty($coursePlanList[$co->fk_course][3])){
+						$finishCount = count($coursePlanList[$co->fk_course][3]);
+						$finishPlan = $coursePlanList[$co->fk_course][3][$finishCount-1];
+						$finishStime = strtotime($finishPlan->start_time);
+					}
+					if(!empty($coursePlanList[$co->fk_course][1]) && !empty($coursePlanList[$co->fk_course][3])){
+						foreach($coursePlanList[$co->fk_course][1] as $to){
+							$stime = strtotime($to->start_time);
+							if($stime > $finishStime){
+								$temp = $to;
+								break;
+							}
+						}
+					}
+					if(empty($coursePlanList[$co->fk_course][3]) && !empty($coursePlanList[$co->fk_course][1])){
+						$temp = $coursePlanList[$co->fk_course][1][0];
+					}
+					if(empty($temp)){
+						$temp = $finishPlan;
+					}
+				}
+				$offlineFlag = 0;
+				if(!empty($temp)){
+					if($co->type == 3){
+						foreach($coursePlanTemp[$co->fk_course] as $plan){
+							if(strtotime($plan->start_time) >= time()){
+								$offlineFlag = 1;
+								$temp->section_name = $plan->section_name;
+								break;
+							}
+						}
+					}
+					$co->section_name = $temp->section_name;
+					$co->section_status = $temp->status;
+				}else{
+					$co->section_name   = '';
+					$co->section_status = 1;
+				}
+				if($co->status == 3 || $co->type == 2 ){
+					$co->section_show = 0;
+				}elseif($co->type == 3 && $offlineFlag == 0){
+					$co->section_show = 0;
+				}else{
+					$co->section_show = 1;
+				}
+			}
+		}
+		$this->assign('curr_date', $currDate);
+		$this->assign('user_course', $courseInfo);
+		$this->assign('course_count', $courseCount);
+		$this->assign('planlist', $planlist);
+		$this->assign('title', $searchTitle);
+		$this->assign('del', $searchDel);
+		$this->assign('num',$num);
+		$this->assign('total_page',$totalPage);
+		$this->assign('path',$path);
+		$this->assign('page',$page);
+		$this->assign('size',$size);
+		$this->render('index/student.course.html');
+	}
+
+	public function pageGetPlanAjax($inPath){
+		$page = !empty($_POST['page'])?$_POST['page']: 1;
+		$uid = $this->user['uid'];
+		$currDate  = date('m.d',time());
+		$startTime = date('Y-m-d',time()).' 00:00:00';
+		$userLivingCourse = course_api::getUserLivingCourse($uid,1,$startTime);
+		if(!empty($userLivingCourse)){
+			foreach($userLivingCourse as $course){
+				$livingCourseIdArr[] = $course->fk_course;
+				$livingClassIdArr[]  = $course->fk_class;
+        		$livingCourse[$course->fk_course] = $course;
+            	if( $course->fee_type == 0 ) {
+            		$livingCourse[$course->fk_course]->fee_type = "免费";
+					$livingCourse[$course->fk_course]->fee_class = 'cGreen';
+            	}else{
+                	$livingCourse[$course->fk_course]->fee_type = '￥'.$course->price/100;
+					$livingCourse[$course->fk_course]->fee_class = 'cYellow';
+           		}
+			}
+			$livingPlan = $this->getLivingPlan($livingCourseIdArr,$livingClassIdArr,$page,20);				
+			$planlist   = $this->handlePlan($livingPlan, $currDate, $livingCourse);	
+			if(!empty($planlist)){
+				$this->setAjaxResult(0,'success',$planlist);
+			}else{
+				$this->setAjaxResult(-1,'data is empty');
+			}
+        }else{
+			$this->setAjaxResult(-2,'not find data');
+		}
+	}
+	
+	public function getLivingPlan($my_courseid_arr,$my_classid_arr,$page=1,$size){
+		$start_time = date('Y-m-d', time()).' 00:00:00';
+        $end_time   = date('Y-m-d H:i:s', strtotime('next year'));
+        $status = '1,2,3';
+        $order = array('start_time'=>'asc');
+        $livingPlan = $this->getPlanList($page,$my_courseid_arr,$my_classid_arr,$status,$start_time,$end_time,$order,$size);
+		return $livingPlan;
+	}
+	
+	public function handlePlan($plan_info, $curr_date, $course_info){
+  		if( !empty($plan_info) ) {
+			$owner_arr = array();
+        	foreach($plan_info as $pv){
+            	$start_date = date('m.d',strtotime($pv->start_time));
+                $start_hour = date('H:i',strtotime($pv->start_time));
+				$month = date('m',strtotime($pv->start_time)).'月';
+                $pv->start_date = $start_date;
+                $pv->start_day = $start_date;
+                $pv->start_month = $month;
+                $pv->start_hour = $start_hour;
+				if(!empty($course_info[$pv->course_id])){	
+               	 	$pv->thumb_sma  = utility_cdn::file($course_info[$pv->course_id]->thumb_sma);
+                	$pv->fee_type   = $course_info[$pv->course_id]->fee_type;
+                	$pv->fee_class  = $course_info[$pv->course_id]->fee_class;
+                	$pv->section_count  = $course_info[$pv->course_id]->section_count;
+				}else{
+               	 	$pv->thumb_sma  = '';
+                	$pv->fee_type   = '';
+                	$pv->fee_class  = '';
+                	$pv->section_count  = 0;
+				}
+                $temp[$pv->start_month][$pv->start_date][] = $pv;
+            }
+			
+			 //获取机构信息
+			$video_type_arr = array(0,-2);
+			foreach($temp as $k=>$v){
+				foreach($v as $kk=>$vv){
+					foreach($vv as $kkk=>$vvv){
+						$start_date = $vvv->start_date;
+						$smonth = date('m',strtotime($vvv->start_time)).'月';
+						$sday = date('d',strtotime($vvv->start_time)).'日';
+						if($kk == $curr_date){
+							if($kkk == 0){
+								$vvv->start_date = '<p class="vertical-line-date">今日</p><p>'.$vvv->start_hour.'</p>';
+							}else{
+								$vvv->start_date = '<p class="vertical-line-time">'.$vvv->start_hour.'</p>';
+							}
+						}else{
+							if($kkk == 0){
+								$vvv->start_date = '<p class="vertical-line-date">'.$smonth.$sday.'</p><p>'.$vvv->start_hour.'</p>';
+							}else{
+								$vvv->start_date = $vvv->start_hour;
+							}
+						}
+						$vvv->org_name   = $vvv->org_subname;
+                    	$vvv->course_url = '/index.student.detail/'.$vvv->course_id.'/'.$vvv->class_id;
+                    	$vvv->plan_url   = "//".user_organization::course_domain($vvv->subdomain).'/course.plan.play/'.$vvv->plan_id;
+                    	$vvv->teacher_url = '/index.teacherblog.entry/'.$vvv->teacher_id;
+                    	$vvv->plan_stat_url = '/index.student.stat/'.$vvv->plan_id;
+						if(!empty($vvv->teacher_real_name)){
+							$vvv->teacher_name = $vvv->teacher_real_name;
+						}
+						$vvv->plan_button = '';
+						
+						if($curr_date == $start_date){
+                     		if($vvv->status != 3){
+								$vvv->plan_button = "<a href='{$vvv->plan_url}' target='_blank'><button class='come-look-btn'>进入课堂</button></a>";
+                     		}
+							if($vvv->status == 3 && $vvv->video_public_type != -2){
+								$vvv->plan_button = "<a href='{$vvv->plan_url}' target='_blank'><button class='look-btn' >直播回看</button></a>";
+												//"<p class='class-stat'><a data-pid = '{$vvv->plan_id}'  href='javascript::void(0);'>课堂统计</p>";
+							}
+                 		}else{
+                     		if($vvv->status == 1 || $vvv->status == 2){
+                         		$vvv->plan_button="<p style='margin-top:14px;'>未开课</p>";
+                     		}elseif($vvv->status == 3 && $vvv->video_public_type != -2 ){
+								$vvv->plan_button = "<a href='{$vvv->plan_url}' target='_blank'><button class='look-btn'>直播回看</button></a>";
+								//"<p class='class-stat'><a data-pid='{$vvv->plan_id}' href=javascript::void(0);'>课堂统计</p>";
+							}
+                 		}
+						$planlist[$k][] = $vvv;
+					}
+				}
+			}
+        }else{
+			$planlist = array();
+		}
+		return $planlist;
+	}
+	
+	public function pageDetail($inPath){
+		$course_id = $inPath[3];	
+		$class_id  = $inPath[4];	
+		$uid = $this->user['uid'];
+		if(!empty($course_id) && !empty($class_id)){
+			$check = course_api::checkUserRegisterCourse($course_id,$class_id,$uid);
+			if($check->result->code == 0 && !empty($check->result->data)){
+				$courseid_arr = array($course_id);
+				$classid_arr = array($class_id);
+				$course_ret = $this->getCourseInfo($courseid_arr);
+				$domain = '';
+				$org_name = '';
+				$owner_id = 0;
+				$class_detail = array();
+				if(!empty($course_ret)){
+					$course_info = $course_ret[$course_id];
+					$class_detail = $this->getCourseDetail($course_info,$class_id);
+					$owner_id = $course_info->user_id;
+					$org_name = $course_info->org_subname;
+				}			
+				$course_plan  = $this->getCoursePlanList($courseid_arr,$classid_arr);
+				$section_count = count($course_plan);
+				$finish_section = 0;
+				$temp = array();
+				$curr_plan = array();
+				$curr_date = date('m.d',time());
+				$finish_planids = array();
+				$planids = array();
+				$sort = 0;
+				$good_count = 0;
+				$right_percent = '0%';
+				$right_count = 0;
+				$question_count = 0;
+				$avg_score = 0;
+				$attach_data = array();
+				$file_data = array();
+				$study_flag = array();
+				$offline_finish = array();
+				$user_comment = array();
+				if(!empty($course_plan)){
+					//章节信息
+					$curr_year = date('Y',time());
+					foreach($course_plan as &$po){
+						$temp[$po->status][] = $po;
+            			$start_day = date('m.d',strtotime($po->start_time));
+						$po->start_day = $start_day;
+                    	$po->plan_url = '//'.user_organization::course_domain($po->subdomain).'/course.plan.play/'.$po->plan_id;
+                    	$po->teacher_url = '/index.teacherblog.entry/'.$po->teacher_id;					
+						$stime = strtotime($po->start_time);
+						$start_time_year = date('Y',strtotime($po->start_time));
+						$nextday = date('Y-m-d',$stime+24*3600).' '.'00:00:00';
+						if($curr_year != $start_time_year){
+							$po->start_date = date('Y',$stime).'年'.date('m',$stime).'月'.date('d',$stime).'日 '.date('H:i',$stime);
+						}else{
+							$po->start_date = date('m',$stime).'月'.date('d',$stime).'日 '.date('H:i',$stime);
+						}
+						if($po->course_type == 2){
+							if($po->status == 3){
+								$finish_planids[] = $po->plan_id;
+							}
+						}else{
+							if($po->status == 3 || $po->status == 2){
+								$finish_planids[] = $po->plan_id;
+							}
+						}
+						if($po->course_type == 3 && time() >= strtotime($nextday)){
+							$offline_finish[] = $po->plan_id;
+						}	
+						$planids[] = $po->plan_id;
+						
+					}	
+					
+					//获取录播课上传视频时间
+					if(!empty($course_info) && $course_info->course_type == 2 && !empty($finish_planids)){
+						$video_plan_ret = course_api::getPlanVideoByPlanIdArr($finish_planids);
+						if(!empty($video_plan_ret)){
+							$video_temp = array();
+							foreach($video_plan_ret as $video){
+								if(!empty($video->segs_totaltime)){
+									$video_time = $this->getVideoTime($video->segs_totaltime);
+								}else{
+									$video_time = $this->getVideoTime($video->totaltime);
+								}
+								$video_temp[$video->fk_plan] = $video_time;
+							}
+							foreach($course_plan as &$plan){
+								if(!empty($video_temp[$plan->plan_id])){
+									$plan->video_time = $video_temp[$plan->plan_id];
+								}else{
+									$plan->video_time = '';
+								} 
+							}
+						}
+					}
+					
+					//获取用户已经学习的章节
+					if(!empty($course_info) && $course_info->course_type != 3){
+						$study_flag = $this->getStudyPlan($planids);
+					}
+					
+					//获取课程进度	
+					if(!empty($course_info) && $course_info->course_type == 1){
+						if(!empty($temp[3])){
+							$finish_section = count($temp[3]);
+							$curr_plan = $temp[3][$finish_section-1];
+							$finish_stime = strtotime($curr_plan->start_time);
+						}
+						if(!empty($temp[1]) && !empty($temp[3]) ){
+							foreach($temp[1] as $to){
+								$stime = strtotime($to->start_time);
+								if($stime < $finish_stime){
+									$finish_section += 1;	
+								}
+							}
+						}
+						if(!empty($curr_plan)){
+							$class_detail['curr_sname'] = $curr_plan->section_name;
+							$class_detail['curr_pid']   = $curr_plan->plan_id;
+						}else{
+							$class_detail['curr_sname'] = '';
+							$class_detail['curr_pid']   = '';
+						}
+						$class_detail['percent'] = bcdiv($finish_section,$section_count,2)*100 .'%';
+					}elseif(!empty($course_info) && $course_info->course_type == 2){
+						$video_count = count($finish_planids);
+						$class_detail['percent'] = bcdiv($video_count,$section_count,2)*100 .'%';
+					}elseif(!empty($course_info) && $course_info->course_type == 3){
+						$offline_finish_count = count($offline_finish);
+						$class_detail['percent'] = bcdiv($offline_finish_count,$section_count,2)*100 .'%';
+					}
+
+					//课堂统计
+					if(!empty($finish_planids) && !empty($course_info) && $course_info->course_type == 1 ){
+					//排名 点赞总次数
+						$good_ret = message_api::getPlanGoodByPidArr($finish_planids);
+						if(!empty($good_ret) && !empty($good_ret->data)){
+							$good_data = $good_ret->data;
+							foreach($good_data as $go){
+								$good_key[] = $go->num;
+							}
+							array_multisort($good_key,SORT_DESC,$good_data);
+							foreach($good_data as $kk=>$gg){
+								if($gg->fk_user == $uid){
+									$sort = $kk+1;
+									$good_count = $gg->num;
+									break;
+								}
+							}				
+							if($sort == 0){
+								$sort = count($good_data)+1;
+							}
+						}
+						//获取用户答题统计
+						$question_ret = course_api::getPlanQuestionCountByPidArr($finish_planids);
+						if(!empty($question_ret) && !empty($question_ret->data)){
+							$question_count = $question_ret->data;
+						}
+						$answer_ret = exam_api::getUserRightAnswerCountByPidArr($uid,$finish_planids);		
+						if(!empty($answer_ret) && !empty($answer_ret->data)){
+							$right_count = $answer_ret->data;
+						}
+						if($question_count != 0 ){
+					    	$right_percent = bcdiv($right_count,$question_count,2)*100 .'%';
+						}
+					}
+					//获取班级学生对课程的评价
+					if(!empty($course_info) && $course_info->course_type != 3 && !empty($finish_planids)){
+						$score_ret = message_api::getPlanScoreByPidArr($finish_planids);
+						if(!empty($score_ret->data->user_total)){
+							$avg_score = bcdiv($score_ret->data->score_count,$score_ret->data->user_total,1);
+						}
+						$comment_ret = comment_api::checkIsCommentByPlanId($finish_planids,$uid);
+						if(!empty($comment_ret->result->items)){
+							foreach($comment_ret->result->items as $comment){
+								$user_comment[$comment->fk_plan] = $comment;
+							}
+						}
+					}elseif(!empty($course_info) && $course_info->course_type == 3 && !empty($offline_finish)){
+						$score_ret = message_api::getPlanScoreByPidArr($offline_finish);
+						if(!empty($score_ret->data->user_total)){
+							$avg_score = bcdiv($score_ret->data->score_count,$score_ret->data->user_total,1);
+						}
+						$comment_ret = comment_api::checkIsCommentByPlanId($offline_finish,$uid);
+						if(!empty($comment_ret->result->items)){
+							foreach($comment_ret->result->items as $comment){
+								$user_comment[$comment->fk_plan] = $comment;
+							}
+						}
+					}
+				}
+
+					//获取下载课件资料
+				$attach_ret = course_api::listPlanAttach($class_id);
+				if(!empty($attach_ret) && !empty($attach_ret->data)){
+					$attach_data = $attach_ret->data;
+					foreach($attach_data as $ao){
+						$fidArr[] = '\''.$ao->attach.'\'';
+					}
+					$file = utility_file::getFileByFidArr($fidArr);
+					if(!empty($file)){
+						foreach($file as $fo){
+							$file_data[$fo->fid] = bcdiv($fo->size,1024,1);
+						}
+					}
+				}
+				$first_show  = 0;
+				$second_show = 0;
+				if(!empty($class_detail['curr_sname']) && $class_detail['course_type'] == 1){
+					$first_show = 1;
+				}elseif(!empty($attach_data)){
+					$second_show =1;
+				}
+				$this->assign('user_comment',$user_comment);
+				$this->assign('first_show',$first_show);
+				$this->assign('second_show',$second_show);
+				$this->assign('study_flag',$study_flag);
+				$this->assign('file_data',$file_data);
+				$this->assign('attach_count',count($attach_data));
+				$this->assign('attach_data',$attach_data);
+				$this->assign('avg_score',$avg_score);
+				$this->assign('good_count',$good_count);
+				$this->assign('sort',$sort);
+				$this->assign('right_count',$right_count);
+				$this->assign('right_percent',$right_percent);
+				$this->assign('curr_date',$curr_date);
+				$this->assign('planlist',$course_plan);
+				$this->assign('class_detail',$class_detail);
+				$this->assign('org_name',$org_name);
+				$this->assign('user_id',$uid);
+				$this->assign('course_id',$course_id);
+				$this->assign('owner_id',$owner_id);
+				$this->render('/index/student.course.detail.html');
+			}else{
+            	header('Location: https://www.'.$this->domain);
+			}
+		}else{
+            header('Location: https://www.'.$this->domain);
+		}	
+	}
+	
+	public function getCourseDetail($courseInfo,$classId){
+		$courseDetail = array();
+		if(!empty($courseInfo->class)){
+			foreach($courseInfo->class as $class){
+				if($class->class_id == $classId){
+					$classInfo = $class;
+					$adminId   = $class->class_admin_id;
+					break;
+				} 
+			}
+		}
+		//获取班主任信息
+		if(!empty($adminId)){
+			$adminInfo = user_api::getUser($adminId);
+			$courseDetail['admin_id']    = $adminId;
+			$courseDetail['admin_url']   = '/index.teacherblog.entry/'.$adminId;
+			$courseDetail['admin_thumb'] = $adminInfo->avatar->large;
+		}else{
+			$courseDetail['admin_id']    = '';
+			$courseDetail['admin_url']   = '';
+			$courseDetail['admin_thumb'] = '';
+		}
+		if(!empty($adminInfo->profile->real_name)){
+			$courseDetail['admin_name'] = $adminInfo->profile->real_name;
+		}elseif($adminInfo->name){
+			$courseDetail['admin_name'] = $adminInfo->name;
+		}else{
+			$courseDetail['admin_name'] = '';
+		}
+		
+		//获取课程信息
+		$courseDetail['course_url'] = '//'.user_organization::course_domain($courseInfo->subdomain).'/course.info.show/'.$courseInfo->course_id;
+		if(!empty($courseInfo)){
+			$courseDetail['course_thumb_sma']  = utility_cdn::file($courseInfo->thumb_sma);
+			$courseDetail['course_name'] = $courseInfo->title;
+			$courseDetail['section_count'] = $courseInfo->section_count;		
+			$courseDetail['course_type'] = $courseInfo->course_type;
+		}else{
+			$courseDetail['course_thumb_sma']  = '';
+			$courseDetail['course_name'] = '';
+			$courseDetail['section_count'] = 0;
+			$courseDetail['course_type'] = '';
+		}
+		//获取班级信息
+		if(!empty($classInfo)){
+			$courseDetail['class_name'] = $classInfo->name;
+			$region_level0 = !empty(region_geo::$region[$classInfo->region_level0])?region_geo::$region[$classInfo->region_level0]:'';
+			$region_level1 = !empty(region_geo::$region[$classInfo->region_level1])?region_geo::$region[$classInfo->region_level1]:'';
+			$region_level2 = !empty(region_geo::$region[$classInfo->region_level2])?region_geo::$region[$classInfo->region_level2]:'';
+			$address = $classInfo->address;
+			$courseDetail['address'] = $region_level0.$region_level1.$region_level2.$address;
+		}else{
+			$courseDetail['class_name'] = '';
+			$courseDetail['address'] = '';
+		}				
+		$courseDetail['curr_sname'] = '';
+		$courseDetail['curr_pid']   = '';
+		$courseDetail['percent']    = '0%';
+		return $courseDetail;
+	}
+	
+	
+	public function pageGetCommentAndScore(){
+		$params = $_POST;
+		empty($this->user) && interface_func::setMsg(1021);
+		empty($params) && interface_func::setMsg(1000);
+		if (empty($this->user['uid'])){
+			interface_func::setMsg(1021);
+		} 
+		if (empty($params['course_id']) || !intval($params['course_id'])){
+			interface_func::setMsg(1000);
+		}
+		if (empty($params['plan_id']) || !intval($params['plan_id'])){
+			interface_func::setMsg(1000);
+		}
+		$commentRet = comment_api::getCommentAndScore($params['course_id'],$this->user['uid'],$params['plan_id']);
+		interface_func::setData($commentRet);	
+	}
+	
+	public function pageAddCommentScore($inPath){
+		empty($this->user) && interface_func::setMsg(1021);
+		empty($_POST) && interface_func::setMsg(1000);
+
+		if (empty($this->user['uid'])) interface_func::setMsg(1021);
+		//检测是否评论
+		if (empty($_POST['course_id']) || !intval($_POST['course_id']))
+			interface_func::setMsg(1000);
+
+		if (comment_api::checkIsComment(intval($_POST['course_id']), $this->user['uid'], intval($_POST['plan_id']))) {
+			interface_func::setMsg(2043);
+		}
+
+		$re_comment = comment_api::addComment($_POST, $this->user["uid"]);
+		$re_detail = comment_api::addDetail($_POST, $this->user["uid"]);
+		$res = comment_api::addUserExperience($this->user["uid"]);
+		$res && interface_func::setData($res);
+		interface_func::setMsg(1);
+	}
+	
+	//获取用户已经学习的章节
+	public function getStudyPlan($planids){
+		$uid = $this->user['uid'];
+		$study_flag = array();
+		$plan_video = course_api::getPlanVideoByPlanIdArr($planids);
+		$plan_total_time = array();
+		if(!empty($plan_video)){
+			foreach($plan_video as $video){
+				$plan_total_time[$video->fk_plan] = $video->totaltime;
+			}
+		}
+		$study = stat_api::getUserPlanStatByPidArr($uid,$planids);
+		if(!empty($study)){
+			foreach($study as $so){
+				$study_plan[] = $so->fk_plan;
+				$study_time[$so->fk_plan] = $so->vt_live+$so->vt_record;
+			}
+			foreach($planids as $pid){
+				if(in_array($pid,$study_plan)){
+					if(!empty($plan_total_time[$pid])){
+						$study_percent = bcdiv($study_time[$pid],$plan_total_time[$pid],3) * 100;
+						if($study_percent >= 50){
+							$study_flag[$pid] = 1;
+						}else{
+							$study_flag[$pid] = 0;
+						}
+					}else{
+						$study_flag[$pid] = 1;
+					}
+				}else{
+					$study_flag[$pid] = 0;
+				}
+			}
+		}
+		return $study_flag;
+	}
+	
+	public function getVideoTime($totaltime){
+		if($totaltime > 3600){
+			$hour = floor($totaltime / 3600);
+			$hour = $hour > 0 ? $hour.'小时' : '';
+			$minutes = floor(($totaltime % 3600) / 60);
+			$minutes = $minutes > 0 ? $minutes.'分钟' : '';
+			$video_time = $hour.$minutes;
+		}elseif(  $totaltime > 60 && $totaltime < 3600 ){
+			$minutes = floor(($totaltime % 3600) / 60);
+			$minutes = $minutes > 0 ? $minutes.'分钟' : '';
+			$video_time = $minutes;
+		}elseif( $totaltime < 60 && $totaltime > 0){
+			$video_time = $totaltime.'秒';
+		}else{
+			$video_time = '';
+		}
+		return $video_time;
+	}
+	
+	public function pageStat($inPath){
+		$pid = !empty($inPath[3]) ? $inPath[3]:'538';
+		$uid = $this->user['uid'];
+		//$uid = 149;
+		if(!empty($pid) && is_numeric($pid)){
+			$plan_ret = course_api::getPlanByPid($pid);	
+			if(!empty($plan_ret) && !empty($plan_ret->data)){
+				$plan_data = $plan_ret->data;
+				$check = course_api::checkUserRegisterCourse($plan_data->course_id,$plan_data->class_id,$this->user['uid']);
+				if($check->result->code == 0 && !empty($check->result->data)){
+					$section_ret = course_api::getSection($plan_data->section_id);
+					$course_ret  = course_api::getCourseOne($plan_data->course_id);
+
+					$good_count = 0;
+					$sort = 0;
+					$good_ret = message_api::getPlanGoodByPidArr(array($pid));
+					if(!empty($good_ret) && !empty($good_ret->data)){
+						$good_data = $good_ret->data;
+						foreach($good_data as $go){
+							$good_key[] = $go->num;
+						}
+						array_multisort($good_key,SORT_DESC,$good_data);
+						foreach($good_data as $kk=>$gg){
+							if($gg->fk_user == $uid){
+								$sort = $kk+1;
+								$good_count = $gg->num;
+								break;
+							}
+						}				
+						if($sort == 0){
+							$sort = count($good_data)+1;
+						}
+					}
+					//获取用户答题统计
+					$question_count = 0;
+					$right_count = 0;
+					$wrong_count = 0;
+					$no_count = 0;
+					$question_data = array();
+					$user_question_data = array();
+					$user_right_question = array();
+					$user_wrong_question = array();
+					$user_no_question = array();
+					$all_question = course_api::getPlanQuestionByPid($pid);	
+					if(!empty($all_question) && !empty($all_question->data)){
+						$question_data = $all_question->data;
+					}
+
+					$user_question = exam_api::getLogUserQuestionByPid($uid,$pid);	
+					if(!empty($user_question) && !empty($user_question->data)){
+						$user_right = array();
+						$user_wrong = array();
+						$user_question_data = $user_question->data;
+						foreach($user_question_data as $vo){
+							if($vo->correct == 1){
+								$user_right[$vo->fk_question]['options'] = $vo->options;
+							}	
+							if($vo->correct == 0){
+								$user_wrong[$vo->fk_question]['options'] = $vo->options;
+							}
+						}
+						foreach($question_data as &$qo){
+							$qo->options = '';
+							$qo->correct = '';
+							if(!empty($user_right[$qo->fk_question])){
+								$qo->options = $user_right[$qo->fk_question]['options'];
+								$qo->correct = 'right';
+								$user_right_question[] = $qo;
+							}elseif(!empty($user_wrong[$qo->fk_question])){
+								$qo->options = $user_wrong[$qo->fk_question]['options'];
+								$qo->correct = 'wrong';
+								$user_wrong_question[] = $qo;
+							}else{
+								$user_no_question[] = $qo;
+							}	
+						}
+					}else{
+						$user_no_question = $question_data;
+					}
+					$question_count = count($question_data);
+					$right_count = count($user_right_question);
+					$wrong_count = count($user_wrong_question);
+					$no_count = count($user_no_question);
+
+					$this->assign('good_count',$good_count);
+					$this->assign('sort', $sort);
+					$this->assign('wrong_count',$wrong_count);
+					$this->assign('question_count',$question_count);
+					$this->assign('right_count',$right_count);
+					$this->assign('no_count',$no_count);
+					$this->assign('question_data',$question_data);
+					$this->assign('user_right_question',$user_right_question);
+					$this->assign('user_wrong_question',$user_wrong_question);
+					$this->assign('user_no_question',$user_no_question);
+					$this->assign('section_ret',$section_ret);
+					$this->assign('course_ret',$course_ret);
+					$this->render('/index/student.course.stat.html');
+
+				}	
+			}
+		}
+	}
+	
+	public function setAjaxResult($code, $msg, $data=array()){
+    	exit(
+        	json_encode(
+            	array(
+                	'code' => $code,
+                    'msg' => $msg,
+                    'data' => $data
+                ),
+                JSON_UNESCAPED_UNICODE
+           )
+		);
+	}
+
+	public function getCourseInfo( $my_courseid_arr){
+
+		$f_array = array(
+                  "course_id","title","subject_id","thumb_big","thumb_med","thumb_sma","course_type",
+                  "grade_id","user_id","public_type","fee_type","price","status","admin_status","class_id",
+                  "section_id","start_time","end_time","section_count","class","avg_score","subdomain","org_subname"
+        		);
+
+		$q_array=array(
+			  'course_id'=> implode(',', $my_courseid_arr),
+			);
+        $seek_arr = array(
+                  "f"=>$f_array,
+                  "q"=>$q_array,
+                  "ob"=>array('start_time'=>'asc'),
+                  "p"=>1,
+                  "pl"=>1000,
+        		);
+        $ret_seek = seek_api::seekcourse($seek_arr);
+		$course_info = array();
+		if(!empty($ret_seek->data)){
+        	$ret_course = $ret_seek->data;
+        	foreach($ret_course as $cv){
+        		$course_info[$cv->course_id] = $cv;
+            	if( $cv->fee_type == 0 ) {
+            		$course_info[$cv->course_id]->fee_type = "免费";
+					$course_info[$cv->course_id]->fee_class = 'cGreen';
+            	}else{
+                	$course_info[$cv->course_id]->fee_type = '￥'.$cv->price/100;
+					$course_info[$cv->course_id]->fee_class = 'cYellow';
+           		}
+        	}
+		}
+		return $course_info;
+	}
+
+	public function getPlanList($page,$my_courseid_arr,$my_classid_arr,$status,$start_time,$end_time,$order,$size){
+
+		$plan_condition = array(
+                  'course_id'=>implode(',', $my_courseid_arr),
+                  'class_id' =>implode(',', $my_classid_arr),
+                  'status'   =>$status,
+				  'course_type' => 1,
+                  'start_time'=>"$start_time,$end_time",
+              );
+        $planArr=array(
+                    "f"=>array(
+                          'course_id',
+                          'course_type',
+                          'plan_id',
+                          'class_id',
+                          'teacher_id',
+						  'admin_id',
+						  'owner_id',
+                          'section_id',
+                          'course_name',
+                          'class_name',
+						  'region_level0',
+						  'region_level1',
+						  'region_level2',
+						  'address',
+                          'section_name',
+                          'teacher_name',
+                          'teacher_real_name',
+						  'admin_name',
+						  'admin_real_name',
+						  'video_public_type',
+                          'start_time',
+                          'end_time',
+                          'max_user',
+                          'user_total',
+						  'course_type',
+                          'status',
+						  'subdomain',
+						  'org_subname',
+                          ),
+                     "q" =>$plan_condition,
+                     "ob"=>$order,
+                     "p" =>$page,
+                     "pl"=>$size,
+                );
+        $seek_plan=seek_api::seekPlan($planArr);
+		if(!empty($seek_plan->data)){
+			return $seek_plan->data;
+		}else{
+			return array();
+		}	
+	}
+	
+	public function getCoursePlanList($my_courseid_arr,$my_classid_arr){
+
+		$plan_condition = array(
+                  'course_id'=>implode(',', $my_courseid_arr),
+                  'class_id' =>implode(',', $my_classid_arr),
+                  'status'   =>'1,2,3',
+              );
+        $planArr=array(
+                    "f"=>array(
+                          'course_id',
+                          'course_type',
+                          'plan_id',
+                          'class_id',
+                          'teacher_id',
+						  'admin_id',
+						  'owner_id',
+                          'section_id',
+                          'course_name',
+                          'class_name',
+						  'region_level0',
+						  'region_level1',
+						  'region_level2',
+						  'address',
+                          'section_name',
+                          'section_desc',
+                          'teacher_name',
+                          'teacher_real_name',
+						  'teacher_thumb_sma',
+						  'teacher_thumb_med',
+						  'teacher_thumb_big',
+						  'admin_name',
+						  'admin_real_name',
+						  'admin_thumb_sma',
+						  'admin_thumb_med',
+						  'admin_thumb_big',
+						  'video_public_type',
+                          'start_time',
+                          'end_time',
+                          'max_user',
+                          'user_total',
+						  'course_type',
+                          'status',
+						  'subdomain',
+						  'org_subname',
+                          ),
+                     "q" =>$plan_condition,
+                     "ob"=>array('start_time'=>'asc'),
+                     "p" =>1,
+                     "pl"=>10000,
+                );
+        $seek_plan=seek_api::seekPlan($planArr);
+		if(!empty($seek_plan->data)){
+			return $seek_plan->data;		
+		}else{
+			return array();		
+		}
+	}
+	
+	public function pageOrder($inPath){
+		$num  = 10;
+		$page = isset($_GET['page']) ? $_GET['page']:1;
+		$status_arr = array(
+			"all"=>"0",
+			"pay"=>"1",
+			"suc"=>"2",
+			"del"=>"-1",
+			"exp"=>"-2",
+			"fai"=>"-3",
+			"cal"=>"-4",
+		);
+
+		if(empty($inPath[3])){
+			$status  = 0;
+			$get_sta = 'all';
+			$path = '/index.student.order/all';
+		}else{
+			$get_sta = $inPath[3];
+			$status = $status_arr[$get_sta];
+			$path = '/index.student.order/'.$get_sta;
+		}
+		if($status == 0 ){
+			$q_status = array(0,1,2,-2,-3,-4);
+		}else{
+			$q_status = $status;
+		}
+		$list_fee_cond = array(
+			"user_id"=>$this->user['uid'],
+			"status"=>$q_status,
+		);
+		$list_fee_info  = array();
+		$order_list     = array();
+		$list_fee_info1 = course_api::listFeeOrder($list_fee_cond,$page,$num);
+		if(!empty($list_fee_info1->data)){
+			$list_fee_info = $list_fee_info1->data;
+			$user_course_info = array();
+			$course_id_arr = array();
+			$class_id_arr  = array();
+			$owner_id_arr  = array();
+			foreach($list_fee_info as $fo){
+				$course_id_arr[$fo->course_id] = $fo->course_id;
+				$class_id_arr[$fo->ext] = $fo->ext;
+				$owner_id_arr[$fo->owner_id] = $fo->owner_id;
+			}
+
+			$class_ret = course_api::getClassByClassIdArr($class_id_arr);
+			$class_plan_ret = course_api::getClassPlan($class_id_arr);
+			
+			$class_plan_list = array();
+			if(!empty($class_plan_ret)){
+				$tem_class = array();
+				foreach($class_plan_ret as $cv){
+					if(!in_array($cv->fk_class,$tem_class)){
+						$tem_class[] = $cv->fk_class;
+						$class_plan_list[$cv->fk_class] = $cv->start_time;
+					}
+				}	
+			}
+			
+			$class_list = array();
+			if( !empty($class_ret->data) ) {
+				foreach( $class_ret->data as $co){
+					if(!empty($class_plan_list[$co->pk_class])){
+						$co->start_time = $class_plan_list[$co->pk_class];
+					}else{
+						$co->start_time = '';
+					}
+					$class_list[$co->pk_class] = $co;
+				}
+			}
+            $orgList=user_organization::getOrgInfoByUidArr($owner_id_arr);
+            $orgInfo=array();
+            if(!empty($orgList)){
+                foreach($orgList as $ov){
+                    $orgInfo[$ov->user_owner]=$ov;
+                }
+            }
+			$domain_ret = user_api::getSubdomainByUidArr($owner_id_arr);
+         	$domainlist = array();
+          	if( $domain_ret->result->code == 0 && !empty($domain_ret->result->data->items)){
+              	$subdomains = $domain_ret->result->data->items;
+              	foreach($subdomains as $so){
+                	$domainlist[$so->fk_user] = '//'.user_organization::course_domain($so->subdomain);
+            	}
+          	}
+			foreach($list_fee_info as $v ){
+				if(!empty($orgInfo[$v->owner_id])){
+					$v->org_name=!empty($orgInfo[$v->owner_id]->subname)?$orgInfo[$v->owner_id]->subname:mb_substr($orgInfo[$v->owner_id]->name,0,6,'utf-8');
+				}else{
+					$v->org_name = '';
+				}
+				if(!empty($class_list[$v->ext])){
+					$v->class = $class_list[$v->ext];
+				}else{
+					$v->class = '';
+				}
+				if(!empty($domainlist[$v->owner_id])){
+					$v->pay_url = $domainlist[$v->owner_id].'/course.info.Pay/'.$v->unique_order_id;
+					$v->course_url = $domainlist[$v->owner_id].'/course.info.show/'.$v->course_id;
+				}else{
+					$v->pay_url = '//www.yunke.com';
+					$v->course_url = '//www.yunke.com';
+				}
+				$v->cha_time = date('i:s',strtotime($v->expiration_time)-time());
+				$create_date = date('Ymd', strtotime($v->create_time));
+				$v->order_number = $create_date.$v->order_id;
+				$order_list[] = $v;
+			}
+		}
+		$pay_type = array(
+			0 => '未知',
+			1 => '支付宝',
+			2 => '微信',
+			3 => '免费',
+		);
+		$status_array = array(
+			"initial"=>"未支付",
+			"paying"=>"正在支付",
+			"success"=>"已支付",
+			"deleted"=>"订单已删除",
+			"expired"=>"超时失效",
+			"fail"=>"订单失败",
+			"cancel"=>"订单已取消",
+		);
+		$this->assign('pay_type', $pay_type);
+		$this->assign("order_list",$order_list);
+		$this->assign('get_sta', $get_sta);
+		$this->assign("status_array",$status_array);
+		$list = $list_fee_info1;
+		$this->assign("list",$list);
+		$this->assign("path",$path);
+		$this->assign("num",$num);
+		$this->render('index/student.order.html');
+	}
+
+	public function pageUpdateOrderStatusAjax($inPath){
+
+		$result= new stdclass;
+		$order_id = isset($_POST["order_id"])?$_POST["order_id"]:'';
+		$status   = isset($_POST["status"])?$_POST["status"]:'';
+		if( !empty($order_id) && !empty($status) ){
+			$order_status["order_id"] = $order_id;
+			$order_status["status"]   = $status;
+			$ret_set_fee = course_api::setFeeOrderStatus($order_status);
+
+			if($ret_set_fee){
+				$result->status="Success!";
+				return $result;
+			}else{
+				$result->error=$ret_set_fee->result->msg;
+				return $result;
+			}
+		}else{
+			$result->error = '参数错误！';
+			return $result;
+		}
+
+	}
+
+
+	/*
+	 * 我的收藏课程
+	 * @author zhengtianlong
+	 */
+	 public function pageFav($inPath)
+	 {
+		 $uid = $this->user['uid'];
+		 $res_fav = user_api::listfav2(array('uid'=>$uid),1,100000);
+		 $courseArr  = array();
+		 $courseInfo = array();
+		 $sublist = array();
+		 if(!empty($res_fav))
+		 {
+			 foreach($res_fav as $v)
+			 {
+				 $courseArr[] = $v->course_id;
+			 }
+
+			$courseInfo = $this->getFavCourse($uid,$courseArr);
+		 }
+		 $this->assign('courseInfo', $courseInfo);
+		 $this->render('index/student.fav.html');
+	 }
+
+     public function pageFavCourseAjax()
+    {
+        $page = !empty($_POST['page'])?$_POST['page']:1;
+        $uid = $this->user['uid'];
+        $res_fav = user_api::listfav2(array('uid'=>$uid),1,100000);
+		$courseArr  = array();
+		if(!empty($res_fav))
+		{
+		    foreach($res_fav as $v)
+			{
+				$courseArr[] = $v->course_id;
+			}
+		}
+        $courseFav = $this->getFavCourse($uid,$courseArr,$page,15);
+		$courseFav = array_values($courseFav['data']);
+        if(!empty($courseFav))
+        {
+            $this->setAjaxResult(0,'success',$courseFav);
+        }else
+        {
+            $this->setAjaxResult(-2,'not find data');
+        }
+    }
+	 /*
+	  * 获取课程信息
+	  * @params $courseArr $page $length
+	  * @author zhengtianlong
+	  */
+	  private function getFavCourse($uid,$courseArr,$page=1,$length=15)
+	  {
+		$subjectName = array(1=>'数学',2=>'英语',3=>'语文',4=>'物理',5=>'化学',6=>'生物',7=>'历史',8=>'地理',9=>'政治');
+		$gradeName   = array(1001=>'一年级',1002=>'二年级',1003=>'三年级',1004=>'四年级',1005=>'五年级',1006=>'六年级',2001=>'初一',2002=>'初二',2003=>'初三',3001=>'高一',3002=>'高二',3003=>'高三');
+		$params = [
+			'q'  => ['course_id'=> implode(',', $courseArr)],
+			'f'  => [ "course_id","title","subject_id","thumb_med","admin_status",
+					  "grade_id","user_id","fee_type","price","status","subject","grade","course_type",
+					  "section_id","start_time","end_time","section_count","subject_id","comment"
+					],
+			'p'  => $page,
+			'ob' => array('start_time'=>'desc'),
+			'pl' => $length
+		 ];
+		$ret_seek = course_api::seekcourse($params);
+		
+		
+		$str = '';
+		$data = array();
+		if(!empty($ret_seek->data))
+		{
+			foreach($ret_seek->data as $v)
+			{
+				$uidArr[$v->user_id] = $v->user_id;
+			}
+			$subdomain = $this->getDomain($uidArr);
+            
+			if($subdomain)
+			{
+				$data['favCount'] = $ret_seek->total;
+				foreach($ret_seek->data as $val)
+				{
+					$data['data'][$val->course_id] = [
+						'course_id'     => $val->course_id,
+						'title'         => $val->title,
+						'thumb_med'     => utility_cdn::file($val->thumb_med),
+						'start_time'    => date('m月 H:i',strtotime($val->start_time)),
+						'cate_name'     => teacher_api::getSubjectName($val->subject),
+						'grade_name'    => teacher_api::getGradeName($val->grade),
+						'score'         => '',
+						'commNum'       => '',
+						'scoreType'     => '',
+						'section_count' => count($val->section_id),
+						'course_type'   => $val->course_type
+					];
+					
+					$score = $this->getScore($val->course_id);
+					for($i=1;$i<=5;$i++)
+					{
+						if($score>0 && $i<=$score)
+						{
+							$str.="<dd class='collect-pingfen-solid'></dd>";
+						}else
+						{
+							$str.="<dd></dd>";
+						}
+						
+					}
+					$data['data'][$val->course_id]['scoreType'] = $str;
+					$data['data'][$val->course_id]['score'] = "<span class='c-fr fs14 collect-pf'>".$score."分</span>";
+					$str = '';
+
+					if(!empty($subdomain[$val->user_id]['subdomain'])){
+						$data['data'][$val->course_id]['course_url'] = '//'.user_organization::course_domain($subdomain[$val->user_id]['subdomain']).'/course.info.show/'.$val->course_id;
+					}else{
+						$data['data'][$val->course_id]['course_url'] = '//www.yunke.com';
+					}
+					if($val->comment > 0)
+					{
+						$data['data'][$val->course_id]['commNum'] = "<div class='col-sm-20  col-xs-12 collect-pl'><a href='".$data['data'][$val->course_id]['course_url']."'>".$val->comment."个评论</a></div>";
+					}
+					if( $val->fee_type == '' ||$val->fee_type == 0 )
+					{
+						$val->fee_type = 0;
+						$data['data'][$val->course_id]['fee_type'] = course_status::$feeType[$val->fee_type];
+						$data['data'][$val->course_id]['fee_class'] = 'col-sm-3 col-lg-3 col-xs-4 c-fl s-pd0 cGreen fs16 mt30';
+					}else
+					{
+						$data['data'][$val->course_id]['fee_type'] = '￥'.number_format($val->price/100);
+						$data['data'][$val->course_id]['fee_class'] = 'col-sm-3 s-pd0 col-lg-3 col-xs-4 c-fl fs16 subject-price mt30';
+					}
+
+					if(!empty($subdomain[$val->user_id]['subname']))
+					{
+						$data['data'][$val->course_id]['subdomain'] = $subdomain[$val->user_id]['subname'];
+					}else
+					{
+						$data['data'][$val->course_id]['subdomain'] = substr($subdomain[$val->user_id]['name'],0,12);
+					}
+					
+					if($val->admin_status == 1)
+					{
+						$data['data'][$val->course_id]['admin_status'] = '';
+					}else
+					{
+						$data['data'][$val->course_id]['admin_status'] = '该课程已下架';
+					}
+				}
+			}
+		}
+
+		return $data;
+	  }
+
+	  /*
+	  * 我的优惠券
+	  * @author zhengtianlong
+	  * array_reduce()
+	  */
+	 public function pageDiscount($inPath)
+	 {
+		 $uid  = $this->user['uid']; //= 249;
+		 $page = isset($_GET['page'])?$_GET['page']:1;
+		 $code = !empty($_POST['keyword']) ? htmlspecialchars($_POST['keyword']) : '';
+		 $num  = 15;
+		 $path = '/index.student.discount';
+		 //t_discount_code_used
+		 $userCodeParams = array('user_id'=>$uid,'limit'=> -1,'page'=>1);
+		 $res_discounts = course_api::listUserByCode($userCodeParams);
+		 $disCodeIdStr = '';
+		 $disCodeIdArr = array();
+		 if(!empty($res_discounts->data))
+		 {
+			 $disCodeIdArr = array_reduce($res_discounts->data, create_function('$v,$w', '$v[$w->discount_code]=$w->discount_code;return $v;')); 
+			 $disCodeIdStr = implode(',',$disCodeIdArr);
+		 }
+		 //t_discount_code
+		 $disCodeParams = array('dis_ids'=>$disCodeIdStr,'code'=>$code,'limit'=>$num,'page'=>$page);
+		 $res_discount_code = course_api::ListDiscountByIds($disCodeParams);
+	
+		 $discountIdArr = array();
+		 $discountIdStr = '';
+		 $ownerIdArr = array();
+		 if(!empty($res_discount_code->data))
+		 {
+			 $discountIdArr = array_reduce($res_discount_code->data, create_function('$v,$w', '$v[$w->fk_discount]=$w->fk_discount;return $v;'));
+			 $ownerIdArr    = array_reduce($res_discount_code->data, create_function('$v,$w', '$v[$w->owner]=$w->owner;return $v;'));
+			 $discountIdStr = implode(',',$discountIdArr);
+		 }
+		 //t_discount
+		 $disParams = array('discountid'=>$discountIdStr,'limit'=> -1,'page'=>1);
+		 $res_discount = course_api::getDiscountByIds($disParams);
+		 if(!empty($res_discount->data))
+		 {
+			$names         = array_reduce($res_discount->data, create_function('$v,$w', '$v[$w->pk_discount]=$w->name;return $v;'));
+			$discount_type = array_reduce($res_discount->data, create_function('$v,$w', '$v[$w->pk_discount]=$w->discount_type;return $v;'));
+			$discount_value= array_reduce($res_discount->data, create_function('$v,$w', '$v[$w->pk_discount]=$w->discount_value;return $v;'));
+			$min_fee       = array_reduce($res_discount->data, create_function('$v,$w', '$v[$w->pk_discount]=$w->min_fee;return $v;'));
+		 }
+		 
+		 //机构名称
+		 $ownerName = $this->getDomain($ownerIdArr);
+		 
+		 $data = ['page'  => 1,'total' => 0];
+		 if(!empty($res_discount_code->data))
+		 {
+			 $data = [
+				'page'  => $res_discount_code->page,
+				'total' => $res_discount_code->totalPage
+			 ];
+			 foreach($res_discount_code->data as $val)
+			 {
+				 $data['data'][] = [
+					'owner_name'    => !empty($ownerName[$val->owner]['subname'])?$ownerName[$val->owner]['subname']:mb_substr($ownerName[$val->owner]['name'],0,18),
+					'owner'         => $val->owner,
+					'fk_discount'   => $val->fk_discount,
+					'endtime'       => date('Y年m月d日',strtotime($val->endtime)),
+					'status'        => $val->status,
+					'discount_code' => $val->discount_code,
+					'used_num'      => $val->used_num,
+					'name'          => $names[$val->fk_discount],
+					'discount_type' => $discount_type[$val->fk_discount],
+					'discount_value'=> $discount_value[$val->fk_discount],
+					'min_fee'       => $min_fee[$val->fk_discount]
+				 ];
+			 }
+		 }
+
+		 $this->assign('data', $data);	
+		 $this->assign('num', $num);
+		 $this->assign('path', $path);
+		 $this->assign('code',$code);
+		 $this->render('index/student.coupons.html');
+	 }
+
+	 /*
+	  * 机构名称
+	  * @params $uidArr
+	  * @author zhengtianlong
+	  */
+	  private function getDomain($uidArr)
+	  {
+		if(empty($uidArr)) return false;
+
+		$sub_ret = user_api::getSubdomainByUidArr($uidArr);
+        $org_ret = user_organization::getOrgInfoByUidArr($uidArr);
+		$data = array();
+		if(!empty($org_ret))
+		{
+			foreach($org_ret as $ov)
+			{
+				$data[$ov->user_owner] = [
+					'name'    => $ov->name,
+					'subname' => $ov->subname
+				];
+			}
+		}
+		
+		if(!empty($sub_ret->result->data->items))
+		{
+			foreach($sub_ret->result->data->items as $val)
+			{
+				$data[$val->fk_user]['subdomain'] = $val->subdomain;
+			}
+		}
+		return $data;
+	  }
+
+	 /*
+	  * 评分
+	  * @author zhengtianlong
+	  */
+	  private function getScore($cid)
+	  {
+		$res = comment_api::getTotal(array('course_id'=>$cid));
+		$avg_score = 0;
+		if(!empty($res))
+		{
+			$avg_score = (int)ceil($res[0]->avg_score/$res[0]->total_user);
+		}
+		return $avg_score;
+	  }
+	 
+	/*
+	 * 取消收藏
+	 * @author zhengtianlong
+	 */
+	public function pageDelFav()
+    {
+        $result = new stdclass;
+        if (empty($_POST['cid'])) 
+		{
+            $result->error = "参数错误";
+            return $result;
+        }
+		
+        $param = array(
+            'uid' => $this->user['uid'],
+            'cid' => $_POST['cid']
+        );
+		
+        $res = user_api::delFav($param);
+
+        if (!empty($res) && $res->code == 0) 
+		{
+            return true;
+        } else 
+		{
+            $result->error = "删除失败";
+            return $result;
+        }
+    }
+    //更新订单
+	public function pageUpdateStatusAjax($inPath){
+		$result= new stdclass;
+		$order_id = isset($_POST["order_id"])?$_POST["order_id"]:'';
+		$status   = isset($_POST["status"])?$_POST["status"]:'';
+		if( !empty($order_id) && !empty($status) ){
+			$order_status["order_id"] = $order_id;
+			$order_status["status"]   = $status;
+			$ret_set_fee = course_api::setFeeOrderStatus($order_status);
+
+			if($ret_set_fee){
+				$result->status="Success!";
+				return $result;
+			}else{
+				$result->error=$ret_set_fee->result->msg;
+				return $result;
+			}
+		}else{
+			$result->error = '参数错误！';
+			return $result;
+		}
+
+	}
+
+
+}
+?>
+

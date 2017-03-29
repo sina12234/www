@@ -1,0 +1,326 @@
+<?php
+class live_list extends STpl{
+	private $domain;
+	private $orgOwner;
+	function __construct(){
+		$domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","domain");
+		$this->domain = $domain_conf->domain;
+		$this->assign('domain', $this->domain);
+
+		$org=user_organization::subdomain();
+		if(!empty($org)){
+			$this->orgOwner = $org->userId; //机构所有者id 以后会根据域名而列取 
+		}else{
+			header('Location: https://www.'.$this->domain);
+		}
+		$this->orgInfo = user_organization::getOrgByOwner($this->orgOwner);
+	}
+	function pageEntry($inPath){
+
+
+        $loginInfo = user_api::loginedUser();
+		$uid = 0;
+		if(!empty($loginInfo['uid'])){ $uid=$loginInfo["uid"];}
+
+		$strstart_time = strtotime(date("Y-m-01",time()));
+		$strend_time = strtotime(date("Y-m-t",time()));
+		$start_time = date('Y-m-d 00:00:00',$strstart_time);
+		$endstart_time = date('Y-m-d 00:00:00',$strend_time);
+
+		$planCond = array(
+			'allcourse'    => true,
+			'order_by'     => 'desc',
+			'page'         => 1,
+			'length'       => 10000,
+			'startTime'    => "$start_time,$endstart_time",
+			"orgUserId"     => $this->orgOwner,
+		);
+		$planRes1 = course_api::listPlan($planCond);
+		//print_r($planRes);
+
+		$jsonOrm = array(
+			"plan_id",
+			//"user_id",
+			"course_id",
+			"section_id",
+			//"fk_user_class",
+			"fk_user_plan",
+			"user_total_class",
+			"max_user_class",
+			"live_public_type",
+			"video_public_type",
+			//"user_plan_name",
+			"start_time",
+			"status",
+			"title",
+			"fee_type",
+			"price",
+			"section_name",
+			"class_name",
+			"thumb_med",
+		);
+		if(!empty($planRes1->data)){
+			foreach($planRes1->data as $plk=>$plv){
+				foreach($jsonOrm as $jsk=>$jsv){
+					//$planRes[$plk]["live_public_type"] = 0;
+					//$planRes[$plk]["video_public_type"] = 0;
+					if(!empty($plv->$jsv)){
+						//$jsonOrm[$jsv] = $plv->$jsv;
+						$planRes[$plk][$jsv] = $plv->$jsv;
+					}
+					if(!empty($plv->user_plan)){
+						$planRes[$plk]["user_plan_name"] = $plv->user_plan->name;
+					}
+				}
+			}
+		}
+
+		//print_r($jsonOrm);
+
+
+		//拼接年月日数组
+		$yearArr = date("Y");
+		$monthArr = date("m");
+		$countMonthdays = date("t");
+		$jsonTimeArr = array();
+		for($i=1;$i<=$countMonthdays;$i++){
+			$keyArr = $yearArr.$monthArr.$i;
+			$jsonTimeArr[$keyArr] = array();
+		}
+		//print_r($jsonTimeArr);
+		/*数组格式 
+			array( 
+				[月份]=> 数据
+		)*/
+
+		$courseIdArr1 = array();
+		if(!empty($planRes)){
+			foreach($planRes as $rek=>$rev){
+				$starttime1 = $rev["start_time"];
+				$timeTostr  = date("Ymj",strtotime($rev["start_time"]));
+				$jsonTimeArr[$timeTostr][] = $rev;
+				if(!empty($rev["course_id"])){
+					$courseIdArr1[$rev["course_id"]] = $rev["course_id"];
+				}
+			}
+		}
+
+		foreach($courseIdArr1 as $k=>$v){
+			$courseIdArr[] = $v;
+		}
+
+		//print_r($jsonTimeArr);
+		//本人本月报名的状态
+		$regStatus = array();
+		if(!empty($courseIdArr)){
+			$regCondition['course_ids'] = $courseIdArr;
+			$uids = array(0);
+			$uids[] = $uid;
+			if(!empty($uid)){
+				$regCondition['uids'] = $uids;
+				$studentRet = course_api::listRegistrationBycond($regCondition);
+				if(!empty($studentRet->data)){
+					foreach($studentRet->data as $stk=>$stv){
+						if($stv->uid ==$uid){
+							$regStatus[$stv->cid] = $stv;
+						}
+					}
+				}
+			}
+		}
+		//print_r($regStatus);
+		//热门课程 (临时)
+		$fields = array(
+			"tags","course_id","title","create_time","desc","start_time","subject_id","thumb_big",
+			"thumb_med","thumb_sma","recomm_weight","course_type","grade_id","user_id","public_type",
+			"fee_type","price","market_price","max_user","min_user","user_total","status","admin_status",
+			"system_status","class_id","section_id","end_time","create_time","last_updated","section","class",
+			"third_cate_name","course_attr","section_count"
+		);	
+        $query = array(
+			//'course_type'    => $courseType,
+			'course_type'    => 1,
+			//'fee_type'       => $feeType,
+			'admin_status'   => 1,
+			'user_id'        => $this->orgOwner
+        );
+		$obArr = array("recomm_weight"=>"desc");
+		$page = 1;
+		$size = 4;
+		$sData = array(
+			"f" => $fields,
+			"q" => $query,
+			"p" => $page,
+			"pl"=> $size,
+			"ob"=> $obArr
+		);
+			
+		$resCourse = seek_api::seekcourse($sData);
+		//print_r($resCourse);
+		$courseList  = array();
+		if(!empty($resCourse->data)){
+			$courseList = $resCourse->data;
+			//获取科目名称
+			foreach($courseList as $value){
+				$value->sectionNum = count($value->section);
+			}
+		}
+		//print_r($jsonTimeArr);
+		//科目
+		$subArr = array();
+		if(!empty($courseList)){
+			foreach($courseList as $coulk=>$coulv){
+				if(!empty($coulv->course_attr)){
+					foreach($coulv->course_attr as $couk=>$couv){
+						if(!empty($couv->attr_value)){
+							foreach($couv->attr_value as $couvk=>$couvv){
+								$subArr[$coulv->course_id][] = $couvv->attr_value_name;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		$this->assign("regStatus",$regStatus);  //报名状态
+		$this->assign("courseList",$courseList); //收藏课程
+		$this->assign("jsonTimeArr",json_encode($jsonTimeArr)); //json后的plan数据
+		$this->assign("TimeArr",$jsonTimeArr);  //未json的plan数据
+		$this->assign("orgInfo",$this->orgInfo);  //机构信息
+		$this->assign("subArr",$subArr);  //机构信息
+		//print_r($courseList);
+
+	//	print_r($subArr);
+
+
+
+		$this->render("course/live.plan.list.html");
+	}
+
+
+	public function pagelivePlanAjax($inPath){
+		if(empty($_REQUEST["start_time"])){
+			$this->setAjaxResult("1000777","failed"," data incorrect");
+		}
+		$starttime = $_REQUEST["start_time"];
+		//$starttime = "123";
+		if(empty($starttime) || !is_numeric($starttime)){
+			$this->setAjaxResult("1000777","failed"," data incorrect");
+		}
+		$time = $starttime;
+		$strstart_time = strtotime(date("Y-m-01",$time));
+		$strend_time = strtotime(date("Y-m-t",$time));
+		$start_time = date('Y-m-d 00:00:00',$strstart_time);
+		$endstart_time = date('Y-m-d 00:00:00',$strend_time);
+
+		$planCond = array(
+			'allcourse'    => true,
+			'order_by'     => 'desc',
+			'page'         => 1,
+			'length'       => 10000,
+			'startTime'    => "$start_time,$endstart_time",
+			"orgUserId"     => $this->orgOwner,
+		);
+		$planRes1 = course_api::listPlan($planCond);
+		//print_r($planRes);
+
+		$jsonOrm = array(
+			"plan_id",
+			//"user_id",
+			"course_id",
+			"section_id",
+			//"fk_user_class",
+			"fk_user_plan",
+			"user_total_class",
+			"max_user_class",
+			"live_public_type",
+			"video_public_type",
+			//"user_plan_name",
+			"start_time",
+			"status",
+			"title",
+			"fee_type",
+			"price",
+			"section_name",
+			"class_name",
+			"thumb_med",
+			"title",
+		);
+		if(!empty($planRes1->data)){
+			foreach($planRes1->data as $plk=>$plv){
+				foreach($jsonOrm as $jsk=>$jsv){
+					//$planRes[$plk]["live_public_type"] = 0;
+					//$planRes[$plk]["video_public_type"] = 0;
+					if(!empty($plv->$jsv)){
+						//$jsonOrm[$jsv] = $plv->$jsv;
+						$planRes[$plk][$jsv] = $plv->$jsv;
+					}
+					if(!empty($plv->user_plan)){
+						$planRes[$plk]["user_plan_name"] = $plv->user_plan->name;
+					}
+				}
+			}
+		}
+
+		//print_r($jsonOrm);
+
+		//拼接年月日数组
+		$yearArr = date("Y");
+		$monthArr = date("m");
+		$countMonthdays = date("t");
+		$jsonTimeArr = array();
+		for($i=1;$i<=$countMonthdays;$i++){
+			$keyArr = $yearArr.$monthArr.$i;
+			$jsonTimeArr[$keyArr] = array();
+		}
+		//print_r($jsonTimeArr);
+		/*数组格式 
+			array( 
+				[月份]=> 数据
+		)*/
+
+		$courseIdArr1 = array();
+		if(!empty($planRes)){
+			foreach($planRes as $rek=>$rev){
+				$starttime1 = $rev["start_time"];
+				$timeTostr  = date("Ymj",strtotime($rev["start_time"]));
+				$jsonTimeArr[$timeTostr][] = $rev;
+				if(!empty($rev["course_id"])){
+					$courseIdArr1[$rev["course_id"]] = $rev["course_id"];
+				}
+			}
+		}
+
+		foreach($courseIdArr1 as $k=>$v){
+			$courseIdArr[] = $v;
+		}
+
+		//print_r($jsonTimeArr);
+		$this->setAjaxResult("200","success",$jsonTimeArr);
+	}
+    public function setAjaxResult($code, $msg, $data=array()){
+            exit(
+                json_encode(
+                    array(
+                        'code' => $code,
+                        'msg' => $msg,
+                        'data' => $data
+                    ),
+                    JSON_UNESCAPED_UNICODE
+                )
+			/*	SJson::encode(
+                    array(
+                        'code' => $code,
+                        'msg' => $msg,
+                        'data' => $data
+                    )
+                )
+				*/
+            );
+    }
+
+
+
+
+}
+

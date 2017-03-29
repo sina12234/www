@@ -1,0 +1,10 @@
+<?php
+class user_main extends STpl{
+	function __construct(){
+	}
+	function pageEntry($inPath){
+		return $this->render("teacher/teacher.html");
+	}
+
+}
+

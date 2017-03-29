@@ -1,0 +1,46 @@
+<?php
+class stat_api{
+	public static function addUserStat($params){
+		$ret = utility_services::call("/stat/statuser/addUserStat",$params);
+		if(!empty($ret->result) && $ret->result->code==0){
+			return true;
+		}
+		return false;
+	}
+	
+	public static function getUserPlanStatByPidArr($uid,$planIdArr){
+		$ret = utility_services::call("/stat/userplan/getUserPlanStatByPidArr/$uid",$planIdArr);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+    /*获取机构教师统计数据
+     * @param $owner,$uid
+     * @return array
+     * @author Panda <zhangtaifeng@gn100.com>
+     */
+    public static function getOrgTeacherStat($owner,$uid){
+        $params= new stdCLass;
+        $ret=utility_services::call("/stat/statteacher/getOrgTeacherStat/$owner/$uid", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        }
+        return false;
+    }
+    /*获取机构学生统计数据
+     * @param $owner,$uid
+     * @return array
+     * @author Panda <zhangtaifeng@gn100.com>
+     */
+    public static function getOrgStudentStat($owner,$uid){
+        $params= new stdCLass;
+        $ret=utility_services::call("/stat/statuser/getOrgStudentStat/$owner/$uid", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        }
+        return false;
+    }
+}
+?>
+

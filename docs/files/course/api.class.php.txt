@@ -1,0 +1,2317 @@
+<?php
+
+class course_api
+{
+    private static $attrs = array(
+        'course_id'      => 'course_id',
+        'title'          => 'title',
+        'tags'           => 'tags',
+        'desc'           => 'desc',
+        'thumb_big'      => 'thumb_big',
+        'thumb_med'      => 'thumb_med',
+        'thumb_sma'      => 'thumb_small',
+        'user_thumb_big' => 'user_thumb_big',
+        'user_thumb_med' => 'user_thumb_med',
+        'user_thumb_sma' => 'user_thumb_sma',
+        'user_name'      => 'user_name',
+        'cate_id'        => 'cate_id',
+        'recomm_weight'  => 'recomm_weight',
+        'course_type'    => 'course_type',
+        'grade_id'       => 'grade_id',
+        'user_id'        => 'user_id',
+        'public_type'    => 'public_type',
+        'fee_type'       => 'fee_type',
+        'max_user'       => 'max_user',
+        'min_user'       => 'min_user',
+        'user_total'     => 'user_total',
+        'status'         => 'status',
+        'admin_status'   => 'admin_status',
+        'system_status'  => 'system_status',
+        'start_time'     => 'start_time',
+        'end_time'       => 'end_time',
+        'create_time'    => 'create_time',
+        'last_updated'   => 'last_updated',
+        'class_id'       => 'class_id',
+        'section_id'     => 'section_id',
+        'price'          => 'price',
+        'market_price'   => 'market_price',
+        //新加上的
+        'top'            => 'top',
+    );
+    private static $timesArr = array(
+        'start_time'   => 0,
+        'end_time'     => 0,
+        'create_time'  => 0,
+        'last_updated' => 0
+    );
+
+    public static function seekCourse($sdata)
+    {
+        $params     = new stdclass;
+        $params->f  = new stdclass;
+        $params->q  = new stdclass;
+        $params->ob = new stdclass;
+        /*		foreach(self::$attrs as $attrk=>$attrv){
+                    if(isset($sdata["f"][$attrk]))$params->f->$attrk = $sdata["f"][$attrk];
+                }
+        */
+        if (isset($sdata["f"])) $params->f = $sdata["f"];
+        foreach (self::$attrs as $attrk => $attrv) {
+            if (isset($sdata["q"][$attrk])) $params->q->$attrk = $sdata["q"][$attrk];
+        }
+        foreach (self::$attrs as $attrk => $attrv) {
+            if (isset($sdata["ob"][$attrk])) $params->ob->$attrk = $sdata["ob"][$attrk];
+        }
+        if (isset($sdata["p"])) {
+            $params->p = $sdata["p"];
+        } else {
+            $params->p = "1";
+        }
+        if (isset($sdata["pl"])) {
+            $params->pl = $sdata["pl"];
+        } else {
+            $params->pl = "20";
+        }
+        $ret = utility_services::call("/seek/course/list/", $params);
+
+        return $ret;
+        /*	if(!empty($ret->result) && $ret->result->code==0){
+            return true;
+        }
+            return false;
+         */
+    }
+
+    public static function genId($uid)
+    {
+        $ret = utility_services::call("/course/info/genId/$uid");
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function genclassId($cid)
+    {
+        $ret = utility_services::call("/course/class/genclassid/$cid");
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getClass($class_id)
+    {
+        $ret = utility_services::call("/course/class/get/$class_id");
+        if (!empty($ret)) {
+            return $ret;
+        } else {
+            return false;
+        }
+    }
+
+    public static function checkClassUserIsFull($classId)
+    {
+        $classInfo = self::getClass($classId);
+        if (!empty($classInfo)) {
+            if ($classInfo->user_total >= $classInfo->max_user) {
+                return false;
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function updateCourse($cid, $cdata, $price = 0,$attrValueIds=''){
+        $params           = new stdclass;
+        $params->title    = $cdata["title"];
+        $params->fee_type = $cdata["fee_type"];
+        if (isset($cdata["start_time"])) {
+            $params->start_time = $cdata["start_time"];
+        }
+        if (isset($cdata["end_time"])) {
+            $params->end_time = $cdata["end_time"];
+        }
+		$params->scope = $cdata["scope"];
+        $params->descript = $cdata["descript"];
+        if (isset($cdata["max_user"])) {
+            $params->max_user = $cdata["max_user"];
+        }
+        if (isset($cdata["min_user"])) {
+            $params->min_user = $cdata["min_user"];
+        }
+        if (isset($cdata["type"])) {
+            $params->type = $cdata["type"];
+        }
+		if (isset($cdata["first_cate"])) {
+            $params->first_cate = $cdata["first_cate"];
+        }
+		if (isset($cdata["second_cate"])) {
+            $params->second_cate = $cdata["second_cate"];
+        }
+		if (isset($cdata["third_cate"])) {
+            $params->third_cate = $cdata["third_cate"];
+        }
+        $params->thumb_big   = $cdata["thumb_big"];
+        $params->thumb_med   = $cdata["thumb_med"];
+        $params->thumb_small = $cdata["thumb_small"];
+        if ($price) {
+            $params->fee        = new stdclass;
+            $params->fee->price = $price;
+        }
+		if($attrValueIds){
+			$params->attr        = new stdclass;
+            $params->attr->attr_value_ids = $attrValueIds;
+		}
+        $ret = utility_services::call("/course/info/update/$cid", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+	
+	public static function addCourse( $cdata, $price = 0,$attrValueIds=''){
+        $params           = new stdclass;
+        $params->title    = $cdata["title"];
+        $params->fee_type = $cdata["fee_type"];
+		$params->user_id  = $cdata['user_id'];
+        if (isset($cdata["start_time"])) {
+            $params->start_time = $cdata["start_time"];
+        }
+        if (isset($cdata["end_time"])) {
+            $params->end_time = $cdata["end_time"];
+        }
+		$params->scope = $cdata["scope"];
+        $params->descript = $cdata["descript"];
+        if (isset($cdata["type"])) {
+            $params->type = $cdata["type"];
+        }
+		if (isset($cdata["first_cate"])) {
+            $params->first_cate = $cdata["first_cate"];
+        }
+		if (isset($cdata["second_cate"])) {
+            $params->second_cate = $cdata["second_cate"];
+        }
+		if (isset($cdata["third_cate"])) {
+            $params->third_cate = $cdata["third_cate"];
+        }
+        $params->thumb_big   = $cdata["thumb_big"];
+        $params->thumb_med   = $cdata["thumb_med"];
+        $params->thumb_small = $cdata["thumb_small"];
+        if ($price) {
+            $params->fee        = new stdclass;
+            $params->fee->price = $price;
+        }
+		if($attrValueIds){
+			$params->attr        = new stdclass;
+            $params->attr->attr_value_ids = $attrValueIds;
+		}
+        $ret = utility_services::call("/course/info/addCourse", $params);
+        if (!empty($ret->data) ) {
+            return $ret->data;
+        }
+
+        return false;
+    }
+	
+
+    public static function setCourseAdminStatus($cid, $status)
+    {
+        $params               = new stdclass;
+        $params->admin_status = $status;
+        $ret                  = utility_services::call("/course/info/SetAdminStatus/$cid", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /*
+     *获取单个课程
+     */
+    public static function getCourseOne($cid)
+    {
+        $ret = utility_services::call("/course/info/get/$cid");
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+    /*
+     *根据班级的id获取结束的plan的个数
+     */
+    public static function endGroupByClassIds ($userId,$classIdsArr){
+        $params           = new stdclass;
+		$params->classIdsArr = $classIdsArr;
+		$params->userId = $userId;
+        $ret = utility_services::call("/course/plan/endGroupByClassIds/",$params);
+        if (!empty($ret->data)) {
+            return $ret;
+        } else {
+            return false;
+        }
+    }
+    /*
+     *根据课程id获取章节的个数
+     */
+    public static function planGroupSectionByCourseIds($courseIdsArr){
+        $params           = new stdclass;
+		$params->courseIdsArr = $courseIdsArr;
+		//$params->userId = $userId;
+        $ret = utility_services::call("/course/section/planGroupSectionByCourseIds/",$params);
+        if (!empty($ret->data)) {
+            return $ret;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getCourselist($page, $size, $fee_type, $grade_id = 0, $week = 0, $oid = 0, $shelf = false)
+    {
+        $params           = new stdclass;
+        $params->fee_type = $fee_type;
+        $params->grade_id = $grade_id;
+        $params->week     = $week;
+        if ($shelf != false) {
+            $params->shelf = $shelf;
+        }
+        if ($oid != 0) {
+            $params->oid = $oid;
+        }
+        $ret = utility_services::call("/course/info/courselist/$page/$size", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function CourseLikelist($userId,$courseIds,$data){
+        $params           = new stdclass;
+        $params->cond     = new stdclass;
+        if (!empty($userId)) {
+            $params->cond->user_id = $userId;
+        }
+        if (!empty($courseIds)) {
+            $params->cond->course_ids = $courseIds;
+        }
+        if (!empty($data["search"])) {
+            $params->cond->search = $data["search"];
+        }
+        $ret = utility_services::call("/course/info/courselikelist/", $params);
+        if (!empty($ret->data)) {
+            return $ret;
+        } else {
+            return false;
+        }
+    }
+    public static function getCourselistindex($page, $size, $fee_type, $grade_id = 0, $week = 0)
+    {
+        $params           = new stdclass;
+        $params->fee_type = $fee_type;
+        $params->grade_id = $grade_id;
+        $params->week     = $week;
+        $ret              = utility_services::call("/course/info/courselistindex/$page/$size", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getFinishedCourselist($grade_id, $oid, $shelf, $page, $size)
+    {
+        $params           = new stdclass;
+        $params->status   = "finished";
+        $params->grade_id = $grade_id;
+        $params->oid      = $oid;
+        $params->shelf    = $shelf;
+        $ret              = utility_services::call("/course/info/courselist/$page/$size", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getCourselistByOid($page, $size, $oid, $data = array())
+    {
+        $params      = new stdclass;
+        $params->oid = $oid;
+        $dataArr     = array(
+            "status"      => "status",
+            "grade_id"    => "grade_id",
+            "shelf"       => "shelf",
+            "week"        => "week",
+            "fee_type"    => "fee_type",
+            "create_time" => "create_time",
+            "user_total"  => "user_total",
+            "search"      => "search",
+			"type"		  => "type",	
+        );
+        foreach ($dataArr as $dak => $dav) {
+            if (isset($data[$dak])) {
+                $params->$dak = $data[$dak];
+            }
+        }
+        $ret = utility_services::call("/course/info/courselist/$page/$size", $params);
+        if (!empty($ret->data)) {
+            return $ret;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getCate($cid)
+    {
+        $ret = utility_services::call("/course/cate/list/");
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getCourseId($uid)
+    {
+        $ret = utility_services::call("/course/info/genId/$uid");
+        if ($ret->result->code != 0) return false;
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function addsection($cid, $sdata)
+    {
+        $params           = new stdclass;
+        $params->name     = $sdata["name"];
+        $params->descript = $sdata["descript"];
+        if (isset($sdata["order_no"])) {
+            $params->order_no = $sdata["order_no"];
+        }
+        $ret = utility_services::call("/course/section/create/$cid", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function delClass($class_id, $cid)
+    {
+        $ret = utility_services::call("/course/class/del/$class_id/$cid");
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return $ret;
+        } elseif (!empty($ret->result) && $ret->result->code == -4) {
+            return $ret;
+        } else {
+            return false;
+        }
+    }
+
+    public static function delSection($sid, $cid)
+    {
+        $ret = utility_services::call("/course/section/del/$sid/$cid");
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return $ret;
+        }
+
+        return false;
+    }
+
+    public static function getSection($sid)
+    {
+        $ret = utility_services::call("/course/section/get/$sid");
+        if (!empty($ret->data)) {
+            return $ret->data;
+        }
+
+        return false;
+    }
+
+    public static function updateSection($section_id, $sdata)
+    {
+        $params = new stdclass;
+        if (isset($sdata["name"])) {
+            $params->name = $sdata["name"];
+        }
+        $params->descript = $sdata["descript"];
+        if (isset($sdata["order_no"])) {
+            $params->order_no = $sdata["order_no"];
+        }
+        $ret = utility_services::call("/course/section/update/$section_id", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function listSection($cid)
+    {
+        $ret = utility_services::call("/course/section/list/$cid");
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    private static $array_class = array(
+        "user_class_id" => "user_class_id",
+        "user_id"       => "user_id",
+        "name"          => "name",
+        "descript"      => "descript",
+        "type"          => "type",
+        "max_user"      => "max_user",
+        "min_user"      => "min_user",
+        "status"        => "status",
+    );
+
+    public static function addClass($cid, $cdata)
+    {
+        $params = new stdclass;
+        foreach (self::$array_class as $key => $value) {
+            $params->$key = $cdata["$value"];
+        }
+        //	$params->descript=$cdata["descript"];
+        $ret = utility_services::call("/course/class/add/$cid", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function updateClass($class_id, $cdata)
+    {
+        $params                = new stdclass;
+        $params->name          = $cdata["name"];
+        $params->user_class_id = $cdata["user_class_id"];
+        $params->status        = empty($cdata["status"]) ? 1 : $cdata["status"];
+        if (isset($cdata["descript"])) {
+            $params->descript = $cdata["descript"];
+        }
+        if (isset($cdata["user_id"])) {
+            $params->user_id = $cdata["user_id"];
+        }
+        if (isset($cdata["type"])) {
+            $params->type = $cdata["type"];
+        }
+        $params->max_user = $cdata["max_user"];
+        if (isset($cdata["min_user"])) {
+            $params->min_user = $cdata["min_user"];
+        }
+		//地点分类
+        if (isset($cdata["region_level0"])) {
+			$params->region_level0 = $cdata["region_level0"];
+		}
+		if (isset($cdata["region_level1"])) {
+			$params->region_level1 = $cdata["region_level1"];
+		}
+		if (isset($cdata["region_level2"])) {
+			$params->region_level2 = $cdata["region_level2"];
+		}
+		if (isset($cdata["address"])) {
+			$params->address = $cdata["address"];
+		}
+
+        $ret = utility_services::call("/course/class/update/$class_id", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function getClasslist($cid)
+    {
+        $ret = utility_services::call("/course/class/list/$cid");
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+	public static function classListByCond($arrayin){
+		$params = new stdclass;
+		$array = array(
+			"user_id"=>"user_id",
+			"user_class_id"=>"user_class_id",
+			"course_id"=>"course_id",
+		);
+		foreach($array as $k=>$v){
+			if(!empty($arrayin[$v])){
+				$params->$k = $arrayin[$v];
+			}
+		}
+		$ret = utility_services::call("/course/class/listbycond/",$params);
+		if (!empty($ret->data)) {
+			return $ret;
+		} else {
+			return false;
+		}
+	}
+
+	public static function classListByCourseIds($arrayin,$page=1,$length=10){
+		$params = new stdclass;
+		$params->cond = new stdclass;
+		$array = array(
+			"user_id"=>"user_id",
+			"user_class_id"=>"user_class_id",
+		);
+		foreach($array as $k=>$v){
+			if(!empty($arrayin[$v])){
+				$params->$k = $arrayin[$v];
+			}
+		}
+		$params->page = $page ;
+		$params->length = $length ;
+		if(!empty($arrayin["course_ids"])){
+			$params->cond->course_ids = $arrayin["course_ids"];
+		}
+		$ret = utility_services::call("/course/class/classListByCourseIds/",$params);
+		if (!empty($ret->data)) {
+			return $ret;
+		} else {
+			return false;
+		}
+	}
+
+	private static $array_plan = array(
+        "user_id"           => "user_id",
+        "user_plan_id"      => "user_plan_id",
+        //	"course_id"=>"course_id",
+        //	"descript"=>"descript",
+        "section_id"        => "section_id",
+        "class_id"          => "class_id",
+        "start_time"        => "cstart_time",
+		"end_time"          => "end_time",
+        "live_public_type"  => "live_public_type",
+        "video_public_type" => "video_public_type",
+        "video_trial_time"  => "video_trial_time",
+        "status"            => "status",
+    );
+
+    public static function addPlan($cid, $cdata)
+    {
+        $params = new stdclass;
+        foreach (self::$array_plan as $key => $value) {
+            if (isset($cdata[$value])) $params->$key = $cdata[$value];
+        }
+        //			print_r($params);
+        $ret = utility_services::call("/course/plan/insert/$cid", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function getPlan($plan_id)
+    {
+        $ret = utility_services::call("/course/plan/get/$plan_id");
+        if (!empty($ret->data)) {
+            return $ret->data;
+        }
+
+        return false;
+    }
+
+    public static function getPlanuni($plan_data)
+    {
+        $params = new stdclass;
+        if (isset($plan_data["course_id"])) $params->course_id = $plan_data["course_id"];
+        if (isset($plan_data["section_id"])) $params->section_id = $plan_data["section_id"];
+        if (isset($plan_data["class_id"])) $params->class_id = $plan_data["class_id"];
+        $ret = utility_services::call("/course/plan/getuni/", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        }
+
+        return false;
+    }
+
+    public static function getPlanByCids($params)
+    {
+        $ret = utility_services::call("/course/plan/getPlanByCids/", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        }
+
+        return false;
+    }
+
+    public static function updatePlanStatus($plan_id, $status)
+    {
+        $ret = utility_services::call("/course/plan/setStatus/$plan_id", array("status" => $status));
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function getPlanStatus($plan_id)
+    {
+        $ret = utility_services::call("/course/plan/getStatus/$plan_id");
+        if (!empty($ret->data)) {
+            return $ret->data;
+        }
+
+        return false;
+    }
+
+    public static function updatePlan($cdata)
+    {
+        $params = new stdclass;
+        foreach (self::$array_plan as $key => $value) {
+            if (isset($cdata[$value])) $params->$key = $cdata[$value];
+        }
+        $params->course_id = $cdata["course_id"];
+        $ret               = utility_services::call("/course/plan/update/", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+	public static function verifyPlan($user_id, $plan_id)
+	{
+		$params = new stdclass;
+		$params->user_id = $user_id;
+		$ret = utility_services::call("/course/plan/verify/$plan_id", $params);
+		if (!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+	public static function verifyPlanMulti($user_id, array $plan_ids)
+	{
+		$params = new stdclass;
+		$params->user_id = $user_id;
+		$params->plan_ids= $plan_ids;
+		$ret = utility_services::call("/course/plan/verifyMulti/", $params);
+		if (!empty($ret->data)){
+			return $ret->data;
+		}
+		return false;
+	}
+
+    private static $list_plan_cond = array(
+        "cid"           => "cid",
+        "class_id"      => "class_id",
+        "user_plan_id"  => "user_plan_id",
+        "orgUserId"     => "orgUserId",
+        "sid"           => "sid",
+        "order_by"      => "order_by",
+        "plan_id"       => "plan_id",
+        "week"          => "week",
+        "allcourse"     => "allcourse",
+        "orgUserId"     => "orgUserId",
+        "start_time"    => "start_time",
+        "endstart_time" => "endstart_time",
+        "status"        => "status",
+        "type"          => "type",
+		"startTime"     => "startTime"
+        //""=>"",
+    );
+
+    public static function listPlan($plist)
+    {
+        $params = new stdclass;
+        foreach (self::$list_plan_cond as $key => $value) {
+            if (isset($plist[$value])) $params->$key = $plist[$value];
+        }
+        $page   = isset($plist['page']) ? $plist['page'] : 1;
+        $length = isset($plist['length']) ? $plist['length'] : 200;
+        //	$length = 100;
+        $ret = utility_services::call("/course/plan/list/$page/$length", $params);
+
+        if (!empty($ret->data)) {
+            return $ret;
+        }
+
+        return false;
+    }
+
+    public static function planCourseGroup($plist)
+    {
+        $params = new stdclass;
+        foreach (self::$list_plan_cond as $key => $value) {
+            if (isset($plist[$value])) $params->$key = $plist[$value];
+        }
+        $page   = isset($plist['page']) ? $plist['page'] : 1;
+        $length = isset($plist['length']) ? $plist['length'] : 100;
+        //	$length = 100;
+        $ret = utility_services::call("/course/plan/planCourseGroup/$page/$length", $params);
+
+        if (!empty($ret->data)) {
+            return $ret;
+        }
+
+        return false;
+    }
+
+	static private $array_reg = array(
+		"cid"       => "cid",
+		"course_id" => "course_id",
+		"class_id"  => "class_id",
+		"uid"       => "uid",
+		"user_owner" => "user_owner",
+		"mobile"=>"mobile",
+	);
+
+    public static function addregistration($regdata)
+    {
+        $params = new stdclass;
+        foreach (self::$array_reg as $k => $v) {
+            if (isset($regdata[$v])) $params->$k = $regdata[$v];
+        }
+        $params->user_owner = $regdata["user_owner"];
+        $params->class_id   = $regdata["class_id"];
+        $params->status     = $regdata["status"];
+
+        $ret                = utility_services::call("/course/info/addregistration/", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function updateRegClass($course_user_id, $updata)
+    {
+        $params                 = new stdclass;
+        $params->course_user_id = $course_user_id;
+        $params->class_id       = $updata["class_id"];
+        $params->course_id      = $updata["course_id"];
+        $params->old_class_id   = $updata["old_class_id"];
+        $params->old_course_id  = $updata["old_course_id"];
+        $ret                    = utility_services::call("/course/info/updateregclass/", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function updateRegCount($updata)
+    {
+        $params                = new stdclass;
+        $params->old_class_id  = $updata["old_class_id"];
+        $params->old_course_id = $updata["old_course_id"];
+        $params->new_class_id  = $updata["new_class_id"];
+        $params->new_course_id = $updata["new_course_id"];
+        $ret                   = utility_services::call("/course/info/updateregcount/", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return $ret;
+        }
+
+        return false;
+    }
+
+	//没有分页
+    public static function listRegistrationBycond($regdata,$page=null,$length=null){
+        $params = new stdclass;
+		if(empty($page)){
+			$page = 0;
+		}
+		if(empty($length)){
+			$length = 0;
+		}
+		$array_reg_data = array(
+			"course_ids" => "course_ids",
+			"class_id"  => "class_id",
+			"uids"       => "uids",
+			"user_owner" => "user_owner",
+		);
+		foreach ($array_reg_data as $k => $v) {
+            if (isset($regdata[$v])) $params->$k = $regdata[$v];
+        }
+		//print_r($params);
+        $ret = utility_services::call("/course/info/listregistrationbycond/$page/$length", $params);
+        if (!empty($ret->data)) {
+            //	return $ret->data;
+            return $ret;
+        } else {
+            return false;
+        }
+    }
+
+    public static function listregistrationByInfo($regdata, $page = 1, $size = 0)
+    {
+        $params = new stdclass;
+        foreach (self::$array_reg as $k => $v) {
+            if (isset($regdata[$v])) $params->$k = $regdata[$v];
+        }
+        $ret = utility_services::call("/course/info/teacherByOfStudentNum/$page/$size", $params);
+        if (!empty($ret->data)) {
+            return $ret;
+        } else {
+            return false;
+        }
+    }
+	
+	 public static function listRegistration($regdata, $page = 1, $size = 0)
+    {
+        $params = new stdclass;
+        foreach (self::$array_reg as $k => $v) {
+            if (isset($regdata[$v])) $params->$k = $regdata[$v];
+        }
+        $ret = utility_services::call("/course/info/listRegistration/$page/$size", $params);
+        if (!empty($ret->data)) {
+            return $ret;
+        } else {
+            return false;
+        }
+    }
+
+
+    public static function listPlanUser($plan_id)
+    {
+        $ret = utility_services::call("/course/info/planuser/$plan_id");
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getFeeOrder($order_id)
+    {
+        $ret = utility_services::call("/course/feeorder/get/$order_id");
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getFeeOrderByOutTradeId($out_trade_id)
+    {
+        $ret = utility_services::call("/course/feeorder/getfeeorderbyouttradeid/$out_trade_id");
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static $fee_info_array = array(
+        "user_id"   => "user_id",
+        "course_id" => "course_id",
+        "order_id"  => "order_id",
+		"owner_id"  => "owner_id",
+        "status"    => "status",
+        "price"     => "price"
+    );
+
+    public static function listFeeOrder($fee_type, $page = 1, $size = -1)
+    {
+        $params = new stdclass;
+        foreach (self::$fee_info_array as $k => $v) {
+            if (isset($fee_type[$v])) $params->$k = $fee_type[$v];
+        }
+
+        $ret = utility_services::call("/course/feeorder/list/$page/$size", $params);
+        if (!empty($ret->data)) {
+            return $ret;
+        } else {
+            return false;
+        }
+    }
+
+    public static $fee_status_array = array(
+        "order_id" => "order_id",
+        "status"   => "status",
+    );
+
+    public static function setFeeOrderStatus($order_status)
+    {
+        $params = new stdclass;
+        foreach (self::$fee_status_array as $k => $v) {
+            if (isset($order_status[$v])) $params->$k = $order_status[$v];
+        }
+        $ret = utility_services::call("/course/feeorder/setstatus/", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function updateFeeOrder($order_id, $order_info)
+    {
+        $ret = utility_services::call("/course/feeorder/update/$order_id", $order_info);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function addFeeOrder($user_id, $user_owner, $course_id, $price, $price_market, $ext = "")
+    {
+        $params               = new stdclass;
+        $params->user_id      = $user_id;
+        $params->user_owner   = $user_owner;
+        $params->course_id    = $course_id;
+        $params->price        = $price;
+        $params->price_market = $price_market;
+        $params->ext          = $ext;
+        $ret                  = utility_services::call("/course/feeorder/add/", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function genPayUrl($order_info, $course_info)
+    {
+        require_once(ROOT_LIBS."/alipay/alipay.config.php");
+        require_once(ROOT_LIBS."/alipay/lib/alipay_submit.class.php");
+        //支付类型
+        $payment_type = "1";
+        //必填，不能修改
+        //服务器异步通知页面路径
+        $sc = "http";
+        if (utility_net::isHTTPS()) {
+            $sc = "https";
+        }
+        $notify_url = $sc."://".$_SERVER['HTTP_HOST']."/course.buy.notify";
+
+        //页面跳转同步通知页面路径
+        $return_url = $sc."://".$_SERVER['HTTP_HOST']."/course.buy.return";
+
+        //卖家支付宝帐户
+        $seller_email = "gn100@talkweb.com.cn";
+        //必填
+
+        //商户订单号
+        //$out_trade_no = $order_info->unique_order_id;
+        $out_trade_no = $order_info->out_trade_id;
+        //商户网站订单系统中唯一订单号，必填
+
+        //订单名称
+        $subject = $course_info->title;
+        //必填
+
+        //付款金额
+        $total_fee = $order_info->price;
+        //必填
+
+        //订单描述
+
+        $body = "";//mb_substr(strip_tags($course_info->descript),0,30,"utf8");
+        //默认支付方式
+        $paymethod = "bankPay";
+        //必填
+        //默认网银
+        $defaultbank = "CMB";
+        //必填，银行简码请参考接口技术文档
+
+        //商品展示地址
+        //$show_url = $sc."://www.gn100.com/course.info.show/3";
+        $show_url = $sc."://".$_SERVER['HTTP_HOST']."/course.info.show/".$order_info->course_id;
+        //需以http://开头的完整路径，例如：http://www.商户网址.com/myorder.html
+
+        //防钓鱼时间戳
+        $anti_phishing_key = "";
+        //若要使用请调用类文件submit中的query_timestamp函数
+
+        //客户端的IP地址
+        $exter_invoke_ip = "";
+        //非局域网的外网IP地址，如：221.0.0.1
+
+
+        /************************************************************/
+
+        //构造要请求的参数数组，无需改动
+        $parameter = array(
+            "service"           => "create_direct_pay_by_user",
+            "partner"           => trim($alipay_config['partner']),
+            "payment_type"      => $payment_type,
+            "notify_url"        => $notify_url,
+            "return_url"        => $return_url,
+            "seller_email"      => $seller_email,
+            "out_trade_no"      => $out_trade_no,
+            "subject"           => $subject,
+            "total_fee"         => $total_fee,
+            "body"              => $body,
+            "paymethod"         => $paymethod,
+            "defaultbank"       => $defaultbank,
+            "show_url"          => $show_url,
+            "anti_phishing_key" => $anti_phishing_key,
+            "exter_invoke_ip"   => $exter_invoke_ip,
+            "_input_charset"    => trim(strtolower($alipay_config['input_charset']))
+        );
+
+        //建立请求
+        $alipaySubmit = new AlipaySubmit($alipay_config);
+
+        return $alipaySubmit->alipay_gateway_new.$alipaySubmit->buildRequestParaToString($parameter, "get", "确认");
+    }
+
+    /**
+     * 微信扫码支付
+     */
+    public static function genWeixinPayQrcodeUrl($order_info, $course_info)
+    {
+        //return weixin_api::getQrcodeUrl($order_info->unique_order_id);
+        return weixin_api::getQrcodeUrl($order_info->out_trade_id);
+    }
+
+    public static function getOrgStat($data)
+    {
+        if (empty($data["user_id"])) {
+            return false;
+        }
+        $params          = new stdclass;
+        $params->user_id = $data["user_id"];
+        $ret             = utility_services::call("/course/detail/getorgstat", $params);
+
+        return $ret;
+    }
+
+    public static function getTeacherStat($data)
+    {
+        if (empty($data["user_id"])) {
+            return false;
+        }
+        $params          = new stdclass;
+        $params->user_id = $data["user_id"];
+        $ret             = utility_services::call("/course/detail/getteacherstat", $params);
+
+        return $ret;
+    }
+
+    public static function getStudentStat($data)
+    {
+        if (empty($data["user_id"])) {
+            return false;
+        }
+        $params          = new stdclass;
+        $params->user_id = $data["user_id"];
+        $ret             = utility_services::call("/course/detail/getstudentstat", $params);
+
+        return $ret;
+    }
+
+    public static function createDiscount($data, $uid)
+    {
+        $params                 = new stdclass;
+        $params->user_id        = $uid;
+        $params->name           = $data["name"];
+        $params->introduction   = $data["introduction"];
+        $params->course_id      = $data["course_id"];
+        $params->discount_type  = intval($data["discount_type"]);
+        $params->discount_value = floatval($data["discount_value"]);
+        $params->min_fee        = floatval($data["min_fee"]);
+        $params->starttime      = $data["starttime"];
+        $params->endtime        = $data["endtime"];
+        $ret                    = utility_services::call("/course/discount/create", $params);
+
+        return $ret;
+    }
+
+    public static function listDiscount($data, $uid)
+    {
+        $params          = new stdclass;
+        $params->user_id = $uid;
+        if (!empty($data["limit"])) {
+            $params->limit = $data["limit"];
+        }
+        if (!empty($data["page"])) {
+            $params->page = $data["page"];
+        }
+        $ret = utility_services::call("/course/discount/listbyorg", $params);
+
+        return $ret;
+    }
+
+    public static function forbidDiscount($uid, $discount_id)
+    {
+        $params              = new stdclass;
+        $params->user_id     = $uid;
+        $params->discount_id = $discount_id;
+        $ret                 = utility_services::call("/course/discount/forbid", $params);
+
+        return $ret;
+    }
+
+    public static function recoverDiscount($uid, $discount_id)
+    {
+        $params              = new stdclass;
+        $params->user_id     = $uid;
+        $params->discount_id = $discount_id;
+        $ret                 = utility_services::call("/course/discount/recover", $params);
+
+        return $ret;
+    }
+
+    public static function listDiscountCode($data, $uid, $discount_id)
+    {
+        $params              = new stdclass;
+        $params->user_id     = $uid;
+        $params->discount_id = $discount_id;
+        if (!empty($data["limit"])) {
+            $params->limit = $data["limit"];
+        }
+        if (!empty($data["page"])) {
+            $params->page = $data["page"];
+        }
+        $ret = utility_services::call("/course/discount/listcodebydiscountid", $params);
+
+        return $ret;
+    }
+
+    public static function createDiscountCode($data, $uid)
+    {
+        $params               = new stdclass;
+        $params->user_id      = $uid;
+        $params->introduction = $data["introduction"];
+        $params->discount_id  = $data["discount_id"];
+        $params->total_num    = intval($data["total_num"]);
+        $params->user_limit   = intval($data["user_limit"]);
+        $params->starttime    = $data["starttime"];
+        $params->endtime      = $data["endtime"];
+        $ret                  = utility_services::call("/course/discount/createcode", $params);
+
+        return $ret;
+    }
+
+    public static function forbidDiscountCode($uid, $discount_code_id)
+    {
+        $params                   = new stdclass;
+        $params->user_id          = $uid;
+        $params->discount_code_id = $discount_code_id;
+        $ret                      = utility_services::call("/course/discount/forbiddiscountcode", $params);
+
+        return $ret;
+    }
+
+    public static function recoverDiscountCode($uid, $discount_code_id)
+    {
+        $params                   = new stdclass;
+        $params->user_id          = $uid;
+        $params->discount_code_id = $discount_code_id;
+        $ret                      = utility_services::call("/course/discount/recoverdiscountcode", $params);
+
+        return $ret;
+    }
+
+	/*
+	 * (t_discount_code_used)
+	 */
+	public static function listDiscountCodeUid($data, $uid)
+    {
+        $params          = new stdclass;
+        $params->user_id = $uid;
+        if (!empty($data["limit"])) {
+            $params->limit = $data["limit"];
+        }
+        if (!empty($data["page"])) {
+            $params->page = $data["page"];
+        }
+        $ret = utility_services::call("/course/discount/listcodeusedbyuid", $params);
+
+        return $ret;
+    }
+
+	/*
+	 * (t_discount_code)
+	 */
+	public static function listDisCodeIds($data,$codeIds)
+    {
+		$params = new stdclass;
+        if (!empty($data["limit"])) {
+            $params->limit = $data["limit"];
+        }
+        if (!empty($data["page"])) {
+            $params->page = $data["page"];
+        }
+		$params->pk_discount_code = $codeIds;
+        $ret = utility_services::call("/course/discount/listDisInId/",$params);
+        return $ret;
+    }
+
+	/*
+	 * (t_discount)
+	 */
+	public static function listDisIds($disIds)
+    {
+		$params = new stdclass;
+		$params->fk_discount = $disIds;
+        $ret = utility_services::call("/course/discount/ListDiscountInId/",$params);
+        return $ret;
+    }
+
+
+    public static function listDiscountCodeUsed($data, $uid, $discount_code)
+    {
+        $params                = new stdclass;
+        $params->user_id       = $uid;
+        $params->discount_code = $discount_code;
+        if (!empty($data["limit"])) {
+            $params->limit = $data["limit"];
+        }
+        if (!empty($data["page"])) {
+            $params->page = $data["page"];
+        }
+        $ret = utility_services::call("/course/discount/listcodeusedbycodeid", $params);
+
+        return $ret;
+    }
+
+    public static function getDiscountCodeUsed($order_id)
+    {
+        $params           = new stdclass;
+        $params->order_id = $order_id;
+        $ret              = utility_services::call("/course/discount/getdiscountcodeused", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function useDiscountCode($discount_code, $user_id, $unique_order_id)
+    {
+        $params                  = new stdclass;
+        $params->discount_code   = $discount_code;
+        $params->user_id         = $user_id;
+        $params->unique_order_id = $unique_order_id;
+        $ret                     = utility_services::call("/course/discount/usediscountcode", $params);
+
+        return $ret;
+    }
+
+    public static function getCoursesByOrg($user_id)
+    {
+        $params          = new stdclass;
+        $params->user_id = $user_id;
+        $ret             = utility_services::call("/course/discount/getcoursesbyorg", $params);
+
+        return $ret;
+    }
+
+    public static function getFeeCoursesByOrg($user_id)
+    {
+        $params          = new stdclass;
+        $params->user_id = $user_id;
+        $ret             = utility_services::call("/course/discount/getfeecoursesbyorg", $params);
+
+        return $ret;
+    }
+
+    public static function getCourseVideo($plan_id)
+    {
+        $params          = new stdclass;
+        $params->plan_id = $plan_id;
+        $ret             = utility_services::call("/course/video/get/", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function setCourseVideo($video_id, $start, $end)
+    {
+        $params                     = new stdclass;
+        $params->encoding_starttime = $start;
+        $params->encoding_endtime   = $end;
+        $ret                        = utility_services::call("/course/video/update/$video_id", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+	
+	public static function setCourseVideoV2($video_id, $data)
+    {
+        $params = new stdclass;
+		if(!empty($data['segs'])){
+			$params->segs = $data['segs'];
+		}
+        if(!empty($data['totalTime'])){
+			$params->segs_totaltime = $data['totalTime'];
+		}
+		if(!empty($data['thumb0'])){
+			$params->thumb0 = $data['thumb0'];
+		}
+
+        $ret = utility_services::call("/course/video/update/$video_id", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function confirmDiscountCode($order_id)
+    {
+        $params           = new stdclass;
+        $params->order_id = $order_id;
+        $ret              = utility_services::call("/course/discount/confirmdiscountcode", $params);
+
+        return $ret;
+    }
+
+    public static function cancelDiscountCode($order_id)
+    {
+        $params           = new stdclass;
+        $params->order_id = $order_id;
+        $ret              = utility_services::call("/course/discount/canceldiscountcode", $params);
+
+        return $ret;
+    }
+
+    public static function getUsedsByCodeIdUserId($code, $user_id, $page = 1, $limit = 0)
+    {
+        $params          = new stdclass;
+        $params->code    = $code;
+        $params->user_id = $user_id;
+        $params->page    = $page;
+        $params->limit   = $limit;
+        $ret             = utility_services::call("/course/mydiscount/getdiscountcodeusedsbycodeiduserid", $params);
+
+        return $ret;
+    }
+
+    public static function getUsedsByUserId($user_id, $statuses, $page = 1, $limit = 0)
+    {
+        $params           = new stdclass;
+        $params->user_id  = $user_id;
+        $params->statuses = $statuses;
+        $params->page     = $page;
+        $params->limit    = $limit;
+        $ret              = utility_services::call("/course/mydiscount/getdiscountcodeusedsbyuserid", $params);
+
+        return $ret;
+    }
+
+    public static function countStudent($cids)
+    {
+        $ret = utility_services::call("/course/info/countStudent", array('cids' => $cids));
+
+        return $ret;
+
+    }
+
+    public static function getStudentsByCid($cid)
+    {
+        $ret = utility_services::call("/course/info/getStudentsByCid/".$cid);
+
+        return $ret;
+
+    }
+
+    public static function addCourseTop($cid)
+    {
+        $ret = utility_services::call("/course/info/addCourseTop/".$cid);
+
+        return $ret;
+
+    }
+
+    public static function delCourseTop($cid)
+    {
+        $ret = utility_services::call("/course/info/delCourseTop/".$cid);
+
+        return $ret;
+
+    }
+
+    public static function getOrgIncome($org_owner, $start_time = 0, $end_time = 0)
+    {
+        $params             = new stdCLass;
+        $params->start_time = $start_time;
+        $params->end_time   = $end_time;
+        $ret                = utility_services::call('/course/info/getOrgIncome/'.$org_owner, $params);
+        if (!empty($ret->data)) {
+            return $ret->data->sum;
+        }
+
+        return 0;
+    }
+
+    public static function countFeeOrderByOwner($org_owner, $status, $start_time = 0, $end_time = 0)
+    {
+        $params             = new stdCLass;
+        $params->status     = $status;
+        $params->start_time = $start_time;
+        $params->end_time   = $end_time;
+        $ret                = utility_services::call("/course/feeorder/countFeeOrderByOwner/$org_owner", $params);
+        if (!empty($ret->data)) {
+            return $ret->data->count;
+        }
+
+        return 0;
+    }
+
+    public static function countPlanByOwner($org_owner, $status, $start_time = 0, $end_time = 0)
+    {
+        $params             = new stdCLass;
+        $params->status     = $status;
+        $params->start_time = $start_time;
+        $params->end_time   = $end_time;
+        $ret                = utility_services::call("/course/info/countPlanByOwner/$org_owner", $params);
+        if (!empty($ret->data)) {
+            return $ret->data->count;
+        }
+
+        return 0;
+    }
+
+    public static function countStudentByOwner($org_owner, $status, $start_time = 0, $end_time = 0)
+    {
+        $params             = new stdCLass;
+        $params->status     = $status;
+        $params->start_time = $start_time;
+        $params->end_time   = $end_time;
+        $ret                = utility_services::call("/course/info/countStudentByOwner/$org_owner", $params);
+        if (!empty($ret->data)) {
+            return $ret->data->count;
+        }
+
+        return 0;
+    }
+
+    public static function getPlanListByOwner($org_owner, $status, $start_time = 0, $end_time = 0)
+    {
+        $params             = new stdCLass;
+        $params->status     = $status;
+        $params->start_time = $start_time;
+        $params->end_time   = $end_time;
+        $ret                = utility_services::call("/course/plan/getPlanListByOwner/$org_owner", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        }
+
+        return false;
+    }
+
+    public static function getOrgStudentList($param)
+    {
+        return utility_services::call('/course/student/list', $param);
+    }
+
+    public static function searchUserData($param)
+    {
+        return utility_services::call('/course/student/SearchUserData', $param);
+    }
+
+    public static function getCourseByCids($params)
+    {
+        $ret = utility_services::call("/course/info/getCourseByCids/", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        }
+
+        return false;
+    }
+
+    public static function countStudentByClassIds($params)
+    {
+        $ret = utility_services::call("/course/info/countStudentByClassIds", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        }
+
+        return false;
+
+    }
+
+    /*
+     * 为排课增加一条题目信息
+     *
+     */
+    public static function addCoursePlanExam($data)
+    {
+        $params  = new stdclass;
+        $arrkeys = array(
+            "plan_id"     => "plan_id",
+            "question_id" => "question_id",
+            "type"        => "type",
+            "q_desc"      => "q_desc",
+            "q_desc_img"  => "q_desc_img",
+            "a"           => "a",
+            "b"           => "b",
+            "c"           => "c",
+            "d"           => "d",
+            "e"           => "e",
+            "answer_a_id" => "answer_a_id",
+            "answer_b_id" => "answer_b_id",
+            "answer_c_id" => "answer_c_id",
+            "answer_d_id" => "answer_d_id",
+            "answer_e_id" => "answer_e_id",
+            "answer"      => "answer",
+            "order_no"    => "order_no",
+            "status"      => "status",
+        );
+        foreach ($arrkeys as $arrk => $arrv) {
+            if (isset($data[$arrk])) {
+                $params->$arrv = $data[$arrv];
+            }
+        }
+        $ret = utility_services::call("/course/exam/add/", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function updateCoursePlanExam($examid, $data)
+    {
+        $params  = new stdclass;
+        $arrkeys = array(
+            "q_desc"      => "q_desc",
+            "q_desc_img"  => "q_desc_img",
+            "a"           => "a",
+            "b"           => "b",
+            "c"           => "c",
+            "d"           => "d",
+            "e"           => "e",
+            "answer_a_id" => "answer_a_id",
+            "answer_b_id" => "answer_b_id",
+            "answer_c_id" => "answer_c_id",
+            "answer_d_id" => "answer_d_id",
+            "answer_e_id" => "answer_e_id",
+            "answer"      => "answer",
+            "order_no"    => "order_no",
+            "status"      => "status",
+        );
+        foreach ($arrkeys as $arrk => $arrv) {
+            if (isset($data[$arrv])) {
+                $params->$arrv = $data[$arrv];
+            }
+        }
+        $ret = utility_services::call("/course/exam/update/$examid", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /*
+     * 列取该plan下的题目信息
+     *
+     */
+    public static function coursePlanExamList($data, $page = 0, $length = 0)
+    {
+        if (empty($length)) {
+            $length = 1000;
+        }
+        if (empty($page)) {
+            $page = 1;
+        }
+        $params          = new stdclass;
+        $params->orderby = new stdclass;
+        $params->plan_id = $data["plan_id"];
+        if (isset($data["orderby"]["order_no"])) {
+            $params->orderby->order_no = $data["orderby"]["order_no"];
+        }
+        $ret = utility_services::call("/course/exam/list/$page/$length", $params);
+        if (!empty($ret->data)) {
+            return $ret;
+        }
+
+        return false;
+    }
+
+    /*
+     * 删除一条或多条题目信息
+     * $data = array(1,2,3,4); 1 2 3 4 为题目id
+     */
+    public static function courseDelPlanExam($data)
+    {
+        $params = new stdclass;
+        if (empty($data)) {
+            return false;
+        }
+        $params->ids = $data;
+        $ret         = utility_services::call("/course/exam/del/", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function createDiscountV2($data, $uid)
+    {
+        $params                 = new stdclass;
+        $params->user_id        = $uid;
+        $params->name           = $data["discount_name"];
+        $params->course_id      = $data["course_id"];
+        $params->discount_type  = intval($data["discount_type"]);
+        $params->discount_value = floatval($data["discount_value"]);
+        $params->min_fee        = floatval($data["min_fee"]);
+        $params->total_num      = intval($data["total_num"]);
+        $params->user_limit     = intval($data["user_limit"]);
+        $params->duration       = intval($data["duration"]);
+        if (!empty($data["create_code"])) {
+            $params->create_code = 1;
+        }
+        $ret = utility_services::call("/course/discount/createv2", $params);
+
+        return $ret;
+    }
+
+    public static function listDiscountV2($data, $uid)
+    {
+        $params          = new stdclass;
+        $params->user_id = $uid;
+        if (!empty($data["limit"])) {
+            $params->limit = $data["limit"];
+        }
+        if (!empty($data["page"])) {
+            $params->page = $data["page"];
+        }
+        $ret = utility_services::call("/course/discount/listbyorgv2", $params);
+
+        return $ret;
+    }
+
+    public static function listDiscountCodeV2($data, $uid, $discount_id)
+    {
+        $params              = new stdclass;
+        $params->user_id     = $uid;
+        $params->discount_id = $discount_id;
+        if (!empty($data["limit"])) {
+            $params->limit = $data["limit"];
+        }
+        if (!empty($data["page"])) {
+            $params->page = $data["page"];
+        }
+        $ret = utility_services::call("/course/discount/listcodebydiscountidv2", $params);
+
+        return $ret;
+    }
+
+    public static function listDiscountCodeUsedV2($data, $uid, $discountcode)
+    {
+        $params          = new stdclass;
+        $params->user_id = $uid;
+        $params->code    = $discountcode;
+        if (!empty($data["limit"])) {
+            $params->limit = $data["limit"];
+        }
+        if (!empty($data["page"])) {
+            $params->page = $data["page"];
+        }
+        $ret = utility_services::call("/course/discount/listcodeusedv2", $params);
+
+        return $ret;
+    }
+	/*
+	 * 通过用户id查找用户优惠券
+	 */
+	public static function listUserByCode($data)
+    {
+        $params          = new stdclass;
+        $params->user_id = $data['user_id'];
+        if (!empty($data["limit"]))
+		{
+            $params->limit = $data["limit"];
+        }
+        if (!empty($data["page"]))
+		{
+            $params->page = $data["page"];
+        }
+        $ret = utility_services::call("/course/discount/ListUserByCode", $params);
+
+        return $ret;
+    }
+
+	public static function ListDiscountByIds($data)
+    {
+        $params          = new stdclass;
+        $params->dis_ids = $data['dis_ids'];
+		if(!empty($data['owner']))
+		{
+			$params->owner = $data['owner'];
+		}
+        if (!empty($data["limit"]))
+		{
+            $params->limit = $data["limit"];
+        }
+        if (!empty($data["page"]))
+		{
+            $params->page = $data["page"];
+        }
+		if (!empty($data['code']))
+		{
+			$params->code = $data['code'];
+		}
+        $ret = utility_services::call("/course/discount/ListDiscountByIds", $params);
+
+        return $ret;
+    }
+
+	public static function getDiscountByIds($data)
+    {
+        $params          = new stdclass;
+        $params->discountid = $data['discountid'];
+        if (!empty($data["limit"]))
+		{
+            $params->limit = $data["limit"];
+        }
+        if (!empty($data["page"]))
+		{
+            $params->page = $data["page"];
+        }
+        $ret = utility_services::call("/course/discount/getDiscountByIds", $params);
+
+        return $ret;
+    }
+
+
+    public static function createDiscountCodeV2($num, $uid, $discount_id)
+    {
+        $params              = new stdclass;
+        $params->user_id     = $uid;
+        $params->discount_id = $discount_id;
+        $params->num         = intval($num);
+        $ret                 = utility_services::call("/course/discount/createcodev2", $params);
+
+        return $ret;
+    }
+
+    public static function getClassByClassIdArr($class_id_arr)
+    {
+
+        $ret = utility_services::call("/course/class/getClassByClassIdArr", $class_id_arr);
+
+        return $ret;
+    }
+
+    public static function addPlanAttach($planId, $data)
+    {
+        $params = new stdclass;
+        $attArr = array(
+            "title"    => "title",
+            "order_no" => "order_no",
+            "type"     => "type",
+            "thumb"    => "thumb",
+        );
+        foreach ($attArr as $k => $v) {
+            if (isset($data[$k])) {
+                $params->$k = $data[$k];
+            }
+        }
+        if (!isset($data["attach"])) {
+            return false;
+        }
+        $params->attach = $data["attach"];
+        $ret            = utility_services::call("/course/planattach/add/$planId", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return $ret;
+        }
+
+        return false;
+    }
+
+    /*
+        public static function delPlanAttach($planId,$planAttId){
+            $ret = utility_services::call("/course/planattach/del/$planAttId/$planId");
+            if(!empty($ret->result) && $ret->result->code==0){
+                return $ret;
+            }else{
+                return false;
+            }
+        }
+    */
+    public static function delPlanAttach($data)
+    {
+        $params = new stdclass;
+        if (empty($data)) {
+            return false;
+        }
+        $params->planAttIds = $data;
+        $ret                = utility_services::call("/course/planattach/del/", $params);
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function listPlanAttach($plan_id)
+    {
+        $planId = (int)$plan_id;
+        $ret    = utility_services::call("/course/planattach/list/$planId");
+        if (!empty($ret->data)) {
+            return $ret;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getTopCourseByOwner($uid)
+    {
+        $ret = utility_services::call("/course/info/getTopCourseByOwner/".$uid);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function setCourse($cid, $params)
+    {
+        $ret = utility_services::call("/course/info/setCourse/".$cid, $params);
+
+        return $ret;
+
+    }
+
+    public static function delHistoryTopCourse($uid, $top)
+    {
+        $ret = utility_services::call("/course/info/delHistoryTopCourse/".$uid, array('top' => $top));
+        if (!empty($ret->result) && $ret->result->code == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function getPlanExamsByPlan($plan_id, $user_id)
+    {
+        if (empty($plan_id) || empty($user_id)) {
+            return false;
+        }
+        $params          = new stdclass;
+        $params->plan_id = $plan_id;
+        $params->user_id = $user_id;
+        $ret             = utility_services::call("/course/exam/getplanexamsbyplan", $params);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function updatePlanExamStatus($data, $user_id)
+    {
+        if (empty($data) || empty($user_id) || empty($data["plan_id"]) || empty($data["plan_exam_id"]) || empty($data["status"])) {
+            return false;
+        }
+        $params               = new stdclass;
+        $params->plan_id      = $data["plan_id"];
+        $params->plan_exam_id = $data["plan_exam_id"];
+        $params->status       = $data["status"];
+        $params->user_id      = $user_id;
+        $ret                  = utility_services::call("/course/exam/updateplanexamstatus", $params);
+        if (0 == $ret->result->code) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function updateUserClass($params)
+    {
+        $ret = utility_services::call("/course/info/UpdateUserClass", $params);
+
+        return $ret->code ? false : true;
+    }
+
+    public static function checkIsRegistration($uid, $cid)
+    {
+        if (!intval($uid) || !intval($cid)) {
+            return false;
+        }
+
+        $params = ['uid' => $uid, 'courseId' => $cid];
+        $regInfo = utility_services::call('/course/info/CheckUserIsReg', $params);
+
+        if ($regInfo->code) return false;
+
+        return [
+            'courseUserId' => $regInfo->result->pk_course_user,
+            'courseId'     => $regInfo->result->fk_course,
+            'userId'       => $regInfo->result->fk_user,
+            'userOwnerId'  => $regInfo->result->fk_user_owner,
+            'classId'      => $regInfo->result->fk_class
+        ];
+    }
+
+    public static function getScoreInfo($cid)
+    {
+        $res = comment_api::getTotal(array('course_id' => $cid));
+        if (!empty($res)) {
+            $student_score = (int)ceil($res[0]->student_score / $res[0]->total_user);
+            $desc_score    = (int)ceil($res[0]->desc_score / $res[0]->total_user);
+            $explain_score = (int)ceil($res[0]->explain_score / $res[0]->total_user);
+            $avg_score     = (int)ceil($res[0]->avg_score / $res[0]->total_user);
+
+            return array(
+                'student_score' => $student_score > 5 ? 5 : $student_score,
+                'desc_score'    => $desc_score > 5 ? 5 : $desc_score,
+                'explain_score' => $explain_score > 5 ? 5 : $explain_score,
+                'avg_score'     => $avg_score > 5 ? 5 : $avg_score
+            );
+        }
+
+        return array();
+    }
+
+	public static function getOrgCourseCount($uidArr){
+        $url = '/course/info/getOrgCourseCount';
+        return utility_services::call($url,$uidArr);
+	}
+
+	public static function getCourseListByParams($page,$length,$params){
+        $ret=utility_services::call('/course/info/getCourseListByParams/'.$page.'/'.$length,$params);
+        return !empty($ret->data) ? $ret->data : false;
+	}
+
+	public static function checkUserRegisterCourse($course_id,$class_id,$uid,$owner_id=0){
+		$params = new stdclass;
+		$params->course_id = $course_id;
+		$params->class_id = $class_id;
+		$params->uid = $uid;
+		$params->owner_id = $owner_id;
+		$url = '/course/courseuser/checkUserRegisterCourse';
+        return utility_services::call($url,$params);
+	}
+
+	public static function getPlanQuestionCountByPidArr($pid_arr){
+        return utility_services::call('/course/exam/getPlanQuestionCountByPidArr', $pid_arr);
+	}
+
+	public static function getPlanQuestionByPid($pid){
+        return utility_services::call('/course/exam/getPlanQuestionByPid', $pid);
+	}
+
+	public static function getPlanAttachByPidArr($pid_arr){
+        return utility_services::call('/course/planattach/getPlanAttachByPidArr', $pid_arr);
+	}
+
+	public static function getPlanByPid($pid){
+        return utility_services::call('/course/plan/get/'.$pid);
+	}
+
+	public static function getstudentCourse($uid)
+	{
+        return utility_services::call('/course/student/getstudentCourse/'.$uid);
+	}
+    public static function getCourseByPlan($plan_id){
+        $params = new stdclass;
+        $params->plan_id = $plan_id;
+        $ret = utility_services::call("/course/plan/getcoursebyplan", $params);
+        return $ret;
+    }
+	
+	public static function getClassPlan($class_id_arr){	
+		$ret = utility_services::call("/course/plan/getClassPlan", $class_id_arr);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}else{
+			return false;
+		}
+	}
+	
+	public static function getPlanVideoByPlanIdArr($planIdArr){
+        $ret = utility_services::call("/course/video/getPlanVideoByPlanIdArr/", $planIdArr);
+        if (!empty($ret->data)){
+            return $ret->data;
+        }else{
+            return false;
+        }
+    }
+	
+	public static function getCateByLevel($level){	
+    	$url = '/course/cate/getCateByLevel/'.$level;
+        $ret = utility_services::call($url);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}else{
+			return false;
+		}
+	}
+	
+	public static function getCateByCateId($cateId){	
+    	$url = '/course/cate/getCateByCid/'.$cateId;
+        $ret = utility_services::call($url);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}else{
+			return false;
+		}
+	}
+	
+	public static function getCateByCidStr($cateIdStr){	
+		$params = new stdCLass;
+		$params->cateIdStr = $cateIdStr;
+    	$url = '/course/cate/getCateByCidStr/';
+        $ret = utility_services::call($url,$params);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}else{
+			return false;
+		}
+	}
+	
+	public static function getCateList(){	
+    	$url = '/course/cate/list/';
+        $ret = utility_services::call($url);
+		if(!empty($ret->data->items)){
+			return $ret->data->items;
+		}else{
+			return false;
+		}
+	}
+	
+	public static function getNodeCate($cateId){	
+    	$url = '/course/cate/getNodeCate/'.$cateId;
+        $ret = utility_services::call($url);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}else{
+			return false;
+		}
+	}
+	
+	public static function getAttrAndValueByCateId($cateId){	
+    	$url = '/course/attr/getAttrAndValueByCateId/'.$cateId;
+        $ret = utility_services::call($url);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}else{
+			return false;
+		}
+	}
+	
+	public static function getAttrValueByAttrId($attrId){	
+    	$url = '/course/attrValue/getAttrValueByAttrId/'.$attrId;
+        $ret = utility_services::call($url);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}else{
+			return false;
+		}
+	}
+	public static function exportOrgOfstudentData($param){
+        return utility_services::call('/course/student/exportOfStudentData', $param);
+    }
+	public static function getCourseAttrValueByCourseId($courseId){	
+    	$url = '/course/attrValue/getCourseAttrValueByCourseId/'.$courseId;
+        $ret = utility_services::call($url);
+		if(!empty($ret->data)){
+			return $ret->data;
+		}else{
+			return false;
+		}
+	}
+    /*
+     * 查询机构课程数量
+     * @param $owner,$status,$startTime,$endTime
+     * @return int
+     * @author Panda <zhangtaifeng@gn100.com>	
+     */
+    public static function countCourseByOwner($owner, $status, $startTime = 0, $endTime = 0){
+        $params= new stdCLass;
+        $params->status=$status;
+        $params->start_time=$startTime;
+        $params->end_time=$endTime;
+        $ret=utility_services::call("/course/organization/countCourseByOwner/$owner", $params);
+        if (!empty($ret->data)) {
+            return $ret->data->count;
+        }
+        return 0;
+    }
+    /*查询教师班级数量
+     * @param $owner,$uid,status
+     * @return int
+     * @author Panda <zhangtaifeng@gn100.com>
+     */
+    public static function countTeacherClassByUid($owner,$uid,$status=1){
+        $params= new stdCLass;
+        $params->owner=$owner;
+        $params->status=$status;
+        $ret=utility_services::call("/course/teacher/countTeacherClassByUid/$uid", $params);
+        if (!empty($ret->data)) {
+            return $ret->data->count;
+        }
+        return 0;
+    }
+    /*查询教师排课数量
+     * @param $owner,$uid,status
+     * @return int
+     * @author Panda <zhangtaifeng@gn100.com>
+     */
+    public static function countTeacherPlanByUid($owner,$uid,$status=1){
+        $params= new stdCLass;
+        $params->owner=$owner;
+        $params->status=$status;
+        $ret=utility_services::call("/course/teacher/countTeacherPlanByUid/$uid", $params);
+        if (!empty($ret->data)) {
+            return $ret->data->count;
+        }
+        return 0;
+    }
+    /*查询学生课程数量
+     * @param $owner,$uid,status
+     * @return int
+     * @author Panda <zhangtaifeng@gn100.com>
+     */
+    public static function countstudentCourseByUid($owner,$uid,$status=1){
+        $params= new stdCLass;
+        $params->owner=$owner;
+        $params->status=$status;
+        $ret=utility_services::call("/course/student/countstudentCourseByUid/$uid", $params);
+        if (!empty($ret->data)) {
+            return $ret->data->count;
+        }
+        return 0;
+    }
+    /*查询学生排课数量
+     * @param $owner,$uid,status,$startTime,$endTime
+     * @return int
+     * @author Panda <zhangtaifeng@gn100.com>
+     */
+    public static function countstudentPlanByUid($owner,$uid,$status=1,$startTime=0,$endTime=0){
+        $params= new stdCLass;
+        $params->owner=$owner;
+        $params->status=$status;
+        $params->start_time=$startTime;
+        $params->end_time=$endTime;
+        $ret=utility_services::call("/course/student/countstudentPlanByUid/$uid", $params);
+        if (!empty($ret->data)) {
+            return $ret->data->count;
+        }
+        return 0;
+    }
+	
+	public static function checkCourseByFirstCateArr($firstCateArr,$ownerId=''){
+		$ret=utility_services::call("/course/cate/checkCourseByFirstCateArr/".$ownerId, $firstCateArr);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        }
+        return false;
+	}
+	
+	public static function checkCourseBySecondCateArr($secondCateArr,$ownerId=''){
+		$ret=utility_services::call("/course/cate/checkCourseBySecondCateArr/".$ownerId, $secondCateArr);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        }
+        return false;
+	}
+	
+	public static function checkCourseByThirdCateArr($thirdCateArr,$ownerId=''){
+		$ret=utility_services::call("/course/cate/checkCourseByThirdCateArr/".$ownerId, $thirdCateArr);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        }
+        return false;
+	}
+	
+	public static function checkMappingCourseByAttrValueIdArr($attrValueIdArr,$ownerId=''){
+		$ret=utility_services::call("/course/attrValue/checkMappingCourseByAttrValueIdArr/".$ownerId, $attrValueIdArr);
+        if (!empty($ret->data)) {
+            return $ret->data;
+        }
+        return false;
+	}
+	
+	public static function recommendByCateId($cateId){
+		$params = new stdclass;
+		$params->cateId = $cateId;
+        $ret = utility_services::call("/course/recommend/recommendByCateId/",$params);
+		return $ret;
+	}
+	
+	public static function getAttrValueListByAttrId($page,$length,$attr_id,$name,$status){
+		$params = new stdclass;
+        $params->page    = $page;
+        $params->length  = $length;
+		$params->attr_id = $attr_id;
+        $params->name    = $name;
+		$params->status  = $status;
+        $ret = utility_services::call("/course/attrValue/getAttrValueListByAttrId", $params);
+		
+		return $ret;
+		
+		if(!empty($ret->data)){
+			return $ret->data;
+		}else{
+			return false;
+		}
+	}
+	
+	public static function getUserCourseCount($userId,$ownerId=0){
+		$params = new stdClass;
+		$params->uid = $userId;
+		$params->owner_id = $ownerId;
+		$ret = utility_services::call("/course/courseuser/getUserCourseCount", $params);
+		if($ret->code == 0){
+			return $ret->result;
+		}else{
+			return 0;
+		}
+	} 
+	
+	public static function getUserLivingCourse($userId,$type,$startTime,$ownerId=0){
+		$params = new stdClass;
+		$params->uid = $userId;
+		$params->owner_id = $ownerId;
+		$params->type = $type;
+		$params->start_time = $startTime;
+		$ret = utility_services::call("/course/courseuser/getUserLivingCourse", $params);
+		if($ret->code == 0){
+			return $ret->result;
+		}else{
+			return false;
+		}
+	}
+	
+	public static function getUserRegisterCourseList($userId,$page,$length,$ownerId=0,$search=''){
+		$params = new stdClass;
+		$params->uid = $userId;
+		$params->owner_id = $ownerId;
+		$params->page = $page;
+		$params->length = $length;
+		$params->title = $search;
+		$ret = utility_services::call("/course/courseuser/getUserRegisterCourseList", $params);
+		if($ret->code == 0){
+			return $ret->result;
+		}else{
+			return false;
+		}
+	}
+	
+	public static function getAllAttrValue(){
+		$ret = utility_services::call("/course/attr/getAllAttrValue");
+		if($ret->code == 0){
+			return $ret->data;
+		}else{
+			return false;
+		}
+	}
+	
+	public static function getDiscountCodeByOrder($orderIds){
+		$params = new stdClass;
+		$params->orderId = $orderIds;
+		$ret = utility_services::call("/course/feeorder/getDiscountCodeByOrder",$params);
+		return $ret;
+	}
+	
+}
+

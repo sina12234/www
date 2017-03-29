@@ -1,0 +1,120 @@
+default{
+    menu{
+        data{
+            id 6;
+            name '学前';
+            data{
+                id 27;
+                name '早教';
+            }
+            data{
+                id 28;
+                name '幼儿园';
+            }
+        }
+        data {
+            id 7;
+            name '小学';
+            data{
+                id 29;
+                name '一年级';
+            }
+            data{
+                id 30;
+                name '二年级';
+            }
+            data{
+                id 31;
+                name '三年级';
+            }
+            data{
+                id 32;
+                name '四年级';
+            }
+            data{
+                id 33;
+                name '五年级';
+            }
+            data{
+                id 34;
+                name '六年级';
+            }
+            data{
+                id 35;
+                name '小升初';
+            }
+            data{
+                id 187;
+                name '素质教育';
+            }
+            data{
+                id 190;
+                name '竞赛';
+            }
+            data{
+                id 193;
+                name '专题';
+            }
+        }
+        data {
+            id 8;
+            name '初中';
+            data{
+                id 36;
+                name '初一';
+            }
+            data{
+                id 37;
+                name '初二';
+            }
+            data{
+                id 38;
+                name '初三';
+            }
+            data{
+                id 39;
+                name '中考';
+            }
+            data{
+                id 188;
+                name '素质教育';
+            }
+            data{
+                id 191;
+                name '竞赛';
+            }
+        }
+        data {
+            id 9;
+            name '高中';
+            data{
+                id 40;
+                name '高一';
+            }
+            data{
+                id 41;
+                name '高二';
+            }
+            data{
+                id 42;
+                name '高三';
+            }
+            data{
+                id 43;
+                name '高考';
+            }
+            data{
+                id 189;
+                name '素质教育';
+            }
+            data{
+                id 192;
+                name '竞赛';
+            }
+        }
+    }
+
+
+
+}
+

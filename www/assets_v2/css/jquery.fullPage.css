@@ -1,0 +1,225 @@
+@charset "UTF-8";
+/**
+ * fullPage 2.5.6
+ * https://github.com/alvarotrigo/fullPage.js
+ * MIT licensed
+ *
+ * Copyright (C) 2013 alvarotrigo.com - A project by Alvaro Trigo
+ */
+html,body {
+    margin: 0;
+    padding: 0;
+    overflow:hidden;
+
+    /*Avoid flicker on slides transitions for mobile phones #336 */
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+#superContainer {
+    height: 100%;
+    position: relative;
+
+    /* Touch detection for Windows 8 */
+    -ms-touch-action: none;
+
+    /* IE 11 on Windows Phone 8.1*/
+    touch-action: none;
+}
+.fp-section {
+    position: relative;
+    -webkit-box-sizing: border-box; /* Safari<=5 Android<=3 */
+    -moz-box-sizing: border-box; /* <=28 */
+    box-sizing: border-box;
+}
+.fp-slide {
+    float: left;
+}
+.fp-slide, .fp-slidesContainer {
+    height: 100%;
+    display: block;
+}
+.fp-slides {
+    z-index:1;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    -webkit-transition: all 0.3s ease-out; /* Safari<=6 Android<=4.3 */
+    transition: all 0.3s ease-out;
+}
+.fp-section.fp-table, .fp-slide.fp-table {
+    display: table;
+    table-layout:fixed;
+    width: 100%;
+}
+.fp-tableCell {
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+}
+.fp-slidesContainer {
+    float: left;
+    position: relative;
+}
+.fp-controlArrow {
+    position: absolute;
+    z-index: 4;
+    top: 50%;
+    cursor: pointer;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    margin-top: -38px;
+    -webkit-transform: translate3d(0,0,0);
+    -ms-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+}
+.fp-controlArrow.fp-prev {
+    left: 15px;
+    width: 0;
+    border-width: 20px 20px 29px 0;
+    border-color: transparent #fff transparent transparent;
+}
+.fp-controlArrow.fp-next {
+    right: 15px;
+    border-width: 20px 0 20px 20px;
+    border-color: transparent transparent transparent #fff;
+}
+.fp-scrollable {
+    overflow: scroll;
+
+}
+.fp-notransition {
+    -webkit-transition: none !important;
+    transition: none !important;
+}
+#fp-nav {
+    position: fixed;
+    z-index: 100;
+    margin-top: -32px;
+    top: 50%;
+    opacity: 1;
+    -webkit-transform: translate3d(0,0,0);
+}
+#fp-nav.right {
+    right: 17px;
+}
+#fp-nav.left {
+    left: 17px;
+}
+.fp-slidesNav{
+    position: absolute;
+    z-index: 4;
+    left: 50%;
+    opacity: 1;
+}
+.fp-slidesNav.bottom {
+    bottom: 17px;
+}
+.fp-slidesNav.top {
+    top: 17px;
+}
+#fp-nav ul,
+.fp-slidesNav ul {
+  margin: 0;
+  padding: 0;
+}
+#fp-nav ul li,
+.fp-slidesNav ul li {
+    display: block;
+    width: 14px;
+    height: 13px;
+    margin: 7px;
+    position:relative;
+}
+.fp-slidesNav ul li {
+    display: inline-block;
+}
+#fp-nav ul li a,
+.fp-slidesNav ul li a {
+    display: block;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    text-decoration: none;
+}
+#fp-nav ul li a.active span,
+.fp-slidesNav ul li a.active span {
+    background: #333;
+}
+#fp-nav ul li a span,
+.fp-slidesNav ul li a span {
+    top: 2px;
+    left: 2px;
+    width: 8px;
+    height: 8px;
+    border: 1px solid #000;
+    background: rgba(0, 0, 0, 0);
+    border-radius: 50%;
+    position: absolute;
+    z-index: 1;
+}
+#fp-nav ul li .fp-tooltip {
+    position: absolute;
+    top: -2px;
+    color: #fff;
+    font-size: 14px;
+    font-family: arial, helvetica, sans-serif;
+    white-space: nowrap;
+    max-width: 220px;
+    overflow: hidden;
+    display: block;
+    opacity: 0;
+    width: 0;
+}
+#fp-nav ul li:hover .fp-tooltip {
+    -webkit-transition: opacity 0.2s ease-in;
+    transition: opacity 0.2s ease-in;
+    width: auto;
+    opacity: 1;
+}
+#fp-nav ul li .fp-tooltip.right {
+    right: 20px;
+}
+#fp-nav ul li .fp-tooltip.left {
+    left: 20px;
+}
+.section .bg {position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+    .section .bg img {display: block; width: 100%; height: 100%; }
+    .section .container {position: relative; height: 100% }
+    .section .d_container {position:relative;/* top: 160px; left: 0px; right: 0px; bottom:0px;*/width:100%;height:100%;margin-top:-2px;}
+    .section .bg1 {position: absolute; top: 10%; left: -5%; width: 80px; height: 50px; background: url(../img/platform/bg3.png) no-repeat; transition: all 0.5s; }
+    .section .bg2 {position: absolute; bottom: 20%; left: 8%; width: 80px; height: 50px; background: url(../img/platform/bg4.png) no-repeat; transition: all 1.6s; }
+    .section .bg3 {position: absolute; top: 20%; left: 5%; width: 80px; height: 50px; background: url(../img/platform/bg5.png) no-repeat; transition: all 0.8s; }
+    .section .bg4 {position: absolute; bottom: 5%; left: 40%; width: 80px; height: 80px; background: url(../img/platform/bg6.png) no-repeat; transition: all 1.2s; }
+    .section .bg5 {position: absolute; top: 15%; left: 55%; width: 80px; height: 80px; background: url(../img/platform/bg7.png) no-repeat; transition: all 1.3s; }
+    .section .bg6 {position: absolute; top: 20%; right: 5%; width: 80px; height: 50px; background: url(../img/platform/bg8.png) no-repeat; transition: all 1.5s; }
+    .section .bg7 {position: absolute; top: 40%; right: -5%; width: 80px; height: 60px; background: url(../img/platform/bg9.png) no-repeat; transition: all 1.5s; }
+    .section .bg8 {position: absolute; width: 80%; transition: all 1.5s; top:30%; left: -5%; }
+    .section .bg9 {position: absolute; width: 30%; top:20%; left: -10%; transition: all 2.5s; }
+    .section .bg10 {position: absolute; width: 30%; top: 20%; left: 55%; transition: all 2.5s; }
+    .section .bg11 {position: absolute; width: 70%; transition: all 1.5s; bottom: 0px; left: 10%; }
+    .section .bg12 {position: absolute; width: 30%; top: 30%; left: 5%; transition: all 2.5s; }
+    .section .bg8 img, .section .bg9 img, .section .bg10 img {width: 100% }
+    .section .bg11 img, .section .bg12 img {width: 90% }
+    .section .text1 {position: absolute; top: 20%; right: -10%; color: #fff; width: 45%; }
+    .section .text2 {position: absolute; top: 30%; left: 45%; color: #fff; width: 50%; }
+    .section .clinet-bg {position: absolute; top: 0px; left: 10%; bottom: 0px; width: 50%; height: 100%; }
+    .section .clinet-bg2 {position: absolute; top: 0px; left: 5%; bottom: 0px; width: 45%; height: 100%; }
+    .section .text1 h2 {font-size: 40px; float: left; font-weight: inherit; line-height: 180%; width: 100% }
+    .section .text1 h3 {font-size: 30px; float: left; font-weight: inherit; line-height: 180%; width: 100% }
+    .section .text1 h4 {font-size: 22px; float: left; margin-bottom: 30px; line-height: 180%; width: 100% }
+    .section .text1 h5 {font-size: 18px; float: left; line-height: 180%; width: 100% }
+    .section .txt1, .section .txt2, .section .txt3 {float: left; width: 100%; }
+    .section .txt1 img, .section .txt2 img {width: 60% }
+    .section .txt3 img {width: 30% }
+    .section .txt1 {margin-bottom: 30px }
+    .section .txt2 {margin-bottom: 50px }
+    .section .txt3 {margin-bottom: 10px }
+    .section .down-load-icon {height: 45px; width: 50px; display: inline-table; }
+    .section .down-load-icon img {height: 60%; max-width: 100%; margin-bottom: -0px }
+    .section .download-btn, .section .app-download-btn1, .section .app-download-btn2 {float: left; width: 60%; height: 60px; line-height: 50px; background: #68c8c2; text-align: center; font-size: 23px; color: #fff; margin-bottom: 10px; -moz-border-radius: 3px; -webkit-border-radius: 3px; -o-border-radius: 3px; -ms-border-radius: 3px; border-radius: 3px; margin-bottom: 20px; font-weight: inherit; }
+    .section .app-download-btn1 {width: 40%; background: #19b74f; float: left; }
+    .section .app-download-btn2 {width: 45%; background: #19b74f; float: right; }
+    .section .app-download-btn2 img, .section .app-download-btn1 img {margin-top: -3px }

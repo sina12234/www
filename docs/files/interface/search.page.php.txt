@@ -1,0 +1,948 @@
+<?php
+
+class interface_search extends interface_base
+{
+    public function pageSubject()
+    {
+        $data = [
+            '1' => '数学',
+            '2' => '英语',
+            '3' => '语文',
+            '4' => '物理',
+            '5' => '化学',
+            '6' => '生物',
+            '7' => '历史',
+            '8' => '地理',
+            '9' => '政治',
+            '10' => '综合'
+        ];
+
+        $this->setData($data);
+    }
+
+    /*
+     * 区域
+     * @author zhengtianlong
+     */
+    public function pageGetArea()
+    {
+        $data['data'] = array(
+            array('name'=>'全国','id'=>0),
+            array('name'=>'北京','id'=>1),
+            array('name'=>'长沙','id'=>252),
+            array('name'=>'济南','id'=>168)
+        );
+        $this->setData($data);
+    }
+
+    /*
+     * ip地址
+     * @author zhengtianlong
+     */
+    public function pageGetIpInfoOld()
+    {
+        empty($this->paramsInfo['params']['ip']) && $this->setMsg(1);
+        $ip     = utility_ip::realIp();
+        $result = utility_ip::info($ip);
+        $area = array_flip(region_geo::$region);
+        empty($result) && exit('全国');
+        $data = [
+            'address'   => $result->area_name,
+            'addressId' => !empty($area[$result->area_desc]) ? $area[$result->area_desc] : 0
+        ];
+
+        $this->setData($data);
+    }
+
+    public function pageGetIpInfo()
+    {
+        $data = [
+            '北京' => 1,
+            '长沙' => 252,
+            '济南' => 168
+        ];
+
+        $result = utility_ip::info(utility_ip::realIp());
+
+        $res = [
+            'address' => '全国',
+            'addressId' => 0
+        ];
+
+        if (!empty($result->area_name) && !empty($data[$result->area_name])) {
+            $res = [
+                'address'   => $result->area_name,
+                'addressId' => $data[$result->area_name]
+            ];
+        }
+
+        $this->setData($res);
+    }
+
+     /*
+     * 课程筛选与查询
+     * @author zhengtianlong
+     */
+    public function pageListV2()
+    {
+        $sortType = [
+            2001 => 'user_total',
+            2002 => 'avg_score'
+        ];
+
+        $gradeArr  = array(3000,2000,1000);
+        $page      = $this->s('page') ? (int)$this->paramsInfo['params']['page'] : 1;
+        $length    = $this->s('length') ? (int)$this->paramsInfo['params']['length'] : 20;
+        $cityId    = isset($this->paramsInfo['params']['cityId'])?$this->paramsInfo['params']['cityId']:0;
+        $res_org = user_api::getOrgByProvince($cityId);
+
+        empty($res_org->data->items) && $this->setMsg(3002);
+
+        $ownerArr = array_reduce($res_org->data->items, create_function('$v,$w', '$v[$w->fk_user_owner]=$w->fk_user_owner;return $v;'));
+        $ownerArr = array_filter($ownerArr);
+        $ownerStr = implode(',',$ownerArr);
+
+        $params = [
+            'p'  => $page,
+            'pl' => $length,
+            'q'  => ['admin_status'=>1],
+            'f'  => [
+                    'user_id',
+                    'course_id',
+                    'title',
+                    'subject',
+                    'grade',
+                    'price',
+                    'grade_id',
+                    'user_total',
+                    'comment',
+                    'thumb_med',
+                    'status',
+                    'fee_type',
+                    'class',
+                    'avg_score'
+                ]
+        ];
+		
+		if($cityId > 0)
+		{
+			$params['q']['user_id'] = $ownerStr;
+		}
+        if(!empty($this->paramsInfo['params']['gradeId']))
+        {
+            $params['q']['grade_id'] = $this->paramsInfo['params']['gradeId'];
+        }
+        if(!empty($this->paramsInfo['params']['subjectId']))
+        {
+            $params['q']['subject_id'] = $this->paramsInfo['params']['subjectId'];
+        }
+        if(!empty($this->paramsInfo['params']['keywords']))
+        {
+            $params['q']['search_field'] = $this->paramsInfo['params']['keywords'];
+        }
+        
+        if(!empty($this->paramsInfo['params']['sort']))
+        {
+            $sort = explode(',',$this->paramsInfo['params']['sort']);
+            foreach ($sortType as $k=>$v)
+            {
+                if (in_array($k, $sort))
+                {
+                    $params['ob'][$v] = 'desc';
+                }
+            }
+            if(empty($params['ob'])){
+                $params['ob']['recomm_weight'] = 'desc';
+            }
+        }else{
+            $params['ob']['recomm_weight'] = 'desc';
+        }
+
+        $res = seek_api::seekcourse($params);
+        empty($res->data) && $this->setMsg(3002);
+
+        //机构所有者
+        foreach($res->data as $v)
+        {
+            $uid_arr[$v->user_id] = $v->user_id;
+        }
+        $sublist = array();
+
+        if(!empty($uid_arr))
+        {
+            $sub_ret = user_api::getSubdomainByUidArr($uid_arr);
+            $org_ret = user_organization::getOrgInfoByUidArr($uid_arr);
+            if(!empty($org_ret))
+            {
+                foreach($org_ret as $ov)
+                {
+                    $sublist[$ov->user_owner] = [
+                        'name'    => $ov->name,
+                        'subname' => $ov->subname
+                    ];
+                }
+            }
+
+            if(!empty($sub_ret->result->data->items))
+            {
+                foreach($sub_ret->result->data->items as $val)
+                {
+                    $sublist[$val->fk_user]['subdomain'] = $val->subdomain;
+                }
+            }
+        }
+
+        $data = [
+            'total'     => $res->total,
+            'page'      => $res->page,
+            'pageTotal' => ceil($res->total/$res->pagelength)
+        ];
+
+
+        $res_grade = array_reduce($res->data, create_function('$v,$w', '$v[$w->course_id]=$w->grade;return $v;'));
+        $grade = array();
+        if(!empty($res_grade))
+        {
+            foreach($res_grade as $key=>$val)
+            {
+                foreach($val as $k=>$v)
+                {
+                    if(in_array($v->grade_id,$gradeArr))
+                    {
+                        $grade[$key] = $v->grade_name;
+                    }
+                }
+            }
+        }
+
+        foreach($res->data as $val)
+        {
+            if(!empty($val->class))
+            {
+                //apple check
+                /*if ($this->paramsInfo['u'] == 'i') {
+                    if ($val->fee_type > 0 || $val->price > 0) continue;
+                }*/
+                // end
+                $data['data'][] = [
+                    'courseId'  => empty($val->course_id)?'':$val->course_id,
+                    'title'     => empty($val->title)?'':$val->title,
+                    'cate'      => teacher_api::getSubjectName($val->subject),
+                    'thumbMed'  => empty($val->thumb_med)?'':$this->imgUrl($val->thumb_med),
+                    'price'     => floatval($val->price / 100),
+                    'grade'     => (!empty($grade) && !empty($grade[$val->course_id]))?$grade[$val->course_id]:'',
+                    'userTotal' => empty($val->user_total)?0:$val->user_total,
+                    'comment'   => empty($val->comment)?0:$val->comment,
+                    'status'    => ($val->status==0)?1:$val->status,
+                    'score'     => ($val->avg_score/10),
+                    'org'       => !empty($sublist[$val->user_id]['subname'])?$sublist[$val->user_id]['subname']:(!empty($sublist[$val->user_id]['name'])?$sublist[$val->user_id]['name']:''),
+                    'courseType'=> '线上',
+                    'feeType' => empty($val->fee_type)?0:$val->fee_type
+                ];
+            }else
+            {
+                continue;
+            }
+        }
+
+       $this->setData($data);
+    }
+	
+	/*
+	 * 课程搜索
+	 * @param $condition 兴趣id
+	 * @param $keywords  关键字
+	 * @param $sort 1价格最底,2价格最高，3最新上价，4人气排序，5评分排序
+	 * @param $type
+	 */
+	public function pageCourseSearch(){
+		$page      = $this->s('page') ? (int)$this->paramsInfo['params']['page'] : 1;
+        $length    = $this->s('length') ? (int)$this->paramsInfo['params']['length'] : 20;
+		$condition = !empty($this->paramsInfo['params']['condition']) ? $this->paramsInfo['params']['condition'] : '';
+		
+		$thirdId = '';
+		$attrId  = '';
+		if(!empty($condition)){
+			$conditionArr = explode(',',$condition);
+		
+            $secondId= !empty($conditionArr[0]) ? $conditionArr[0] : '';
+			$thirdId = !empty($conditionArr[1]) ? $conditionArr[1] : '';
+			$attrId  = !empty($conditionArr[2]) ? $conditionArr[2] : '';
+		}
+		
+		$sortType = [
+			1 => 'priceAsc',
+			2 => 'price',
+			3 => 'course_id',
+            4 => 'user_total',
+            5 => 'avg_score'
+        ];
+		
+		$params = [
+            'p'  => $page,
+            'pl' => $length,
+            'q'  => ['admin_status'=>1],
+            'f'  => [
+                    'user_id','course_id','title','price','fee_type','third_cate','course_type',
+                    'user_total','comment','thumb_med','status','avg_score','third_cate_name',
+					'course_attr'
+                ]
+        ];
+
+		if(!empty($secondId)){
+			$params['q']['second_cate'] = $secondId;
+		}
+
+		if(!empty($thirdId)){
+			$params['q']['third_cate'] = $thirdId;
+		}
+		
+		if(!empty($this->paramsInfo['params']['keywords'])){
+            $params['q']['search_field'] = $this->paramsInfo['params']['keywords'];
+        }
+        
+
+		if(!empty($this->paramsInfo['params']['sort'])){
+            $sort = explode(',',$this->paramsInfo['params']['sort']);
+            foreach ($sortType as $k=>$v){
+                if (in_array($k, $sort)){
+					if($v == 'priceAsc'){
+						$params['ob']['price'] = 'asc';
+					}
+                    $params['ob'][$v] = 'desc';
+                }
+            }
+            if(empty($params['ob'])){
+                $params['ob']['recomm_weight'] = 'desc';
+            }
+        }else{
+            $params['ob']['recomm_weight'] = 'desc';
+        }
+		
+		
+		if(!empty($this->paramsInfo['params']['type'])){
+			$params['q']['course_type'] = $this->paramsInfo['params']['type'];
+		}
+
+		$resCourse = seek_api::seekcourse($params);
+
+		empty($resCourse->data) && $this->setMsg(3002);
+		
+		$data = [
+            'total'     => $resCourse->total,
+            'page'      => $resCourse->page,
+            'pageTotal' => ceil($resCourse->total/$resCourse->pagelength)
+        ];
+		
+		
+		//获取科目名称
+		$temp = array();
+		$attrValues = array();
+		$attrCourseId = array();
+		foreach($resCourse->data as $value){
+			if(!empty($value->course_attr)){
+				foreach($value->course_attr as $val){
+					if(!empty($val->attr_value)){
+						foreach($val->attr_value as $v){
+							if(!empty($attrId) && $v->attr_value_id == $attrId){
+								$attrCourseId[] = $value->course_id;
+							}
+							$temp[$value->course_id][$v->attr_value_id] = $v->attr_value_name;
+						}
+					}
+				}
+			}
+		}
+
+		if(!empty($temp)){
+			foreach($temp as $k=>$v){
+				$attrValues[$k] = implode(",",$v);
+			}
+		}
+		
+		//机构所有者
+		$sublist = array();
+        foreach($resCourse->data as $v){
+            $uid_arr[$v->user_id] = $v->user_id;
+        }
+        if(!empty($uid_arr)){
+            $sub_ret = user_api::getSubdomainByUidArr($uid_arr);
+            $org_ret = user_organization::getOrgInfoByUidArr($uid_arr);
+            if(!empty($org_ret)){
+                foreach($org_ret as $ov){
+                    $sublist[$ov->user_owner] = [
+                        'name'    => $ov->name,
+                        'subname' => $ov->subname
+                    ];
+                }
+            }
+        }
+
+		foreach($resCourse->data as $val){
+			if(!empty($attrCourseId) && in_array($val->course_id,$attrCourseId)){
+				$data['data'][] = [
+					"courseId"   => $val->course_id,
+					"title"      => $val->title,
+					"thumbMed"   => empty($val->thumb_med) ? '' : $this->imgUrl($val->thumb_med),
+					"cate"       => !empty($attrValues[$val->course_id]) ? $attrValues[$val->course_id] : '',
+					"grade"      => $val->third_cate_name,
+					"userTotal"  => $val->user_total,
+					"comment"    => $val->comment,
+					"org"        => !empty($sublist[$val->user_id]['subname'])?$sublist[$val->user_id]['subname']:$sublist[$val->user_id]['name'],
+					"score"      => $val->avg_score/10,
+					"status"     => $val->status,
+					"courseType" => $val->course_type,
+					"feeType"    => $val->fee_type,
+					"price"      => $val->price / 100
+				];
+			}else{
+				$data['data'][] = [
+					"courseId"   => $val->course_id,
+					"title"      => $val->title,
+					"thumbMed"   => empty($val->thumb_med) ? '' : $this->imgUrl($val->thumb_med),
+					"cate"       => !empty($attrValues[$val->course_id]) ? $attrValues[$val->course_id] : '',
+					"grade"      => $val->third_cate_name,
+					"userTotal"  => $val->user_total,
+					"comment"    => $val->comment,
+					"org"        => !empty($sublist[$val->user_id]['subname'])?$sublist[$val->user_id]['subname']:$sublist[$val->user_id]['name'],
+					"score"      => $val->avg_score/10,
+					"status"     => $val->status,
+					"courseType" => $val->course_type,
+					"feeType"    => $val->fee_type,
+					"price"      => $val->price / 100
+				];
+			}
+		}
+		
+		$this->setData($data);
+	}
+	
+
+    /*
+     * 年级与对应ID
+     * @author zhengtianlong
+     */
+     public function pageGradeAndSubject()
+     {
+        $data['data'] = array(
+            'grade' => array(
+                array("name"=>"全部年级","id"=>"0"),
+                array("name"=>"小学","id"=>"1000"),
+                array("name"=>"初中","id"=>"2000"),
+                array("name"=>"高中","id"=>"3000")
+            ),
+            'subject' => array(
+                array("name"=>"全部科目","id"=>"0"),
+                array("name"=>"数学","id"=>"1"),
+                array("name"=>"英语","id"=>"2"),
+                array("name"=>"语文","id"=>"3"),
+                array("name"=>"物理","id"=>"4"),
+                array("name"=>"化学","id"=>"5"),
+                array("name"=>"生物","id"=>"6"),
+                array("name"=>"历史","id"=>"7"),
+                array("name"=>"地理","id"=>"8"),
+                array("name"=>"政治","id"=>"9"),
+            ),
+            'others' => array(
+                "nolimit"=>array("name"=>"不限","id"=>"0"),
+                "courseType"=>array(
+                    array("name"=>"线上课", "id"=>"1001"),
+                    array("name"=>"线下课", "id"=>"1002"),
+                ),
+                "sortType"=>array(
+                    array("name"=>"人气排序", "id"=>"2001"),
+                    array("name"=>"评分排序", "id"=>"2002")
+                )
+            )
+        );
+
+        $this->setData($data);
+     }
+
+    public function pageGetTag(){
+        
+        $cateList = course_api::getCateList();
+        $cate = array(7=>"1000",8=>"2000",9=>"3000");
+        $i = 0;
+        
+        foreach($cateList as $key=>$value){
+            if($value->level == 1){
+                $data[$key] = [
+                    'name' => $value->name,
+                    'id'   => $value->pk_cate
+                ];
+                $i = 0;
+                foreach($cateList as $ke=>$val){
+                    if($val->level == 2 && $val->lft > $value->lft && $val->rgt < $value->rgt){
+                        $data[$key]['data'][$i] = [
+                            'name' => $val->name,
+                            'id'   => $val->pk_cate
+                        ];
+                        
+                        foreach($cateList as $k=>$v){
+                            if($v->level == 3 && $v->lft > $val->lft && $v->rgt < $val->rgt){
+                                
+                                if(!empty($cate[$val->pk_cate])){
+                                    $data[$key]['data'][$i]['data'][] = [
+                                        'name' => $v->name,
+                                        'id'   => $v->pk_cate,
+                                        'oldId'=> $cate[$val->pk_cate]
+                                    ];
+                                }else{
+                                    if($v->name == '其他'){
+                                        $data[$key]['data'][$i]['data'][] = [
+                                             'name' => $val->name.$v->name,
+                                             'id'   => $v->pk_cate,    
+                                        ];
+                                    }else{
+                                        $data[$key]['data'][$i]['data'][] = [
+                                             'name' => $v->name,
+                                             'id'   => $v->pk_cate,    
+                                        ];
+                                    }
+                                }
+                                
+                            }
+                        }
+                        $i++;
+                    }
+                }
+            }
+        }
+        
+        $data = array_values($data);
+        $this->setData($data);
+            
+    }
+        
+     /*
+     * 改版首页
+     * @param $city    城市名称
+     * @param $cityId  城市Id
+     * @param $uid     用户Id
+     * @param $condition 兴趣Id
+     */
+    public function pageIndex(){
+        $uid       = !empty($this->paramsInfo['params']['uid']) ? intval($this->paramsInfo['params']['uid']) : '';
+        $condition = !empty($this->paramsInfo['params']['condition']) ? $this->paramsInfo['params']['condition'] : ''; 
+        $teacherSeach = !empty($this->paramsInfo['params']['teacherSeach']) ? $this->paramsInfo['params']['teacherSeach'] : ''; 
+        
+        //轮播图
+        $banner = array();
+        $bannerRes = index_api::getPlatformBanner(1);
+        if(!empty($bannerRes->result->data->items)){
+            foreach($bannerRes->result->data->items as $v){
+                $banner[] = [
+                    'name'  => $v->title,
+                    'image' => $this->imgUrl($v->url),
+                    'url'   => !empty($v->link) ? $v->link : ''
+                ];
+            }
+        }
+
+        //分类列表
+        $types = [
+            ['name'=>'小学','id'=>1000],
+            ['name'=>'初中','id'=>2000],
+            ['name'=>'高中','id'=>3000],
+            ['name'=>'全部','id'=>0]
+        ];
+
+        //今日直播
+        $lives = [
+            'name'    =>'最近直播',
+            'courses' => $this->todayLives($condition,5,$uid)
+        ];
+        
+        //热门课程  
+        $topsCourse = [
+            'name'    => '热门课程',
+            'courses' => $this->hotCourse($condition,20)
+        ];
+
+        //热门老师
+        $topTeacher = [
+            'name'    => '热门老师',
+            'courses' => $this->hotTeacher($teacherSeach,20)
+        ];
+		
+        //推荐课程
+        $recommends = [
+            'name'    => '推荐课程',
+            'courses' => $this->recommendCourse($condition,20)
+        ];
+        
+        $data = [
+            'ad'     => $banner,
+            'types'  => $types,
+            'lives'  => $lives,
+            'topsCourse' => $topsCourse,
+            'topTeacher' => $topTeacher,
+            'recommends' => $recommends
+        ];
+
+        $this->setData($data);
+    }
+    
+    
+    //今日直播
+    private function todayLives($conditionstr,$showNum,$uid){
+        $data    = array();
+        if(empty($conditionstr)) return $data;
+        $condition = explode(',',$conditionstr);
+
+        $sTime = strtotime(date('Y-m-d 00:00:00'));
+        $eTime = strtotime(date('Y-m-d 23:59:59'));  
+		
+		$startTime = date('Y-m-d 00:00:00').','.date('Y-m-d 23:59:59',strtotime('+7 days'));
+		$params = [
+            'q' => ['status'=>'1,2,3','admin_status'=>1,'course_type'=>1,'start_time'=>$startTime],
+            'f' => [
+                    'course_id','plan_id','class_name','class_id','section_name','teacher_name',
+                    'teacher_real_name','status','start_time','live_public_type','course_name',
+                    'second_cate','third_cate','try'
+                   ],
+			'ob'=> ['start_time'=>'asc'],
+            'p' => 1,
+            'pl'=> 10
+        ];
+		
+        
+        $planRes = seek_api::seekPlan($params);
+		if(empty($planRes->data)) return $data;
+		
+		$thirdArr    = array();
+        $secondIdArr = array();
+        $reviewArr   = array();
+        $review      = array();
+        $lives       = array();
+		$livesCourseId = array();
+        
+        //报名信息
+        $userCourse = array();
+        if($uid > 0){
+            $regis = course_api::listRegistration(array('uid'=>$uid));
+            if(!empty($regis->data)){
+                foreach($regis->data as $v){
+                    $userCourse[$v->cid] = $v->cid;
+                }
+            }
+        }
+		
+		//三级分类下直播课
+        foreach($planRes->data as $v){
+            if(in_array($v->third_cate,$condition)){
+                $time = strtotime($v->start_time);
+                if($time > $sTime && $time < $eTime){
+                    $secondIdArr[$v->second_cate] = $v->second_cate;
+					$lives[] = $v->plan_id;
+					break;
+                }
+            }
+        }
+		
+		//二级分类下直播课
+        if(empty($lives)){
+            foreach($planRes->data as $v){
+                if(in_array($v->second_cate,$secondIdArr)){
+                    $time1 = strtotime($v->start_time);
+                    if($time1 > $sTime && $time1 < $eTime){
+                        $lives[] = $v->plan_id;
+						break;
+                    }
+                }
+            }
+        }
+		
+		$liveData = array();
+		foreach($planRes->data as $v){
+			if(in_array($v->plan_id,$lives)){
+				$liveData[] = [
+					'planId'      => $v->plan_id,
+					'classId'     => $v->class_id,
+					'className'   => $v->class_name,
+					'setionName'  => $v->section_name,
+					'courseId'    => $v->course_id,
+					'courseName'  => $v->course_name,
+					'teacherName' => !empty($v->teacher_real_name) ? $v->teacher_real_name : (!empty($v->teacher_name) ? $v->teacher_name : ''),
+					'status'      => $v->status,
+					'time'        => date('H:i',strtotime($v->start_time)),
+					'userStatus'  => !empty($userCourse[$v->course_id]) ? 1 : 0,
+					'livePublicType' => $v->try
+				];
+			}
+		}
+		
+		$count = $showNum - count($lives);
+
+		//取精彩回放
+		$revTime = date('Y-m-d 23:59:59',strtotime('-7 days')).','.date('Y-m-d 00:00:00');
+		$revParams = [
+            'q' => ['status'=>'3','admin_status'=>1,'course_type'=>1,'start_time'=>$revTime,'third_cate'=>$conditionstr],
+            'f' => [
+                    'course_id','plan_id','class_name','class_id','section_name','teacher_name',
+                    'teacher_real_name','status','start_time','live_public_type','course_name',
+                    'second_cate','third_cate','try'
+                   ],
+			'ob'=> ['start_time'=>'asc'],
+            'p' => 1,
+            'pl'=> 10
+        ];
+        $revPlanRes = seek_api::seekPlan($revParams);
+		
+		if(!empty($revPlanRes->data)){
+			foreach($revPlanRes->data as $v){
+			   $reviewArr[] = [
+					'planId'      => $v->plan_id,
+					'classId'     => $v->class_id,
+					'className'   => $v->class_name,
+					'setionName'  => $v->section_name,
+					'courseId'    => $v->course_id,
+					'courseName'  => $v->course_name,
+					'teacherName' => !empty($v->teacher_real_name) ? $v->teacher_real_name : (!empty($v->teacher_name) ? $v->teacher_name : ''),
+					'status'      => $v->status,
+					'time'        => date('H:i',strtotime($v->start_time)),
+					'userStatus'  => !empty($userCourse[$v->course_id]) ? 1 : 0,
+					'livePublicType' => $v->try
+				];
+			}
+		}
+		
+		$review = array_slice($reviewArr,0,$count);
+        $data   = array_merge($review,$liveData);
+		if(empty($data)) return $data;
+
+		//获取课程价格 
+        foreach($data as $v){
+            $courseId[] = $v['courseId'];
+        }
+        $courseIdStr = implode(',',$courseId);
+        $param = [
+            'q' => ['course_id'=>$courseIdStr],
+            'f' => ['course_id','price','fee_type','thumb_med']
+        ];
+        $courseRes = seek_api::seekCourse($param);
+        
+        foreach($courseRes->data as $v){
+            $course[$v->course_id] = [
+                'price'      => $v->price/100,
+                'feeType'    => $v->fee_type,
+                'courseImage'=> $this->imgUrl($v->thumb_med)
+            ];
+        }
+		
+		foreach($data as &$val){
+            $val['price']   = $course[$val['courseId']]['price'];
+            $val['feeType'] = $course[$val['courseId']]['feeType'];
+            $val['courseImage'] = $course[$val['courseId']]['courseImage'];
+        }
+	
+        return $data;
+    }
+    
+    
+    //热门课程
+    private function hotCourse($condition,$showNum){
+        $data    = array();
+        if(empty($condition)) return $data;
+        
+        $thirdQuery = ['status'=>'1,2,3','admin_status'=>1,'third_cate'=>$condition];
+		$fields     = ['course_id','title','thumb_med','second_cate','third_cate'];
+		$ob         = ['start_time'=>'desc','vv'=>'desc'];
+		
+		$thirdCourse = seek_api::seekcourse(array('q'=>$thirdQuery,'f'=>$fields,'ob'=>$ob,'p'=>1,'pl'=>$showNum));
+		$thirdCourseData = $thirdCourse->data;
+		if(empty($thirdCourseData)) return $data;
+		
+		//二级分类的课程
+		$secondCate = array_reduce($thirdCourseData, create_function('$v,$w', '$v[$w->second_cate]=$w->second_cate;return $v;'));
+		$count = count($thirdCourseData);
+		$secondCourseData = array();
+		if($count < $showNum && $secondCate){
+            $secondCate = implode(',',$secondCate);
+			$length = $showNum - $count;
+			$secondQuery = ['status'=>'1,2,3','admin_status'=>1,'second_cate'=>$secondCate];
+			$secondCourse = seek_api::seekcourse(array('q'=>$secondQuery,'f'=>$fields,'ob'=>$ob,'p'=>1,'pl'=>$length));
+			$secondCourseData = $secondCourse->data;
+		}
+		
+		//合并数据
+		$courseData = array_merge($thirdCourseData,$secondCourseData);
+		if(empty($courseData)) return $data;
+		
+		foreach($courseData as $v){
+			$data[] = [
+				'courseId'   => $v->course_id,
+				'courseName' => $v->title,
+				'courseImage'=> $this->imgUrl($v->thumb_med)
+			];
+		}
+		
+		return $data;
+		
+    }
+    
+    //热门老师
+    private function hotTeacher($condition,$showNum){
+        
+        $data = array();        
+        $params = [
+            'q'  => ['teacher_status'=>1,'visiable'=>1,'course_count'=>'1, 5000','student_count'=>'1,5000'],
+            'f'  => ['teacher_id','grade_id','real_name','name','thumb_big','student_count','subject'],
+            'p'  => 1,
+            'ob' => ['student_count'=>'desc'],
+            'pl' => 1000
+        ];
+        
+        $teacherRes = seek_api::seekTeacher($params);
+        empty($teacherRes->data) && $data;
+        
+        $teacherIdArr = array();
+        $gradeIdArr   = array();
+        $gradeTeacher = array();
+        $tIdArr       = array();
+        $gData        = array();
+        $starData     = array();
+        
+        //根据年级id获取老师信息
+        if(!empty($condition)){
+            $condition = explode(',',$condition);
+            
+            foreach($teacherRes->data as $v){
+                if(!empty($v->grade_id)){
+                    $gradeIdArr[$v->teacher_id] = $v->grade_id;
+                }
+            }
+            
+            foreach($gradeIdArr as $k=>$v){
+                foreach($condition as $vv){
+                    if(in_array($vv,$v)){
+                        $teacherIdArr[$k] = $k;
+                    }
+                }
+            }
+            
+            if(!empty($teacherIdArr)){
+                foreach($teacherRes->data as $v){
+                    if(in_array($v->teacher_id,$teacherIdArr)){
+                        $tIdArr[$v->teacher_id] = $v->teacher_id;
+                        $gradeTeacher[] = [
+                            'teacherId'    => $v->teacher_id,
+                            'teacherName'  => !empty($v->real_name) ? $v->real_name : (!empty($v->name) ? $v->name : ''),
+                            'teacherImage' => $this->imgUrl($v->thumb_big),
+                            'studentNum'   => $v->student_count,
+                            'subjects'     => !empty(teacher_api::getSubjectName($v->subject))?str_replace(',',' ',teacher_api::getSubjectName($v->subject)):'',
+                        ];
+                    }
+                }
+            }
+            
+            $gData  = array_slice($gradeTeacher,0,$showNum);
+        }
+        $gCount = count($gData);
+        
+        //明星教师
+        if($gCount < $showNum){
+            foreach($teacherRes->data as $v){
+                if(!in_array($v->teacher_id,$tIdArr)){
+                    $starArr[] = [
+                        'teacherId'    => $v->teacher_id,
+                        'teacherName'  => !empty($v->real_name) ? $v->real_name : (!empty($v->name) ? $v->name : ''),
+                        'teacherImage' => $this->imgUrl($v->thumb_big),
+                        'studentNum'   => $v->student_count,
+                        'subjects'     => !empty(teacher_api::getSubjectName($v->subject))?str_replace(',',' ',teacher_api::getSubjectName($v->subject)):'',
+                    ];
+                }
+            }
+            
+            if(!empty($starArr)){
+                $count     = $showNum - $gCount;
+                $starData  = array_slice($starArr,0,$count);
+            }
+        }
+        
+        
+        $data = array_merge($gData,$starData);
+        return $data;
+    }
+    
+    //推荐课程
+    private function recommendCourse($condition,$showNum){
+        $data    = array();
+		
+		//获取推荐课程id
+        $courseIdStr = '';
+        if(!empty($condition)){
+            $recommendRes = course_api::recommendByCateId($condition);
+            
+            $cateIdStr = '';
+            if(!empty($recommendRes->data->items)){
+                
+                foreach($recommendRes->data->items as $v){
+					if(!empty($v->fk_course)){
+						$cateIdStr .= $v->fk_course.",";
+					}
+                }
+				
+				if(!empty($cateIdStr)){
+					$courseIdStr = trim($cateIdStr,',');
+				}
+            }
+        }
+	
+		//课程筛选条件
+		if(empty($courseIdStr)){
+			//没有推荐课程
+			$query = ['status'=>'1,2,3','admin_status'=>1,'third_cate'=>$condition];
+		}else{
+			$query = ['status'=>'1,2,3','admin_status'=>1,'course_id'=>$courseIdStr];
+		}
+		$fields = [
+			'course_id','title','thumb_med','status','fee_type','price','third_cate',
+            'subject','user_total','third_cate_name','remain_user','second_cate'
+		];
+		$ob = ['user_total'=>'desc'];
+		
+        $courseRes = seek_api::seekcourse(array('q'=>$query,'f'=>$fields,'ob'=>$ob,'p'=>1,'pl'=>20));
+		
+		
+		if(empty($courseRes->data)) return $data;
+		$courseData = $courseRes->data;
+		
+		
+		
+		//二级分类的课程
+		$secondCate = array_reduce($courseData, create_function('$v,$w', '$v[$w->second_cate]=$w->second_cate;return $v;'));
+		$courseResult = array();
+		$count  = count($courseData);
+		if($count < $showNum){
+			$length = $showNum - $count;
+			$cateStr       = implode(',',$secondCate);
+			$secondQuery  = ['status'=>'1,2,3','admin_status'=>1,'second_cate'=>$cateStr];
+			$courseResu = seek_api::seekcourse(array('q'=>$secondQuery,'f'=>$fields,'ob'=>$ob,'p'=>1,'pl'=>$length));
+			$courseResult = $courseResu->data;
+		}
+
+		
+		
+		//合并数据
+		$mergeData = array_merge($courseData,$courseResult);
+		if(empty($mergeData)) return $data;
+		
+		foreach($mergeData as $v){
+            $data[] = [
+				'courseId'    => $v->course_id,
+				'courseName'  => $v->title,
+				'courseImage' => $this->imgUrl($v->thumb_med),
+				'status'      => $v->status,
+				'feeType'     => $v->fee_type,
+				'price'       => floatval($v->price / 100),
+				'grade'       => $v->third_cate_name,
+				'subject'     => !empty(teacher_api::getSubjectName($v->subject)) ? teacher_api::getSubjectName($v->subject) : '',
+				'studentNum'  => $v->user_total
+			];         
+        }
+		return $data;
+    }
+}
+

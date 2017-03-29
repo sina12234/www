@@ -1,0 +1,83 @@
+<?php
+class course_plan_api{
+	/**
+	 * 开始上课
+	 */
+	public static function startPlan($uid,$token,$plan_id){
+		//关联用户直播token和planid
+		$ret = live_publish::setPlan($uid, $token, $plan_id,$cleanFile=false);
+		if($ret){
+			//修改plan直播状态
+			course_api::updatePlanStatus($plan_id,"living");
+			//发送信号
+			message_api::startCloseClass($plan_id, $uid, $token, true);
+		}
+		return $ret;
+	}
+	/**
+	 * 下课
+	 */
+	public static function stopPlan($uid,$token,$plan_id){
+		//设置直播的plan id为0
+		$ret = live_publish::setPlan($uid, $token, 0);
+		//关闭直播流
+		if($ret){
+			//关闭直播流
+			live_publish::close($uid);
+			//修改plan 状态 
+			course_api::updatePlanStatus($plan_id,"finished");
+			//发送下课信号
+			message_api::startCloseClass($plan_id, $uid, $token, false);
+		}
+		return $ret;
+	}
+
+    public static function getClassAndPlan($courseId)
+    {
+
+    }
+
+    public static function getCourseRegUser($courseId, $owner=0, $page=1, $length=0)
+    {
+        $params = [
+            'courseId' => $courseId,
+            'owner'    => $owner,
+            'page'     => $page,
+            'length'   => $length
+        ];
+        $res = utility_services::call('/course/courseuser/GetCourseRegUser/', $params);
+
+        $data = [];
+        if (!empty($res->result)) {
+            foreach ($res->result as $item) {
+                $data[] = [
+                    'name' => $item->name,
+                    'thumb' => interface_func::imgUrl($item->thumb_big)
+                ];
+            }
+        }
+
+        return $data;
+    }
+
+    public static function getScoreInfo($courseId)
+    {
+        $res = comment_api::getTotal(array('course_id' => $courseId));
+        if (!empty($res)) {
+            $student_score = (int)ceil($res[0]->student_score / $res[0]->total_user);
+            $desc_score    = (int)ceil($res[0]->desc_score / $res[0]->total_user);
+            $explain_score = (int)ceil($res[0]->explain_score / $res[0]->total_user);
+            $avg_score     = round($res[0]->avg_score);
+
+            return [
+                'studentScore' => $student_score > 5 ? 5 : $student_score,
+                'descScore'    => $desc_score > 5 ? 5 : $desc_score,
+                'explainScore' => $explain_score > 5 ? 5 : $explain_score,
+                'avgScore'     => $avg_score > 5 ? 5 : $avg_score
+            ];
+        }
+
+        return [];
+    }
+}
+

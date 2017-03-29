@@ -1,0 +1,791 @@
+<?php
+
+class course_info extends STpl
+{
+
+    public function __construct()
+    {
+        $org = user_organization::subdomain();
+        $this->orgOwner = !empty($org) ? $org->userId : 0;
+        $this->head = !empty($org->subdomain) ? $org->subdomain : 'www';
+    }
+
+    public function pagePlayUrl($inPath)
+    {
+        if (empty($inPath[3]) || empty($inPath[4])) {
+            $this->redirect('/index');
+        }
+
+        $cid   = $inPath[3];
+        $classId   = $inPath[4];
+        $planInfo = course_api::listPlan(
+            [
+                'cid' => $cid,
+                'class_id' => $classId,
+                'allcourse' => true
+            ]
+        );
+
+        if (empty($planInfo->data)) {
+            $this->redirect("/course.info.show/".$cid);
+        }
+
+        $timeArr = array();
+        foreach ($planInfo->data as $v) {
+            $timeArr[$v->plan_status][$v->plan_id] = $v->start_time;
+        }
+
+        foreach (array('living', 'normal', 'finished') as $v) {
+            // 获取排课中最靠近的
+            if (isset($timeArr[$v]) && $timeArr[$v]) {
+                $planId = array_search(max($timeArr[$v]), $timeArr[$v]);
+            }
+
+            if (!empty($planId)) {
+                $this->redirect("/course.plan.play/".$planId);
+            }
+        }
+
+        $this->redirect("/course.info.show/".$cid);
+    }
+
+    public function pageShow($inPath)
+    {
+        // 检查是否登陆
+        $user = user_api::loginedUser();
+
+        $uid = empty($user) ? 0 : $user['uid'];
+        if (!isset($inPath[3]) || !intval($inPath[3])) {
+            $this->redirect('/index');
+        }
+        $cid = (int)$inPath[3];
+        // 获取课程信息
+        $courseParam = [
+            'q' => ['course_id' => $cid],
+            'f' => [
+                'course_id',
+                'title',
+                'thumb_big',
+                'subject',
+                'subject_id',
+                'grade',
+                'grade_id',
+                'course_type',
+                'fee_type',
+                'price',
+                'desc',
+                'class_id'
+            ]
+        ];
+        $courseInfo = seek_api::seekCourse($courseParam);
+
+        if (empty($courseInfo->data[0])) $this->redirect('/index');
+
+        $planData = $this->_getPlanClassData(['cid'=>$cid], $courseInfo->data[0]->course_type);
+
+        // 获取报名信息
+        $regInfo = course_api::checkIsRegistration($uid, $cid);
+        $regId = !empty($regInfo['classId']) ? $regInfo['classId'] : 0;
+
+        $page = isset($_REQUEST['page']) && $_REQUEST['page'] ? intval($_REQUEST['page']) : 1;
+
+        $this->assign("data",array(
+            'list'         => $planData ?: ['classId' => 0],
+            'courseInfo'   => $courseInfo->data[0],
+            'commentList'  => comment_api::getCommentListByCourseId($cid, 0, $page),
+            'isRegister'   => $regInfo,// 是否报名
+            'isLikeCourse' => $this->_checkIsLikeCourse($user, $cid),// 是否喜欢课程
+            'isLogin'      => !empty($user) ? 'yes' : 'no', // 是否登陆
+            'userId'       => $uid,
+            'page'         => $page,
+            'scoreInfo'    => $this->_getScoreInfo($cid),
+            'isWeiXin'     => weixin_api::is_weixin(),
+            'regId'        => $regId, // 报名id
+            'grade'        => teacher_api::getGradeName($courseInfo->data[0]->grade),
+            'major'        => teacher_api::getSubjectName($courseInfo->data[0]->subject)
+        ));
+
+        $http = (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) ? "https" : "http";
+        $host = $http."://".user_organization::course_domain($this->head);
+        $domainConf = SConfig::getConfig(ROOT_CONFIG.'/const.conf', 'platform');
+
+        //网页meta描述获取
+        preg_match_all("/<p[^>]*>([^\<|\>]*)<\/p>/is", $courseInfo->data[0]->desc, $meta, PREG_SET_ORDER);
+        $this->assign("meta", !empty($meta[0][1]) ? $meta[0][1] : '');
+        $this->assign('host', $host);
+        $this->assign('platformUrl', $domainConf->platform);
+        $this->render("course/newcourse.detail.html");
+    }
+
+	public function pagePlanList($inPath)
+	{
+		// 检查是否登陆
+        $user = user_api::loginedUser();
+
+        $uid = empty($user) ? 0 : $user['uid'];
+
+        if (!isset($inPath[3]) || !is_numeric($inPath[3]))
+		{
+            $this->redirect('/index');
+        }
+
+        $cid = $inPath[3];
+
+
+		$retJudgeuser = utility_judgeid::authrole($uid,$this->orgOwner);
+
+    	if(!$retJudgeuser)
+		{
+			$this->redirect("/site.main.entry");
+			die("No authority");
+		}
+
+		$retCourse = utility_judgeid::courseid($cid,$uid,$this->orgOwner);
+		if(!$retCourse)
+		{
+			$this->redirect("/site.main.entry");
+			die("No authority");
+		}
+
+		// 获取课程信息
+		$res_course = course_api::getCourseone($cid);
+
+		if(empty($res_course))
+		{
+			$this->redirect("/site.main.entry");
+		}
+
+		$course = [
+			'title' => $res_course->title,
+			'type'  => $res_course->type_id,
+			'tname' => !empty($res_course->user->user_real_name)?$res_course->user->user_real_name:$res_course->user->username
+		];
+
+		//班级信息
+		$res_class = course_api::getClasslist($cid);
+
+		$class = array();
+		if(!empty($res_class))
+		{
+			foreach($res_class as $v)
+			{
+				$class[$v->class_id] = [
+					'class_id'   => $v->class_id,
+					'class_name' => $v->name
+				];
+				if($course['type'] == 2)
+				{
+					$class = [
+						'class_id'   => $v->class_id,
+						'class_name' => $v->name
+					];
+				}
+			}
+		}
+
+		$this->assign('course',$course);
+		$this->assign('class',$class);
+		$this->assign('courseId',$cid);
+		$this->render("course/plan.list.html");
+	}
+
+	/*
+	 * 获取班级下的排课信息
+	 * @param $courseId 课程id $classId 班级id
+	 */
+	public function pagePlanListAjax()
+	{
+		$courseId = intval($_POST['course_id']);
+		$classId  = intval($_POST['cid']);
+		$lan      = !empty($_POST['lan']) ? $_POST['lan'] : '';
+		if(empty($courseId) || empty($classId)){
+			return false;
+		}
+		$sectionName = array();
+		if($lan == 'en'){
+			for($i=1;$i<=30;$i++){
+				$sectionName["第{$i}章"] = "Section ".$i;
+			}
+		}
+
+		//排课信息
+		$res_plan = course_api::listPlan(array('cid'=>$courseId,'class_id'=>$classId,'order_by'=>'asc','allcourse'=>true));
+		
+		$list = array();
+		if(!empty($res_plan->data))
+		{
+			if($lan == 'en'){
+				foreach($res_plan->data as $k=>$v)
+				{
+					$list['admin_name'] = !empty($v->user_class->real_name)?$v->user_class->real_name:'';
+					$list['data'][$k] = [
+						'plan_id'         => $v->plan_id,
+						'class_id'        => $v->class_id,
+						'section_descipt' => $v->section_descipt,
+						'start_time'      => date('d',strtotime($v->start_time)).'-'.date('m',strtotime($v->start_time)).'-'.date('Y',strtotime($v->start_time)).' '.date('H:i',strtotime($v->start_time)),
+						'section_name'    => !empty($sectionName[$v->section_name]) ? $sectionName[$v->section_name] : '',
+						'status'          => $v->status
+					];
+					
+					if($v->fk_user_class == $v->fk_user_plan)
+					{
+						$list['data'][$k]['teacher_name'] = '';
+					}else
+					{
+						$list['data'][$k]['teacher_name'] = !empty($v->user_plan->real_name)?"(".$v->user_plan->real_name.")":(!empty($v->user_plan->name)?"(".$v->user_plan->name.")":'');
+					}
+				}
+			}else{
+				foreach($res_plan->data as $k=>$v)
+				{
+					$list['admin_name'] = !empty($v->user_class->real_name)?$v->user_class->real_name:'';
+					$list['data'][$k] = [
+						'plan_id'         => $v->plan_id,
+						'class_id'        => $v->class_id,
+						'section_descipt' => $v->section_descipt,
+						'start_time'      => date('Y年m月d日 H:i',strtotime($v->start_time)),
+						'section_name'    => $v->section_name,
+						'status'          => $v->status
+					];
+					if($v->fk_user_class == $v->fk_user_plan)
+					{
+						$list['data'][$k]['teacher_name'] = '';
+					}else
+					{
+						$list['data'][$k]['teacher_name'] = !empty($v->user_plan->real_name)?"(".$v->user_plan->real_name.")":(!empty($v->user_plan->name)?"(".$v->user_plan->name.")":'');
+					}
+				}
+			}
+		}
+
+		echo json_encode($list);exit;
+	}
+
+    public function pageGetClassList($inPath)
+    {
+        if (isset($inPath[3], $inPath[4]) && $inPath[3] && $inPath[4]) {
+            $cid = $inPath[3];
+            $classId = $inPath[4];
+        } else {
+            interface_func::setMsg(1000);
+        }
+
+        $courseInfo = course_api::getCourseone($cid);
+        empty($courseInfo) && interface_func::setMsg(2017);
+
+        $classList = $this->_getPlanClassData(['cid'=>$cid]);
+        empty($classList['classList']) && interface_func::setMsg(2017);
+
+        $data = [];
+        foreach ($classList['classList'] as $v) {
+            if ($v['class_id'] == $classId) {
+                $data = $v;
+            }
+        }
+
+        empty($data) && interface_func::setMsg(2032);
+        $data['type'] = $courseInfo->fee_type;
+        $data['course_id'] = $cid;
+
+        $this->assign('info', $data);
+        $this->assign('courseInfo', $courseInfo);
+        $this->render('/layer/class.list.html');
+    }
+
+    /**
+     * checkIsLikeCourse
+     *
+     * 检查是否是喜欢课程
+     * @param mixed $user
+     * @param mixed $cid
+     * @access private
+     * @return bool
+     */
+    private function _checkIsLikeCourse($user, $cid)
+    {
+        if (!$user || !$cid)
+            return false;
+
+        $likeInfo = user_api::listfav(array(
+            'cid' => $cid,
+            'uid' => $user['uid']
+        ));
+
+        return !empty($likeInfo) ? true : false;
+    }
+
+    /**
+     * @param $cid
+     * @return array
+     */
+    private function _getScoreInfo($cid)
+    {
+        $res = comment_api::getTotal(array('course_id'=>$cid));
+        if (!empty($res)) {
+            $student_score = (int)ceil($res[0]->student_score/$res[0]->total_user);
+            $desc_score = (int)ceil($res[0]->desc_score/$res[0]->total_user);
+            $explain_score = (int)ceil($res[0]->explain_score/$res[0]->total_user);
+			$avg_score = round($res[0]->avg_score);
+            return array(
+                'student_score' => $student_score > 5 ? 5 : $student_score,
+                'desc_score' => $desc_score > 5 ? 5 : $desc_score,
+                'explain_score' => $explain_score > 5 ? 5 : $explain_score,
+                'avg_score' => $avg_score > 5 ? 5 : $avg_score
+            );
+        }
+
+        return array();
+    }
+
+    private function _getPlanClassData($param, $courseType=1)
+    {
+        $param['courseType'] = $courseType;
+        $data = course_detailed::getCoursePlan($param);
+        if (empty($data[$param['cid']])) return [];
+
+        $res = $classIdArr = $planIdArr = $videoTime = [];
+        foreach ($data[$param['cid']] as $v) {
+            foreach ($v as $m) {
+                $planIdArr[] = $m['planId'];
+                $videoTime[$m['planId']] = 0;
+            }
+        }
+
+        if ($courseType == 2) {
+            $videoTimeList = utility_services::call('/course/video/GetTotalTimeByPlanIdArr', ['planIdArr' => $planIdArr]);
+            if (!empty($videoTimeList->result)) {
+                foreach ($videoTimeList->result as $video) {
+                    $totalTime = $video->segs_totaltime ? $video->segs_totaltime : $video->totaltime;
+                    $videoTime[$video->fk_plan] = $totalTime;
+                }
+            }
+        }
+
+        foreach ($data[$param['cid']] as $p) {
+            foreach ($p as $m) {
+                $res['classList'][$m['classId']] = [
+                    'class_name'          => $m['className'],
+                    'classAddress'        => $m['classAddress'],
+                    'displayClassAddress' => ($m['classAddress'] && $courseType == 3) ? 0 : 1,
+                    'class_id'            => $m['classId'],
+                    'teacher_id'          => $m['teacherId'],
+                    'admin_id'            => $m['adminId'],
+                    'teacher_name'        => $m['adminName'],
+                    'classBeginTime'      => ($courseType == 2) ? '' : $m['progress'],
+                    'classSectionName'    => $m['sectionName'],
+                    'classStatus'         => $m['courseClassStatus']
+                ];
+
+                $res['teacherMasterList'][$m['teacherId']] = [
+                    'teacher_name' => $m['teacherName'],
+                    'teacher_id' => $m['teacherId'],
+                    'thumb' => $m['teacherThumb']
+                ];
+
+                $res['planList'][$m['classId']][] = [
+                    'section_name' => $m['sectionName'],
+                    'section_desc' => ($courseType == 2)
+                                    ?
+                                        (!empty($videoTime[$m['planId']])
+                                            ? $m['sectionDesc'].' <span class="cDark_9">(时长：'.utility_tool::sec2time($videoTime[$m['planId']]).' )</span>'
+                                            : $m['sectionDesc'].' <span class="cDark_9">暂无视频</span>'
+                                        )
+                                    : $m['sectionDesc'],
+                    'plan_status' => course_detailed::getPlanTimeAndStatus($m['planStatus'], $courseType, $m['videoPublicType'], $m['startTime'], $m['endTime'], $videoTime[$m['planId']])['planStatus'],
+                    'plan_id' => $m['planId'],
+                    'start_time' => course_detailed::getPlanTimeAndStatus($m['planStatus'], $courseType, $m['videoPublicType'], $m['startTime'], $m['endTime'], $videoTime[$m['planId']])['planTime']
+                ];
+                
+                if (intval($m['tryPlayId'])) {
+                    $res['isTryPlay'][$m['classId']] = $m['tryPlayId'];
+                }
+
+                $res['courseClassName'][$m['classId']]= [
+                    'class_name' => $m['className'],
+                    'class_id' => $m['classId']
+                ];
+
+                $res['section_num'][$m['classId']] = count($res['planList'][$m['classId']]);
+
+                $classIdArr[] = $m['classId'];
+            }
+
+            $res['courseClassName'] = array_values($res['courseClassName']);
+            $res['classList'] = array_values($res['classList']);
+            $res['classId'] = !empty($classIdArr[0]) ? $classIdArr[0] : 0;
+        }
+
+        return $res;
+    }
+
+
+    public function pageBuy($inPath)
+    {
+        if (empty($inPath[3])) {
+            return $this->redirect("/");
+        }
+        $course_id = $inPath[3];
+        $user      = user_api::loginedUser();
+        if (empty($user)) {
+            return $this->redirect("/site.main.login?url=/course.info.show/$course_id");
+        }
+        $course_info = course_api::getCourseone($course_id);
+        if (empty($course_info)) {
+            return $this->redirect("/");
+        }
+        if ($course_info->fee_type == 0) {
+            //免费课,直接去详情页报名
+            return $this->redirect("/course.info.show/$course_id?error=1");
+        }
+        //判断是不是已经购买
+        $baoming = false;
+        $user    = user_api::loginedUser();
+        if ($user) {
+            $reg_info = course_api::listRegistration(array("course_id" => $course_info->course_id, "uid" => $user['uid']));
+            if (!empty($reg_info->data)) {
+                $baoming = true;
+            }
+        }
+        if ($baoming) {//已经购买
+            return $this->redirect("/course.info.show/$course_id?error=2");
+        }
+        //如果课程类型是上传的点播课 $class_id为0
+        $class_id = isset($inPath[4]) ? $inPath[4] : 0;
+        //if ($course_info->type_id == 2) {
+        //   $class_id = 0;
+        //} else {
+            if (empty($class_id)) {
+                //请选择班级
+                return $this->redirect("/course.info.show/$course_id?error=3");
+            }
+            $class_all = course_api::getClasslist($course_id);
+            if (empty($class_all)) {
+                return $this->redirect("/course.info.show/$course_id?error=4");
+            }
+            $in         = false;
+            $class_info = "";
+            foreach ($class_all as $_class) {
+                if ($class_id == $_class->class_id) {
+                    $class_info = $_class;
+                    $in         = true;
+                    break;
+                }
+            }
+            if ($in == false) {
+                return $this->redirect("/course.info.show/$course_id?error=5");
+            }
+        //}
+
+        //生成订单
+        $order_info = course_api::addFeeOrder(
+            $user['uid'],
+            $course_info->user_id,
+            $course_id,
+            $course_info->fee->price,
+            $course_info->fee->price_market,
+            $class_id
+        );
+        if (empty($order_info)) {
+            //TODO ERROR Page
+            return "生成订单错误";
+        }
+
+        return $this->redirect("/course.info.Pay/{$order_info->unique_order_id}");
+    }
+
+    public function pagePay($inPath){
+        if (empty($inPath[3])) {
+            $this->redirect("/");
+        }
+
+        $unique_order_id = $inPath[3];
+        $order_info      = course_api::getFeeOrder($unique_order_id);
+        if (empty($order_info)) {
+            //TODO ERROR Page
+            return "生成订单错误";
+        }
+        $course_id = $order_info->course_id;
+        $class_id  = $order_info->ext;
+        $error     = null;
+        $user      = user_api::loginedUser();
+        if (empty($user)) {
+            $this->redirect("/site.main.login?url=/course.info.show/$course_id/");
+        }
+        if (!empty($_REQUEST['error'])) {
+            switch ($_REQUEST['error']) {
+                case "verify_error":
+                    $error = array("title" => "错误", "msg" => "验证失败");
+                    break;
+            }
+        }
+        $status = "";
+        if ($order_info->status == "expired") {
+            //TODO ERROR Page
+            $error = array("title" => "错误", "msg" => "订单已经过期");
+        }
+        if ($order_info->status == "success") {
+            $status = "ok";
+            //$error=array("title"=>"错误","msg"=>"已经支付，请不要重复支付");
+        }
+        if ($order_info->status == "deleted") {
+            //TODO ERROR Page
+            $error = array("title" => "错误", "msg" => "定单不存在");
+        }
+        if ($order_info->status == "fail") {
+            //TODO ERROR Page
+            $error = array("title" => "错误", "msg" => "支付失败，请重新购买");
+        }
+        $course_info = course_api::getCourseone($course_id);
+        if (empty($course_info)) {
+            $this->redirect("/");
+        }
+        if ($course_info->fee_type == 0) {
+            //免费课,直接去详情页报名
+            $this->redirect("/course.info.show/$course_id?error=6");
+        } else {
+            //	付费的课程详情显示
+            $class_all_fee = course_api::getClasslist($course_id);
+            if (empty($class_all_fee)) {
+                $this->redirect("/course.info.show/$course_id?error=8");
+            }
+            $in             = false;
+            $class_info_fee = "";
+            foreach ($class_all_fee as $_class_fee) {
+                if ($class_id == $_class_fee->class_id) {
+                    $class_info_fee = $_class_fee;
+                    $in             = true;
+                    break;
+                }
+            }
+            $this->assign("class", $class_info_fee);
+        }
+        //如果课程类型是上传的点播课 $class_id为0
+        /*if ($course_info->type_id == 2) {
+            $class_id = 0;
+            if (empty($class_id)) {
+                //请选择班级
+                $this->redirect("/course.info.show/$course_id?error=7");
+            }
+            $class_all = course_api::getClasslist($course_id);
+            if (empty($class_all)) {
+                $this->redirect("/course.info.show/$course_id?error=8");
+            }
+            $in         = false;
+            $class_info = "";
+            foreach ($class_all as $_class) {
+                if ($class_id == $_class->class_id) {
+                    $class_info = $_class;
+                    $in         = true;
+                    break;
+                }
+            }
+            if ($in == false) {
+                $this->redirect("/course.info.show/$course_id");
+            }
+            $this->assign("class", $class_info);
+        }*/
+
+        $ret_code      = false;
+        $discount_code = 0;
+        $weixinPayUrl = '';
+        if (empty($error) && empty($status)) {
+            if (!empty($_POST["discount_code"])) {
+                $discount_code = $_POST["discount_code"];
+                $ret_code      = course_api::useDiscountCode($discount_code, $user["uid"], $unique_order_id);
+                $order_info    = course_api::getFeeOrder($unique_order_id);
+            } else if (!empty($_POST["confirm"])) {
+                course_api::confirmDiscountCode($order_info->order_id);
+            } else if (!empty($_POST["cancel"])) {
+                course_api::cancelDiscountCode($order_info->order_id);
+                $order_info = course_api::getFeeOrder($unique_order_id);
+            }
+            $link = course_api::genPayUrl($order_info, $course_info);
+            $this->assign("aliPayUrl", $link);
+			if (weixin_api::is_weixin()) {
+				$this->assign("weixin",1);
+				$sc = "http";
+				if (utility_net::isHTTPS()) {
+					$sc = "https";
+				}
+				$backurl = "$sc://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+				$weixinPayUrl=utility_services::url("weixin_pay" ,"index.main.weixinpay/?uqid=$unique_order_id&backurl=$backurl");
+            } else {
+                //扫码支付
+                $weixinQrcode = course_api::genWeixinPayQrcodeUrl($order_info, $course_info);
+                $qrcode       = utility_cdn::qrcode("qr?s=200&t=".urlencode($weixinQrcode));
+                $this->assign("qrcode", $qrcode);
+            }
+        }
+        $sy_course_user     = $course_info->max_user - $course_info->user_total;
+        $discount_code_used = course_api::getDiscountCodeUsed($order_info->order_id);
+        $show_pay           = true;
+        if ($discount_code_used && 0 == $discount_code_used->status) {
+            $show_pay = false;
+        }
+        $order_info->price_discount = $order_info->price_old - $order_info->price * 100;
+
+        $this->assign("weixinPayUrl", $weixinPayUrl);
+        $this->assign("discount_code_used", $discount_code_used);
+        $this->assign("show_pay", $show_pay);
+        $this->assign("discount_code", $discount_code);
+        $this->assign("ret_code", $ret_code);
+        $this->assign("sy_course_user", $sy_course_user);
+        $this->assign("status", $status);
+        $this->assign("user", $user);
+        $this->assign("course", $course_info);
+        $this->assign("order_info", $order_info);
+        $this->assign("order_id", $unique_order_id);
+        $this->assign("error", $error);//ok,fail
+        //return $this->render("course/info.buy.html");
+        $this->render("course/info.buy.v2.html");
+    }
+
+    public function pagecheckclassAjax($inPath)
+    {
+        $this->user = user_api::loginedUser();
+        $cid        = $_POST['couid'];//course_id
+
+        if (empty($_POST['couid'])) {
+            return $this->redirect("/");
+        }
+        $course_id = $_POST['couid'];
+        $user      = user_api::loginedUser();
+        if (empty($user)) {
+            return $this->redirect("/site.main.login?url=/course.info.show/$course_id");
+        }
+        $uid         = $user['uid'];//uid
+        $course_info = course_api::getCourseone($course_id);
+        if (empty($course_info)) {
+            return $this->redirect("/");
+        }
+        if ($course_info->fee_type == 1) {
+            //收费课,直接去购买
+            return $this->redirect("/course.info.show/$course_id?error=1");
+        }
+        $status    = empty($_POST['status']) ? '1' : $_POST['status'];
+        $class_id  = empty($_POST['classid']) ? 0 : $_POST['classid'];//class_id
+        $hello     = explode("/", $this->user["small"]);
+        $thumb_big = $hello[3];//头像
+
+        $result = new stdclass;
+        if (!empty($class_id)) {
+            $regdata = array(
+                "class_id"   => $class_id,
+                "course_id"  => $course_id,
+                "uid"        => $uid,
+                "user_owner" => $course_info->user_id,
+                "status"     => $status,
+            );
+            if ($thumb_big) {
+                $regdata["thumb_big"] = $thumb_big;
+            }
+            $reg_ret = course_api::addregistration($regdata);
+            if ($reg_ret) {
+                $result->status = "Success!";
+
+                return $result;
+            } else {
+                $result->error = SLanguage::tr('报名失败', 'course.info');
+
+                return $result;
+            }
+        }
+        $result->error = SLanguage::tr('报名失败', 'course.info');
+
+        return $result;
+    }
+
+    public function pagecheckfavAjax($inPath)
+    {
+        $this->user = user_api::loginedUser();
+        $uid        = $this->user['uid'];
+        $cid        = $_POST['couid'];
+        $result     = new stdclass;
+        if (!empty($cid)) {
+            $favdata = array(
+                "user_id"   => $uid,
+                "course_id" => $cid,
+            );
+            $reg_ret = user_api::addFav($favdata);
+            if ($reg_ret) {
+                $result->status = "Success!";
+
+                return $result;
+            } else {
+                $result->error = SLanguage::tr('添加失败', 'course.info');
+
+                return $result;
+            }
+        }
+        $result->error = SLanguage::tr('报名失败', 'course.info');
+
+        return $result;
+    }
+
+    public function pageDelFav()
+    {
+        $result = new stdclass;
+        if (empty($_POST['cid'])) {
+            $result->error = SLanguage::tr('参数错误', 'course.info');;
+
+            return $result;
+        }
+
+        $user = user_api::loginedUser();
+
+        if (empty($user)) {
+            $result->error = SLanguage::tr('请先登陆', 'course.info');;
+
+            return $result;
+        }
+
+        $param = array(
+            'uid' => $user['uid'],
+            'cid' => $_POST['cid']
+        );
+
+        $res = user_api::delFav($param);
+        if (!empty($res) && $res->code == 0) {
+            return true;
+        } else {
+            $result->error = SLanguage::tr('删除失败', 'course.info');;
+
+            return $result;
+        }
+    }
+
+    public function pageAddReg()
+    {
+        empty($_POST['cid']) && !intval($_POST['cid']) && interface_func::setMsg(1000);
+        empty($_POST['classId']) && !intval($_POST['classId']) && interface_func::setMsg(1000);
+
+        $courseId = intval($_POST['cid']);
+        $classId  = intval($_POST['classId']);
+
+        $user = user_api::loginedUser();
+        empty($user) && interface_func::setMsg(1021);
+
+        $tImg     = explode("/", $user["small"]);
+        $thumbBig = $tImg[3];
+
+        $courseInfo = course_api::getCourseone($courseId);
+        empty($courseInfo) && interface_func::setMsg(2017);
+
+        if ($courseInfo->fee_type == 1) {
+            interface_func::setMsg(2017);
+        }
+
+        $data = array(
+            "class_id"   => $classId,
+            "course_id"  => $courseId,
+            "uid"        => $user['uid'],
+            "user_owner" => $courseInfo->user_id,
+            "status"     => 1,
+        );
+
+        !empty($thumbBig) && $data['thumb_big'] = $thumbBig;
+
+        course_api::addregistration($data) ? interface_func::setMsg(0) : interface_func::setMsg(1);
+    }
+}
+

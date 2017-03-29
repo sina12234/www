@@ -1,0 +1,27 @@
+<?php
+class promote_api{
+	public static function getPromote($pid){
+		if(empty($pid) || !is_numeric($pid)){
+			return false;
+		}
+		$ret = utility_services::call("/promote/info/get/$pid");
+		return $ret;
+	}
+	public static function getPromoteByCode($code){
+		if(empty($code)){
+			return false;
+		}
+		$params = array('promote_code'=>$code);
+		$ret = utility_services::call("/promote/info/getPromoteByOther",$params);
+		return $ret;
+	}
+	public static function addPromoteUser($params){
+		if(empty($params['fk_user']) || empty($params['fk_promote'])){
+			return false;
+		}
+		$url = "/promote/info/addPromoteUser/";
+		return utility_services::call($url, $params);
+	}
+}	
+?>
+

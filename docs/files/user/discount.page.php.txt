@@ -1,0 +1,119 @@
+<?php
+/*
+ * chat传递消息接口
+ */
+class user_discount extends STpl{
+	var $user;
+	public function __construct($inPath){
+		$this->user = user_api::loginedUser();
+		if(!$this->user){
+			$this->redirect("/");
+		}
+		$userInfo = user_api::getUser($this->user["uid"]);
+		if(!$userInfo->types->organization){
+			$this->redirect("/");
+		}
+	}
+	public function pageCreate($inPath){
+		$courses = course_api::getFeeCoursesByOrg($this->user["uid"]);
+		if(empty($courses->data)){
+			$this->assign("courses", false);
+		}else{
+			$this->assign("courses", $courses->data);
+		}
+		return $this->render("user/discount.create.html");
+	}
+	public function pageCreateOk($inPath){
+		$ret = course_api::createDiscount($_POST, $this->user["uid"]);
+		if(0 == $ret->result->code){
+			$this->redirect("/user.discount.list");
+			return;
+		}else{
+			return $ret;
+		}
+	}
+	public function pageList($inPath){
+		if(empty($_REQUEST["limit"])){
+			$_REQUEST["limit"] = 10;
+		}
+		if(empty($_REQUEST["page"])){
+			$_REQUEST["page"] = 1;
+		}
+		$discounts = course_api::listDiscount($_REQUEST, $this->user["uid"]);
+		//$this->assign("discounts", SJson::encode($discounts));
+		$this->assign("discounts", $discounts);
+		$this->assign("page", $_REQUEST["page"]);
+		$this->assign("limit", $_REQUEST["limit"]);
+		return $this->render("user/discount.list.html");
+	}
+	public function pageForbid($inPath){
+		if(empty($inPath[3])){
+			$this->redirect("/");
+		}
+		$discount_id = $inPath[3];
+		$discounts = course_api::forbidDiscount($this->user["uid"], $discount_id);
+		$this->redirect("/user.discount.list");
+	}
+	public function pageListCode($inPath){
+		if(empty($inPath[3])){
+			$this->redirect("/");
+		}
+		if(empty($_REQUEST["limit"])){
+			$_REQUEST["limit"] = 10;
+		}
+		if(empty($_REQUEST["page"])){
+			$_REQUEST["page"] = 1;
+		}
+		$discount_id = $inPath[3];
+		$discounts = course_api::listDiscountCode($_REQUEST, $this->user["uid"], $discount_id);
+		if(0 != $discounts->result->code){
+			$this->redirect("/user.discount.list");
+		}
+		//$this->assign("discounts", SJson::encode($discounts));
+		$this->assign("discounts", $discounts);
+		$this->assign("page", $_REQUEST["page"]);
+		$this->assign("limit", $_REQUEST["limit"]);
+		return $this->render("user/discount.listcode.html");
+	}
+	public function pageCreateCodeOk($inPath){
+		$ret = course_api::createDiscountCode($_POST, $this->user["uid"]);
+		if(0 == $ret->result->code){
+			$this->redirect("/user.discount.listcode/".$_POST["discount_id"]);
+			return;
+		}else{
+			return $ret;
+		}
+	}
+	public function pageListCodeUsed($inPath){
+		if(empty($inPath[3])){
+			$this->redirect("/");
+		}
+		if(empty($_REQUEST["limit"])){
+			$_REQUEST["limit"] = 10;
+		}
+		if(empty($_REQUEST["page"])){
+			$_REQUEST["page"] = 1;
+		}
+		$discount_code = $inPath[3];
+		$discounts = course_api::listDiscountCodeUsed($_REQUEST, $this->user["uid"], $discount_code);
+		if(0 != $discounts->result->code){
+			$this->redirect("/user.discount.list");
+		}
+		//$this->assign("discounts", SJson::encode($discounts));
+		$this->assign("discounts", $discounts);//var_dump($discounts);
+		$this->assign("page", $_REQUEST["page"]);
+		$this->assign("limit", $_REQUEST["limit"]);
+		return $this->render("user/discount.listcodeused.html");
+	}
+	public function pageForbidCode($inPath){
+		if(empty($inPath[4])){
+			$this->redirect("/");
+		}
+		$discount_code_id = $inPath[3];
+		$discount_id = $inPath[4];
+		$ret = course_api::ForbidDiscountCode($this->user["uid"], $discount_code_id);
+		$this->redirect("/user.discount.listcode/$discount_id");
+	}
+}
+?>
+

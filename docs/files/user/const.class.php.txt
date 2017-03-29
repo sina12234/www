@@ -1,0 +1,15 @@
+<?php
+class user_const{
+	const SOURCE_QQ = 1;
+	const SOURCE_WEIXIN = 2;
+	const SOURCE_WEIBO = 3;
+	const SOURCE_ALIPAY = 4;
+	#普通机构以100开始
+	//智慧校
+	const SOURCE_ZHIHUIXIAO = 100;
+	//云校园
+	const SOURCE_YUNXIAOYUAN= 101;
+	//长征教育
+	const SOURCE_CHANGZHENG = 102;
+}
+

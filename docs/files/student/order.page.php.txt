@@ -1,0 +1,165 @@
+<?php
+class student_order extends STpl{
+
+	var $user;
+	private $domain;
+	private $orgOwner;
+    function __construct(){
+		$domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","domain");
+		$this->domain = $domain_conf->domain;
+		$this->assign('domain', $this->domain);
+
+		$this->user = user_api::loginedUser();
+        if(empty($this->user)){
+			if(!empty($_SERVER['REQUEST_URI'])){
+            	$this->redirect("/site.main.login?url=".$_SERVER['REQUEST_URI']);
+            }else{
+                $this->redirect("/site.main.login");
+            }
+        }
+        $org=user_organization::subdomain();
+        if(!empty($org)){
+            $this->orgOwner=$org->userId; //机构所有者id 以后会根据域名而列取
+        }else{
+            header('Location: https://www.'.$this->domain);
+        }
+    }
+
+	public function pageMyOrder($inPath){
+
+		$num  = 10;
+		$page = isset($_GET['page']) ? $_GET['page']:1;
+		$status_arr = array(
+			"all"=>"0",
+			"pay"=>"1",
+			"suc"=>"2",
+			"del"=>"-1",
+			"exp"=>"-2",
+			"fai"=>"-3",
+			"cal"=>"-4",
+		);
+	
+		if(empty($inPath[3])){
+			$status  = 0;
+			$get_sta = 'all';
+			$path = '/student.order.myorder/all';
+		}else{
+			$get_sta = $inPath[3];
+			$status = $status_arr[$get_sta];
+			$path = '/student.order.myorder/'.$get_sta;
+		}
+		if($status == 0 ){
+			$q_status = array(0,1,2,-2,-3,-4);
+		}else{
+			$q_status = $status;
+		}	
+		$list_fee_cond = array(
+			"user_id"=>$this->user['uid'],
+			"owner_id" => $this->orgOwner,
+			"status"=>$q_status,
+		);
+		$list_fee_info  = array();
+		$order_list     = array();
+		$list_fee_info1 = course_api::listFeeOrder($list_fee_cond,$page,$num);
+		if(!empty($list_fee_info1->data)){
+			$list_fee_info = $list_fee_info1->data;
+			$user_course_info = array();
+			$course_id_arr = array();
+			$class_id_arr  = array();
+			foreach($list_fee_info as $fo){
+				$course_id_arr[$fo->course_id] = $fo->course_id;
+				$class_id_arr[$fo->ext] = $fo->ext;
+			}
+
+			$class_ret = course_api::getClassByClassIdArr($class_id_arr);
+			$class_plan_ret = course_api::getClassPlan($class_id_arr);
+			
+			$class_plan_list = array();
+			if(!empty($class_plan_ret)){
+				$tem_class = array();
+				foreach($class_plan_ret as $cv){
+					if(!in_array($cv->fk_class,$tem_class)){
+						$tem_class[] = $cv->fk_class;
+						$class_plan_list[$cv->fk_class] = $cv->start_time;
+					}
+				}	
+			}
+		
+			$class_list = array();
+			if( !empty($class_ret->data) ) {
+				foreach( $class_ret->data as $co){
+					if(!empty($class_plan_list[$co->pk_class])){
+						$co->start_time = $class_plan_list[$co->pk_class];
+					}else{
+						$co->start_time = '';
+					}
+					$class_list[$co->pk_class] = $co;
+				}
+			}
+
+			foreach($list_fee_info as $v ){
+				if(!empty($class_list) && !empty($class_list[$v->ext])){
+					$v->class = $class_list[$v->ext];
+				}else{
+					$v->class = '';
+				}
+				$v->pay_url = '/course.info.Pay/'.$v->unique_order_id;	
+				$v->course_url = '/course.info.show/'.$v->course_id;	
+				$v->cha_time = date('i:s',strtotime($v->expiration_time)-time());	
+				$create_date = date('Ymd', strtotime($v->create_time));
+				$v->order_number = $create_date.$v->order_id;
+				$order_list[] = $v;
+			}
+		}
+
+		$pay_type = array(
+			0 => '未知',
+			1 => '支付宝',
+			2 => '微信',
+			3 => '免费',	
+		);
+		$status_array = array(
+			"initial"=>"未支付",
+			"paying"=>"正在支付",
+			"success"=>"已支付",
+			"deleted"=>"订单已删除",
+			"expired"=>"超时失效",
+			"fail"=>"订单失败",
+			"cancel"=>"订单已取消",
+		);
+		$this->assign('pay_type', $pay_type);
+		$this->assign("order_list",$order_list);
+		$this->assign('get_sta', $get_sta);
+		$this->assign("status_array",$status_array);
+		$list = $list_fee_info1;
+		$this->assign("list",$list);	
+		$this->assign("path",$path);	
+		$this->assign("num",$num);	
+
+		$this->render('/student/my.order.html');
+	}
+	
+	public function pageUpdateStatusAjax($inPath){
+		$result= new stdclass;
+		$order_id = isset($_POST["order_id"])?$_POST["order_id"]:'';
+		$status   = isset($_POST["status"])?$_POST["status"]:'';
+		if( !empty($order_id) && !empty($status) ){
+			$order_status["order_id"] = $order_id;
+			$order_status["status"]   = $status;
+			$ret_set_fee = course_api::setFeeOrderStatus($order_status);
+
+			if($ret_set_fee){
+				$result->status="Success!";
+				return $result;
+			}else{
+				$result->error=$ret_set_fee->result->msg;
+				return $result;
+			}
+		}else{
+			$result->error = '参数错误！';
+			return $result;
+		}
+
+	}
+}
+

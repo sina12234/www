@@ -1,0 +1,6 @@
+{
+    "require": {
+        "ua-parser/uap-php": "*",
+        "monolog/monolog": "^1.17"
+    }
+}
