@@ -1,0 +1,434 @@
+/*
+机构管理-页面设置基础设置-重构
+org.main.setting
+jinye
+ */
+/*左侧小三角*/
+.bubble-left {
+    position: relative;
+    padding: 4px 8px;
+    border: 1px solid $text-holder-color;
+    &:after,&:before {
+        position: absolute;
+        top: 50%;
+        display: block;
+        width: 0;
+        height: 0;
+        margin-top: -4px;
+        content: '';
+        border-width: 4px 6px 4px 0;
+        border-style: solid;
+    }
+    &:before {
+        left: -6px;
+        border-color: transparent #bbb transparent transparent;
+    }
+    &:after {
+        left: -5px;
+        border-color: transparent $main-white-color transparent transparent;
+    }
+    &:hover {
+        color: $main-theme-color;
+        border-color: $main-theme-color;
+        &:before {
+            border-right-color: $main-theme-color;
+        }
+    }
+}
+/*右侧小三角*/
+.bubble-right {
+    position: relative;
+    padding: 4px 8px;
+    border: 1px solid $text-holder-color;
+    &:after,&:before {
+        position: absolute;
+        top: 50%;
+        display: block;
+        width: 0;
+        height: 0;
+        margin-top: -4px;
+        content: '';
+        border-width: 4px 0 4px 6px;
+        border-style: solid;
+    }
+    &:before {
+        right: -6px;
+        border-color: transparent transparent transparent #bbb;
+    }
+    &:after {
+        right: -5px;
+        border-color: transparent transparent transparent $main-white-color;
+    }
+    &:hover {
+        color: $main-theme-color;
+        border-color: $main-theme-color;
+        &:before {
+            border-left-color: $main-theme-color;
+        }
+    }
+}
+/*common*/
+.main-setting {
+    .thead {
+        font-size: 14px;
+        line-height: 30px;
+        height: 30px;
+        min-height: 30px;
+        padding: 0 15px;
+        background-color: $background-color;
+        i {
+            vertical-align: middle;
+        }
+        .tip {
+            color: $text-subsidiary-color;
+        }
+    }
+    .tbody {
+        line-height: 50px;
+        min-height: 50px;
+        .tip {
+            color: $text-holder-color;
+        }
+    }
+    input {
+        &[type='radio'] {
+            margin-right: 8px;
+        }
+        &[type='text'] {
+            line-height: 30px;
+            height: 30px;
+            border: 1px solid $input-border-color;
+        }
+    }
+    .menu-add {
+        height: 36px;
+    }
+    .menu-tbody .menu-form {
+        line-height: 30px;
+    }
+}
+// 皮肤切换
+.main-style{
+    .style-item{
+        width:85px;
+        padding:15px 15px 0 15px;
+        display: inline-block;
+        text-align: center;
+        line-height:30px;
+    }
+    .affirm{
+        position: absolute;
+        right:1px;
+        bottom:1px;
+        @include sprite($affirm);
+        display: none;
+    }
+    .bg{
+        cursor: pointer;
+        position:relative;
+        width:100%;
+        height:55px;
+        @include b-radius(5px);
+        overflow: hidden;
+        &:hover{
+            .affirm{
+                display: block;
+            }
+        }
+    }
+
+    .blue-bg{
+        background-color:#26b3c0
+    }
+    .orange-bg{
+        background-color:#ff6537
+    }
+    .green-bg{
+        background-color:#1aad51
+    }
+    .skyblue-bg{
+        background-color:#273e68
+    }
+}
+/*标签展示*/
+.label-display-item {
+    display: inline-block;
+    margin: 10px 20px 0 0;
+    cursor: pointer;
+    line-height: 20px;
+}
+.label-display .tbody {
+    padding: 0 15px 10px;
+
+    .no-label {
+        line-height: 40px;
+    }
+}
+.label-edit {
+    position: relative;
+}
+.label-edit-list {
+    padding-right: 180px;
+    border: 1px solid $border-color;
+}
+.label-edit-del {
+    font-size: 13px;
+    padding-left: 3px;
+}
+.label-history {
+    border: 1px solid $border-color;
+    border-top: 0;
+}
+.label-edit-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 170px;
+}
+.main-setting .label-edit .input-tagator {
+    line-height: 26px;
+    height: 26px;
+    border: 0;
+}
+.input-tagator-o {
+    display: inline-block;
+}
+.label-recent,.label-usual {
+    margin: 0 10px;
+    padding-bottom: 10px;
+}
+.label-recent {
+    border-bottom: 1px dotted $input-border-color;
+}
+.label-display .tfoot b {
+    font-size: 14px;
+    padding-right: 3px;
+    color: $main-theme-color;
+}
+/*首页幻灯片*/
+.home-slide {
+    .thead .edit:hover {
+        color: $main-theme-color;
+    }
+    .tbody {
+        padding: 25px;
+    }
+}
+.home-quick-nav .tbody {
+    padding: 25px;
+}
+
+.home-quick-nav .tfoot,.home-slide .tfoot {
+    padding-bottom: 25px;
+}
+
+.home-slide {
+    .menu-item {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid $border-color;
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+    .menu-tbody {
+        padding: 15px 20px 10px;
+    }
+    .upload-area {
+        position: relative;
+        width: 694px;
+        height: 130px;
+        margin-bottom: 16px;
+        text-align: center;
+        background-color: #eee;
+    }
+    .minicolors-input {
+        border: 1px solid $input-border-color;
+    }
+    .upload-area img {
+        width: auto;
+        height: 100%;
+    }
+    .change-img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: none;
+        margin-top: -15px;
+        margin-left: -50px;
+    }
+    .active .upload-area:hover .change-img {
+        display: block;
+    }
+    .menu-module {
+        .upload-area:hover .change-img {
+            display: block;
+        }
+
+        input[type='text']:focus {
+            border-color: $main-theme-color;
+        }
+    }
+    .active input[type='text']:focus {
+        border-color: $main-theme-color;
+    }
+    .icolor-select,
+    .menu-tfoot {
+        display: none;
+    }
+}
+.main-setting .home-slide .menu-addr {
+    border: none;
+}
+.home-slide {
+    .active {
+        .icolor-select,
+        .menu-tfoot {
+            display: block;
+        }
+        .menu-addr {
+            border: 1px solid $input-border-color;
+        }
+    }
+    .menu-module .menu-addr {
+        border: 1px solid $input-border-color;
+    }
+    .active .home-slide-edit {
+        display: none;
+    }
+}
+/*首页快速导航*/
+.home-quick-nav {
+    .menu-item {
+        margin-top: 20px;
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+    .menu-thead {
+        line-height: 16px;
+        height: 16px;
+        &:before {
+            display: inline-block;
+            float: left;
+            width: 6px;
+            height: 16px;
+            margin-right: 6px;
+            content: '';
+            background-color: $main-theme-color;
+        }
+    }
+    .menu-tbody {
+        padding: 20px 20px 0;
+        input {
+            margin-bottom: 10px;
+        }
+    }
+    .menu-tfoot {
+        display: none;
+    }
+    .active .menu-tfoot,
+    .menu-module .menu-tfoot {
+        display: block;
+    }
+    .active input:focus,
+    .menu-module input:focus {
+        border-color: $main-theme-color;
+    }
+    .active .home-quickNav-edit {
+        display: none;
+    }
+}
+/*教师推荐*/
+.teacher-recommended {
+    .tbody {
+        padding-top: 15px;
+    }
+    .teacher-item {
+        position: relative;
+        overflow: hidden;
+        &:hover .mourse-opacity {
+            display: block;
+        }
+    }
+    .mourse-opacity {
+        position: absolute;
+        top: 7px;
+        display: none;
+        width: 78%;
+        height: 62%;
+        opacity: 0.8;
+        border-radius: 65px;
+        background: $main-black-color;
+    }
+    p {
+        font-size: 14px;
+        padding-top: 8px;
+        text-align: center;
+    }
+    .top-teacher {
+        line-height: 90px;
+        cursor: pointer;
+        color: $main-white-color;
+    }
+    .del-teacher {
+        position: absolute;
+        top: 1px;
+        right: -1px;
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
+    }
+    .no-img {
+        line-height: 100px;
+        display: block;
+        float: left;
+        width: 109px;
+        height: 109px;
+        margin-bottom: 5px;
+        margin-top:10px;
+        padding: 0;
+        cursor: pointer;
+        color: $text-strong-color;
+        border-radius: 50%;
+        background: #ececec;
+    }
+    p img {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        border: 1px solid #dadada;
+        border-radius: 60px;
+        &:hover {
+            -webkit-box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.4);
+            -moz-box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.4);
+            box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.4);
+            -o-box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.4);
+            -ms-box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.4);
+        }
+    }
+    .no-img:hover {
+        -webkit-box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.4);
+        -moz-box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.4);
+        box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.4);
+        -o-box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.4);
+        -ms-box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.4);
+    }
+}
+@media (max-width: 768px) {
+    .home-slide .tbody {
+        padding: 10px 0;
+    }
+    .home-quick-nav {
+        .tbody {
+            padding: 10px 0;
+        }
+        .menu-tbody {
+            padding-top: 5px;
+        }
+    }
+    .home-slide .upload-area {
+        width: 100%;
+    }
+}

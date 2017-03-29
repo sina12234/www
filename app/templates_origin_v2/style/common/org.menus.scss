@@ -1,0 +1,71 @@
+//tab切换
+.tab-main{
+  width:100%;
+  border-bottom:1px solid $horizontal-border-color;
+  @include clearFix();
+  font-size:14px;
+  .tab-hd{
+    float:left;
+  }
+  .tab-hd-opt{
+      float:left;
+      cursor: pointer;
+      padding:0 18px 8px 18px;
+      line-height:25px;
+    }
+  .curr{
+      border-bottom:2px solid $main-theme-color;
+      color:$main-theme-color;
+  }
+  @include screen (320px,720px){
+    .tab-hd-opt{
+        float:left;
+        cursor: pointer;
+        padding:0 10px 10px 7px;
+      }
+  }
+}
+// 二级menus
+.sub-menus{
+    width:100%;
+    @include clearFix();
+    .sub-hd{
+      float:left;
+    }
+    .sub-opt{
+        float:left;
+        cursor: pointer;
+        padding:0 18px;
+    }
+    .curr{
+        color:$main-theme-color;
+    }
+}
+// 三级menus
+.ops-menus{
+    width:100%;
+    @include clearFix();
+    .ops-hd{
+      float:left;
+    }
+    .ops-item{
+        float:left;
+        border:1px solid #e6e6e6;
+        background:#fefefe;
+        padding:5px;
+        &:hover{
+            background:#f5f5f5;
+        }
+        &:first-child{
+            border-right:0;
+        }
+    }
+    .curr{
+        color:#fff;
+        background:#188fef;
+        border:1px solid #188fef;
+        &:hover{
+            background:#188fef;
+        }
+    }
+}

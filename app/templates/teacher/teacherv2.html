@@ -1,0 +1,267 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>高能100-专业的K12在线教育平台-明星教师</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+{part "/index.main.header"}
+<script src="{utility_cdn::js('/assets/js/script.js')}"></script>
+<script src="{utility_cdn::js('/assets/js/part.js')}"></script>
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/startteacV2.css')}">
+</head>
+<body>
+{part "/index.main.nav.teacher"}
+<script type="text/javascript">
+				window.onscroll = function(){
+					var t = document.body.scrollTop;
+					if(t > 10){
+						$('.steacbt').css({
+							'background':'#000',
+							'top':0
+
+						});
+						$('.steacbt').find('a').css('color','#fff');
+					}else{
+						$('.steacbt').css({
+							'background':'',
+							'top':'130px'
+						});
+						$('.steacbt').find('a').css('color','#333333');
+					}
+				}
+
+			$(document).ready(function(){
+				//展开列表
+				var path=document.location.pathname;
+				console.log(path);
+				$("#menu li").removeClass("qb");
+				$("#menu li a").each(function(i,item){
+					var ul  = $(this).parents("ul");
+					if(path.indexOf($(this).attr("href"))!==-1){
+						if(path=="/teacher.main.Entry.0"){
+							$(".steacbox").css("marginTop","100px");
+						}else{
+							$(".steacbox").css("marginTop","30px");
+						}
+						li = $(this).parents("li").addClass("qb");
+					}else{
+					//	$(".fs20").addClass("qb");
+					}
+
+				});
+			});
+</script>
+<div class='steachea col-sm-12 col-xs-12'>
+			<div class='steacbt col-xs-12'>
+				<ul id="menu">
+					<li><p><img src="{utility_cdn::img('/assets/images/steachx.png')}" alt=""></p></li>
+					<li class='qb fs20'><a href="/teacher.main.Entry.0"><p href="#">全部</p></a></li>
+					{foreach($majors as $majk=>$majv)}
+					{if(!empty($checked[$majv]))}
+					<li><a href="/teacher.main.entry.{$majk}"><p>{$majv}</p></a></li>
+					{/if}
+					{/foreach}
+			{*		<li><a href="/teacher.main.tstarv2.3">语文</a></li>*}
+			{*		<!--li><a href="/teacher.main.tstarv2.en">英语</a></li>
+					<li><a href="#">物理</a></li>
+					<li><a href="#">化学</a></li>
+					<li><a href="#">生物</a></li-->
+					*}
+				</ul>
+			</div>
+		</div>
+		<div class='steacbox'>
+			<div class='steacjs col-sm-12 col-xs-12'>
+				{if((empty($major)&&(!empty($teachers))))}
+				<div class='steacpd'>
+					{foreach $teachers as $teacherk=>$_teacher}
+					{if(!empty($_teacher->name))}
+					{if(($teacherk)>1) break;}
+					<div class='steaczuo col-sm-6 col-xs-6'>
+						<dl>
+							<dt><a href="/teacher.main.startdetail.{$_teacher->user_id}" target="_blank"><img src="{if !empty($_teacher->thumb_big)}{utility_cdn::file($_teacher->thumb_big)}{else}/assets/img/defaultPhoto.gif{/if}" alt="" width="214px" height="230px"><span><img src="{utility_cdn::img('/assets/images/tui.png')}" alt=""></span></a></dt>
+							<dd>
+							<div class='border'>
+								<a href="/teacher.main.startdetail.{$_teacher->user_id}" target="_blank"><h1 class="limithis" title="{$_teacher->name}">{$_teacher->name}<b class="limithis" title="{$_teacher->college}">({$_teacher->college})</b></h1></a>
+								<p class="limithis" title="{$_teacher->title}">{$_teacher->title}</p>
+								{*	<!--p class='zym ' title="{$_teacher->desc}" >没有学不好的学生,只有不会教的老师;只是源于生活兴趣源于成功是知识的趣味性.{$_teacher->desc}</p-->*}
+								<span class='zym ' title="{$_teacher->desc}" >
+									{if(mb_strlen($_teacher->desc,'utf8')>39)}
+									{mb_substr($_teacher->desc,0,40,'utf-8')}...
+									{else}
+									{$_teacher->desc}
+									{/if}
+								</span>
+							</div>
+							<div class='steac-nav'>
+								<ul>
+									{if (!empty($_teacher->plan->data))}
+									{foreach $_teacher->plan->data as $plans1k=>$_plans1v}
+									{if($_plans1v->admin_status == "1")}
+									<li class="limithis" title="{date("n月j日, ",strtotime($_plans1v->start_time))}"><img src="{utility_cdn::img('/assets/images/steacdian.png')}" alt=""><a href="/course.info.show/{$_plans1v->course_id}" target="_blank">{$_plans1v->title}{$_plans1v->class_name}{date("n月j日, ",strtotime($_plans1v->start_time))}</a></li>
+									{*		<li><img src="{utility_cdn::img('/assets/images/steacdian.png')}" alt=""><a href="#">六升初一预科和四次分班5月20 17:00</a></li>
+									<li><img src="{utility_cdn::img('/assets/images/steacdian.png')}" alt=""><a href="#">六升初一预科和四次分班5月20 17:00</a></li>
+									*}
+									{/if}
+									{/foreach}
+									{/if}
+								</ul>
+							</div>
+							</dd>
+						</dl>
+					</div>
+					{/if}
+					{/if}
+					{/if}
+					{/foreach}
+					{*			<div class='steaczuo col-sm-6 col-xs-6'>
+						<dl>
+							<dt>
+							<img src="{utility_cdn::img('/assets/images/gao.png')}" alt="">
+							<span><img src="{utility_cdn::img('/assets/images/tui.png')}" alt=""></span>
+							</dt>
+							<dd>
+							<div class='border'>
+								<h1>小熊老师<b>(清华大学)</b></h1>
+								<p>华杯优秀教练</p>
+								<p class='zym'>重点中学，教研组长;所带班级易懂;重基础提能力,循序渐进;耐心热情,深受学生及家长好评.</p>
+							</div>
+							<div class='steac-nav'>
+								<ul>
+									<li><img src="{utility_cdn::img('/assets/images/steacdian.png')}" alt=""><a href="#">六升初一预科和四次分班5月20 17:00</a></li>
+									<li><img src="{utility_cdn::img('/assets/images/steacdian.png')}" alt=""><a href="#">六升初一预科和四次分班5月20 17:00</a></li>
+									<li><img src="{utility_cdn::img('/assets/images/steacdian.png')}" alt=""><a href="#">六升初一预科和四次分班5月20 17:00</a></li>
+								</ul>
+							</div>
+							</dd>
+						</dl>
+					</div>
+
+				</div>
+				*}
+			</div>
+			{if(empty($major))}
+				{if(!empty($mathTea))}
+				{foreach $mathTea as $mathTeakk=>$mathTeavv}
+			<div class='steacsx col-sm-12 col-xs-12'>
+				<div class='steactop col-xs-12'>
+					{if(empty($major))}
+					<ul>
+						<li><p href=""><img src="{utility_cdn::img('/assets/images/steachx.png')}" alt=""></p></li>
+						<li class='qb'><p href="#">{$mathTeakk}</p></li>
+					</ul>
+					<div class='gd'>
+					{foreach($majors as $majk=>$majv)}
+						{if($majv==$mathTeakk)}
+							{if(count($mathTeavv)>3)}
+							<p><a href="/teacher.main.entry.{$majk}">更多>></a></p>
+							{/if}
+						{/if}
+					{/foreach}
+					</div>
+					{/if}
+				</div>
+					{foreach $mathTeavv as $mathTeak=>$mathTeav}
+					{if(($mathTeak)>7) break;}
+				<div class='steac-1 col-sm-3 col-xs-12'>
+					<div class='steacimg'><a href="/teacher.main.startdetail.{$mathTeav->user_id}" target="_blank"><img src="{utility_cdn::file($mathTeav->thumb_big)}" alt=""></a></div>
+					<p class='p3 limithis' title="{$mathTeav->name}">{$mathTeav->name}</p>
+					{if(!empty($mathTeav->college))}
+					<p class='p2 limithis' title="{$mathTeav->college}">{$mathTeav->college}</p>
+					{/if}
+					{if(!empty($mathTeav->title))}
+					<p class='p1 limithis' title="{$mathTeav->title}">{$mathTeav->title}</p>
+					{/if}
+				</div>
+					{/if}
+					{/foreach}
+				{/foreach}
+				{else}
+			{*	<div class='steac-1 col-sm-3 col-xs-12'>
+					<div class='steacimg'><a href=""><img src="{utility_cdn::img('/assets/images/fa.png')}" alt=""></a></div>
+					<p class='p3'>本科目暂无老师</p>
+					<p class='p2'>本科目暂无老师</p>
+					<p class='p1'>本科目暂无老师</p>
+				</div>
+			*}
+				{/if}
+			</div>
+			{else}
+				{if(!empty($mathTea))}
+				{foreach $mathTea as $mathTeakk=>$mathTeavv}
+			<div class='steacsx col-sm-12 col-xs-12'>
+				<div class='steactop col-xs-12'>
+					{if(empty($major))}
+					<ul>
+						<li><p href=""><img src="{utility_cdn::img('/assets/images/steachx.png')}" alt=""></p></li>
+						<li class='qb'><p href="#">{$mathTeakk}</p></li>
+					</ul>
+					<div class='gd'>
+					{foreach($majors as $majk=>$majv)}
+						{if($majv==$mathTeakk)}
+						<p><a href="/teacher.main.entry.{$majk}">更多>></a></p>
+						{/if}
+					{/foreach}
+					</div>
+					{/if}
+				</div>
+					{foreach $mathTeavv as $mathTeak=>$mathTeav}
+				<div class='steac-1 col-sm-3 col-xs-12'>
+					<div class='steacimg'><a href="/teacher.main.startdetail.{$mathTeav->user_id}" target="_blank"><img src="{utility_cdn::file($mathTeav->thumb_big)}" alt=""></a></div>
+					<p class='p3 limithis' title="{$mathTeav->name}">{$mathTeav->name}</p>
+					<p class='p2 limithis' title="{$mathTeav->college}">{$mathTeav->college}</p>
+					{if(!empty($mathTeav->title))}
+					<p class='p1 limithis' title="{$chTeav->title}">{$mathTeav->title}</p>
+					{/if}
+				</div>
+					{/foreach}
+				{/foreach}
+				{else}
+			<div class='steacsx col-sm-12 col-xs-12'>
+			{*	<div class='steac-1 col-sm-3 col-xs-12'>
+					<div class='steacimg'><a href=""><img src="{utility_cdn::img('/assets/images/fa.png')}" alt=""></a></div>
+					<p class='p3'>本科目暂无老师</p>
+					<p class='p2'>本科目暂无老师</p>
+					<p class='p1'>本科目暂无老师</p>
+				</div>
+			*}
+				{/if}
+			</div>
+	{*		<div class='steacsx col-sm-12 col-xs-12'>
+				<div class='steactop col-xs-12'>
+					<ul>
+						<li><p href=""><img src="{utility_cdn::img('/assets/images/steachx.png')}" alt=""></p></li>
+						<li class='qb'><p href="#">语文</p></li>
+					</ul>
+					<div class='gd'>
+						<p><a href="/teacher.main.entry.ch">更多>></a></p>
+					</div>
+				</div>
+				{if(!empty($chTea))}
+				{foreach $chTea as $chTeak=>$chTeav}
+				{if(($chTeak)>7) break;}
+				<div class='steac-1 col-sm-3 col-xs-12'>
+					<div class='steacimg'><a href="/teacher.main.startdetail.{$chTeav->user_id}" target="_blank"><img src="{utility_cdn::file($chTeav->thumb_big)}" alt=""></a></div>
+					<p class='p3 limithis' title="{$chTeav->name}">{$chTeav->name}</p>
+					{if(!empty($chTeav->college))}
+					<p class='p2 limithis' title="{$chTeav->college}">{$chTeav->college}</p>
+					{/if}
+					{if(!empty($chthTeav->title))}
+					<p class='p1 limithis' title="{$chTeav->title}">{$chTeav->title}</p>
+					{/if}
+				</div>
+				{/if}
+				{/foreach}
+				{else}
+		<div class='steacsx col-sm-12 col-xs-12'>
+		{/if}
+		</div>
+		*}	{/if}
+		</div>
+	</div>
+</div>
+{part "/index.main.footer"}
+</body>
+</html>

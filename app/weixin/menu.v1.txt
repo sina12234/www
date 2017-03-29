@@ -1,0 +1,49 @@
+{
+    "button": [
+        {
+            "name": "下载APP", 
+            "sub_button": [
+                {
+                    "type": "view", 
+                    "name": "直接访问", 
+                    "url": "http://www.gn100.com"
+                }, 
+                {
+                    "type": "view", 
+                    "name": "下载APP", 
+                    "url": "http://www.gfgaoneng.com/plugin.php?id=appbyme_app:download"
+                }
+            ]
+        }, 
+        {
+            "name": "关于我们", 
+            "sub_button": [
+                {
+                    "type": "view", 
+					"name": "关于我们", 
+					"url": "http://mp.weixin.qq.com/s?__biz=MjM5OTYyNjA5Ng==&mid=201286484&idx=1&sn=00420cd561dada407e5e6196e43587b6#rd"
+                 }
+            ]
+        }, 
+        {
+            "name": "QQ群交流", 
+            "sub_button": [
+                {
+                    "type": "view", 
+                    "name": "小学群", 
+		    "url": "http://jq.qq.com/?_wv=1027&k=a6wiZu"
+                 },
+                {
+                    "type": "view", 
+                    "name": "初一群", 
+		    "url": "http://jq.qq.com/?_wv=1027&k=TPP8AA"
+                 },
+                {
+                    "type": "view", 
+                    "name": "初三群", 
+		    "url": "http://jq.qq.com/?_wv=1027&k=bE4Ouw"
+                 }
+            ]
+        }
+    ]
+}

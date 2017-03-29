@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="title" content="{part '/site.main.orgname'} - 章节统计 - 云课 - 专业的在线学习平台">
+    <meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+    <meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+    <title class="head-title">学生答题</title>
+    {part "/site.main.header"}
+</head>
+<body style="background:#f7f7f7;">
+{part "/site.main.usernav.student"}
+<script src="{utility_cdn::js('/assets_v2/js/mustache.js')}"></script>
+<body>
+<section class="mt30 mb30">
+    <div class="container border-main-content ed-exercise-content">
+        <div class="ed-title ">
+            <div class="tab-button hidden-xs ">
+                学生答题
+            </div>
+            <div class="title col-lg-15 col-md-15 col-sm-15 col-xs-15 " id="head-title">
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="ed-exercise-info">
+            <table class="table-grid">
+                <thead>
+                    <tr>
+                        <td class="col-lg-3 col-md-3 col-sm-3 col-xs-5">时间</td>
+                        <td class="col-lg-3 col-md-3 col-sm-3 col-xs-5">学生</td>
+                        <td class="col-lg-3 col-md-3 col-sm-3 col-xs-5">题数</td>
+                        <td class="col-lg-3 col-md-3 col-sm-3 col-xs-5">正确率</td>
+                        <td class="col-lg-3 col-md-3 col-sm-3 hidden-xs">答对</td>
+                        <td class="col-lg-3 col-md-3 col-sm-3 hidden-xs">答错</td>
+                        <td class="col-lg-2 col-md-2 col-sm-2 hidden-xs">未答</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <script id="questionTotal" type='text/template'>
+                            <td class="col-lg-3 col-md-3 col-sm-3 col-xs-5">
+                                <<createTime>>
+                            </td>
+                            <td class="col-lg-3 col-md-3 col-sm-3 col-xs-5">
+                                <<name>>
+                            </td>
+                            <td class="col-lg-3 col-md-3 col-sm-3 col-xs-5">
+                                <<#judgeStr>>共<<questionCount>>+题<</judgeStr>>
+                            </td>
+                            <td class="col-lg-3 col-md-3 col-sm-3 col-xs-5">
+                                <<#judgeStr>><<correct>>+%<</judgeStr>>
+                            </td>
+                            <td class="col-lg-3 col-md-3 col-sm-3 hidden-xs">
+                                <<#judgeStr>><<answer>>+题<</judgeStr>>
+                            </td>
+                            <td class="col-lg-3 col-md-3 col-sm-3 hidden-xs">
+                                <<#judgeStr>><<wrong>>+题<</judgeStr>>
+                            </td>
+                            <td class="col-lg-2 col-md-2 col-sm-2 hidden-xs">
+                                <<#judgeStr>><<notAnswer>>+题<</judgeStr>>
+                            </td>
+                        </script>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="ed-question" id="ed-question">
+        </div>
+    </div>
+</section>
+<script id="questionExam" type='text/template'>
+    <ul class="choice question">
+        <<#questionExamList>>
+            <li data-qid="<<id>>" class="question-item <<#userAnswer>><<#moreJudge>><<correct>>$$1:true-question&&0:wrong-question&&-1:no-answer<</moreJudge>><</userAnswer>> <<^userAnswer>>no-answer<</userAnswer>> ">
+                <span class="question-index">
+                    1.
+                </span>
+                        <span class="question-item">
+                          <<qDesc>>
+                        </span>
+                    <div class="ed-option-info">
+                        <ul class="ed-option col-lg-8 col-md-8 col-sm-8 col-xs-8">
+						<span class="question-img">
+							<img src="<<qDescImg>>" id="img1">
+						</span>
+                            <<resetIndex>>
+                            <<#options>>
+                                <li>
+                                    <<setUpIndex>>
+                                    <<getOption>>.<<.>>
+                                </li>
+                            <</options>>
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="ed-answer-analysis">
+                        <div class="true-answer-box show col-lg-3 col-md-3 col-sm-5 col-xs-10">
+                            <span class="answer-icon"></span>
+                                正确答案：
+                            <span class="true-answer">
+                                <<#answer>>
+                                   <<#upperCase>> <<.>> <</upperCase>>
+                                <</answer>>
+                            </span>
+                        </div>
+                        <<#userAnswer>>
+                            <div class="<<#reverseJudge>><<correct>>?hidden:show<</reverseJudge>> my-answer-box col-lg-3 col-md-3 col-sm-5 col-xs-20">
+                                我的答案：
+                                <span class="true-answer">
+                                    <<#options>>
+                                        <<#upperCase>> <<.>> <</upperCase>>
+                                    <</options>>
+                                </span>
+                            </div>
+                        <</userAnswer>>
+                        <<^userAnswer>>
+                        <div class="show my-answer-box col-lg-3 col-md-3 col-sm-5 col-xs-20">
+                            我的答案：
+                                <span class="true-answer">
+                                    未答
+                                </span>
+                        </div>
+                        <</userAnswer>>
+                        <p class="clear"></p>
+                    </div>
+
+                    <div class="ed-question-create-time">
+                          <span class="time-tag">
+                            出题时间：
+                          </span>
+                          <span class="time">
+                            <<createTime>>
+                          </span>
+                        <div class="clear"></div>
+                    </div>
+                </li>
+            <</questionExamList>>
+        </ul>
+        <ul class="question">
+            <<#questionPhraseList>>
+                <li data-qid="<<id>>" class="question-item <<#phraseLog>><<#moreJudge>><<answerStatus>>$$1:true-question&&-1:wrong-question&&0:no-answer<</moreJudge>><</phraseLog>>">
+                            <span class="question-index">
+                              1.
+                            </span>
+                            <span class="question-item">
+                              快速出题:
+                                <<#phrase>>
+                                    <<#moreJudge>>
+                                        <<type>>$$1:选择题&&3:判断题&&4:填空题
+                                    <</moreJudge>>
+									<span class="question-type" hidden data-type="<<type>>"></span>
+                                    <br/>
+                                    <<qDesc>>
+                                    <<#qDescImg>>
+                                        <div class="qDescImg">
+                                            <img src="<<qDescImg>>" alt="">
+                                        </div>
+                                    <</qDescImg>>
+                                <</phrase>>
+                            </span>
+                    <div class="ed-option-info">
+                        <ul class="ed-option col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <!--<<#phrase>>-->
+                                <!--<<#moreJudge>>-->
+                                    <!--<<type>>$$1:&&3:<<#option>><li><<.>></li><</option>>&&4:<<#option>><li><<.>></li><</option>>-->
+                                <!--<</moreJudge>>-->
+                            <!--<</phrase>>-->
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="ed-answer-analysis">
+                        <<#phraseLog>>
+                        <div class="true-answer-box <<#answerRight>>show<</answerRight>> col-lg-3 col-md-3 col-sm-5 col-xs-10">
+                            <span class="answer-icon"></span>
+                            正确答案：
+                                <span class="true-answer true-answer1">
+                                    <<#answerRight>>
+                                       <<.>>
+                                    <</answerRight>>
+                                </span>
+							<span class="question-type" hidden data-type="<<type>>"></span>
+                        </div>
+                        <div class="<<#moreJudge>><<answerStatus>>$$1:' '&&-1:show&&0:show<</moreJudge>> my-answer-box col-lg-3 col-md-3 col-sm-5 col-xs-20">
+                            我的答案：
+                                <span class="true-answer true-answer1 my-answer"  data-answerStatus="<<answerStatus>>">
+                                    <<#answer>>
+                                        <<.>>
+                                    <</answer>>
+                                </span>
+                        </div>
+                        <</phraseLog>>
+                        <p class="clear"></p>
+                    </div>
+                    <div class="ed-question-create-time">
+                              <span class="time-tag">
+                                出题时间：
+                              </span>
+                              <span class="time">
+                                <<createTime>>
+                              </span>
+                        <div class="clear"></div>
+                    </div>
+                </li>
+            <</questionPhraseList>>
+        </ul>
+</script>
+<script >
+    layer.config({
+        extend: ['skin/frame/style.css'],
+        skin: 'layer-ext-frame'
+    });
+    $(function () {
+        var userId = location.href.split('/').pop();
+        var planId = location.href.split('/').slice(-2, -1)[0];
+        $.ajax(' /course.stat.GetStudentQuestionAjax/'+planId+'/'+userId,{
+            dataType:'json',
+            type:'get',
+            success:function (data) {
+                if (data.code == 0) {
+                    var data = data.data;
+                    var questionTotal = data.questionTotal;
+                    var questionExamList = transformArr(data.questionExamList);
+                    var questionPhraseList = transformArr(data.questionPhraseList);
+                    data['questionExamList'] = questionExamList;
+                    questionPhraseList = transformArr(questionPhraseList);
+                    data['questionPhraseList'] = questionPhraseList;
+                    //console.log(data);
+                    $('#head-title').text(data.planName+' '+data.courseName+' '+data.className);
+                    $('head .head-title').text('学生答题'+data.planName+data.courseName+data.className);
+                    var questionTotalHtml = $('#questionTotal').html();
+                    questionTotal['judgeStr'] = judgeStr;
+                    $('#questionTotal').parent().html(Mustache.render(questionTotalHtml, questionTotal));
+                    data['setUpIndex'] = setUpIndex;
+                    data['getIndex'] = getIndex;
+                    data['getOption'] = getOption;
+                    data['resetIndex'] = resetIndex;
+                    data['upperCase'] = upperCase;
+                    data['reverseJudge'] = reverseJudge;
+                    data['moreJudge'] = moreJudge;
+                    var questionExamHtml = $('#questionExam').html();
+                    $('#ed-question').append(Mustache.render(questionExamHtml, data));
+                    $('.question-index').each(function (index) {
+                        $(this).text(parseInt(index+1)+'.');
+                    });
+					$(".question-item").each(function(){
+                        var s=$(this).find(".question-type").attr("data-type");
+                        var myAnswerStatus = $(this).find('.my-answer').attr('data-answerstatus');
+                        if(s==3){
+                            $(this).find(".true-answer").each(function () {
+                                var stu= $.trim($(this).text());
+                                if(stu=='A'){
+                                    $(this).text("对");
+                                }else if(stu=='B'){
+                                    $(this).text("错");
+                                }else{
+                                    $(this).text("未答");
+                                }
+                            })
+                        }else if(s==1){
+                            if(myAnswerStatus==0){
+                                $(this).find('.my-answer').text('未答')
+                            }
+                        }else if(s==4){
+                            if(myAnswerStatus=='0'){
+                                $(this).find('.true-answer1').text("未答");
+                            }
+                        }
+                        if($(this).hasClass('no-answer')){
+                            $(this).find('.my-answer-box .true-answer').text('未答');
+                        }
+                    })
+				var len = $('.question-img').length;
+				for(var i=0;i<len;i++){
+					if($('.question-img').eq(i).children('img').attr('src') == ''){
+						$('.question-img').eq(i).children('img').hide();
+					}
+				}
+                } else if (data.code == -1) {
+                    layer.open({
+                        title: '提示',
+                        content: '该章节暂时没有数据'
+                    });
+                } else if (data.code == -3) {
+                    location.href = '/course.plan.Error';
+                }
+
+            },
+            error:function () {
+                layer.open({
+                    title: '提示',
+                    content: '网络不给力！'
+                });
+            }
+        });
+        function judgeStr() {
+            return function (value, render) {
+                return (render(value).match(/^[\D]*0[\D]*$/)) ? render('-') : render(render(value).split('+')[0] + render(value).split('+')[1]);
+            }
+        }
+        function moreJudge() {
+            return function (value,render) {
+                if(render(value).indexOf('$$')>-1){
+                    var innerArr = [];
+                    var conditionArr = $.trim(render(value)).split('$$');
+                    var conditionJudge = conditionArr[1].split('&&');
+                    for(var i = 0;i<conditionJudge.length;i++){
+                        innerArr = conditionJudge[i].split(':');
+                        if(innerArr[0] == conditionArr[0]){
+                            return render(innerArr[1]);
+                        }
+                    }
+                }
+            }
+        }
+        function reverseJudge(  ) {
+            return function (value,render) {
+                if(render(value).indexOf(':')>-1&&render(value).indexOf('?')>-1){
+                    var arr = render(value).split(/[?,:]/);
+                    return arr[0] == '1' ? arr[1] : arr[2];
+                }else{
+                    return render(value);
+                }
+            }
+        }
+        function  setUpIndex() {
+            ++window['INDEX'] || (window['INDEX']=0);
+            return ;
+        }
+        function getIndex() {
+            return window['INDEX'];
+        }
+        function getOption() {
+            return String.fromCharCode(64 + parseInt(window['INDEX']) );
+        }
+        function resetIndex() {
+            window['INDEX']=null;
+            return;
+        }
+        function upperCase() {
+            return function (value,render) {
+                return  render(value).toUpperCase();
+            }
+        }
+        function transformArr(data) {
+            var arr = [];
+            for(var i in data){
+                data[i]['id'] = i;
+                arr.push(data[i]);
+            }
+            return arr;
+        }
+    })
+</script>
+{part "/site.main.footer"}
+</body>
+</html>

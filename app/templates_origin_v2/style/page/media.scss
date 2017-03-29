@@ -1,0 +1,12 @@
+@include screen(320px,768px) {
+	.site-nav-menu {
+		float: left;
+		padding: 10px 0;
+		position: relative;
+		cursor: pointer;
+		margin-top: 6px;
+		.menu-icon {
+			@include sprite($menu-icon);
+		}
+	}
+}

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>文件管理 - <?php echo tpl_function_part('/site.main.orgname'); ?> - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="<?php echo tpl_function_part('/site.main.orgname'); ?> - 创建课程 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="<?php echo tpl_function_part('/site.main.orgname'); ?> - 云课 - Yunke K12 在线学习 直播 云课网">
+<meta name="description" content="<?php echo tpl_function_part('/site.main.orgname'); ?> - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+<?php echo tpl_function_part("/site.main.header"); ?>
+<link rel="stylesheet" href="<?php echo utility_cdn::css('/assets/js/jcrop/css/jquery.Jcrop.css'); ?>" type="text/css" />
+</head>
+<style type="text/css">
+.new-data-list .named { width: 300px;}
+.new-data-list li input{ width: 180px;}
+</style>
+<body>
+<?php echo tpl_function_part("/site.main.nav.home"); ?>
+<!-- tpInfo -->
+<?php echo tpl_function_part("/org.course.managetop.".SlightPHP\Tpl::$_tpl_vars["courseId"]); ?>
+<!-- tpInfo -->
+<section class="pb40">
+	<div class="container">
+		<div class="row">
+	<!-- bdy -->
+		<section>
+			<?php echo tpl_function_part("/org.course.managenav.".SlightPHP\Tpl::$_tpl_vars["courseId"]); ?>
+			<div class="col-md-16 pr0">
+				<div class="gn-base-ct clearfix">
+					<ul class="tab-main clearfix" id="get-class-list"></ul>
+                    <div class="file-manage-info">
+                        <span class="file-total" style="display:none;">共<em id="get-file-total"></em>个文件</span>
+                        <a href="javascript:;" id="upload-files-btn" class="c-fr cBlue" courid="<?php echo SlightPHP\Tpl::$_tpl_vars["courseId"]; ?>">
+                            +上传文件
+                        </a>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="file-more">
+                        <table class="table-grid">
+                            <thead class="fs14">
+                                <tr>
+                                    <td>文件名称</td>
+                                    <td>文件格式</td>
+                                    <td>上传时间</td>
+                                    <td>操作人员</td>
+                                    <td>操作</td>
+                                </tr>
+                            </thead>
+                            <tbody id="get-base-file"></tbody>
+                        </table>
+                        <div class="get-load-data"></div>
+                    </div>
+                    <!-- page -->
+                    <div id="page-num" class="mt20 col-md-20 tac"></div>
+                    <!-- /page -->
+				</div>
+			</div>
+		</section>
+	<!-- /bdy -->
+		</div>
+	</div>
+</section>
+<?php echo tpl_function_part("/site.main.footer"); ?>
+<!-- 上传文件 -->
+<section id="upload-file-info" style="display:none;">
+    <div class="new-data-list fs14">
+        <ul class="clearfix" id="file-list"></ul>
+        <div class="tac" id="file-ft-btn">
+            <p id="file-num-tip">最多上传10个文件，每个文件小于100M</p>
+            <p class="cGray mb20 mt20">注：支持格式：txt、pdf、jpg、doc、docx、pptx、xls、xlsx、rar、zip</p>
+            <button class="green-button" id="select-upload-btn">选择本地文件</button>
+            <button class="green-button" id="request-upload-btn" onclick="uploadFile(this)" style="display:none">确定上传</button>
+        </div>
+    </div>
+</section>
+<!-- /上传文件 -->
+</body>
+</html>
+<script type="text/javascript" src="<?php echo utility_cdn::js('/assets/js/jcrop/js/jquery.Jcrop.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo utility_cdn::js('/assets_v2/js/jquery.create.course.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo utility_cdn::js('/assets_v2/js/mustache.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo utility_cdn::js('/assets_v2/laypage/laypage.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo utility_cdn::js('/assets_v2/js/jquery.plupload.js'); ?>"></script>
+<script type="text/template" id="getClassListTpl">
+    <<#classList>>
+        <li class="tab-hd-opt" onclick="classFile(<<classId>>, this)" classId="<<classId>>">
+            <span class="org-slide-a">
+                <<className>>
+            </span>
+        </li>
+    <</classList>>
+</script>
+<script type="text/template" id="getBaseFileTpl">
+    <<#fileList>>
+        <tr class="filename">
+            <td>
+                <a  href="<<url>>" target="_blank" class="cBlue"><<fileName>></a>
+            </td>
+            <td><<fileFormat>></td>
+            <td><<createTime>></td>
+            <td><<actionUser>></td>
+            <td>
+                <a href="javascript:;" class="blue-link" planattId="<<planattId>>" classId="<<classId>>" onclick="delPlanAtt(this)">删除</a>
+            </td>
+        </tr>
+    <</fileList>>
+</script>
+<script type="text/javascript">
+var courseId = <?php echo SlightPHP\Tpl::$_tpl_vars["courseId"]; ?>;
+var cid = <?php echo SlightPHP\Tpl::$_tpl_vars["classId"]; ?>;
+window.onload = function() {
+    classList();
+    setTimeout(function() {
+       if(cid ==0) cid = $('#get-class-list').find('li:eq(0)').attr('classid');
+        $('#get-class-list').find('li').each(function(e){
+            if($(this).attr('classid') == cid) {
+                $(this).removeClass('curr');
+                $(this).addClass('curr');
+            }
+        });
+        $('#upload-files-btn').attr('classId', cid);
+        classFile(cid);
+    }, 300);
+
+    $('#upload-files-btn').click(function() {
+        layer.open({
+            type: 1,
+            title:["上传资料"],
+            area: ['460px', '320px'],
+            shadeClose: true,
+            content: $('#upload-file-info'),
+            cancel: function(){
+                locationReload();
+            }
+        });
+    });
+}
+//文件管理
+function classFile(classId, obt, curr) {
+    $(obt).addClass('curr').siblings().removeClass('curr');
+    $('.file-more .table-grid:eq('+$(obt).index()+')').show().siblings().hide();
+    if(typeof($(obt).attr('classid')) != 'undefined'){
+        classId = $(obt).attr('classid');
+        $('#upload-files-btn').attr('classId', $(obt).attr('classid'));
+    }
+    var page = curr || 1;
+    var params = {
+        classId : classId,
+        page    : page
+    };
+    var getBaseFileTpl = $('#getBaseFileTpl').html();
+        $.ajax({
+            url: '/user/supCourseAjax/classFile',
+            type: 'post',
+            dataType: 'json',
+            data: JSON.stringify(params),
+            success:function(r) {
+                if(r.code == 0){
+                    $(".file-total").show();
+                    $('#get-base-file').show();
+                    $('.get-load-data').hide();
+                    $('#get-file-total').text(r.result.total);
+                    $('#get-base-file').html(Mustache.render(getBaseFileTpl, r.result));
+                    laypage({
+                        cont: $("#page-num"),
+                        pages: r.result.pageTotal,
+                        curr: curr || 1,
+                        jump: function(obj, first){
+                            if(!first){
+                                classFile(classId, obt, obj.curr);
+                            }
+                        }
+                    });
+                }else {
+                    $(".file-total").hide();
+                    $('#get-base-file').hide();
+                    $('.get-load-data').show();
+                    $('.get-load-data').html('<div class="my-collect-no-class p40" style="height:300px;"><img src="/assets_v2/img/platform/pet3.png" alt="" /><div>什么资料都没有，快去上传吧！</div></div>');
+                    return false;
+                }
+            }
+        });
+}
+</script>

@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+	<head>
+		<title>高能100 - 恭喜您成功设置密码</title>
+		{part "/index.main.header"}
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/user.css')}">
+	</head>
+
+	<body>
+		{part "/index.main.nav"}
+
+		<!--login-->
+		<div class="fpCon">
+			<div class="fpstep fps_4"></div>
+
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12 mt60">
+						<div class="row x_field2 ">
+							<span class="col-xs-4 tar fl"><img src="{utility_cdn::img('/assets/images/icg.png')}" width="52" height="56"  alt=""/></span>
+							<span class="col-xs-12"><h2 class="fs22 fwn">恭喜您成功设置密码！<a class="lkor" href="/user.main.login">登录</a></h2><p class="mt5 fcg7"><!--页面10秒自动跳转到登录。未跳转请点击<a class="lkor" href="/user.main.login">登录</a>--></p></span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+
+		<!--footer-->
+
+		<div class="footer">
+			<div class="ftcon">
+				<p class="fter_2 mt15">© 2014 北京高能壹佰教育科技有限公司 版权所有</p>
+				<p class="fter_2 mt15">京ICP备14053191号</p>
+			</div>
+		</div>
+
+	</body>
+</html>
+<script>
+	// 提交验证代码
+	$("#x_submit_form").submit(function(){
+		if($("#x_user_name").val()=='' || $("#x_user_name").val()=="手机号"){
+			$(".x_error").html("请输入手机号");
+			return false;
+			}else if($("#x_pass").val()=='' || $("#x_pass").val()=="密码"){
+			$(".x_error").html("请输入密码");
+			return false;
+			}else{
+			return true;
+		}
+	})
+
+	$(document).ready(function(){
+		$("input[type=text],input[type=password],textarea").each(function(){
+			var label=$(this).prev("label");
+			var label_txt=label.text();
+			if(("placeholder" in document.createElement("input"))){
+				$(this).attr("placeholder",label_txt);
+				label.remove();
+				}else{
+				$(this).data("placeholder",label_txt);
+				psuedoPlaceholder($(this));
+				label.remove();
+			}
+		});
+		function psuedoPlaceholder(input){
+			if(input.attr("type")=="password"){
+				var opassword=$("<input type='text' class='"+input.attr("class")+"' value='"+input.data("placeholder")+"' name='addinput' />");
+				input.hide();
+				input.before(opassword);
+				opassword.focus(function(){
+					$(this).hide();
+					input.show().focus();
+				});
+				input.blur(function(){
+					if($(this).val()==""){
+						$(this).hide();
+						opassword.show();
+					}
+				});
+				}else{
+				input.focus(function(){
+					if($(this).val()==$(this).data("placeholder")){
+						$(this).val("");
+					}
+					}).blur(function(){
+					if($(this).val()==""){
+						$(this).val($(this).data("placeholder"));
+					}
+				}).blur();
+			}
+		}
+	})
+</script>

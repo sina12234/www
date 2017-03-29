@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>填写基础资料-机构入驻</title>
+{part "/index.main.header"}
+</head>
+<body>
+<!-- header -->
+{part "/index.main.top"}
+{part "/index.main.nav.join"}
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="join-step col-sm-20 fs16">
+                <div class="col-sm-5 step">
+                    <p class="bg"></p>
+                    <p class="num">1</p>
+                    <p class="text">在线协议</p>
+                </div>
+                <div class="step col-sm-5">
+                    <p class="blue-bg"></p>
+                    <p class="blue-num">2</p>
+                    <p class="blue-text">填写基础资料</p>
+                </div>
+                <div class="step col-sm-5">
+                    <p class="bg"></p>
+                    <p class="num">3</p>
+                    <p class="text">资质证明</p>
+                </div>
+                <div class="step col-sm-5">
+                    <p class="bg"></p>
+                    <p class="num">4</p>
+                    <p class="text">系统审核</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="p20">
+    <div class="container">
+        <div class="row">
+            <form id="base-form" autocomplete="off">
+            <input type="password" style="display:none;">
+            <div class="join-info cGray2">
+                <h1 class="fs16">机构信息</h1>
+                    <ul class="form fs14 pd-t30 wrap-form-select">
+                        <li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed"></span>机构LOGO：
+                            </div>
+                            <div class="label-for col-sm-17 row" id="panel">
+                                <div class="img" id="logo-box">
+                                    <img id="img_p" src="{if !empty($base['thumb_big'])}{utility_cdn::file($base['thumb_big'])}{else}/assets_v2/img/platform/upload-img.png{/if}" alt="">
+                                <p class="logo-img-ifrem"><span>上传图片</span></p>
+                                </div>
+								
+                                <input type="hidden" name="thumb_small" value="{if !empty($base['thumb_small'])}{$base['thumb_small']}{/if}">
+                                <input type="hidden" name="thumb_med" value="{if !empty($base['thumb_med'])}{$base['thumb_med']}{/if}">
+                                <input type="hidden" name="thumb_big" value="{if !empty($base['thumb_big'])}{$base['thumb_big']}{/if}">
+								
+								 <input type="hidden" size="4" id="x" name="x">
+								 <input type="hidden" size="4" id="y" name="y">
+								 <input type="hidden" size="4" id="x2" name="x2">
+								 <input type="hidden" size="4" id="y2" name="y2">
+								 <input type="hidden" size="4" id="w" name="w">
+								 <input type="hidden" size="4" id="h" name="h">
+                                  <span class="fs12 cGray3" style="line-height:55px">尺寸宽度小于等于180px，高度48px,支持jpg、png格式，图片小于2MB</span>
+							</div>
+                                <br>
+                                <span class="msg fs12 cRed" style="clear:both;"></span>
+                            
+                        </li>
+                        <li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed">*</span>机构域名：
+                            </div>
+                            <div class="label-for col-sm-17 row">
+                                <input type="text" class="lh-35" name="subdomain" placeholder="请务必填写真实机构域名" value="{if !empty($base['subdomain'])}{$base['subdomain']}{/if}">.{$domain}
+                                <span class="msg fs12 cRed"></span>
+                            </div>
+                        </li>
+						<li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed">*</span>机构全称：
+                            </div>
+                            <div class="label-for col-sm-17 row">
+                                <input type="text" class="col-sm-6 lh-35" placeholder="汉字少于30个，支持120英文字符" maxlength="30" name="name" value="{if !empty($base['name'])}{$base['name']}{/if}">
+                                <span class="msg fs12 cRed"></span>
+                            </div>
+                        </li>
+                        <li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed">*</span>机构简称：
+                            </div>
+                            <div class="label-for col-sm-17 row">
+                                <input type="text" class="col-sm-6 lh-35" name="subname" placeholder="请务必填写真实机构简称" value="{if !empty($base['subname'])}{$base['subname']}{/if}">
+                                <span class="msg fs12 cRed"></span>
+                            </div>
+                        </li>
+						{*
+                        <li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed">*</span>公司全称：
+                            </div>
+                            <div class="label-for col-sm-17 row">
+                                <input type="text" class="col-sm-6 lh-35" name="company" placeholder="请务必填写真实公司全称" value="{if !empty($base['company'])}{$base['company']}{/if}">
+                                <span class=" msg fs12 cRed"></span>
+                            </div>
+                        </li>
+						*}
+                        <li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed">*</span>培训范围：
+                            </div>
+                            <div class="label-for col-sm-17 row" id="train">
+                                <input type="text" class="col-sm-4 lh-35" name="scopestxt" id="scopestxt" style="{if !empty($base['scopes'])}display:block;{else}display:none;{/if}" value="{if !empty($base['nameStr'])}{$base['nameStr']}{/if}">
+                                <input type="hidden" name="scopes" id="scopes" value="{if !empty($base['pkCateStr'])}{$base['pkCateStr']}{/if}">
+                                <span class="edit-train">点击可修改</span>
+                                <span class=" msg fs12 cRed"></span>
+                            </div>
+                        </li>
+                        <li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed">*</span>所在地：
+                            </div>
+                            <div class="label-for col-sm-17 row">
+                                <select id="province" class="col-sm-3 lh-35" name="province">
+                                    <option value='0'>请选择</option>
+                                    {if !empty($province_list)}
+                                    {foreach $province_list as $province}
+                                    <option value="{$province->region_id}" {if !empty($base['province'])&&$base['province']==$province->region_id}selected{/if}>{$province->name}</option>
+                                    {/foreach}
+                                    {/if}
+                                </select>
+                                <select class="city col-sm-3 lh-35" name="city" style="display:none;">
+                                    <option value='0'>请选择</option>
+                                </select>
+                                <select class="county col-sm-3 lh-35" name="county" style="display:none;">
+                                    <option value='0'>请选择</option>
+                                </select>
+                                <span class=" msg fs12 cRed"></span>
+                            </div>
+                        </li>
+                        <li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed">*</span>联系地址：
+                            </div>
+                            <div class="label-for col-sm-17 row">
+                                <input type="text" class="col-sm-6 lh-35" placeholder="请务必填写真实联系地址" name="address" value="{if !empty($base['address'])}{$base['address']}{/if}">
+                                <span class=" msg fs12 cRed"></span>
+                            </div>
+                        </li>
+                        <li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed">*</span>服务电话：
+                            </div>
+                            <div class="label-for col-sm-17 row">
+                                <input type="text" class="col-sm-4 lh-35" placeholder="请务必填写真实服务电话" name="hotline" value="{if !empty($base['hotline'])}{$base['hotline']}{/if}">
+                                <span class=" msg fs12 cRed"></span>
+                            </div>
+                        </li>
+                        <li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed">*</span>公司介绍：
+                            </div>
+                            <div class="label-for col-sm-17 row">
+                                <textarea name="desc" id="" cols="30" rows="3" placeholder="请务必填写真实公司介绍" class="col-sm-8">{if !empty($base['desc'])}{$base['desc']}{/if}</textarea>
+                                <span class=" msg fs12 cRed"></span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="join-btn">
+                    <div class="label col-sm-3"></div>
+                    <div class="label-for col-sm-17 fs16">
+                        <button class="btn col-sm-3" type=“button” onClick="location='/index/join/step1'">上一步</button>
+                        <button class="btn col-sm-3 blue-btn" type="submit">下一步</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<!-- footer -->
+
+{part '/index.main.footer'}
+</body>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+<script src="{utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js')}"></script>
+<script type="text/javascript">
+$(function() {
+//培训范围
+$("#train").on("click","input,.edit-train",function(){
+    layer.open({
+        type:2,
+        title: ['选择培训范围','background:#00a7ef;color:#fff;'],
+        shadeClose: true,
+        shade: 0.8,
+        area: ['450px', '320px'],
+        content: '{"/index.join.orgCourseRange"}'
+    });
+});
+$('#logo-box').on('click', function(){
+    layer.open({
+        type: 2,
+        title: ['上传图片','background:#00a7ef;color:#fff;'],
+        shadeClose: true,
+        shade: 0.8,
+        area: ['500px', '370px'],
+        //content: '/f-1.html'
+        content: '{"/index.main.iframeLogo"}'
+    });
+});
+
+    var logo = new plupload.Uploader({
+        browse_button: 'logo', // this can be an id of a DOM element or the DOM element itself
+        url: '/file.main.uploadOrgLogo',
+        filters: {
+            mime_types : [
+            { title : "Image files", extensions : "jpg,png" }
+            ],
+            max_file_size:"100kb"
+        }
+        ,multi_selection:false
+    });
+    logo.init();
+    logo.bind('FilesAdded', function(up, files) {
+        logo.start();
+    });
+    logo.bind('Error', function(up, err) {
+        if(err.code=='-600'){
+            layer.msg('图片大小不符合标准');
+        }
+    });
+    logo.bind('UploadProgress', function(up, file) {
+        //$("#logo").val("上传中："+ file.percent +"%");
+    });
+    logo.bind('FileUploaded', function(up, file,info) {
+        //$("#logo").val("上传完成");
+		
+        if(info.response){
+            var r = jQuery.parseJSON(info.response);
+            if(r.error){
+                layer.msg(r.error);
+                //$("#logo").val("上传图片");
+            }else{
+			
+                $('#logo').attr('src',r.pic+"?"+Math.random());
+                $('#logo-box').nextAll('input[name=thumb_small]').val(r.pic);
+                $('#logo-box').nextAll('input[name=thumb_med]').val(r.pic);
+                $('#logo-box').nextAll('input[name=thumb_big]').val(r.pic);
+            }
+        }
+        
+    });
+	
+    $('#province').change(function(){
+        var city={if !empty($org_info->city)}{$org_info->city}{else}''{/if};
+        $('.city').hide();
+        $('.county').hide();
+        $.post("/index.main.getRegionAjax",{ rid:$(this).val(),level:1 },function(r){
+            if(r.data){
+                var json=r.data;
+                var option='请选择';
+                $(json).each(function(i){
+                    var s='';
+                    if(json[i].region_id==city){
+                        s='selected';
+                    }
+                    option+=('<option '+s+' value="' +json[i].region_id+ '">' +json[i].name+ '</option>');
+                }); 
+                $('.city').html(option);
+                $('.city').show().trigger('change');
+            }   
+        },"json");
+    }).trigger('change');
+
+    $('.city').change(function(){
+        var county={if !empty($org_info->county)}{$org_info->county}{else}''{/if};
+        $('.county').hide();
+        $.post("/index.main.getRegionAjax",{ rid:$(this).val(),level:2 },function(r){
+            if(r.data){
+                var json=r.data;
+                var option='请选择';
+                $(json).each(function(i){
+                    var s='';
+                    if(json[i].region_id==county){
+                        s='selected';
+                    }   
+                    option+=('<option '+s+' value="' +json[i].region_id+ '">' +json[i].name+ '</option>');
+                }); 
+                $('.county').html(option);
+                $('.county').show();
+            }   
+        },"json"); 
+    }); 
+    $('#base-form').submit(function(){
+        $.post("/index/join/step2Ajax",$(this).serialize(),function(r){
+            if(r.error){
+                layer.msg(r.error);
+            }else{
+                location='/index/join/step3';
+            }
+        },"json");
+        return false;
+    });
+     $("input[type='text']").focus(function(){
+        $(this).css("border","solid 1px #ffa81e");
+    });
+     $("input[type='text'],select").change(function(){
+        $(this).css("border","solid 1px #ddd").nextAll('.msg').html('');
+    });
+    $("input[type='text']").blur(function(){
+        $(this).css("border","solid 1px #ddd");
+    });
+});
+</script>
+</html>

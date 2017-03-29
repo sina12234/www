@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 专业的K12在线教育平台 </title>
+		{part "/index.main.header"}
+	</head>
+	<body>
+		<!-- nav -->
+		{part "/index.main.nav.video"}
+		<div class='count'>
+			<div class="public_class">
+				<div class='count1'>
+					<h1><a href="/course.video">课程点播</a></h1>
+					<ul>
+						{*<li class="" style='color:#fff;'><a href="#">最新发布</a></li>*}
+						<li class="{if $grade_id=="0"} sel1{/if} hidden-xs hidden-sm" style="padding-left:15px"><a href="/course.video">全部</a></li>
+						<li class="{if $grade_id=="1001"} sel1{/if} hidden-xs hidden-sm"><a href="?grade_id=1001">小学一年级</a></li>
+						<li class="{if $grade_id=="1002"} sel1{/if} hidden-xs hidden-sm"><a href="?grade_id=1002">二年级</a></li>
+						<li class="{if $grade_id=="1003"} sel1{/if} hidden-xs hidden-sm"><a href="?grade_id=1003">三年级</a></li>
+						<li class="{if $grade_id=="1004"} sel1{/if} hidden-xs hidden-sm"><a href="?grade_id=1004">四年级</a></li>
+						<li class="{if $grade_id=="1005"} sel1{/if} hidden-xs hidden-sm"><a href="?grade_id=1005">五年级</a></li>
+						<li class="{if $grade_id=="1006"} sel1{/if} hidden-xs hidden-sm"><a href="?grade_id=1006">六年级</a></li>
+						<li class="{if $grade_id=="2001"} sel1{/if} hidden-xs hidden-sm"><a href="?grade_id=2001">初一</a></li>
+						<li class="{if $grade_id=="2002"} sel1{/if} hidden-xs hidden-sm"><a href="?grade_id=2002">初二</a></li>
+						<li class="{if $grade_id=="2003"} sel1{/if} hidden-xs hidden-sm"><a href="?grade_id=2003">初三</a></li>
+						<li class="{if $grade_id=="3001"} sel1{/if} hidden-xs hidden-sm"><a href="?grade_id=3001">高一</a></li>
+						<li class="{if $grade_id=="3002"} sel1{/if} hidden-xs hidden-sm"><a href="?grade_id=3002">高二</a></li>
+						<li class="{if $grade_id=="3003"} sel1{/if} hidden-xs hidden-sm"><a href="?grade_id=3003">高三</a></li>
+					</ul>
+				<div class="clear"></div>
+				</div>
+				<style>
+				.public:hover{
+					box-shadow: 2px 2px 5px #E2E2E2;
+					-webkit-box-shadow: 2px 2px 5px #E2E2E2;
+					-moz-box-shadow: 2px 2px 5px #E2E2E2;
+					-o-box-shadow: 2px 2px 5px #E2E2E2;
+					-ms-box-shadow: 2px 2px 5px #E2E2E2;
+				}
+				
+				</style>
+
+				<div class='container-fluid'>
+					<div class="public_content">
+						<div class='row' id="course">
+							{if !empty($courselist)}
+							{foreach $courselist as $course}
+							<div class='col-sm-3 col-xs-6 box'>
+								<div href="#" class="public">
+									<a href="/course.info.show/{$course->course_id}">
+										<div style="padding:10px;">
+											<div class="courseThumb">
+												<div><img src="{utility_cdn::file($course->thumb_small)}" alt="" style="width:100%;max-height: 121px;" class='img-responsive'/></div>
+												{*
+												{if empty($course->fee->price)}
+												<div class="iconPublic"></div>
+												{else}
+												<div class="iconFee"></div>
+												{/if}
+												*}
+												{if $course->status=='finished'}
+												<div class="iconEnd"></div>
+												{elseif $course->status=='living'}
+												<div class="iconLive"></div>
+												{/if}
+											</div>
+										</div>
+									</a>
+
+
+									<p class="title">{$course->title}</p>
+									{if empty($course->fee->price)}
+									<p class="free"><span style="color:green;">免费</span>&nbsp;&nbsp;|&nbsp;&nbsp;
+										{if(($course->max_user-$course->user_total) > 5)}
+										<span style="color:red;font-weight:bold">热报</span>
+										{else}
+										<span>{if(($course->max_user-$course->user_total) <= 0)}报名已满{else}剩余{$course->max_user-$course->user_total}人{/if}</span>
+										{/if}
+									{*	已报名:{$course->user_total}人 &nbsp;剩余<span>{$course->max_user-$course->user_total}</span>人*}
+									</p>
+									{else}
+									<p class="free"><span style="color:red;">￥{$course->fee->price}</span>&nbsp;&nbsp;|&nbsp;&nbsp;
+										{if(($course->max_user-$course->user_total) > 5)}
+										<span style="color:red;font-weight:bold">热报</span>
+										{else}
+										<span>{if(($course->max_user-$course->user_total) <= 0)}报名已满{else}剩余{$course->max_user-$course->user_total}人{/if}</span>
+										{/if}		
+									{*	已报名:{$course->user_total}人 &nbsp;剩余<span>{$course->max_user-$course->user_total}</span>人*}
+									</p>
+									{/if}
+									<p class="free">开课时间:{$course->start_time}</p>
+									<p class="free">主讲:{$course->class[0]->user_name}</p>
+									<div class='go'>
+										<input type='button' value='立即播放' url="/course.info.show/{$course->course_id}">
+									</div>
+								</div>
+							</div>
+							{/foreach}
+							{/if}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- countEND -->
+		<!--footer-->
+		{part "/index.main.footer"}
+	</body>
+	<script>
+
+		$(function(){
+			$("#course .go input").click(function(){
+			location = $(this).attr("url");
+			});
+			if('ontouchstart' in document.documentElement ==false){
+				$("#course .public").on("mouseover",function(){
+					$(this).find(".go").show();
+					$(".public").on("mouseout",function(){
+						$(this).find(".go").hide();
+					});
+				});
+			}
+		})
+	</script>
+</html>

@@ -1,0 +1,234 @@
+<?php
+/**
+ * 课程sphinx接口
+ * 用法 测试地址http://xxx.gn100.com/seek.plan.seekplan
+ * 
+ */
+class seek_plan extends STpl{
+	/*
+	 * 显示页面
+	 */
+	public function pageSeeklist($inPath){
+
+		// q的查询键值
+		// 过滤作用
+		$attrs = array(
+		'plan_id'=>'plan_id',
+		'course_id'=>'course_id',
+		'section_id'=>'section_id',
+		'class_id'=>'class_id',
+		'teacher_id'=>'teacher_id',
+		'admin_id'=>'admin_id',
+		'owner_id'=>'owner_id',
+		'video_id'=>'video_id',
+		'totaltime'=>'totaltime',
+		'first_cate'=>'first_cate',
+		'second_cate'=>'second_cate',
+		'third_cate'=>'third_cate',
+		'first_cate_name'=>'first_cate_name',
+		'second_cate_name'=>'second_cate_name',
+		'third_cate_name'=>'third_cate_name',
+		'first_cate_name_display'=>'first_cate_name_display',
+		'second_cate_name_display'=>'second_cate_name_display',
+		'third_cate_name_display'=>'third_cate_name_display',
+		'live_public_type'=>'live_public_type',
+		'video_public_type'=>'video_public_type',
+		'video_trial_time'=>'video_trial_time',
+		'admin_name'=>'admin_name',
+		'admin_real_name'=>'admin_real_name',
+		'admin_thumb_big'=>'admin_thumb_big',
+		'admin_thumb_med'=>'admin_thumb_med',
+		'admin_thumb_sma'=>'admin_thumb_small',
+		'teacher_name'=>'teacher_name',
+		'teacher_real_name'=>'teacher_real_name',
+		'teacher_thumb_big'=>'teacher_thumb_big',
+		'teacher_thumb_med'=>'teacher_thumb_med',
+		'teacher_thumb_sma'=>'teacher_thumb_small',
+		'course_name'=>'course_name',
+		'section_name'=>'section_name',
+		'section_desc'=>'section_desc',
+		'class_name'=>'class_name',
+		'region_level0'=>'region_level0',
+		'region_level1'=>'region_level1',
+		'region_level2'=>'region_level2',
+		'address'=>'address',
+		'max_user'=>'max_user',
+		'user_total'=>'user_total',
+		'status'=>'status',
+		'course_status'=>'course_status',
+		'admin_status'=>'admin_status',
+		'course_type'=>'course_type',
+		'fee_type'=>'fee_type',
+		'try' => 'try',
+		'vv'=>'vv',
+		'vv_live'=>'vv_live',
+		'vv_record'=>'vv_record',
+		'vt'=>'vt',
+		'vt_live'=>'vt_live',
+		'vt_record'=>'vt_record',
+		'comment'=>'comment',
+		'discuss'=>'discuss',
+		'start_time'=>'start_time',
+		'end_time'=>'end_time',
+		'create_time'=>'create_time',
+		'last_updated'=>'last_updated',
+		'subdomain'=>'subdomain',
+		'org_subname'=>'org_subname',
+		'org_id'=>'org_id',
+		'org_status'=>'org_status',
+		'course_thumb_big'=>'course_thumb_big',
+		'course_thumb_med'=>'course_thumb_med',
+		'course_thumb_small'=>'course_thumb_small',
+		'section_order_no'=>'section_order_no',
+		'deleted' => 'deleted',
+		'resell_org_id'=>'resell_org_id',
+		'expression'=>'expression',
+		);
+
+		//	设置f
+		$f = $_POST["f"];
+		if(!empty($f)){
+			$f_array = explode(",",$f);
+			foreach($f_array as $fk=>$fo){
+				if(!in_array($fo,$attrs)){
+					unset($f_array[$fk]);
+				}
+			}
+		}else{
+			// f的默认项
+			$f_array = array(
+				'plan_id',
+				'course_id',
+				'section_id',
+				'class_id',
+				'teacher_id',
+				'admin_id',
+				'owner_id',
+				'first_cate',
+				'second_cate',
+				'third_cate',
+				'first_cate_name',
+				'second_cate_name',
+				'third_cate_name',
+				'live_public_type',
+				'video_public_type',
+				'video_trial_time',
+				'admin_name',
+				'admin_thumb_big',
+				'admin_thumb_med',
+				'admin_thumb_sma',
+				'teacher_name',
+				'teacher_real_name',
+				'teacher_thumb_big',
+				'teacher_thumb_med',
+				'teacher_thumb_sma',
+				'course_name',
+				'section_name',
+				'class_name',
+				'max_user',
+				'user_total',
+				'status',
+				'course_status',
+				'admin_status',
+				'vv',
+				'vv_live',
+				'vv_record',
+				'vt',
+				'vt_live',
+				'vt_record',
+				'start_time',
+				'end_time',
+				'create_time',
+				'last_updated',
+				'city',
+				'city_id',
+				'province',
+				'province_id'
+			);
+		}
+		
+		//设置q
+		$q_array = array();
+		$q = $_POST['q'];
+		if(!empty($q)){
+			$q_temp = explode('~',$q);
+			foreach($q_temp as $temp){
+				if(!empty($temp)){
+					$query = explode(':',$temp);
+					if(in_array($query[0],$attrs)){
+						$q_array[$query[0]] = $query[1];
+					}
+				} 	 
+			}
+		}
+		
+		// 设置ob
+		$obNewarray = array();
+		if(!empty($_POST["ob"])){
+			$ob = $_POST["ob"];
+			$obArrayEx = explode(" ",$ob);
+			foreach($obArrayEx as $obk=>$obv){
+				$obvArrayEx = explode(":",$obv);
+				$obNewarray[$obvArrayEx[0]] = $obvArrayEx[1];
+			}
+		}
+		$ob_array = array();
+		$ob_array = $obNewarray;
+		if(empty($ob_array)){
+			$ob_array["plan_id"] = "desc";
+		}
+		
+		// 设置p
+		if(!empty($_POST["p"])){
+			$p = $_POST["p"];
+		}else{
+			$p = 1;	 
+		}
+		// 设置pl
+		if(!empty($_POST["pl"])){
+			$pl = $_POST["pl"];
+			if($pl > 500 ){
+				$pl = 500;
+			}
+		}else{
+			$pl = 20;	 
+		}
+
+		$seek_arr = array(
+			"f"=>$f_array,
+			"q"=>$q_array,
+			"ob"=>$ob_array,
+			"p"=>$p,
+			"pl"=>$pl,
+		);
+		$ret_seek= seek_api::seekplan($seek_arr);
+		$planList = array();
+		if(!empty($ret_seek->data)){
+			foreach($ret_seek->data as $ro){
+				$planList[] = (array)$ro;
+			}
+		}
+		$type = !empty($_POST['dataType'])?$_POST['dataType']:2;
+		if($type == 1){
+			if(!empty($ret_seek->data)){
+				echo "<pre>";
+				var_dump($ret_seek->data);
+				echo "</pre>"; 
+			}else{
+				echo "获取数据失败!";
+			}
+		}else{
+			$this->assign('num',$pl);
+			$this->assign("ret_seek",$ret_seek);
+			$this->assign("planList",$planList);
+			$this->assign('f_array',$f_array);
+			return $this->render("seekview/plan.seeklist.html");
+		}
+	}
+	/**
+	 * 查询页面
+	 */
+	public function pageSeekplan($inPath){
+		return $this->render("seekview/plan.seeksearch.html");
+	}
+}

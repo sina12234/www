@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{'我的学生'|tr:'interface.client'}</title>
+    <script type="text/javascript" src="{utility_cdn::js('/assets_v2/interface/pc_client/js/jquery-1.11.1.min.js')}"></script>
+    <link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/interface/pc_client/css/client.css')}">
+</head>
+<body>
+<div id="gn-general-bg">
+    <h1 class="fs24 gn-title">{'我的学生'|tr:'interface.client'}</h1>
+    <!-- 内容 -->
+    <div class="gn-mystudents">
+        <table>
+            <thead>
+            <tr>
+                <th width="16%">{'姓名'|tr:'interface.client'}</th>
+                <th width="16%">{'性别'|tr:'interface.client'}</th>
+                <th width="16%">{'地区'|tr:'interface.client'}</th>
+                <th width="16%">{'所在学校'|tr:'interface.client'}</th>
+                <th>{'手机号'|tr:'interface.client'}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {if(!empty($list))}
+            {foreach($list as $v)}
+            <tr>
+                <td>{$v['name']}</td>
+                <td>{$v['gender']}</td>
+                <td>{$v['region']}</td>
+                <td>{$v['schoolName']}</td>
+                <td>{$v['mobile']}</td>
+            </tr>
+            {/foreach}
+            {/if}
+            </tbody>
+        </table>
+    </div>
+    <!-- /内容 -->
+</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<div class="hidden-xs col-sm-3 col-md-4 user-left-menu pd0">
+  <ul class="left-menu">
+       <li class="nav-menu-box">
+          <a class="nav-menu {if $subnav==''}active{/if}" href="/about">
+              <span class="nav-icon nav-about"></span>
+              <span class="nav-tag">
+                  {'关于我们'|tr:'about'}
+              </span>
+          </a>
+      </li>
+      <li class="nav-menu-box">
+          <a class="nav-menu {if $subnav=='contact'}active{/if}" href="/about.main.contact">
+              <span class="nav-icon nav-contact"></span>
+              <span class="nav-tag">
+                  {'联系我们'|tr:'about'}
+              </span>
+          </a>
+      </li>
+       <!--li class="nav-menu-box">
+          <a class="nav-menu" href="/about.main.content">
+              <span class="nav-icon nav-recruit"></span>
+              <span class="nav-tag">
+                  {'内容募捐'|tr:'about'}
+              </span>
+          </a>
+      </li-->
+	  {if(!empty($is_pro)&&$is_pro==1&&!empty($org_info->oid)&&$org_info->oid=='842')}
+      <li class="nav-menu-box">
+          <a class="nav-menu {if $subnav=='business'}active{/if}" href="/about.main.business">
+              <span class="nav-icon nav-collaborateBusiness"></span>
+              <span class="nav-tag">
+                  {'商务合作'|tr:'about'}
+              </span>
+          </a>
+      </li>
+	  {/if}
+       <!--li class="nav-menu-box">
+          <a class="nav-menu" href="/about.main.tech">
+              <span class="nav-icon nav-collaborateTechnical"></span>
+              <span class="nav-tag">
+                  {'技术合作'|tr:'about'}
+              </span>
+          </a>
+      </li-->
+  </ul>
+</div>

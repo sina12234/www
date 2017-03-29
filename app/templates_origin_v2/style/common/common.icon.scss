@@ -1,0 +1,67 @@
+// edit and delect button icon
+.edit-icon{
+  @include sprite($edit);
+  cursor: pointer;
+  &:hover{
+    @include sprite($edit_hover);
+  }
+}
+.del-icon{
+  @include sprite($del);
+  cursor: pointer;
+  &:hover{
+    @include sprite($del_hover);
+  }
+}
+.link-icon{
+  display: inline-block;
+  @include sprite($link);
+  cursor: pointer;
+  &:hover{
+    @include sprite($link_hover);
+  }
+}
+.question-icon{
+  display: inline-block;
+  @include sprite($undefined-answer);
+  cursor: pointer;
+}
+.mans-icon{
+  display: inline-block;
+  @include sprite($mans-icon);
+  cursor:pointer;
+}
+.qq-icon{
+  display: inline-block;
+  @include sprite($qq-icon);
+  cursor:pointer;
+}
+.tel-icon{
+  display: inline-block;
+  @include sprite($tel-icon);
+  cursor:pointer;
+}
+.tips-icon{
+  @include sprite($validate-error);
+  cursor: pointer;
+}
+.browser-icon{
+  display: inline-block;
+  @include sprite($browser-logo);
+}
+.google-icon{
+  display: inline-block;
+  @include sprite($google-logo);
+}
+.tips-orange-icon{
+  display: inline-block;
+  @include sprite($tips);
+}
+.success-green-icon{
+  display: inline-block;
+  @include sprite($img-selected);
+}
+.clock-icon{
+  display: inline-block;
+  @include sprite($clock);
+}

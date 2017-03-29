@@ -1,0 +1,111 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>高能100 注册</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="../assets/css/common.css">
+<link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+<script src="../assets/js/jquery/jquery-1.8.2.min.js"></script>
+<script src="../assets/js/user.js"></script>
+<script src="../assets/js/part.js"></script>
+    </head>
+<style> 
+
+        .user_content_box{position: relative;height: 500px;}
+        .stepbar_1{width: 720px;}
+        
+</style>
+<body>
+  <!--top-->
+      <div class="part" url="/part.top.html"></div>
+      <!-- nav -->
+      <div class="part" url="/part.nav.html"></div>
+      <div class="part" url="/user/part.nav.user.html"></div>
+
+<div class='count'>
+  <div class='container-fluid'>
+    <div class='row'>
+      <div class='col-md-3 user_menu hidden-xs'>
+        <div class="part" url="/user/part.user.menu.html"></div>
+      </div>
+      <div class='col-md-9 user_content'>
+        <div class='user_box'>
+          <div class='container-fluid'>
+            <div class='row'>
+              <div class='user_content_box'>
+                <div class="stepbar_1 mt25">
+                    <ul>
+                    <li class="on"><b></b><span class="fs14">内容维护</span></li>
+                    <li><span>机构信息</span></li>
+                    </ul>
+                </div> 
+               <div class='zhanshi col-sm-12 col-xs-12'>
+                  <div class='yil col-sm-12 col-xs-12'>
+                      <h1 class='col-sm-12 col-xs-12'><img src="../assets/images/jgdian.jpg" alt="">展示图</h1>
+                      <div class='mouse col-sm-12 col-xs-12'>
+                          <div class='mouse-1 col-sm-4'><img src="../assets/images/jgtp.jpg" alt=""><p class='on-1'>点击更换图片</p></div>
+                          <div class='mouse-1 col-sm-4'><img src="../assets/images/jgtp.jpg" alt=""><p class='on-1'>点击更换图片</p></div>
+                          <div class='mouse-1 col-sm-4'><img src="../assets/images/jgtp.jpg" alt=""><p class='on-1'>点击更换图片</p></div>
+                      </div>
+                   </div>  
+                   <div class='yil col-sm-12 col-xs-12'>
+                       <h1 class='col-sm-12 col-xs-12'><img src="../assets/images/jgdian.jpg" alt="">活动公告 <input type="button" value='+增加公告'></h1>
+                       <div class='mouse-nav col-sm-12 col-xs-12' id="show">
+                            <ul>
+                              <li><img src="../assets/images/ding.jpg" alt=""><a href="">摄影基础进阶版-啊近似地卡罗时间-阿斯大时代</a><p>2015-4-20</p></li>
+                              <li><img src="../assets/images/dian.jpg" alt=""><a href="">摄影基础进阶版-啊近似地卡罗时间-阿斯大时代</a><p>2015-4-20</p></li>
+                              <li><img src="../assets/images/dian.jpg" alt=""><a href="">摄影基础进阶版-啊近似地卡罗时间-阿斯大时代</a><p>2015-4-20</p></li>
+                              <li><img src="../assets/images/dian.jpg" alt=""><a href="">摄影基础进阶版-啊近似地卡罗时间-阿斯大时代</a><p>2015-4-20</p></li>
+                              <li><img src="../assets/images/dian.jpg" alt=""><a href="">摄影基础进阶版-啊近似地卡罗时间-阿斯大时代</a><p>2015-4-20</p></li>
+                            </ul>
+                       </div>
+                       <div class='nav-show' id="hide">
+                           <ul>
+                               <li>修改</li>
+                               <li>删除</li>
+                               <li style="border:none;">置顶</li>
+                           </ul>
+                       </div>
+                    </div>
+               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<style>
+      .zhanshi .yil{margin-top: 30px;}
+      .zhanshi .yil input{ background-color:#FFA81D;border: none;width: 90px;height: 35px;float: right;margin-right: 20px; color: #fff;border-radius: 5px;}
+      .zhanshi .yil input:hover{ background-color: #F59500;}
+      .zhanshi .yil h1{font-size: 14px;font-weight: normal;}
+      .zhanshi .yil h1 img{margin-right: 10px;}
+      .zhanshi .yil .mouse{margin-top: 10px;}
+      .zhanshi .yil .mouse .mouse-1 img{position: relative;}
+      .zhanshi .yil .mouse .mouse-1 .on-1{ position: absolute;top:50px;left: 23%;cursor: pointer;font-size: 20px;color: #fff;text-shadow: 1px 1px 8px #FFA91E;}
+      .zhanshi .yil .mouse-nav{ margin-top: 10px;}
+      .zhanshi .yil .mouse-nav ul li{height:43px; border-bottom: 1px dashed #ccc;font-size: 14px;line-height: 43px; position: relative;}
+      .zhanshi .yil .mouse-nav ul li:hover{background-color: #FEF5E4;}
+      .zhanshi .yil .mouse-nav ul li p{float: right;padding-right: 20px; font-size: 12px;color: #b6b6b6;}
+      .zhanshi .yil .mouse-nav ul li a{color: #333333;}
+      .zhanshi .yil .mouse-nav ul li img{margin-right: 10px;}
+      .zhanshi .yil .nav-show {width: 120px;height: 120px;background-color: #f1f1f1;position: absolute;border-radius: 5px;right: 10px;top:40px;box-shadow: 0px 0px 5px rgba(200,200,200,0.5); display: none;}
+      .zhanshi .yil .nav-show ul li{height: 39px;border-bottom: 1px solid #E2E2E2;text-align: center;line-height: 39px;}
+      .zhanshi .yil .nav-show ul li:hover{ background-color:#E2E2E2;}
+</style>
+<div class="footer">
+  <div class="ftcon">
+    <!-- <div class="fter_1">
+                        <a href="">关于我们</a> | <a href="">加入我们</a> | <a href="">校园代理招募</a> | <a href="">O2O体验店招商</a> | <a href="">企业培训</a> | <a href="">网站地图</a> | <a href="">友情链接</a> 
+                    </div> -->
+    <p class="fter_2 mt10">© 2014 北京高能壹佰教育科技有限公司 版权所有</p>
+  </div>
+</div>
+</body>

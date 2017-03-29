@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>多选-我的选题篮</title>
+    <meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+    <meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+    <meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+    {part "/site.main.header"}
+</head>
+<body>
+<!-- hd -->
+<!-- /hd -->
+<!-- bd -->
+<section>
+    <div class="container">
+        <div class="row">
+            <!-- lt -->
+                <section>
+                    <!-- leftmenu start-->
+                    {part "/user.main.menu.teacher"}
+                    <!-- leftmenu end -->
+                </section>
+            <!-- /lt -->
+            <!-- rt -->
+                <section id="tq_cy_add_wrap">
+                    <div class="right-main col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                        <h1 class="fs16 lh22 mb20">添加新题</h1>
+                        <div class="tq_cy_add_top fs14">
+                            <dl class="mb10 clearfix">
+                                <dt class="col-sm-2">题目：</dt>
+                                <dd class="col-sm-2">
+                                    <label>
+                                        <input name='radio_chk[]' type="radio" /> 单选
+                                    </label>
+                                </dd>
+                                <dd class="col-sm-2">
+                                    <label>
+                                        <input name='multi_chk[]' type="radio" /> 多选
+                                    </label>
+                                </dd>
+                                <dd class="col-sm-2">
+                                    <label>
+                                        <input name='blank_chk[]' type="radio" checked /> 填空
+                                    </label>
+                                </dd>
+                            </dl>
+                            <dl class="clearfix">
+                                <dt class="col-sm-2">科目：</dt>
+                                <dd class="col-sm-3">
+                                    <select name="selt[]">
+                                        <option value="1">数学</option>
+                                        <option value="2">语文</option>
+                                        <option value="3">历史</option>
+                                    </select>
+                                </dd>
+                                <dd class="col-sm-4">
+                                    <div class="tq_cy_selet bor1px">
+                                        <span class="serch_icon-btn c-fr"></span>
+                                    <!-- 内容 -->
+                                        <div class="tq_serch_content fs12 bor1px">
+                                            <dl class="clearfix">
+                                                <dt class="col-sm-12 fs14">小学：</dt>
+                                                <dd class="col-sm-4">
+                                                    <label>
+                                                        <input type="checkbox" name="class_chk[]" /> 一年级
+                                                    </label>
+                                                </dd>
+                                                <dd class="col-sm-4">
+                                                    <label>
+                                                        <input type="checkbox" name="class_chk[]" /> 二年级
+                                                    </label>
+                                                </dd>
+                                                <dd class="col-sm-4">
+                                                    <label>
+                                                        <input type="checkbox" name="class_chk[]" /> 三年级
+                                                    </label>
+                                                </dd>
+                                                <dd class="col-sm-4">
+                                                    <label>
+                                                        <input type="checkbox" name="class_chk[]" /> 四年级
+                                                    </label>
+                                                </dd>
+                                                <dd class="col-sm-4">
+                                                    <label>
+                                                        <input type="checkbox" name="class_chk[]" /> 五年级
+                                                    </label>
+                                                </dd>
+                                                <dd class="col-sm-4">
+                                                    <label>
+                                                        <input type="checkbox" name="class_chk[]" /> 六年级
+                                                    </label>
+                                                </dd>
+                                            </dl>
+                                            <dl class="clearfix">
+                                                <dt class="col-sm-12 fs14">初中：</dt>
+                                                <dd class="col-sm-4">
+                                                    <label>
+                                                        <input type="checkbox" name="class_chk[]" /> 初一
+                                                    </label>
+                                                </dd>
+                                                <dd class="col-sm-4">
+                                                    <label>
+                                                        <input type="checkbox" name="class_chk[]" /> 初二
+                                                    </label>
+                                                </dd>
+                                                <dd class="col-sm-4">
+                                                    <label>
+                                                        <input type="checkbox" name="class_chk[]" /> 初三
+                                                    </label>
+                                                </dd>
+                                            </dl>
+                                            <dl class="clearfix">
+                                                <dt class="col-sm-12 fs14">高中：</dt>
+                                                <dd class="col-sm-4">
+                                                    <label>
+                                                        <input type="checkbox" name="class_chk[]" /> 高一
+                                                    </label>
+                                                </dd>
+                                                <dd class="col-sm-4">
+                                                    <label>
+                                                        <input type="checkbox" name="class_chk[]" /> 高二
+                                                    </label>
+                                                </dd>
+                                                <dd class="col-sm-4">
+                                                    <label>
+                                                        <input type="checkbox" name="class_chk[]" /> 高三
+                                                    </label>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    <!-- /内容 -->
+                                    </div>  
+                                </dd>
+                            </dl>
+                        </div>
+                        <h2 class="fs16 lh22">编辑题干：</h2>
+                    <!-- 编辑题干 -->
+                        <ul class="tq_cy_add_content clearfix">
+                            <li class="mb20">   
+                                <p>
+                                    <span class="c-fl mr10 fs14">选项1</span>
+                                    <a href="javascript:;" class="garbage_icon c-fl" title="删除"></a>
+                                </p>
+                            <!-- 编辑器 -->
+                                <img src="../img/demo_tq_radio.jpg" alt="">
+                            <!-- /编辑器 -->
+                                <div class="col-sm-2 c-fr">
+                                    <button class="col-sm-12 add_true_btn">设为正确答案</button>
+                                </div>
+                            </li>
+                            <li class="mb20">   
+                                <p>
+                                    <span class="c-fl mr10 fs14">选项1</span>
+                                    <a href="javascript:;" class="garbage_icon c-fl" title="删除"></a>
+                                </p>
+                            <!-- 编辑器 -->
+                                <img src="../img/demo_tq_radio.jpg" alt="">
+                            <!-- /编辑器 -->
+                                <div class="col-sm-2 c-fr">
+                                    <button class="col-sm-12 z_add_true_btn">正确答案</button>
+                                </div>
+                            </li>
+                        </ul>   
+                    <!-- /编辑题干 -->
+                        <h3 class="fs14 lh22">+添加解析</h3>
+                    <!-- 添加解析 -->
+                        <div class="tq_cy_analy_box mb15">
+                            <img src="../img/demo_tq_radio.jpg" alt="">
+                            <dl class="tq_cy_diffdeg fs14 clearfix">
+                                <dt class="col-sm-2">难易程度：</dt>
+                                <dd class="col-sm-2">
+                                    <label>
+                                        <input type="radio" /> 简单
+                                    </label>
+                                </dd>
+                                <dd class="col-sm-2">
+                                    <label>
+                                        <input type="radio" /> 一般
+                                    </label>
+                                </dd>
+                                <dd class="col-sm-2">
+                                    <label>
+                                        <input type="radio" /> 困难
+                                    </label>
+                                </dd>
+                            </dl>
+                        </div>
+                    <!-- /添加解析 -->
+                    <h4 class="fs14 lh22 mt15">知识点关联</h4>
+                    <!-- 知识点关联 -->
+                    <div class="tq_cy_klge_point bor1px mb10">
+                        <ol class="clearfix">
+                            <li>
+                                <i></i>
+                                <span>+</span>
+                                集合的认识
+                            </li>
+                            <li>
+                                <i></i>
+                                <span>+</span>
+                                集合的认识
+                            </li>
+                        </ol>
+                    </div>
+                    <ul class="tq_cy_klge_class mb20 clearfix">
+                        <li class="c-fl bor1px">
+                            <span>+</span>
+                            集合的认识
+                        </li>  
+                        <li class="c-fl bor1px">
+                            <span>+</span>
+                            集合的认识
+                        </li>  
+                        <li class="c-fl bor1px">
+                            <span>+</span>
+                            其他
+                        </li>   
+                    </ul>
+                    <dl class="tq_cy_klge_class fs14 clearfix">
+                        <dt class="col-sm-1">教材：</dt>
+                        <dd class="col-sm-2">
+                            <select>
+                                <option value="1">人教版</option>
+                                <option value="2">外语班</option>}
+                            </select>
+                        </dd>
+                    </dl>
+                    <!-- /知识点关联 -->
+                    <div class="tq_cy_add_seltpic fs14 mb20 mt20">
+                        <label>
+                            <input type="checkbox" /> 加入选题栏
+                        </label>
+                    </div>
+                <!-- 保存 -->
+                    <div class="general-prevbtn">
+                        <button>完成并继续添加</button>
+                        <a href="javascript:;">保存并返回题目列表</a>
+                    </div>  
+                <!-- /保存 -->
+                    </div>
+                </section>
+            <!-- /rt -->
+        </div>
+    </div>
+</section>
+<!-- /bd -->
+<!-- ft -->
+<!-- /ft -->
+</body>
+</html>
+<script>
+$(function() {
+    $(".tq_cy_diffdeg label").click(function() {
+        $(this).css("color","#198fee");
+    })
+})
+</script>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=9;IE=8;IE=7;IE=edge;chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	<meta name="renderer" content="webkit">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>会员权益 - 云课 - 专业的在线直播教育学习平台 - 云课网</title>
+	<link rel="stylesheet" href="{utility_cdn::css('/assets_v2/css/index.css')}">
+	<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+	<script type="text/javascript" src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+	<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/md5.js')}"></script>
+</head>
+<style type="text/css">
+.mm-step1{ line-height:50px;background: #12b7f5;color:#fff;font-size: 26px;text-align: center;}
+.mm-step1 .go-left{ width: 15px;height: 30px;display: inline-block;background:url(/assets_v2/img/app-mm-left.png)no-repeat;background-size: 100%;margin:12px 0 0 10px;}
+.mm-step3 li{ color:#5c6273;text-align: center;border:1px solid #e5e4e4;padding:8px;margin:18px 0 6px 8px;cursor: pointer;}
+.mm-step3 li i{ width:18px;height:21px;background: url(/assets_v2/img/app-select.png) no-repeat;bottom:0px;right:0px;background-size: 100%;display: none;}
+.mm-step3 li.active{ border:1px solid #12b7f5;}
+.mm-step3 li.active i{ display: block;}
+.mm-step3 p{ line-height: 30px;}
+.mm-step3 .title{ line-height: 24px;font-size: 1.4rem;-o-text-overflow: ellipsis;-moz-text-overflow: ellipsis;-webkit-text-overflow: ellipsis;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;}
+.mm-step3 .fs36{ font-size: 36px;}
+.mm-inpt-step4{ padding:12px 7px;border:1px solid #dedede;font-size: 14px;}
+.mm-submit-btn{ width: 260px;line-height: 76px;background: #12b7f5;font-size: 24px;color:#fff;cursor: pointer;border-radius: 50px;-o-border-radius: 50px;-moz-border-radius: 50px;-webkit-border-radius: 50px;} 
+</style>
+<body style="background:#f3f5f7;">
+<section>
+	<div class="row" style="margin:0;">
+		<!-- step1 -->
+		<div class="mm-step1">
+			<a href="https://www.yunke.com" class="go-left c-fl"></a>会员权益
+		</div>
+		<!-- /step1 -->
+		<div class="mm-step2">
+			<img src="/assets_v2/img/app-hd-bg.png" width="100%" alt="" />
+		</div>	
+		<ul class="mm-step3 col-xs-20 p0">
+			<li class="col-xs-6 pos-rel" data-apco="300009972221">
+				<p class="fs18"><span class="fs24">29</span>元</p>
+				<div class="title fs14">云课名师课堂会员</div>
+				<i class="pos-abs"></i>
+			</li>
+			<li class="col-xs-6 pos-rel" data-apco="300009972218">
+				<p class="fs18"><span class="fs24">1</span>元</p>
+				<div class="title fs14">云课10学币</div>
+				<i class="pos-abs"></i>
+			</li>
+			<li class="col-xs-6 pos-rel" data-apco="300009972217">
+				<p class="fs18"><span class="fs24">0.9</span>元</p>
+				<div class="title fs14">云课9学币</div>
+				<i class="pos-abs"></i>
+			</li>
+			<li class="col-xs-6 pos-rel" data-apco="300009972216">
+				<p class="fs18"><span class="fs24">29</span>元</p>
+				<div class="title fs14">云课290学币</div>
+				<i class="pos-abs"></i>
+			</li>
+			<li class="col-xs-6 pos-rel" data-apco="300009972215">
+				<p class="fs18"><span class="fs24">20</span>元</p>
+				<div class="title fs14">云课200学币</div>
+				<i class="pos-abs"></i>
+			</li>
+			<li class="col-xs-6 pos-rel" data-apco="300009972214">
+				<p class="fs18"><span class="fs24">19</span>元</p>
+				<div class="title fs14">云课190学币</div>
+				<i class="pos-abs"></i>
+			</li>
+			<li class="col-xs-6 pos-rel" data-apco="300009972213">
+				<p class="fs18"><span class="fs24">10</span>元</p>
+				<div class="title fs14">云课100学币</div>
+				<i class="pos-abs"></i>
+			</li>
+			<li class="col-xs-6 pos-rel" data-apco="300009972212">
+				<p class="fs18"><span class="fs24">0.1</span>元</p>
+				<div class="title fs14">云课新用户礼包</div>
+				<i class="pos-abs"></i>
+			</li>
+		</ul>
+		<div class="col-xs-20 tac mt10 p10">
+			<input placeholder="请输入订购手机号码" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="11" class="mm-inpt-step4 col-xs-20" />
+			<button class="mm-submit-btn mt30">确定</button>
+		</div>
+	</div>
+</section>
+</body>
+</html>
+<script type="text/javascript">
+$(function() {
+	$('.mm-step3').on('click', 'li', function() {
+		if($(this).hasClass('active')) {
+			$(this).removeClass('active');
+		}else{
+			$(this).addClass('active').siblings().removeClass('active');
+		}
+	})
+	$('.mm-submit-btn').click(function() {
+		var appMobile = parseInt($('.mm-inpt-step4').val());
+		var subBtn = $(this);
+		if(!$('.mm-step3').find('li').hasClass('active')) {
+			layer.msg('请选择类型');
+		}else if($.trim($('.mm-inpt-step4').val()) == ''){
+			layer.msg('请输入订购手机号码');
+		}else if(appMobile < 13000000000 || appMobile > 19999999999){
+			layer.msg('请输入有效手机号码');
+		}else{
+			var mobile_no = $.trim($('.mm-inpt-step4').val());
+			var key = 'MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1';
+			var apco = $('.mm-step3').find('li.active').attr('data-apco');
+			var url = 'http://mm.vpmc.talkedu.cn/mm/sendOrderCommand?product_code=yunke&mobile_no='+mobile_no+'&apco='+apco+'&sign='+hex_md5(mobile_no + apco + key);
+			//http://mm.vpmc.talkedu.cn/mm/sendOrderCommand?product_code=yunke&mobile_no=13874854711&apco=300009972212&sign=77a377b989ab3f7ae3c79b886b842bec
+			window.location.href = url;
+		}
+	})
+})
+</script>

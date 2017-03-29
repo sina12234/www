@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>高能100 - 专业的K12在线教育平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+</head>
+<body>
+<div class="gn-alert-main" style="height:230px;overflow:hidden">
+    <div class="form-c col-xs-14">
+            <div class="x_error" style="display:block;"></div>
+            <form  id="login_form" method='post'>
+                <ul class="form col-xs-20" >
+                    <li><input type="text" id="user_name" name='uname' class="col-xs-20" placeholder="{'请输入手机号'|tr:'site.login'}"></li>
+                    <li><input type="password" id="x_pass" name='password' placeholder="{'请输入密码'|tr:'site.login'}" class="col-xs-20"></li>
+                    <li style="height:40px;line-height:30px;">
+                        <div class="col-xs-20">
+                            <div class="row">
+                                <input type="checkbox" id="checkbox">
+                            <label for="checkbox">{'下次自动登录'|tr:'site.login'}</label>
+                            <span class="c-fr"><a href="/site.main/forget1" target='_top'>{'忘记密码'|tr:'site.login'}？</a></span>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li style="height:40px;line-height:30px;">
+                    <div class="row">
+                        <div class="col-xs-20"><button type="submint">{'登录'|tr:'site.login'}</button></div>
+                    </div>
+
+                    </li>
+                </ul>
+            </form>
+        </div>
+        <dl class="other col-xs-6">
+            <dt class="fs14">{'还没有云课账号'|tr:'course.play'}？</dt>
+            <dt style="height:80px"><a href="/site.main.register" class="cYellow fs16" target="_top">{'立即注册'|tr:'course.play'} ></a></dt>
+            <dt class="fs12">{'使用以下账号进行登录'|tr:'course.play'}</dt>
+            <dd><a href="/user/parterner/weixin?from={$url}" target='_top'><span class="weixin"></span></a></dd>
+            <dd><a href="/user/parterner/qq?from={$url}" target='_top'><span class="qq"></span></a></dd>
+            {*<dd><a href="/user/parterner/alipay" target='_top'><span class="taobao"></span>淘宝</a></dd>
+            <dd><a href="/user/parterner/sina" target='_top'><span class="weibo"></span>微博</a></dd>
+			*}
+        </dl>
+</div>
+<script>
+$("#login_form").submit(function(){
+    if($("#user_name").val()=='' || $("#user_name").val()=="手机号"){
+        $(".x_error").html("请输入手机号");
+        return false;
+    }
+            if($("#x_pass").val()=='' || $("#x_pass").val()=="密码"){
+                $(".x_error").html("帐号或密码错误");
+                return false;
+            }
+
+           $.post("/course.layerplan.planloginAjax/{$cid}/{$classId}",$("#login_form").serialize(),function(r){
+                if (r.code == 0) {
+                    parent.location.reload();
+                } else if(r.code > 0){
+                    $(".x_error").html(r.message);
+                    return false;
+                } else if (r.code == -2) {
+                    var index = layer.load(2);
+                } else if (r.code == -3 || r.code == -4) {
+                    parent.location.reload();
+                } else if (r.code == -5) {
+                    layer.msg('已报名别的班');
+                } else {
+                    layer.msg('未知错误', function(){
+						parent.location.reload();
+                    });
+                }
+    },"json");
+    return false;
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>高能100 - 专业的K12在线教育平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part '/site.main.header'}
+</head>
+<body>
+{part '/site.main.nav.home'}
+<section class="pd30 container">
+    {part '/org.main.menu'}
+    <div class="right-main col-sm-9">
+            <div class='course-bt col-sm-12'>
+                <p>课程管理><b>班级详情</b></p>
+            </div>
+            <div class='course-box col-sm-12'>
+            <div class='nice'>
+                <div class='course-l col-sm-6'>
+                    <div class='course-l-1'>
+                        <h1>{$data['title']}</h1>
+                        <p>{$data['name']}&nbsp;&nbsp;|&nbsp;&nbsp;<b>共{$data['section_count']}章节&nbsp;&nbsp;进度&nbsp;&nbsp;</b>第三章</p>
+                        <span>{$data['start_time']}至{$data['end_time']}每周二18:00</span>
+                    </div>
+                    <div class='course-r-2'>
+                        <img src="{if(!empty($thumb->thumb_med))}{utility_cdn::file($thumb->thumb_med)}{else}{/if}">
+                    </div>
+                </div>
+
+                <div class='course-r col-sm-6'>
+                <div class='course-r-1'>
+                    <h1>班级情况:</h1>
+                    <p><img src="{utility_cdn::img('/assets_v2/img/num-s.png')}">学生({$data['min_user']}/{$data['max_user']})</p>
+                    <!--<p><img src="{utility_cdn::img('/assets_v2/img/clock.png')}">下节课时间:5月29日6点</pS>-->
+                </div>
+                <div class='course-r-3'>
+                    <p><a href="/user.org.editPlanv2.{$data['course_id']}.{$class_id}"><img src="{utility_cdn::img('/assets_v2/img/Pencil.png')}">修改排课</a></p>
+                    <p class="remove" class_id="{$class_id}" cid="{$data['course_id']}"><img src="{utility_cdn::img('/assets_v2/img/Trashcan.png')}">删除</p> 
+                </div>
+                </div>
+            </div>
+                {if (!empty($list))}
+                <div class='col-sm-12 course-nav'>
+                        <ul>
+                            <li><div class='col-sm-4 col-xs-2'>姓名</div></li>
+                            <li><div class='col-sm-4 col-xs-2'>性别</div></li>
+                            <li><div class='col-sm-4 col-xs-2'>手机号</div></li>
+                            <!--<li><div class='col-sm-4 col-xs-2'>随堂问题</div></li>
+                            <li><div class='col-sm-4 col-xs-2'>出勤率</div></li>
+                            <li><div class='col-sm-4 col-xs-2'>作业完成情况</div></li>-->
+                        </ul>
+                </div>
+                {foreach($list as $v)}
+                <div class='col-sm-12 course-nav-1'>
+                        <ul>
+                            <li><div class='col-sm-4 col-xs-2'>{$v['name']}</div></li>
+                            <li><div class='col-sm-4 col-xs-2'>{$v['gender']}</div></li>
+                            <li><div class='col-sm-4 col-xs-2'>{$v['mobile']}</div></li>
+                            <!--<li><div class='col-sm-4 col-xs-2'>对1错5</div></li>
+                            <li><div class='col-sm-4 col-xs-2'>1%</div></li>
+                            <li><div class='col-sm-4 col-xs-2' style='border-right:none;'>0.1%</div></li>-->
+                        </ul>
+					</div>
+					{/foreach}
+					{/if}
+				</div>
+		</div>
+</section>
+<script>
+$(".remove").click(function(){
+	if(confirm("您确定要删除这个班级吗")){
+		var class_id=$(this).attr("class_id");
+		var cid=$(this).attr("cid");
+		$.post("/user.org.DelClassAjax",{ classid:class_id,couid:cid },function(r){
+			if(r.error){
+				//$("#error").html(r.error);
+				alert(r.error);	
+				//location.reload();//这里未完善
+				return false;
+			}
+			if(r){
+			    location.reload();
+				return false;
+			}
+		},"json");
+	}
+	return false;
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>修改排课</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}" ></script>
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+</head>
+<body>
+{part "/site.main.nav.home"}
+<section class="pd30">
+    <div class="container">
+        <div class="row">
+		{part "/org.main.menu.course"}
+		<div class="right-main col-md-16">
+				<div class="content">
+					<div class="manage-path fs14"><a href="/user.org.addplan.{$cid}">{'返回'|tr:'site.course'}</a>><span class="cGray">{'修改排课'|tr:'site.course'}</span></div>
+			<form action="/user.org.EditPlan.{$cid}.{$class_id}" method="post">
+					<ul class="course-list">
+					{if !empty($list_section_data)}
+					{foreach $list_section_data as $_sectionk=>$_section}
+						<li>
+						<input type="hidden" name="sectionid[{$_section->section_id}]" value="{$_section->section_id}">
+						<div class="item fs14" style="width:9%;">{$_section->name|tr:'site.index'}</div>
+						{if($type_id!=2)}
+						<div class="item" style="width:19%:">{'时间'|tr:'site.course'}：
+							<input type="datetime"  name="secstime[{$_section->section_id}]" class="start-time" placeholder="开始日期" id="coursedate{$_section->section_id}" value="{if(isset($_section->plan_info->start_time))}{$_section->plan_info->start_time}{/if}">
+						</div>
+						<script>
+							$(function() {
+							//data-status="{if(isset($_section->plan_info))}{$_section->plan_info->status}{/if}"
+								/*$( "#coursedate{$_section->section_id}" ).datetimepicker({
+									timepicker:true,lang:'zh', format:'Y-m-d H:i',step:15, mask:true
+								});*/
+								jQuery('#coursedate{$_section->section_id}').datetimepicker({
+									timepicker:true, format:'Y-m-d H:i',step:15, mask:true,
+									//format:'Y/m/d',
+									validateOnBlur:false,
+									onShow:function( ct ){
+										this.setOptions({
+											minDate:jQuery('#coursedate{$_section->section_id}').val()?jQuery('#coursedate{$_section->section_id}').val():false
+										})
+									}
+									//timepicker:true
+								})
+								jQuery('#coursedateend{$_section->section_id}').datetimepicker({
+									timepicker:true, format:'Y-m-d H:i',step:15, mask:true,
+									validateOnBlur:false,
+									onShow:function( ct ){
+										this.setOptions({
+											minDate:jQuery('#coursedate{$_section->section_id}').val()?jQuery('#coursedate{$_section->section_id}').val():false
+										})
+									},
+								});
+							});
+						</script>
+						<div class="item" style="width:19%;">{'到'|tr:'site.course'}：
+							<input type="datetime" name="secetime[{$_section->section_id}]" class="end-time" placeholder="开始日期" id="coursedateend{$_section->section_id}" value="{if(isset($_section->plan_info->end_time))}{$_section->plan_info->end_time}{/if}">
+						</div>
+						{/if}
+						<div class="item" style="width:15%">
+							<span>{'讲师'|tr:'site.course'}：</span>
+							{if(!empty($teachers))}
+								{if(!empty($_section->plan_info->user_plan_id))}
+									{if(!empty($teachers[$_section->plan_info->user_plan_id]))}
+									<input style="width:78px;" type="text" data-sectionid="{$_section->section_id}" class="s-teacher tname{$_section->section_id}" name="user_plan_name[{$_section->section_id}]" value="{$teachers[$_section->plan_info->user_plan_id]->real_name}">
+									<input type="hidden" class="tid{$_section->section_id}" name="user_plan_id[{$_section->section_id}]" value="{$teachers[$_section->plan_info->user_plan_id]->user_id}">
+ 									{elseif(!empty($teachers[$user_class_id]))}
+									<input style="width:78px;" type="text" data-sectionid="{$_section->section_id}" class="s-teacher tname{$_section->section_id}" name="user_plan_name[{$_section->section_id}]" value="{$teachers[$user_class_id]->real_name}">
+									<input type="hidden" class="tid{$_section->section_id}" name="user_plan_id[{$_section->section_id}]" value="{$teachers[$user_class_id]->user_id}">
+ 									{else}
+									<input style="width:78px;" type="text" data-sectionid="{$_section->section_id}" class="s-teacher tname{$_section->section_id}" name="user_plan_name[{$_section->section_id}]" value="">
+									<input type="hidden" class="tid{$_section->section_id}" name="user_plan_id[{$_section->section_id}]" value="">
+									{/if}
+								{elseif(!empty($teachers[$user_class_id]))}
+									<input style="width:78px;" type="text" data-sectionid="{$_section->section_id}" class="s-teacher tname{$_section->section_id}" name="user_plan_name[{$_section->section_id}]" value="{$teachers[$user_class_id]->real_name}">
+									<input type="hidden" class="tid{$_section->section_id}" name="user_plan_id[{$_section->section_id}]" value="{$teachers[$user_class_id]->user_id}">
+								{else}
+									<input style="width:78px;" type="text" data-sectionid="{$_section->section_id}" class="s-teacher tname{$_section->section_id}" name="user_plan_name[{$_section->section_id}]" value="">
+									<input type="hidden" class="tid{$_section->section_id}" name="user_plan_id[{$_section->section_id}]" value="">
+								{/if}
+							{else}
+								<input style="width:78px;" type="text" data-sectionid="{$_section->section_id}" class="s-teacher tname{$_section->section_id}" name="user_plan_name[{$_section->section_id}]" value="">
+								<input type="hidden"  class="tid{$_section->section_id}" name="user_plan_id[{$_section->section_id}]" value="">
+							{/if}
+						</div>
+						{if($type_id==1)}
+						<div class="item" style="width:17%;"><span>{'直播试看'|tr:'site.course'}：</span>
+							<div class="divselect" style="width:85px;margin-top: 12px;">
+									{if(!empty($_section->plan_info->live_public_type))}
+									{foreach($live_public_type_arr as $lptak=>$lptav)}
+									   	{if($_section->plan_info->live_public_type==$lptav['value'])}
+                              			  <cite>
+                                              <span class=""></span>
+											  <span class="cite-text">{$lptav["text"]|tr:'site.course'}</span>
+										  </cite>
+                               		 	  <input id="live_public_type{$_section->section_id}" name="live_public_type[{$_section->section_id}]" type="hidden" value = "{$lptav['value']}" />
+                              		 	{/if}
+									{/foreach}
+									{else}
+                               		 <cite>
+										 <span class="cite-text">{$live_public_type_arr[0]["text"]|tr:'site.course'}</span>
+									 </cite>
+                               		 	  <input id="live_public_type{$_section->section_id}" name="live_public_type[{$_section->section_id}]" type="hidden" value = "{$live_public_type_arr[0]['value']}" />
+									{/if}
+                                <dl>
+                                	{foreach $live_public_type_arr as $lptak=>$lptav}
+                                    <dd><a href="javascript:;" selectid="{$lptav['value']}">{$lptav["text"]|tr:'site.course'}</a></dd>
+                                    {/foreach}
+                                </dl>
+							</div>
+						</div>
+						{/if}
+						{if($type_id!=3)}
+						<div class="item" style="width:20%"><span>{'视频权限'|tr:'site.course'}：</span>
+							<div class="divselect luzhi" style="width:85px;margin-top: 12px;">
+									{if(!empty($_section->plan_info->video_public_type))}
+									{foreach($video_public_type_arr as $vptak=>$vptav)}
+									   	{if(($_section->plan_info->video_public_type==$vptav['pubic_type']) &&($_section->plan_info->video_trial_time==$vptav["trial_time"]))}
+                              			  <cite>
+                                              <span class="cite-text">{$vptav["text"]|tr:'site.course'}</span>
+                                          </cite>
+                               		 	  <input sid="{$_section->section_id}" class="video_public_type_value" id="video_public_type_value{$_section->section_id}" name="" type="hidden" value = "{$vptav['value']}" />
+                              		 	{/if}
+									{/foreach}
+									{else}
+                               		 <cite>
+                                         <span class="cite-text">{$video_public_type_arr[0]["text"]|tr:'site.course'}</span>
+                                     </cite>
+                               		 	  <input id="video_public_type_value{$_section->section_id}" name="" type="hidden" value = "{$video_public_type_arr[0]['value']}" />
+									{/if}
+                                <dl>
+                                	{foreach $video_public_type_arr as $vptak=>$vptav}
+                                    <dd><a href="javascript:;" sid="{$_section->section_id}" selectid="{$vptav['pubic_type']}" trial_time="{$vptav['trial_time']}">{$vptav["text"]|tr:'site.course'}</a></dd>
+                                    {/foreach}
+                                </dl>
+							</div>
+								<input type="hidden" id="video_public_type{$_section->section_id}" name="video_public_type[{$_section->section_id}]" value="{if(isset($_section->plan_info->video_public_type))}{$_section->plan_info->video_public_type}{/if}"/>
+								<input type="hidden" id="video_trial_time{$_section->section_id}" name="video_trial_time[{$_section->section_id}]" value="{if(isset($_section->plan_info->video_trial_time))}{$_section->plan_info->video_trial_time}{/if}"/>
+						</div>
+						{/if}
+						</li>
+					{/foreach}
+					{/if}
+						<li>
+						<button class="sub_btn">{'保存'|tr:'site.course'}</button>
+						</li>
+					</ul>
+				</form>
+				</div>
+			</div>
+	</div>
+	</div>
+</section>
+<script>
+$(function() {
+	$('.s-teacher').each(function(i){
+		var sectionId= $(this).attr('data-sectionid');
+		$(this).click(function(){
+			layer.open({
+				type: 2,
+				title: ['修改教师','color:#fff;background:#ffa81d'],
+				shadeClose: true,
+				shade: 0.8,
+				area: ['600px', '50%'],
+				content: '{"/user.org.iframeTeacher."}'+sectionId
+				});
+		});
+	});
+
+	var luzhi = $(".luzhi");
+	$(".luzhi>dl>dd>a").click(function(){
+		var sid = $(this).attr("sid");
+		console.log(sid);
+		var val = $(this).val();
+		var opt = $(this).find("option").eq(val);
+		var pt = $(this).attr("selectid");
+		console.log(pt);
+		var tt = $(this).attr("trial_time");
+		console.log(tt);
+		$("#video_public_type"+sid).val(pt);
+		$("#video_trial_time"+sid).val(tt);
+	});
+	$(".video_public_type_value").change(function(){
+		var id = $(this).attr("id");
+		var sid = $(this).attr("sid");
+		console.log(sid);
+		console.log(id);
+		var val = $(this).val();
+		var opt = $(this).find("option").eq(val);
+		var pt = $(opt).attr("pubic_type");
+		console.log(pt);
+		var tt = $(opt).attr("trial_time");
+		$("#video_public_type"+sid).val(pt);
+		$("#video_trial_time"+sid).val(tt);
+	});
+	{if !empty($flag)&&$flag==1}
+	layer.msg("{'保存成功'|tr:'site.course'}");
+	var courseId = {$cid};
+	var classId = {$class_id};
+	window.location.href="/user.org.editplan."+courseId+"."+classId;//页面跳转并传参
+	{/if}
+/*
+	$(".course-list input[type='datetime']").each(function() {
+		if($(this).attr("data-status") == 3) {
+			$(this).attr("disabled",true);
+		}
+	});
+*/
+});
+</script>
+{part "/site.main.footer"}
+</body>
+</html>

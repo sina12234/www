@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>收货地址 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+    <meta name="title" content="{part '/site.main.orgname'} - 个人中心 - 云课 - 专业的在线学习平台">
+    <meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+    <meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+    {part "/site.main.header"}
+    <style>
+        .add-item{
+            padding:0;
+            font-size:14px;
+        }
+        .add-title{ text-align: right;padding:0;}
+    </style>
+</head>
+<body >
+{part "/site.main.nav3"}
+<!-- mob nav -->
+<div class="g-nav hidden-lg hidden-md">
+    <ul class="swiper-wrapper" id="mob-nav">
+        <li class="swiper-slide"><a href="/student.main.infobase" class="active">基础资料</a></li>
+        <li class="swiper-slide"><a href="/student.main.uploadPic/1">修改头像</a></li>        
+        <li class="swiper-slide"><a href="/student.main.address/1">收货地址</a></li>
+        <li class="swiper-slide"><a href="/student.security.password">安全设置</a></li>
+    </ul>
+</div>
+<section class="org-section">
+    <div class="container">
+        <div class="row">
+            {part "/user.main.menu.address"}
+            <div class="right-main col-md-16 col-xs-20">
+                <div class="p15">
+                    <h1 class="fb fs16">收货地址</h1>
+                    <p class="cGray pt10">提供学习资料寄送服务的课程，老师将根据你在这里填写的收件地址讲可见寄送到你的手中。</p>
+                </div>
+                <input type="hidden" name="location" {if !empty($location)}value="{$location}"{/if}>                              
+                <div class="fs14 form-horizontal" id="add_address">
+                    <div class="form-group">
+                        <div class="control-label col-xs-6 col-sm-3">
+                            <em class='cRed'>*</em>{'收件人'|tr:'site.user'}：
+                        </div>
+                        <div class="label-for col-xs-14 col-sm-15" >
+                            <input type="text"  id="addName" placeholder="长度不超过20个字符" data-valid="isNonEmpty||between:0-20" data-error="不能为空||长度不超过20个字符" data-status="0"  name="name" class="col-xs-20 col-sm-12 required verify-judge" data-tip="最多20个字符"  value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label col-xs-6 col-sm-3">
+                            <em class='cRed'>*</em>{'收件人电话'|tr:'site.user'}：
+                        </div>
+                        <div class="label-for col-xs-14 col-sm-15" >
+                            <input type="text"  id="addTel" placeholder="请填写正确的手机号码" data-valid="isNonEmpty||onlyInt" data-error="请填写正确的手机号码||请填写正确的手机号码" data-status="0"  name="tel" class="col-xs-20 col-sm-12 required verify-judge" data-tip="请填写正确的手机号码"  value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label col-xs-6 col-sm-3"><em class="cRed">*</em>{'收件地址'|tr:'site.user'}：</div>
+                        <div class="label-for col-xs-14 col-sm-15">
+                        <div class="col-sm-12 p0 mb10">
+                             <select id="level0">
+                                <option>请选择</option>
+                                {if(!empty($level0))}
+                                    {foreach $level0 as $region}
+                                    <option value="{$region->region_id}" {if !empty($userAddressInfo) && $userAddressInfo['0']->province==$region->region_id} selected=selected {/if}>{$region->name}</option>
+                                     {/foreach}
+                                {/if}
+                            </select>
+                            <select id="level1">
+                                <option value='0'>请选择</option>                                
+                            </select>
+                            <select id="level2">
+                                <option value='0'>请选择</option>                                
+                            </select>
+                            
+                        </div>                            
+                            <input type="text" id="addDetai" placeholder="详细地址" data-valid="isNonEmpty||beteeen:0-100" datt-error="请填写正确的地址" data-status="0" name="add" class="col-xs-20 col-sm-12 required verify-judge" data-tip=" "  value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label col-xs-6 col-sm-3">
+                            {'备注'|tr:'site.user'}：
+                        </div>
+                        <div class="label-for col-xs-14 col-sm-15" >
+                            <input type="text"  id="addRemark" placeholder="长度不超过50个字符" data-valid="isNonEmpty||between:0-50" data-error="长度不超过50个字符" data-status="0"  name="remark" class="col-xs-20 col-sm-12 required verify-judge" data-tip=" "  value="">
+                        </div>
+                    </div>
+                    <input name="act" value="add" type="hidden">
+                    <input name="addressId" value="" type="hidden">
+                    <div>
+                        <div class="label col-sm-5 col-xs-6"> </div>
+                        <div class="label-for col-sm-15 col-xs-14 mt40">
+                            <button class="btn" id="saveBtn">{'保存'|tr:'site.user'}</button>
+                            <button class="gray-btn" id="cancelBtn">{'取消'|tr:'site.user'}</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="clear"></div>
+                <!--收件地址展示-->
+            
+                 {if (!empty($userAddressInfo))}
+                 {foreach($userAddressInfo as $value)}
+                <div class="pd20">
+                    <ul class="add-list fs14 form-horizontal">
+                        <li class="form-group add-item">
+                            <div class="col-md-3 col-xs-6 add-title">
+                                <em class='cRed'>*</em>{'收件人'|tr:'site.user'}：
+                            </div>
+                            <div class="col-md-15 col-xs-14 cGray">                               
+                                {$value->receiver|tr:'site.user'}
+                            </div>
+                        </li>
+                        <li class="form-group add-item">
+                            <div class="col-md-3 col-xs-6 add-title">
+                                <em class='cRed'>*</em>{'收件人电话'|tr:'site.user'}：
+                            </div>
+                            <div class="col-md-15 col-xs-14 cGray">
+                                {$value->phone}
+                            </div>
+                        </li>
+                        <li class="form-group add-item">
+                            <div class="col-md-3 col-xs-6 add-title">
+                                <em class='cRed'>*</em>{'收件地址'|tr:'site.user'}：
+                            </div>
+                            <div class="col-md-15 col-xs-14 cGray">
+                                {$level0.$level1.$level2.$value->address|tr:'site.user'}
+                            </div>
+                        </li>
+                        <li class="form-group add-item">
+                            <div class="col-md-3 col-xs-6 add-title">
+                                {'备注'|tr:'site.user'}：
+                            </div>
+                            <div class="col-md-15 col-xs-14 cGray">
+                                {$value->desc|tr:'site.user'}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="label col-sm-5 col-xs-6"> </div>
+                            <div class="label-for col-sm-15 col-xs-14 mt40">
+                                <button class="btn" id="editBtn" data="{$value->pk_address}">{'修改'|tr:'site.user'}</button>
+                            </div>
+                        </li>
+                    </ul>                    
+                    <div class="clear"></div>
+                </div>
+                {/foreach}
+                {/if}
+
+            </div>
+        </div>
+    </div>
+</section>
+{part "/site.main.footer"}
+</body>
+</html>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery.validate.js')}"></script>
+<script type="text/javascript">
+$(function(){   
+var flag = true;
+var locations = $('input[name=location]').val();
+if (locations == 1) {       
+    $('#add_address').attr('style','display:none')
+}
+$('.form-horizontal').on('click', '#saveBtn', function(event){
+    if(!flag){
+        return false;
+    }
+    flag=false;
+    var params = {
+        'receiver': $('input[name=name]').val(),
+        'phone': $('input[name=tel]').val(),
+        'level0':$('select[id=level0]').val(),
+        'level1':$('select[id=level1]').val(),
+        'level2':$('select[id=level2]').val(),
+        'address':$('input[name=add]').val(),
+        'desc':$('input[name=remark]').val(),
+        'act':$('input[name=act]').val()
+    }
+    if(params['act'] == 'add'){
+         $.ajax({
+            type:'POST',
+            url :'/student.main.adduseraddress',
+            data: params,
+            dataType: 'json',
+            success:function(data){
+               if (data.code==0) {                    
+                    location.reload();
+               }else{
+                    layer.msg(data.msg);
+               }                
+            }      
+
+        });   
+     }else if(params['act'] == 'edit'){        
+        var addressId = $('input[name=addressId]').val();
+        $.ajax({
+            type:'POST',
+            url :'/student.main.updateUserAddress/'+addressId,
+            data: params,
+            dataType: 'json',
+            success:function(data){                
+               if (data.code==0) {                    
+                    location.reload();
+               }else{
+                    layer.msg(data.msg);
+               }                
+            }      
+
+        });   
+     }
+    
+   
+});
+})
+
+$('.mb10').on('change','#level0',function(event){
+    var lel = this.value;
+    $.get('/student.main.getleve/'+lel, function(data){
+        if (data) {            
+          var html = '';
+          $(data).each(function(i,item){
+            html += '<option value="'+item.region_id+'"';
+            html += '>'+item.name+'</option>';
+          })
+          $('#level1').show().html('<option value="0">请选择</option>'+html);
+          $('#level2').show().html('<option value="0">请选择</option>'+html);  
+        };
+        },'json');
+})
+
+$('.mb10').on('change','#level1',function(event){
+    var lel = this.value;    
+    $.get('/student.main.getleve/'+lel, function(data){
+    console.log(data)
+        if (data) {            
+          var html = '';
+          $(data).each(function(i,item){
+            html += '<option value="'+item.region_id+'"';
+            html += '>'+item.name+'</option>';
+          })
+          $('#level2').show().html('<option value="0">请选择</option>'+html);  
+        }else{
+            $('#level2').hide();
+        }
+        },'json');
+})
+
+$('.pd20').on('click', '#editBtn', function(event){
+    $('.pd20').attr('style','display:none');
+    $('#add_address').attr('style','display:block');
+    $('input[name=addressId]').val($(this).attr('data'));
+    $('input[name=act]').val('edit');    
+    $.get('/student.main.getUserAddressByAddressId/'+$(this).attr('data'),function(data){        
+        $('input[name=name]').val(data[0].receiver);
+        $('input[name=tel]').val(data[0].phone);
+        $('input[name=add]').val(data[0].address);
+        $('input[name=remark]').val(data[0].desc);
+        getLevel(0,data[0].province,0);    
+        getLevel(data[0].province,data[0].city,1);     
+        getLevel(data[0].city,data[0].country,2);                 
+    },'json'); 
+
+
+});
+
+$('.form-horizontal').on('click', '#cancelBtn', function(event){
+    location.reload();
+})
+
+function getLevel(region_id,area,level_id){
+    if (!region_id || region_id != 0) {return false;}
+    $.get('/student.main.getleve/'+region_id, function(data){            
+        if (data) {            
+          var html = '';
+          $(data).each(function(i,item){            
+            html += '<option value="'+item.region_id+'"';                       
+            if(area == item.region_id){
+                html += ' selected="selected" >'+item.name+'</option>';
+            }else{
+                html += '>'+item.name+'</option>';
+            }
+          })
+          $('#level'+level_id).show().html(html);  
+        };
+        },'json'); 
+}
+</script>

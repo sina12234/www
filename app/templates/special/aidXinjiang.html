@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="title" content="互联网教育援疆计划，献礼66周年专题。云课 - 专业的在线直播教育学习平台 - 云课网 ">
+    <meta name="keywords" content="互联网教育援疆计划，献礼66周年专题。云课 - 专业的在线直播教育学习平台 - 云课网 ">
+    <meta name="description" content="互联网教育援疆计划，献礼66周年专题。云课 - 专业的在线直播教育学习平台 - 云课网 ">
+    <title>互联网教育援疆计划，献礼66周年专题。云课 - 专业的在线直播教育学习平台 - 云课网</title>
+    <link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets_v2/img/platform/yunke.ico')}" />
+    <script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+    <script type="text/javascript" src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+    <link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/platform/bootstrap/bootstrap.min.css')}">
+    <link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/platform/index.css')}">
+    <link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/bootstrap/bootstrap.min.css')}">
+    <!--[if lt IE 8]>
+    <script src="//dev.gn100.com/assets_v2/js/ie8.js?ver=13"></script>
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" type="text/css" href="/assets_v2/css/bootstrap/bootstrap.min.css">
+    <script src="//dev.gn100.com/assets_v2/bootstrap-3.3.0/js/html5shiv.min.js?ver=13"></script>
+    <script src="//dev.gn100.com/assets_v2/bootstrap-3.3.0/js/respond.min.js?ver=13"></script>
+    <![endif]-->
+    <style>
+        body,html{ margin:0;padding:0;background:#FEF8E0;font-family: "Microsoft YaHei"}
+        header,section{ float:left;width:100%;position:relative }
+        header img{ float:left;width:100%;max-width:1920px; }
+        .tac{ text-align: center;}
+        p{ margin:0px; }
+        .head { position: relative; }
+        .head p.banner img{ width:100%;}
+        .titleBac{ display: inline-block;padding:0.3em 2.5em;font:bold 1.3em microsoft Yahei;color:#fff;}
+        .con{ background:url(/assets_v2/img/special/2016_10_01/aidjiang-topbg.png) center top no-repeat;-webkit-background-size:100%;background-size:100%;}
+        .aid-content{ margin-top:10%;margin-bottom:6%;}
+        .aid-item{ padding:2em 0;}
+        .aid-item-last{ border-top:2px dashed #ECE1CB;}
+        .aid-detail{ margin:0 auto; text-align: left; float: none; padding:1em;}
+        .aid-detail img{ width:100%;vertical-align: top;}
+        .aid-detail .box-con{ background:url(/assets_v2/img/special/2016_10_01/box-center.jpg) repeat-y; background-size:100%; padding:0 30px 10px 30px; margin-top:-10px;}
+        .aid-detail .box-con p{ color:#63111F; font-family: "Microsoft YaHei"; }
+        .aid-detail .box-con p.title{ font-size:1.2em;font-weight: bold;}
+        .aid-detail .box-con p.more{ text-align: right;}
+        .aid-detail .box-con a.btn{ color:#fff;background:#FF600A;padding:0.3em 1em;border-radius: 20px;font:normal 1em Microsoft YaHei;}
+        .gradient{
+            border-radius: 30px;
+            background: #EB1701;
+            background: -moz-linear-gradient(left,  #EB1701 0%, #FF600A 100%);
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#EB1701), color-stop(100%,#FF600A));
+            background: -webkit-linear-gradient(left,  #EB1701 0%,#FF600A 100%);
+            background: -o-linear-gradient(left,  #EB1701 0%,#FF600A 100%);
+            background: -ms-linear-gradient(left,  #EB1701 0%,#FF600A 100%);
+            background: linear-gradient(to right,  #EB1701 0%,#FF600A 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EB1701', endColorstr='#FF600A',GradientType=0 );
+        }
+        :root .gradient{ filter:none;}
+        #tea-list { margin-top:-1em;}
+        #tea-list li{ margin-top:1em;margin-bottom:1em;}
+
+        #tea-list img{ width:100%;}
+        #tea-list .item-r{ padding-top:0.5em;}
+        #tea-list .item-l img{ border:2px solid #3489FE; }
+        #tea-list p{ color:#989898;}
+        #tea-list .name{ color:#666; font-size:1.5em;}
+        #tea-list .turn{ overflow: hidden;padding-top:0.5em;}
+        #tea-list .turn p{ float: left; color:#666;}
+        #tea-list .turn p.btn-l{ width:23%; font-weight: bold;}
+        #tea-list .turn p.btn-r{ width:77%;}
+        #tea-list .turn p a{ display: block; text-decoration: none;}
+        #tea-list .turn p a .courseName{ color:#666;}
+        #tea-list .turn p a .blue-link { float:right;}
+        @media screen and (min-width:320px) and (max-width:760px){
+            .aid-content{ margin-top:3%;margin-bottom:-7%;}
+            .aid-detail .box-con{ padding:0 20px 10px 20px;}
+            #tea-list{ padding:0 1em;}
+            #tea-list .item-r{ padding-right:0;padding-top:0;}
+            #tea-list .turn p.btn-r,#tea-list .turn p.btn-l{ width:100%;}
+        }
+    </style>
+</head>
+<body>
+    <section class="">
+        <!--头部-->
+        <div class="head">
+            <p class="banner">
+                <img src="/assets_v2/img/special/2016_10_01/aidjiang-top.jpg" alt="">
+            </p>
+        </div>
+        <!--头部-->
+        <!--内容-->
+        <div class="con">
+            <div class="tac container">
+                <div class="row">
+                <section class="aid-content">
+                    <div class="aid-item">
+                        <div class="title">
+                            <p class="titleBac gradient">
+                                援助内容
+                            </p>
+                        </div>
+                        <div class="aid-detail col-md-13 col-xs-20">
+                            <img src="/assets_v2/img/special/2016_10_01/box-top.jpg">
+                            <div class="box-con">
+                                    <p class="title">名校名师在线优质资源输入:</p>
+                                    <p class="conP">将优质的教育资源以直播、录播的形式输送到援助地区，实现在线教学、师生互动、共享优质教育课程，促进教育资源的均衡。</p>
+                                    <P class="title">捐赠内容包括:</P>
+                                    <p class="conP">
+                                        <span>①小学、初中、高中等相关课程；</span>
+                                        <span>②为学校和学生提供专属的教学视频，实现“人人皆学，处处能学，时时可学”。</span>
+                                    </p>
+                                    <!--<p class="more"><a href="" class="titleBac btn">点击了解</a></p>-->
+                            </div>
+                            <img src="/assets_v2/img/special/2016_10_01/box-footer.jpg">
+                        </div>
+                    </div>
+                    <div class="aid-item aid-item-last">
+                        <div class="title">
+                            <p class="titleBac gradient">
+                                援疆名师
+                            </p>
+                        </div>
+                        <div class="aid-detail col-md-20 col-xs-20">
+                            <img src="/assets_v2/img/special/2016_10_01/box-top.jpg">
+                            <ul class="box-con fl" id="tea-list">
+                                <li class="box-item col-md-10 col-xs-20">
+                                     <div class="item-l fl col-md-8 col-xs-5 row">
+                                         <img src="/assets_v2/img/special/2016_10_01/tea01.jpg">
+                                     </div>
+                                    <div class="item-r fl col-md-13 col-xs-16">
+                                        <p class="name">蒋雁鸣</p>
+                                        <p>简介：</p>
+                                        <p class="detail">蒋雁鸣语文工作室首席名师，长沙市明德中学语文教研组组长，长沙市中语会理事，长沙市高三复习教学调研专家，长沙市优秀语文教师，长沙市“九芝”优秀班主任，全国中语会湖南名...</p>
+                                        <div class="turn">
+                                            <p class="btn-l">在线课程：</p>
+                                            <p class="btn-r">
+                                                暂无课程
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="box-item col-md-10 col-xs-20">
+                                     <div class="item-l fl col-md-8 col-xs-5 row">
+                                         <img src="/assets_v2/img/special/2016_10_01/tea02.jpg">
+                                     </div>
+                                    <div class="item-r fl col-md-13 col-xs-16">
+                                        <p class="name">曾峰</p>
+                                        <p>简介：</p>
+                                        <p class="detail">曾峰，中学一级教师。2004年本科毕业后于长沙市第一中学参加工作。2006年~2012年担任高中生物竞赛教练。2008年起担任长沙市一中理科班班主任至今。</p>
+                                        <div class="turn">
+                                            <p class="btn-l">在线课程：</p>
+                                            <p class="btn-r">
+                                                <a href="https://f2fzj.yunke.com/course.info.show/9232" target="_blank">
+                                                    <span class="courseName">基因突变与基因重组</span>
+                                                    <span class="blue-link">查看课程></span>
+                                                </a>
+                                                <a href="https://f2fzj.yunke.com/course.info.show/9233" target="_blank">
+                                                    <span class="courseName">减数分裂</span>
+                                                    <span class="blue-link">查看课程></span>
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="box-item col-md-10 col-xs-20">
+                                    <div class="item-l fl col-md-8 col-xs-5 row">
+                                        <img src="/assets_v2/img/special/2016_10_01/tea03.jpg">
+                                    </div>
+                                    <div class="item-r fl col-md-13 col-xs-16">
+                                        <p class="name">马臻</p>
+                                        <p>简介：</p>
+                                        <p class="detail">长沙市明德中学青年骨干教师。长沙市第三届“英才工程”骨干教师培训班成员。湖南大学文学院在读硕士。有若干随笔发表于《名作欣赏》《书屋》等国内著名人文刊物，另有数十篇语文...</p>
+                                        <div class="turn">
+                                            <p class="btn-l">在线课程：</p>
+                                            <p class="btn-r">
+                                                <a href="https://zuowen.yunke.com/course.info.show/9529" target="_blank">
+                                                    <span class="courseName">议论文立意写作指导</span>
+                                                    <span class="blue-link">查看课程></span>
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="box-item col-md-10 col-xs-20">
+                                    <div class="item-l fl col-md-8 col-xs-5 row">
+                                        <img src="/assets_v2/img/special/2016_10_01/tea04.jpg">
+                                    </div>
+                                    <div class="item-r fl col-md-13 col-xs-16">
+                                        <p class="name">张奔胜</p>
+                                        <p>简介：</p>
+                                        <p class="detail">青竹湖湘一学校数学老师、中学一级教师、长沙市骨干教师、长沙市中考命题人才库成员、《长沙市中考数学考试标准》编写、长沙中学数学名师工作室首席名师、“第七届全国青年教师优...</p>
+                                        <div class="turn">
+                                            <p class="btn-l">在线课程：</p>
+                                            <p class="btn-r">
+                                                <a href="https://zhangbensheng.yunke.com/course.info.show/8005" target="_blank">
+                                                    <span class="courseName">如何赢在初一的起跑线？</span>
+                                                    <span class="blue-link">查看课程></span>
+                                                </a>
+                                                <a href="https://zhangbensheng.yunke.com/course.info.show/7778" target="_blank">
+                                                    <span class="courseName">平行四边形的性质</span>
+                                                    <span class="blue-link">查看课程></span>
+                                                </a>
+
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="box-item col-md-10 col-xs-20">
+                                    <div class="item-l fl col-md-8 col-xs-5 row">
+                                        <img src="/assets_v2/img/special/2016_10_01/tea05.jpg">
+                                    </div>
+                                    <div class="item-r fl col-md-13 col-xs-16">
+                                        <p class="name">李东霞</p>
+                                        <p>简介：</p>
+                                        <p class="detail">李东霞，原新东方集团数学组教研团队成员，曾是长沙新东方校级优秀教师，明星教师，任初一数学年级组长，参与组织本地化教材编写研发。在工作期间，注重对教学方法的探索，对教育...</p>
+                                        <div class="turn">
+                                            <p class="btn-l">在线课程：</p>
+                                            <p class="btn-r">
+                                                <a href="https://lidongxia.yunke.com/course.info.show/8711" target="_blank">
+                                                    <span class="courseName">秋季初一数学课堂</span>
+                                                    <span class="blue-link">查看课程></span>
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="box-item col-md-10 col-xs-20">
+                                    <div class="item-l fl col-md-8 col-xs-5 row">
+                                        <img src="/assets_v2/img/special/2016_10_01/tea06.jpg">
+                                    </div>
+                                    <div class="item-r fl col-md-13 col-xs-16">
+                                        <p class="name">傅勉剑</p>
+                                        <p>简介：</p>
+                                        <p class="detail">现任长沙市一中岳麓中学语文教师、初三年级语文备课组组长，中学一级教师。2014、2015年连续两年参加长沙市中考语文试题命题和阅卷实践，2015年7月担任长沙市中考语文阅卷题组长。</p>
+                                        <div class="turn">
+                                            <p class="btn-l">在线课程：</p>
+                                            <p class="btn-r">
+                                                <a href="https://zuowen.yunke.com/course.info.show/9486" target="_blank">
+                                                    <span class="courseName">初中命题作文写作指导</span>
+                                                    <span class="blue-link">查看课程></span>
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <img src="/assets_v2/img/special/2016_10_01/box-footer.jpg">
+                        </div>
+                    </div>
+                </section>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        {part "/index.main.footer"}
+    </footer>
+</body>
+</html>

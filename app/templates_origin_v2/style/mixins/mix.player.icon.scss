@@ -1,0 +1,195 @@
+/*
+SCSS variables are information about icon's compiled state, stored under its original file name
+
+.icon-home {
+  width: $icon-home-width;
+}
+
+The large array-like variables contain all information about a single icon
+$icon-home: x y offset_x offset_y width height total_width total_height image_path;
+
+At the bottom of this section, we provide information about the spritesheet itself
+$spritesheet: width height image $spritesheet-sprites;
+*/
+$datum-selected-name: 'datum-selected';
+$datum-selected-x: 0px;
+$datum-selected-y: 34px;
+$datum-selected-offset-x: 0px;
+$datum-selected-offset-y: -34px;
+$datum-selected-width: 22px;
+$datum-selected-height: 25px;
+$datum-selected-total-width: 118px;
+$datum-selected-total-height: 90px;
+$datum-selected-image: '../img/player-icon.png';
+$datum-selected: (0px, 34px, 0px, -34px, 22px, 25px, 118px, 90px, '../img/player-icon.png', 'datum-selected', );
+$datum-name: 'datum';
+$datum-x: 97px;
+$datum-y: 35px;
+$datum-offset-x: -97px;
+$datum-offset-y: -35px;
+$datum-width: 21px;
+$datum-height: 24px;
+$datum-total-width: 118px;
+$datum-total-height: 90px;
+$datum-image: '../img/player-icon.png';
+$datum: (97px, 35px, -97px, -35px, 21px, 24px, 118px, 90px, '../img/player-icon.png', 'datum', );
+$discuss-selected-name: 'discuss-selected';
+$discuss-selected-x: 0px;
+$discuss-selected-y: 69px;
+$discuss-selected-offset-x: 0px;
+$discuss-selected-offset-y: -69px;
+$discuss-selected-width: 23px;
+$discuss-selected-height: 21px;
+$discuss-selected-total-width: 118px;
+$discuss-selected-total-height: 90px;
+$discuss-selected-image: '../img/player-icon.png';
+$discuss-selected: (0px, 69px, 0px, -69px, 23px, 21px, 118px, 90px, '../img/player-icon.png', 'discuss-selected', );
+$discuss-name: 'discuss';
+$discuss-x: 33px;
+$discuss-y: 69px;
+$discuss-offset-x: -33px;
+$discuss-offset-y: -69px;
+$discuss-width: 23px;
+$discuss-height: 21px;
+$discuss-total-width: 118px;
+$discuss-total-height: 90px;
+$discuss-image: '../img/player-icon.png';
+$discuss: (33px, 69px, -33px, -69px, 23px, 21px, 118px, 90px, '../img/player-icon.png', 'discuss', );
+$note-selected-name: 'note-selected';
+$note-selected-x: 32px;
+$note-selected-y: 34px;
+$note-selected-offset-x: -32px;
+$note-selected-offset-y: -34px;
+$note-selected-width: 22px;
+$note-selected-height: 24px;
+$note-selected-total-width: 118px;
+$note-selected-total-height: 90px;
+$note-selected-image: '../img/player-icon.png';
+$note-selected: (32px, 34px, -32px, -34px, 22px, 24px, 118px, 90px, '../img/player-icon.png', 'note-selected', );
+$note-name: 'note';
+$note-x: 66px;
+$note-y: 35px;
+$note-offset-x: -66px;
+$note-offset-y: -35px;
+$note-width: 21px;
+$note-height: 23px;
+$note-total-width: 118px;
+$note-total-height: 90px;
+$note-image: '../img/player-icon.png';
+$note: (66px, 35px, -66px, -35px, 21px, 23px, 118px, 90px, '../img/player-icon.png', 'note', );
+$rank-selected-name: 'rank-selected';
+$rank-selected-x: 0px;
+$rank-selected-y: 0px;
+$rank-selected-offset-x: 0px;
+$rank-selected-offset-y: 0px;
+$rank-selected-width: 23px;
+$rank-selected-height: 24px;
+$rank-selected-total-width: 118px;
+$rank-selected-total-height: 90px;
+$rank-selected-image: '../img/player-icon.png';
+$rank-selected: (0px, 0px, 0px, 0px, 23px, 24px, 118px, 90px, '../img/player-icon.png', 'rank-selected', );
+$rank-name: 'rank';
+$rank-x: 33px;
+$rank-y: 0px;
+$rank-offset-x: -33px;
+$rank-offset-y: 0px;
+$rank-width: 23px;
+$rank-height: 24px;
+$rank-total-width: 118px;
+$rank-total-height: 90px;
+$rank-image: '../img/player-icon.png';
+$rank: (33px, 0px, -33px, 0px, 23px, 24px, 118px, 90px, '../img/player-icon.png', 'rank', );
+$section-selected-name: 'section-selected';
+$section-selected-x: 66px;
+$section-selected-y: 0px;
+$section-selected-offset-x: -66px;
+$section-selected-offset-y: 0px;
+$section-selected-width: 21px;
+$section-selected-height: 25px;
+$section-selected-total-width: 118px;
+$section-selected-total-height: 90px;
+$section-selected-image: '../img/player-icon.png';
+$section-selected: (66px, 0px, -66px, 0px, 21px, 25px, 118px, 90px, '../img/player-icon.png', 'section-selected', );
+$section-name: 'section';
+$section-x: 97px;
+$section-y: 0px;
+$section-offset-x: -97px;
+$section-offset-y: 0px;
+$section-width: 21px;
+$section-height: 25px;
+$section-total-width: 118px;
+$section-total-height: 90px;
+$section-image: '../img/player-icon.png';
+$section: (97px, 0px, -97px, 0px, 21px, 25px, 118px, 90px, '../img/player-icon.png', 'section', );
+$spritesheet-width: 118px;
+$spritesheet-height: 90px;
+$spritesheet-image: '../img/player-icon.png';
+$spritesheet-sprites: ($datum-selected, $datum, $discuss-selected, $discuss, $note-selected, $note, $rank-selected, $rank, $section-selected, $section, );
+$spritesheet: (118px, 90px, '../img/player-icon.png', $spritesheet-sprites, );
+
+/*
+The provided mixins are intended to be used with the array-like variables
+
+.icon-home {
+  @include sprite-width($icon-home);
+}
+
+.icon-email {
+  @include sprite($icon-email);
+}
+
+Example usage in HTML:
+
+`display: block` sprite:
+<div class="icon-home"></div>
+
+To change `display` (e.g. `display: inline-block;`), we suggest using a common CSS class:
+
+// CSS
+.icon {
+  display: inline-block;
+}
+
+// HTML
+<i class="icon icon-home"></i>
+*/
+@mixin sprite-width($sprite) {
+  width: nth($sprite, 5);
+}
+
+@mixin sprite-height($sprite) {
+  height: nth($sprite, 6);
+}
+
+@mixin sprite-position($sprite) {
+  $sprite-offset-x: nth($sprite, 3);
+  $sprite-offset-y: nth($sprite, 4);
+  background-position: $sprite-offset-x  $sprite-offset-y;
+}
+
+@mixin sprite-image($sprite) {
+  $sprite-image: nth($sprite, 9);
+  background-image: url(#{$sprite-image});
+}
+
+@mixin sprite($sprite) {
+  @include sprite-image($sprite);
+  @include sprite-position($sprite);
+  @include sprite-width($sprite);
+  @include sprite-height($sprite);
+}
+
+/*
+The `sprites` mixin generates identical output to the CSS template
+  but can be overridden inside of SCSS
+
+@include sprites($spritesheet-sprites);
+*/
+@mixin sprites($sprites) {
+  @each $sprite in $sprites {
+    $sprite-name: nth($sprite, 10);
+    .#{$sprite-name} {
+      @include sprite($sprite);
+    }
+  }
+}

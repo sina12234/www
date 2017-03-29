@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{part '/site.main.orgname'} - app首页设置 - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 首页维护 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<link rel="stylesheet" type="text/css" href="{utility_cdn::js('/assets_v2/js/webuploader/webuploader.css')}">
+<script src="{utility_cdn::js('/assets_v2/js/webuploader/webuploader.js')}"></script>
+<script src="{utility_cdn::js('/assets/js/jcrop/js/jquery.Jcrop.min.js')}"></script>
+</head>
+<body>
+{part "/site.main.nav"}
+<section class="pd30">
+    <div class="container">
+	    <div class="row">
+            <!-- left -->
+  	        {part "/org.main.menu.apptemplate"}
+            <!-- right -->
+    	    <div class="right-main col-sm-9 col-md-16">
+                <div class="col-xs-20 pd0">
+                    <h3 class="fs14 c-fl fb pt5">首页快速入口自定义</h3>
+                    <button class="btn c-fr fs14" id="view-mob">查看手机预览</button>
+                </div>
+                <!-- classify -->
+                <div class="app-classify-set dropdown" id="app-classify">
+                  <span class="col-md-2 mt10">选择分类：</span>
+                  <div class="dropdown-input col-md-14" id="cate_apptemplate">
+					{if !empty($orgCate)}
+					{foreach($orgCate as $k=>$v)}
+					<div class="delect-subj dropdown-show-tab pd0 c-fl" rel="4" contenteditable="false">
+                      <i class="left-side"></i><i class="tab-delete" data-cateid="{$v->pk_cate}"></i>{$v->name}
+					</div>
+					{/foreach}
+					{/if}
+                  </div>
+                  <span class="col-md-3 mt10">最多8个</span>
+                </div>
+                <div class="tab-main c-fl">
+                    <div class="tab-hd fb" id="tab-hd">
+                        <a href="javascript:void(0);"  class="tab-hd-opt curr" data-id="app-banner-list">幻灯片设置</a>
+                        <a href="javascript:void(0);" class="tab-hd-opt" data-id="app-topic-list">专题设置</a>
+                    </div>
+                </div>
+                <!-- 幻灯片设置 -->
+                <div class="app-banner-set" id="app-banner-list">
+				    {if(!empty($bannerApp))}
+				    {foreach($bannerApp as $k=>$v)}
+                    <div class="app-banner-item">
+                        <p class="fs14 fb pb10 " data-pid="{$v->pk_banner}">幻灯片{$k+1}
+                            <a href="javascript:void(0);" class="app-del-btn c-fr" ></a>
+						    <a href="javascript:void(0);" class="app-edit-btn c-fr mr10" ></a>
+                        </p>
+                        <div class="app-banner-main pt10">
+                            <!-- left img -->
+                            <div class="col-md-8 pl5 pr5">
+                                <div class="app-banner-img banner-app">
+                                    <img class="banner_app " data-id='1' data-thumb_app="{$v->thumb_app}" src="{if (!empty($v->thumb_app))}{utility_cdn::file($v->thumb_app)}{/if}">
+							        <div class="banner-img-mask">修改图片</div>
+                                </div>
+                            </div>
+                            <!-- right img -->
+                            <div class="col-md-12 pl5 pr5">
+                                <div class="app-banner-img banner-ipad">
+                                    <img class="banner_app " data-id='2' data-thumb_app="{$v->thumb_ipad}" src="{if (!empty($v->thumb_ipad))}{utility_cdn::file($v->thumb_ipad)}{/if}">
+							        <div class="banner-img-mask">修改图片</div>
+                                </div>
+                            </div>
+                            <!-- href -->
+                            <p class="col-md-20 mt10 pr5"><span class="c-fl mt10">链接：</span>
+					            <span class="app-banner-href-text mt10 c-fl">{$v->url}</span>
+					        </p>
+                        </div>
+                    </div>
+				  {/foreach}
+				  {/if}
+					{if(count($bannerApp)<6)}
+                    <div class="tac pd30 col-xs-20"><a class="gray-btn" id="add-app-banner">+添加幻灯片</a> <span class="cGray">最多添加6个</span></div>
+					{/if}
+                </div>
+                <!-- 专题设置 -->
+                <div class="app-banner-set" id="app-topic-list">
+				    {if(!empty($themePic))}
+				    {foreach($themePic as $k=>$v)}
+                    <div class="app-banner-item">
+                        <p class="fs14 fb pb10 " data-pid="{$v->pk_banner}">专题图 <a href="javascript:void(0);" class="app-del-btn c-fr" ></a>
+						<a href="javascript:void(0);" class="app-edit-btn c-fr mr10" data-pid="{$v->pk_banner}"></a></p>
+                        <div class="app-banner-main pt10">
+                            <!-- left img -->
+                            <div class="col-md-8 pl5 pr5">
+                                <div class="app-banner-img banner-app">
+                                    <img class="banner_app" data-id='1'  data-thumb_app="{$v->thumb_app}" src="{if (!empty($v->thumb_app))}{utility_cdn::file($v->thumb_app)}{/if}">
+							        <div class="banner-img-mask">修改图片</div>
+                                </div>
+                            </div>
+                            <!-- right img -->
+                            <div class="col-md-12 pl5 pr5">
+                                <div class="app-banner-img banner-ipad">
+                                    <img class="banner_app" data-id='2' data-thumb_app="{$v->thumb_ipad}" src="{if (!empty($v->thumb_ipad))}{utility_cdn::file($v->thumb_ipad)}{/if}">
+							        <div class="banner-img-mask">修改图片</div>
+                                </div>
+                            </div>
+                            <!-- href -->
+                            <p class="col-md-20 mt10 pr5"><span class="c-fl mt10">名称：</span>
+					            <span class="app-banner-title mt10 c-fl">{if(isset($v->title))}{$v->title}{/if}</span>
+					        </p>
+                            <p class="col-md-20 mt10 pr5"><span class="c-fl mt10">链接：</span>
+					            <span class="app-banner-href-text mt10 c-fl">{$v->url}</span>
+					        </p>
+                        </div>
+                    </div>
+				  {/foreach}
+				  {/if}
+					{if(empty($themePic))}
+                    <div class="tac pd30 col-xs-20"><a class="gray-btn" id="add-app-topic">添加专题图</a> <span class="cGray">只能添加1个</span></div>
+					{/if}
+                </div>
+            </div>
+            <!-- right end -->
+        </div>
+    </div>
+</section>
+<script>
+    $(function(){
+        //切换
+        var tab_hd = $('#tab-hd');
+        $('#app-topic-list').hide();
+        var hashStrings = (window.location.hash.length > 0 ? window.location.hash.substring(1) : "");
+        tab_hd.find('a').click(function(){
+            $(this).addClass('curr').siblings('a').removeClass('curr');
+            $('#'+$(this).attr('data-id')+'').show();
+            $('#'+$(this).siblings('a').attr('data-id')+'').hide();
+        });
+        if(hashStrings){
+            tab_hd.find("a[data-id="+hashStrings+"]").addClass('curr').siblings('a').removeClass('curr');
+            $('#'+hashStrings+'').show();
+            $('#'+hashStrings+'').siblings(".app-banner-set").hide();
+        }
+        var app_list = $('#app-banner-list');
+
+        //编辑banner
+        $('#app-topic-list,#app-banner-list').on('click','.app-edit-btn',function(){
+            $(this).hide();
+            $(this).after('<a href="javascript:void(0);" class="gray-btn c-fr ml5 cancel-banner">取消</a><a href="javascript:void(0);" class="btn c-fr update-banner">保存</a>');
+            $(this).siblings('.app-del-btn').hide();
+            $(this).parents('.app-banner-item').find('.banner-img-mask').show();
+            var t=$(this).parents('.app-banner-item').find('.app-banner-href-text').text();
+            $(this).parents('.app-banner-item').find('.app-banner-href-text').replaceWith('<input class="app-banner-href" name="thumb_url" value="'+t+'">');
+            if($(this).parents(".app-banner-item").find(".app-banner-title")){
+                $(this).parents('.app-banner-item').find('.app-banner-title').replaceWith('<input class="app-banner-href" name="thumb_title" value="'+$(this).parents(".app-banner-item").find(".app-banner-title").text()+'">');
+            }
+        });
+        $(".app-banner-set").on("click",".cancel-banner",function(r){
+            $(this).siblings('a.app-del-btn,a.app-edit-btn').show();
+            $(this).parents('div.app-banner-item').find('.banner-img-mask').hide();
+            if($(this).parents(".app-banner-item").find("input[name='thumb_title']")){
+                $(this).parents('.app-banner-item').find("input[name='thumb_title']").replaceWith('<span class="app-banner-title c-fl mt10" name="thumb_title">'+$(this).parents('.app-banner-item').find("input[name='thumb_title']").val()+'</span>');
+            }
+            $(this).parents('div.app-banner-item').find('.app-banner-href').replaceWith('<span class="app-banner-href-text mt10 c-fl">'+$(this).parents('.app-banner-item').find('.app-banner-href').val()+'</span>');
+            $(this).parents('div.app-banner-item').find('.cancel-banner,.update-banner').remove();
+		});
+
+        $('#view-mob').click(function(){
+          layer.open({
+              type: 2,
+              title:false,
+              shadeClose: true,
+              area: ['348px','600px'],
+              content: '{"/org.main.appdemo"}'
+          });
+        });
+        //添加banner
+        var add_Tmpl = '<div class="app-banner-add app-banner-item"><p class="fs14 fb pb10">幻灯片1<button class="btn c-fr add_banner">保存</button></p><div class="app-banner-main pt10"><div class="col-md-8 pl5 pr5"><div class="app-banner-img banner-app"><div class="banner_float"></div><img class="banner_app" data-thumb_app=""  data-id="1"></div></div><div class="col-md-12 pl5 pr5"><div class="app-banner-img banner-ipad"><div class="banner_float"></div><img class="banner_app" data-thumb_app="" data-id="2"></div></div><p class="col-md-20 mt10 pr5"><span class="c-fl mt10">链接：</span><input type="text" name="thumb_url" value="" class="app-banner-href"/> </p></div></div>';
+        var banner_list = $('#app-banner-list');
+        var add_Topic_Tmpl = '<div class="app-topic-add app-banner-item"><p class="fs14 fb pb10">幻灯片1<button class="btn c-fr add_banner">保存</button></p><div class="app-banner-main pt10"><div class="col-md-8 pl5 pr5"><div class="app-banner-img banner-app"><div class="banner_float"></div><img class="banner_app" data-thumb_app=""  data-id="1"></div></div><div class="col-md-12 pl5 pr5"><div class="app-banner-img banner-ipad"><div class="banner_float"></div><img class="banner_app" data-thumb_app="" data-id="2"></div></div><p class="col-md-20 mt10 pr5"><span class="c-fl mt10">名称：</span><input type="text" name="thumb_title" value="" class="app-banner-href"></p><p class="col-md-20 mt10 pr5"><span class="c-fl mt10">链接：</span><input type="text" name="thumb_url" value="" class="app-banner-href"></p></div></div>';
+        var topic_list = $('#app-topic-list');
+        // banner添加
+        var imageUploader = WebUploader.create({
+            auto:true,
+            swf:"{utility_cdn::js('/assets_v2/js/webuploader/Uploader.swf')}",
+            server:'/file.main.UploadBannerApp.',
+            pick:'.banner_float',
+            resize:false,
+            duplicate:true,
+            accept:{
+                title:'Images',
+                extensions:'jpg,jpeg,png'
+            }
+        })
+        imageUploader.on('beforeFileQueued',function (file) {
+            var uid = file.source.ruid;
+            var type = $('#rt_'+uid).parents('.app-banner-img').find('.banner_app').attr('data-id');
+            imageUploader.option('server','/file.main.UploadBannerApp.'+type);
+        })
+        imageUploader.on('uploadAccept',function (object,ret) {
+            if(ret['error']){
+                layer.msg(ret['error']);
+            }
+        })
+        imageUploader.on('uploadSuccess',function (file,response) {
+            if(response){
+                var uid = file.source.ruid;
+                $('#rt_'+uid).parents('.app-banner-img').find('.banner_app').attr('src',response.src);
+				$('#rt_'+uid).parents('.app-banner-img').find('.banner_app').attr('data-thumb_app',response.fid);
+            }
+        })
+        $('#add-app-banner').click(function(){
+          if(banner_list.find('.app-banner-add').length>0){
+            banner_list.find('.app-banner-add').addClass('error-border');
+          }else{
+				$(this).parent().before(add_Tmpl);
+          }
+            imageUploader.addButton({
+                id:'.banner_float'
+            })
+        });
+        $('#add-app-topic').click(function(){
+          if(topic_list.find('.app-topic-add').length>0){
+            topic_list.find('.app-topic-add').addClass('error-border');
+          }else{
+				$(this).parent().before(add_Topic_Tmpl);
+          }
+          imageUploader.addButton({
+              id:'.banner_float'
+          })
+        });
+
+		$("#cate_apptemplate").click(function(event){
+			layer.open({
+				type:2,
+				title: ['选择'],
+				shadeClose: true,
+				shade: 0.8,
+				area: ['450px', '320px'],
+				content: '{"/org.main.iframeCate"}'
+			});
+		});
+		$("#cate_apptemplate").on('click','.delect-subj',function(event){
+				event.stopPropagation();
+				if(event.target.className=='tab-delete'){
+					var cate_name = [ ];
+
+						cate_name.push($(this).find(".tab-delete").attr("data-cateid"));
+
+					var cate_name = cate_name.join(',');
+					$(this).remove();
+					$.post("/org.main.addOrgCustomerCate",{ cate_name:cate_name },function(r){
+					},"json");
+
+				}
+		});
+		$(".app-banner-set").on("click",".add_banner",function(r){
+			var thumb_ipad = [];
+            var thumb_type,thumb_title,thumb_type_txt;
+            if($('#tab-hd a.curr').attr("data-id")=='app-banner-list'){
+                thumb_type = 1;
+                thumb_type_txt="app-banner-list";
+            }else{
+                thumb_type= 2;
+                thumb_type_txt="app-topic-list";
+            }
+            if($(this).parents(".app-banner-item").find("input[name='thumb_title']")){
+                thumb_title = $(this).parents(".app-banner-item").find("input[name='thumb_title']").val();
+            }else{
+                thumb_title = '';
+            }
+
+
+            $(this).parents('.app-banner-item').find('img').each(function(){
+                thumb_ipad.push($(this).attr("data-thumb_app"));
+            });
+            //console.log(thumb_ipad);
+            //return false;
+			var  thumb_url  = $(this).parents(".app-banner-item").find("input[name='thumb_url']").val();
+			$.post("/org.main.addXiaowoOrg",{ title:thumb_title,thumb_app:thumb_ipad[0],thumb_ipad:thumb_ipad[1],thumb_url:thumb_url,type:thumb_type },function(r){
+				if(r.error){
+					layer.msg(r.error);
+					return false;
+				}else{
+                    window.location = '/org.main.apptemplate#'+thumb_type_txt;
+					location.reload();
+				}
+			},"json");
+		});
+		//修改banner图
+		$(".app-banner-set").on("click",".app-edit-btn",function(r){
+			imageUploader.addButton({
+                id:'.banner-img-mask'
+            })
+		});
+		//保存
+		$(".app-banner-set").on("click",".update-banner",function(r){
+            var thumb_type= 1;
+            var thumb_type_txt,thumb_title;
+            if($('#tab-hd a.curr').attr("data-id")=='app-banner-list'){
+                thumb_type = 1;
+                thumb_type_txt="app-banner-list";
+            }else{
+                thumb_type= 2;
+                thumb_type_txt="app-topic-list"
+            }
+            if($(this).parents(".app-banner-item").find("input[name='thumb_title']")){
+                thumb_title = $(this).parents(".app-banner-item").find("input[name='thumb_title']").val();
+            }else{
+                thumb_title = '';
+            }
+			var banner_id  = $(this).parent().attr("data-pid");
+            var thumb_app  = $(this).parents('.app-banner-item').find('.banner-app .banner_app').attr('data-thumb_app');
+            var thumb_ipad = $(this).parents('.app-banner-item').find('.banner-ipad .banner_app').attr('data-thumb_app');
+            var thumb_url  = $(this).parents('.app-banner-item').find('input[name="thumb_url"]').val();
+			$.post("/org.main.updateXiaowoOrgBanner",{ title:thumb_title,type:thumb_type,banner_id:banner_id,thumb_app:thumb_app,thumb_ipad:thumb_ipad,thumb_url:thumb_url },function(r){
+				if(r.error){
+					layer.msg(r.error);
+					return false;
+				}else{
+					window.location = '/org.main.apptemplate#'+thumb_type_txt;
+                    window.location.reload();
+				}
+			},"json");
+		});
+
+		//删除banner图
+		$(".app-banner-set").on("click",".app-del-btn ",function(r){
+            var thumb_type;
+            if($('#tab-hd a.curr').attr("data-id")=='app-banner-list'){
+                thumb_type = 'app-banner-list';
+            }else{
+                thumb_type= 'app-topic-list';
+            }
+			var banner_id = $(this).parent().attr("data-pid");
+			$.post("/org.main.delXiaoWoOrgBanner",{ banner_id:banner_id },function(r){
+				if(r.result.code==200){
+					window.location='/org.main.apptemplate#'+thumb_type;
+                    window.location.reload();
+				}else{
+					layer.msg("删除失败");
+					return false;
+				}
+			},"json");
+		});
+    });
+</script>
+{part "/site.main.footer"}
+</body>
+</html>

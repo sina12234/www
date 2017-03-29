@@ -1,0 +1,217 @@
+$gray-better-color:#f1f1f1;
+$input-border-color:#dbdbdb;
+%list-button{
+  height: 35px;
+  padding: 0 25px;
+  font-size: 14px;
+  line-height: 35px;
+  @include b-radius(3px);
+}
+%box-common{
+  width:100%;
+  border: 1px solid #e8e8e8;
+}
+$chapter:'chapter';
+section.c-l-#{$chapter}-list-box{
+  margin:40px 0;
+  .#{$chapter}-border{
+    @include borderDeleteDirection();
+    background-color: $main-white-color;
+    padding: 30px 20px;
+    .#{$chapter}-tag{
+      padding:0 0px 30px;
+    }
+  }
+  @at-root .c-l-course-option{
+    text-align: center;
+    .select-name{
+      text-align: center;
+      cursor: pointer;
+      height: 40px;
+      line-height: 40px;
+      @include borderDeleteDirection(bottom,$gray-better-color);
+      &:hover{
+        @include borderDeleteDirection(bottom);
+        background-color: $main-white-color;
+        .index-down img{
+          @include transform(180deg);
+        }
+      }
+      .name-tag{
+        display: inline-block;
+        height: 100%;
+        width: auto;
+      }
+      .index-down{
+        top:0;
+        right:-15px;
+      }
+    }
+    @at-root & ul.c-l-select-option{
+      box-sizing: content-box;
+      left: -1px;
+      top:39px;
+      background-color: $main-white-color;
+      z-index: 30;
+      @include borderDeleteDirection(top);
+      color: $text-strong-color;
+      display: none;
+      width:100%;
+      li{
+        cursor: pointer;
+      }
+      li:hover{
+        background-color: $gray-better-color;
+      }
+    }
+  }
+  @at-root .c-l-#{$chapter}-condition{
+    width: 100%;
+    height: auto;
+    background-color: $gray-better-color;
+    line-height: 40px;
+    margin: 0 auto;
+    .course-search{
+      line-height: 40px;
+      font-size: 0px;
+      text-align: right;
+      float: right;
+      input{
+        width: 100%;
+        height: 30px;
+        font-size: 12px;
+        min-width: 80px;
+        background-color:$main-white-color ;
+        @include borderDeleteDirection('none',$input-border-color);
+      }
+      span.index-down{
+        cursor: pointer;
+        top:0;
+        right: 20px;
+      }
+    }
+  }
+  @at-root .c-l-#{$chapter}-lists{
+    width:100%;
+    padding-top: 10px;
+    li{
+      @extend %box-common;
+      margin: 10px 0 0 0;
+      padding: 10px 0;
+      height: auto;
+      min-height: 94px;
+      @at-root  div.c-l-#{$chapter}-message{
+        min-width: 338px;
+        text-align: center;
+        @include screen(0px,380px){
+          &{
+            min-width: 300px;
+          }
+        }
+      }
+      div.chapter-thumb{
+        height: 72px;
+        width: 128px;
+        float:left;
+        img{
+          height: 72px;
+          width: 128px;
+        }
+      }
+      @at-root div.c-l-#{$chapter}-description{
+        margin-left: 10px;
+        height: 72px;
+        text-align: left;
+        float:left;
+        @at-root .c-l-#{$chapter}-title{
+          width: 150px;
+          @extend %ellipsis;
+          color: $text-strong-color;
+          cursor: pointer;
+          @include screen(0px,380px){
+             &{
+               width: 100px;
+             }
+           }
+          &:hover{
+            text-overflow:inherit;
+            overflow:visible;
+          }
+        }
+        @at-root .c-l-#{$chapter}-tag-name{
+          width: 150px;
+          white-space: nowrap;
+          span{
+            display: inline-block;
+            min-width:60px;
+            color:$text-subsidiary-color;
+            @extend %ellipsis;
+          }
+          @include screen(0px,380px){
+            &{
+              width: 100px;
+              span{
+                min-width:40px;
+              }
+            }
+          }
+          .class-name{
+            margin-right: 10px;
+          }
+        }
+        .student-number{
+          color: #999;
+        }
+      }
+      .#{$chapter}-update-time{
+        height: 72px;
+        text-align: center;
+        span{
+          line-height:72px;
+          color:$text-subsidiary-color;
+        }
+      }
+      @at-root .c-l-#{$chapter}-action{
+        height: 72px;
+        float:right;
+        margin-top: 10px;
+        .action-button{
+          height: auto;
+          span{
+            cursor: pointer;
+          }
+          span.video-manage{
+            color: $main-white-color;
+            &.blue{
+              @include button($main-white-color,$blue-button-color);
+            }
+            &.green{
+              @include button($main-white-color,$green-button-color);
+            }
+          }
+          span.hang-up{
+            @include button($text-subsidiary-color,$gray-button-color,$gray-button-border-color);
+          }
+        }
+        @at-root .c-l-action-select{
+          width: 100%;
+          height: 50%;
+          span{
+            color:$text-subsidiary-color;
+          }
+          .action-name{
+            line-height: 36px;
+            cursor: pointer;
+          }
+          .action-option{
+            line-height: 36px;
+            span{
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+  }
+
+}

@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>高能100 注册</title>
+<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/common.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+		<script type="text/javascript" src="assets/js/jquery/jquery-1.11.1.min.js" ></script>
+		<script src="assets/js/user.js"></script>
+		<script src="assets/js/part.js"></script>
+</head>
+
+<body>
+<!--top-->
+<div class="part" url="/part.top.html"></div>
+
+<!--nav-->
+<div class="part" url="/part.nav.html"></div>
+<div class="part" url="/user/part.nav.user.html"></div>
+
+<!--login-->
+<div class="loginCon col-sm-12">
+  <div class="lcle col-sm-6"><img src="assets/images/regCon.jpg" width="449" height="515"  alt=""/></div>
+  <div class="lcri col-sm-6">
+		<form action="" method="post" autocomplete="off" id="x_submit_form">
+		<div class="x_reg_inner">
+           <div class="x_error"></div>
+			<div class="x_field2">
+				<label>手机／邮箱</label>
+				<input type="text" placeholder="" class="x_input_tx2"  id="x_user_name" style="" />
+			</div>
+			<div class="x_field2">
+				<label>请输入密码</label>
+				<input type="password" placeholder="" class="x_input_tx2" id="x_pass" />
+			</div>
+           <div class="x_login_p clearfix">
+              <label class="allvert fl"><input type="checkbox" class="x_input_ck" /> <span>下次自动登录</span></label>
+              <span class="fr" style="margin-right:40px;"><a href="#">忘记密码？</a></span>
+           </div>
+			<div class="x_field2">
+				<input type="submit" class="x_btn_reg2" value="登录" />
+			</div>
+        </div>
+    </form>
+    <div class="snsicons clearfix">
+      <h1>使用社交账号直接登录</h1>
+      <ul>
+        <li><a class="snsi si_weixin" href=""></a></li>
+        <li><a class="snsi si_weibo" href=""></a></li>
+        <li><a class="snsi si_qq" href=""></a></li>
+        <li><a class="snsi si_taobao" href=""></a></li>
+      </ul>
+    </div>
+    <div class="goreg">没有账号？ <a class="lkblue" href="">立即注册&gt;&gt;</a> </div>
+  </div>
+</div>
+
+<!--footer-->
+<div class="footer">
+  <div class="ftcon">
+    <div class="fter_1">
+    <a href="">关于我们</a> | <a href="">加入我们</a> | <a href="">校园代理招募</a> | <a href="">O2O体验店招商</a> | <a href="">企业培训</a> | <a href="">网站地图</a> | <a href="">友情链接</a> 
+    </div>
+    <p class="fter_2 mt10">增值电信业务经营许可证粤B2-20050785B2-20120129|粤ICP备09075143号</p>
+    <p class="fter_2">Copyright©北京大生知行科技有限公司 &nbsp;&nbsp;|&nbsp;&nbsp; <a href="">隐私声明</a>  &nbsp;&nbsp;|&nbsp;&nbsp;   <a href="">用户协议</a>  &nbsp;&nbsp;|&nbsp;&nbsp;   京ICP证110696号 京ICP备11031999号</p>
+    <p class="fter_2 mt15">© 2005-2014 广州华多网络科技有限公司 版权所有</p>
+  </div>
+</div>
+
+</body>
+</html>
+<script>
+	// 提交验证代码
+	$("#x_submit_form").submit(function(){
+		if($("#x_user_name").val()=='' || $("#x_user_name").val()=="邮箱/手机号"){
+			$(".x_error").html("请输入邮箱/手机号");
+			return false;
+		}else if($("#x_pass").val()=='' || $("#x_pass").val()=="密码"){
+			$(".x_error").html("请输入密码");
+			return false;
+		}else{
+			return true;
+		}
+	})
+	
+	$(document).ready(function(){
+		$("input[type=text],input[type=password],textarea").each(function(){
+			var label=$(this).prev("label");
+			var label_txt=label.text();
+			if(("placeholder" in document.createElement("input"))){
+				$(this).attr("placeholder",label_txt);
+				label.remove();
+			}else{
+				$(this).data("placeholder",label_txt);
+				psuedoPlaceholder($(this));
+				label.remove();
+			}
+		});
+		function psuedoPlaceholder(input){
+			if(input.attr("type")=="password"){
+				var opassword=$("<input type='text' class='"+input.attr("class")+"' value='"+input.data("placeholder")+"' name='addinput' />");
+				input.hide();
+				input.before(opassword);
+				opassword.focus(function(){
+					$(this).hide();
+					input.show().focus();
+				});
+				input.blur(function(){
+					if($(this).val()==""){
+						$(this).hide();
+						opassword.show();
+					}
+				});
+			}else{
+				input.focus(function(){
+					if($(this).val()==$(this).data("placeholder")){
+						$(this).val("");
+					}
+				}).blur(function(){
+					if($(this).val()==""){
+						$(this).val($(this).data("placeholder"));
+					}
+				}).blur();
+			}
+		}
+	})
+</script>

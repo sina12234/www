@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>学生管理 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 学生管理 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+<script>
+{if ($list)}
+$(function() {
+    page("pagepage","{$path}",{$length},{$page},{$totalPage});
+});
+{/if}
+</script>
+<body >
+{part "/site.main.nav"}
+<section class="pd30">
+    <div class="container">
+		<div class="row">
+            {part "/org.main.menu.student"}
+            <div class="right-main col-md-16 col-sm-9">
+                <div class="content">
+                    <div class="t-list-order fs14 col-md-20 pd0">
+                        <form action='/org/student/list' method="POST">
+							<div style="float:right;">
+								<div class="search-frame">
+									<input name='keyword' class="search-input" id='kw' type="text" value="{$keyword}" placeholder="{'搜索学生名称/手机号'|tr:'org'}">
+                                    <button class="search-box org-t-search-btn" id="subsearch">
+                                        <span class="search-icon" style="margin: 0;"></span>
+                                        <div class='t-list-img clear-icon' id="t-delt-btn" {if empty($keyword)}style="display:none;"{/if} >
+                                        </div>
+                                    </button>
+								</div>
+							</div>
+							<div class="col-md-20" style="float:right;padding:0;">
+                                <span class="c-fl fcg9">{'共'|tr:'org'} {if !empty($keyword)}{$searchCount}{else}{$total}{/if}{'人'|tr:'org'}</span>
+								<a id="importStudent" class="c-fr blue-link">{'导出Excel'|tr:'org'}</a>
+							</div>
+                        </form>
+                    </div>
+                    <table class="table-grid">
+                        <thead>
+                            <tr>
+                                <td class="hidden-lg col-sm-1 col-md-1">{'序号'|tr:'org'}</td>
+                                <td class="name col-sm-2 col-md-3" style="text-align:center;">{'学生姓名'|tr:'org'}</td>
+                                <td class="name col-sm-2 col-md-2" style="text-align:center;">{'昵称'|tr:'org'}</td>
+                                <td class="col-sm-1 col-md-2">{'性别'|tr:'org'}</td>
+                                <td class="col-sm-3 col-md-5">{'学校'|tr:'org'}</td>
+                                <td class="col-sm-3 col-md-4">{'联系方式'|tr:'org'}</td>
+                                <td class="hidden-sm col-sm-3 col-md-4">{'正在学习课程'|tr:'org'}</td>
+                            </tr>
+                        </thead>
+                        {if ($list)}
+                        <tbody>
+                        {foreach ($list as $k=>$v)}
+                        <tr>
+                            <td class="col-lg-1 col-sm-1 col-md-1 hidden-lg">{$k+1}</td>
+                            {if empty($v['real_name'])}
+                            <td class="name col-sm-2 col-md-3 tal">&nbsp;</td>
+                            {else}
+                            <td class="name col-sm-2 col-md-3 tal" style="padding:0 10px;">
+                                <a href="/org/student/detail/{$v['id']}" class="blue-link">{if($v['thumb'])}<img src="{utility_cdn::file($v['thumb'])}" class="face">{/if}
+                                {$v['real_name']}</a>
+                            </td>
+                            {/if}
+                            {if empty($v['name'])}
+                            <td class="col-sm-1 col-md-2">&nbsp;</td>
+                            {else}
+                            <td class="col-sm-1 col-md-2">{$v['name']}</td>
+                            {/if}
+                            {if empty($v['gender'])}
+                            <td class="col-sm-1 col-md-2">&nbsp;</td>
+                            {else}
+                            <td class="col-sm-1 col-md-2">{$v['gender']|tr:'org'}</td>
+                            {/if}
+                            {if empty($v['school'])}
+                            <td class="col-sm-3 col-md-5">&nbsp;</td>
+                            {else}
+                            <td class="col-sm-3 col-md-5">{$v['school']}</td>
+                            {/if}
+                            {if empty($v['mobile'])}
+                            <td class="col-sm-3 col-md-4">&nbsp;</td>
+                            {else}
+                            <td class="col-sm-3 col-md-4">{$v['mobile']}</td>
+                            {/if}
+                            <td class="hidden-sm col-md-4">{$v['courseNum']}</td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+						{/if}
+                    </table>
+					{if empty($searchCount)}
+					<div class="col-sm-20 mt15 fs14 tac" style="padding-top:60px;display:block;">
+						<img src="{utility_cdn::img('/assets_v2/img/platform/pet3.png')}" />
+						{if !empty($keyword)}
+						<p>{'您查询的学生不存在'|tr:'org'}~</p>
+						{else}
+						<p>{'您还没有学生'|tr:'org'}~</p>
+						{/if}
+					</div>
+					{/if}
+                <div class="page-list" id="pagepage"></div>
+            <div class="col-lg-12 tac mt10" style="display:none;padding-top:60px;">
+                <img src="{utility_cdn::img('/assets_v2/img/pet3.png')}">
+                <p class="fs14" style="font-weight: bold; color:#666;">{'学生列表为空'|tr:'org'}</p>
+            </div>
+        </div>
+        <div class='clear'></div>
+    </div>
+	</div>
+</section>
+{part "/site.main.footer"}
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery.divselect.js')}"></script>
+<script>
+$(function() {
+    $.divselect(".divselect");
+});
+</script>
+<script>
+$(function(){
+    $(".t-list-img").click(function(){
+    	$(this).hide();
+    	$("#kw").val("");
+        $('form').submit();
+    });
+    //调班弹框
+    $('.s-lst-class-btn').on('click', function(){
+        var uid=$(this).attr("dataId");
+
+        layer.open({
+            type: 2,
+            title:'调班',
+            area: ['500px', '400px'],
+            shadeClose: true, //点击遮罩关闭
+            content: '/layer/main/changeClass/'+uid
+        });
+
+    });
+	$("#importStudent").click(function(){
+		var keyword= $("#kw").val();
+		window.location.href="/phpexcel/platformstu/importOrgOfStudent?keyword="+keyword;
+        //$('form').submit();
+    });
+});
+</script>
+</body>
+</html>

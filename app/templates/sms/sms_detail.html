@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>发送短信-明细</title>
+    {part "/site.main.header"}
+    <link rel="stylesheet" href="{utility_cdn::css('/assets/js/jcrop/css/jquery.Jcrop.css')}" type="text/css" />
+    <link rel="stylesheet" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}" type="text/css" />
+</head>
+<style>
+    .bor1px{ border:1px solid #ddd;padding:5px 7px;height: 30px;line-height:30px;}
+</style>
+<body>
+{part "/site.main.nav.home"}
+<section class="pd30">
+    <div class="container">
+        <div class="row">
+            <!-- left menu -->
+            {part "/org.main.menu.sms"}
+            <!-- right main -->
+            <!-- rt -->
+            <div class="right-main col-md-16">
+                <section class="send-messages-grobal">
+                    <div class="tab-main">
+                        <div class="tab-hd fs14">
+                            <a class="tab-hd-opt" href="/org/message/SmsIndex">首页</a>
+                            <a class="tab-hd-opt curr" href="/org/message/MessageSendList">发送明细</a>
+                            <a class="tab-hd-opt" href="/org/message/SmsRecharge">充值记录</a>
+                        </div>
+                    </div>
+                    <div class="col-md-20 p0 clearfix mt20">
+                        <select class="c-fl mr30 select-smsType">
+                            <option value="">选择短信类型</option>
+                            <option {if($sms_type=="1")}selected{/if} value="1">报名成功</option>
+                            <option {if($sms_type=="2")}selected{/if}  value="2">开课提醒</option>
+                            <option {if($sms_type=="3")}selected{/if}  value="3">修改排课</option>
+                            <option  {if($sms_type=="4")}selected{/if} value="4">课堂统计</option>
+                        </select>
+                        <input type="text" value="{if(!empty($start_time))}{$start_time}{/if}" class="bor1px c-fl" placeholder="选择开始时间" id="start_time" />
+                        <span class="c-fl mr5 ml5 mt5">——</span>
+                        <input type="text" value="{if(!empty($end_time))}{$end_time}{/if}" class="bor1px c-fl mr10" placeholder="选择结束时间" id="end_time" />
+                        <select class="c-fl select-status">
+                            <option value="">发送状态</option>
+                            <option {if($status=="1")}selected{/if} value="1">成功</option>
+                            <option  {if($status=="2")}selected{/if}  value="2">失败</option>
+                        </select>
+                        <div class="c-fr">
+                            <div class="search-frame org-class-course">
+                                <select class="c-fl select-change-type" style="border-right:0;width:60px;">
+                                    <option {if(!empty($course_name))}selected{/if} value="1">手机号</option>
+                                    <option {if(!empty($course_name))}selected{/if} value="2">课程</option>
+                                </select>
+                                <input name="keyword" class="search-input" value="{if(!empty($mobile))}{$mobile}{/if} {if(!empty($course_name))} {$course_name} {/if}" autocomplete="off" type="text" placeholder="请输入手机号">
+                                <button class="search-box org-t-search-btn"   onclick="subSearch()">
+                                    <span class="search-icon" style="margin: 0;"></span>
+                                    <div class="t-list-img clear-icon" id="t-delt-btn" style="display:none;"></div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <h1 class="fs14 mt15 col-md-20 p0 clearfix mb15">
+                        <span class="c-fl">共{if(isset($data->result->totalSize))}{$data->result->totalSize}{else}0{/if}条</span>
+                        <a onclick="subexcel()"  class="c-fr cBlue">导出Excel</a>
+                    </h1>
+                    <table class="table-grid tac">
+                        <thead>
+                        <tr>
+                            <td class="col-md-2">手机号</td>
+                            <td class="col-md-2">短信类型</td>
+                            <td class="col-md-5">短信内容</td>
+                            <td class="col-md-3">课程</td>
+                            <td class="col-md-3">发送时间</td>
+                            <td class="col-md-2">状态</td>
+                            <td class="col-md-3">备注</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {if(!empty($data->result->items))}
+                        {foreach $data->result->items as $v}
+                        <tr>
+                            <td class="col-md-2">{$v->mobile}</td>
+                            <td class="col-md-2">{$v->sms_name}</td>
+                            <td class="col-md-5">{$v->content}</td>
+                            <td class="col-md-3">{$v->course_name}</td>
+                            <td class="col-md-3">{$v->create_time}</td>
+                            <td class="col-md-2">{if($v->status==0)}成功{else}失败{/if}</td>
+                            <td class="col-md-3">{if(!empty($v->remark))}{$v->remark}{else}  {/if}</td>
+                        </tr>
+                        {/foreach}
+                        {else}
+                            <tr>
+                                <div class="fs14 col-md-20 tac" style="padding-top:120px;">没有符合条件的结果</div>
+                            </tr>
+                        {/if}
+                        </tbody>
+                    </table>
+                    <div class="page-list" id="pagelist"></div>
+                </section>
+            </div>
+            <!-- /rt -->
+        </div>
+    </div>
+</section>
+{part "/site.main.footer"}
+</body>
+</html>
+<script src="{utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js')}"></script>
+<script src="{utility_cdn::js('/assets/js/jcrop/js/jquery.Jcrop.min.js')}"></script>
+<script src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}"></script>
+<script src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+<script>
+    var status = {$status};
+    $(function() {
+        page("pagelist","{$pagepath}",20,{$page},{$totalpage})
+        $("#start_time,#end_time").datetimepicker({
+            timepicker:false,
+            format: 'Y-m-d',
+        });
+        $('.select-change-type').change(function() {
+            if($(this).val() == 1) {
+                $('input.search-input').attr('placeholder', '请输入手机号');
+            }else{
+                $('input.search-input').attr('placeholder', '请输入课程名称');
+            }
+        });
+    })
+    function subSearch() {
+        var smsType = $('.select-smsType').val();
+        var startTime = $('#start_time').val();
+        var endTime = $('#end_time').val();
+        var status = $('.select-status').val();
+        var page = {$page};
+        if(status == 6){
+            status = '';
+        }
+
+        if($('.select-change-type').val() == 1) {
+            var mobile = $('.search-input').val();
+            if(mobile== 'undefined' || mobile == ''){
+                var mobile='';
+            }
+            var courseName='';
+        }else if($('.select-change-type').val() == 2){
+            var courseName = $('.search-input').val();
+            if(courseName== '' || courseName == 'undefined'){
+                var courseName ='';
+            }
+            var mobile ='';
+
+        }
+        window.location.href = "/org/message/MessageSendList?page="+page+"&sms_type="+smsType+"&start_time="+startTime+"&end_time="+endTime+"&status="+status+"&mobile="+mobile+"&course_name="+courseName;
+//        $.ajax({
+//            type:"get",
+//            dataType:"json",
+//            data:{ mobile: mobile, sms_type: smsType, status:status, start_time:startTime, end_time:endTime, course_name:courseName},
+//            url:'/org/message/MessageSendList',
+//            success:function(r){
+//
+//            }
+//        });
+    }
+
+
+    function subexcel() {
+        var smsType = $('.select-smsType').val();
+        var startTime = $('#start_time').val();
+        var endTime = $('#end_time').val();
+        var status = $('.select-status').val();
+        var page = {$page};
+        if(status == 6){
+            status = '';
+        }
+
+        if($('.select-change-type').val() == 1) {
+            var mobile = $('.search-input').val();
+            if(mobile== 'undefined' || mobile == ''){
+                var mobile='';
+            }
+            var courseName='';
+        }else if($('.select-change-type').val() == 2){
+            var courseName = $('.search-input').val();
+            if(courseName== '' || courseName == 'undefined'){
+                var courseName ='';
+            }
+            var mobile ='';
+
+        }
+        window.location.href = "/org/message/SendMessageExcel?page="+page+"&sms_type="+smsType+"&start_time="+startTime+"&end_time="+endTime+"&status="+status+"&mobile="+mobile+"&course_name="+courseName;
+    }
+
+</script>

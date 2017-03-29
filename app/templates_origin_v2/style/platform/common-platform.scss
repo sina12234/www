@@ -1,0 +1,49 @@
+@import "../common.scss";
+$main-color:#333;
+$link-color:#333 #0378c0;
+$gray-color:#666;
+$yellow-bg:#ffa81e #ffb949;
+$blue-bg:#02a1e5 #02be2a;
+$gray-bg:#f5f5f5;
+$white-color:#ffffff;
+/*color*/
+.cGreen,.cGreen a,.cGreen:visited,.green{color:#090}
+.cBlue,.cBlue a,.cBlue:visited{color:#1E50A2}
+.dBlue,.dBlue a,.dBlue:visited{color:#198fee}
+.cRed,.cRed a,.cRed:visited,.red{color:red}
+.cGray,.cGray a,.cGray:visited{color:#999}
+.dGray,.dGray a,.dGray:visited{color:#666}
+.lGray,.lGray a,.lGray:visited{color:#ccc}
+.cYellow,.cYellow a,.cYellow:visited{color:#f93}
+.cPink,.cPink a,.cPink:visited{color:#f66}
+.cWhite,.cWhite a,.cWhite:visited{color:#fff}
+a{
+    text-decoration:none;
+    color:nth($link-color,1);
+    &:visited{color:nth($link-color,1)}
+    &:hover{color:nth($link-color,2)}
+    &:active{color:nth($link-color,1)}
+}
+/*botton*/
+.btn{
+    display:inline-block;
+    padding:0 20px;
+    height:35px;
+    line-height: 35px;
+    background:$gray-bg;
+    color:$gray-color;
+    border:1px solid #e1e1e1;
+    @include b-radius(3px);
+    &:hover{
+        border:1px solid #d8d8d8;
+    }
+}
+.blue-btn{
+    background:nth($blue-bg,1);
+    color:$white-color;
+    border:1px solid nth($blue-bg,1);
+    &:hover{
+        background:nth($blue-bg,2);
+        border:1px solid nth($blue-bg,2);
+    }
+}

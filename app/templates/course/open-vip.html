@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{part '/site.main.orgname'} - 开通会员</title>
+    <meta name="title" content="{part '/site.main.orgname'} - 课程详情 - 云课 - 专业的在线学习平台">
+    <meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+    <meta name="description" content="{part '/site.main.orgname'} -  云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+    {part "/site.main.header"}
+</head>
+<style>
+.content .d-but{ margin:40px auto;}
+.auto{ margin: 0 auto;position: relative;border:2px solid #FFA81E !important; }
+.auto .dui{ position: absolute;top:-5px;right:0; display:block !important;}
+.disa .x_btn_reg2{ background: #ffa81e;}
+.btn_yellow_5:hover,.btn_gray_2:hover{ color:#fff;}
+</style>
+<body class="bgf7">
+{part "/site.main.nav"}
+<section class="pd40" id="open-vip">
+    <div class="container">
+        <div class="row">
+            <!-- 第一步 -->
+            <div class="open-vip member-pay-stepOne">
+                <div class="vip-intro mt30">
+                    <div class="vip-intro-pic col-md-4">
+                        <img src="{utility_cdn::img('/assets_v2/img/member-order.jpg')}" alt="" width="100%" height="auto">
+                    </div>
+                    <div class="col-md-16">
+                        <p class="fs16">{$info['title']}</p>
+                        <p class="fs14 mt20">
+                            <span class="cGray">{$info['desc']} </span>
+                            <a href="/course.list?ms={$setId}" class="cYellow">{'查看课程范围'|tr:'course.info'}</a>
+                        </p>
+                    </div>
+                </div>
+                <ul class="vip-class mt30" id="vip-class">
+                    <li class="col-md-5" date-tip="30" date-price="1" date-memberprice={$info['price_30']/100}>
+                        <p>{$info['price_30']/100}元/30天</p>
+                    </li>
+                    <li class="col-md-5" date-tip="90" date-price="2" date-memberprice={$info['price_90']/100}>
+                        <p>{$info['price_90']/100}元/90天</p>
+                    </li>
+                    <li class="col-md-5" date-tip="180" date-price="3" date-memberprice={$info['price_180']/100}>
+                        <p>{$info['price_180']/100}元/180天</p>
+                    </li>
+                    <li class="col-md-5" date-tip="360" date-price="4" date-memberprice={$info['price_360']/100}>
+                        <p>{$info['price_360']/100}元/360天</p>
+                    </li>
+                </ul>
+                <p class="fs14 cDarkgray mt30 c-fl">
+                    {'开通后，会员立即生效，有效期至'|tr:'course.info'}
+                    <span class="cYellow memberDate-txtDate" data-time={$time}>{$time}</span>
+                </p>
+                <p class="tec col-xs-20 mt30 mb30">
+                    <button class="btn fs16 col-md-3 request-pay-stepOne">{'确认开通'|tr:'course.info'}</button>
+                </p>
+            </div>
+            <!-- /第一步 -->
+            <!-- 第二步 -->
+            <div class="open-vip member-pay-stepTwo">
+                <div class="col-sm-14 pd0 tel mb10">
+                    <a href="javascript:;" class="member-payBtn-stepTwo fs14" title="">{'返回'|tr:'course.info'}</a>
+                </div>
+                <!-- 订单信息 -->
+                <div class="col-sm-20 bor1px bg1 fs14 pd10 mb20 hidden-xs">
+                    <div class="col-sm-17">{'订单信息'|tr:'course.info'}</div>
+                    <div class="col-sm-3 tec">{'价格'|tr:'course.info'}</div>
+                </div>
+                <div class="clearfix col-sm-20 pd0">
+                    <div class="col-sm-3 pdl0 col-xs-20">
+                        <img src="{utility_cdn::img('/assets_v2/img/member-order.jpg')}" alt="" width="100%" height="auto">
+                    </div>
+
+                    <div class="col-sm-14 pdl0 col-xs-20">
+                        <h1 class="fs16 new-pay-title">{$info['title']}</h1>
+                        <p class="mt20 cDarkgray info-buy-teac">{'有效期30天'|tr:'course.info'}</p>
+                        <div class="fl"></div>
+                    </div>
+                    <div class="fs16 col-sm-3 tec mt30 ter">
+                        <strong class="fwn fs18 colored lh22">
+                            ¥<span id="orderMemberSelectPrice"></span>
+                        </strong>
+                    </div>
+                </div>
+                <p class="tec col-xs-20 mt30 mb30 pd0">
+                    <button class="btn fs16 col-md-3 request-pay-stepTwo" onclick="openVip(this)">
+                        {'提交订单'|tr:'course.info'}
+                    </button>
+                </p>
+                <!-- /订单信息 -->
+            </div>
+            <!-- /第二步 -->
+            <!-- 第三步 -->
+            <div class="open-vip member-pay-stepThree">
+                <div class="col-sm-14 pd0">
+                    <a href="javascript:;" class="member-payBtn-stepThree fs14" title="">{'返回'|tr:'course.info'}</a>
+                </div>
+                <div class="vip-intro mt30 fs14 clearfix member-order-info">
+                    <div class="c-fl cDarkgray" id="orderMemberSerialNum">订单ID：216554459999887</div>
+                    <div class="c-fr">
+                        {'应付金额：'|tr:'course.info'}
+                        <span class="colored">
+                            ￥<em id="orderMemberPrice"></em>  
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-20 pd0 clearfix mb20 fs14 lh22 mt10">
+                    <div class="c-fr cGray">
+                        {'请于60分钟内完成支付，否则订单将会取消，付款剩余时间：'|tr:'course.info'}
+                        <span class="c-orange" id="timer">59分55秒</span>
+                    </div>
+                </div>
+                <!-- pay -->
+                <div class="col-sm-20 pd0">
+                    <div class="col-sm-2 cDarkgray fs16 pd0 tel">{'支付方式：'|tr:'course.info'}</div>
+                    <div class="col-sm-18 tel col-xs-20 pd0">
+                        <div tip="用支付宝支付" name="aliPayUrl" method="url" payurl="" class="paymethod new-pay-btn c-fl">
+                            <img class="mauto" src="{utility_cdn::img('/assets_v2/img/pay_zfb.jpg')}" alt="" />
+                            <div class='dui' style="display:none;">
+                                <img src="{utility_cdn::img('/assets/images/duihao.png')}" alt="">
+                            </div>
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div tip="用微信支付" name="otherPayUrl" method="" payurl="" class="paymethod new-pay-btn c-fl">
+                            <div class="bag">
+                                <img class="mauto" src="{utility_cdn::img('assets_v2/img/pay_weixin.jpg')}" alt=""/>
+                            </div>
+                            <div class='dui' style="display:none;">
+                                <img src="{utility_cdn::img('/assets/images/duihao.png')}" alt="">
+                            </div>
+                        </div>
+                        <div class="hidden" id="weixinPayUrl"></div>
+                    </div>
+                </div>
+                <div class="col-xs-20 col-md-3 pd0 col-md-offset-8">
+                    <div class="disa">
+                        <a id="buybt" method="" target="_blank" class="col-xs-20 col-md-20 fs14 tec mt40" value="去支付" type="submit">{'请选择支付方式'|tr:'course.info'}</a>
+                    </div>
+                </div>
+                <!-- /pay -->
+            </div>
+            <!-- /第三步 -->
+        </div>
+    </div>
+</section>
+<!-- 订单超时 -->
+<div class="col-md-20 tec orderTimeout" style="display:none;">
+    <p class="fs14 mt30 lh22">{'该订单已超时，请返回重新下单'|tr:'course.info'}</p>
+    <p class="fs14 lh22">{'您可以选择：'|tr:'course.info'}
+        <a href="/course.list" class="colored">{'课程详情页'|tr:'course.info'}</a>
+    </p>
+</div>
+<!-- /订单超时 -->
+ <!-- 提示 -->
+    <div id="wrap-pay-tip" style="display:none;">
+        <div class='box2'>
+            <div class="content diaw_1">
+                <div class='col-lg-20 fltnone mauto nonepdh mt40'>
+                    <p class="fs16 tac">{'支付完成前，请不要关闭此支付验证窗口。'|tr:'course.info'}</p>
+                    <p class="mt10 fs16 tec lh22">{'支付完成后，请根据您支付的情况点击下面按钮。'|tr:'course.info'}</p>
+                </div>
+                <div style="text-align:center" class='d-but col-lg-14 nonepdh fltnone clear'>
+                    <a style="padding:0 15px" href="" class="col-lg-8 ml15 nonepdh btn_gray_2">
+                        {'支付遇到问题'|tr:'course.info'}
+                    </a>
+                    <a style="padding:0 15px" href="" class="col-lg-8 ml15 nonepdh btn_yellow_5">
+                        {'支付完成'|tr:'course.info'}
+                    </a>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+    <div id="weixinqrcode" style="display:none;">
+        <div class='box1'>
+            <div class="content diaw_1">
+                <div style="padding:0 20px;text-align:center" class='col-lg-15 fltnone mauto mt40 clear'>
+                    <img src="" alt="">
+                </div>
+                <div style="text-align:center" class='d-but col-lg-10 nonepdh fltnone clear'>
+                    <a href="" class="col-lg-10 nonepdh btn_gray_2" type="button" value="支付遇到问题">
+                        {'支付遇到问题'|tr:'course.info'}
+                    </a>
+                    <a href="" class="col-lg-8 ml15 nonepdh btn_yellow_5" type="button" value="支付完成">
+                        {'支付完成'|tr:'course.info'}
+                    </a>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+ <!-- /提示 -->
+{part "/site.main.footer"}
+</body>
+</html>
+<script type="text/javascript">
+    $(function() {
+        $('.info-buy-teac').html('');
+        $('#timer').html('');
+
+        $('#vip-class li').click(function(){
+            if($(this).hasClass('select')){
+                $(this).removeClass('select');
+            }else{
+                $(this).addClass('select');
+                $(this).siblings().removeClass('select');
+            }
+
+            var memberSelectDate = $(this).attr('date-tip');
+             var newMemberDate = new Date();
+            var stringTime = $('.memberDate-txtDate').attr('data-time');
+            var timesTamp = Date.parse(new Date(stringTime))
+            var newMemberTime = timesTamp + (memberSelectDate*24*60*60*1000);
+                newMemberDate.setTime(newMemberTime);
+            var newMemberNowDate = newMemberDate.toLocaleDateString().replace('/','-').replace('/','-');
+
+                $('.request-pay-stepTwo').attr('priceType',$(this).attr('date-price'));
+                $('#orderMemberSelectPrice').html($(this).attr('date-memberprice'));
+                $('.memberDate-txtDate').html(newMemberNowDate);
+                $('.info-buy-teac').html('{'有效期至'|tr:'course.info'}' + newMemberNowDate);
+           
+        })
+
+    //step
+        $('.request-pay-stepOne').click(function() {
+            if($('#vip-class li').hasClass('select')) {
+                $('.member-pay-stepOne').hide();
+                $('.member-pay-stepThree').hide();
+                $('.member-pay-stepTwo').show();
+            }else {
+                layer.msg('{'请选择价格'|tr:'course.info'}');
+                return false;
+            }
+        })
+
+    //backBtn
+        $('.member-payBtn-stepTwo').click(function() {
+            $('.member-pay-stepOne').show();
+            $('.member-pay-stepTwo').hide();
+            $('.member-pay-stepThree').hide();
+        })
+
+        $('.member-payBtn-stepThree').click(function() {
+            $('.member-pay-stepOne').hide();
+            $('.member-pay-stepTwo').show();
+            $('.member-pay-stepThree').hide();
+        })
+    //payTabBtn
+        $('.paymethod[name="aliPayUrl"]').click(function() {
+            $(this).addClass('auto');
+            $('.paymethod[name="otherPayUrl"]').removeClass('auto');
+            $("#buybt").html($(this).attr("tip"));
+            $("#buybt").attr("href",$(this).attr("payurl"));
+            $("#buybt").attr("method",$(this).attr("method"));
+            $("#buybt").parent().removeClass("disa");
+        })
+        $('.paymethod[name="otherPayUrl"]').click(function() {
+            $(this).addClass('auto');
+            $('.paymethod[name="aliPayUrl"]').removeClass('auto');
+            $("#buybt").html($(this).attr("tip"));
+            $("#buybt").attr("href",'javascript:;');
+            $("#buybt").attr("method",$(this).attr("method"));
+            $("#buybt").parent().removeClass("disa");
+            $('#weixinqrcode').find('img').attr('src',$(this).attr("payurl"));
+        })
+
+    //memberPay
+        $("#buybt").click(function(){
+            if($(this).attr("method") == "qrCode"){
+                $('.member-pay-stepOne').hide();
+                $('.member-pay-stepTwo').hide();
+                $('.member-pay-stepThree').show();
+                $('.member-payBtn-stepThree').hide();
+                layer.open({
+                    type: 1,
+                    title: ['{'请用微信扫一扫'|tr:'course.info'}','color:#fff;background:#ffa81d'],
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['450px', '320px'],
+                    content: $('#weixinqrcode')
+                });
+            }else if($(this).attr("method") == "app"){
+                callpay();
+                $('.member-pay-stepOne').hide();
+                $('.member-pay-stepTwo').hide();
+                $('.member-pay-stepThree').show();
+                $('.member-payBtn-stepThree').hide();
+                layer.open({
+                    type: 1,
+                    title: ['{'请用微信扫一扫'|tr:'course.info'}','color:#fff;background:#ffa81d'],
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['450px', '320px'],
+                    content: $('#weixinqrcode')
+                });
+            }else if($(this).attr("method") == "url") {
+                $('.member-pay-stepOne').hide();
+                $('.member-pay-stepTwo').hide();
+                $('.member-pay-stepThree').show();
+                $('.member-payBtn-stepThree').hide();
+                layer.open({
+                    type: 1,
+                    title: ['{'网上支付提示'|tr:'course.info'}','color:#fff;background:#ffa81d'],
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['450px', '320px'],
+                    content: $('#wrap-pay-tip')
+                });
+            }else{
+                layer.msg('{'请选择支付方式'|tr:'course.info'}');
+            }
+        });
+
+    })
+
+    //Pay
+    function openVip(obj) {
+        var setId = {$info['setId']};
+        var priceType = $(obj).attr('pricetype');
+        var index = layer.load(2);
+        $('.request-pay-stepTwo').attr('disabled',"true");
+        
+        $.post('/course/ajax/OpenVip/' ,{ setId:setId ,priceType:priceType } ,function(r) {
+            if(r.code) {
+                layer.msg('{'提交订单失败'|tr:'course.info'}')
+            }else {
+                layer.close(index);
+                $('.member-pay-stepOne').hide();
+                $('.member-pay-stepTwo').hide();
+                $('.member-pay-stepThree').show();
+                $('.member-payBtn-stepThree').hide();
+                $('.request-pay-stepTwo').hide();
+                $('#orderMemberSerialNum').html('{'订单号：'|tr:'course.info'}'+r.result.serialNum);
+                $('#orderMemberPrice').html(r.result.price);
+                $('.paymethod[name="aliPayUrl"]').attr('payurl' ,r.result.aliPayUrl);
+                $('#timer').attr('date-time',r.result.createTime);
+                if(r.result.qrCode != '') {
+                    $('.paymethod[name="otherPayUrl"]').attr('payurl' ,r.result.qrCode);
+                    $('.paymethod[name="otherPayUrl"]').attr('method' ,'qrCode');
+                }else if(r.result.weixinPayUrl != ''){
+                    $('.paymethod[name="otherPayUrl"]').attr('payurl' ,r.result.weixinPayUrl);
+                    $('.paymethod[name="otherPayUrl"]').attr('method' ,'app');
+                    $('#weixinPayUrl').attr('payurl',r.result.weixinPayUrl);
+                }
+                $('.request-pay-stepTwo').removeAttr("disabled");
+                timer = setInterval("CountDown()",1000);
+            }
+        } ,'json');
+    }
+
+    function callpay(){
+        var weixinPayUrl = $('#weixinPayUrl').attr('payurl');
+        location.replace(weixinPayUrl);
+    }
+
+    function CountDown(){  
+        var orderTime = $('#timer').attr('date-time');
+        var maxtime = 60*60;
+        var starTime = new Date(orderTime.replace(/-/g,"/"));
+        var nowTime  = new Date();
+        var t = nowTime.getTime() - starTime.getTime();
+        var m = 59-Math.floor(t/1000/60%60);
+        var s = 59-Math.floor(t/1000%60);
+        var msg = m + "分" + s + "秒";
+
+        if (t > 0 && m > 0 && m < 60) {
+            document.all["timer"].innerHTML=msg;
+            --maxtime;  
+        }else if(m == 0 && s == 0) {
+            $('.member-pay-stepOne').hide();
+            $('.member-pay-stepTwo').hide();
+            $('.member-pay-stepThree').show();
+            document.all["timer"].innerHTML="订单已经过时";
+            layer.open({
+                type: 1,
+                title:['{'订单超时'|tr:'course.info'}','color:#fff;background:#ffa81d'],
+                area: ['400px','220px'],
+                shadeClose: true,
+                content: $('.orderTimeout')
+            });
+            clearInterval(timer);
+        }else {
+            return false;
+        }
+
+    }
+</script>

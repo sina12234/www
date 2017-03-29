@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{part '/site.main.orgname'} - 首页维护 - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 首页维护 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery.dragsort-0.5.2.min.js')}"></script>
+</head>
+<style>
+.Nocourse{ height:400px;text-align:center;line-height:200%; }
+.Nocourse p{ font-size:14px;color:#666;}
+.Nocourse a input{ padding:0 25px;height:30px;border-radius:3px;background:#ffa81d;color:#fff; }
+/*上传图片hover*/
+.edit-upload-cover:hover .ad-img:after{ position: absolute;top: 0;left: 0;width: 100%;height: 100%;line-height:230px;text-align: center;background-color: rgba(0,0,0,0.5);content:'修改推荐图';display: block;color:#fff;transition: .6s;
+}
+</style>
+<body>
+{part "/site.main.nav"}
+<section class="pd30">
+<div class="container">
+	<div class="row">
+  	{part "/org.main.menu.template"}
+    	<div class="right-main col-sm-9 col-md-16  pos-rel" id="template-course-data">
+          <div class="content">
+			<form>
+            	<p class="fs14">
+					<button type="submit" class="btn c-fr" id="index-release">首页发布</button>
+                <a class="gray-btn c-fr mr10" id="set-class-add">+添加模板</a>
+              </p>
+              {if !empty($templates)&&$is_pro==0}
+              {foreach $templates as $tk=>$tv}
+              <div class="set-class-li" tid="{$tv->template_id}">
+              	<div class="set-title col-sm-12 col-xs-12 col-md-20" data-title="{$tv->title}">
+                	<span class="set-title-icon"></span>
+                  	<p class="c-fl">{$tv->title}
+						<input type="hidden" name="title[]" value="{$tv->title}"/>
+						<input type="hidden" name="template_id[]" value="{$tv->template_id}"/>
+						<input type="hidden" name="owner_id[]" value="{$tv->owner_id}"/>
+						<input type="hidden" name="row_count[]" value="{$tv->row_count}"/>
+						<input type="hidden" name="recommend[]" value="{$tv->recommend}"/>
+						<input type="hidden" name="query_str[]" value="{$tv->query_str}"/>
+						<input type="hidden" name="order_by[]" value="{$tv->order_by}"/>
+						<input type="hidden" name="course_ids[]" value="{$tv->course_ids}"/>
+						<input type="hidden" name="sort[]" value="{$tv->sort}"/>
+						<input type="hidden" name="create_time[]" value="{$tv->create_time}"/>
+						<input type="hidden" name="last_updated[]" value="{$tv->last_updated}"/>
+						<input type="hidden" name="set_url[]" value="{$tv->set_url}"/>
+						<input type="hidden" name="type[]" value="{$tv->type}"/>
+						<input type="hidden" name="thumb_left[]" value="{$tv->thumb_left}"/>
+						<input type="hidden" name="thumb_right[]" value="{$tv->thumb_right}"/>
+                      {if $tv->recommend==2}
+                      (<span class="fs12">{'手动推荐'|tr:'org'}</span>)
+                      {else}
+                      (<span class="fs12">{'自动推荐'|tr:'org'} {'内容展示'|tr:'org'}:
+                      {if !empty($tv->query_arr->first_cate) and $cateList[$tv->query_arr->first_cate]}{$cateList[$tv->query_arr->first_cate]|tr:'course.list'}{else}{'全年级'|tr:'org'}{/if}
+                                {if !empty($tv->query_arr->second_cate) and $cateList[$tv->query_arr->second_cate]}{$cateList[$tv->query_arr->second_cate]|tr:'course.list'}{/if}
+								{if !empty($tv->query_arr->third_cate) and $cateList[$tv->query_arr->third_cate]}{$cateList[$tv->query_arr->third_cate]|tr:'course.list'}{/if}
+								{if !empty($tv->query_arr->attr_value_id) and $valueNameStr[$tv->template_id]}{$valueNameStr[$tv->template_id]}{else}{'全科目'|tr:'org'}{/if}
+								{if isset($tv->query_arr->course_type)&&$tv->query_arr->course_type=="1,2,3"}{'全部'|tr:'org'}
+                                {elseif(!empty($tv->query_arr->course_type) and $tv->query_arr->course_type==1)}{'直播'|tr:'org'}
+                                {elseif(!empty($tv->query_arr->course_type) and $tv->query_arr->course_type==2)}{'录播'|tr:'org'}
+                                {elseif(!empty($tv->query_arr->course_type) and $tv->query_arr->course_type==3)}{'线下课'|tr:'org'}
+								{/if}
+                                {if !empty($tv->query_arr->fee_type) and $tv->query_arr->fee_type=="0,1"}{'全部'|tr:'org'}
+								{elseif(!empty($tv->query_arr->fee_type) and $tv->query_arr->fee_type==1)}{'收费'|tr:'org'}
+								{else}{'免费'|tr:'org'}
+								{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='create_time:desc'}{'最新创建'|tr:'site.course'}{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='create_time:asc'}{'最早创建'|tr:'site.course'}{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='register:desc'}{'报名人数多'|tr:'site.course'}{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='register:asc'}{'报名人数少'|tr:'site.course'}{/if}
+                                </span>)
+                            {/if}
+                            </p>
+							{if (count($templates)>1)}
+                            <a href="javascript:void(0)" class="c-fr remove" tid="{$tv->template_id}"></a>
+							{/if}
+							{if $tv->recommend==1}
+							<span class="sort fs12">
+								<a href="javascript:void(0)" class="maunal-order" tid="{$tv->template_id}"></a>
+							</span>
+							{/if}
+                            <p class="maunal-div">
+                                <a href="javascript:void(0)" class="maunal-edit" tid="{$tv->template_id}">
+                                    <i class="maunal" style="display:none;"></i>
+                                </a>
+                                {*<span><i class="arrow-up"></i>{'设置模板'|tr:'org'}</span>*}
+                            </p>
+							
+                            {if $tk<count($templates)-1}
+                            <a class="arrow-down fs12" href="javascript:void(0)" tid="{$tv->template_id}" sort="{$tk}">{'下移'|tr:'org'}<span></span></a>
+                            {/if}
+                            {if $tk>0}
+                            <a class="arrow-up fs12" href="javascript:void(0)" tid="{$tv->template_id}" sort="{$tk}">{'上移'|tr:'org'}<span></span></a>
+                            {/if}
+                        </div>
+                        <dl class="set-class col-xs-20 p0">
+                            {if !empty($tv->courses)}
+                            {foreach $tv->courses as $ck=>$cv}
+                            <dd cid="{$cv->course_id}" class="col-xs-5">
+                                <div class="set-class-img">
+                                    <img src="{if !empty($cv->thumb_big)}{utility_cdn::file($cv->thumb_big)}{else}/assets_v2/img/1.png{/if}">
+                                    {if !empty($cv->admin_status)&&$cv->admin_status==-2}
+                                    <div class="course-status">该课程已下架(首页不显示)</div>
+                                    {/if}
+                                    {if !empty($cv->resell_status)&&$cv->resell_status<0}
+                                    <div class="course-status">该课程已失效(首页不显示)</div>
+                                    {/if}
+									{if !empty($cv->restatus)&&$cv->restatus==-1}
+                                    <div class="course-status">该课程在推广中已删除(首页不显示)</div>
+                                    {/if}
+                                    {if $tv->recommend==2}
+                                    <p class="edit-classbg"></p>
+                                    <a href="javascript:;" class="edit-classbtn top-course edit_course" top="{$ck}" tid="{$tv->template_id}" data-cid="{$cv->course_id}">
+                                        {'点击修改'|tr:'org'}
+                                    </a>
+									<span class="remove pos-abs remove-thisTemplate" data-tid="{$tv->template_id}" data-cid="{$cv->course_id}"></span>
+                                    {/if}
+
+                                </div>
+                                <a href="/course.info.show.{$cv->course_id}" target="_blank">{$cv->title}</a>
+                            </dd>
+                            {/foreach}
+                            {/if}
+                            {if $tv->recommend==2 and isset($tv->courses) and count($tv->courses)<16}
+                            <dd cid="1" class="col-xs-5 add-course">
+                            <div class="set-class-img top-course no-class-img add_course" style="cursor:pointer;" top="{count($tv->courses)}" tid="{$tv->template_id}">+ {'添加推荐课程'|tr:'org'}
+                                </div>
+                            </dd>
+                            {/if}
+                        </dl>
+                        <input type="hidden" name="listSort" value=""/>
+                        {if $tv->recommend==1  and isset($tv->courses) and count($tv->courses)%4==0}
+                        <span class="c-fr add-class-id" style="cursor:pointer;" tid="{$tv->template_id}">{'添加一行'|tr:'org'}</span>
+                        {/if}
+                    </div>
+                {/foreach}
+				{elseif(!empty($templates)&&$is_pro==1)}
+					{foreach $templates as $tk=>$tv}
+                    <div class="set-class-li" tid="{$tv->template_id}">
+                        <div class="set-title col-sm-12 col-xs-12 col-md-20" data-title="{$tv->title}">
+                            <span class="set-title-icon"></span>
+                            <p class="c-fl">{$tv->title}
+							<input type="hidden" name="title[]" value="{$tv->title}"/>
+							<input type="hidden" name="template_id[]" value="{$tv->template_id}"/>
+							<input type="hidden" name="owner_id[]" value="{$tv->owner_id}"/>
+							<input type="hidden" name="row_count[]" value="{$tv->row_count}"/>
+							<input type="hidden" name="recommend[]" value="{$tv->recommend}"/>
+							<input type="hidden" name="query_str[]" value="{$tv->query_str}"/>
+							<input type="hidden" name="order_by[]" value="{$tv->order_by}"/>
+							<input type="hidden" name="course_ids[]" value="{$tv->course_ids}"/>
+							<input type="hidden" name="sort[]" value="{$tv->sort}"/>
+							<input type="hidden" name="create_time[]" value="{$tv->create_time}"/>
+							<input type="hidden" name="last_updated[]" value="{$tv->last_updated}"/>
+							<input type="hidden" name="set_url[]" value="{$tv->set_url}"/>
+							<input type="hidden" name="type[]" value="{$tv->type}"/>
+							<input type="hidden" name="thumb_left[]" value="{$tv->thumb_left}"/>
+							<input type="hidden" name="thumb_right[]" value="{$tv->thumb_right}"/>
+							<input type="hidden" name="thumb_left_url[]" value="{$tv->thumb_left_url}"/>
+							<input type="hidden" name="thumb_right_url[]" value="{$tv->thumb_right_url}"/>
+
+                            {if $tv->recommend==2}
+                                (<span class="fs12">{'手动推荐'|tr:'org'}</span>)
+                            {else}
+                                (<span class="fs12">{'自动推荐'|tr:'org'} {'内容展示'|tr:'org'}:
+                                {if !empty($tv->query_arr->first_cate) and $cateList[$tv->query_arr->first_cate]}{$cateList[$tv->query_arr->first_cate]|tr:'course.list'}{else}{'全年级'|tr:'org'}{/if}
+                                {if !empty($tv->query_arr->second_cate) and $cateList[$tv->query_arr->second_cate]}{$cateList[$tv->query_arr->second_cate]|tr:'course.list'}{/if}
+								{if !empty($tv->query_arr->third_cate) and $cateList[$tv->query_arr->third_cate]}{$cateList[$tv->query_arr->third_cate]|tr:'course.list'}{/if}
+								{if !empty($tv->query_arr->attr_value_id) and $valueNameStr[$tv->template_id]}{$valueNameStr[$tv->template_id]}{else}{'全科目'|tr:'org'}{/if}
+								{if isset($tv->query_arr->course_type)&&$tv->query_arr->course_type=="1,2,3"}{'全部'|tr:'org'}
+                                {elseif (!empty($tv->query_arr->course_type) and $tv->query_arr->course_type==1)}{'直播'|tr:'org'}
+                                {elseif (!empty($tv->query_arr->course_type) and $tv->query_arr->course_type==2)}{'录播'|tr:'org'}
+                                {elseif (!empty($tv->query_arr->course_type) and $tv->query_arr->course_type==3)}{'线下课'|tr:'org'}
+								{/if}
+
+                                {if !empty($tv->query_arr->fee_type) and $tv->query_arr->fee_type==1}{'收费'|tr:'org'}
+								{elseif(!empty($tv->query_arr->fee_type) and $tv->query_arr->fee_type=="0,1")}{'全部'|tr:'org'}{else}{'免费'|tr:'org'}{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='create_time:desc'}{'最新创建'|tr:'site.course'}{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='create_time:asc'}{'最早创建'|tr:'site.course'}{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='register:desc'}{'报名人数多'|tr:'site.course'}{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='register:asc'}{'报名人数少'|tr:'site.course'}{/if}
+                                </span>)
+                            {/if}
+                            </p>
+                            {if (count($templates)>1)}
+							<a href="javascript:void(0)" class="c-fr remove" tid="{$tv->template_id}"></a>
+							{/if}
+							{if $tv->recommend==1}
+							<span class="sort fs12">
+								<a href="javascript:void(0)" class="maunal-order" tid="{$tv->template_id}"></a>
+							</span>
+							{/if}
+                            <p class="maunal-div">
+                                <a href="javascript:void(0)" class="maunal-edit" tid="{$tv->template_id}">
+                                    <i class="maunal" style="display:none;"></i>
+                                </a>
+                                {*<span><i class="arrow-up"></i>{'设置模板'|tr:'org'}</span>*}
+                            </p>
+                            {if $tk<count($templates)-1}
+                            <a class="arrow-down fs12" href="javascript:void(0)" tid="{$tv->template_id}" sort="{$tk}">{'下移'|tr:'org'}<span></span></a>
+                            {/if}
+                            {if $tk>0}
+                            <a class="arrow-up fs12" href="javascript:void(0)" tid="{$tv->template_id}" sort="{$tk}">{'上移'|tr:'org'}<span></span></a>
+                            {/if}
+                        </div>
+			{if ($tv->type==0)}
+				<dl class="set-class col-xs-20 p0">
+                {if !empty($tv->courses)}
+                {foreach $tv->courses as $ck=>$cv}
+                <dd cid="{$cv->course_id}" class="col-xs-4">
+                	<div class="set-class-img">
+                  	<img src="{if !empty($cv->thumb_big)}{utility_cdn::file($cv->thumb_big)}{else}/assets_v2/img/1.png{/if}">
+                    {if !empty($cv->admin_status)&&$cv->admin_status==-2}
+                    <div class="course-status">该课程已下架(首页不显示)</div>
+                    {/if}
+                    {if !empty($cv->resell_status)&&$cv->resell_status<0}
+                    <div class="course-status">该课程已失效(首页不显示)</div>
+                    {/if}
+					{if !empty($cv->restatus)&&$cv->restatus==-1}
+                    <div class="course-status">该课程在推广中已删除(首页不显示)</div>
+                    {/if}
+                    {if $tv->recommend==2}
+                    <p class="edit-classbg"></p>
+                    <a href="javascript:;" class="edit-classbtn top-course edit_course" top="{$ck}" tid="{$tv->template_id}" data-cid="{$cv->course_id}">{'点击修改'|tr:'org'}
+                    </a>
+					<span class="remove pos-abs remove-thisTemplate" data-tid="{$tv->template_id}" data-cid="{$cv->course_id}"></span>
+                    {/if}
+					</div>
+                    <a href="/course.info.show.{$cv->course_id}" target="_blank">{$cv->title}</a>
+                </dd>
+                {/foreach}
+                {/if}
+                {if $tv->recommend==2}
+					<dd cid="1" class="col-xs-5 add-course">
+						<div class="set-class-img top-course no-class-img add_course" style="cursor:pointer;" top="{count($tv->courses)}" tid="{$tv->template_id}">+ {'添加推荐课程'|tr:'org'}</div>
+					</dd>
+
+				{/if}
+				</dl>
+				<input type="hidden" name="listSort" value=""/>
+                {if $tv->recommend==1 and isset($tv->courses) and count($tv->courses)%5==0}
+                <p class="col-xs-20"><span class="c-fr add-class-id" style="cursor:pointer;" tid="{$tv->template_id}">{'添加一行'|tr:'org'}</span></p>
+                {/if}
+	           {elseif($tv->type==1)}
+				<dl class="set-class col-xs-4 pd0 edit-upload-cover">
+					<dt class="ad-img" id="imgid{$tv->template_id}">
+						{if !empty($tv->thumb_left)}
+						<img src="{utility_cdn::file($tv->thumb_left)}"/>
+						{else}
+						<div class="no-course-img">
+							<p>+添加图片</p>
+							<p>上传尺寸：230*390</br>支持jpg、png</p>
+						</div>
+						{/if}
+					</dt>
+				</dl>
+				<input type="hidden" name="local_thumb" value="{$tv->type}"/>
+				<dl class="set-class col-xs-16 pd0">
+            	{if !empty($tv->courses)}
+              	{foreach $tv->courses as $ck=>$cv}
+					<dd cid="{$cv->course_id}" class="col-xs-5">
+						<div class="set-class-img">
+						<img src="{if !empty($cv->thumb_big)}{utility_cdn::file($cv->thumb_big)}{else}/assets_v2/img/1.png{/if}">
+						{if !empty($cv->admin_status)&&$cv->admin_status==-2}
+						<div class="course-status">该课程已下架(首页不显示)</div>
+						{/if}
+						{if !empty($cv->resell_status)&&$cv->resell_status<0}
+						<div class="course-status">该课程已失效(首页不显示)</div>
+						{/if}
+						{if !empty($cv->restatus)&&$cv->restatus<0}
+						<div class="course-status">该课程已失效(首页不显示)</div>
+						{/if}
+						{if $tv->recommend==2}
+						<p class="edit-classbg"></p>
+						<a href="javascript:;" class="edit-classbtn top-course edit_course" top="{$ck}" tid="{$tv->template_id}" data-cid="{$cv->course_id}">{'点击修改'|tr:'org'}</a>
+						<span class="remove pos-abs remove-thisTemplate" data-tid="{$tv->template_id}" data-cid="{$cv->course_id}"></span>
+						{/if}
+						</div>
+						 <a href="{if !empty($cv->surl)}{$cv->surl}{/if}" target="_blank">{$cv->title}</a>
+                    </dd>
+                    {/foreach}
+                    {/if}
+					{if $tv->recommend==2}
+					<dd cid="1" class="col-xs-5 add-course">
+						<div class="set-class-img top-course no-class-img add_course" style="cursor:pointer;" top="{count($tv->courses)}" tid="{$tv->template_id}">+ {'添加推荐课程'|tr:'org'}</div>
+					</dd>
+					{/if}
+				</dl>
+			{elseif($tv->type==2)}
+				<dl class="set-class col-xs-16 pd0">
+					{if !empty($tv->courses)}
+					{foreach $tv->courses as $ck=>$cv}
+                	<dd cid="{$cv->course_id}" class="col-xs-5">
+                  	<div class="set-class-img">
+                    <img src="{if !empty($cv->thumb_big)}{utility_cdn::file($cv->thumb_big)}{else}/assets_v2/img/1.png{/if}">
+                    {if !empty($cv->admin_status)&&$cv->admin_status==-2}<div class="course-status">该课程已下架(首页不显示)</div>
+                    {/if}
+                    {if !empty($cv->resell_status)&&$cv->resell_status<0}
+                    <div class="course-status">该课程已失效(首页不显示)</div>
+                    {/if}
+					{if !empty($cv->restatus)&&$cv->restatus==-1}
+                    <div class="course-status">该课程在推广中已删除(首页不显示)</div>
+                    {/if}
+                    {if $tv->recommend==2}
+                    <p class="edit-classbg"></p>
+                    <a href="javascript:;" class="edit-classbtn top-course edit_course" top="{$ck}" tid="{$tv->template_id}" data-cid="{$cv->course_id}">
+                    {'点击修改'|tr:'org'}
+                    </a>
+					<span class="remove pos-abs remove-thisTemplate" data-tid="{$tv->template_id}" data-cid="{$cv->course_id}"></span>
+                    {/if}
+                    </div>
+                    <a href="{if !empty($cv->surl)}{$cv->surl}{/if}" target="_blank">{$cv->title}</a>
+                </dd>
+                    {/foreach}
+                    {/if}
+					{if $tv->recommend==2}
+					<dd cid="1" class="col-xs-4 add-course">
+					<div class="set-class-img top-course no-class-img add_course" style="cursor:pointer;" top="{count($tv->courses)}" tid="{$tv->template_id}">+ {'添加推荐课程'|tr:'org'}</div>
+					</dd>
+					{/if}
+				</dl>
+				<dl class="set-class col-xs-4 pd0 edit-upload-cover">
+					<dt class="ad-img" id="imgid{$tv->template_id}">
+						{if !empty($tv->thumb_right)}
+						<img src="{utility_cdn::file($tv->thumb_right)}"/>
+						{else}
+						<div class="no-course-img">
+							<p>+添加图片</p>
+							<p>上传尺寸：230*390</br>支持jpg、png</p>
+						</div>
+						{/if}
+					</dt>
+				</dl>
+				<input type="hidden" name="local_thumb" value="{$tv->type}"/>
+				{/if}
+                </div>
+                {/foreach}
+				{else}
+				<div class="col-md-20  no-template Nocourse mt60" style="display:block;">
+                    <div class="template-info ">
+                        <div class="no-template-icon"></div>
+                        <p>还没有课程不能进行首页模块设置哦！</p>
+                       <!-- <div class="btn" id="tmpl-add">新建课程</div>-->
+                    </div>
+                    <!--<p>您还没有创建课程哦~</p>-->
+                    <!--<p>创建课程后自动显示</p>-->
+                    <!--<p>-->
+                        <!--<a href="javascript:void(0);" class="btn" id="tmpl-add">添加模板</a>-->
+                    <!--</p>-->
+				</div>
+                {/if}
+				</form>
+            <!-- 引导弹窗
+            <div class="setDistriBoxBg"></div>
+            <div class="setTemplateBox pos-abs">
+                <a href="javascript:;" title="" id="setTemplateBox-closeBtn"></a>
+            </div>
+            /引导弹窗 -->
+        </div>
+    </div>
+<div class='clear'></div>
+<a href="#bottom" name="bottom"></a>
+</div>
+</div>
+</section>
+{part "/site.main.footer"}
+</body>
+</html>
+<script type="text/javascript">
+$(function () {
+	if(isPro == 1){
+		$('#tab-app').show();
+	}
+	//添加广告
+	var tmpl=$('#template-course-data');
+	tmpl.find(".ad-img").click(function(){
+		if($(this).attr('id')){
+				var tid=''+$(this).attr('id');
+		}else{
+				var tid='';
+		}
+		if($(this).parents('.set-class-li').find('input[name="local_thumb"]').val()){
+			var local_id = $(this).parents('.set-class-li').find('input[name="local_thumb"]').val();
+		}else{
+			var local_id = '';
+		}
+
+		layer.open({
+			type: 2,
+			title: ['{'图片设置'|tr:'org'}'],
+			shadeClose: true,
+			shade: 0.8,
+			area: ['500px', '460px'],
+			content: '{"/org.main.addCourseImg."}'+tid+'/'+local_id,
+			closeBtn:2
+		});
+	});
+    //拖拽
+    $(".maunal-order").click(function(){
+        $(this).hide();
+        var _this=$(this).parents(".set-class-li").find(".set-class");
+        var thisId=$(this).closest(".set-class-li");
+        _this.dragsort({ dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<dd ></dd>" });
+        function saveOrder() {
+        var data = _this.find("dd").map(function() { return $(this).attr("cid"); }).get();
+        _this.siblings("input[name=listSort]").val(data.join(","));
+        };
+        var cBtn='<input type="button" class="order-cancel" value="取消">';
+        var sBtn="<a href='javascript:;' class='order-confirm'>保存</a>";
+        thisId.find(".arrow-down,.arrow-up,.add-class-id,.maunal-div,.remove").hide();
+        thisId.find(".set-title").append(cBtn,sBtn);
+        $(".set-class-li").removeClass("set-class-border");
+        thisId.addClass("set-class-border");
+        thisId.find(".edit-classbg").css("display",'none');
+        thisId.find(".edit-classbtn").css("display",'none');
+        thisId.find(".add-course").remove();
+    });
+    //首页发布
+    $('form').submit(function(){
+		$.post('/org.main.setTemplate',$(this).serialize(),function(r){
+    	if(r.code=="100"){
+      	layer.msg("{'发布成功'|tr:'org'}",{ icon: 1 },function(){ });
+      }else if(r.code=='-101'){
+		layer.msg(r.error);
+		return false;
+	  }else{
+        layer.msg("{'发布失败'|tr:'org'}",{ icon: 1 },function(){ });
+      }
+    },"json");
+		return false;
+    });
+
+    $(".set-class-li").on("click","a.arrow-down",function(){
+        var tid=$(this).attr('tid');
+        var old=$(this).parents('.set-class-li').next().attr('tid');
+        var sort=$(this).attr('sort');
+        var thisId=$(this).closest(".set-class-li");
+        var nextId=$(this).closest(".set-class-li").next(".set-class-li");
+        var preId=$(this).closest(".set-class-li").prev(".set-class-li");
+        var nums=$(".content").find(".set-class-li").length;
+        if(nextId.html() != undefined){
+            $.post('/org.main.moveDownAjax',{ 'tid':tid,'sort':sort,'old':old },function(r){
+                if(r.error){
+                    layer.msg(r.error);
+                }else{
+                    location.reload();
+                }
+            },"json");
+        }else{
+            layer.msg("{'不能再移了'|tr:'org'}");
+        }
+    });
+    $(".set-class-li").on("click",".order-confirm",function(){
+            var cids=$(this).parents('.set-class-li').find('input[name=listSort]').val();
+            var tid=$(this).parents('.set-class-li').attr('tid');
+            var thisId=$(this).closest(".set-class-li");
+            if(cids!=''){
+                $.post('/org.main.saveSortAjax',{ 'tid':tid,'cids':cids },function(r){
+                    if(r.error){
+                        layer.msg(r.error);
+						return false;
+                    }else{
+					location.reload();
+					}
+                },"json");
+            };
+    })
+
+    $(".set-class-li").on("click",".order-cancel",function(){
+        layer.confirm('您确认要取消么？', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            location.reload();
+        }, function(){
+        });
+    })
+    $(".set-class-li").on("click","a.arrow-up",function(){
+        var tid=$(this).attr('tid');
+        var old=$(this).parents('.set-class-li').prev().attr('tid');
+        var sort=$(this).attr('sort');
+        var thisId=$(this).closest(".set-class-li");
+        var nextId=$(this).closest(".set-class-li").next(".set-class-li");
+        var preId=$(this).closest(".set-class-li").prev(".set-class-li");
+        if(preId.html() != undefined){
+            $.post('/org.main.moveUpAjax',{ 'tid':tid,'sort':sort,'old':old },function(r){
+                if(r.error){
+                    layer.msg(r.error);
+                }else{
+                    location.reload();
+                }
+            },"json");
+        }else{
+            layer.msg("{'不能再移了'|tr:'org'}");
+        }
+    })
+    $('.add-class-id').click(function(){
+        var tid=$(this).attr('tid');
+        var this_parent_li=$(this).closest('.set-class-li');
+        var this_nums=this_parent_li.find('li').length;
+        if (this_nums<16){
+            $.post('/org.main.addRowsAjax',{ tid:tid },function(r){
+                if(r.error){
+                    layer.msg(r.error);
+                }else{
+                    var html='';
+                    for(var i in r){
+                        html+='<dd class="col-sm-4 add-course"><div class="set-class-img"><img src="'+r[i].thumb_big+'"></div><a href="/course.info.show/'+r[i].course_id+'">'+r[i].title+'</a></dd>';
+                    }
+                    if(i<3){
+                        $('.add-class-id').remove();
+                    }
+                    this_parent_li.find('ul').append(html);
+					if(r){
+					location.reload();
+					}
+                }
+            },"json");
+        }else{
+            layer.msg('最多只能添加4行');
+        }
+    });
+    $(".maunal-edit,#set-class-add").click(function(){
+        if($(this).attr('tid')){
+            var tid='/'+$(this).attr('tid');
+        }else{
+            var tid='';
+        }
+        layer.open({
+            type: 2,
+            title: ['{'课程模版设置'|tr:'org'}'],
+            shadeClose: true,
+            shade: 0.8,
+            area: ['700px', '500px'],
+            content: '{"/org.main.SystemSet"}'+tid,
+            closeBtn:2
+        });
+    });
+    $('.add_course').each(function(i){
+        var top=$(this).attr('top');
+        var tid=$(this).attr('tid');
+        $(this).click(function(){
+            layer.open({
+                type: 2,
+                title: ['{'课程推荐'|tr:'org'}'],
+                shadeClose: true,
+                shade: 0.8,
+                area: ['800px', '600px'],
+                content: '{"/org.main.iframeTemplateCourse."}'+top+'/'+tid,
+                closeBtn:2
+            });
+        });
+    });
+	$('.edit_course').each(function(i){
+        var top=$(this).attr('top');
+        var tid=$(this).attr('tid');
+        var cid=$(this).attr('data-cid');
+
+        $(this).click(function(){
+            layer.open({
+                type: 2,
+                title: ['{'课程推荐修改'|tr:'org'}'],
+                shadeClose: true,
+                shade: 0.8,
+                area: ['800px', '600px'],
+                content: '{"/org.main.iframeTemplateCourseEdit."}'+top+'/'+tid+'/'+cid,
+                closeBtn:2
+            });
+        });
+    });
+    $('.set-title .remove').click(function(){
+        var tid=$(this).attr('tid');
+        var cid=$(this).attr('data-tid');
+        layer.confirm('确认删除该模块课程吗？',{ btn:['确认','取消'] },function(){
+        $.post('/org.main.deleteTemplateAjax',{ tid:tid,cid:cid },function(r){
+            if(r.error){
+                layer.msg(r.error);
+            }else{
+                location.reload();
+            }
+        },"json");
+        },function(){ });
+    });
+
+    $('.set-class-img .remove-thisTemplate').click(function() {
+		var cid=$(this).attr('data-cid');
+		var tid=$(this).attr('data-tid');
+        layer.confirm('确认删除该推荐的课程吗？', {
+          btn: ['确定','取消']
+        }, function(){
+			 $.post("/org.main.delTemplateOfCourse",{ cid:cid,tid:tid },function(r){
+					if(r){
+						location.reload();
+						return false;
+					}
+                },"json");
+        }, function(){
+        });
+    })
+
+    $('#setTemplateBox-closeBtn').click(function() {
+        $('.setDistriBoxBg').hide();
+        $('.setTemplateBox').hide();
+    })
+	$('#template-course-data').each(function(){
+        var tid=$(this).find('.set-class-li').attr('tid');
+        var this_nums=$(this).find('.set-class-li').length;
+		if(this_nums<=1){
+			$('.maunal-div').css({ 'margin-right':'8px','margin-top':'12px'})
+			$('.maunal-div>span').css({ 'right':'-5px' })
+		}else{
+			$('.maunal-div').css({ 'margin-right':'0'})
+		}
+		
+	})
+    $('.set-title').each(function() {
+        var title = $(this).attr('data-title');
+        if(title == '推荐模块') {
+            $(this).find('.maunal').hide();
+        }else{
+            $(this).find('.maunal').show();
+        }
+    })
+})
+
+</script>

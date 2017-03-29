@@ -1,0 +1,29 @@
+// 尖角
+.border-arrow-up{
+  width: 0;
+  height: 0;
+  border-left:7px solid transparent;
+  border-right:7px solid transparent;
+  border-bottom:8px solid $jianjiao-border-color;
+}
+.border-arrow-down{
+	width:0; 
+	height:0; 
+	border-left:7px solid transparent;
+	border-right:7px solid transparent;
+	border-top:8px solid $jianjiao-border-color;
+}
+.border-arrow-left{
+	width:0; 
+	height:0; 
+	border-top:7px solid transparent;
+	border-bottom:7px solid transparent; 
+	border-right:8px solid $jianjiao-border-color; 
+}
+.border-arrow-right{
+  width: 0;
+  height: 0;
+  border-top:7px solid transparent;
+  border-bottom:7px solid transparent;
+  border-left:8px solid $jianjiao-border-color;
+}

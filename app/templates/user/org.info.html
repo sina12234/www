@@ -1,0 +1,770 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>高能100 - 首页设置</title>
+{part "/index.main.headeruser"}
+<script src="{utility_cdn::js('/assets/js/part.js')}"></script>
+<style> 
+      .user_content_box{ position: relative;height: 500px; }
+      .stepbar_1{ width: 720px; }
+      .zhanshi{ margin-top: 30px; }
+      .zhanshi .tjinput{ margin: 0px 0px 0px 150px; }
+      .zhanshi .tjinput input { width: 240px;height: 45px;background-color: #FFA81D;border-radius: 5px;border:none;color: #fff; }
+      .zhanshi .yil{ margin-top: 30px;padding-left: 20px; }
+      .zhanshi .yil input{ background-color:#FFA81D;border: none;width: 90px;height: 35px;float: right;margin-right: 20px; color: #fff;border-radius: 5px; }
+      .zhanshi .yil input:hover{ background-color: #F59500; }
+      .zhanshi .yil h1{ font-size: 14px;font-weight: normal; }
+      .zhanshi .yil h1 img{ margin-right: 10px; }
+      .zhanshi .yil .mouse .mouse-1 .zhez{ position: absolute;top:0px;left:0px;z-index: 0;display:none; }
+      .zhanshi .yil .mouse{ margin-top: 10px; }
+      .zhanshi .yil .mouse .mouse-1{ position: relative;background-color: #ccc;width: 218px;height: 123px;margin:5px;overflow: hidden; }
+      .zhanshi .yil .mouse .mouse-1 .on-1{ position: absolute; top:0px; left: 45px; cursor: pointer;font-size: 20px;text-shadow: 1px 1px 8px #FFA91E;z-index: 1;padding-top: 40px; }
+      .zhanshi .yil .mouse .mouse-1{  width: 220px; height: 125px; margin: 5px; position: relative; border: 2px solid #fff; }
+      .zhanshi .yil .mouse .mouse-1:hover{ border: 2px solid #FFA81D; }
+      .zhanshi .yil .mouse .mouse-1 p img{ position: absolute;right: -40px;bottom: -20px;cursor: pointer; }
+      .zhanshi .yil .mouse .mouse-1 .on-1 a{ color: #fff;padding-left: 15px; }
+      .zhanshi .yil .mouse .mouse-1 .on-1 b{ font-size: 14px;text-shadow:none;font-weight: normal; color: #fff; }
+      .zhanshi .yil .mouse-nav{ margin-top: 10px; }
+      .zhanshi .yil .mouse-nav ul li{ height:43px; border-bottom: 1px dashed #ccc;font-size: 14px;line-height: 43px; position: relative;padding-left: 15px; }
+      .zhanshi .yil .mouse-nav ul li:hover{ background-color: #FEF5E4; }
+      .zhanshi .yil .mouse-nav ul li p{ float: right;padding-right: 20px; font-size: 12px;color: #b6b6b6; }
+      .zhanshi .yil .mouse-nav ul li a{ color: #333333; }
+      .zhanshi .yil .mouse-nav ul li img{ margin-right: 10px; }
+      .zhanshi .yil .nav-show { z-index:999;cursor: pointer;width: 120px;height: 120px;background-color: #f1f1f1;position: absolute;border-radius: 5px;right: 10px;top:0px;box-shadow: 0px 0px 5px rgba(200,200,200,0.5); }
+      .zhanshi .yil .nav-show ul li{ height: 39px;border-bottom: 1px solid #E2E2E2;text-align: center;line-height: 39px; }
+      .zhanshi .yil .nav-show ul li:hover{ background-color:#E2E2E2; }
+      .zhanshi .yil .more{ padding:10px 20px 0 0;text-align:right;line-height:30px; }
+      .zhanshi .yil .more span{ cursor:pointer; }
+      #bgg{ position: fixed;left: 0;top: 0;width: 100%;height: 100%;text-align: center;z-index: 10000;background: rgba(0, 0, 0, 0.498039); display: none; }
+        .message-show{ width: 520px;height:430px;background-color: #fff; z-index: 1002;position: fixed;top: 10%;left: 31%;border-radius:10px;display:none; }
+        .message-show .show-hea{ height:44px;background-color: #f6f6f6;border-radius: 10px  }
+        .message-show .show-hea p{ padding:11px;font-size: 16px; }
+        .message-show .show-hea p img{ margin-right: 10px; }
+        .message-show .show-hea p b{ float: right;font-size: 20px; cursor: pointer; }
+        .message-show .mty{ margin: 30px 0px 0px 70px; }
+        .message-show .scbtn{ margin: 10px 0px 0px 70px  }
+        .message-show .scbtn input{ float: left; width: 125px;height: 40px;margin-right: 20px;border:1px solid #ccc;background-image: -moz-linear-gradient(top, #00FF00, #FF0000); /*火狐*/ }
+        .message-show .scbtn p{ line-height: 40px; color: #a1a1a1; }
+        .message-show .wbk input{ width: 380px;height: 45px;margin: 10px 0px 0px 70px  }
+        .message-show .show-wc input{ width: 240px;height: 45px; background-color: #FFA81D;border: none; border-radius: 5px;color: #fff;margin: 10px 0px 0px 135px;font-size: 16px; }
+      .show-box{ width:500px;height:560px;background-color: #fff; z-index: 1003;position: fixed;top: 10%;left: 33%;border-radius:10px;display: none; }
+      .show-box .show-hea{ height:44px;background-color: #f6f6f6;border-radius: 5px; }
+      .show-box .show-hea p{ padding:11px;font-size: 16px; }
+      .show-box .show-hea p img{ margin-right: 10px; }
+      .show-box .show-hea p b{ float: right;font-size: 20px; cursor: pointer; }
+      .show-box .mty{ margin: 30px 0px 0px 0px; }
+      .show-box .mty h1{ font-weight: normal;font-size: 16px; float: left;padding-top:10px; }
+      .show-box .mty input{ width:400px;height: 43px; margin-left: 20px;padding-left: 10px;border:1px solid #ccc; }
+      .show-box .scbtn{ margin: 10px 20px 0px 20px;  }
+      .show-box .scbtn textarea{ float: left; width:400px;height:350px;border:1px solid #ccc;margin-top: 10px; }
+      .show-box .scbtn p{ line-height: 40px; color: #a1a1a1; }
+      /*.show-box .wbk input{ width: 241px;height: 45px;border:none;background-color: #FFA81D;border-radius: 5px;color: #fff;margin: 15px 0px 0px 140px; }*/
+      .show-box .wbk input{ width: 380px;height: 45px;margin: 10px 0px 0px 70px; }
+      .show-box .bc input{ width: 241px;height: 45px;border:none;background-color: #FFA81D;border-radius: 5px;color: #fff;margin: 15px 0px 0px 140px; }
+      .zhanshi .jglogo .jgdj p{ line-height: 40px; color: #528AD5; padding-left: 20px; cursor: pointer;width: 150px; }
+      .zhanshi .jglogo{ margin-top: 15px; }
+      .zhanshi .jglogo select{ width: 180px;height: 45px;margin-right: 8px; }
+      .zhanshi .jglogo .jgt{  float: left; margin-right:15px; }
+      .zhanshi .jglogo .jgbtn input{  width: 123px;height: 40px;text-shadow: 0 1px 0 rgba(0,0,0,0); }
+      .zhanshi .jglogo .jgbtn p{ font-size: 12px;color: #c3c3c3; }
+      .zhanshi .jglogo .jigxing{  float: left; line-height: 40px; }
+      .zhanshi .jglogo .jigxing img{ margin-top: -2px; }
+      .zhanshi .jglogo .jigxing p{  display: inline; padding-right: 10px; font-size: 12px;padding-left: 5px; }
+      #bg{ position: fixed; top: 0%; left: 0%; width: 100%; height: 100%; background-color: black; z-index:1001; -moz-opacity: 0.7; opacity:.70; filter: alpha(opacity=70); display: none; }
+
+     .show-box .show-wc input{ width: 240px;height: 45px; background-color: #FFA81D;border: none; border-radius: 5px;color: #fff;margin: 10px 0px 0px 135px;font-size: 16px; }
+    .show-big{ width: 520px;height: 433px;background-color: #fff; z-index: 100222;position: absolute;top: 10%;left: 31%;border-radius:10px;display:none; }
+    .show-big .show-hea{ height:44px;background-color: #f6f6f6;border-radius: 10px; }
+    .show-big .show-hea p{ padding:11px;font-size: 16px; }
+    .show-big .show-hea p img{ margin-right: 10px; }
+    .show-big .show-hea p b{ float: right;font-size: 20px; cursor: pointer; }
+    .show-big .mty{ margin: 30px 0px 0px 70px; }
+    .show-big .scbtn{ margin: 10px 0px 0px 70px; }
+    .show-big .scbtn input{ float: left; width: 125px;height: 40px;margin-right: 20px; border:1px solid #ccc;background-image: -moz-linear-gradient(top, #00FF00, #FF0000); /*火狐*/ }
+   .show-big .scbtn p{ line-height: 40px; color: #a1a1a1; }
+   .show-big .wbk input{ width: 380px;height: 45px;margin: 10px 0px 0px 70px; }
+   .show-big .show-wc input{ width: 240px;height: 45px; background-color: #FFA81D;border: none; border-radius: 5px;color: #fff;margin: 10px 0px 0px 135px;font-size: 16px; }
+</style>
+<body>
+<!--top-->
+{part "/index.main.nav.user"}
+<div class='count'>
+  <div class='container-fluid'>
+    <div class='row'>
+      <div class='col-md-3 user_menu hidden-xs'>
+        <div id=''>
+          <div id='menu'>
+            {part "/user.home.menu.user"}
+          </div>
+        </div>
+      </div>
+      <div class='col-md-9 user_content'>
+        <div class='user_box'>
+          <div class='container-fluid'>
+            <div class='row'>
+              <div class='user_content_box'>
+                <div class="stepbar_1 mt25">
+                    <ul class='tab'>
+                    <li class="on"><b></b><span class="fs14">内容维护</span></li>
+                    <li><b></b><span>机构信息</span></li>
+                    </ul>
+                </div> 
+               <div class='zhanshi col-sm-12 col-xs-12'>
+                  <div class='yil col-sm-12 col-xs-12'>
+                      <h1 class='col-sm-12 col-xs-12'><img src="{utility_cdn::img('/assets/images/jgdian.jpg')}" alt="">展示图</h1>
+                      <div class='mouse col-sm-12 col-xs-12'>
+                          {if !empty($org_slide)}
+                          {foreach $org_slide as $slide}
+                          <div class='mouse-1 col-sm-4 add-shadow'>
+                            <img width="220" height="125" src="{$url}/{$slide->slide_url}" alt="">
+                            <div class="zhez"><img src="{utility_cdn::img('/assets/images/tm.png')}" alt=""></div>
+                            <p class='on-1' style="display:none;">
+                              <a class='edit-pic'href="#" sid="{$slide->pk_slide}">点击修改</a></br><b>图片尺寸1920*428</b>
+                              <img src="{utility_cdn::img('/assets/images/ljt.png')}" alt="" class="del-pic" sid="{$slide->pk_slide}">
+                            </p>
+                          </div>
+                          {/foreach}
+                          {else}
+                          <div class='mouse-1 col-sm-4 add-shadow'>
+                            <img width="220" height="125" src="{utility_cdn::img('/assets/images/ba.jpg')}" alt="">
+                            <div class="zhez"><img src="{utility_cdn::img('/assets/images/tm.png')}" alt=""></div>
+                            <p class='on-1' style="display:none;">
+                              <a class='add-pic'href="#" sid="{$slide->pk_slide}">点击修改</a></br><b>图片尺寸1920*428</b>
+                            </p>
+                          </div>
+                          {/if}
+                          {for($i=3;$i>count($org_slide);$i--)}
+                          <div class='mouse-1 col-sm-4'>
+                            <p class='on-1'>
+                              <a class='add-pic' href="#">点击添加</a></br><b>图片尺寸1920*428</b>
+                            </p>
+                          </div>
+                          {/for}
+                      </div>
+                   </div>
+                   <div class='yil col-sm-12 col-xs-12'>
+                       <h1 class='col-sm-12 col-xs-12'><img src="{utility_cdn::img('/assets/images/jgdian.jpg')}" alt="">活动公告 <input type="button" class='add-notice' value='+增加公告'></h1>
+                       <div class='mouse-nav col-sm-12 col-xs-12' id="show">
+                            <ul>
+                             {if !empty($notice_list->data)}
+                             {foreach $notice_list->data as $notice}
+                              <li class="notice-list">
+                                {if $notice->sort>0}
+                                <img src="{utility_cdn::img('/assets/images/ding.png')}" alt="">
+                                {else}
+                                <img src="{utility_cdn::img('/assets/images/dian.jpg')}" alt="">
+                                {/if}
+                                <a href="/activity.main.info.{$notice->pk_notice_id}" title="{$notice->notice_title}">{if strlen($notice->notice_title)>50}{$notice->notice_title_sub50}{else}{$notice->notice_title}{/if}</a>
+                                <p>{$notice->update_time}</p>
+                                <div class='nav-show' style="display:none;">
+                                  <ul>
+                                    <li class="edit-notice" nid="{$notice->pk_notice_id}">修改</li>
+                                    <li class="remove-notice" nid="{$notice->pk_notice_id}">删除</li>
+                                    {if $notice->sort==0}
+                                    <li class="is-top" nid="{$notice->pk_notice_id}"style="border:none;">优先展示</li>
+                                    {else}
+                                    <li class="no-top" nid="{$notice->pk_notice_id}"style="border:none;">取消优先</li>
+                                    {/if}
+                                  </ul>
+                                </div>
+                              </li>
+                             {/foreach}
+                             {/if}
+                            </ul>
+                            <div class="more" page="{$notice_list->page}"><span>更多</span></div>
+                       </div>
+                    </div>
+               </div>
+               <div class='zhanshi col-sm-12 col-xs-12' style="display:none;">
+                  <form id="org-info">
+                    <div class='jglogo col-sm-12 col-xs-12' style="margin-top:-5px;">
+                         <div class='jigxing'><img src="{utility_cdn::img('/assets/images/jigxing.jpg')}" alt="">
+                         <p>机构LOGO：</p>
+                         </div>
+                         <div class='jgt'><img style="width:129px;;height:48px;" src="{if $org_info->thumb_big}{$url}/{$org_info->thumb_big}{else}{utility_cdn::img('/assets/images/jgt.jpg')}{/if}" alt=""></div>
+                         <div class='jgbtn'>
+                             <input type="button" id='upload-logo' value="上传图片">
+                             <p>尺寸129*48 支持jpg,png格式 最大100K</p>
+                         </div>
+                    </div> 
+                    <div class='jglogo col-sm-12 col-xs-12'>
+                         <div class='jigxing' style="margin-left:6px;">
+                            <p>公司名称： </p>
+                         </div>
+                         <div class='jgbtn'>
+                             <input type="text" name="company" value="{$org_info->company}" style="width:368px;height:40px; padding-left:5px;">
+                         </div>
+                    </div> 
+                    <div class='jglogo col-sm-12 col-xs-12'>
+                         <div class='jigxing' style="margin-left:10px;"><img src="{utility_cdn::img('/assets/images/jigxing.jpg')}" alt="">
+                         <p>所在地：</p>
+                         </div>
+                          <select class="province" name="province">
+                              <option value='0'>请选择</option>
+                              {if !empty($province_list)}
+                              {foreach $province_list as $province}
+                              <option value='{$province->region_id}' {if $org_info->province==$province->region_id}selected{/if}>{$province->name}</option>
+                              {/foreach}
+                              {/if}
+                          </select>
+                          <select class="city" name="city" style="display:none;">
+                              <option value='0'>请选择</option>
+                          </select>
+                          <select class="county" name="county" style="display:none;">
+                              <option value='0'>请选择</option>
+                          </select>
+                    </div>
+                    <div class='jglogo col-sm-12 col-xs-12'>
+                         <div class='jigxing' style="margin-left:5px;">
+                         <p>联系地址：</p>
+                         </div>
+                         <div class='jgbtn'>
+                             <input type="text" name="address" value="{$org_info->address}" style="width:368px;height:40px; padding-left:5px;">
+                         </div>
+                    </div>
+                    <div class='jglogo col-sm-12 col-xs-12'>
+                         <div class='jigxing' style="margin-left:28px;">
+                         <p>邮箱：</p>
+                         </div>
+                         <div class='jgbtn'>
+                             <input type="text" name="email" value="{$org_info->email}" style="width:368px;height:40px; padding-left:5px;">
+                         </div>
+                    </div>
+                    <div class='jglogo col-sm-12 col-xs-12'>
+                         <div class='jigxing' style="margin-left:5px;">
+                         <p>服务电话：</p>
+                         </div>
+                         <div class='jgbtn'>
+                             <input type="text" name="areacode" value="{$org_info->areacode}" style="width:40px;height:40px; padding-left:5px;">
+                             -
+                             <input type="text" name="hotline" value="{$org_info->hotline}" style="width:80px;height:40px; padding-left:5px;">
+                         </div>
+                    </div>
+                    <div class='jglogo col-sm-12 col-xs-12'>
+                         <div class='jigxing'style="margin-left:-3px;"><img src="{utility_cdn::img('/assets/images/jigxing.jpg')}" alt="">
+                         <p>培训领域：</p>
+                         </div>
+                          <select>
+                              <option>全部</option>
+                              <option>小学</option>
+                              <option>初中</option>
+                              <option>高中</option>
+                          </select>
+                    </div>
+                    <div class='jglogo col-sm-12 col-xs-12'>
+                         <div class='jigxing' style="margin-left:5px;">
+                         <p>办学方针：</p>
+                         </div>
+                         <div class='jgbtn'>
+                             <input type="text" name="policy" style="width:368px;height:40px; padding-left:5px;" value="{$org_info->policy}">
+                         </div>
+                    </div>
+                    <div class='jglogo col-sm-12 col-xs-12'>
+                         <div class='jigxing'style="margin-left:-3px;"><img src="{utility_cdn::img('/assets/images/jigxing.jpg')}" alt="">
+                         <p>关于我们：</p>
+                         </div>
+                           <div class='jgdj' id="add-about">
+                              <p>添加/修改</p>
+                           </div>  
+                    </div>
+                    <div class='tjinput'>
+                           <input type="submit" value="保存">
+                    </div>
+                  </form>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class='message-show' id="add-pic-box">
+  <form>
+    <div class='show-hea'>
+       <p><img src="{utility_cdn::img('/assets/images/kuai.jpg')}" alt="" />添加图片<b class="close">×</b></p>
+    </div>
+    <div class='mty'>
+      <img width="380" height="154" src="{utility_cdn::img('/assets/images/mty.png')}" alt="">
+    </div>
+    <div class='scbtn'>
+        <input type="button" id="browse" value="上传图片">
+        <p>尺寸1920*428  支持jpg,png格式 最大800K</p>
+    </div>
+    <div class='wbk'>
+        <input type="text" name="link" placeholder="图片链接地址">
+    </div>
+    <div class='show-wc'>
+        <input type="hidden" name="sid">
+        <input type="hidden" name="fid">
+        <input type="hidden" name="act">
+         <input type="submit" value="完成">
+    </div>
+  </form>
+</div>
+<div class='show-box' id="add-notice-box">
+  <form>
+   <div class='show-hea'>
+      <p><img src="{utility_cdn::img('/assets/images/kuai.jpg')}" alt="" />添加公告<b class='close'>×</b></p>
+   </div>
+   <div class='mty'>
+       <input type="text" name="notice_title" placeholder="请输入标题">
+   </div>
+   <div class='scbtn'>
+        <textarea name="notice_content" id="add-notice-content" placeholder="请输入公告内容"></textarea>
+        <script src="{utility_cdn::js('/assets/libs/ckeditor/ckeditor.js')}"></script>
+        <script src="{utility_cdn::js('/assets/libs/ckeditor/adapters/jquery.js')}"></script>
+        <script>
+           $(document).ready(function(){
+                $( '#add-notice-content' ).ckeditor( { customConfig: '/assets/libs/ckeditor.config.js' } );
+            });
+        </script>
+   </div>
+   <div class='bc'>
+       <input type="submit" value="保存">
+   </div>
+   <div class='show-wc'>
+   </div>
+  </form>
+</div>
+<div class='show-box' id="edit-notice-box">
+  <form>
+   <div class='show-hea'>
+      <p><img src="{utility_cdn::img('/assets/images/kuai.jpg')}" alt="" />修改公告<b class='close'>×</b></p>
+   </div>
+   <div class='mty'>
+       <input type="text" name="notice_title" placeholder="请输入文字">
+   </div>
+   <div class='scbtn'>
+        <textarea name="notice_content" id="edit-notice-content" placeholder="请输入公告内容"></textarea>
+        <script src="{utility_cdn::js('/assets/libs/ckeditor/ckeditor.js')}"></script>
+        <script src="{utility_cdn::js('/assets/libs/ckeditor/adapters/jquery.js')}"></script>
+        <script>
+           $(document).ready(function(){
+                $( '#edit-notice-content' ).ckeditor( { customConfig: '/assets/libs/ckeditor.config.js' } );
+            });
+        </script>
+   </div>
+   <div class='wbk'>
+       <input type="hidden" name="nid">
+       <input type="submit" value="保存">
+   </div>
+   <div class='show-wc'>
+   </div>
+  </form>
+</div>
+<div class='show-big' id="show-big" style="display:none">
+  <form>
+   <div class='show-hea'>
+      <p><img src="{utility_cdn::img('/assets/images/kuai.jpg')}" alt="" />更换LOGO<b class="close">×</b></p>
+   </div>
+   <div class='mty'>
+     <img src="{utility_cdn::img('/assets/images/mty.png')}" width="380" height="154" alt="">
+   </div>
+   <div class='scbtn'>
+       <input type="button" id="logo" value="上传图片">
+       <p>尺寸129*48  支持jpg,png格式 最大100K</p>
+   </div>
+   <div class='show-wc'>
+       <input type="hidden" name="thumb_small">
+       <input type="hidden" name="thumb_med">
+       <input type="hidden" name="thumb_big">
+       <input type="submit" value="完成">
+   </div>
+  </form>
+</div>
+<div class='show-box' id="about-box">
+  <form>
+   <div class='show-hea'>
+      <p><img src="{utility_cdn::img('/assets/images/kuai.jpg')}" alt="" />关于我们<b class='close'>×</b></p>
+   </div>
+   <div class='mty'>
+       <input type="text" name="name" placeholder="请输入机构名称">
+   </div>
+   <div class='scbtn'>
+        <textarea name="desc" id="edit-about" placeholder="请输入结构简介"></textarea>
+        <script src="{utility_cdn::js('/assets/libs/ckeditor/ckeditor.js')}"></script>
+        <script src="{utility_cdn::js('/assets/libs/ckeditor/adapters/jquery.js')}"></script>
+        <script>
+           $(document).ready(function(){
+                $( '#edit-about' ).ckeditor( { customConfig: '/assets/libs/ckeditor.config.js' } );
+            });
+        </script>
+   </div>
+   <div class='show-wc'>
+       <input type="submit" value="保存">
+   </div>
+  </form>
+</div>
+<div id="bg">
+</div>
+{part "/index.main.footer"}
+</body>
+<script type="text/javascript">
+$(function  () {
+  $('.tab li').click(function(){
+    $(".tab li").eq($(this).index()).addClass("on").siblings().removeClass('on');
+    $(".zhanshi").hide().eq($(this).index()).show();
+  })
+  $('.add-shadow').mousemove(function(){
+    $(this).find('.zhez,.on-1').show().css({ 'background':'rgbc(0,0,.15)' });
+  })
+  $('.add-shadow').mouseout(function(){
+    $(this).find('.zhez,.on-1').hide();
+  })
+  $('.add-pic').click(function(){
+    var el = $("#add-pic-box");
+    $(el).find(".mty img").attr('src','/assets/images/kuai.jpg')
+    $(el).find("input[name=sid]").val('')
+    $(el).find("input[name=fid]").val('')
+    $(el).find("input[name=link]").val('')
+    $(el).find("input[name=act]").val('add')
+    $('#bg').show();
+    $('#add-pic-box').show();
+  })
+  $('.edit-pic').click(function(){
+    var el = $("#add-pic-box");
+    $(el).find("input[name=act]").val('edit')
+    var sid=$(this).attr("sid");
+    $.post("/user.org.getOrgSlideAjax","sid="+sid,function(r){
+      if (r && r.data) {
+        data = r.data;
+        $(el).find("input[name=sid]").val(data.pk_slide)
+        $(el).find("input[name=fid]").val(data.slide_url)
+        $(el).find("input[name=link]").val(data.slide_link)
+        $(el).find(".mty img").attr('src',r.path+'/'+data.slide_url)
+        $('#bg').show();
+        $('#add-pic-box').show();
+      } else {
+        alert('获取失败!');
+      }
+    },"json");
+  })
+  $('.del-pic').click(function(){
+   if(confirm("您确定要删除这张图片吗？")){
+    var sid=$(this).attr("sid");
+    $.post("/user.org.delOrgSlideAjax","sid="+sid,function(r){
+      if (r && r.error) {
+        alert(r.error);
+      } else {
+        location.reload();
+      }
+    },"json");
+   }
+  })
+  $('.add-notice').click(function(){
+    $('#bg').show();
+    $('#add-notice-box').show();
+  })
+  $("#add-notice-box form").submit(function(){
+    $.post("/user.org.addnoticeAjax",$(this).serialize(),function(r){
+        if(r.error){
+            alert(r.error);
+            $("[name="+r.field+"]").focus();
+            return false;
+        }
+        if(r){
+            location.reload();
+            return false;
+        }
+    },"json");
+    return false;
+  });
+  $('.mouse-nav').on('click','.edit-notice',function(){
+    var nid=$(this).attr("nid");
+    $.post("/user.org.getNoticeAjax","nid="+nid,function(data){
+      var el = $("#edit-notice-box");
+      if (data && data.data) {
+        data = data.data;
+        $(el).find("input[name=notice_title]").val(data.notice_title)
+        $(el).find("textarea[name=notice_content]").val(data.notice_content)
+        $(el).find("input[name=nid]").val(nid)
+        //$(el).find("#notice_content_edit").text(data.notice_content)
+        //CKEDITOR.instances.edit-notice-content.setData(data.notice_content)
+      } else {
+        alert('获取失败!');
+      }
+    },"json");
+    $('#bg').show();
+    $('#edit-notice-box').show();
+  })
+  $("#edit-notice-box form").submit(function(){
+    $.post("/user.org.updateNoticeAjax",$(this).serialize(),function(r){
+        if(r.error){
+            alert(r.error);
+            if(r.field){
+                $("[name="+r.field+"]").focus();
+            }
+            return false;
+        }
+        if(r){
+            location.reload();
+            return false;
+        }
+    },"json");
+    return false;
+  });
+  $(".mouse-nav").on('click','.remove-notice',function(){
+    if(confirm("您确定要删除这条公告吗？")){
+        var nid = $(this).attr("nid");
+        $.post("/user.org.delNoticeAjax","nid="+nid,function(r){
+            if(r){
+                location.reload();
+                return false;
+            }
+        },"json");
+    }
+    return false;
+  });
+  $('.more span').click(function(){
+    var page = $('.more').attr("page");
+    $.post("/user.org.getNoticeListAjax","page="+page,function(r){
+      if(r.data!=''){
+        $('.mouse-nav>ul:first-child').append(r.data);
+        $('.more').attr("page",r.page)
+      }else{
+          $('.more').remove();
+      }
+    },"json");
+  });
+  $(".mouse-nav").on('click','.is-top',function(){
+    if(confirm("您确定要将这条公告置顶吗？")){
+        var nid = $(this).attr("nid");
+        $.post("/user.org.topNoticeAjax","nid="+nid,function(r){
+            if(r){
+                location.reload();
+            }
+        },"json");
+    }
+  });
+  $(".mouse-nav").on('click','.no-top',function(){
+    if(confirm("您确定要将这条公告取消置顶吗？")){
+        var nid = $(this).attr("nid");
+        $.post("/user.org.noTopNoticeAjax","nid="+nid,function(r){
+            if(r){
+                location.reload();
+                return false;
+            }
+        },"json");
+    }
+    return false;
+  });
+  $('#upload-logo').click(function(){
+    $.post("/user.org.getOrgLogoAjax",function(r){
+      var el = $("#show-big");
+      if (r && r.data) {
+        var data = r.data;
+        $(el).find("input[name=thumb_big]").val(data.thumb_big)
+        $(el).find("input[name=thumb_med]").val(data.thumb_med)
+        $(el).find("input[name=thumb_small]").val(data.thumb_small)
+        $(el).find(".mty img").attr('src',r.path+'/'+data.thumb_big)
+        $('#bg').show();
+        $('#show-big').show();
+      } else {
+        alert('获取失败!');
+      }
+    },"json");
+  })
+  $('.close').click(function(){
+    $('#bg').hide();
+    $('#add-pic-box').hide();
+    $('#edit-pic-box').hide();
+    $('#add-notice-box').hide();
+    $('#edit-notice-box').hide();
+    $('#show-big').hide();
+    $('#about-box').hide();
+  })
+
+  $('.mouse-nav').on('mousemove','.notice-list',function(){
+    $(this).children('.nav-show').show();
+  })
+  $('.mouse-nav').on('mouseout','.notice-list',function(){
+    $(this).children('.nav-show').hide();
+  })
+  $("#org-info").submit(function(){
+    $.post("/user.org.updateOrgProfileAjax",$(this).serialize(),function(r){
+        if(r.error){
+            alert(r.error);
+            if(r.field){
+                $("[name="+r.field+"]").focus();
+            }
+        }else{
+            alert('修改成功');
+        }
+        return false;
+    },"json");
+    return false;
+  });
+  $('#add-about').click(function(){
+    var nid=$(this).attr("nid");
+    $.post("/user.org.getAboutAjax",function(data){
+      var el = $("#about-box");
+      if (data && data.data) {
+        data = data.data;
+        $(el).find("input[name=name]").val(data.name)
+        $(el).find("textarea[name=desc]").val(data.desc)
+        //$(el).find("#notice_content_edit").text(data.notice_content)
+        //CKEDITOR.instances.edit-about.setData(data.desc)
+      } else {
+        alert('获取失败!');
+      }
+    },"json");
+    $('#bg').show();
+    $('#about-box').show();
+  })
+  $("#about-box form").submit(function(){
+    $.post("/user.org.updateAboutAjax",$(this).serialize(),function(r){
+        if(r.error){
+            alert(r.error);
+            if(r.field){
+                $("[name="+r.field+"]").focus();
+            }
+        }else{
+            $('#bg').hide();
+            $('#about-box').hide();
+        }
+        return false;
+    },"json");
+    return false;
+  });
+
+  $('.province').change(function(){
+    var city={if !empty($org_info->city)}{$org_info->city}{else}''{/if};
+    $('.city').hide();
+    $('.county').hide();
+    $.post("/user.org.getRegionAjax",{ rid:$(this).val(),level:1 },function(r){
+        if(r.data){
+            var json=r.data;
+            var option='';
+            $(json).each(function(i){
+                var s='';
+                if(json[i].region_id==city){
+                    s='selected';
+                }
+                option+=('<option '+s+' value="' +json[i].region_id+ '">' +json[i].name+ '</option>');
+            });
+            $('.city').html(option);
+            $('.city').show().trigger('change');
+        }
+    },"json");
+  }).trigger('change');
+  $('.city').change(function(){
+    var county={if !empty($org_info->county)}{$org_info->county}{else}''{/if};
+    $('.county').hide();
+    $.post("/user.org.getRegionAjax",{ rid:$(this).val(),level:2 },function(r){
+        if(r.data){
+            var json=r.data;
+            var option='';
+            $(json).each(function(i){
+                var s='';
+                if(json[i].region_id==county){
+                    s='selected';
+                }
+                option+=('<option '+s+' value="' +json[i].region_id+ '">' +json[i].name+ '</option>');
+            });
+            $('.county').html(option);
+            $('.county').show();
+        }
+    },"json");
+  });
+})
+</script>
+<script src="{utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js')}"></script>
+<script>
+$(function(){
+    var uploader = new plupload.Uploader({
+        browse_button: 'browse', // this can be an id of a DOM element or the DOM element itself
+        url: '/file.main.uploadOrgSlide',
+        filters: {
+            mime_types : [
+            { title : "Image files", extensions : "jpg,gif,png" }
+            ],
+            max_file_size:"1000kb"
+        }
+        ,multi_selection:false
+    });
+    uploader.init();
+    uploader.bind('FilesAdded', function(up, files) {
+        uploader.start();
+    });
+    uploader.bind('UploadProgress', function(up, file) {
+        $("#browse").val("上传中："+ file.percent +"%");
+    });
+    uploader.bind('FileUploaded', function(up, file,info) {
+        $("#browse").val("上传完成");
+        if(info.response){
+            var r = jQuery.parseJSON(info.response);
+            if(r.error){
+                alert(r.error);
+            }else{
+                $('#add-pic-box').find('.mty img').attr('src',r.src+"?"+Math.random());
+                $('#add-pic-box').find('input[name=fid]').val(r.fid);
+            }
+        }
+    });
+    var logo = new plupload.Uploader({
+        browse_button: 'logo', // this can be an id of a DOM element or the DOM element itself
+        url: '/file.main.uploadOrgLogo',
+        filters: {
+            mime_types : [
+            { title : "Image files", extensions : "jpg,gif,png" }
+            ],
+            max_file_size:"1000kb"
+        }
+        ,multi_selection:false
+    });
+    logo.init();
+    logo.bind('FilesAdded', function(up, files) {
+        logo.start();
+    });
+    logo.bind('UploadProgress', function(up, file) {
+        $("#logo").val("上传中："+ file.percent +"%");
+    });
+    logo.bind('FileUploaded', function(up, file,info) {
+        $("#logo").val("上传完成");
+        if(info.response){
+            var r = jQuery.parseJSON(info.response);
+            if(r.error){
+                alert(r.error);
+            }else{
+                $('#show-big').find('.mty img').attr('src',r.src+"?"+Math.random());
+                $('#show-big').find('input[name=thumb_small]').val(r.thumb_small);
+                $('#show-big').find('input[name=thumb_med]').val(r.thumb_med);
+                $('#show-big').find('input[name=thumb_big]').val(r.thumb_big);
+            }
+        }
+        
+    });
+    $('#add-pic-box form').submit(function(){
+        $.post("/user.org.uploadOrgSlideAjax",$(this).serialize(),function(r){
+            if(r.error){
+                alert(r.error);
+                return false;
+            }else{
+                location.reload();
+            }
+        },"json");
+        return false;
+    });
+    $('#show-big form').submit(function(){
+        var src=$('#show-big').find('input[name=thumb_small]').val();
+        $.post("/user.org.uploadOrgLogoAjax",$(this).serialize(),function(r){
+            if(r.error){
+                alert(r.error);
+                return false;
+            }else{
+                $('.jgt img').attr('src','{$url}/'+src);
+                $('#bg').hide();
+                $('#show-big').hide();
+                
+            }
+        },"json");
+        return false;
+    });
+});
+
+</script>
+</html>
+

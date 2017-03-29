@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>课程详情</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=9;IE=8;IE=7;IE=edge;chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<meta name="renderer" content="webkit">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+</head>
+<style>
+body,dd,div,dl,dt,li,ol,p,pre,td,th,ul,h1,h2,h3,h4,h5,h6{ margin:0;padding:0; }
+body,fieldset,html,iframe,img{ border:0; }
+body,input,select,textarea{ outline:0;border:0;font-family:\5fae\8f6f\96c5\9ed1,Arial,"Hiragino Sans GB",Helvetica,sans-serif; }
+html{ font-size:62.5%; }
+body{ font-size:1.4rem;background:#f3f5f7; }
+.box{ margin-top:1rem;border-top:.1rem solid #ececec;border-bottom:.1rem solid #ececec;padding:1rem;background:#fff; }
+.course-title{ font-size:1.6rem;color:#5c6273; }
+.title{ font-size:1.4rem;color:#999;line-height:2.1rem;width:100%;padding-bottom:1rem;height:2.1rem; }
+.title-icon{ float:left;width:.4rem;height:1.8rem;background:#12b7f5;display:inline-table;margin-right:1rem;}
+.left{ float:left; }
+.right{ float:right; }
+.b1{ border-bottom:.1rem solid #f4f4f4; }
+.course-price{ color:#ff711b;font-size:1.6rem; }
+.fs12{ font-size:1.2rem;}
+.mt10{ margin-top:1rem; }
+.ml10{ margin-left:1rem; }
+.cgray{ color:#999; }
+.f16{ font-size:1.6rem; }
+.content{ font-size:1.2rem;color:#5c6273;padding:1rem 0;width:100%; }
+.teacher-list{ width:100%;padding-top:1rem;display:inline-block; }
+.teacher-item{ width:100%;list-style:none;display:inline-block;min-height:5rem;}
+.teacher-pic{ width:4rem;height:3rem;float:left; }
+.teacher-pic img{ width:3.8rem;height:3.8rem;border-radius:50%; }
+.teacher-info{ float:left;max-width:80%;overflow:hidden;padding-left:.5rem;padding-bottom:1rem;}
+.more-icon{ display:inline-block;width:0;height:0;border-left: 5px solid transparent;border-right: 5px solid transparent;border-top: 5px solid #999;margin-left:3px;}
+.more-up-icon{ display:inline-block;width:0;height:0;border-left: 5px solid transparent;border-right: 5px solid transparent;border-bottom: 5px solid #999;margin-left:3px;}
+.teacher-name{ float:left;width:100%;display:inline-block;color:#5c6273; }
+.teacher-intro{ float:left;width:100%;display:inline-block;color:#999999;position:relative;}
+.m10{ margin-left:10%;}
+#content img{ max-width:100%; }
+.cgreen{ color:#67b53d ;}
+.discount{ text-decoration:line-through;font-size:1.2em}
+ .vip-icon{ display:none;width:2.5rem;height:1.5rem;background:url(/assets_v2/img/crow.png) no-repeat;display:inline-block;}
+ .box-vip{ padding:.5rem 1rem;background:#f8f4e1;color:#f18135;font-size:1.2rem;}.vip-list{ padding:.5rem 0 0 2.5rem;}
+.vip-open{ float:right;color:#f18135;text-decoration:none;float:right;}
+.vip-item{ width:100%;display:block;line-height:2.5rem;color:#3ea2af;text-decoration: none;}
+.vip-status{ float:left;background:#ff711b;color:#fff;border-radius:.5rem;margin-right:.8rem;font-size:.7rem;height:20px;line-height:20px;margin-top:5px;padding:0rem .5rem;}
+.no-data{ padding:2rem;text-align:center;}
+.no-data img{ max-width:100%; }
+.address-list{ width:100%;padding-top:1rem;display:inline-block;}
+.address-list li{ list-style:none;display:inline-block;width:100%;font-size: 1.2rem;color: #999;line-height: 2.1rem;}
+.address-list li span{ color: #666;}
+
+{*.vip-tanc{ background-color:rgba(0,0,0,0.5); }
+.vip-fixed{ position: fixed;top: 0;left: 0;width: 100%;height: 100%;z-index: 101;display:none; }
+.vip-popup{ width:100%;height:25rem;background:#fff;position:absolute;bottom:0;z-index:101;display:none; }
+.vip-tit{ width:100%;text-align:center;height:3.5rem;line-height:3.5rem;border-bottom:1px solid #ccc; }
+.vip-close{ height:1.5rem;width:100%; }
+.vip-close span{ float:right;width:1.5rem;height:1.5rem;font-size:1.8rem; }*}
+
+</style>
+<body>
+  <div class="box b1">
+    <p class="course-title">{$data['title']}</p>
+    <p class="course-price mt10">
+		{if $data['feeType'] == 0 or $data['isFree'] == 1}
+        <span class="cgreen">免费</span>
+			{if($data['isFree'] == 1)}
+				<span class="discount cgray">￥{$data['price']}</span>
+			{/if}
+		{else}
+			￥{$data['price']}
+		{/if}
+	</p>
+    <p class="cgray mt10 fs12"><span>{$data['userTotal']}人报名</span>
+	<span class="m10">
+	{if $data['commentNum'] != 0}
+		评价{$data['score']}分
+	{else}
+		暂无评分
+	{/if}
+	</span></p>
+  </div>
+  {if !empty($data['memberset'])}
+  <div class="box-vip" id="box-vip">
+<i class="vip-icon left"></i><span>会员课程</span>
+ 	{if $data['isFree'] != 1}
+ 		<a class="vip-open" href="http://www.yunke.com/vipCourseList?type=0">开通会员></a>
+ 	{/if}
+     <div class="vip-list">
+ 	{foreach $data['memberset'] as $val}
+ 		<a href="http://www.yunke.com/vipCourseList?type=1&memberId={$val->member_set_id}&memberName={$val->member_set_name}" class="vip-item">{$val->member_set_name}
+ 		{if $val->status == 1 && $val->isExpire == 0}
+ 			<span class="vip-status">已开通</span>
+ 		{/if}
+ 		</a>
+ 	{/foreach}
+     </div>
+   </div>
+   {/if}
+  {*<div class="vip-tanc vip-fixed"></div>
+  <div class="vip-popup">
+	<div class="vip-close">
+		<span class="close" id="close">×</span>
+	</div>
+	<div class="vip-tit">
+		<p>课程所属会员类型</p>
+	</div>
+	<div class="vip-list">
+		
+    </div>
+  </div>*}
+  <!--div class="box-vip" id="box-vip">
+    <i class="vip-icon left"></i><span>会员课程</span>
+		<a class="vip-open" href="http://www.yunke.com/vipCourseList?type=0">高能100</a>
+    <div class="vip-list">
+		<a href="http://www.yunke.com/vipCourseList?type=1&memberId=" class="vip-item">范德萨发的
+			<span class="vip-status">已开通</span>
+		</a>
+    </div>
+</div-->
+
+<!-- 课程简介 -->
+    {if $teachers}
+    <div class="box">
+      <p class="title b1"><i class="title-icon"></i><span class="left">授课讲师</span></p>
+      <ul class="teacher-list">
+    {foreach $teachers as $teacher}
+        <li class="teacher-item">
+          <div class="teacher-pic">
+              <a href="https://www.yunke.com?teacherId={$teacher['teacherId']}&teacherName={$teacher['teacherName']}">
+                <img src="{$teacher['thumbMed']}">
+              </a>
+          </div>
+          <div class="teacher-info">
+              <a href="https://www.yunke.com?teacherId={$teacher['teacherId']}&teacherName={$teacher['teacherName']}">
+                <p class="teacher-name">{$teacher['teacherName']}</p>
+              </a>
+              <div class="teacher-intro fs12" id="teacher-intro" data-content="{$teacher['teacherDesc']}">{$teacher['teacherDesc']} </div>
+          </div>
+        </li>
+      {/foreach}
+      </ul>
+    </div>
+    {/if}
+    <div class="box">
+        <p class="title b1"><i class="title-icon"></i><span>课程概述</span></p>
+        <div class="content" id="content">
+            {if !empty($data['desc'])}
+                {$data['desc']}
+            {else}
+                <p class="cgray">课程暂未添加概述</p>
+            {/if}
+        </div>
+    </div>
+    {if !empty($classData)}
+    <div class="box">
+        <p class="title b1"><i class="title-icon"></i><span class="left">上课地址</span></p>
+        <ul class="address-list">
+			{if !empty($signClass) }
+				{foreach $signClass as $v}
+				<li>
+					<span>{$v['className']}：</span>{$v['address']}
+				</li>
+				{/foreach}
+			{else}
+				{foreach $classData as $v}
+				<li>
+					<span>{$v['className']}：</span>{$v['address']}
+				</li>
+				{/foreach}
+			{/if}
+        </ul>
+    </div>
+    {/if}
+  {if !empty($data['scope'])}
+  <div class="box">
+    <p class="title b1"><i class="title-icon"></i>适用人群</p>
+    <div class="content">{$data['scope']}</div>
+  </div>
+  {/if}
+
+</body>
+</html>
+<script>
+    $(function(){
+        $('#content').find('p,img,div,table').removeAttr('style');
+        var aText='';
+        $('#content a').each(function(){
+        aText=$(this).text();
+        $(this).replaceWith(aText);
+        aText='';
+        });
+
+	});
+
+	function courseMenber() {
+		$('#box-vip').hide()
+	}
+	$('.vip-open').click(function(){
+		$('.vip-fixed').show();
+		$('.vip-popup').show();
+	})
+	$('#close').click(function(){
+		$('.vip-fixed').hide();
+		$('.vip-popup').hide();
+	})
+</script>

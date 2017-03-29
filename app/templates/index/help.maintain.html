@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>首页维护 帮助中心—云课网</title>
+{part "/index.main.header"}
+</head>
+<body>
+    <!-- header -->
+    {part "/index.main.top"}
+{part "/index.main.nav.help"}
+
+<!-- 列表 -->
+<section class="p20">
+    <div class="container">
+        <div class="row">
+            {part "/index.help.menu"}
+            <div class="col-sm-16">
+                <div class="help-c">
+                    <p class="help-bar fs16 cGray"><span class="icon guide-icon"></span>首页维护</p>
+                    <ul class="fs14 cGray2">
+                        <li class="col-sm-10"><a href="#1">1、如何编辑首页幻灯片？</a></li>
+                        <li class="col-sm-10"><a href="#2">2、如何编辑活动公告？</a></li>
+                        <li class="col-sm-10"><a href="#3">3、如何设置推荐课程？</a></li>
+                        <li class="col-sm-10"><a href="#4">4、如何设置推荐老师？</a></li>
+ 
+                    </ul>
+                </div>
+                <div class="help-item">
+                    <ul>
+                        <li>
+                            <p class="help-bar fs14 cGray"><a name="1">1、如何编辑首页幻灯片？</a></p>
+                            <div class="help-item-c">
+                                <p>机构首页展示图自定义，默认1张图，最多设置3张图轮播。图片尺寸1920*428，支持jpg，gif，png格式，最大200K。</p>
+                                <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/hdp.png')}">
+                            </div>
+                        </li>
+                        <li>
+                            <p class="help-bar fs14 cGray"><a name="2">2、如何编辑活动公告？</p>
+                            <div class="help-item-c">
+				<p>活动公告自定义添加，展示在首页公告栏。</p>
+                                <p>（1）点击“增加公告”，进入设置公告弹窗。。</p>
+                                <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/gg1.png')}"> 
+                                <p></br>（2）填写公告信息，标题必填，确认后点击完成。</p>
+                                <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/gg2.png')}"> 
+                        </li>
+                        <li>
+                            <p class="help-bar fs14 cGray"><a name="3">3、如何设置推荐课程？</p>
+                            <div class="help-item-c">
+                              （1）点击课程推荐栏目“添加推荐课程”。
+                               <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/tjkc1.png')}">
+                                <p></br>（2）输入推荐课程名称，点击即可。</p>
+                                <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/tjkc2.png')}">
+                            </div>
+                        </li>
+                        <li>
+                            <p class="help-bar fs14 cGray"><a name="4" >4、如何设置推荐老师？</a></p>
+                            <div class="help-item-c">
+                                 <p>（1）点击教师推荐栏目“添加教师”。</p>
+                                 <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/tjls1.png')}">
+                                 <p></br>（2）输入推荐教师姓名，点击即可。</p>
+                                  <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/tjls2.png')}">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- footer -->
+{part "/index.main.footer"}
+</body>
+</html>
+<script type="text/javascript">
+        $(document).ready(function() {
+            $('.help-menu>ul>li').click(function() {
+                $(this).addClass('curr').siblings().removeClass('curr');
+                $('ul',this).show();
+                $(this).siblings().find('ul').hide();
+            })
+        })
+</script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery.divselect.js')}"></script>
+<script>
+    $(function() {
+        $.divselect(".divselect cite");
+    });
+</script>

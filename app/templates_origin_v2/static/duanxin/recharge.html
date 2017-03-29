@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+ 	<meta name="title" content="{part '/site.main.orgname'} - 首页 - 云课 - 专业的在线学习平台">
+ 	<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+ 	<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+	<title>充值</title>
+	<link rel="stylesheet" href="../../../../www/assets_v2/css/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" href="../../../../www/assets_v2/css/index.css">
+	<script type="text/javascript" src="../../../../www/assets_v2/js/jquery/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="../../../../www/assets_v2/layer/layer.js"></script>
+	<script type="text/javascript" src="../../../../www/assets/libs/datetimepicker-master/jquery.datetimepicker.js"></script>
+	<link rel="stylesheet" href="../../../../www/assets/libs/datetimepicker-master/jquery.datetimepicker.css">
+	<!--[if lt IE 9]>
+	<link rel="stylesheet" type="text/css" href="/assets_v2/css/bootstrap/bootstrap.min.css">
+	<script src="//dev.gn100.com/assets_v2/bootstrap-3.3.0/js/html5shiv.min.js?ver=13"></script>
+	<script src="//dev.gn100.com/assets_v2/bootstrap-3.3.0/js/respond.min.js?ver=13"></script>
+	<![endif]-->
+	<!--[if lt IE 8]>
+	<script src="//dev.gn100.com/assets_v2/js/ie8.js?ver=13"></script>
+	<![endif]-->
+</head>
+
+<body style="background:#f7f7f7;">
+<!-- ct -->
+<section class="p40" id="wallet-list">
+	<div class="container">
+<div class="col-lg-16 right-main" style="min-height: 590px;">
+                <div class="tab-main hidden-xs hidden-sm fs14">
+                    <div class="tab-hd">
+                        <a class="tab-hd-opt" href="#">首页</a>
+                        <a class="tab-hd-opt" href="#">发送明细</a>
+                        <a class="tab-hd-opt curr" href="#">充值记录</a>
+                    </div>
+                </div>
+                <!--搜索-->
+                <div class="order-so c-fl mt20">
+					<!--时间搜索-->
+					<div class="order-so-time hidden-xs hidden-sm">
+							<div class="pos-rel c-fl mr5">
+								<input type="text" readonly="" name="start_time" id="start_time" value="" placeholder="开始时间">
+								<!--<a href="javascript:void(0)" class="close-data" id="close_start"></a>-->
+								<span>——</span>
+                            </div>
+							<div class="pos-rel c-fl"><input type="text" class="ml5" readonly="" name="end_time" id="end_time" value="" placeholder="结束时间">
+								<a href="javascript:void(0)" class="close-data" id="close_end" style="top:5px;"></a>
+							</div>
+					</div>
+					<a id="exportOrderData" class="c-fr blue-link pr15" href="javascript:void(0);">导出excel</a>
+                </div>
+                <dl class="recharge-list mt20">
+                    <dt class="hidden-xs hidden-sm list-reaha">
+                        <p class="col-lg-5">充值id</p>
+                        <p class="col-lg-5">时间</p>
+                        <p class="col-lg-5">充值金额</p>
+                        <p class="col-lg-5">状态</p>
+                    </dt>
+                    <dt class="hidden-xs hidden-sm">
+                        <p class="col-lg-5">jaskljdlkasjlkd</p>
+                        <p class="col-lg-5">2017-3-16&nbsp;19:00:00</p>
+                        <p class="col-lg-5">100元</p>
+                        <p class="col-lg-5">成功</p>
+                    </dt>
+                    <dt class="hidden-xs hidden-sm">
+                        <p class="col-lg-5">jaskljdlkasjlkd</p>
+                        <p class="col-lg-5">2017-3-16&nbsp;19:00:00</p>
+                        <p class="col-lg-5">100元</p>
+                        <p class="col-lg-5">失败</p>
+                    </dt>
+				</dl>
+			</div>
+	</div>
+</section>
+<!-- /ct -->
+</body>
+</html>
+<script>
+	$("#start_time").datetimepicker({
+            format: 'Y/m/d',
+            onShow:function( ct ){
+                this.setOptions({
+                    maxDate:$('#end_time').val()?$('#end_time').val():false
+                })
+            },
+            timepicker: false
+    });
+
+	$("#end_time").datetimepicker({
+            format: 'Y/m/d',
+            onShow:function( ct ){
+                this.setOptions({
+                    minDate:$('#start_time').val()?$('#start_time').val():false
+                })
+            },
+            timepicker: false
+        });
+
+</script>

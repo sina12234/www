@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>我推广的课程 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 订单管理 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}"></script>
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+<style type="text/css">
+.layui-layer-btn a.layui-layer-btn0{ background: #ffa81d;}
+.layui-layer-btn a.layui-layer-btn0:hover{ background: #ffb949;}
+.layui-layer-btn .layui-layer-btn1,.layui-layer-btn .layui-layer-btn1:hover{ background: #e5e5e5;border:1px solid #ddd;}
+.inputpd{ border:1px solid #ddd;padding: 4px 6px;}
+</style>
+</head>
+<body>
+{part "/site.main.nav"}
+<section class="pd30">
+    <div class="container">
+        <div class="row">
+        <!-- lt -->
+        {part "/org.main.menu.promote"}
+        <!-- /lt -->
+        <!-- rt -->
+        <div class="right-main col-md-16">
+            <div class="content">
+                <div class="tab-main">
+                    <div class="tab-hd fs14">
+                        <a class="tab-hd-opt" href="/course.promote.center">线上推广中心</a>
+                        <a class="tab-hd-opt curr" href="/course.distribute.list">渠道分销课程</a>
+                    </div>
+                    <div class="c-fr" {if !isset($path)}style="display:none;"{/if}>
+                        <form id="search_pcourse_form" method="get" action="">
+                            <div class="search-frame org-class-course">
+                                <input name="search_field" class="search-input" id="sc_title" type="text" value="{if $pm['search_field']}{$pm['search_field']}{/if}" placeholder="搜索课程名称">
+                                <button class="search-box org-t-search-btn" id="subsearch" >
+                                    <span class="search-icon" style="margin:0;" ></span>
+                                    <div class='t-list-img discount-delt-btn clear-icon' id="t-delt-btn" {if empty($pm['search_field'])}style="display:none;"{/if}></div>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <script>
+                    function searchPcourseSubmit() {
+                	var url = '';
+                	var search_name = $(".divselect cite").text();
+                	url = {if isset($path)}'{$path}'{else}''{/if};
+                	$('#search_pcourse_form').attr('action', url);
+                	$('#search_pcourse_form').submit();
+                    }
+                    $("#search_type").change(function(){
+                        var Input = $("#sc_title");
+                        var thisValue = $(this).val();
+                        if(thisValue == 1){
+                            Input.attr('placeholder','搜索课程名称');
+                        }else if(thisValue == 2){
+                            Input.attr('placeholder','搜索机构名称');
+                        }
+                    })
+                    $("#subsearch").click(function(){
+                        searchPcourseSubmit();
+                    });
+                    $("#t-delt-btn").click(function() {
+                        $(this).css("display",'none');
+                        $('#sc_title').val('');
+                    })
+                </script>
+                <div class="sub-menus mt10">
+                    <div class="sub-hd">
+                        <a class="sub-opt curr" href="/course.distribute.list" >我推广的课程</a>
+                        <a class="sub-opt" href="/course.distribute.loglist">成交记录</a>
+                    </div>
+                </div>
+				<div class="order-list-num">
+					<span class="left fs14 cGray c-fl">共 <span id="promote_course_count">{$pm['count']}</span> 个课程</span>
+					<div class="c-fr">
+						<a href="//{$platform}/index.help.extension" class="c-fl mark-ask mt5 mr10">推广规则</a>
+						<a href="javascript:;" class="c-fr add-button fs14 setDistriCourseBtn">
+							<i class="add-icon c-fl"></i>推广课程
+						</a>
+					</div>
+				</div>
+				<dl class="order-list mt5" id="order-list">
+					<dt class="fs14">
+						<p class="col-lg-12">课程信息</p>
+						<p class="col-lg-4">分成比例</p>
+						<p class="col-lg-4">推广状态</p>
+					</dt>
+					{if !empty($courseList)}
+					{foreach $courseList as $v}
+					{if $v->course_id > 0}
+					<dd class="fs14 {if $v->status<-1}invalid{/if}">
+						<div class="col-lg-12 order-item-pro">
+							<a href="//{$attrValues[$v->course_id]->subdomain}/course.info.show/{$v->course_id}" class="col-lg-8 order-item-img" target="_blank">
+								{if $v->course_type==2}<span class="g-icon3">录播</span>{/if}
+								<img src="{utility_cdn::file($v->thumb_small)}" alt="{$v->title}">
+							</a>
+							<div class="col-lg-12 order-item-title">
+								<a href="//{$attrValues[$v->course_id]->subdomain}/course.info.show/{$v->course_id}" class="c-fl" target="_blank">
+									<span class="col-sm-20 pd0">{$v->title}</span>
+                                    <span class="cGray col-sm-20 pd0 mt5">
+                                        {*{'共'|tr:'course.list'}{$attrValues[$v->course_id]->sectionNum}{'章节'|tr:'course.list'}*}
+                                        {$attrValues[$v->course_id]->second_cate_name}/{$attrValues[$v->course_id]->third_cate_name}/
+                                        {if !empty($attrValues[$v->course_id]->attr_value)}{$attrValues[$v->course_id]->attr_value|tr:'course.list'}{/if}
+                                    </span>
+									</span>
+                                    <span class="cGray col-sm-20 pd0 mt5">
+                                        <span class="cYellow1">
+                                            {if $v->price==0 &&!empty($v->fee_type) && $v->fee_type==0}
+                                                <span class="cGreen">免费</span>
+                                            {else}
+                                                ￥{if $v->price%100==0}{$v->price/100}{else}{number_format($v->price/100,2)}{/if}
+                                            {/if}
+                                        </span>
+                                        <!--<span class="cLightgray">{$v->course_type_str}</span>-->
+                                        {if $v->course_type==1}
+                                            <span class="ml10">剩余人数：</span><span class="cDarkgray">{if $v->remain_user > 0}{$v->remain_user}{else}0{/if}</span>
+                                        {/if}
+                                    </span>
+								</a>
+							</div>
+						</div>
+						<p class="col-lg-4 tac mt20">
+							<em class="cDarkgray showProPrice">
+								{$v->rate*100}%
+							</em>
+						</p>
+						<p class="col-lg-4 tac st_info mt20">
+							{if $v->status==1}
+								<em>正常</em>
+							{elseif $v->status==0}
+								<em>已停止</em>
+							{elseif $v->status==-1}
+								<em>已删除</em>
+							{else}
+								<em>已停止</em>
+							{/if}
+						</p>
+						<p class="col-lg-20 order-item-thumb fs12">
+				                    <span class="col-lg-5 pd0">
+                                    <!--<a href="/course.resell.GetCourseResellLog?cId={$v->course_id}" target="_blank" >共成交订单 <span class="cYellow">{$v->order_count}</span> 个</a>-->
+                                    {if $v->enroll_count>0}
+                                    <a href="/course.distribute.CourseLogList/{$v->course_id}">已报名 <span class="cYellow">{$v->enroll_count}</span> 个</a>
+                                    {else}
+                                    已报名 <span class="cYellow">{$v->enroll_count}</span> 个
+                                    {/if}
+                                </span>
+							<span class="col-lg-5">预期总收益：{if $v->income%100==0}{$v->income/100}{else}{number_format($v->income/100,2)}{/if}</span>
+				  <span class="right" cid="{$v->course_id}" ctitle="{$v->title}" rate="{$v->rate*100}">
+                                    {if ($v->status==1)}
+                                    <a href="javascript:;" class="cGray distriListCloseBtn" act="orgStopPromote">暂停推广</a>
+                                    {elseif($v->status==0 or $v->status==-2)}
+                                    <a href="javascript:;" class="cGray distriListStartBtn" act="orgStartPromote">重新推广</a>
+                                    {/if}
+                                    {if $v->status==1}
+                                    <a href="javascript:;" class="ml10 distriListPriceBtn" act="updatePromotePrice">改价</a>
+                                    {/if}
+                                    <a href="javascript:;" class="ml10 distriListDelBtn"  act="orgDelPromote">删除</a>
+                                </span>
+						</p>
+					</dd>
+					{/if}
+					{/foreach}
+					<!--分页开始-->
+					<div class="page-list" id="pagepage"></div>
+					<script>
+						page("pagepage","{$path_page}",{$pm['size']},{$pm['page']},{$pm['total']});
+					</script>
+					{else}
+					<!-- 无内容 -->
+					<div class="col-xs-20 fs14 tac" style="padding-top:60px;display:block;">
+						<img src="{utility_cdn::img('/assets_v2/img/platform/pet3.png')}">
+						<p>您还没有推广课程哦~快去添加推广课程吧！</p>
+					</div>
+					<!-- /无内容 -->
+					{/if}
+            </div>
+        </div>
+        <!-- /rt -->
+        </div>
+    </div>
+</section>
+
+<section id="setDistriCourse" style="display: none;">
+	<ul class="col-xs-20 clearfix">
+		<li class="mt20 col-xs-20 pd0">
+			<span class="col-xs-5 fs14 mt5 pd0 ter">选择课程：</span>
+			<input class="inputpd bor1px col-xs-12" id="selectCourse">
+			<input type="hidden" value="" name="siteid" id="siteid" />
+			<input type="hidden" value="" name="price" id="price" />
+			<span class="btn-clear" id="clearContentBtn"></span>
+		</li>
+		<li id="courseList">
+			<span class="col-xs-5 fs14 mt5 pd0 ter"></span>
+			<ul class="last fs14" style="display:none;"></ul>
+		</li>
+		<div id="chargeState" style="display: none;">
+			<li class="mt20 col-xs-20 pd0">
+				<span class="col-xs-5 fs14 mt5 pd0 ter">成本比例：</span>
+				<input class="inputpd bor1px col-xs-12" id="costPrice">%
+			</li>
+			<li class="mt10 col-xs-20 pd0">
+				<div class="col-xs-5 pd0"></div>
+				<div class="cl-xs-15 cLightgray" id="errInfo">请填写0-40的整数</div>
+			</li>
+		</div>
+		<div id="freeState" style="display: none;">
+			<li class="mt20 col-xs-20 pd0">
+				<div class="cl-xs-15 cGray cGrayTip">该课程为免费课程，推广优质的免费课能为机构带来品牌效应和生源</div>
+			</li>
+		</div>
+		<li class="mt20 col-xs-20 pd0 tac">
+			<button class="btn mr10 setDistriRequestBtn">确认</button>
+
+		</li>
+	</ul>
+</section>
+<!-- 修改价格 -->
+<section id="distriListPrice" style="display:none;">
+	<ul class="col-xs-20 clearfix">
+		<li class="mt20 col-xs-20 pd0" id='li_pro_price'>
+			<span class="col-xs-7 fs14 mt5 pd0 ter">设置新的分成比例：</span>
+			<input class="inputpd bor1px col-xs-11" id="pro_price"/> <!--成本价-->
+		</li>
+		<li class="mt20 col-xs-20 pd0">
+			<div class="col-xs-7 pd0 hidden"></div>
+			<div class="cl-xs-13 cLightgray tac" id="pro_ErrInfo">请输入0-40的整数</div>
+			<input type="hidden" value="" name="pro_cid" id="pro_cid" />
+			<input type="hidden" value="" name="pro_oldAct" id="pro_oldAct" />
+			<input type="hidden" value="" name="pro_oriPrice" id="pro_oriPrice" />
+		</li>
+		<li class="mt20 col-xs-20 pd0 tac">
+			<button class="btn mr10 setDistriProPriceBtn">确认</button>
+		</li>
+	</ul>
+</section>
+<!-- /修改价格 -->
+{part "/site.main.footer"}
+</body>
+</html>
+<script type="text/javascript">
+	var  errInfo1 = $("#errInfo").text();
+	$(function() {
+
+		$('.btn-clear').css('right', '58px');
+
+//推广课程
+		$('.setDistriCourseBtn').click(function () {
+			layer.open({
+				type: 1,
+				title: ['设置课程'],
+				area: ['400px', '300px'],
+				shadeClose: true,
+				content: $('#setDistriCourse')
+			});
+		});
+		$("#selectCourse").keyup(function(){
+			var optionVal = $(this).val();
+			var _html='';
+			$('#clearContentBtn').show();
+			$.post("/course.promote.addPromoteSearch",{ optionVal:optionVal },function(r){
+				if(jQuery.isEmptyObject(r.data)==true){
+					_html='<li class="li1" s='+r.code+' onclick="tabName.call($(this))">'+r.error+'</li>';
+					$("#courseList").find('ul').show();
+					$("#courseList").find('ul').html(_html);
+				}else{
+					var errorInfo = '';
+					$(r.data).each(function(i,item){
+						_html += '<li price='+item.price+' siteid=' + item.course_id + ' title="' + item.title + '" s=' + r.code + ' onclick="tabName.call($(this))" imgUrl=' + item.thumb_med + '><span>' + item.title + '</span></li>';
+					});
+					$("#courseList").find("ul").show();
+					$("#courseList").find("ul").html(_html);
+				}
+			},'json');
+		});
+		$("#costPrice").keyup(function(){
+			var costPrice = parseInt($(this).val());
+			if (isNaN(costPrice)) {
+				$("#errInfo").css('color', 'red');
+				$("#errInfo").text("比例只能输入数字");
+				return false;
+			}else if(costPrice<1 || costPrice>40){
+				$("#errInfo").css('color','red');
+				$("#errInfo").text(errInfo1);
+				return false;
+			}else {
+				$("#errInfo").css('color', '');
+				$("#errInfo").text(errInfo1);
+			}
+
+		})
+		$('.setDistriRequestBtn').click(function() {
+			var courseId =$("#siteid").val();
+			var costPrice =parseInt($("#costPrice").val());
+			if (isNaN(costPrice)) {
+				$("#errInfo").css('color', 'red');
+				$("#errInfo").text("比例只能输入数字");
+				return false;
+			}else if(costPrice<0 || costPrice>40){
+				$("#errInfo").css('color','red');
+				$("#errInfo").text(errInfo1);
+				return false;
+			}else {
+				$("#errInfo").css('color', '');
+				$("#errInfo").text(errInfo1);
+			}
+			$.post("/course.distribute.addDistribute",{ courseId:courseId,costPrice:costPrice },function(r){
+				if(r.code==0){
+					layer.closeAll();
+					layer.msg('推广成功', { icon: 1 });
+					$("#costPrice").val('');
+					$("#price").val('');
+					$("#siteid").val('');
+					$("#selectCourse").val('');
+					$("#chargeState").hide();
+					location.reload(true);
+				}
+				if(r.code==-4){
+					layer.msg(r.result['msg'], { icon: 1 });
+				}
+				if(r.code==-2){
+					layer.msg(r.result['msg'], { icon: 1 });
+				}
+
+			},'json');
+		});
+		//修改分成比列 distriListPriceBtn， 重新推广 distriListStartBtn
+		$('.distriListPriceBtn , .distriListStartBtn').click(function() {
+			var cid = $(this).parent('span').attr("cid");
+			var rate = $(this).parent('span').attr("rate");     // 原价
+			$('#pro_price').val(rate);
+			$('#pro_cid').val(cid);
+			var act = $(this).attr("act");
+			$("#pro_oldAct").val(act);
+			if (act=='orgStartPromote'){
+				var title = '重新推广';
+			} else if (act=='updatePromotePrice'){
+				var title = '修改分成比例';
+			}
+			$('.setDistriProPriceBtn').attr('act',act);
+			layer.open({
+				type: 1,
+				title:[title,'color:#fff;background:#ffa81d'],
+				area: ['400px' ,'260px'],
+				shadeClose: true,
+				content: $('#distriListPrice')
+			});
+		});
+		$("#pro_price").keyup(function(){
+			var proPrice = parseFloat($("#pro_price").val()); // 新分成比例
+			if(isNaN(proPrice)){
+				$("#pro_ErrInfo").css('color','red');
+				$("#pro_ErrInfo").text("分成比例只能输入数字");
+				return false;
+			}else if(proPrice<0 || proPrice>40){
+				$("#pro_ErrInfo").css('color','red');
+				$("#pro_ErrInfo").text(errInfo1);
+				return false;
+			}else{
+				$("#pro_ErrInfo").css('color','');
+				$("#pro_ErrInfo").text(errInfo1);
+			}
+		});
+		$('.setDistriProPriceBtn').click(function() {
+			var proCid = $("#pro_cid").val();
+			var rate = parseFloat($("#pro_price").val()); // 新分成比例
+			if(isNaN(rate)){
+				$("#pro_ErrInfo").css('color','red');
+				$("#pro_ErrInfo").text("分成比例只能输入数字");
+				return false;
+			}else if(rate<0 || rate>40){
+				$("#pro_ErrInfo").css('color','red');
+				$("#pro_ErrInfo").text(errInfo1);
+				return false;
+			}else{
+				$("#pro_ErrInfo").css('color','');
+				$("#pro_ErrInfo").text(errInfo1);
+			}
+			var act = $(this).attr("act");
+			$.post("/course.distribute.EditDistributeCourseAjax/"+act,{ cid:proCid,rate:rate},function(ret){
+				if (ret.code==0){
+					//$('span[cid='+proCid+']').parents('dd').find('.showProPrice').html('￥'+proPrice);
+					layer.closeAll();
+					layer.msg('操作成功', { icon: 1 });
+					window.location.reload();//刷新当前页面
+				} else {
+					layer.closeAll();
+					layer.msg('操作失败', { icon: 1 });
+				}
+			},"json");
+		});
+		//删除推广 distriListDelBtn,暂停推广 distriListCloseBtn
+		$('.distriListDelBtn,.distriListCloseBtn').click(function() {
+			var distritElement = $(this).parents('dd');
+			var thisBtn = $(this);
+			var cid = $(this).parent('span').attr("cid");
+			var ctitle = $(this).parent('span').attr("ctitle");
+			var act = $(this).attr("act");
+			var url = '/course.distribute.changeDistributeCourseAjax/';
+			var status = 0;
+			if (act=='orgDelPromote'){
+				var title = '删除';
+				var cstr = '删除后将不能恢复，确定删除？';
+				status = -1;
+			} else if (act=='orgStopPromote'){
+				var title = '暂停推广';
+				var cstr = '<p class="tac">该课程目前所有线下分销将会消失，不能给</p><p class="tac">您带来更多购买订单，是否确认停止？</p>';
+			} else if (act=='orgStartPromote'){
+				var title = '重新推广';
+				var cstr = '确定重新推广该课程？';
+			}
+			url += act;
+			layer.confirm('<p class="tac">'+cstr+'</p>', {
+				btn: ['确定','取消'],
+				title:[title]
+			}, function(){
+				$.post(url,{ cid:cid,ctitle:ctitle,status:status},function(ret){
+					if (ret.code==0){
+						if (act=='orgDelPromote'){ // 删除推广
+							distritElement.remove();
+							$('#promote_course_count').html(parseInt($('#promote_course_count').html()-1));
+						} else if (act=='orgStopPromote'){
+							distritElement.children('.st_info').html('<em class="colored distriStatus">已停止</em>');
+							//thisBtn.hide();
+						} else if (act=='orgStartPromote'){
+							distritElement.children('.st_info').html('<em>正常</em>');
+							//thisBtn.hide();
+						}
+						window.location.reload();
+						layer.msg(title+'成功', { icon: 1 });
+					} else {
+						layer.msg(title+'失败', { icon: 1 });
+					}
+				},"json");
+			}, function(){
+				//layer.msg('已取消', { icon: 1 } );
+			});
+		})
+	});
+	function tabName(){
+		var _this  = $(this);
+		var _val   = $(this).find('span').html();
+		if(_this.attr('s') == 1){
+			var siteid = $(this).attr('siteid');
+			$("#chargeState").show();
+
+			$(this).closest("section").find("#selectCourse").val(_val);
+			//$(this).closest("section").find("#originalPrice").text(price);
+			$(this).closest("section").find("input[name=siteid]").val(siteid);
+			errInfo1 = $("#errInfo").html();
+			$(this).closest("ul").hide();
+		}
+		$(this).closest("ul").hide();
+		return false;
+	}
+</script>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>成交记录 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 订单管理 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}"></script>
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+</head>
+<body>
+{part "/site.main.nav"}
+<section class="pd30">
+    <div class="container">
+        <div class="row">
+        <!-- lt -->
+        {part "/org.main.menu.promote"}
+        <!-- /lt -->
+        <!-- rt -->
+        <div class="right-main col-md-16">
+            <div class="content">
+				<div class="tab-main">
+                    <div class="tab-hd fs14">
+                        <a class="tab-hd-opt" href="/course.promote.center">线上推广中心</a>
+                        <a class="tab-hd-opt curr" href="/course.distribute.list">渠道分销课程</a>
+                    </div>
+                    <div class="c-fr" {if !isset($path)}style="display:none;"{/if}>
+                        <form id="search_pcourse_form" method="get" action="">
+                            <!--搜索-->
+                            <div class="order-so mt10">
+                                <select name='search' id="sea" class="left"  >
+                                    <option value='3' {if $search==3}selected{/if}>手机号</option>
+                                    <option value='1' {if $search==1}selected{/if}>订单号</option>
+                                    <option value='2' {if $search==2}selected{/if}>课程名</option>
+                                    <option value='4' {if $search==4}selected{/if}>用户名</option>
+                                </select>
+                                <input type="text" style="float: left;" name="keywords" value="{if $keywords!=''}{$keywords}{/if}">
+                                <button id="search"></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <script>
+                    function searchPcourseSubmit() {
+                	var url = '';
+                	var search_name = $(".divselect cite").text();
+                	url = {if isset($path)}'{$path}'{else}''{/if};
+                	$('#search_pcourse_form').attr('action', url);
+                	$('#search_pcourse_form').submit();
+                    }
+                    $("#search_type").change(function(){
+                        var Input = $("#sc_title");
+                        var thisValue = $(this).val();
+                        if(thisValue == 1){
+                            Input.attr('placeholder','搜索课程名称');
+                        }else if(thisValue == 2){
+                            Input.attr('placeholder','搜索机构名称');
+                        }
+                    })
+                    $("#subsearch").click(function(){
+                        searchPcourseSubmit();
+                    });
+                    $("#t-delt-btn").click(function() {
+                        $(this).css("display",'none');
+                        $('#sc_title').val('');
+                    })
+                </script>
+                <div class="sub-menus mt10">
+                    <div class="sub-hd">
+                        <a class="sub-opt" href="/course.distribute.list" >我推广的课程</a>
+                        <a class="sub-opt curr" href="/course.distribute.loglist">成交记录</a>
+                    </div>
+                </div>
+				<table class="table-grid mt20">
+                	<thead>
+                    	<tr>
+                            <td class="col-md-4">课程信息</td>
+                            <td class="col-md-2">购买用户</td>
+                            <td class="col-md-2">课程价格</td>
+                            <td class="col-md-2">收益</td>
+                            <td class="col-md-3">支付手续费</td>
+                            <td class="col-md-1">税费</td>
+                            <td class="col-md-2">平台分成</td>
+							<td class="col-md-2">订单号</td>
+							<td class="col-md-2">交易时间</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {if !empty($orderList)}
+                            {foreach $orderList as $val}
+                                <tr>
+                                    <td class="col-md-4 tal" style="line-height:25px;padding-left:5px">
+                                        {$val->course['name']}
+                                        <p class="cGray">初中/数学</p>
+                                    </td>
+                                    <td class="col-md-2 tal" style="line-height:25px;padding-left:5px">
+                                        {$val->stuName}
+                                        <p class="cGray">{$val->mobile}</p>
+                                    </td>
+                                    <td class="col-md-2">￥{$val->price}</td>
+                                    <td class="col-md-2">￥{$val->actual_price}</td>
+                                    <td class="col-md-3">￥{$val->gateway_price}</td>
+                                    <td class="col-md-1">￥{$val->tax_price}</td>
+                                    <td class="col-md-2">￥{$val->platform_price}</td>
+                                    <td class="col-md-2">{$val->orderSn}</td>
+                                    <td class="col-md-2">{date('m/d',strtotime($val->create_time))}</td>
+                                </tr>
+                            {/foreach}
+                        {/if}
+                    </tbody>
+				</table>
+                <!-- page -->
+                <div class="page-list" id="pagepage">
+                </div>
+                <!-- /page -->
+            </div>
+        </div>
+        <!-- /rt -->
+        </div>
+    </div>
+</section>
+{part "/site.main.footer"}
+</body>
+</html>
+<script type="text/javascript">
+    page("pagepage","{$path}",{$length},{$page},{$totalPage});
+</script>

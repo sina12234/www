@@ -1,0 +1,48 @@
+<div class="tab-main">
+    <div class="tab-hd fs14">
+        <a class="tab-hd-opt {if $nav=='promotecenter'}curr{/if}" href="/course.promote.center">线上推广中心</a>
+        <a class="tab-hd-opt {if $nav=='promotecenter'}curr{/if}" href="/course.distribute.list">渠道分销课程</a>
+    </div>
+    <div class="c-fr" {if !isset($path)}style="display:none;"{/if}>
+        <form id="search_pcourse_form" method="get" action="">
+            <div class="search-frame org-class-course">
+                {if !empty($searchType)}
+                <select name="search_type" id="search_type" style="width:60px;float:left;border-right:0">
+                    <option value="1" {if $searchType==1}selected{/if}>课程</option>
+                    <option value="2" {if $searchType==2}selected{/if}>机构</option>
+                </select>
+                {/if}
+                <input name="search_field" class="search-input" id="sc_title" type="text" value="{if $pm['search_field']}{$pm['search_field']}{/if}" placeholder="搜索课程名称">
+                <button class="search-box org-t-search-btn" id="subsearch" >
+                    <span class="search-icon" style="margin:0;" ></span>
+                    <div class='t-list-img discount-delt-btn clear-icon' id="t-delt-btn" {if empty($pm['search_field'])}style="display:none;"{/if}></div>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function searchPcourseSubmit() {
+	var url = '';
+	var search_name = $(".divselect cite").text();
+	url = {if isset($path)}'{$path}'{else}''{/if};
+	$('#search_pcourse_form').attr('action', url);
+	$('#search_pcourse_form').submit();
+    }
+    $("#search_type").change(function(){
+        var Input = $("#sc_title");
+        var thisValue = $(this).val();
+        if(thisValue == 1){
+            Input.attr('placeholder','搜索课程名称');
+        }else if(thisValue == 2){
+            Input.attr('placeholder','搜索机构名称');
+        }
+    })
+    $("#subsearch").click(function(){
+        searchPcourseSubmit();
+    });
+    $("#t-delt-btn").click(function() {
+        $(this).css("display",'none');
+        $('#sc_title').val('');
+    })
+</script>

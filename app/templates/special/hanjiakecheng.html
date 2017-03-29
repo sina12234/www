@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<meta name="renderer" content="webkit">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="title" content="云课 - 寒假报名">
+<meta name="keywords" content="云课 - 云课堂 - 寒假报名">
+<meta name="description" content="寒假课程报名">
+<link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets_v2/img/platform/yunke.ico')}" />
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/bootstrap/bootstrap.min.css')}">
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/platform/index.css')}">
+<title>寒假报名-初中课-云课网 </title>
+</head>
+<style media="screen">
+      .pd0{ padding:0; }
+      .mt10{ margin-top:10px; }
+      .mt15{ margin-top:15px; }
+      .mt20{ margin-top:20px; }
+      .mt35{ margin-top: 35px;}
+      .mt40{ margin-top: 40px;}
+      .c-fr{ float: right;}
+      div.content{ position: relative;}
+      .banner{ width:100%;padding: 0;}
+      .banner img{ width:100%; }
+      .qushi{ text-align: center;background:#f77135;}
+      .outer { width:100%: }
+      .tab { margin:0;overflow:hidden;zoom:1;background:#ffe8a3;height:50px;line-height:50px;padding:10px 0 0 10px;}
+      .tab li { float:left;color:#f77135;font-weight: bold;cursor:pointer;list-style: none;padding:0 27px;font-size: 16px;height:40px;line-height:40px;}
+      .tab li.current { color:#f77135;background:#f7f7f7;border-top-left-radius:5px;border-top-right-radius:5px;}
+      .contbox{ background:#f77135;}
+      .contentbox{ background:#f7f7f7; }
+      .contentbox ul { line-height:25px;display:none;	margin:0 30px;padding:35px 0;}
+      .contentbox ul:after{ content: '';clear:both;display: block;height: 0;}
+      .contentbox li img{ border-radius: 3px;}
+      .contentbox li span{ width:100%;float: left;font-size:16px;color:#666;padding-top: 15px;}
+      .contentbox li a{ line-height:55px;margin-top:95px;float: left;background:#f77135;width:150px;text-align: center;font-size:20px;color:#fff;border-radius: 3px;}
+      .contentbox li a:hover{ background:#e0632b; }
+      .contentbox li span.fontbold{ width:100%;font-weight: bold;font-size:20px;color:#666;float: left;}
+      .tabclick{ padding:0; }
+      .floating a{ position:fixed;top:20%;width:100px;right:13px;height:250px;background:url(/assets_v2/img/special/2016_11_30/fixed.png)no-repeat;}
+      .vacation{ margin-top:20px;background:#e0632b;margin-bottom:40px;}
+      .vacation-courseinfo{ font-size: 18px;background:#fff;margin-bottom:20px;margin-left:30px;border-radius:2px;}
+      .vacation-courseinfo p{ margin:6px 0 0 0; }
+      .vacation-courseinfo img{ width:100%;margin-top:10px; }
+      .vacation-courseinfo .jiage{ float: left;margin-top:20px; }
+      .vacation-courseinfo .jiage span{ font-size:14px;font-weight: bold;color:#ff4401;}
+      .vacation-courseinfo .jiage .dolor{ font-size:24px;color:#ff4001; }
+      .vacation-courseinfo .jiage b.fontb{ text-decoration:line-through;color:#999;font-size: 12px;font-weight: normal;}
+      .vacation-courseinfo .coursebtn{ font-size:14px; text-decoration: none;margin:18px 0 10px 0;background:#f77135;width: 100px;height:40px;color:#fff;border-radius: 2px;text-align: center;line-height: 40px;}
+      .vacation-courseinfo .coursebtn:hover{ background: #e0632b;}
+      .xiaoxue{ text-align: center;}
+      .chuzhong{ text-align: center;}
+      @media screen and (min-width:320px) and (max-width:760px){
+          .banner{ width:100%;}
+          .jies{ padding: 0;}
+          .floating a{ position:fixed;top:20%;width:40px;right:7px;height:150px;text-align: center;background:#ffa81e;padding:14px;}
+          .floating a span{ font-size:14px;color:#fff; }
+          .vacation-courseinfo{ margin:5px 0 5px 10px;font-size:16px;padding:0px 5px 0 5px;}
+          .vacation-courseinfo img{ width:100%;margin-top:5px; }
+          .qushi img{ width:100%;}
+          .xiaoxue img{ width:100%; }
+          .chuzhong img{ width:100%; }
+          .vacation-courseinfo .jiage{ width:100%;margin: 0;}
+          .vacation-courseinfo .coursebtn{ width:100%;margin:0px 0 10px 0; }
+          .vacation-courseinfo p { font-size:14px;height: 40px;}
+          .qushit{ margin:-1px 0 0 0; }
+          .contbox{ margin:-1px 0 0 0; }
+      }
+</style>
+<header></header>
+  <body>
+    <section>
+            <div class="content col-lg-20 pd0">
+                  <div class="banner col-lg-20">
+                        <img src="/assets_v2/img/special/2016_11_30/banner.png" alt="" class="hidden-xs">
+                        <img src="/assets_v2/img/special/2016_11_30/banner-m.png" alt="" class="visible-xs">
+                  </div>
+            </div>
+            <div class="col-lg-20 col-xs-20 qushit pd0">
+                  <div class="col-lg-20 col-xs-20 qushi">
+                      <span class="hidden-xs"><img src="/assets_v2/img/special/2016_11_30/qushi.png" alt=""></span>
+					  <span class="visible-xs"><img src="/assets_v2/img/special/2016_11_30/qushim.png" alt=""></span>
+                  </div>
+            </div>
+  <div class="contbox col-lg-20 col-xs-20">
+      <div class="container">
+          <div class="row">
+                <div class="tabclick col-lg-20 hidden-xs mt20">
+                  <div id="outer" class="col-lg-20 outer pd0">
+                      <ul id="tab" class="tab">
+                          <li class="current">三年级数学</li>
+                          <li>四年级数学</li>
+                          <li>五年级数学</li>
+                          <li>六年级数学</li>
+                          <li>初一数学尖子班</li>
+                          <li>初一尖端进阶班</li>
+                          <li>初一理实目标班</li>
+                          <li>初二数学</li>
+                      </ul>
+                      <div id="content" class="contentbox">
+                          <ul style="display:block;">
+                                <li class="col-lg-10"><img src="/assets_v2/img/special/2016_11_30/video_s6.png" alt=""></li>
+                                <li class="col-lg-10">
+                                    <span class="fontbold">三年级数学大纲视频解读</span>
+                                    <span>讲师:任丽丽</span>
+                                    <span>开课时间：2017年01月16日 开课</span>
+                                    <a href="javascript:volid(0);" class="click_video" data-planid="41631">观看视频</a>
+                                </li>
+                          </ul>
+                          <ul>
+                            <li class="col-lg-10"><img src="/assets_v2/img/special/2016_11_30/video_s7.png" alt=""></li>
+                              <li class="col-lg-10">
+                                  <span class="fontbold">四年级数学大纲视频解读</span>
+                                  <span>讲师:任丽丽</span>
+                                  <span>开课时间：2017年01月16日 开课</span>
+                                  <a href="javascript:volid(0);" class="click_video" data-planid="47093">观看视频</a>
+                              </li>
+                          </ul>
+                          <ul>
+                            <li class="col-lg-10"><img src="/assets_v2/img/special/2016_11_30/video_s8.png" alt=""></li>
+                            <li class="col-lg-10">
+                                <span class="fontbold">五年级数学大纲视频解读</span>
+                                <span>讲师:任丽丽</span>
+                                <span>开课时间：2017年01月16日 开课</span>
+                                <a href="javascript:volid(0);" class="click_video" data-planid="47094">观看视频</a>
+                            </li>
+                          </ul>
+                          <ul>
+                            <li class="col-lg-10"><img src="/assets_v2/img/special/2016_11_30/video_s5.png" alt=""></li>
+                            <li class="col-lg-10">
+                                <span class="fontbold">六年级数学大纲视频解读</span>
+                                <span>讲师:张发营</span>
+                                <span>开课时间：2017年01月16日 开课</span>
+                                <a href="javascript:volid(0);" class="click_video" data-planid="47095">观看视频</a>
+                            </li>
+                          </ul>
+                          <ul>
+                            <li class="col-lg-10"><img src="/assets_v2/img/special/2016_11_30/video_s3.png" alt=""></li>
+                            <li class="col-lg-10">
+                                <span class="fontbold">初一年级数学尖子班大纲视频解读</span>
+                                <span>讲师:张发营</span>
+                                <span>开课时间：2017年01月16日 开课</span>
+                                <a href="javascript:volid(0);" class="click_video" data-planid="47096">观看视频</a>
+                            </li>
+                          </ul>
+                          <ul>
+                            <li class="col-lg-10"><img src="/assets_v2/img/special/2016_11_30/video_s2.png" alt=""></li>
+                            <li class="col-lg-10">
+                                <span class="fontbold">初一年级数学尖端进阶班大纲视频解读</span>
+                                <span>讲师:张发营</span>
+                                <span>开课时间：2017年01月16日 开课</span>
+                                <a href="javascript:volid(0);" class="click_video" data-planid="47097">观看视频</a>
+                            </li>
+                          </ul>
+                          <ul>
+                            <li class="col-lg-10"><img src="/assets_v2/img/special/2016_11_30/video_s4.png" alt=""></li>
+                            <li class="col-lg-10">
+                                <span class="fontbold">初一年级数学理实目标班大纲视频解读</span>
+                                <span>讲师:张发营</span>
+                                <span>开课时间：2017年01月16日 开课</span>
+                                <a href="javascript:volid(0);" class="click_video" data-planid="47098">观看视频</a>
+                            </li>
+                          </ul>
+                          <ul>
+                            <li class="col-lg-10"><img src="/assets_v2/img/special/2016_11_30/video_s1.png" alt=""></li>
+                            <li class="col-lg-10">
+                                <span class="fontbold">初二年级数学寒假大纲解读</span>
+                                <span>讲师:杨鹰</span>
+                                <span>开课时间：2017年01月16日 开课</span>
+                                <a href="javascript:volid(0);" class="click_video" data-planid="47099">观看视频</a>
+                            </li>
+                          </ul>
+                      </div>
+                 </div>
+               </div>
+               <div class="xiaoxue col-lg-20 mt40 col-xs-20">
+                     <img src="/assets_v2/img/special/2016_11_30/xiaoxue.png" alt="">
+               </div>
+                  <div class="vacation col-lg-20 col-xs-20 pd0 mt20">
+                      <div class="col-lg-20 pd0 mt20 col-xs-20">
+                            <div class="vacation-courseinfo col-lg-6 col-xs-9">
+                                  <a href="https://www.gn100.com/course.info.show/7552" target="_blank"><img src="/assets_v2/img/special/2016_11_30/sanshuxue.png" alt=""></a>
+                                  <p class="courseinfo">寒假三年级思维班</p>
+                                  <p class="jiage">
+                                        <span>￥<b class="dolor">500</b></span>
+                                        <b class="fontb">原价:700</b>
+                                  </p>
+                                  <a href="https://www.gn100.com/course.info.show/7552" target="_blank" class="coursebtn c-fr">
+                                        查看详情
+                                  </a>
+                            </div>
+                            <div class="vacation-courseinfo col-lg-6 col-xs-9">
+                                  <a href="https://www.gn100.com/course.info.show/7553" target="_blank"><img src="/assets_v2/img/special/2016_11_30/sishuxue.png" alt=""></a>
+                                  <p class="courseinfo">寒假四年级思维班</p>
+                                  <p class="jiage">
+                                        <span>￥<b class="dolor">500</b></span>
+                                        <b class="fontb">原价:700</b>
+                                  </p>
+                                  <a href="https://www.gn100.com/course.info.show/7553" target="_blank" class="coursebtn c-fr">
+                                        查看详情
+                                  </a>
+                            </div>
+                            <div class="vacation-courseinfo col-lg-6 col-xs-9">
+                                  <a href="https://www.gn100.com/course.info.show/7554" target="_blank"><img src="/assets_v2/img/special/2016_11_30/wushuxue.png" alt=""></a>
+                                  <p class="courseinfo">寒假五年级思维训练</p>
+                                  <p class="jiage">
+                                    <span>￥<b class="dolor">500</b></span>
+                                    <b class="fontb">原价:700</b>
+                                  </p>
+                                  <a href="https://www.gn100.com/course.info.show/7554" target="_blank" class="coursebtn c-fr">
+                                        查看详情
+                                  </a>
+                            </div>
+                            <div class="vacation-courseinfo col-lg-6 col-xs-9">
+                                  <a href="https://www.gn100.com/course.info.show/7634" target="_blank"><img src="/assets_v2/img/special/2016_11_30/wuyuwen.png" alt=""></a>
+                                  <p class="courseinfo">寒假五年级语文思维班</p>
+                                  <p class="jiage">
+                                    <span>￥<b class="dolor">500</b></span>
+                                    <b class="fontb">原价:700</b>
+                                  </p>
+                                  <a href="https://www.gn100.com/course.info.show/7634" target="_blank" class="coursebtn c-fr">
+                                        查看详情
+                                  </a>
+                            </div>
+                            <div class="vacation-courseinfo col-lg-6 col-xs-9">
+                                  <a href="https://www.gn100.com/course.info.show/7630" target="_blank"><img src="/assets_v2/img/special/2016_11_30/liuyuwen.png" alt=""></a>
+                                  <p class="courseinfo">寒假六年级语文思维班</p>
+                                  <p class="jiage">
+                                    <span>￥<b class="dolor">500</b></span>
+                                    <b class="fontb">原价:700</b>
+                                  </p>
+                                  <a href="https://www.gn100.com/course.info.show/7630" target="_blank" class="coursebtn c-fr">
+                                        查看详情
+                                  </a>
+                            </div>
+                            <div class="vacation-courseinfo col-lg-6 col-xs-9">
+                                  <a href="https://www.gn100.com/course.info.show/7555" target="_blank"><img src="/assets_v2/img/special/2016_11_30/liufuxi.png" alt=""></a>
+                                  <p class="courseinfo">寒假六年级数学思维班</p>
+                                  <p class="jiage">
+                                    <span>￥<b class="dolor">500</b></span>
+                                    <b class="fontb">原价:700</b>
+                                  </p>
+                                  <a href="https://www.gn100.com/course.info.show/7555" target="_blank" class="coursebtn c-fr">
+                                        查看详情
+                                  </a>
+                            </div>
+                            <div class="vacation-courseinfo col-lg-6 col-xs-9">
+                                  <a href="https://www.gn100.com/course.info.show/7558" target="_blank"><img src="/assets_v2/img/special/2016_11_30/liuyingyu.png" alt=""></a>
+                                  <p class="courseinfo">寒假新概念英语班（六年级英语）</p>
+                                  <p class="jiage">
+                                    <span>￥<b class="dolor">500</b></span>
+                                    <b class="fontb">原价:700</b>
+                                  </p>
+                                  <a href="https://www.gn100.com/course.info.show/7558" target="_blank" class="coursebtn c-fr">
+                                        查看详情
+                                  </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chuzhong col-lg-20 col-xs-20">
+                        <img src="/assets_v2/img/special/2016_11_30/chuzhong.png" alt="">
+                    </div>
+                    <div class="vacation col-lg-20 col-xs-20 pd0 mt20">
+                        <div class="col-lg-20 pd0 mt20 col-xs-20">
+                              <div class="vacation-courseinfo col-lg-6 col-xs-9">
+                                    <a href="https://www.gn100.com/course.info.show/11223" target="_blank"><img src="/assets_v2/img/special/2016_11_30/chuyshuxue.png" alt=""></a>
+                                    <p class="courseinfo">寒假初一尖端进阶班</p>
+                                    <p class="jiage">
+                                          <span>￥<b class="dolor">500</b></span>
+                                          <b class="fontb">原价:700</b>
+                                    </p>
+                                    <a href="https://www.gn100.com/course.info.show/11223" target="_blank" class="coursebtn c-fr">
+                                          查看详情
+                                    </a>
+                              </div>
+                              <div class="vacation-courseinfo col-lg-6 col-xs-9">
+                                    <a href="https://www.gn100.com/course.info.show/11221" target="_blank"><img src="/assets_v2/img/special/2016_11_30/chuywuli.png" alt=""></a>
+                                    <p class="courseinfo">寒假初一理实目标班</p>
+                                    <p class="jiage">
+                                          <span>￥<b class="dolor">500</b></span>
+                                          <b class="fontb">原价:700</b>
+                                    </p>
+                                    <a href="https://www.gn100.com/course.info.show/11221" target="_blank" class="coursebtn c-fr">
+                                          查看详情
+                                    </a>
+                              </div>
+                              <div class="vacation-courseinfo col-lg-6 col-xs-9">
+                                    <a href="https://www.gn100.com/course.info.show/7556" target="_blank"><img src="/assets_v2/img/special/2016_11_30//chuyjianzi.png" alt=""></a>
+                                    <p class="courseinfo">寒假初一尖子班</p>
+                                    <p class="jiage">
+                                          <span>￥<b class="dolor">500</b></span>
+                                          <b class="fontb">原价:700</b>
+                                    </p>
+                                    <a href="https://www.gn100.com/course.info.show/7556" target="_blank" class="coursebtn c-fr">
+                                          查看详情
+                                    </a>
+                              </div>
+                              <div class="vacation-courseinfo col-lg-6 col-xs-9">
+                                    <a href="https://www.gn100.com/course.info.show/7638" target="_blank"><img src="/assets_v2/img/special/2016_11_30/chuyyuwen.png" alt=""></a>
+                                    <p class="courseinfo">寒假初一语文思维班</p>
+                                    <p class="jiage">
+                                      <span>￥<b class="dolor">500</b></span>
+                                      <b class="fontb">原价:700</b>
+                                    </p>
+                                    <a href="https://www.gn100.com/course.info.show/7638 target="_blank"" class="coursebtn c-fr">
+                                          查看详情
+                                    </a>
+                              </div>
+                              <div class="vacation-courseinfo col-lg-6 col-xs-9">
+                                    <a href="https://www.gn100.com/course.info.show/11184" target="_blank"><img src="/assets_v2/img/special/2016_11_30/chuyyingyu.png" alt=""></a>
+                                    <p class="courseinfo">初一英语寒假班</p>
+                                    <p class="jiage">
+                                      <span>￥<b class="dolor">500</b></span>
+                                      <b class="fontb">原价:700</b>
+                                    </p>
+                                    <a href="https://www.gn100.com/course.info.show/11184" target="_blank" class="coursebtn c-fr">
+                                          查看详情
+                                    </a>
+                              </div>
+                              <div class="vacation-courseinfo col-lg-6 col-xs-9">
+                                    <a href="https://www.gn100.com/course.info.show/11185" target="_blank"><img src="/assets_v2/img/special/2016_11_30/chueyingyu.png" alt=""></a>
+                                    <p class="courseinfo">初二英语寒假班</p>
+                                    <p class="jiage">
+                                      <span>￥<b class="dolor">500</b></span>
+                                      <b class="fontb">原价:700</b>
+                                    </p>
+                                    <a href="https://www.gn100.com/course.info.show/11185" target="_blank" class="coursebtn c-fr">
+                                          查看详情
+                                    </a>
+                              </div>
+                              <div class="vacation-courseinfo col-lg-6 col-xs-9">
+                                    <a href="https://www.gn100.com/course.info.show/7557" target="_blank"><img src="/assets_v2/img/special/2016_11_30/chueshuxue.png" alt=""></a>
+                                    <p class="courseinfo">寒假初二数学拓展班</p>
+                                    <p class="jiage">
+                                      <span>￥<b class="dolor">500</b></span>
+                                      <b class="fontb">原价:700</b>
+                                    </p>
+                                    <a href="https://www.gn100.com/course.info.show/7557" target="_blank" class="coursebtn c-fr">
+                                          查看详情
+                                    </a>
+                              </div>
+                              </div>
+                      </div>
+              </div>
+            </div>
+      </div>
+    </section>
+    <div class="floating">
+          <a href="http://wpa.qq.com/msgrd?v=3&uin=719918597&site=qq&menu=yes" target="_blank">
+          </a>
+          <a class="visible-xs" href="mqqwpa://im/chat?chat_type=wpa&uin=719918597&version=1&src_type=web&web_src=oicqzone.com" target="_blank">
+              <span>立即咨询课程 </span>
+          </a>
+    </div>
+    <!-- footer -->
+    {part '/index.main.footer'}
+  </body>
+  <script>
+  //tab切换
+	$(function(){
+			var $li = $('#tab li');
+			var $ul = $('#content ul');
+			$('#tab li').click(function(){
+				var $this = $(this);
+				var $t = $this.index();
+				$('#tab li').removeClass();
+				$(this).addClass('current');
+				$('#content ul').css('display','none');
+			  $('#content ul').eq($t).css('display','block');
+			})
+	});
+  //点击出现视频
+$(function() {
+    //var planId;
+  	$('.click_video').click(function(){
+        var planId=$(this).attr('data-planid');
+  		layer.open({
+  			  type: 2,
+  			  title:false,
+  			  shadeClose: true,
+  			  area: ['710px', '399px'],
+  			  content:'/index.teacher.TeacherVideoPreview#'+planId  //iframe的url
+  		});
+  	})
+})
+</script>
+</html>

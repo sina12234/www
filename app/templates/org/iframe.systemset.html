@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+{part "/site.main.header"}
+</head>
+<body style="background:#fff">
+<section id="tmpl-opt">
+    <div class="tmpl-set">
+        <div class="course-tmpl">
+            <i class="course-tmpl-icon"></i>
+            <p class="fs14">课程模板</p>
+        </div>
+        <div class="course-img-tmpl">
+            <i class="course-img-tmpl-icon"></i>
+            <p class="fs14">课程+推荐图</p>
+        </div>
+		<div class="course-img-tmpl">
+			<i class="recommend-img-tmpl-icon"></i>
+			<p class="fs14">推荐图模块</p>
+		</div>
+    </div>
+</section>
+<section class="col-xs-20" style="display:none" id="tmpl">
+	<form>
+		<ul class="form-horizontal mt10">
+			<li class="form-group">
+				<div class="control-label col-xs-3">模块标题</div>
+				<div class="label-for col-xs-14"><input type="text" name="title" class="col-xs-20" placeholder="最多五个字" value="{if !empty($template->title)}{$template->title}{/if}"></div>
+			</li>
+			<li class="form-group">
+				<div class="control-label col-xs-3">课程内容</div>
+				<div class="label-for col-xs-16">
+					<label><input name="recommend" id="show" type="radio" value="1" {if !empty($recommend) and $recommend==1}checked="checked"{/if} />{'自动推荐'|tr:'org'}</label>
+					<label><input name="recommend" id="hide" type="radio" value="2" {if !empty($recommend) and $recommend==2}checked="checked"{/if} />{'手动推荐'|tr:'org'}</label>
+					<div class="gray-bg p10 col-xs-20" id="auto-div"  style="display:none">
+						<label>更多按钮：</label>
+						<label><input name="set_url_name" id="btnShow" type="radio" value="1" {if !empty($template->set_url)}checked{/if}/>{'显示'|tr:'org'}</label>
+						<label><input name="set_url_name" id="btnHide" type="radio" {if empty($template->set_url)}checked{/if} value="2"/>{'隐藏'|tr:'org'}</label>
+						<input type="text" class="col-xs-20" name="set_url" id="set-url" placeholder="链接地址http://" value="{if !empty($template->set_url)}{$template->set_url}{/if}" style="display:none">
+					</div>
+					<div class="gray-bg p5 col-xs-20" id="manual-div">
+						<div class="col-xs-20 p0">
+						{if($firstCount > 1)}
+						<div class="col-xs-20 mt10 pd0">
+						<div class="col-xs-3 mt5 control-label">课程分类：</div>
+						<select id="level0" name="first_cate" class="col-xs-3 mr10 mt5 p5">
+							<option value="0">{'全部'|tr:'org'}</option>
+							{if(!empty($firstCateList))}
+							{foreach($firstCateList as $fo)}
+							<option value = "{$fo->pk_cate}" {if(isset($template->query_arr->first_cate))}{if $template->query_arr->first_cate == $fo->pk_cate}selected{/if}{/if}>{$fo->name_display|tr:'course.list'}</option>
+							{/foreach}
+							{/if}
+						</select>
+
+						{elseif($firstCount == 1)}
+							<span style="float:left;margin-right:33px;margin-left:17px;"><input name="first_cate" type="hidden" value="{$firstCateList[0]->pk_cate}"/>{$firstCateList[0]->name_display|tr:'course.list'}</span>
+						{/if}
+							<select class="col-xs-3 mr10 mt5  p5" id="level1" name="second_cate">
+								<option value="0">{'全部'|tr:'org'}</option>
+								{if(!empty($secondCateList))}
+								{foreach($secondCateList as $so)}
+								<option value = "{$so->pk_cate}" {if(isset($template->query_arr->second_cate))}{if $template->query_arr->second_cate == $so->pk_cate}selected{/if}{/if}>{$so->name_display|tr:'course.list'}</option>
+								{/foreach}
+								{/if}
+							</select>
+							<select class="col-xs-3 mt5 mr10 p5" id="level2" name="third_cate">
+								<option value="0">{'全部'|tr:'org'}</option>
+								{if(!empty($thirdCateList))}
+								{foreach($thirdCateList as $to)}
+								<option value = "{$to->pk_cate}" {if(isset($template->query_arr->third_cate))}{if $template->query_arr->third_cate == $to->pk_cate}selected{/if}{/if}>{$to->name_display|tr:'course.list'}</option>
+								{/foreach}
+								{/if}
+							</select>
+                            <select class="col-xs-4 mt5 p5" id="level3" name="attr_value_id">
+							</select>
+						</div>
+						<div class="col-xs-20 mt10 pd0">
+							<div class="col-xs-3 mt5 control-label">课程筛选：</div>
+							<select name="course_type" class="col-xs-5 mr10 mt5 p5">
+								<option value="0" {if !empty($template->query_arr->course_type) and $template->query_arr->course_type==0}selected{/if}>{'全部'|tr:'org'}</option>
+								<option value="1" {if !empty($template->query_arr->course_type) and $template->query_arr->course_type==1}selected{/if}>{'直播'|tr:'org'}</option>
+								<option value="2" {if !empty($template->query_arr->course_type) and $template->query_arr->course_type==2}selected{/if}>{'录播'|tr:'org'}</option>
+								<option value="3" {if !empty($template->query_arr->course_type) and $template->query_arr->course_type==3}selected{/if}>{'线下课'|tr:'org'}</option>
+							</select>
+
+							<select name="fee_type" class="col-xs-5 mr10 mt5 p5">
+								<option value="2" {if !empty($template->query_arr->course_type) and $template->query_arr->course_type==2}selected{/if}>{'全部'|tr:'org'}</option>
+								<option value="0" {if !empty($template->query_arr->fee_type) and $template->query_arr->fee_type==0}selected{/if}>{'免费'|tr:'org'}</option>
+								<option value="1" {if !empty($template->query_arr->fee_type) and $template->query_arr->fee_type==1}selected{/if}>{'收费'|tr:'org'}</option>
+							</select>
+						</div>
+						<div class="col-xs-20 mt10 pd0">
+						<div class="col-xs-3 mt5 control-label">课程排序：</div>
+							<select name="order_by"  class="col-xs-5 mt5 p5">
+								<option value="crtdesc" {if !empty($template->order_by) and $template->order_by=='create_time:desc'}selected{/if}>{'最新创建'|tr:'site.course'}</option>
+								<option value="crtasc" {if !empty($template->order_by) and $template->order_by=='create_time:asc'}selected{/if}>{'最早创建'|tr:'site.course'}</option>
+								<option value="regdesc" {if !empty($template->order_by) and $template->order_by=='register:desc'}selected{/if}>{'报名人数多'|tr:'site.course'}</option>
+								<option value="regasc" {if !empty($template->order_by) and $template->order_by=='register:asc'}selected{/if}>{'报名人数少'|tr:'site.course'}</option>
+							</select>
+						</div>
+						</div>
+					</div>
+
+				</div>
+			</li>
+			<li class="form-group" id="banner" style="display:none">
+				<div class="control-label col-xs-6">推荐图位置</div>
+				<div class="label-for col-xs-14">
+					<label><input name="recommend-img" id="recommend-left" type="radio" value="1" />左</label>
+					<label><input name="recommend-img" id="recommend-right" type="radio" value="2" {if !empty($template->type)&&$template->type==2}checked="checked"{/if} />右</label>
+				</div>
+			</li>
+			<li class="tac">
+					<input type="hidden" name="tid" value="{if !empty($template->template_id)}{$template->template_id}{/if}">
+					<input type="hidden" name="act" value="{if !empty($act)}{$act}{/if}">
+					<button class="btn" type="submit">确认</button>
+			</li>
+		</ul>
+	</form>
+</section>
+</body>
+<script>
+$(function(){
+	console.log(isPro);
+	var tid 	= "{if !empty($template->template_id)}{$template->template_id}{/if}";
+	var typeId  = "{if !empty($template->type)}{$template->type}{/if}";
+	if(isPro == '1'&& tid=='' ) {
+		$('#tmpl-opt').show();
+	} else {
+		$('#tmpl-opt').hide();
+		$('#tmpl').show();
+	};
+	if(typeId !=''){
+		$('#banner').show();
+	}
+	//模板选择
+	$('#tmpl-opt').on('click','.course-tmpl',function(){
+		$("form").find(".tac").append("<input type='hidden' name='pic_type' value='1'/>");
+		$('#tmpl-opt').hide();
+		$('#tmpl').show();
+	});
+	$('#tmpl-opt').on('click','.course-img-tmpl',function(){
+		$('#tmpl-opt').hide();
+		$('#tmpl').show();
+		$('#banner').show();
+	});
+//展开更多科目
+$('#fold-subject').click(function(){
+    if($(this).html() == "{'收起科目'|tr:'org'}"){
+        $('#check-subject').height('70px');
+        $(this).html("{'展开更多'|tr:'org'}");
+    } else {
+        $('#check-subject').height('auto');
+        $(this).html("{'收起科目'|tr:'org'}");
+    }
+})
+	var morebtntext = "{if !empty($template->set_url)}{$template->set_url}{/if}";
+	var recommend = "{if !empty($template->recommend)}{$template->recommend}{/if}";
+	if(morebtntext !=''&&recommend !='1'){
+		$(".morebtntext").show();
+	}else{
+		$(".morebtntext").hide();
+	}
+
+var index = parent.layer.getFrameIndex(window.name);
+    $('#show').click(function(){
+        $('#manual-div').show();
+				$('#auto-div').hide();
+    });
+	var recommend = "{if(!empty($recommend))}{$recommend}{/if}";
+	if(recommend == 2){
+		$('#manual-div').hide();
+	}
+	if(recommend == 2){
+		$('#auto-div').show();
+	}
+    $('#hide').click(function(){
+			$('#auto-div').show();
+			$('#manual-div').hide();
+
+    });
+	var type = $("input[name='recommend']:checked").val();
+	if(type=='2'){
+		$(".courseNum").hide();
+		$('.morebtn').show();
+	}else{
+		$(".courseNum").show();
+	}
+	$('#btnShow').click(function(){
+		if($('#set-url').hide()){
+			$('#set-url').show();
+		}
+    });
+
+	$('#btnHide').click(function(){
+		if($('#set-url').show()){
+			$('#set-url').hide();
+		}
+    });
+    $("form").submit(function(){
+        if($(this).find('input[name=act]').val()=='edit'){
+            $.post("/org.main.updateTemplateAjax",$(this).serialize(),function(r){
+                if(r.error){
+                    layer.msg(r.error);
+                     $("[name="+r.field+"]").focus();
+                }else{
+                    parent.location.reload();
+                    parent.location.href="/org.main.template#bottom";
+                    parent.layer.close(index);
+                }
+            },"json");
+        }else{
+            $.post("/org.main.addTemplateAjax",$(this).serialize(),function(r){
+                if(r.error){
+                    layer.msg(r.error);
+                    $("[name="+r.field+"]").focus();
+                }else{
+                    parent.location.reload();
+                    parent.location.href="/org.main.template#bottom";
+                    parent.layer.close(index);
+                }
+            },"json");
+        }
+        return false;
+    });
+
+	var first_cate  = {if(!empty($template->query_arr->first_cate))}{$template->query_arr->first_cate}{else}''{/if};
+	var second_cate = {if(!empty($template->query_arr->second_cate))}{$template->query_arr->second_cate}{else}''{/if};
+	var third_cate  = {if(!empty($template->query_arr->third_cate))}{$template->query_arr->third_cate}{else}''{/if};
+	var attrValueIds = {if(!empty($attrValueIds))}{$attrValueIds}{else}''{/if}
+
+	{if(empty($secondCateList))}
+	$('#level1').hide();
+	{/if}
+	{if(empty($thirdCateList))}
+	$('#level2').hide();
+	{/if}
+    {if(empty($attrValueIds))}
+	$('#level3').hide();
+	{/if}
+	$("#level0").change(function(){
+			var cateId = $(this).val();
+			$(".cate-attr").remove();
+			$('#fold-subject').hide();
+			if(cateId){
+				$.get("/org.main.getNodeCate."+cateId,{ },function(item){
+					$("#level1").html("");
+					if(item.data){
+						var data = item.data;
+						$("#level1").append("<option  value='0'>{'全部'|tr:'org'}</option>");
+						for(var i in data){
+							var s="";
+							if(data[i].pk_cate == second_cate){
+								s=" selected ";
+							}
+							$("#level1").append("<option "+s+" value='"+data[i].pk_cate+"'>"+data[i].name_display+"</option>");						}
+						$("#level1").show().trigger("change");
+					}else{
+						$("#level1").hide();
+					}
+				},"json");
+				$('#level2').hide();
+			}else{
+				$('#level1').empty();
+				$("#level1").append("<option  value='0'>{'全部'|tr:'org'}</option>");
+				$('#level2').empty();
+				$("#level2").append("<option  value='0'>{'全部'|tr:'org'}</option>");
+				$('#level2').hide();
+				$('#level1').hide();
+			}
+		}).trigger("change");
+
+
+		$("#level1").change(function(){
+			var cateId = $(this).val();
+			$(".cate-attr").remove();
+			$('#fold-subject').hide();
+			$('#level2').empty();
+			if(cateId){
+				$.get("/org.main.getNodeCate."+cateId,{ },function(item){
+					if(item.data){
+						var data = item.data;
+						$("#level2").append("<option value='0'>{'全部'|tr:'org'}</option>");
+						for(var i in data){
+							var s="";
+							if(data[i].pk_cate == third_cate){
+								s=" selected ";
+							}
+							$("#level2").append("<option "+s+" value='"+data[i].pk_cate+"'>"+data[i].name_display+"</option>");
+							}
+						$("#level2").show().trigger("change");
+					}else{
+						$("#level2").hide();
+					}
+				},"json").fail(function(){
+				$("#level2").hide();
+				});
+			}
+		});
+
+		$("#level2").change(function(){
+			var cateId = $(this).val();
+			$(".cate-attr").remove();
+			$('#fold-subject').hide();
+			if(cateId){
+				$(".cate-attr").remove();
+				$.get("/org.main.getAttrAndValueByCateId."+cateId,{ },function(item){
+					if(item.data){
+						var data = item.data.attr_value;
+                        $("#level3").append("<option value='0'>全部</option>");
+                        for(var i=0;i<data.length;i++){
+							$("#level3").append("<option value='"+data[i].attr_value_id+"'>"+data[i].value_name+"</option>");
+						}
+                        $("#level3").show().trigger("change");
+						var attrCon = '<label><input type="checkbox">{'全科目'|tr:'org'}</label>';
+						var dataCount = data.length;
+
+						for(i=0; i< dataCount; i++){
+							var checked = '';
+							if(attrValueIds != 0){
+								for(j=0; j< attrValueIds.length; j++){
+									if(attrValueIds[j] == data[i].attr_value_id){
+										checked = 'checked';
+									}
+								}
+							}
+							attrCon += '<label class="cate-attr"><input '+checked+' name="attr_value_id[]" type="checkbox" value="'+data[i].attr_value_id+'">'+data[i].value_name+'</label>';
+						}
+						if(dataCount > 8){
+							$('#fold-subject').show();
+						}else{
+							$('#fold-subject').hide();
+						}
+
+						var select = "";
+						var st='';
+						var vt='<div class="label col-xs-3">{'科目'|tr:'org'}：</div><option value="0">全科目</option>';
+						$.each(data,function(k,v){
+							if(v.attr_value_id==attrValueIds){
+								var st = "selected";
+							}
+							select +='<option value="'+v.attr_value_id+'" '+st+'>'+v.value_name+'</option>';
+						});
+						var vo = vt+select;
+						var str = '<select name="attr_value_id" class="mt5">'+vo+'</select>';
+						$("#level3").html(str);
+
+					}else{
+                        $("#level3").hide();
+                    }
+				},"json")
+			}
+		});
+});
+</script>
+</html>

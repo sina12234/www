@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{part '/site.main.orgname'} - 首页 - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 首页 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{if $ssl_flag}
+<script> if (location.protocol !== "https:") location.protocol = "https:"; </script>
+{/if}
+{part "/site.main.header"}
+</head>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/common.js')}"></script>
+<body class="bgf">
+{part "/site.main.usernav.home"}
+{if isset($liShow->is_nav)&&($liShow->is_nav==1)&&!empty($orgNav)}
+<section class="fast-nav hidden-xs hidden-sm fs14">
+  <div class="container">
+    <div class="row">
+        <i class="fast-nav-icon"></i>
+		<span>快速导航</span>
+	    {foreach($orgNav as $k=>$v)}
+        <a href="{$v->url}"  target="_blank">{$v->nav_name}</a>
+		{/foreach}
+    </div>
+  </div>
+</section>
+{/if}
+<!--banner-->
+<section class="c-fl mt10 bgf">
+    <div id="main" class="pos-rel">
+        <div id="slide" class="slide_wrap">
+            <ul class="slide_imglist conbox">
+                {if !empty($slideList)}
+                {foreach $slideList as $k1=>$slide}
+                <li class="i{$k1+1}" style="background-color:{$slide->rgb};">
+                <div class="container pd0">
+                  <a href="{$slide->slide_link}" target="_blank">
+                      <img src="{utility_cdn::file($slide->slide_url)}" data-width="{$slide->width}" data-height="{$slide->height}">
+                  </a>
+                </div>
+                </li>
+                {/foreach}
+                {else}
+                <li class="i1" target="_blank">
+                    <div class="container" >
+                    <a href="/">
+                        <img alt="" src="{utility_cdn::img('/assets_v2/img/banner033.jpg')}">
+                    </a>
+                    </div>
+				<!--
+                <div class="title">
+                    <div class="title-bg">
+                        <p></p>
+                        <div class="title-t container">
+                            欢迎入驻云课平台。
+                        </div>
+                    </div>
+                </div>
+				-->
+                </li>
+                {/if}
+            </ul>
+            {if !empty($slideList)}
+			<div class="switcher">
+				{foreach $slideList as $k=>$v}
+					<a href="#" {if $k==0}class="cur"{/if}></a>
+				{/foreach}
+			</div>
+            {/if}
+        </div>
+        <div class="login-index hidden-xs hidden-sm" id="indexuser">
+        </div>
+    </div>
+</section>
+<!--即将直播-->
+<section id="living" class="c-fl bgf pb30"></section>
+{if !empty($liShow->living_show)&&$liShow->living_show==1}
+<script>
+	$("#living").load("/site.main.living");
+</script>
+{/if}
+<!--课程模版-->
+{if(!empty($templates))}
+{foreach $templates as $tv}
+{if !empty($tv->courses)}
+<section class="index-section">
+    <div class="container">
+        <div class="box-title mb10">
+            <div class="box-title-left hidden-xs"></div>
+            <div class="box-title-name fs24">{$tv->title}</div>
+            <div class="box-title-right hidden-xs"></div>
+            <p class="clearfix"></p>
+            <p class="square-red"><i></i></p>
+        </div>
+        <ul class="row course-list">
+           {if !empty($tv->courses)}
+           {foreach($tv->courses as $tcv)}
+		   {if(isset($tcv->diplayStatus)&&$tcv->diplayStatus ==1)}
+            <li class="col-sm-5 col-lg-5 col-md-5 col-xs-10">
+                <div class="course-item">
+                    <a href="{if(!empty($tcv->url))}{$tcv->url}{else}/course.info.show/{$tcv->course_id}{/if}" target="_blank" class="course-img">
+                        <img src="{utility_cdn::file($tcv->thumb_big)}">
+                        {if $tcv->course_type==2}
+                        <span class="recorded-icon">{'录播'|tr:'course.list'}</span>
+                        {/if}
+                        {if $tcv->course_type==3}
+                        <span class="offline-icon">{'线下'|tr:'course.list'}</span>
+                        {/if}
+                        {if $tcv->status==2}
+                        <span class="living-icon">{'正在上课'|tr:'course.list'}</span>
+                        {/if}
+                    </a>
+                    <a href="{if(!empty($tcv->url))}{$tcv->url}{else}/course.info.show/{$tcv->course_id}{/if}" target="_blank" class="course-tit fs14"><p>{$tcv->title}</p></a>
+					<!-- 课程分类-章数-->
+                    <div class="course-status clear">
+                        <div class="course-status-fit">
+							{if !empty($tcv->third_cate_name)}
+                                {$tcv->third_cate_name|tr:'course.list'}&nbsp;
+                            {/if}
+                                |
+							{if !empty($attrValues[$tcv->course_id])}
+								{$attrValues[$tcv->course_id]|tr:'course.list'}
+							{/if}
+                        </div>
+                        <div class="course-status-step">
+                            {*<span class="cGray">共{$tcv->sectionNum}章</span>*}
+                        </div>
+                    </div>
+                    <!--/课程分类-章数 -->
+                    <!-- 价格-报名状况 -->
+                    <div class="course-count clear">
+                        <div class="course-price">
+							{if($tcv->fee_type==0&&isset($tcv->is_promote)&&$tcv->is_promote==0)}
+							<span class="cGreen">{'免费'|tr:'course.list'}</span>
+							{elseif isset($tcv->fee->price)}
+                            <span class="cRed">
+								￥{if $tcv->fee->price%100==0}{$tcv->fee->price/100}{else}{number_format($tcv->fee->price/100,2)}{/if}
+							</span>
+							{else}
+							<span class="cRed">
+								{if(empty($tcv->price))}
+								<span class="cGreen">{'免费'|tr:'course.list'}</span>
+								{else}
+								￥{if $tcv->price%100==0}{$tcv->price/100}{else}{number_format($tcv->price/100,2)}{/if}
+								{/if}
+
+							</span>
+							{/if}
+                        </div>
+                        {if ($tcv->try==1 && $tcv->status!=2)}
+                            <span class="i-course-status">可试看</span>
+                        {/if}
+                        <div class="course-num" style="display:none;">
+							{if !empty($org_hot_type->hot_type)&&$org_hot_type->hot_type==1}
+                            <span class="num-icon"></span>
+                            {$tcv->user_total}{' '|tr:'course.list'}
+							{/if}
+							{if !empty($org_hot_type->hot_type)&&$org_hot_type->hot_type==2}
+							{if $tcv->max_user-$tcv->user_total>5}<span class="g-icon8"></span>{/if}
+							{if $tcv->max_user-$tcv->user_total>0&&$tcv->max_user-$tcv->user_total<=5}<font color='#009900' class="ter">{'剩余'|tr:'course.list'}{$tcv->max_user - $tcv->user_total}{'个名额'|tr:'course.list'}</font>{/if}
+							{if $tcv->max_user-$tcv->user_total<=0}<font class="ter cYellow">{'已报满'|tr:'course.list'}</font>{/if}
+							{/if}
+							{if !empty($org_hot_type->hot_type)&&$org_hot_type->hot_type==3}
+							{if $tcv->vv >=10}<span class="g-icon11 c-fl"></span>{$tcv->vv}{'次'|tr:'course.list'}{/if}
+							{/if}
+                        </div>
+                    <!-- /价格-报名状况 -->
+                    </div>
+					{if(!empty($tcv->resellTips)&&$tcv->resellTips==1)}
+						<div class="tuiguang-icon">
+						</div>
+					{/if}
+            </li>
+            {/foreach}
+			{/if}
+
+			{else}
+
+            {/if}
+
+            </div>
+			{if !empty($tv->recommend)&&$tv->recommend==2}
+				{if !empty($tv->set_url)}
+				<p class="tac"><a class="index-more" target="_blank" href="{if !empty($tv->set_url)}{$tv->set_url}{/if}">更多{$tv->title}&gt;&gt;</a></p>
+				{/if}
+			{else}
+				{if !empty($tv->courses)&&count($tv->courses)>=4}
+				<p class="tac"><a class="index-more" target="_blank" href="/course.list{if !empty($tv->query)}?{$tv->query}{/if}">更多{$tv->title}&gt;&gt;</a></p>
+				{/if}
+			{/if}
+            </li>
+            {/foreach}
+        </ul>
+        </ul>
+        </div>
+		{if(empty($tv->courses))}
+			<div class="container">
+				<div class="row">
+					<div class="seize-seat">
+						<ul class="seat-list">
+							<li class="col-lg-5 col-md-5 col-sm-10 col-xs-10 seat-list-item">
+								<div class="seat-li-list">暂无课程</div>
+							</li>
+							<li class="col-lg-5 col-md-5 col-sm-10 col-xs-10 seat-list-item">
+								<div class="seat-li-list">暂无课程</div>
+							</li>
+							<li class="col-lg-5 col-md-5 col-sm-10 col-xs-10 seat-list-item">
+								<div class="seat-li-list">暂无课程</div>
+							</li>
+							<li class="col-lg-5 col-md-5 col-sm-10 col-xs-10 seat-list-item">
+								<div class="seat-li-list">暂无课程</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		{/if}
+</section>
+{/foreach}
+{/if}
+
+<!--明星老师-->
+{if(!empty($teachers))}
+<section class="index-section">
+    <div class="container">
+        <div class="row">
+            <div class="box-title">
+                <p class="tac fs24"><span class="cYellow">{'推荐'|tr:'site.index'}</span>{'老师展示'|tr:'site.index'}</p>
+                <div class="box-title-left hidden-xs"></div>
+                <div class="box-title-name fs18">{'强大的师资力量，让你离梦想更进一步'|tr:'site.index'}</div>
+                <div class="box-title-right hidden-xs"></div>
+                <p class="clearfix"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="c-fl mt10 u-lector-box col-md-20 pd0 mb10 swiper-container-horizontal swiper-container4" style="float:left;width:100%">
+                <ul class="swiper-wrapper" id="teacnav">
+                {foreach $teachers as $teacher}
+                <li class="col-sm-10 col-md-4 col-xs-10 lector-list swiper-slide">
+                        <span class="u-lector">
+                            <div class="pic u-lector-pic">
+                                {if !empty($teacher['thumb_big'])}
+                                <a href="/teacher/detail/entry/{$teacher['user_id']}" target="_blank"><img class="imgPic" src="{utility_cdn::file($teacher['thumb_big'])}"></a>{else}
+                                <a href="/teacher/detail/entry/{$teacher['user_id']}" target="_blank"><img class="imgPic" src="{utility_cdn::img('/assets_v2/img/defaultPhoto.gif')}"></a> {/if}
+							{if(!empty($teacher['planid']))}
+								<span class="video-box visible-lg" data-planid="{$teacher['planid']}">
+									<span class="pos-rel index-teac-vio"></span>
+									<span class="t-video-info">视频简介</span>
+									<span class="t-video-icon"></span>
+								</span>
+							{/if}
+							</div>
+							<a href="/teacher/detail/entry/{$teacher['user_id']}" target="_blank">
+								<div class="u-name fs18">{if !empty($teacher['real_name'])}{$teacher['real_name']}{else}{$teacher['name']}{/if}</div>
+								<div class="u-title">{if !empty($teacher['title'])}{$teacher['title']}{else}TA还没有头衔{/if}</div>
+								<div class="college fs12">{if !empty($teacher['desc'])}{if mb_strlen($teacher['desc'],'utf-8')>50}{mb_substr($teacher['desc'],0,30,'utf-8')}...{else}{$teacher['desc']}{/if}{else}还未完善简介哦!{/if}</div>
+							</a>
+						</span>
+                </li>
+                {/foreach}
+            </ul>
+            </div>
+            </div>
+    {if !empty($teachers) && count($teachers)>3}
+    <p class="tac"><a class="index-more" target="_blank" href="/teacher.list">{'更多老师'|tr:'site.index'}>></a> {/if}
+    </div>
+</section>
+{/if}
+<!--资讯-->
+{if !empty($noticeList->data)}
+<section class="index-section hidden-sm">
+    <div class="container">
+        <div class="row">
+            <div class="box-title">
+                <div class="box-title-left hidden-xs"></div>
+                <div class="box-title-name fs24">{'学习资讯'|tr:'site.index'}</div>
+                <div class="box-title-right hidden-xs"></div>
+                <p class="clearfix"></p>
+                <p class="square-red"></p>
+            </div>
+        </div>
+        <div class="row mt10">
+            <ul class="newslist-img pdl0 {if count($noticeList->data)>4}col-md-10{else}col-md-20{/if}">
+                {if count($noticeList->data)<=4}
+					{if !empty($noticeList->data[0])}
+                <li class="{if count($noticeList->data)=='1'}col-md-20 col-xs-20{elseif(count($noticeList->data)>1 and  count($noticeList->data) <=4)}col-md-10{/if}">
+                    <a href="{if !empty($noticeList->data[0]->notice_link)}{$noticeList->data[0]->notice_link}{else}/activity.main.info/{$noticeList->data[0]->pk_notice_id}{/if}" target="_blank">
+                        <div class="{if !empty($noticeList->data[0]->thumb)}col-md-14 col-xs-13{else}col-md-20 col-xs-13{/if}">
+                            <span class="news-title fs16"><i class="dott-icon">1</i> <span>{$noticeList->data[0]->notice_title}</span> </span>
+                            <div class="news-intro">{$noticeList->data[0]->sub_content}</div>
+                            <span class="news-date">{$noticeList->data[0]->update_time}</span>
+                        </div>
+                        {if !empty($noticeList->data[0]->thumb)}
+                        <p class="news-img col-md-5 col-xs-7"><img src="{$noticeList->data[0]->thumb}"></p>
+                        {/if}
+                    </a>
+                </li>
+                {/if}
+                {if !empty($noticeList->data[1])}
+                <li class="{if count($noticeList->data)=='1'}col-md-20{elseif(count($noticeList->data)>1 and  count($noticeList->data) <=4)}col-md-10{/if}">
+                    <a href="{if !empty($noticeList->data[1]->notice_link)}{$noticeList->data[1]->notice_link}{else}/activity.main.info/{$noticeList->data[1]->pk_notice_id}{/if}" target="_blank">
+                        <div class="{if !empty($noticeList->data[1]->thumb)}col-md-14 col-xs-13{else}col-md-20 col-xs-13{/if}">
+                            <span class="news-title fs16"><i class="dott-icon">2</i> <span>{$noticeList->data[1]->notice_title}</span></span>
+                            <div class="news-intro">{$noticeList->data[1]->sub_content}</div>
+                            <span class="news-date">{$noticeList->data[1]->update_time}</span>
+                        </div>
+                        {if !empty($noticeList->data[1]->thumb)}
+                        <p class="news-img col-md-5 col-xs-7"><img src="{$noticeList->data[1]->thumb}"></p>
+                        {/if}
+                    </a>
+                </li>
+                {/if}
+                {if !empty($noticeList->data[2])}
+                <li class="{if count($noticeList->data)=='1'}col-md-20{elseif(count($noticeList->data)>1 and  count($noticeList->data) <=4)}col-md-10{/if}">
+                    <a href="{if !empty($noticeList->data[2]->notice_link)}{$noticeList->data[2]->notice_link}{else}/activity.main.info/{$noticeList->data[2]->pk_notice_id}{/if}" target="_blank">
+                        <div class="{if !empty($noticeList->data[2]->thumb)}col-md-14 col-xs-13{else}col-md-20 col-xs-13{/if}">
+                            <span class="news-title fs16"><i class="dott-icon">3</i> <span>{$noticeList->data[2]->notice_title}</span> </span>
+                            <div class="news-intro">{$noticeList->data[2]->sub_content}</div>
+                            <span class="news-date">{$noticeList->data[2]->update_time}</span>
+                        </div>
+                        {if !empty($noticeList->data[2]->thumb)}
+                        <p class="news-img col-md-5 col-xs-7"><img src="{$noticeList->data[2]->thumb}"></p>
+                        {/if}
+                    </a>
+                </li>
+                {/if}
+				{if !empty($noticeList->data[3])}
+                <li class="col-md-10">
+                    <a href="{if !empty($noticeList->data[3]->notice_link)}{$noticeList->data[3]->notice_link}{else}/activity.main.info/{$noticeList->data[3]->pk_notice_id}{/if}" target="_blank">
+                        <div class="{if !empty($noticeList->data[3]->thumb)}col-md-14 col-xs-13{else}col-md-20{/if}">
+                            <span class="news-title fs16"><i class="dott-icon">4</i> <span>{$noticeList->data[3]->notice_title}</span> </span>
+                            <div class="news-intro">{$noticeList->data[3]->sub_content}</div>
+                            <span class="news-date">{$noticeList->data[3]->update_time}</span>
+                        </div>
+                        {if !empty($noticeList->data[3]->thumb)}
+                        <p class="news-img col-md-5 col-xs-7"><img src="{$noticeList->data[3]->thumb}"></p>
+                        {/if}
+                    </a>
+                </li>
+                {/if}
+				{else}
+						{if !empty($noticeList->data[0])}
+                <li class="col-md-20 col-xs-20">
+                    <a href="{if !empty($noticeList->data[0]->notice_link)}{$noticeList->data[0]->notice_link}{else}/activity.main.info/{$noticeList->data[0]->pk_notice_id}{/if}" target="_blank">
+                        <div class="{if !empty($noticeList->data[0]->thumb)}col-md-14 col-xs-13{else}col-md-20 col-xs-13{/if}">
+                            <span class="news-title fs16"><i class="dott-icon">1</i> <span>{$noticeList->data[0]->notice_title}</span> </span>
+                            <div class="news-intro">{$noticeList->data[0]->sub_content}</div>
+                            <span class="news-date">{$noticeList->data[0]->update_time}</span>
+                        </div>
+                        {if !empty($noticeList->data[0]->thumb)}
+                        <p class="news-img col-md-5 col-xs-7"><img src="{$noticeList->data[0]->thumb}"></p>
+                        {/if}
+                    </a>
+                </li>
+                {/if}
+                {if !empty($noticeList->data[1])}
+                <li class="col-md-20 col-xs-20">
+                    <a href="{if !empty($noticeList->data[1]->notice_link)}{$noticeList->data[1]->notice_link}{else}/activity.main.info/{$noticeList->data[1]->pk_notice_id}{/if}" target="_blank">
+                        <div class="{if !empty($noticeList->data[1]->thumb)}col-md-14 col-xs-13{else}col-md-20 col-xs-13{/if}">
+                            <span class="news-title fs16"><i class="dott-icon">2</i> <span>{$noticeList->data[1]->notice_title}</span> </span>
+                            <div class="news-intro">{$noticeList->data[1]->sub_content}</div>
+                            <span class="news-date">{$noticeList->data[1]->update_time}</span>
+                        </div>
+                        {if !empty($noticeList->data[1]->thumb)}
+                        <p class="news-img col-md-5 col-xs-7"><img src="{$noticeList->data[1]->thumb}"></p>
+                        {/if}
+                    </a>
+                </li>
+                {/if}
+				{/if}
+            </ul>
+            {if count($noticeList->data)>4}
+            <div class="newslist-txt col-md-10 fs14 hidden-xs">
+                {foreach $noticeList->data as $nlk=>$nlv}
+                {if $nlk>1}
+                <a href="{if !empty($nlv->notice_link)}{$nlv->notice_link}{else}/activity.main.info/{$nlv->pk_notice_id}{/if}" target="_blank">
+                    <i class="c-fl">{$nlk+1}</i><p class="col-md-12 length_sl">{$nlv->notice_title}</p>
+                    <span class="c-fr cGray">{$nlv->update_time}</span>
+                </a>
+                {/if}
+                {/foreach}
+            </div>
+            {/if}
+        </div>
+        {if count($noticeList->data)>7}
+        <p class="tac"><a class="index-more" target="_blank" href="/activity.main.list">{'更多资讯'|tr:'site.index'}>></a></p>
+        {/if}
+    </div>
+</section>
+{/if}
+{if empty($planList)&&empty($templates)&&empty($mfclist->data)&&empty($teachers)}
+<section>
+    <div class="container new-load">
+        <p><img src="{utility_cdn::img('/assets_v2/img/gn-load-img.jpg')}" alt="" />正在准备建设中...  敬请期待</p>
+    </div>
+</section>
+{/if}
+<div id="rightWindow"></div>
+{part "/site.main.footer"}
+</body>
+</html>
+<script src="{utility_cdn::js('/assets_v2/js/jquery/jquery.xslider.js')}"></script>
+<script>$("#rightWindow").load("/org.rightWindow.rightWindownew");</script>
+<script>
+$(".cont_tab").tab();
+$(function(){
+    $("#indexuser").load("/site.main.userinfo");
+    // banner 图自适应
+    var window_width = $(window).width();
+    function setSlideImg(w,o){
+        var parent = $(o).closest('a');
+        if(w > 890){
+            if(window_width > 1920){
+                parent.width(1920);
+            }else if(window_width > 1182){
+                parent.css({
+                    'width': '1920px',
+                    'margin-left': - (w - 1185) / 2
+                });
+            }else{
+                parent.css({
+                    'width': w * 5 / 12,
+                    'margin-left': -(w * 5 / 12 - window_width) / 2
+                })
+            }
+        }
+    }
+    $('#slide li img').each(function(){
+        var o = this;
+        var src = o.src;
+        var img =  new Image();
+        img.src = src;
+        if(img.complete){
+            setSlideImg(img.width,o);
+        }else{
+            img.onload = function(){
+                setSlideImg(img.width,o);
+                img.onload = null;
+            }
+        }
+    });
+})
+// 焦点图片淡隐淡现
+$("#slide").Xslider({
+    affect: 'fade',
+    ctag: 'li', //内容标签 默认为<a>
+    speed: 800, //动画速度
+    space: 3000, //时间间隔
+    auto: true, //自动滚动
+    trigger: 'mouseover', //触发事件 注意用mouseover代替hover
+    conbox: '.conbox', //内容容器id或class
+    switcher: '.switcher', //切换触发器id或class
+    stag: 'a', //切换器标签 默认为a
+    current: 'cur', //当前切换器样式名称
+    rand: false //是否随机指定默认幻灯图片
+});
+if($(".slide_imglist li").length<=1) {
+    $(".switcher").hide();
+}
+;(function() {
+    var window_w = $(window).width();
+    var li_width = 0;
+    var l_index;
+    var live_num;
+    if ($(window).width() < 768) {
+        //获取对应class的位置
+        var nIndex=$(".r_ul").find(".live-icon1").parents(".o_list").last().index();
+        if(nIndex<0){
+            nIndex=$(".r_ul").find(".live-icon2").parents(".o_list").last().index();
+            if(nIndex<0){
+                nIndex=$(".r_ul").find(".live-icon6").parents(".o_list").last().index();
+                if(nIndex<0){
+                    nIndex=0;
+                }
+            }
+        };
+
+        //移动端滑动
+        var mySwiper=new Swiper('.swiper-container', {
+        //  autoplay: 5000,//可选选项，自动滑动
+            initialSlide :nIndex,
+        });
+    } else {
+        $(".R_box1").carousel();//即将直播
+        $(".R_box2").carousel({
+            R_li:'.o_list1',//需要滚动的元素
+            R_ul:'.r_ul1',//滚动区域
+            prev:'.prev1',//点击向上翻转箭头
+            next:'.next1',//点击向下翻转箭头
+        }) //精彩回放
+    }
+})()
+;(function() {
+    if ($(window).width() < 768) {
+        var mySwiper = new Swiper('.swiper-container4',{
+        slidesPerView : 2,});
+        var li_width = 0;
+        li_width=$("#teacnav li").outerWidth();
+        var li_index=$("#teacnav li").length;
+        $("#teacnav").css('width',li_width*li_index);
+    }
+})()
+//教师简介
+$(function() {
+    var planId;
+	$('.video-box').click(function(){
+        planId=$(this).attr('data-planid');
+		layer.open({
+			  type: 2,
+			  title:false,
+			  shadeClose: true,
+			  area: ['710px', '399px'],
+			  content:'/user.teacher.TeacherVideoPreview#'+planId  //iframe的url
+		});
+	})
+});
+(function() {
+    $('.course-num').each(function() {
+        var num = parseInt($(this).text());
+        if(num != 0) {
+            $(this).show();
+        }
+    })
+})();
+</script>

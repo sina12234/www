@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>文章资讯 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+{part "/site.main.header"}
+</head>
+<body>
+{part "/site.main.nav.activity"}
+<section class="pd30">
+    <div class="container">
+        <div class="root-nav fs14">
+            <span><a href="/site.main.entry">{'首页'|tr:'site.header'}</a></span> > <span class="cGray">{'文章资讯'|tr:'site.header'}</span>
+        </div>
+        <div class="n-main">
+            <div class="n-bar fs16">{'文章资讯'|tr:'site.header'}</div>
+                <ul class="n-list fs14">
+                    {if !empty($list->data)}
+                    {foreach $list->data as $notice}
+                    <li>
+                        <div {if $notice->sort>0}class="top"{/if}>
+							{if !empty($notice->notice_link)}
+							<a href="{$notice->notice_link}">
+								<span>{$notice->notice_title}</span>
+							</a>
+							{else}
+							<a href="/activity.main.info/{$notice->pk_notice_id}">
+								<span>{$notice->notice_title}</span>
+							</a>
+							{/if}
+							<span class="c-fr cGray">{$notice->update_time}</span>
+						</div>
+                    </li>
+                    {/foreach}
+                    {/if}
+                </ul>
+                <!-- 分页 -->
+            <div class="col-sm-20">
+                <div class="page-list" id="pagepage">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{part "/site.main.footer"}
+</body>
+<script>
+page("pagepage","{$path}",{$num},{$list->page},{$list->total});
+</script>
+</html>

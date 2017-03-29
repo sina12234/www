@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 教师管理</title>
+		{part "/index.main.headeruser"}
+		<script src="{utility_cdn::js('/assets/js/user.js')}"></script>
+		<script src="{utility_cdn::js('/assets/js/part.js')}"></script>
+	</head>
+       <style>
+              .table_teacher .classup .hui td{ width: 100px; border:none; padding-left: 10px; padding-right: 20px; }
+              .table_teacher .classup tr td{ width: 100px;border-right:1px solid #ccc; }
+              .table_teacher .classup tr #Numberone,.table_teacher .classup tr #Numbertwo,.table_teacher .classup tr #Numberthree,.table_teacher .classup tr #noborder{ width: 130px; }
+
+       </style>
+	<body>
+		<!--top-->
+		{part "/index.main.nav.user"}
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='col-sm-3 user_menu hidden-xs'>
+						<div id=''>
+							<div id='menu'>
+								{part "/user.home.menu.user"}
+
+							</div>
+						</div>
+					</div>
+
+					<div class='col-sm-9 user_content'>
+						<div class='container-fluid'>
+							<div class='row'>
+								
+                                
+               <!--教师管理 start-->                
+              <h1 class="rtit">教师管理</h1>
+			  {if !empty($tips)}<h3 class="text-danger">{$tips}</h3>{/if}
+              <div class='table_teacher'>
+              <table class='table classup'>
+              	<tr class="hui">
+              		<td >姓名</td>
+              		<td style="padding-left:36px;">手机号</td>
+              	{*	<td style="padding-left:40px;">正常</td>
+              		<td style="padding-left:40px;">停用</td>
+              		<td style="padding-left:30px;">编辑</td>
+              	*}
+					<td >删除</td>
+              	</tr>
+				{if !empty($user_list)}
+				{foreach $user_list as $_teacher}
+              	<tr>
+              		<td id='Numberone'>{$_teacher->user_name}</td>
+              		<td id='Numbertwo'>{$_teacher->mobile}</td>
+              	{*	<td id='Numberthree'><a href=""><img src="{utility_cdn::img('/assets/images/ok.png')}" style=" margin-top:10px;"></a></td>
+              		<td class="noborder" id='Numberfore'><a href=""><img src="{utility_cdn::img('/assets/images/no.png')}" style="margin-top:10px;"></a></td>
+              		<td id='Numberthree'><a href=""><img src="{utility_cdn::img('/assets/images/book.png')}" style=" margin-top:10px;"></a></td>
+              	*}
+					<!--td class="noborder" id='Numberfore'><a href=""><img src="{utility_cdn::img('/assets/images/stop.png')}" style="margin-top:10px;"></a></td-->
+					<td uid="{$_teacher->user_id}" class="noborder" id="Numberfore">
+						<!--<a class="edit" href="#"><i class="glyphicon glyphicon-edit"></i>修改</a>-->
+						<a class="remove" href="#"><img src="{utility_cdn::img('/assets/images/stop.png')}" style="margin-top:10px;"></a>
+					</td>
+              	</tr>
+				{/foreach}
+				{/if}
+              	<tr>
+              		<td id='Numberone'>高海磊</td>
+              		<td id='Numbertwo'>18811534983</td>
+              		<td id='Numberthree'><a href=""><img src="{utility_cdn::img('/assets/images/ok.png')}" style=" margin-top:10px;"></a></td>
+              		<td class="noborder" id='Numberfore'><a href=""><img src="{utility_cdn::img('/assets/images/no.png')}" style="margin-top:10px;"></a></td>
+              		<td id='Numberthree'><a href=""><img src="{utility_cdn::img('/assets/images/book.png')}" style=" margin-top:10px;"></a></td>
+              		<td class="noborder" id='Numberfore'><a href=""><img src="{utility_cdn::img('/assets/images/stop.png')}" style="margin-top:10px;"></a></td>
+              	</tr>
+              	<tr>
+              		<td id='Numberone'>高海磊</td>
+              		<td id='Numbertwo'>18811534983</td>
+              		<td id='Numberthree'><a href=""><img src="{utility_cdn::img('/assets/images/no.png')}" style=" margin-top:10px;"></a></td>
+              		<td class="noborder" id='Numberfore'><a href=""><img src="{utility_cdn::img('/assets/images/ok.png')}" style="margin-top:10px;"></a></td>
+
+              		<td id='Numberthree'><a href=""><img src="{utility_cdn::img('/assets/images/book.png')}" style=" margin-top:10px;"></a></td>
+              		<td class="noborder" id='Numberfore'><a href=""><img src="{utility_cdn::img('/assets/images/stop.png')}" style="margin-top:10px;"></a></td>
+              	</tr>
+              	<tr>
+              		<td id='Numberone'>高海磊</td>
+              		<td id='Numbertwo'>18811534983</td>
+              		<td id='Numberthree'><a href=""><img src="{utility_cdn::img('/assets/images/ok.png')}" style=" margin-top:10px;"></a></td>
+              		<td class="noborder" id='Numberfore'><a href=""><img src="{utility_cdn::img('/assets/images/no.png')}" style="margin-top:10px;"></a></td>
+
+              		<td id='Numberthree'><a href=""><img src="{utility_cdn::img('/assets/images/book.png')}" style=" margin-top:10px;"></a></td>
+              		<td class="noborder" id='Numberfore'><a href=""><img src="{utility_cdn::img('/assets/images/stop.png')}" style="margin-top:10px;"></a></td>
+              	</tr>
+              </table>
+              </div>
+              <table class='table_new'>
+              	<tr id="new">
+              		<td style="border-bottom:none;margin-left:35%; color:#FFA81E;">＋添加老师</td>
+              	</tr>
+              </table>
+              <!--教师管理 end-->                
+			  <script>
+				  $(document).ready(function(){
+					  $(".teacher .remove").click(function(){
+						  if(confirm("您确定要删除这位老师么")){
+							  var uid = $(this).parents("td").attr("uid");
+							  $.post("/user.org.delteacherAjax","uid="+uid,function(r){
+								  if(r){
+									  location.reload();
+									  return false;
+								  }
+							  },"json");
+						  }
+						  return false;
+					  });
+					  $(".teacher .edit").click(function(){
+						  console.log($(this).parents("td").attr("uid"));
+						  return false;
+					  });
+					  $("#bt_add").click(function(){
+						  $("#ct_add").toggle();
+					  });
+				  });
+			  </script>
+
+
+							
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>  
+
+			{part "/index.main.footer"}
+	</body>

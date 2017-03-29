@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>我的课程 帮助中心—云课网</title>
+{part "/index.main.header"}
+</head>
+<body>
+    <!-- header -->
+{part "/index.main.top"}
+{part "/index.main.nav.help"}
+<!-- 列表 -->
+<section class="pd-b40">
+    <div class="container">
+            {part "/index.help.menu"}
+            <div class="col-sm-16">
+                <div class="help-c">
+                    <p class="help-bar fs16 cGray"><span class="icon guide-icon"></span>我的课程</p>
+                    <ul class="fs14 cGray2">
+                        <li class="col-sm-4"><a href="#kecheng1">1、什么是我的课程</a></li>
+                        <li class="col-sm-4"><a href="#kecheng2">2、待上课列表</a></li>
+                        <li class="col-sm-4"><a href="#kecheng3">3、已结束列表</a></li>
+                    </ul>
+                </div>
+                <div class="help-item">
+                    <ul>
+                        <li>
+                            <p class="help-bar fs14 cGray"><a name="kecheng1" >1、什么是我的课程</a></p>
+                            <div class="help-item-c">“我的课程”中罗列了学生报名的全部课程，分“待上课”“已结束”两个列表。在学习管理-我的课程中查看。</div>
+                        </li>
+                        <li>
+                            <p class="help-bar fs14 cGray"><a name="kecheng2" >2、待上课列表</a></p>
+                            <div class="help-item-c">
+                                <p></br>（1）待上课：可查看所有已报名的待上课程，开课时间临近，点击课程右侧的“进入课堂”进入上课页。
+                                <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/bm9.png')}">
+                            </div>
+                        </li>
+                        <li>
+                           <p class="help-bar fs14 cGray"><a name="kecheng3" >3、已结束列表</a></p>
+                           <div class="help-item-c">
+                               <p></br>可查看所有报名的已结束课程，可以点击课程右侧的“观看录播“进行复习。
+                               <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/bm10.png')}">
+                           </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    </div>
+</section>
+<!-- footer -->
+{part "/index.main.footer"}
+</body>
+</html>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.help-menu>ul>li').click(function() {
+        $(this).addClass('curr').siblings().removeClass('curr');
+        $('ul',this).show();
+        $(this).siblings().find('ul').hide();
+    })
+})
+</script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery.divselect.js')}"></script>
+<script>
+    $(function() {
+        $.divselect(".divselect cite");
+    });
+</script>

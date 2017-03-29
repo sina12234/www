@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{part '/site.main.orgname'} - 课程分类导航设置 - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 首页维护 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+<body>
+{part "/site.main.nav"}
+<section class="pd30">
+	<div class="container">
+		<div class="row">
+			<!-- leftmenu -->
+			{part "/org.main.menu.classify"}
+			<!-- /leftmenu -->
+			<!-- right -->
+			<div class="right-main col-sm-9 col-md-16">
+				<div class="content">
+					<!-- title -->
+					<div class="tab-main">
+    					<div class="tab-hd fs14">
+							<span class="tab-hd-opt" style="padding:0 0 8px 0">课程分类导航设置</span>
+    					</div>
+					</div>
+					<div class="col-xs-20 p0 mt10">
+						<a class="gray-btn c-fr ml10 submit-cate">保存</a>
+						<label for="hide" class="c-fr mt5 ml10"><input type="radio" name="course_cate" id="hide" value="2" class="update-cate" {if(!empty($orgInfo->is_cate)&&$orgInfo->is_cate==2)}checked{/if}>隐藏</label>
+						<label for="show" class="c-fr mt5"><input type="radio" name="course_cate" class="update-cate" value="1" {if(!empty($orgInfo->is_cate)&&$orgInfo->is_cate==1)}checked{/if} id="show">显示</label>
+					</div>
+					<div class="col-xs-offset-2 col-xs-16 mt20">
+						<!-- left -->
+						<div class="col-xs-10">
+							<p class="fs14">
+								&nbsp;
+							</p>
+							<ul class="classify-group mt5"  id="classify">
+								{foreach($cateList as $val)}
+								<li class="open" data-id="{$val->pk_cate}">
+									<p><span class="block-icon">-</span><span class="class-name">{$val->name}</span></p>
+									{foreach($val->children as $v)}
+									<ul>
+										<li class="open" data-id="{$v->pk_cate}" data-fid="{$val->pk_cate}">
+											<p><span class="block-icon">-</span><span class="class-name">{$v->name}</span></p>
+											<ul>
+											{foreach($v->children as $vv)}
+												<li class="classify-item" data-id="{$vv->pk_cate}">
+													<span class="item">{$vv->name}</span>
+													<span class="check">
+														<span class="check-box"><i class="checked" {if(!empty($vv->is_check)&&$vv->is_check==1)}style="display: inline;"{/if}></i></span>
+													</span>
+												</li>
+											{/foreach}
+											</ul>
+										</li>
+									</ul>
+									{/foreach}
+								</li>
+								{/foreach}
+							</ul>
+						</div>
+						<!-- /left -->
+						<!-- right -->
+						<div class="col-xs-10">
+							<p>
+								<span class="fs14">已选分类</span><span class="cGray">(建议：最多选3个分类，每个分类不超过6个)</span>
+							</p>
+
+								<ul class="classify-list mt5" id="classify-list">
+								{if(!empty($orgExist))}
+								{foreach($orgExist as $key=>$val)}
+								{foreach($val->children as $k=>$v)}
+								{if(!empty($v->children))}
+								<li data-id="{$v->pk_cate}" data-topid="{$val->pk_cate}">
+								<p class="fs14 mt5 mb5 parent">{if(!empty($v->children))}{$v->name}{/if}</p>
+								
+								{foreach($v->children as $kc=>$vt)}
+								<span class="cGray mr5" data-tid="{$vt->pk_cate}">{if(!empty($vt->name))}{$vt->name}{/if}</span>
+								{/foreach}
+								</li>
+								{/if}
+								{/if}
+								{/foreach}
+								{/foreach}
+								
+								</ul>
+						</div>
+						<!-- /right -->
+					</div>
+				</div>
+			</div>
+			<!-- /right -->
+		</div>
+	</div>
+</section>
+<script>
+	$(function(){
+		var classify=$('#classify'),classifyList=$('#classify-list');
+		classify.on('click','.classify-item',function(event){
+			event.stopPropagation();
+			var _self=$(this),
+			    _self_txt=_self.text(),
+				_self_id=_self.attr('data-id'),
+				_parent=$(this).parents('li:first'),
+				_parent_id=_parent.attr('data-id') || _self_id,
+				_html;
+			_self.find('.checked').toggle();
+
+			if(classifyList.find('span[data-tid="'+_self_id+'"]').length>0){
+				classifyList.find('span[data-tid="'+_self_id+'"]').remove();
+				if(classifyList.find('li[data-id="'+_parent_id+'"]>span').length>0){
+					return false;
+				}else{
+					classifyList.find('li[data-id="'+_parent_id+'"]').remove();
+				}
+			}else{
+				if(_parent.length > 0){
+					var _top = _parent.parents('li:first'),
+						_top_id = (_top.length>0) ? _top.attr('data-id') : _parent_id;
+						_html=$('<li data-id="'+_parent_id+'" data-topid="'+_top_id+'"></li>');
+					_html.append('<p class="fs14 mt5 mb5 parent">'+_parent.find('p>.class-name').text()+'</p>');
+					if(classifyList.find('li[data-id="'+_parent_id+'"]').length>0){
+						classifyList.find('li[data-id="'+_parent_id+'"]').append('<span class="cGray mr5" data-tid="'+_self_id+'">'+_self_txt+'</span>');
+					}else{
+						_html.append('<span class="cGray mr5" data-tid="'+_self_id+'">'+_self_txt+'</span>');
+						classifyList.append(_html);
+					}
+				}else{
+					_html=$('<li data-id="'+_self_id+'" data-topid="'+_self_id+'"></li>');
+					_html.append('<p class="fs14 mt5 mb5 parent">'+_self_txt+'</p>');
+					classifyList.append(_html);
+				}
+
+			}
+		});
+		// 收起
+		classify.on('click','.open',function(event){
+			event.stopPropagation();
+			var _self=$(this);
+			_self.addClass('parent').removeClass('open');
+			_self.find('.block-icon').text('+');
+		});
+		// 展开
+		classify.on('click','.parent',function(event){
+			event.stopPropagation();
+			var _self=$(this);
+			_self.siblings('.open').addClass('parent').removeClass('open').find('.block-icon').text('+');
+			_self.addClass('open').removeClass('parent');
+			_self.find('.block-icon').text('-');
+		});
+		//显示隐藏
+		$('.update-cate').change(function(){
+			var hot_type = "{$orgInfo->hot_type}";
+			var li_show  = "{$orgInfo->living_show}";
+			var nav_name = "{$orgInfo->is_nav}";
+			var course_cate     = $("input[name='course_cate']:checked").val();
+			$.post("/org.main.updatehot",{ 'hot_type':hot_type,'li_show':li_show,'nav_name':nav_name,'course_cate':course_cate },function(r){
+				if(r.error){
+					layer.msg(r.error);
+					return false;
+				}else{
+					layer.msg('修改成功');
+				}
+			},"json");
+		});
+		//保存分类
+		$('.submit-cate').click(function(){
+			var tidList=[];
+			classifyList.find('span').each(function(){
+				tidList.push($(this).attr('data-tid'));
+			})
+			$.post("/org.main.AddOrgCate",{ cateId:tidList },function(r){
+				if(r.result.code==200){
+					layer.msg(r.result.msg);
+					location.reload();
+				}else{
+					layer.msg(r.result.msg);
+				}
+			},"json");
+		});
+	})
+</script>
+{part "/site.main.footer"}
+</body>
+</html>

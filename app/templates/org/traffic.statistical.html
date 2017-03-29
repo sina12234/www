@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户统计 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+    <meta name="title" content="{part '/site.main.orgname'} - 机构中心 - 云课 - 专业的在线学习平台">
+    <meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+    <meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+    {part "/site.main.header"}
+    <link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+    <script type="text/javascript" src="{utility_cdn::js('/assets_v2/laypage/laypage.js')}"></script>
+    <script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}"></script>
+    <script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/echarts.js')}"></script>
+</head>
+<body>
+{part "/site.main.nav"}
+<section class='pd30'>
+    <div class="container">
+        <div class="row">
+            <!--左侧-->
+            {part "/org.main.menu.stat"}
+            <!--右侧-->
+            <div class="right-main col-md-16">
+                <div class="tab-main">
+                    <div class="tab-hd fs14">
+                        <a class="tab-hd-opt" href="/org/stat/UserStatistical">用户统计</a>
+                        <a class="tab-hd-opt curr" href="#">流量统计</a>
+                        <a class="tab-hd-opt" href="/org/stat/ContentStatistical">内容统计</a>
+                    </div>
+                </div>
+
+                <p class="fs14 fb mt20 pd0 titleP mb10">关键指标</p>
+                <ul class="org-count org-chart col-lg-20 liHtml">
+                    <script id="liHtml" type="text/template">
+                    <li class="col-lg-4 org-item">
+                        <div class="org-count-titlel c1">
+                            视频播放次数VV
+                            <i class=""></i>
+                        </div>
+                        <div class="org-count-com c1">
+                            <p class="fs24">
+                            <%if(data.vv == 0){ %>
+                                <a href="javascript:void(0);" title="暂无数据" class="cWhite">---</a>
+                                <% }else{ %>
+                                <a href="javascript:void(0);" title="总数" class="cWhite"><%=data.vv%></a>
+                                <% }%>
+                            </p>
+                            <% if(data.vvStatus==1) { %>
+                            <i class="rang-up-icon"></i>
+                            <% }else if(data.vvStatus==2){ %>
+                            <i class="rang-down-icon"></i>
+                            <% }%>
+                            <%if(data.vvPercentage == 0){ %>
+                            <span href="javascript:void(0);" title="暂无数据" class="fs12">---</span>
+                            <% }else{ %>
+                            <span href="javascript:void(0);" title="昨日与前日增长百分比" class="fs12"><%=data.vvPercentage%></span>
+                            <% }%>
+                        </div>
+                    </li>
+                    <li class="col-lg-4 org-item">
+                        <div class="org-count-titlel c2">
+                            播放时长VT
+                            <i></i>
+                        </div>
+                        <div class="org-count-com c2">
+                            <p class="fs24">
+                                <%if(data.vt == 0){ %>
+                                <a href="javascript:void(0);" title="暂无数据" class="cWhite">---</a>
+                                <% }else{ %>
+                                <a href="javascript:void(0);" title="总数" class="cWhite"><%=data.vt%></a>
+                                <% }%>
+                            </p>
+                            <% if(data.vtStatus==1) { %>
+                            <i class="rang-up-icon"></i>
+                            <% }else if(data.vtStatus==2){ %>
+                            <i class="rang-down-icon"></i>
+                            <% }%>
+                            <%if(data.vtPercentage == 0){ %>
+                            <span href="javascript:void(0);" title="暂无数据" class="fs12">---</span>
+                            <% }else{ %>
+                            <span href="javascript:void(0);" title="昨日与前日增长百分比" class="fs12"><%=data.vtPercentage%></span>
+                            <% }%>
+                        </div>
+                    </li>
+                    </script>
+                </ul>
+
+                <form id="ftime" action="/org/stat/UserTrend" method="post">
+                    <div class="bc-path col-md-20 mt20 fs14">
+                        <div class="c-fl">
+                            <select name="charts_type" id="charts_type">
+                                <option value="vv">{'视频播放次数'|tr:'org'}</option>
+                                <option value="vvLive">{'视频直播次数'|tr:'org'}</option>
+                                <option value="vvRecord">{'视频录播次数'|tr:'org'}</option>
+                                <option value="vt">{'视频播放时长'|tr:'org'}</option>
+                                <option value="vtLive">{'直播时长'|tr:'org'}</option>
+                                <option value="vtRecord">{'录播时长'|tr:'org'}</option>
+                            </select>
+                        </div>
+                        <div class="time-picker">
+                            <input name="startDay" type="text" placeholder="开始时间"  id="time-picker" value="2016-07-05">
+                            <i class=" settle-arrow-icon settle-arrow-icon-left"></i>
+                            <span>至</span>
+                            <input name="endDay" type="text" placeholder="结束时间" id="time-picker2" value="2016-08-03">
+                            <i class="settle-arrow-icon settle-arrow-icon-right"></i>
+                        </div>
+                    </div>
+                </form>
+                <div  id="main" class="col-md-20 pd0" style="height: 400px;" ></div>
+
+                <p>
+                    <span class="fb fs14">{'数据表格'|tr:'org'}</span>
+                    <a id="exportTableData" href="javascript:void(0);" class="blue-link c-fr">{'导出'|tr:'org'} Excel</a>
+                </p>
+                <table class="table-grid mt5" id="chanelList">
+                    <thead>
+                    <tr>
+                        <td class="col-md-5">{'时间'|tr:'org'}</td>
+                        <td class="col-md-6" id="selectCheck">{'视频播放次数（总）'|tr:'org'}</td>
+                        <td class="col-md-6">{'当日 '|tr:'org'}<span class="question-icon" title="当日增长数：今日与昨日总数的差"></span></td>
+                        <td class="col-md-3">{'对比昨日变化 '|tr:'org'}<span class="question-icon" title="当日与昨日增长数的百分比"></span></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                <script id="trList" type="text/template">
+                    <% if(data){ data.forEach(function(list){ %>
+                    <tr>
+                        <td class="col-md-5"><%= list.day %></td>
+                        <td class="col-md-6"><%= list.count %></td>
+                        <td class="col-md-6"><%= list.addCount %></td>
+                        <td class="col-md-3">
+                            <% if(list.percentage!=0&&list.status==2){ %>
+                            <i class="rang-down-icon"></i>
+                            <% }else if(list.percentage!=0&&list.status==1){ %>
+                            <i class="rang-up-icon"></i>
+                            <% }%>
+                            <%=(list.percentage!=0)?(list.percentage+'%'):'---'%>
+                        </td>
+                    </tr>
+                    <% })}%>
+                </script>
+                <div id="pager" class="mt10 c-fr"></div>
+            </div>
+        </div>
+    </div>
+</section>
+{part "/site.main.footer"}
+</body>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ie8/ejs.ie8.js')}"></script>
+<![endif]-->
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ejs.min.js')}"></script>
+
+<script type="text/javascript">
+    require.config({
+        paths: {
+            echarts: "{utility_cdn::jsurl('/assets_v2/js')}"
+        }
+    });
+    $(function() {
+    var length=10;
+    var myDate = new Date();
+    var mytime=myDate.getTime();
+    var endtime =mytime-86400000;
+    var startime=mytime-86400000*7;
+    endtime=new Date(endtime);
+    endtime=endtime.toLocaleDateString();
+    endtime=endtime.replace(/\//g,'\-');
+    endtime=endtime.replace(/[年月]/g,'\-').replace(/[日]/g,'');
+    startime=new Date(startime);
+    startime=startime.toLocaleDateString();
+    startime=startime.replace(/\//g,'\-');
+    startime=startime.replace(/[年月]/g,'\-').replace(/[日]/g,'');
+    $("#time-picker").val(startime);
+    $("#time-picker2").val(endtime);
+    var params={
+        startDay:$("#time-picker").val(),
+        endDay:$("#time-picker2").val(),
+        act:$("#charts_type").val()
+    };
+    var legendName = "视频播放次数";
+    var Hash=window.location.hash;
+    if(Hash){
+        Hash=Hash.replace('#','');
+        switch (Hash){
+            case "vv":
+                legendName = "视频播放次数";
+                break;
+            case "vt":
+                legendName = "视频播放时长";
+                break;
+            case "vvLive":
+                legendName = "视频直播次数";
+                break;
+            case "vvRecord":
+                legendName = "视频录播次数";
+                break;
+            case "vtLive":
+                legendName = "直播时长";
+                break;
+            case "vtRecord":
+                legendName = "录播时长";
+                break;
+            default:
+                break;
+        }
+        $("#selectCheck").html(legendName+'(总)');
+        $("select").val(Hash);
+    }
+    chartData();
+    indexData();
+    TableData();
+    $("#charts_type").on('change',function(){
+            params.act=$(this).val();
+            switch (params.act) {
+                case "vv":
+                    legendName = "视频播放次数";
+                    break;
+                case "vt":
+                    legendName = "视频播放时长";
+                    break;
+                case "vvLive":
+                    legendName = "视频直播次数";
+                    break;
+                case "vvRecord":
+                    legendName = "视频录播次数";
+                    break;
+                case "vtLive":
+                    legendName = "直播时长";
+                    break;
+                case "vtRecord":
+                    legendName = "录播时长";
+                    break;
+                default:
+                    break;
+
+            }
+            $("#selectCheck").html(legendName+'(总)');
+            chartData();
+            TableData();
+
+        });
+    // echarts 从后台获取数据并显示
+    function chartData(){
+        params={
+            startDay:$("#time-picker").val(),
+            endDay:$("#time-picker2").val(),
+            act:$("select").val()
+        };
+        $.ajax({
+            url: "/org/stat/TrafficTrend",
+            type: "post",
+            data: params,
+            dataType: "json",
+            success: function(data){
+                var day=[];
+                var count = [];
+
+                $.each(data.data,function(){
+                    var item = this;
+                    day.push(item.day);
+                    count.push(item.addCount);
+                });
+
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/line',
+                        ],
+                        function (ec) {
+                            var myChart = ec.init(document.getElementById('main'));
+                            var option = {
+                                tooltip : {
+                                    trigger: 'axis'
+                                },
+                                legend: {
+                                    data:['日增变化']
+                                },
+                                xAxis : [
+                                    {
+                                        data : day
+                                    }
+                                ],
+                                yAxis : [
+                                ],
+                                series : [
+                                    {
+                                        name:legendName,
+                                        type:'line',
+                                        smooth:true,
+                                        data:count
+                                    }
+                                ]
+                            };
+
+                            myChart.setOption(option);
+                        }
+                );
+            }
+        });
+    }
+    //导出excel
+    $("#exportTableData").click(function(){
+        var str  = '';
+        var startDay = $("#time-picker").val();
+        var endDay   = $("#time-picker2").val();
+        var act=$("#charts_type").val();
+        str+="startDay="+startDay+"&endDay="+endDay+"&act="+act
+        location.href = "/phpexcel/dayorgstat?" + str;
+    });
+
+    $("#time-picker").datetimepicker({
+        format: 'Y-m-d',
+        onShow:function( ct ){
+            this.setOptions({
+                maxDate:$('#time-picker2').val()?$('#time-picker2').val():false
+            })
+        },
+        timepicker: false
+    }).on('change',function(){
+        params.startDay=$("#time-picker").val();
+        chartData();
+        TableData();
+    });
+    $("#time-picker2").datetimepicker({
+        format: 'Y-m-d',
+        onShow:function( ct ){
+            this.setOptions({
+                maxDate:$('#time-picker').val()?$('#time-picker').val():false
+            })
+        },
+        timepicker: false
+    }).on('change',function(){
+        params.endDay=$("#time-picker2").val();
+        chartData();
+        TableData();
+    });
+
+})
+    //统计关键指标
+    function indexData(){
+        $.ajax({
+            url:'/org/stat/TrafficKeyIndicator',
+            dataTYpe:'json',
+            type:'post',
+            success:function(data) {
+                var data = JSON.parse(data);
+                if (data.code == 0) {
+                    var liHtml = $("#liHtml").html();
+                    var html = ejs.render(liHtml, { data: data.data});
+                    $('body .liHtml').html(html);
+
+                }else{
+                    var data={
+                        "vv":0,
+                        "vt":0.00,
+                        "vvPercentage":0,
+                        "vvStatus":0,
+                        "vtPercentage":0,
+                        "vtStatus":0
+                    }
+                    var liHtml = $("#liHtml").html();
+                    var html = ejs.render(liHtml, { data: data});
+                    $('body .liHtml').html(html);
+                }
+            }
+        })
+    }
+    function TableData(curr) {
+        var page = curr || 1;
+        params={
+            startDay:$("#time-picker").val(),
+            endDay:$("#time-picker2").val(),
+            act:$("#charts_type").val()
+        };
+        var Params={ };
+        Params=params;
+        Params.page=page;
+        Params.length=10;
+        $.ajax({
+            url: "/org/stat/TrafficTable",
+            type: 'post',
+            dataType: 'json',
+            data: Params,
+            success: function (data) {
+                if (data.code == 0) {
+                    var trList = $("#trList").html();
+                    var html = ejs.render(trList, { data: data.data.list});
+                    $("#chanelList tbody").html(html);
+                    laypage({
+                        cont: $("#pager"),
+                        pages: data.data.totalPage,
+                        curr: curr || 1,
+                        jump: function(obj, first){
+                            if(!first){
+                                TableData(obj.curr);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+    }
+</script>

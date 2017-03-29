@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="title" content="云课 - 寒假报名">
+		<meta name="keywords" content="云课 - 云课堂 - 寒假报名">
+		<meta name="description" content="寒假课程报名">
+		<link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets_v2/img/platform/yunke.ico')}" />
+		<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+		<script type="text/javascript" src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/bootstrap/bootstrap.min.css')}">
+		<title>第21届华杯赛初赛成绩查询</title>
+		<style type="text/css">
+			body{ color:#333;font:normal 12px/20px "微软雅黑";background:#f2f2f2 }
+			header,section{ float:left;width:100%; }
+			a:link{ color:#333; }
+			a:hover,a:visited{ text-decoration:none;color:#333; }
+
+			.red,a.red{ color:red; }
+			section{ padding:20px 30px; }
+			.font16{ font-size:16px }
+			.font18{ font-size:18px }
+			.font20{ font-size:20px }
+			.result-title{ float:left;padding:0;margin:0;width:100% }
+			.result{ float:left;width:100%;position:relative;padding:0;margin:20px 0 10px 0;background:#e9eaeb;border:1px dashed #c5c5c5;  }
+			.result p{ float:left;width:100%;line-height:35px;border-top:1px dashed #e5e5e5;border-bottom:1px dashed #e5e5e5;margin:0; }
+			.result .label{ float:left;padding:0 10px 0 0;text-align:right;font-size:16px;color:#333333 }
+			.result .label-for{ float:right;padding:0px;color:#666666;font-size:16px; }
+			.result-score{ float:left;font-size:18px;line-height:50px;border-top:1px solid #ccc;margin:10px 0 0 0; }
+			.result-tips{ float:left;margin-bottom:10px;color:#848484; }
+			.course-list{ float:left;width:100%;padding:0; }
+			.course-list li{ float:left;padding:0 10px 0 10px;list-style-type:none;font-size:14px;overflow: hidden;text-overflow: ellipsis;word-wrap: break-word; }
+			.course-list li:nth-child(2){ float:right;padding:0 10px 0 10px; }
+			.course-list li img{ width:100%;margin-bottom:10px }
+			.course-list li a{ float:left;width:100%; }
+			.mt10{ margin-top:10px }
+			.mt20{ margin-top:20px }
+			.mt40{ margin-top:40px }
+			.mt80{ margin-top:80px }
+			.mb80{ margin-bottom:80px }
+			dl{ float:left;width:100%;list-style-type:none;font-size:14px;line-height:180%;color:#666; }
+			dl dd{ float:left;width:100%;padding:0;width:100%;margin:0px }
+			dl dt{ float:left;width:100%;padding:0;padding-left:2em;width:100%;margin:0px }
+		</style>
+	</head>
+	<body>
+		<section class="container">
+		<p class="result-title font20">{$title}结果：</p>
+		<div class="result">
+			<p>
+			<span class="col-xs-4 label">姓名：</span>
+			<span class="col-xs-8 label-for">{$ret[0]}</span>
+			</p>
+			<div class="result-score col-xs-12">您的成绩总分是：<span class="red">{if empty($ret[1])}缺考{else}{$ret[1]}分{/if}</span></div>
+			{*<div class="result-tips col-xs-12">注：长沙地区入围分数线【小中：45分；小高：30分】,如需查卷，请到管委会办公室办理查卷手续，收取查卷费：30元/人.如因身份证号码及名字错误查询不到成绩的家 长请致电0731--85137468查询、
+			</div>*}
+		</div>
+		{*
+		<p class="result-title font18 mt20">长沙市<span class="red">精英队</span>选拔考试</p>
+		<dl>
+			<dd>
+			<1>选拔标准：凡小中组、小高组入围决赛的参赛学生。
+
+			</dd>
+			<dt>选拔时间：<span class="red">12月21日晚7:30分</span></dt>
+			<dd>
+			<2>报名方式：
+			</dd>
+			<dt>初赛在创新、科培、拓维报名的学生在原报名单位报名并领选拔把考试证。 在其他单位报名参加初赛的学生请到长沙华杯赛管委会报名。 </dt>
+			<dt>地址：长沙劳动西路395号梓园大厦1205房。</dt>
+			<dt>电话：0731--85137468</dt>
+			<dd>
+			<3>进入精英队的学生名单将于12月23日在华杯赛长沙管委会广网公布.
+			</dd>
+			<dt>官网网址: <a href="http://www.hnhbs0731.com" class="red"  target="_blank">www.hnhbs0731.com</a></dt>
+			<dd>
+			<4>长沙市精英队上课时间：
+			</dd>
+			<dt>2016年1月5日-----3月8日期间的每周二晚7:00---9:00（共8次课） </dt>
+			<dt>届时将由湖南地区知名专家教练团亲自授课。</dt>
+		</dl>
+		<p class="result-title font18 mt20">长沙管委会<span class="red">决赛前集训课程</span>及报名安排</p>
+		<dl>报名时间: 即日起至12月24日止。</dl>
+		<dl>报名地点：
+			<dt>
+			<1><span class="red">科培校区</span></dt>
+			<dt>（1）岳麓区新民路111号3楼（三得利超市三楼） 电话84512001/88797855；</dt>
+			<dt>（2）韶山北路139号（湖南大剧院A座8楼） 电话85573776；</dt>
+			<dt>（3）劳动中路86号君悦星城4楼（步步高超市东侧）电话88788876；</dt>
+			<dt>（4）荷花路416号景天大酒店三楼（南侧门）电话88867776；</dt>
+			<dt>
+			<2><span class="red">创新校区</span></dt>
+			<dt>（1）创新学校候家塘梓园大厦5楼 电话：85511069；</dt>
+			<dt>（2）创新学校中山路培罗蒙4楼 电话：82221069；</dt>
+			<dt>（3）创新学校红星美凯龙后栋3楼 电话：85531069；</dt>
+			<dt>（4）创新学校荷花园德政街华铭幼儿园5楼 电话：88801069。</dt>
+		</dl>
+		<p class="result-title font18">拓维天问校区课程可在线上报名缴费，线下上课。详情如下：</p>
+		<ul class="course-list">
+			<li class="col-sm-6 col-xs-6">
+			<a href="https://hnhbs0731.yunke.com/course.info.show/948" target="_blank"><img src="//f.gn100.com/1,a721ed155cdb">华杯赛小中组决赛前集训（拓维天问校区）</a>
+			</li>
+			<li class="col-sm-6 col-xs-6">
+			<a href="https://hnhbs0731.yunke.com/course.info.show/975" target="_blank"><img src="//f.gn100.com/5,a73dec6d02ca">华杯赛小高组决赛前集训（拓维天问校区）</a>
+			</li>
+		</ul>
+		*}
+		</section>
+
+		<div style="display:none">
+			<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256969875'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/stat.php%3Fid%3D1256969875%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+		</div>
+
+	</body>
+</html>

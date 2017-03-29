@@ -1,0 +1,66 @@
+// Responsive utilities
+@mixin responsive-visibility($parent) {
+	#{$parent} {
+		display: block !important;
+	}
+
+	table#{$parent} {
+		display: table !important;
+	}
+
+	tr#{$parent} {
+		display: table-row !important;
+	}
+
+	td#{$parent},
+	th#{$parent} {
+		display: table-cell !important;
+	}
+}
+// [converter] $parent hack
+@mixin responsive-invisibility($parent) {
+	#{$parent} {
+		display: none !important;
+	}
+}
+//margin
+@mixin calc-margin($index, $type) {
+	 @if ($type == padding) and ($index > 0){
+		.p#{$index} {
+			padding: 1px * $index;
+		}
+		.pd#{$index} {
+			padding: (1px * $index) 0;
+		}
+		.pt#{$index} {
+			padding-top: 1px * $index;
+		}
+		.pr#{$index} {
+			padding-right: 1px * $index;
+		}
+		.pl#{$index} {
+			padding-left: 1px * $index;
+		}
+	}
+	@if ($type == margin) {
+		.mb#{$index} {
+			margin-bottom: 1px * $index;
+		}
+		.mt#{$index} {
+			margin-top: (1px * $index) !important;
+		}
+		.ml#{$index} {
+			margin-left: (1px * $index) !important;
+		}
+		.mr#{$index} {
+			margin-right: (1px * $index) !important;
+		}
+	}
+}
+@mixin make-margin($nums) {
+  @while $nums >= 0 {
+    @include calc-margin($nums, padding);
+	@include calc-margin($nums, margin);
+	$nums: $nums - 5;
+  }
+}

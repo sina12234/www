@@ -1,0 +1,221 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 用户资料修改</title>
+		{part "/index.main.header"}
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/style.css')}">
+		<script src="{utility_cdn::js('/assets/js/user.js')}"></script>
+	</head>
+
+	<body>
+		<!--top-->
+		{part "/index.main.nav.user"}
+		<script src="{utility_cdn::js('/assets/js/jcrop/js/jquery.Jcrop.min.js')}"></script>
+		<script src="{utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js')}"></script>
+		<link rel="stylesheet" href="{utility_cdn::css('/assets/js/jcrop/css/jquery.Jcrop.css')}" type="text/css" />
+
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='col-sm-3 user_menu hidden-xs'>
+						<div id='menu'>
+							{part "/user.home.menu.user"}
+						</div>
+					</div>
+					<div class='col-sm-9 user_content'>
+						<div class='container-fluid'>
+<ul id="filelist"></ul>
+<br />
+
+<div id="container">
+	<a id="browse" href="javascript:;">[Browse...]</a>
+	<a id="start-upload" href="javascript:;">[Start Upload]</a>
+</div>
+
+<br />
+<pre id="console"></pre>
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		var uploader = new plupload.Uploader({
+			browse_button: 'browse', // this can be an id of a DOM element or the DOM element itself
+			url: '/file.main.uploadPic',
+			filters: {
+				mime_types : [
+					{ title : "Image files", extensions : "jpg,gif,png" }
+				],
+				max_file_size:"2000kb"
+				//prevent_duplicates:true
+			}
+			,multi_selection:false
+		});
+
+
+		uploader.bind('FilesAdded', function(up, files) {
+			uploader.start();
+/*
+			var html = '';
+			plupload.each(files, function(file) {
+				html += '<li id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></li>';
+			});
+			document.getElementById('filelist').innerHTML += html;
+*/
+		});
+
+		uploader.bind('UploadProgress', function(up, file) {
+			//document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+		});
+		uploader.bind('FileUploaded', function(up, file,info) {
+			console.log(up);
+			console.log(file);
+			console.log(info);
+			if(info.response){
+				if(jcrop_api)jcrop_api.destroy();
+				$("#test").hide().attr("src",info.response+"?"+Math.random());
+				$("#preview-pane img").attr("src",info.response+"?"+Math.random());
+				$('#test').Jcrop({
+					boxWidth:300,boxHeight:300,
+					onChange: updatePreview,
+					onSelect: updatePreview,
+					aspectRatio: 1 //xsize / ysize
+				},function(){
+					// Use the API to get the real image size
+					var bounds = this.getBounds();
+					boundx = bounds[0];
+					boundy = bounds[1];
+					// Store the API in the jcrop_api variable
+					jcrop_api = this;
+				}).show();
+
+
+			}
+		});
+		function showCoords(c){
+		};
+		function updatePreview(c){
+			if (parseInt(c.w) > 0)
+			{
+				$('#x').val(c.x);
+				$('#y').val(c.y);
+				$('#x2').val(c.x2);
+				$('#y2').val(c.y2);
+				$('#w').val(c.w);
+				$('#h').val(c.h);
+				var rx = xsize / c.w;
+				var ry = ysize / c.h;
+
+				$pimg.css({
+					width: Math.round(rx * boundx) + 'px',
+					height: Math.round(ry * boundy) + 'px',
+					marginLeft: '-' + Math.round(rx * c.x) + 'px',
+					marginTop: '-' + Math.round(ry * c.y) + 'px'
+				});
+			}
+		};
+		uploader.init();
+
+		uploader.bind('Error', function(up, err) {
+			document.getElementById('console').innerHTML += "\nError #" + err.code + ": " + err.message;
+		});
+
+		document.getElementById('start-upload').onclick = function() {
+			uploader.start();
+		};
+
+		var jcrop_api,
+		boundx,
+		boundy,
+
+		// Grab some information about the preview pane
+		//$preview = $('#preview-pane'),
+		$pcnt = $('#preview-pane .preview-container'),
+		$pimg = $('#preview-pane .preview-container img'),
+
+		xsize = $pcnt.width(),
+		ysize = $pcnt.height();
+	});
+</script>
+<div class='row'>
+
+	<div style="max-width:300px;max-height:300px;overflow:hidden">
+		<img style="" src="" id="test" alt="[Jcrop Example]" />
+	</div>
+
+	<style>
+		.preview-container{
+			width: 200px;
+			height: 200px;
+			overflow: hidden;}
+	</style>
+	<div id="preview-pane">
+		<div class="preview-container">
+			<img src="" class="jcrop-preview" alt="Preview" />
+		</div>
+	</div>
+	<form onsubmit="return false;">
+		<label>X1 <input type="text" size="4" id="x" name="x"></label>
+		<label>Y1 <input type="text" size="4" id="y" name="y"></label>
+		<label>X2 <input type="text" size="4" id="x2" name="x2"></label>
+		<label>Y2 <input type="text" size="4" id="y2" name="y2"></label>
+		<label>W <input type="text" size="4" id="w" name="w"></label>
+		<label>H <input type="text" size="4" id="h" name="h"></label>
+	</form>
+	<div class="stepbar">
+		<ul>
+			<li><b>1</b><span>填写课程基本信息</span></li>
+			<li><b>2</b><span>填写课程目录</span></li>
+			<li class="on"><b>3</b><span>立即排课</span></li>
+		</ul>
+	</div>
+	<div class="clear"></div>
+	<div class='container-fluid'>
+		<div class='row'>
+			<div class="col-sm-1"></div>
+			<div class="col-sm-10">
+				<table class='table classup'>
+					<tr class="hui">
+						<td >班级名称</td>
+						<td >学生人数</td>
+						<td >编辑</td>
+						<td >删除</td>
+					</tr>
+					<tr>
+						<td id='Numberone'>一班</td>
+						<td id='Numbertwo'>100人</td>
+						<td id='Numberthree'><a href=""><img src="{utility_cdn::img('/assets/images/book.png')}" style=" margin-top:10px;"></a></td>
+						<td class="noborder" id='Numberfore'><a href=""><img src="{utility_cdn::img('/assets/images/stop.png')}" style="margin-top:10px;"></a></td>
+					</tr>
+				</table>
+				<table class='table'>
+					<tr id="new">
+						<td style="border-right:none; border-bottom:none;margin-left:35%; color:#FFA81E;">＋新建班级</td>
+					</tr>
+				</table>
+			</div>
+			<div class="col-sm-1"></div>
+		</div>
+	</div>
+</div>
+						</div>
+
+						<div class='but'>
+							<input type='submit' value='上一步' style='color#000; background:#E5E5E5;'>
+							<input type='submit' value='保存并下一步' style="color:#fff;">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>  
+
+		<div class="footer"> 
+			<div class="ftcon">
+				<!-- <div class="fter_1">
+					<a href="">关于我们</a> | <a href="">加入我们</a> | <a href="">校园代理招募</a> | <a href="">O2O体验店招商</a> | <a href="">企业培训</a> | <a href="">网站地图</a> | <a href="">友情链接</a> 
+				</div> -->
+				<p class="fter_2 mt10">© 2014 北京高能壹佰教育科技有限公司 版权所有</p>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="title" content="云课 - 安徽省教师微课大赛活动">
+    <meta name="keywords" content="云课 - 云课堂 - 安徽省教师微课大赛活动">
+    <meta name="description" content="安徽省教师微课大赛活动">
+    <link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets_v2/img/platform/yunke.ico')}" />
+    <script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+    <script type="text/javascript" src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+    <link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/bootstrap/bootstrap.min.css')}">
+    <title>安徽省教师微课大赛活动</title>
+    <style>
+        body,html{ margin:0;padding:0;background:#CAE2FF;font-family: "微软雅黑"}
+        header{ float:left;width:100%;position:relative }
+        a:hover{ text-decoration: none;}
+        .col-xs-20{ padding:0;}
+        header img,footer img{ float:left;width:100%;max-width:1920px; }
+        footer{ text-align: center; margin-top:1em; background:url(/assets_v2/img/special/2016_10_20/footer.png) no-repeat top left;background-size:100% auto;color:#fff;padding-top:1em;}
+        footer a{ color:#fff;}
+        ul,li{ list-style:none;}
+        p{ margin:0px; }
+        .main { float:none;margin:0 auto;}
+        .tac{ text-align: center;}
+        .tal{ text-align:left;}
+        .param{ position: relative;padding-top:1em;}
+        .param3,.param4,.param5{ overflow: hidden;}
+        .head { position: relative; }
+        .head p.banner img,.activeTime img{ width:100%;}
+        .container{ margin-top:-14%;}
+        .title{ display:inline-block;padding:.2em 1.2em;font-size:1.3em;color:#FFF;border-radius:1em;background:#4B96F3;margin:.83em 0;}
+        .detail{ text-align:left; color:#082441;font-size:1em;line-height: 1.6em;text-indent:2em;}
+        .des{ font-size:12px;}
+
+        .activeTime{ position:relative;margin-top:50px;}
+        .param3 .title{ position:absolute;left:20%;}
+
+        .tim{ float: left; position:absolute;left:0;top:-20px;margin-top:0;}
+        .item{ margin-bottom: .5em;}
+
+        .item1{ background:url(/assets_v2/img/special/2016_10_20/cap.png) no-repeat;width:50%;height:3em; margin-left:10%;}
+        .tel{ width: 50%;position: absolute;top: 10px;right: 10px;font-size: 18px;color: red;}
+        .item2{ background:#B1D4FF;padding:8% 6% 5% 6%;margin:0 4%;text-align: left;  height:287px;}
+        .item3{ height:1em;background:#B1D4FF;}
+        .secP{ padding-left:5%;}
+        .tirP{ padding-left:10%;}
+        .param4 .item{ background:url(/assets_v2/img/special/2016_10_20/box.png) no-repeat center center;height:169px;padding:4% 5.5%; background-size:100%;}
+        /*.param4 .item div{ position:absolute;top:12%; left:20%;}*/
+        .param4 .item .item-title{ font-size:1.1em;color:#082441;}
+        .param4 .item .item-money{ font-size:1.2em;color:#1670E0;font-weight: bold;}
+        .param4 .item .item-detail{ font-size:1em;color:#1670E0;}
+        .param4 .item span{ font-size:1.5em;}
+        .param5 .line{ position: relative;height:3em;line-height: 3em;}
+        .param5 .line .icon{
+            display:inline-block;
+            float: left;
+            width:10%;
+            height:2em;
+            line-height: 2em;
+            background:url(/assets_v2/img/special/2016_10_20/address.png)no-repeat center left;
+            padding-left: 1.7em;
+            text-align: left;
+            color:#1670E0;
+            font-size:1em;
+        }
+        .param5 .line .line-dash{ border-top:1px dashed #4F98F3;float: left;width:90%;margin-top: 1.5em;}
+
+        .school-item div{ background:#fff; border:1px solid #AACDF9;border-radius:2px;text-align: center;font-size:1em;color:#1057AE;padding:.5em 0;margin-bottom:1em;}
+
+        .schools{ padding-left:0;}
+        @media screen and (min-width:320px) and (max-width:768px) {
+            .param4 .item div{ position:absolute;top:12%; left:13%;}
+            .param4 .item{ background:url(/assets_v2/img/special/2016_10_20/box.png) no-repeat center center;padding:0;padding-bottom:33%;position:relative;background-size: 100%;height:auto;}
+            .param5 .line .icon { width: 18%;}
+            .param5 .line .line-dash { width: 82%;}
+            .col-xs-10 { padding:0 .3em;}
+            .item1{ background:url(/assets_v2/img/special/2016_10_20/cap-h5.png) no-repeat bottom left;width:50%;height:2em; margin-left:4%;}
+            .item2{ height:auto;}
+            .tel{ font-size:12px;right:0;}
+            .param3 .title{ left:7%;}
+        }
+
+</style>
+</head>
+<body>
+<section>
+    <div class="head">
+        <p class="banner">
+            <img src="/assets_v2/img/special/2016_10_20/header.png" alt="">
+        </p>
+    </div>
+</section>
+<section>
+    <div class="container tac">
+        <div class="row col-md-18 col-xs-20 main">
+            <div class="param">
+                <p class="title">大赛引言</p>
+                <p class="detail">
+                    为深入学习贯彻党的十八大及十八届三中、四中、五中全会和习近平总书记系列重要讲话精神，重点推动“网络学习空间人人通”，深化普及“一师一优课、一课一名师”活动，每个学校都应该加大教育信息化培训和典型示范推广力度，顺应教育信息化建设的大趋势。拓维云课平台举办教师微课大赛，正是提高教师信息技术应用能力，丰富数字教育资源的一项绝佳选择。
+                </p>
+            </div>
+            <div class="param activeTime">
+                <p class="title tim">活动时间</p>
+                <img src="/assets_v2/img/special/2016_10_20/timer-shaft.png" />
+            </div>
+            <div class="param param3">
+                <div class="col-md-10 col-xs-20 item">
+                    <p class="title introduction">活动引言</p>
+                    <div class="item1"></div>
+                    <div class="item2">
+                        <p>（一）参加对象 ：安徽省幼儿园、中小学（已经签约合作）</p>
+                        <p>（二）时间 ：2016年11月4日--12月25日</p>
+                        <p>（三）活动赞助方：云课平台</p>
+                        <p>（四）参赛单位：安徽省幼儿园、中小学（已经签约合作）</p>
+                        <p>（五）教师参赛</p>
+                        <p>（六）学生投票</p>
+                        <p class="secP">1.下载云校园，通过手机号登录，初始密码后六位（不能登录的可自行注册）</p>
+                        <p class="secP">2.登录后，在社区页面点击“安徽教师微课大赛”，为喜欢的老师投票</p>
+                        <!--<p class="tirP">① QQ或微信  ② 网站投票</p>-->
+                        <p class="secP">3.学生投票：每人可投一票，参与投票即可获得录播课（1节）+直播体验课（1节）+200元精品课优惠券</p>
+                    </div>
+                    <div class="item3"></div>
+                </div>
+                <div class="col-md-10 col-xs-20 item">
+                    <p class="title introduction">教师参赛</p>
+                    <div class="item1"></div>
+                    <p class="tel">报名电话：15805522241</p>
+                    <div class="item2" style="padding-right:0;">
+                        <P>（一）教师注册账号</P>
+                        <P class="secP">注册学校云课空间（账号；密码） ，线下报名参赛</P>
+                        <P>（二）所有签约学校教师均有报名资格 （报名并不等同于参赛资格）完善个人资料</P>
+                        <P class="secP">1.  教师需要登录教学中心，修改个人资料，上传头像</P>
+                        <P class="secP">2. 完善个人主页，上传至少三张照片</P>
+                        <P>（三）制作并上传视频</P>
+                        <P class="secP">1.  微课时长：建议10~30分钟，不超过40分钟</P>
+                        <P class="secP">2.  录制形式：以视频为主，可利用云课客户端、DV等设备录制</P>
+                        <P class="secP">3.  教师个人原创，内容不限（以教学为主，提倡多样性）</P>
+                        <p class="secP">4.  上传微课视频</p>
+                    </div>
+                    <div class="item3"></div>
+                </div>
+
+            </div>
+            <div class="param param4 tal">
+                <p class="title">大赛引言</p>
+                <div class="list tac">
+                    <div class="col-md-5 col-xs-10 item">
+                        <div>
+                            <p class="item-title">一等奖   1名</p>
+                            <p class="item-money"><span>5,000</span> 元</p>
+                            <p class="item-detail">（或等价奖品）</p>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-xs-10 item">
+                        <div>
+                        <p class="item-title">二等奖   2-5名</p>
+                        <p class="item-money"><span>1,500</span> 元</p>
+                        <p class="item-detail">（或等价奖品）</p>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-xs-10 item">
+                        <div>
+                        <p class="item-title">三等奖   6-10名</p>
+                        <p class="item-money"><span>800</span> 元</p>
+                        <p class="item-detail">（或等价奖品）</p>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-xs-10 item">
+                        <div>
+                        <p class="item-title">参与奖   11-210名</p>
+                        <p class="item-money"><span>50</span> 元话费</p>
+                        <p class="item-detail"></p>
+                        </div>
+                    </div>
+                </div>
+                <p class="des">其他参与活动教师前11-210名可送50元话费（参与活动教师指的视频审核通过，并有支持投票超过100票，云课最确定的教师名单，其最终解释权归活动举办方所有）。活动结束后优质课程会被拓维作为扶贫项目一部分，进行扶贫支援时为老师宣传。</p>
+            </div>
+            <div class="param param5 partSchools">
+                <p class="title">微课大赛部分参赛学校</p>
+                <!--毫州-->
+                <div class="line">
+                    <span class="icon">毫州</span>
+                    <p class="line-dash"></p>
+                </div>
+                <ul class="schools row">
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/193" target="_blank"><div>利辛县新河小学</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/194" target="_blank"><div>利辛二小</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/195" target="_blank"><div>亳州市风华小学南校</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/196" target="_blank"><div>涡阳第八小学</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/197" target="_blank"><div>蒙城六小</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/198" target="_blank"><div>蒙城二小</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/199" target="_blank"><div>蒙城城关十二小</div></a></li>
+                </ul>
+                <!--阜阳-->
+                <div class="line">
+                    <span class="icon">阜阳</span>
+                    <p class="line-dash"></p>
+                </div>
+                <ul class="schools row">
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/202" target="_blank"><div>太和一小</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/218" target="_blank"><div>太和七小</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/210" target="_blank"><div>阜阳附小学校</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/206" target="_blank"><div>闻集大陶小学</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/209" target="_blank"><div>界首四小</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/209" target="_blank"><div>界首一小</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/208" target="_blank"><div>临泉育新小学</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/207" target="_blank"><div>太和五小</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/207" target="_blank"><div>太和二小</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/207" target="_blank"><div>太和十小</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/207" target="_blank"><div>太和苗集中心校</div></a></li>
+                </ul>
+                <!--淮南-->
+                <div class="line">
+                    <span class="icon">淮南</span>
+                    <p class="line-dash"></p>
+                </div>
+                <ul class="schools row">
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/213" target="_blank"><div>淮南田区十九小</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/222" target="_blank"><div>淮南田十三小</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/163" target="_blank"><div>淮南谢一中</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/214" target="_blank"><div>淮南田三小</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/221" target="_blank"><div>淮南张集中心小学</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/216" target="_blank"><div>淮南田集中心小学</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://hneswz.yunke.com/org/poll/info/223" target="_blank"><div>淮南市第二十五中学</div></a></li>
+                </ul>
+                <!--蚌埠-->
+                <div class="line">
+                    <span class="icon">蚌埠</span>
+                    <p class="line-dash"></p>
+                </div>
+                <ul class="schools row">
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/168" target="_blank"><div>蚌埠沫河口中学</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/169" target="_blank"><div>蚌埠涂山路二小</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://bbtlzx.yunke.com/org/poll/info/173" target="_blank"><div>蚌埠铁路中学</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://bbtdxx.yunke.com/org/poll/info/171" target="_blank"><div>蚌埠陶店中心小学</div></a></li>
+                </ul>
+                <!--滁州-->
+                <div class="line">
+                    <span class="icon">滁州</span>
+                    <p class="line-dash"></p>
+                </div>
+                <ul class="schools row">
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/174" target="_blank"><div>定远二中	</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/176" target="_blank"><div>明光市明湖学校</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/190" target="_blank"><div>凤阳实验小学</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/191" target="_blank"><div>安徽名师课堂</div></a></li>
+                    <li class="col-md-4 col-xs-10 school-item"><a href="https://ahmskt.yunke.com/org/poll/info/192" target="_blank"><div>安徽名师课堂2</div></a></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</section>
+<footer>
+    <!--<img src="/assets_v2/img/special/2016_10_20/footer.png"/>-->
+    <p>
+        <a href="/index.about" title="">关于我们</a> |
+        <a href="/index.feedback" title="">意见反馈</a> |
+        <a href="/index.main.client">客户端下载</a> |
+        <a href="/index.help">在线帮助</a>
+    </p>
+    <p>Copyright©2016 北京高能壹佰教育科技有限公司版权所有</p>
+    <p>京ICP备14053191号&nbsp;&nbsp;云课--拓维旗下在线教育平台</p>
+</footer>
+</body>
+</html>

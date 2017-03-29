@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{part '/site.main.orgname'} - 用户注册 - 专业的K12在线教育平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+</head>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/common.js')}"></script>
+<body>
+{part "/site.main.nav3"}
+<section id="wrap-login" style="display:block;">
+<div class="login-bg">
+    <div class="register">
+        <div class='container'>
+            <div class='row'>
+            <div class='col-sm-8 col-xs-20 bgf c-fr bor1px login-content pdb10 col-md-6' style="float:right">
+                <div class="x_reg_inner_1" id="reg_ok" style="display:none">
+                    <h1 class="mt20 lh22">{'恭喜您注册成功'|tr:'site.login'}</h1>
+                    <div class='Forget-box' id="reg_ok" style="padding:10% 0px 15% 0px;">
+                        <div class='box-img'>
+                            <img src="{utility_cdn::img('/assets_v2/img/icg.png')}">
+                            <span>{'恭喜您注册成功'|tr:'site.login'}！</span>
+                        </div>
+                        <div class='box-tz'>
+                            <p>{'页面'|tr:'site.login'}<span class='time'>3</span>{'秒自动登录'|tr:'site.login'}.{'未跳转请点击'|tr:'site.login'}<a href="/site.main/login">&nbsp;{'登录'|tr:'site.login'}&nbsp;</a></p>
+                        </div>
+                    </div>
+                </div>
+                <form novalidate id="form" autocomplete="off">
+                    <input type="password" style="display:none;">
+                    <input type="hidden" id="voice" name="voice" value="1" />
+                    <div class='register-bt col-xs-20 col-sm-20'><span>{'欢迎注册'|tr:'site.login'}</span></div>
+
+                    <div class='register-lab col-xs-20 col-sm-20 pos-rel'>
+                        <div class="pos-rel col-sm-20 pd0 col-xs-20">
+                            <div class="c-fl mr10 category-mobile fs12 tac bor1px hidVerifyNumCode">
+                                +<span class="verifyNumCode">86</span>
+                                <i class="c-fr mt15 mr5"></i>
+                            </div>
+                            <dl class="fs14 pos-abs col-sm-20 pd0 areaCountry bor1px" style="display:none;">
+                                <div class="col-sm-20 col-xs-20 clearfix areaCountryInfo fs12 pd0" id="internationCode"></div>
+                                <dd class="col-sm-20 col-xs-20 fs12 tac clearfix moreAreaCountry">
+                                    更多国家
+                                    <input type="hidden" name="cid" value="1"/>
+                                </dd>
+                            </dl>
+                            <div class="pos-rel col-sm-12 pd0 strmobile col-xs-14 col-md-14 c-fr">
+                                <input type="text" id="mobile" name="mobile" placeholder="{'请输入手机号'|tr:'site.login'}" class="col-xs-20 col-sm-20 reg_user_mobile iptFocusBlur" />
+                                <i class="mobile-icon pos-abs"></i>
+                            </div>
+                        </div>
+
+                        <div class="cRed mobile-error-tip lh22 col-xs-20 col-sm-20"></div>
+
+                    </div>
+                    <div class='register-lab col-xs-20 col-sm-20 pic-code pos-rel'>
+                        <input type="text" id="verify_code_img" placeholder="{'请输入图片验证码'|tr:'site.login'}" class="col-xs-10 col-sm-13 reg_verify_code_img iptFocusBlur" name="verify_code_img">
+                        <img src="/captcha.gen" id="cap" class='col-xs-10 c-fr col-sm-6 pd0'>
+                        <div class="tips cRed col-xs-20 col-sm-5 verify_code_img-error-tip" style="display:none;"></div>
+                    </div>
+                    <div class='register-lab col-xs-20 col-sm-20 pos-rel'>
+                        <input type="text" id="code" class="col-xs-10 col-sm-13 reg_user_code iptFocusBlur" placeholder="{'请输入手机验证码'|tr:'site.login'}" name='verify_code' >
+                        <input type="button" id="get_verify_code" title="{'免费获取验证码'|tr:'site.login'}" value="{'获取验证码'|tr:'site.login'}" class="col-xs-8 col-sm-6 c-fr register-but"  style="padding:0;" />
+                        <div class="tips cRed col-xs-20 col-sm-20 verify_code-error-tip" style="display:none;"> </div>
+                        {*<div class='yifasong' style="display:none;">
+                            <span>手机验证码已发，没收到短信？<b id="djs">30秒后</b>点此<a href="javascript:;" id="get_verify_code_v" class="x_btn_yanzhengma_v">获取语音验证码</a></span>
+                        </div>*}
+                    </div>
+                    <div class='register-lab col-xs-20 col-sm-20 pos-rel'>
+                        <input type="text" id="name" name="username" autocomplete="off" value="" placeholder="{'请输入姓名'|tr:'site.login'}" class="reg_username nameCode col-xs-20 col-sm-20 iptFocusBlur">
+                        <i class="user-icon1 pos-abs"></i>
+                    </div>
+                    <div class='register-lab col-xs-20 col-sm-20 pos-rel'>
+                        <div id="box">
+                            <input type="password" name="userpassword" autocomplete="off" value=""  placeholder="{'请输入密码'|tr:'site.login'}" id="password1" class="reg_setpass setpass col-xs-20 col-sm-20 iptFocusBlur">
+                        </div>
+                        <i class="password-icon pos-abs"></i>
+                    </div>
+
+                    {if isset($pr) && !empty($pr)}
+                        <input type="hidden" name="pr" value="{$pr}">
+                    {/if}
+                    {if isset($url) && $url}
+                    <input type="hidden" name="url" value="{$url}">
+                {/if}
+                <div class='register-lab col-xs-20 col-sm-20'>
+                    <label class="reg-invitation-box col-xs-20 col-sm-20 pd0">
+                        <input type="checkbox" style="vertical-align:middle;"  name="inv-code" /> {'邀请码'|tr:'site.login'}（{'选填'|tr:'site.login'}）
+                    </label>
+                </div>
+                <div class="register-lab col-xs-20 hidden mt0" id="invcode">
+                    <input type="text" id="name" name="pr_code" placeholder="{'请输入邀请码'|tr:'site.login'}" class="reg_invitation-code col-xs-20 col-sm-20 iptFocusBlur" />
+                    <i class="user-icon2 pos-abs"></i>
+                </div>
+
+                <div class="register-ton col-xs-20 col-sm-20 pd0">
+                    <button class='col-xs-20 com-sm-20'>{'注册'|tr:'site.login'}</button>
+                </div>
+        </div>
+</div>
+</section>
+{part "/site.main.footer"}
+</body>
+</html>
+<script type="text/javascript">
+	var wait=60;
+    function getVerificatCode() {
+        if (wait == 0) {
+            $('.register-but').prop('disabled', false);
+            $('.register-but').val("获取验证码");
+            wait = 60;
+        } else {
+            $('.register-but').prop('disabled', true);
+            $('.register-but').val("重新发送(" + wait + ")");
+            wait--;
+            setTimeout(function() {
+                getVerificatCode()
+            },1000)
+        }
+    }
+    function ps() {
+        if (password1.type="password")
+            box.innerHTML=" <label>{'设置密码'|tr:'site.login'}：</label><input type=\"text\" id='password1' class='okpass' name=\"password\" size=\"20\" value="+password1.value+">";
+            click.innerHTML="<b class='xians' onclick=\"javascript:txt()\"></b>"};
+    function txt() {
+        if (password1.type="text")
+            box.innerHTML="<label>{'设置密码'|tr:'site.login'}：</label><input type=\"password\" class='okpass' id='password1' name=\"password\" size=\"20\" value="+password1.value+">";
+            click.innerHTML="<b class='xians' onclick=\"javascript:ps()\"></b>"};
+    function ps1() {
+        if (password2.type="password")
+            box1.innerHTML=" <label>{'确定密码'|tr:'site.login'}：</label><input type=\"text\" class='setpass' id='password2' name=\"password2\" size=\"20\" value="+password2.value+">";
+            click1.innerHTML="<b class='xians' onclick=\"javascript:txt1()\"></b>"};
+    function txt1() {
+        if (password2.typte="text")
+            box1.innerHTML="<label>{'确定密码'|tr:'site.login'}：</label><input type=\"password\" class='setpass' id='password2' name=\"password2\" size=\"20\" value="+password2.value+">";
+            click1.innerHTML="<b class='xians' onclick=\"javascript:ps1()\"></b>"}
+
+    $(function() {
+
+        $(".category-mobile").bind("click" ,function() {
+            $(".areaCountry").show();
+            return false;
+        })
+
+        $(".areaCountry").on("click" ,".moreAreaCountry" ,function() {
+            $(".areaCountry").show();
+            return false;
+        })
+
+        $(document).click(function() {
+            $(".areaCountry").hide();
+        })
+
+        $("#internationCode").on("click" ,".areaCountryInfo" ,function() {
+            $(".category-mobile").find(".verifyNumCode").html($(this).find(".areaCode").html());
+            $(".areaCountry").hide();
+        })
+
+        $(".reg-invitation-box").on('click',function() {
+            if($("input[name='inv-code']").is(':checked')) {
+                $("#invcode").addClass('show').removeClass('hidden');
+            }else{
+                $("#invcode").removeClass('show').addClass('hidden');
+            }
+        });
+
+        $(".areaCountry").on("click" ,".moreAreaCountry" ,function() {
+            $(".areaCountry").show();
+            var cid = $.trim($("input[name=cid]").val());
+            $.post("/site.main.getInternationalCodeByInfo",{ cid:cid },function(r){
+                var moreCode = '';
+                $(r.msg).each(function(k,v){
+                moreCode+='<dd class="col-sm-20 col-xs-20 clearfix areaCountryInfo"><span class="areaCity col-sm-15 col-xs-15 pd0 tel">'+v.name_en+'('+v.name+')</span><span class="areaCode col-sm-5 col-xs-5 pd0 ter">'+v.mobile_pre.substring(1)+'</span></dd>';
+            });
+            $("#internationCode").html(moreCode);
+            $(".moreAreaCountry").hide();
+            },"json");
+        })
+
+        $.post("/site.main.getInternationalCodeByInfo","",function(r){
+            var content='';
+            $(r.msg).each(function(k,v){
+                content +='<dd class="col-sm-20 col-xs-20 clearfix areaCountryInfo"><span class="areaCity col-sm-15 col-xs-15 pd0 tel">'+v.name_en+'('+v.name+')</span><span class="areaCode col-sm-5 col-xs-5 pd0 ter">'+v.mobile_pre.substring(1)+'</span></dd>';
+            });
+            $("#internationCode").html(content);
+
+        },"json");
+
+        //邀请码
+        var myIndex=0;//点击三次出现图片验证
+        $("#cap").click(function(){
+            $("#cap").attr("src","/captcha.gen?"+Math.random());
+        });
+
+        var i=0;
+        var timer;
+        $('#get_verify_code').click(function() {
+            var verifyNumCode = $.trim($(".verifyNumCode").html());
+            var cmobile = $.trim($("input[name='mobile']").val());
+            var numCodeAndMobile = "+"+verifyNumCode+cmobile;
+            //if(i>0||ii>0)return false;
+            $("#voice").val(0);
+            $("#error").html("");
+            var mobile = $.trim($("[name=mobile]").val());
+            var verify_code_img = $.trim($("[name=verify_code_img]").val());
+
+            if(mobile==''){
+                layer.msg('{'手机号不能为空'|tr:'site.login'}');
+                $("[name='mobile']").css('border','1px solid #ffa81e').focus();
+                return;
+            }
+
+            if(verify_code_img==''){
+                layer.msg('{'图片验证码不能为空'|tr:'site.login'}');
+                $("[name=verify_code_img]").focus().css("border","1px solid #ffa81e");
+                return;
+            }
+
+            i=60;
+            $.post("/user.main.VerifyCode",{ mobile:numCodeAndMobile,verify_code_img:verify_code_img },function(r){
+                if(r.error){
+                    if(r.error_code==-1){
+                        layer.msg('<p>{'手机号已注册'|tr:'site.login'}</p>');
+                        $("[name='mobile']").css('border','1px solid #ffa81e');
+                    }else if(r.code=='-8'){
+                        layer.msg(r.error);
+                        $("#cap").attr("src","/captcha.gen?"+Math.random());
+                        $("[name="+r.field+"]").focus();
+                    }else if(r.ok==1){
+						layer.msg(r.error);
+						getVerificatCode();
+					}else{
+						layer.msg(r.error);
+						return false;
+					}
+
+                }
+
+            },"json");
+        })
+
+
+        var i3 =3;
+        var timer3;
+        $("#form").submit(function(){
+            var errorNumber = 4;
+            var verifyNumCode = $.trim($(".verifyNumCode").html());
+            var cmobile = $.trim($("input[name='mobile']").val());
+            var numCodeAndMobile = "+"+verifyNumCode+cmobile;
+            $(".strmobile").append("<input type='hidden' name='mobile' value='"+numCodeAndMobile+"'/>");
+            verify_code_img = $("input[name='verify_code_img']").val();
+            if(verify_code_img==''){
+                    layer.msg('{'图片验证码不能为空'|tr:'site.login'}');
+                    return false;
+            }
+            $.post("/user.main.registerajax",$("#form").serialize(),function(r){
+                if(r.error){
+                    layer.msg(r.error);
+                    if(r.code=='-8'){
+                        $("#cap").attr("src","/captcha.gen?"+Math.random());
+                    }
+                    $("[name="+r.field+"]").focus();
+                    return false;
+                }
+                $("#form").hide();
+                $("#reg_ok").show();
+                timer3 = setInterval(function(){
+                    i3--
+                    $(".time").html(i3)
+                    if(i3==0){
+                        clearInterval(timer3);
+                        if(r.redirect_url){
+                           location=r.redirect_url;
+                        }else{
+                           location="/";
+                        }
+                    }
+                },1000);
+            },"json");
+            return false;
+        });
+
+        var i2=0;
+        var timer2;
+        $("#get_verify_code_v").click(function(){
+            $("#voice").val(1);
+            $(".mobile-error-tip").html("");
+            $mo = parseInt($("[name=mobile]").val());
+            if($mo<13000000000 || $mo>19999999999){
+                layer.msg('{'手机号格式错误'|tr:'site.login'}');
+                $("[name=mobile]").focus();return;
+            }else{
+                $(".mobile-error-tip").html("");
+            }
+            if(i2>0 || i>0)return false;
+            $.post("/user.main.VerifyCode",$("#form").serialize(),function(r){
+                if(r.error){
+                    layer.msg(r.error);
+                    $("[name="+r.field+"]").focus();
+                }
+
+                if(!r.ok){
+                    i2=0;
+                    return false;
+                }else{
+                    i2=30;
+                    $("#get_verify_code_v").html("{'请等候'|tr:'site.login'}("+i2+"){'秒'|tr:'site.login'}");
+                    timer2 = setInterval(function(){
+                        i2--;
+                        $("#get_verify_code_v").html("{'请等候'|tr:'site.login'}("+i2+"){'秒'|tr:'site.login'}");
+                        if(i2==0){
+                            clearInterval(timer2);
+                            $("#get_verify_code_v").html("{'语音获取验证码'|tr:'site.login'}");
+                        }
+                    },1000);
+                }
+            },"json");
+        })
+
+        $('.iptFocusBlur').focus(function(){
+            $(this).css('border','solid 1px #ffa81e');
+        });
+        $('.iptFocusBlur').blur(function(){
+            $(this).css('border','solid 1px #ddd');
+        });
+		$('')
+    });
+</script>

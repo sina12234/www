@@ -1,0 +1,32 @@
+// 个人积分等级icon生成
+$level-list:(
+  icon1:$shusheng1 $shusheng1-1,
+  icon2:$shusheng2 $shusheng2-1,
+  icon3:$shusheng3 $shusheng3-1,
+  icon4:$xiucai1   $xiucai1-1,
+  icon5:$xiucai2   $xiucai2-1,
+  icon6:$xiucai3   $xiucai3-1,
+  icon7:$juren1    $juren1-1,
+  icon8:$juren2    $juren2-1,
+  icon9:$juren3    $juren3-1,
+  icon10:$jinshi1  $jinshi1-1,
+  icon11:$jinshi2  $jinshi2-1,
+  icon12:$jinshi3  $jinshi3-1,
+  icon13:$tanhua1  $tanhua1-1,
+  icon14:$tanhua2  $tanhua2-1,
+  icon15:$tanhua3  $tanhua3-1,
+  icon16:$bangyan1 $bangyan1-1,
+  icon17:$bangyan2 $bangyan2-1,
+  icon18:$bangyan3 $bangyan3-1,
+  icon19:$zhuangyuan1  $zhuangyuan1-1,
+  icon20:$zhuangyuan2  $zhuangyuan2-1,
+  icon21:$zhuangyuan3  $zhuangyuan3-1
+);
+@each $icon-name,$icon-list in $level-list{
+  .level-#{$icon-name}{
+    @include sprite(nth($icon-list,1));
+  }
+  .level-s#{$icon-name}{
+    @include sprite(nth($icon-list,2));
+  }
+}

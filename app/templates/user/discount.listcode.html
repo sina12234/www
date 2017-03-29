@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 优惠码列表</title>
+		{part "/index.main.headeruser"}
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/style.css')}">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets/images/favicon.ico')}" />
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/bootstrap-custom/bootstrap.min.css')}">
+		<!--[if lt IE 9]>
+		<link rel="stylesheet" type="text/css" href="/assets/bootstrap-custom/bootstrap.min.css">
+		<script src="{utility_cdn::js('/assets/bootstrap-3.3.0/js/html5shiv.min.js')}"></script>
+		<script src="{utility_cdn::js('/assets/bootstrap-3.3.0/js/respond.min.js')}"></script>
+		<![endif]-->
+		<!--[if lt IE 8]>
+		<script type="text/javascript" src="{utility_cdn::js('/assets/js/ie8.js')}" ></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/teacherplay.css')}">
+		<script type="text/javascript" src="{utility_cdn::js('/assets/js/jquery/jquery-1.11.1.min.js')}" ></script>
+		<script type="text/javascript" src="{utility_cdn::js('/assets/js/page_limit.js')}" ></script>
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/common.css')}">
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/teacherplay.css')}">
+		<script type="text/javascript">
+			$(document).ready(function(e){
+				if({$discounts->total} > 0){
+					var ul = page_limit({$page}, {$limit}, {$discounts->total}, 1, { });
+					$("#page_pilot").append(ul);
+				}
+				$( "#starttime" ).datetimepicker({  format:'Y-m-d H:i:s',step:15});
+				$( "#endtime" ).datetimepicker({  format:'Y-m-d H:i:s',step:15});
+				$("#submit").on("click", function(e){
+					var start = $("#starttime").val();
+					var end = $("#endtime").val();
+					if(start.startsWith("0")){
+						alert("请输入优惠开始时间");
+						return false;
+					}
+					if(end.startsWith("0")){
+						alert("请输入优惠结束时间");
+						return false;
+					}
+					if(start >= end){
+						alert("优惠码开始时间大于等于结束时间");
+						return false;
+					}
+					if(start < "{$discounts->discount->starttime}"){
+						alert("优惠码开始时间小于优惠开始时间");
+						return false;
+					}
+					if(end > "{$discounts->discount->endtime}"){
+						alert("优惠码结束时间小于优惠结束时间");
+						return false;
+					}
+					return true;
+				});
+			});
+		</script>
+		<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}" ></script>
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+		<style>
+			[forbid] { background-color: #ddd;}
+			.Page{ margin-top: 150px;}
+			.Page ul li{ float: left; display:inline-block; margin-left: 10px;font-size: 14px;}
+			.Page ul .big{ width:30px;height:25px;background:#FFA81E; text-align: center;padding-top: 3px;}
+			.Page ul .sam{ padding-top: 3px;}
+			.Page ul .ban{ padding-top: 3px;width:30px;height:25px;background:#ccc;text-align: center;}
+			.Page ul li a{ width: 30px;height: 30px; color: #fff;}
+		</style>
+	</head>
+	<body>
+		<!--top-->
+		{part "/index.main.nav.user"}
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='col-sm-3 user_menu hidden-xs'>
+						<div id=''>
+							<div id='menu'>
+								{part "/user.home.menu.user"}
+							</div>
+						</div>
+					</div>
+
+					<div class='col-sm-9 user_content' style="background:none;">
+
+						<table border="1" width="100%">
+							<caption>优惠规则</caption>
+							<tr>
+								<th> 名字 </th><th> 简介 </th><th> 课程id </th><th> 折扣类型 </th><th> 折扣值 </th><th>最低消费</th><th> 开始时间 </th><th> 结束时间 </th><th>禁用</th>
+							</tr>
+							{$d=$discounts->discount}
+							{if 0 == $d->status}
+							<tr>
+								{else}
+								<tr forbid>
+									{/if}
+									<td>{$d->name}</td>
+									<td>{$d->introduction}</td>
+									<td>{if 0==$d->course_id}{$d->course_name}{else}<a href="/course.info.show/{$d->course_id}" target="_blank">{$d->course_name}</a>{/if}</td>
+									<td>{if 1==$d->discount_type}减额优惠{else}打折优惠{/if}</td>
+									<td>{if 1==$d->discount_type}优惠{$d->discount_value/100}元{else}打{$d->discount_value}折{/if}</td>
+									<td>{$d->min_fee/100}元</td>
+									<td>{$d->starttime}</td>
+									<td>{$d->endtime}</td>
+									<td>
+										{if 0 == $d->status}
+										<a href="/org.discount.forbid/{$d->discount_id}">点击禁用</a>
+										{else}
+										已禁用
+										{/if}
+									</td>
+								</tr>
+							</table>
+							{if $discounts->total > 0}
+							<table border="1" width="100%">
+								<caption>优惠码</caption>
+								<tr>
+									<th> 简介 </th><th>优惠码</th><th>总优惠数量</th><th>已用优惠数量</th><th>每用户最多使用次数</th><th> 开始时间 </th><th> 结束时间 </th><th>使用情况</th><th>禁用</th>
+								</tr>
+								{foreach $discounts->data as $d}
+								{if 0 == $d->status}
+								<tr>
+									{else}
+									<tr forbid>
+										{/if}
+										<td>{$d->introduction}</td><td>{strtoupper($d->discount_code)}</td><td>{$d->total_num}</td><td>{$d->used_num}</td><td>{$d->user_limit}</td><td>{$d->starttime}</td><td>{$d->endtime}</td><td><a href="/org.discount.listcodeused/{$d->discount_code}">使用情况</a></td><td>
+											{if 0 == $d->status}
+											<a href="/org.discount.forbidcode/{$d->discount_code_id}/{$d->discount_id}">点击禁用</a>
+											{else}
+											已禁用
+											{/if}
+										</td>
+									</tr>
+									{/foreach}
+								</table>
+								<div class="Page" id="page_pilot">
+								</div>
+								<div class="clear"></div>
+								{/if}
+								<div>
+									<p>增加优惠码</p>
+									<form method="POST" action="/org.discount.createcodeok">
+										<table border="1" width="100%">
+											<caption>新优惠码</caption>
+											<tr><th>名字</th><th>值</th></tr>
+											<tr><td>简介(如果创建多个，用|分隔)</td><td><input type="text" name="introduction" required /></td></tr>
+											<tr><td>总使用次数</td><td><input type="text" name="total_num" required /></td></tr>
+											<tr><td>每个用户使用次数</td><td><input type="text" name="user_limit" required /></td></tr>
+											<tr>
+												<td>优惠开始时间</td>
+												<td>
+													<input class="col-xs-5 x_input_tx2 xitx2cal" type="text" id="starttime" name="starttime" placeholder="开始时间" value="{$discounts->discount->starttime}" required />
+												</td>
+											</tr>
+											<tr>
+												<td>优惠结束时间</td>
+												<td>
+													<input class="col-xs-5 x_input_tx2 xitx2cal" type="text" id="endtime" name="endtime" placeholder="结束时间" value="{$discounts->discount->endtime}" required />
+												</td>
+											</tr>
+										</table>
+										<input name="discount_id" value="{$discounts->discount->discount_id}" style="display:none"/>
+										<input type="submit" id="submit">
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{part "/index.main.footer"}
+			</body>
+		</html>

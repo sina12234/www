@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>高能100 - 基本资料</title>
+{part "/index.main.headeruser"}
+<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}" ></script>
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+</head>
+<style>
+	.user_content_xb label{ margin-top: 17px;margin-left: 15px; font-size: 14px;}
+</style>
+<body>
+	<!--top-->
+	{part "/index.main.nav.user"}
+	<div class="count">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-3 user_menu hidden-xs">
+					<div id=''>
+						<div id="menu">
+							{part "/user.home.menu.user"}
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-9 user_content">
+					<div class="container-fluid">
+						<div class='row'>
+							<div class='user_content_lagr'>
+								<h1 class="rtit">基本资料</h1>
+							</div>
+						</div>
+						<form class="form-horizontal" role="form" method="post">
+							{if (!empty($error))}
+							<div class="form-group red">
+								<label class="col-sm-2 control-label"></label>
+								<h3>{$error}</h3>
+							</div>
+							{/if}
+							<style> .x_field2 .x_input_tx2,.x_btn_reg2{ width:100%; } </style>
+							<div class="x_field2">
+								<span class="col-xs-3 xftit_1">昵称：</span>
+								<span class="col-md-8 col-xs-8">
+								<input type="text" name="real_name" class="x_input_tx2" value="{$userinfo->profile->real_name}">
+								</span>
+							</div>
+							<div class='x_field2'>
+								<span class="col-xs-3 xftit_1">真实姓名：</span>
+								<span class="col-md-8 col-xs-8">
+									<input type="text" name="name" class="x_input_tx2" placeholder="请务必填写真实姓名" id="x_user_name" value="{$userinfo->name}">
+								</span>
+							</div>
+							<div class="user_content_xb">
+									<span for="" class="col-xs-3 xftit_1">性别:</span>
+										<label class="allvert fl">
+											<input {if $userinfo->gender=="male"}checked{/if} type="radio" name="gender" id="" value="male"> 男
+										</label>
+										<label class="allvert fl">
+											<input {if $userinfo->gender=="female"}checked{/if} type="radio" name="gender" id="" value="female"> 女
+										</label>
+								<!--span class="col-xs-3 xftit_1">性别：</span>
+								<label class="allvert fl "><input type="checkbox" />&nbsp;&nbsp;男</label>
+								<label class="allvert fl"><input type="checkbox" />&nbsp;&nbsp;女</label-->
+							</div>
+						{*	<!--所在地-->
+						<div class="user_content_location " style="margin-left:114px;">
+								<span class="xftit_1">所在地：</span>
+								<select class="fl mt15">
+									<option value="北京">北京</option>
+									<option value="上海">上海</option>
+								</select>
+								<select class="fl mt15 ml15">
+									<option value="北京">西城区</option>
+									<option value="上海">海淀区</option>
+								</select>
+							</div>
+						*}
+							<div class="x_field2" style="padding-top:5px;">
+								<span class="col-xs-3 xftit_1">生日：</span>
+								<div class="fl nonepdh">
+								<span class="col-md-10 col-xs-10">
+									<input id="datepicker" name="birthday" type="datetime" class=" x_input_tx2 xitx2cal" value="{$userinfo->birthday}">
+									</span>
+								</div>
+								<script>
+									$(function() {
+										$( "#datepicker" ).datetimepicker({ timepicker:false, format:'Y-m-d'});
+										//$( "#datepicker" ).datetimepicker({ lang:'zh', format:'Y-m-d H:i'});
+									});
+								</script>
+							</div>
+							<!--div class="user_content_happ " style="margin-left:131px;">
+								<span class="xftit_1">生日：</span>
+								<select class="fl mt15">
+									<option value="">1990</option>
+									<option value="">1991</option>
+								</select>
+								<select class="fl mt15 ml15">
+									<option value="">08</option>
+									<option value="">04</option>
+								</select>
+								<select class="fl mt15 ml15">
+									<option value="">3</option>
+									<option value="">4</option>
+								</select>
+							</div-->
+							<div class="x_field2">
+								<span for="" class="col-xs-3 xftit_1">家庭住址：</span>
+								<span class="col-md-8 col-xs-8">
+								<input type="text" name="address" class="x_input_tx2" value="{$userinfo->profile->address}">
+								</span>
+							</div>
+							<div class="x_field2">
+								<span for="" class="col-xs-3 xftit_1">邮编：</span>
+								<span class="col-md-8 col-xs-8">
+								<input type="text" name="zip_code" class=" x_input_tx2" value="{$userinfo->profile->zip_code}">
+								</span>
+							</div>
+							<!--div class="user_content_introduce" style="margin-top:20px;"-->
+							<div class="x_field2">
+								<span for="" class="col-xs-3 col-sm-3 xftit_1">个人简介：</span>
+								<div class=" nonepdh col-xs-8 col-sm-8" >
+									<textarea name="desc" cols="5" rows="8" class=" col-xs-12 col-sm-12 x_input_txar " id="textarea">{$userinfo->profile->desc}</textarea>
+								</div>
+								<div class="col-xs-3 col-sm-3"></div>
+								<p class="user_num col-sm-3 col-xs-3">还可输入<i id="num_in">400</i>字</p>
+							</div>
+							<div class="col-xs-3 col-sm-3"></div>
+							<div class="x_field2">
+
+								<div class="col-xs-8 nonepdh">
+
+								<div class="col-xs-8 nonepdh" style="margin-left:180px;" >
+									<input class="col-xs-12 x_btn_reg2" type="submit" value="保存" />
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<style>
+#num_in { font-size:20px;color:#A09E9E;margin:-50px 5px 0 0;padding-right:10px;}
+</style>
+				<script>
+					haha = $("#textarea").val().length;
+					$("#num_in").text(400-$("#textarea").val().length)
+					$('#textarea').bind('focus keyup input paste',function(){
+						var curLength=$(this).val().length;
+						if(curLength>400){
+							var textin=$("#textarea").val().substr(0,400);
+							$("#textarea").val(textin);
+							}else{
+							$('#num_in').text(400-$(this).val().length)
+						}
+					});
+					$('#x_user_name').blur(' keyup input paste',function(){
+						var length=$(this).val().length;
+						if(length>6){
+							var textin1=$("#x_user_name").val().substr(0,6);
+							$("#x_user_name").val(textin1);
+						}
+					});
+				</script>
+
+{part "/index.main.footer"}
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>{part '/site.main.orgname'} - 教师资料 - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 教师资料 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+<body>
+{part "/site.main.usernav.teacher"}
+<section>
+    <div class='container mt40 pdr0 pdl0'>
+            {part "/user.main.menu.teacher.edit"}
+            <div class="right-main col-sm-20 col-md-16  col-xs-20 pdr0">
+                <p class="mob-nav hidden-lg hidden-md">
+                <a href="/teacher.manage.student" class="col-xs-6">我的学生</a>
+                <a href="/teacher.course.timetable" class="col-xs-6">我的课程</a>
+                <a href="/teacher.manage.edit" class="col-xs-6">教师资料</a>
+                </p>
+                <div class="content">
+                    <h1 class="fs16 fob">{'教师资料'|tr:'site.teacher'}</h1>
+                    <form  id="form">
+                        <ul class="form-horizontal fs14">
+
+                        {*
+						 <li>
+                            <div class="label col-sm-4">教师名称：</div><div class="label-for col-sm-17">
+							<input type="text"  class="col-sm-8" name="name" value="{if !empty($teacher->college)}{$teacher->college}{/if}"></div>
+						</li>
+                        *}
+						<li>
+                            <div class="label col-sm-4 col-xs-7"><img src="{utility_cdn::img('/assets_v2/img/x.png')}">&nbsp;{'毕业院校'|tr:'site.teacher'}：</div><div class="label-for col-sm-10 col-xs-8">
+							<input type="text" id="college" class="col-sm-8 col-xs-20" name="college" value="{if !empty($teacher->college)}{$teacher->college}{/if}">&nbsp;&nbsp;
+							<span class="cGray">{'最多输入15个汉字'|tr:'site.teacher'}</span>
+							<span class="tip1 cRed"></span>
+							</div>
+						</li>
+
+
+                        <li>
+                            <div class="label col-sm-4">{'学历'|tr:'site.teacher'}：</div>
+                            <div class="label-for col-sm-16">
+                            <select name="diploma" id="" class="col-sm-8">
+								<option value="-1" {if !empty($teacher->diploma)&&$teacher->diploma==-1}selected{/if}>{'不显示'|tr:'site.teacher'}</option>
+                                <option value="1" {if !empty($teacher->diploma)&&$teacher->diploma==1}selected{/if}>{'大专'|tr:'site.teacher'}</option>
+                                <option value="2" {if !empty($teacher->diploma)&&$teacher->diploma==2}selected{/if}>{'本科'|tr:'site.teacher'}</option>
+                                <option value="3" {if !empty($teacher->diploma)&&$teacher->diploma==3}selected{/if}>{'硕士'|tr:'site.teacher'}</option>
+                                <option value="4" {if !empty($teacher->diploma)&&$teacher->diploma==4}selected{/if}>{'博士'|tr:'site.teacher'}</option>
+                            </select></div>
+                        </li>
+                        <li>
+                            <div class="label col-sm-4"><img src="{utility_cdn::img('/assets_v2/img/x.png')}">&nbsp;{'教龄'|tr:'site.teacher'}：</div>
+                            <select name='years'>
+							{for $i=1;$i<31;$i++}
+							<option value='{$i}' {if !empty($teacher->years)&&$teacher->years==$i}selected{/if}>{$i}{'年'|tr:'site.teacher'}</option>
+							{/for}
+							<option value='31' {if !empty($teacher->years)&&$teacher->years==31}selected{/if}>{'30年以上'|tr:'site.teacher'}</option>
+                            </select>
+                        </li>
+                        <li class="item_1">
+                            <div class="label col-sm-4"><img src="{utility_cdn::img('/assets_v2/img/x.png')}">&nbsp;{'教学阶段'|tr:'site.teacher'}：</div>
+                            <div class="label-for col-sm-16">
+							<label for="s1"><input type="checkbox" class="scopes" name="scopes[]" id="s1" value="preschool" {if !empty($teacher->scopes)&&in_array('preschool',$teacher->scopes)}checked{/if} id="s1">&nbsp;{'学前'|tr:'site.teacher'}
+							</label>
+                                <label for="s2"><input type="checkbox" class="scopes" name="scopes[]" value="primary" {if !empty($teacher->scopes)&&in_array('primary',$teacher->scopes)}checked{/if} id="s2">&nbsp;{'小学'|tr:'site.teacher'}</label>
+                                <label for="s3"><input type="checkbox" class="scopes" name="scopes[]" value="junior" {if !empty($teacher->scopes)&&in_array('junior',$teacher->scopes)}checked{/if} id="s3">&nbsp;{'初中'|tr:'site.teacher'}</label>
+                                <label for="s4" ><input type="checkbox"class="scopes" name="scopes[]" value="senior" {if !empty($teacher->scopes)&&in_array('senior',$teacher->scopes)}checked{/if} id="s4">&nbsp;{'高中'|tr:'site.teacher'}</label>
+								<span class="tip1 cRed"></span>
+                            </div>
+                        </li>
+
+                        <li  class="item_2">
+                            <div class="label col-sm-4 col-xs-20"><img src="{utility_cdn::img('/assets_v2/img/x.png')}">&nbsp;{'擅长学科'|tr:'site.teacher'}：</div>
+							<div class="label-for col-sm-8 t-subj-content" id="t-subj-content"  style="border:1px solid #ccc;">
+							{if !empty($good_subject->data) }
+								{foreach $good_subject->data as $v}
+								{if !empty($v->name) }<div class="delect-subj pd0 c-fl" contenteditable="false">
+								{$v->name|tr:'course.list'}<input type="hidden" value="{$v->fk_tag}" name="good_subject[]"></div>
+								{/if}
+								{/foreach}
+							{/if}
+
+							</div>
+                            <div class="t-subjects-but com-sm-8 pd0" style="line-height:35px;float:left;">&nbsp;&nbsp;<input type="button" class="t-subjects-bton col-lg-5" value="{'添加标签'|tr:'site.teacher'}">&nbsp;
+							<span class="cGray hidden-xs">{'至少选择一项，最多选择三项'|tr:'site.teacher'}</span></div>
+                        </li>
+
+                        </li>
+						<li>
+                            <div class="label col-sm-4"></div>
+                            <div class="col-sm-15 t-subjects-list pd0" id="t-subjects-list">
+                            {if !empty($setArr)}
+							{foreach($setArr as $v)}
+								<div class="col-sm-4 pd0 col-lg-3 {if isset($tagArr)&&in_array($v->pk_tag,$tagArr)}on{/if}" rel="{$v->pk_tag}">{$v->name|tr:'course.list'}</div>
+							{/foreach}
+							{/if}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="label col-sm-4"><img src="{utility_cdn::img('/assets_v2/img/x.png')}">&nbsp;{'我的头衔'|tr:'site.teacher'}：</div><div class="label-for col-sm-10">
+							<input type="text" class="col-sm-12" id="title" name="title" value="{if !empty($teacher->title)}{$teacher->title}{/if}">&nbsp;&nbsp;
+							<span class="cGray">{'最多输入10个汉字'|tr:'site.teacher'}</span>
+							<span class="tip1 cRed"></span>
+							</div>
+                        </li>
+                        {*<li>
+                            <div class="label col-sm-4">获得荣誉：</div><div class="label-for col-sm-10"><textarea name="" id="" cols="30" rows="3" class="col-sm-12" placeholder="优秀教师"></textarea></div>
+                            <div class="col-sm-4">
+                                <div class="pic"><img src="{utility_cdn::img('/assets_v2/img/1.png')}" alt=""></div>
+                                <button class="upload">上传证明</button>
+                            </div>
+                        </li>*}
+                        <li>
+                            <div class="label col-sm-4">{'一句话简介'|tr:'site.teacher'}：</div><div class="label-for col-sm-16">
+							<input type="text" class="col-sm-12" id="brief_desc" name="brief_desc" value="{if !empty($teacher->brief_desc)}{$teacher->brief_desc}{/if}">&nbsp;&nbsp;
+							<span class="cGray">{'最多输入20个汉字'|tr:'site.teacher'}</span>
+							<span class="tip1 cRed"></span>
+							</div>
+
+						</li>
+                        <li>
+                            <div class="label col-sm-4"><img src="{utility_cdn::img('/assets_v2/img/x.png')}">&nbsp;{'教师介绍'|tr:'site.teacher'}：</div><div class="label-for col-sm-8">
+							<textarea name="desc" id="desc" cols="30" rows="3" class="col-sm-20" placeholder="">{if !empty($teacher->desc)}{$teacher->desc}{/if}</textarea>
+							<span class="cGray col-sm-20">{'用一段话来介绍自己,让学生和家长更好的了解你,最多1000字'|tr:'site.teacher'}</span>
+							<span class="tip1 cRed"></span>
+							</div>
+                            {*<div class="col-sm-4">
+                                <div class="pic"><img src="{utility_cdn::img('/assets_v2/img/1.png')}" alt=""></div>
+                                <button class="upload">上传视频</button>
+                            </div>*}
+                        </li>
+                        <li>
+                            <div class="label col-sm-4"> </div><div class="label-for col-sm-16 col-xs-8"><button class="col-sm-4 col-xs-20 col-xs-offset-6 col-sm-offset-2" type="submit">保存</button></div>
+                        </li>
+                    </ul>
+                    </form>
+                </div>
+            </div>
+            <div class='clear'></div>
+        </div>
+    </section>
+    {part "/site.main.footer"}
+</body>
+{*<script src="{utility_cdn::js('/assets/libs/ckeditor/ckeditor.js')}"></script>
+<script src="{utility_cdn::js('/assets/libs/ckeditor/adapters/jquery.js')}"></script>
+<script type="text/javascript">
+$(function  () {
+    $( '#desc' ).ckeditor( { customConfig: '/assets/libs/ckeditor.config.js' } );
+})
+</script>*}
+
+
+<script type="text/javascript">
+$(function  () {
+    $('input[type=text],select').on('change',function(){
+        $(this).css("background-color","#FFF");
+    })
+
+//验证毕业
+$('#college').blur(function(){
+		var college = $(this).val();
+		$('#college').removeClass('box-shadow');
+		 if( !college ) {
+			$('#college').next().html('');
+		 	$('#college').next().next().html('请填写毕业院校');
+		    $('#college').addClass('box-shadow');
+		    return;
+		 }else if(college.length>15){
+			$('#college').next().html('');
+		 	$('#college').next().next().html('最多输入15个汉字');
+			$('#college').addClass('box-shadow');
+			return;
+		 }else{
+			$('#college').next().html('最多输入15个汉字');
+		 	$('#college').next().next().html('');
+			$('#college').removeClass('box-shadow');
+		 }
+});
+//我的头衔
+$('#title').blur(function(){
+		var title = $(this).val();
+		$('#title').removeClass('box-shadow');
+		 if( !title ) {
+			$('#title').next().html('');
+		 	$('#title').next().next().html('请填写我的头衔');
+		    $('#title').addClass('box-shadow');
+		    return;
+		 }else if(title.length>10){
+			$('#title').next().html('');
+		 	$('#title').next().next().html('最多输入10个汉字');
+			$('#title').addClass('box-shadow');
+			return;
+		 }else{
+			$('#title').next().html('最多输入10个汉字');
+		 	$('#title').next().next().html('');
+			$('#title').removeClass('box-shadow');
+		 }
+});
+//一句话
+$('#brief_desc').blur(function(){
+		var brief_desc = $(this).val();
+		$('#brief_desc').removeClass('box-shadow');
+		 if(brief_desc.length>20){
+			$('#brief_desc').next().html('');
+		 	$('#brief_desc').next().next().html('最多输入20个汉字');
+			$('#brief_desc').addClass('box-shadow');
+			return;
+		 }else{
+			$('#brief_desc').next().html('最多输入20个汉字');
+		 	$('#brief_desc').next().next().html('');
+			$('#brief_desc').removeClass('box-shadow');
+		 }
+});
+//介绍
+$('#desc').blur(function(){
+		var desc = $(this).val();
+		$('#desc').removeClass('box-shadow');
+		 if( !desc) {
+		 	$('#desc').next().next().html('<br/>请填写教师简介');
+		    $('#desc').addClass('box-shadow');
+		    return;
+		 }else if(desc.length>1000){
+		 	$('#desc').next().next().html('<br/>最多输入1000个汉字');
+			$('#desc').addClass('box-shadow');
+			return;
+		 }else{
+		 	$('#desc').next().next().html('');
+			$('#desc').removeClass('box-shadow');
+		 }
+});
+/*
+if($(this).find("input[name='scopes[]']:checked").length==0){
+	$(".item_1 .tip1").html('请选择教学领域');
+}else{
+	$(".item_1 .tip1").html('');
+}*/
+
+	$(".t-subjects-bton").click(function(){
+                                $("#t-subjects-list").show();
+                            })
+                            var oT_Div_List = $("#t-subjects-list div");
+                            oT_Div_List.on("click",function(){
+                                var val = $(this).attr("rel");
+                                    if($(this).hasClass("on")){
+                                        return false;
+                                    }else{
+                                        if($('#t-subj-content>div').length>=3){
+                                            layer.msg('只能添加三项');
+                                        }else{
+                                            $(this).addClass("on");
+											$(".t-subjects-but .cGray").css("color","#999");
+                                            $("#t-subj-content").append('<div class="delect-subj pd0 c-fl"  contenteditable="false">'+$(this).text()+'<input type="hidden" name="good_subject[]" value="'+val+'"/></div>');
+                                        }
+                                    }
+                                })
+                            $("#t-subj-content").on('click','div',function(){
+                                var txt=$(this).text().replace(/\s/g,"");
+                                $("#t-subjects-list>div").each(function(){
+                                    $(this).text();
+                                    if($(this).text()==txt){
+                                        $(this).removeClass('on');
+                                    }
+                                    // console.log($(this).text());
+                                });
+                                $(this).remove();
+                            })
+
+$(".label-for input[name='scopes[]']").each(function() {
+	$(this).on('click',function() {
+		 if($(this).attr("checked", true)) {
+			$(".item_1 .tip1").html('');
+		 }
+	})
+});
+
+    $("#form").submit(function(){
+        if($(this).find('input[name=college]').val()==''){
+			$('#college').next().next().html('请填写毕业院校');
+            return false;
+        }else if($(this).find('input[name=college]').val().length>15){
+			return false;
+        }else if($(this).find('input[name=years]').val()<0){
+            layer.msg('教龄只允许输入正数字');
+            $(this).find('input[name=years]').css("background-color","#FFFFCC");
+            return false;
+        }else if($(this).find("input[name='scopes[]']:checked").length==0){
+           $(".item_1 .tip1").html('请选择教学领域');
+            return false;
+        }else if($("#t-subj-content .delect-subj").length==0){
+            $(".item_2 .cGray").css("color","red");
+            return false;
+        }else if($(this).find('input[name=brief_desc]').val().length>20){
+            return false;
+        }else if($(this).find('input[name=title]').val()==''){
+            return false;
+        }else if($(this).find('input[name=title]').val().length>10){
+            return false;
+        }else if($(this).find('textarea[name=desc]').val()==''){
+            return false;
+        }else{
+            $.post("/teacher.manage.updateAjax",$(this).serialize(),function(r){
+                if(r.error){
+                    //layer.msg(r.error);
+                    if(r.field){
+                        $("[name="+r.field+"]").focus().css("background-color","#FFFFCC");
+                    }
+                }else{
+                    //location.reload();
+                    layer.msg('修改成功');
+                }
+                return false;
+            },"json");
+        }
+        return false;
+    });
+})
+</script>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>评论管理</title>
+	<link rel="stylesheet" type="text/css" href="http://dev.gn100.com/assets_v2/css/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="http://dev.gn100.com/assets_v2/css/index.css">
+	<script type="text/javascript" src="http://dev.gn100.com/assets_v2/js/jquery/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="http://dev.gn100.com/assets_v2/js/jquery/jquery.so.js"></script>
+</head>
+
+<body style="background:#f7f7f7;">
+{part "/site.main.nav.home"}
+<!-- tpInfo -->
+{part "/user.commont.coursetop.".$courseId}
+<!-- tpInfo -->
+<!-- bd -->
+<section class="pb40 divSelectFirstVal" id="divSelectFirstVal">
+	<div class="container">
+		<div class="row">
+			<section>
+				{part "/user.commont.coursenav.".$courseId}
+				<!-- rt -->
+				<section>
+					<div class="col-md-16 gn-base-ct">
+						<h1 class="base-title mb30">评价管理</h1>
+						<dl class="col-md-20 course-comment clearfix fs14">
+							<dt class="c-fl">共50个评论</dt>
+							<dd class="c-fr">
+								<div class="divselect divselect-32">
+									<cite>
+										<span class="cite-icon"></span>
+										<span class="cite-text">全部时间</span>
+									</cite>
+									<dl>
+										<dd>
+											<a href="javascript:;">最近一周</a>
+										</dd>
+										<dd>
+											<a href="javascript:;">最近一个月</a>
+										</dd>
+									</dl>
+								</div>
+							</dd>
+							<dd class="c-fr">
+								<div class="divselect divselect-32 mr20 ">
+									<cite>
+										<span class="cite-icon"></span>
+										<span class="cite-text">请选择</span>
+									</cite>
+									<dl>
+										<dd>
+											<a href="javascript:;">5分</a>
+										</dd>
+										<dd>
+											<a href="javascript:;">4分</a>
+										</dd>
+										<dd>
+											<a href="javascript:;">3分</a>
+										</dd>
+										<dd>
+											<a href="javascript:;">2分</a>
+										</dd>
+										<dd>
+											<a href="javascript:;">1分</a>
+										</dd>
+									</dl>
+								</div>
+							</dd>
+						</dl>
+						<ul class="col-md-20 p0 mt20 course-comment-info">
+							<li class="clearfix">
+								<img src="http://devf.gn100.com/1,6c5ac0433e4b" class="comment-user-img c-fl" alt="">
+								<div class="col-md-14 comment-content">
+									<p class="fs14 mt5">老师讲的很到位，我很开心！</p>
+									<p class="fs12 cGray">2017-09-20 第4课时</p>
+								</div>
+								<div class="col-md-3 fs18 fecolor">3</div>
+								<a href="javascript:;" class="c-fr cBlue reply-comment-btn">回复</a>
+								<!-- 回复评论 -->
+								<div class="reply-course-comment col-md-20 p0">
+									<textarea placeholder="请输入回复内容"></textarea>
+									<div class="col-md-12 tar">
+										<a href="havascript:;" class="mr10 cancle-reply-comment">取消</a>
+										<button class="yellow-button">确定</button>
+									</div>	
+								</div>
+								<!-- /回复评论 -->
+							</li>
+							<li class="clearfix">
+								<img src="http://devf.gn100.com/1,6c5ac0433e4b" class="comment-user-img c-fl" alt="">
+								<div class="col-md-14 comment-content">
+									<p class="fs14 mt5">老师讲的很到位，我很开心！</p>
+									<p class="fs12 cGray">2017-09-20 第4课时</p>
+								</div>
+								<div class="col-md-3 fs18 fecolor">3</div>
+								<a href="javascript:;" class="c-fr cBlue reply-comment-btn">回复</a>
+								<!-- 回复评论 -->
+								<div class="reply-course-comment col-md-20 p0">
+									<textarea placeholder="请输入回复内容"></textarea>
+									<div class="col-md-12 tar">
+										<a href="havascript:;" class="mr10 cancle-reply-comment">取消</a>
+										<button class="yellow-button">确定</button>
+									</div>	
+								</div>
+								<!-- /回复评论 -->
+							</li>
+							<li class="clearfix">
+								<img src="http://devf.gn100.com/1,6c5ac0433e4b" class="comment-user-img c-fl" alt="">
+								<div class="col-md-14 comment-content">
+									<p class="fs14 mt5">老师讲的很到位，我很开心！</p>
+									<p class="fs12 cGray">2017-09-20 第4课时</p>
+								</div>
+								<div class="col-md-3 fs18 fecolor">3</div>
+								<a href="javascript:;" class="c-fr cBlue reply-comment-btn">回复</a>
+								<!-- 回复评论 -->
+								<div class="reply-course-comment col-md-20 p0">
+									<textarea placeholder="请输入回复内容"></textarea>
+									<div class="col-md-12 tar">
+										<a href="havascript:;" class="mr10 cancle-reply-comment">取消</a>
+										<button class="yellow-button">确定</button>
+									</div>	
+								</div>
+								<!-- /回复评论 -->
+							</li>
+						</ul>
+						<!-- page -->
+							...page
+						<!-- /page -->
+					</div>
+				</section>
+				<!-- /rt -->
+			</section>
+		</div>	
+	</div>	
+</section>
+<!-- /bd -->
+{part "/site.main.footer"}
+</body>
+</html>
+<script>
+$(function(){
+	$.divselect(".divselect cite");
+	$('.course-comment-info').on('click', '.reply-comment-btn', function() {
+		$(this).parents('li').find('.reply-course-comment').show();
+	});
+	$('.course-comment-info').on('click', '.cancle-reply-comment', function() {
+		$(this).parents('.reply-course-comment').hide();
+	})
+})
+</script>

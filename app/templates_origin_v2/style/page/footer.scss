@@ -1,0 +1,10 @@
+/*footer*/
+footer{bottom:0;padding:10px 0;background-color:#4e4e4e;
+    @extend .tac;
+    line-height:30px}
+footer a{padding:0 4px;@extend .cGray}
+#lang a{width:60px;border:1px solid #3f3f3f;background:#3e3e3e;display:inline-block;line-height:23px}
+#lang a.lang-select{
+    color:$text-orange-color;
+    @include linear-gradient(#5c5c5c,#535353);
+}

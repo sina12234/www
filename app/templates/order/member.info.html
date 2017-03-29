@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{part '/site.main.orgname'} - 购买会员</title>
+<meta name="title" content="{part '/site.main.orgname'} - 课程详情 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} -  云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+
+<body class="bgf7">
+{part "/site.main.nav"}
+<section class="pd40" id="open-vip">
+	<div class="container">
+		<div class="row">
+            <div class="open-vip member-pay-stepOne">
+                <div class="vip-intro mt30">
+                    <div class="vip-intro-pic col-md-4 col-xs-10">
+						<img src="{utility_cdn::img('/assets_v2/img/member-order.png')}" alt="">
+					</div>
+                    <div class="vip-intro-txt col-md-16 col-xs-10">
+                        <p class="fs16">{$memberInfo['title']}</p>
+                        <p class="vip-intro-txt2 fs14">
+							<span class="cGray hidden-xs">{$memberInfo['desc']}</span>
+							<a href="/course.list?ms={$memberInfo['setId']}" class="cYellow">查看课程范围</a>
+						</p>
+                    </div>
+                </div>
+                <ul class="vip-class mt30" id="vip-class">
+                   {foreach $memberInfo['type'] as $key=>$val}
+                    <li class="col-md-5 col-xs-20 mb10" date-tip="{$val['day']}" date-price="{$key}" date-memberprice={$val['price']}>
+                        <p>{$val['price']}元/{$val['day']}天</p>
+                    </li>
+					{/foreach}
+                </ul>
+                <p class="fs14 cDarkgray mt30 c-fl">
+					{if $memberInfo['openType']}
+					{'开通后，会员立即生效，有效期至:'|tr:'course.info'}
+					{else}
+					{'有效期至:'|tr:'course.info'}
+					{/if}
+					<span class="cYellow memberDate-txtDate" data-time={$memberInfo['time']}>{$memberInfo['time']}</span>
+				</p>
+                <p class="tac col-xs-20 col-md-20 mt30 mb30">
+					<button class="btn fs16 request-pay-stepOne">确认开通</button>
+				</p>
+            </div>        
+		</div>
+	</div>
+</section>
+{part "/site.main.footer"}
+</body>
+<script type="text/javascript">
+$(function() {
+	var day = 0;
+	$('#vip-class li').click(function(){
+		if($(this).hasClass('select')){
+			$(this).removeClass('select');
+		}else{
+			$(this).addClass('select');
+			$(this).siblings().removeClass('select');
+		}
+		var memberSelectDate = $(this).attr('date-tip');
+		var newMemberDate = new Date();
+		var stringTime = $('.memberDate-txtDate').attr('data-time').replace('-','/').replace('-','/');
+		var timesTamp = Date.parse(stringTime)
+		var newMemberTime = timesTamp + (memberSelectDate*24*60*60*1000);
+			newMemberDate.setTime(newMemberTime);
+        var newMemberNowDate = newMemberDate.toLocaleDateString().replace('/','-').replace('/','-');
+		day = $(this).attr('date-tip');
+		$('.memberDate-txtDate').html(newMemberNowDate);
+	});
+	$('.request-pay-stepOne').click(function() {
+		if($('#vip-class li').hasClass('select')) {
+			var setId = {$memberInfo['setId']};
+			if(day == 0){
+				layer.msg('{'请选择价格'|tr:'course.info'}');
+				return false;
+			}
+			$.post('/order.ajax.openVip', { setId:setId,ext:day }, function(r){
+				if(r.code == 0){
+					parent.location.href = "/order.main.buy/member/"+setId+'/'+ r.result.ext;
+				}else{
+					layer.msg('{'开通失败'|tr:'course.info'}');
+					return false;
+				}
+			},'json');
+		}else {
+			layer.msg('{'请选择价格'|tr:'course.info'}');
+			return false;
+		}
+	});
+})
+</script>
+</html>

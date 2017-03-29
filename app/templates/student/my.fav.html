@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>我的收藏 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 我的收藏 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}"></script>
+<script tyee="text/javascript" src="{utility_cdn::js('/assets_v2/js/scorll.js')}" ></script>
+</head>
+<body>
+{part "/site.main.nav3"}
+<!-- mob nav -->
+<div class="g-nav hidden-lg hidden-md">
+	<ul class="swiper-wrapper" id="mob-nav">
+		<li class="swiper-slide"><a href="/student.main.growth">我的首页</a></li>
+		<li class="swiper-slide"><a href="/student.course.mycourse">我的课程</a></li>
+		<li class="swiper-slide"><a href="/task.commitTask.studentTaskListShow">我的作业</a></li>
+		<li class="swiper-slide"><a href="/student.order.myorder">我的订单</a></li>
+		<li class="swiper-slide"><a href="/student.fav.myfav" class="selected">我的收藏</a></li>
+		<li class="swiper-slide"><a href="/student.discount.mydiscount">我的优惠券</a></li>
+	</ul>
+</div>
+<!--studentPortal start-->
+<section class="org-section">
+    <div class="container">
+      <div class="row">
+        <!-- leftmenu start-->
+		{part "/user.main.menu.student.myfav"}
+        <!-- leftmenu end -->
+
+       <!-- 右侧内容 -->
+	<div class="right-main col-md-16 col-xs-20">
+    <div class="content">
+		<!-- 按钮切换 -->
+			<div class="tab-main">
+                <div class="tab-hd">
+                	<a href="javascript:;" class="tab-hd-opt curr">{'收藏课程'|tr:'LearningCenter'}</a>
+                	<!--a href="javascript:;" class="tab-hd-opt">{'喜欢的老师'|tr:'LearningCenter'}</a-->
+                </div>
+            </div>
+		<!-- /按钮切换 -->
+		<!-- 切换内容 -->
+		<ul id="list" class="mt10">
+			<li>
+			<!--
+				<p class="col-sm-12 col-xs-12 s-pdr32" style="text-align:right;">
+					共收藏（{if !empty($courseInfo['favCount'])}{$courseInfo['favCount']}{else}0{/if}）个课程
+				</p>
+			-->
+					<div class="cy-tab-content">
+		                  <div class="litit fs14 hidden-xs mb20">
+		                    <div class="col-md-9 col-sm-9 col-lg-9">{'课程信息'|tr:'LearningCenter'}</div>
+		                    <div class="col-md-3 col-sm-5 hidden-lg hidden-xs hidden-sm hidden-md">{'金额'|tr:'LearningCenter'}</div>
+		                    <div class="col-md-9 col-sm-9 col-lg-9">{'评价'|tr:'LearningCenter'}</div>
+		                    <div class="col-md-2 col-sm-2 pdl30 col-lg-2">{'操作'|tr:'LearningCenter'}</div>
+		                  </div>
+		            </div>
+				<div class="list-c2">
+				{if(!empty($courseInfo['data']))}
+				{foreach($courseInfo['data'] as $v)}
+				<div class="rt-colect-content clearfix">
+					<a href="{$v['course_url']}" class="pic col-sm-5 col-md-5 col-xs-20 c-fl">
+						<img src="{$v['thumb_med']}" width="100%" alt="">
+                        {if $v['course_type']==3}
+                         <div class="taped-icon">{'线下'|tr:'LearningCenter'}</div>
+                        {elseif($v['course_type'] == 2)}
+						<div class="g-icon3">{'录播'|tr:'LearningCenter'}</div>
+						{/if}
+					</a>
+					<div class="c-fr col-md-15 col-sm-15 col-xs-20 s-pd0 pdl0">
+						<div class="s-collect-content-tp">
+							<div class="col-sm-6 col-md-6 col-xs-20 s-pd0 pdl0 mt30">
+								<a href="{$v['course_url']}" class="fs16">{$v['title']}</a>
+								<p>{$v['cate_name']|tr:'course.list'} {$v['subject_name']} {*| {'共'|tr:'LearningCenter'}{$v['section_count']}{'章'|tr:'LearningCenter'}*}</p>
+							</div>
+							<div class="{$v['fee_class']} hidden-lg hidden-xs hidden-sm hidden-md" style="text-align:center;">{$v['fee_type']}</div>
+							<div class="col-md-10 col-sm-10 hidden-xs mt30 col-lg-8 pd0">
+								<div class="col-sm-20 s-my-collectcont ml10 col-md-20 col-lg-11 c-fr pd0">
+									<dl class="c-fl collect-pingfen">
+										{$v['scoreType']}
+									</dl>
+									{$v['score']}
+								</div>
+								{$v['commNum']}
+							</div>
+							<a cid="{$v['course_id']}" cname="{$v['title']}" class="cancle-collect-btn ter c-fr col-sm-4 col-xs-20 mt30">{'取消收藏'|tr:'LearningCenter'}</a>
+						</div>
+						<div class="s-collect-content-ft">
+
+							<span class="c-fr fs12">{$v['admin_status']}</span>
+						</div>
+					</div>
+				</div>
+				{/foreach}
+				{else}
+					<div class="my-collect-no-class col-md-20 col-sm-20 col-xs-20">
+						<img src="{utility_cdn::img('/assets_v2/img/platform/pet3.png')}" alt="">
+						<p style="font-weight:bold;color:#666;">{'您还没有收藏的课程哦'|tr:'LearningCenter'}~!{'快去'|tr:'LearningCenter'}<a href="/">{'首页'|tr:'LearningCenter'}</a>{'看看吧'|tr:'LearningCenter'}</p>
+					</div>
+				{/if}
+				</div>
+			</li>
+			
+		</ul>
+		<!-- 切换内容 -->
+	</div>
+</div>
+<!-- /右侧内容 -->
+      </div>
+    </div>
+</section>
+<!--studentPortal end-->
+<div id="rightWindow"></div>
+<script>$("#rightWindow").load("/org.rightWindow.rightWindow");</script>
+{part "/site.main.footer"}
+</body>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/mustache.js')}"></script>
+<script id='courseListisend' type='text/template'>
+<<#data>>
+	<div class="list-c2 scorll">
+		<div class="collect-list-content">
+			<div class="rt-colect-content">
+				<a href="<<course_url>>" class="pic col-sm-4 col-xs-3 c-fl">
+					<img src="<<thumb_med>>" alt="">
+				</a>
+				<div class="c-fr col-md-9 col-xs-9 s-pd0">
+					<div class="s-collect-content-tp">
+						<div class="intro col-sm-3 col-lg-3 col-xs-3 col-md-4 s-pd0">
+                            <a href="<<course_url>>" class="fs16"><<title>></a>
+							<p><<grade_name>> <<cate_name>> {*| 共<<section_count>>章*}</p>
+						</div>
+						<div style="text-align:center;" class="<<fee_class>>"><<fee_type>></div>
+						<div class="hidden-md col-sm-5 col-xs-3 hidden-xs">
+							<div class="col-sm-12 col-xs-12">
+								<dl class="c-fl collect-pingfen">
+									<<&scoreType>>
+								</dl>
+								<<&score>>
+								<<&sc>>
+							</div>
+								<<&commNum>>
+						</div>
+					</div>
+					<div class="s-collect-content-ft" >
+						<span class="c-fl fs14"><<subdomain>></span>
+						<span class="c-fr fs16 s-pdr32"><<admin_status>></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<</data>>
+</script>
+<script>
+$(function() {
+    //$('#list li').css('display','block');
+    //$('#list li').last().hide();
+    $('.org-slide>dd').click(function() {
+        $(this).addClass('slide-active').siblings().removeClass('slide-active');
+        $('#list>li:eq(' + $(this).index() + ')').show().siblings().hide();
+    });
+	var page = 1;
+	var arrend = [];
+	var loadend = true;
+	var domisend = $(".scorll:last")[0];
+    arrend.push(domisend);
+
+	$(window).scroll(function(){
+		var tops = $(window).scrollTop();
+		var contents = $(window).height();
+		var prec1 = getClient();
+		jiance(arrend,prec1,function(){
+			if(loadend)
+			{
+				page++;
+				$.post("/student.fav.FavCourseAjax",{ page:page },function(r){
+					if(r.code == 0)
+					{
+						var courseListTpl = $('#courseListisend').html();
+						var courseList1   = Mustache.render(courseListTpl, r);
+						$('#isEnd').append(courseList1);
+						domisend = $(".scorll:last")[0];
+						arrend.push(domisend);
+					}else
+					{
+						return false;
+					}
+				},'json');
+			}
+		});
+	});
+
+	$(".cancle-collect-btn").click(function() {
+			var cid   = $(this).attr("cid");
+			var cname = $(this).attr("cname");
+			layer.confirm("{'是否取消收藏'|tr:'LearningCenter'}《"+cname+"》{'课程'|tr:'LearningCenter'}", {
+				btn: ['{"确定"|tr:"LearningCenter"}','{"取消"|tr:"LearningCenter"}'],
+				title:['{"取消收藏"|tr:"LearningCenter"}','color:#fff;background:#ffa81d']
+			}, function(){
+				$.post("/student.fav.delFav", { "cid": cid }, function (r) {
+                    if(r.error)
+					{
+                        layer.msg(r.error);
+                    }else
+					{
+						window.location.href=window.location.href;
+                        //window.location.reload();
+                    }
+                }, "json");
+			});
+	});
+});
+</script>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>高能100 - 专业的K12在线教育平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part '/site.main.header'}
+</head>
+<body style="background:#f7f7f7;">
+{part '/site.main.nav.home'}
+<section class='pd40 container'>
+    {part '/org.main.menu'}
+    <div class="right-main col-sm-9">
+            <div class='course-bt col-sm-12'>
+                <p>课程管理><b>班级详情</b></p>
+            </div>
+            <div class='course-box col-sm-12'>
+            
+                {if (!empty($ret))}
+                <div class='col-sm-12 course-nav'>
+                        <ul>
+                            <li><div class='col-sm-2 row col-md-2'>姓名</div></li>
+                            <li><div class='col-sm-2 row col-md-2'>手机号</div></li>
+                            <li><div class='col-sm-2 row col-md-2'>地域</div></li>
+                            <li><div class='col-sm-2 row col-md-2'>课程</div></li>
+                            <li><div class='col-sm-2 row col-md-2'>班级</div></li>
+							<li><div class='col-sm-2 row col-md-2'>年级</div></li>
+                            <li><div class='col-sm-2 row col-md-2'>报名时间</div></li>
+                        </ul>
+                </div>
+                {foreach($ret as $k=>$v)}
+                <div class='col-sm-12 course-nav-1'>
+					{foreach($v as $key=>$val)}
+                        <ul>
+                            <li><div class='col-sm-4 col-xs-2'>{$val->user_info->name}</div></li>
+                            <li><div class='col-sm-2 row col-md-2'>{$val->user_info->mobile}</div></li>
+                            <li><div class='col-sm-4 col-xs-2'>{$val->user_info->city}</div></li>
+                            <li><div class='col-sm-4 col-xs-2'>{$course->title}</div></li>
+                            <li><div class='col-sm-4 col-xs-2'>{$val->user_info->mobile}</div></li>
+                            <li><div class='col-sm-4 col-xs-2'>{$classes[$val->class_id]->name}</div></li>
+                            <li><div class='col-sm-4 col-xs-2'>{date("Y-m-d",strtotime($val->create_time))}</div></li>
+							 <li><div class='col-sm-4 col-xs-2'>{date("Y-m-d",strtotime($val->create_time))}</div></li>
+                            
+                        </ul>
+					</div>
+					{/foreach}
+			   {/foreach}	
+			   {/if}
+				</div>
+		</div>
+</section>
+<script>
+$(".remove").click(function(){
+	if(confirm("您确定要删除这个班级吗")){
+		var class_id=$(this).attr("class_id");
+		var cid=$(this).attr("cid");
+		$.post("/user.org.DelClassAjax",{ classid:class_id,couid:cid },function(r){
+			if(r.error){
+				//$("#error").html(r.error);
+				alert(r.error);	
+				//location.reload();//这里未完善
+				return false;
+			}
+			if(r){
+			    location.reload();
+				return false;
+			}
+		},"json");
+	}
+	return false;
+});
+</script>
+</body>
+</html>

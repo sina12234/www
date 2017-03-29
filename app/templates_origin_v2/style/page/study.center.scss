@@ -1,0 +1,1671 @@
+//学习中心公用样式
+/*
+*center common style*/
+//没有内容加载的公用样式
+
+.my-collect-no-class {
+    min-height: 300px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 30px;
+    color: $text-color;
+    a {
+        color: $text-blue-color;
+    }
+
+    p {
+        color: $text-color;
+    }
+}
+//button 需要统一
+/*course list button style*/
+.come-look-btn,
+.look-btn,
+.look-cone-btn,
+.look-start-btn {
+    padding: 0 20px;
+    border: 0;
+    color: $main-white-color;
+    line-height: 30px;
+    border-radius: 5px;
+}
+
+.look-btn {
+    background: nth($green-button-color,1);
+}
+
+.come-look-btn {
+    background: nth($blue-button-color,1);
+}
+
+.look-cone-btn {
+    background: nth($green-button-color,1);
+}
+
+.look-btn:hover,
+.look-cone-btn:hover {
+    background: nth($green-button-color,2);
+}
+
+.look-start-btn {
+    background: nth($blue-button-color,1);
+}
+
+.come-look-btn:hover,
+.look-start-btn:hover {
+    background: nth($blue-button-color,2);
+}
+
+.client-logo-name {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -o-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    color: $text-subsidiary-color;
+    font-size: 12px;
+    text-align: center;
+    padding: 0px 4px 2px 4px;
+}
+/*
+student.main.growth*/
+.progress-content {
+    float: left;
+    width: 100%;
+    height: 80px;
+}
+
+.gi-growth-val {
+    padding: 0;
+    p {
+        line-height: 22px;
+        color: $text-strong-color;
+
+        span {
+            color: #ff4a24;
+            margin: 0 10px;
+        }
+    }
+
+    strong {
+        font-size: 18px;
+        color: $main-black-color;
+        font-weight: normal;
+        margin-right: 22px;
+    }
+
+    a {
+        color: $text-blue-color;
+    }
+
+    ul {
+        margin-top: 0;
+        padding-top: 0;
+        width: 168px;
+        height: 8px;
+        background: #f5f5f5;
+        border:1px solid #ececec;
+        border-radius:10px;
+        line-height:0;
+    }
+    li {
+        position: relative;
+        height: 6px;
+        width: 168px;
+        padding: 0;
+        background: #f5f5f5;
+        float: left;
+        border-radius:10px;
+        line-height:0;
+    }
+    @for $i from 1 through 3 {
+        .val-cirl-lv#{$i} {
+            position: absolute;
+            top: -12px;
+            left: -3px;
+            width: 31px;
+            @include line-height(31px);
+            border-radius: 50%;
+            background: nth($search-button-color,1);
+            color: $main-white-color;
+            font-size: 12px;
+            text-align: center;
+            z-index: 3;
+        }
+    }
+
+    .level-icon {
+        position: absolute;
+        top: -4px;
+        left: 174px;
+        z-index: 1;
+    }
+
+    .g-progress {
+        float: left;
+        width: 0;
+        height: 6px;
+        background: nth($blue-button-color,1);
+        margin-left: 0;
+    }
+
+    .growth-chart {
+        background: nth($blue-button-color,1);
+        z-index: 4;
+        top: -6px\9;
+    }
+
+    .val-cirl {
+        background: nth($blue-button-color,1);
+        z-index: 4;
+        top: -6px\9;
+    }
+
+    .growth-progress {
+        height: 6px;
+        background: $main-white-color;
+        padding: 0;
+        z-index: 1;
+        margin: 7px 0 0 4px;
+        width: 500px;
+    }
+
+    .growth-chart {
+        position: absolute;
+        top: 7px;
+        left: 4px;
+        height: 6px;
+        z-index: 2;
+        padding: 0;
+        margin: 0;
+    }
+}
+#gift-add{
+    position: absolute;
+    bottom:-20px;
+    right:-40px;
+    color: $text-orange-color;
+    opacity: 0;
+    display: block;
+    span{
+        color: $text-orange-color;
+    }
+}
+.gift-flower-icon{
+    @include sprite($gift-flower);
+    margin-bottom: -3px;
+}
+.gi-growth-calendar {
+    width: 177px;
+    height: 105px;
+    background: url("../img/web_organization_two.png") no-repeat -206px -443px;
+
+    h1 {
+        padding: 10px 10px 0;
+        line-height: 30px;
+        overflow: hidden;
+    }
+
+    span {
+        color: $text-color;
+    }
+
+    em {
+        color: $text-orange-color;
+        position: absolute;
+        top: -10px;
+        right: 10px;
+        font-size: 26px;
+        display: none;
+    }
+
+    i {
+        font-style: normal;
+        color: $text-red-color;
+        margin: 0 3px;
+    }
+
+    a {
+        width: 100%;
+        line-height: 50px;
+        text-align: center;
+        display: block;
+        color: $text-red-color;
+        font-size: 20px;
+        margin: 0;
+
+        &#signed {
+            color: $text-color;
+            cursor: default;
+        }
+    }
+}
+
+.gi-studey-stats {
+    padding-bottom: 28px;
+    background: #f4f4f4;
+
+    table {
+        width: 100%;
+    }
+
+    tr {
+        padding: 10px 0;
+        line-height: 38px;
+        font-weight: 400;
+        text-align: left;
+    }
+
+    td {
+        line-height: 44px;
+        color: $text-color;
+        font-size: 14px;
+        padding: 0 5px;
+    }
+
+    span {
+        margin: 0 3px;
+        color: $text-orange-color;
+    }
+
+    i {
+        width: 24px;
+        height: 24px;
+        display: block;
+        float: left;
+        margin: 10px 6px 0 0;
+    }
+}
+
+#index-growth {
+    float: left;
+    min-height: 530px;
+
+    .select-month {
+        position: absolute;
+        top: -6px;
+        left: 46px;
+        color: $text-strong-color;
+        line-height: 26px;
+    }
+
+    .growth-tab {
+        margin: 0 auto;
+        width: 97%;
+        height: 80px;
+        border-bottom: 1px solid $horizontal-border-color;
+    }
+
+    .growth-course-list {
+        border: 1px solid $border-color;
+        overflow: hidden;
+
+        ul {
+            padding-bottom: 20px;
+        }
+
+        .list-c {
+            border: none;
+            float: left;
+
+            li {
+                padding: 0;
+            }
+        }
+    }
+
+    .growth-tab-main {
+        height: 80px;
+        overflow: hidden;
+        position: relative;
+        width: 905px;
+        float: left;
+
+        ul {
+            float: left;
+            width: initial;
+            position: relative;
+        }
+
+        li {
+            color: $text-strong-color;
+            cursor: pointer;
+            float: left;
+            width: 125px;
+
+            p {
+                text-align: center;
+                line-height: 25px;
+                font-size: 14px;
+
+                &.week {
+                    padding-top: 10px;
+                    position: relative;
+                }
+            }
+
+            .on {
+                color: $text-strong-color;
+                height:80px;
+                 /*background: url("../img/on-tabbg.png") no-repeat 25px 0;*/
+            }
+        }
+
+        .date {
+            font-size: 16px;
+        }
+        @at-root .ul-width {
+            li {
+                div:hover p.week,div:hover p.date{
+                    color:$text-orange-color;
+                }
+            }
+
+            div {
+                height: 80px;
+            }
+        }
+    }
+
+    .on p {
+        color: $text-orange-color;
+        position: relative;
+    }
+
+    .red-dott {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background-color: $text-red-color;
+        border-radius: 50%;
+        top: 15px;
+        right: 28%;
+        top: initial \9;
+        right: initial \9;
+    }
+
+    .c-money-status {
+        border: 1px solid #ddd;
+    }
+
+    .s-sign-content {
+        height: 60px;
+        line-height: 60px;
+    }
+
+    .s-sign-content {
+        .click-btn {
+            color: #fff;
+            background: #ffa81e;
+            line-height: 58px;
+            display: block;
+        }
+    }
+
+    .s-sign-growth {
+        .sign-list {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: #ccc;
+
+            &.selected {
+                border: 1px solid #fe8135;
+                background: url("/assets_v2/img/sign-sel.jpg") #fff no-repeat center center;
+            }
+        }
+
+        em {
+            width: 18px;
+            height: 2px;
+            font-size: 0;
+            line-height: 0;
+            background: #ccc;
+            margin-top: 8px;
+            display: inline-block;
+        }
+    }
+
+    .growth-rule-tip {
+        position: relative;
+
+        .message-frame {
+            width: 200px;
+            position: absolute;
+            top: 30px;
+            left: -138px;
+        }
+
+        .frame-icon {
+            position: absolute;
+            top: 12px;
+            right: 24px;
+        }
+
+        &:hover .message-frame {
+            display: block;
+        }
+    }
+
+    .arrow-up-icon {
+        position: absolute;
+        top: -20px;
+        right: -22px;
+        width: 70px;
+        height: 20px;
+    }
+
+    .s-money-status {
+        border-radius: 3px;
+        border: 1px solid #ddd;
+        width: 90px;
+        line-height: 25px;
+        cursor: pointer;
+
+        .message-frame {
+            top: 38px;
+            left: -112px;
+        }
+
+        dd {
+            border-bottom: 1px dotted #ddd;
+
+            &:last-child {
+                border-bottom: 0;
+            }
+        }
+
+        h1 {
+            color: $text-subsidiary-color;
+        }
+
+        span {
+            color: $text-color;
+        }
+
+        a {
+            color: $text-orange-color;
+        }
+    }
+}
+.growth-user-name {
+    text-align: right;
+}
+.growth-course-tp {
+    border-bottom: 1px solid #fe8135;
+    overflow: hidden;
+    margin: 0 10px;
+    padding: 12px 0;
+    line-height: 30px;
+
+    div {
+        position: relative;
+    }
+}
+
+.growth-cous-cont {
+    .pic {
+        position: relative;
+        .g-icon3 {
+            height: 25px;
+            line-height: 25px;
+            font-size: 12px;
+            right: 5px;
+            top: 0;
+            background: url("/assets_v2/img/g-icon3-photo.png") no-repeat nth($green-button-color,1) 5px 5px;
+            text-align: right;
+        }
+        .taped-icon {
+            background: url("/assets_v2/img/taped-icon-photo.png") no-repeat nth($green-button-color,1) 5px 7px;
+            text-align: right;
+            top: 0;
+            right: 5px;
+            font-size: 12px;
+            @include line-height(25px);
+        }
+        img {width: 100%;}
+        .lineclass-icon {
+            position: absolute;
+            right: 5px;
+            top: 0;
+            background: url("/assets_v2/img/taped-icon-photo.png") no-repeat 5px 5px nth($blue-button-color,1);
+            padding: 0 7px 0 20px;
+            @include line-height(25px);
+            color: $main-white-color;
+        }
+    }
+
+    .come-class-tip {
+        width: 55px;
+        line-height: 25px;
+        line-height: 25px;
+        font-size: 12px;
+        text-align: center;
+        background: nth($blue-button-color,1);
+        color: $main-white-color;
+        position: absolute;
+        top: 0;
+        right: 15px;
+        z-index: 2;
+    }
+
+    .intro {
+        line-height: 22px;
+
+        h2 {
+            color: $text-strong-color;
+            @extend %ellipsis;
+        }
+
+        p {
+            color: $text-color;
+        }
+
+        span {
+            color: $text-green-color;
+            margin-right: 24px;
+        }
+    }
+
+    .infor-my-btn {
+        p {
+            padding: 0;
+            text-align: center;
+        }
+    }
+}
+//学习轨迹
+.leam-path {
+    padding-top: 22px;
+    padding-bottom: 22px;
+    h3 {
+        color: $text-strong-color;
+        line-height: 27px;
+        border-bottom: 1px dotted $border-color;
+    }
+    dl {
+        overflow: hidden;
+
+        &:nth-child(odd) {
+            background: $common-background-color;
+        }
+    }
+    dd,dt,span {
+        color: $text-color;
+        @include line-height(40px);
+        @extend %ellipsis;
+    }
+    span {
+        margin-left: 15px;
+    }
+    i {
+        font-style: normal;
+        color: $text-blue-color;
+        margin: 0 10px;
+    }
+}
+.tp-lg-success-tip {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.5);
+    z-index: 100;
+    .base-set-layer {
+        width: 630px;
+        height: 258px;
+        background: url("../img/bg_base_set.png") no-repeat;
+        position: absolute;
+        top: 82px;
+        left: 19%;
+        a {
+            width: 105px;
+            height: 42px;
+            display: block;
+            margin: 131px 184px 0 0;
+        }
+    }
+}
+// student.main.growth 更多链接的 专题页
+
+#wrap-growth {
+    img {
+        width: 100%;
+        display: block;
+    }
+
+    .growth-second {
+        width: 100%;
+        height: 703px;
+        background: url("../../img/growth-lv-bg.png") #fee6a0 no-repeat center 0;
+        padding-top: 120px;
+
+        table {
+            line-height: 45px;
+            border: 1px dotted #fec9a1;
+            width: 956px;
+            margin-right: 245px;
+        }
+
+        .tab-hd {
+            background: #ffebda;
+
+            td {
+                color: #fd5400;
+                font-size: 20px;
+            }
+        }
+
+        thead {
+            tr {
+                border-top: 0;
+            }
+        }
+
+        tbody {
+            td {
+                color: #7f4c1a;
+                font-size: 16px;
+            }
+        }
+
+        tbody td,
+        thead tr {
+            text-align: center;
+            border: 1px dotted #fec9a1;
+            height: 45px;
+        }
+
+        table td,
+        thead tr {
+            border-right: 0;
+            border-bottom: 0;
+        }
+    }
+}
+//公共表
+.stats-icon1 {
+    background: url("../img/web_organization.png") no-repeat -42px -1488px;
+}
+
+.stats-icon2 {
+    background: url("../img/web_organization.png") no-repeat -42px -1576px;
+}
+
+.stats-icon3 {
+    background: url("../img/web_organization.png") no-repeat -42px -1664px;
+}
+
+.stats-icon4 {
+    background: url("../img/web_organization.png") no-repeat -42px -1532px;
+}
+
+.stats-icon5 {
+    background: url("../img/web_organization.png") no-repeat -42px -1708px;
+}
+
+.stats-icon6 {
+    background: url("../img/web_organization.png") no-repeat -42px -1620px;
+}
+
+.s-zhuangy-icon1 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -929px;
+}
+
+.s-zhuangy-icon2 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -945px;
+}
+
+.s-zhuangy-icon3 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -961px;
+}
+
+.s-zhuangy-icon4 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -1169px;
+}
+
+.s-jur-icon1 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -977px;
+}
+
+.s-jur-icon2 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -993px;
+}
+
+.s-jur-icon3 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -1009px;
+}
+
+.s-xiuc-icon1 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -1025px;
+}
+
+.s-xiuc-icon2 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -1041px;
+}
+
+.s-xiuc-icon3 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -1057px;
+}
+
+.s-jins-icon1 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -1073px;
+}
+
+.s-jins-icon2 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -1089px;
+}
+
+.s-jins-icon3 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -1105px;
+}
+
+.s-shus-icon1 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -1121px;
+}
+
+.s-shus-icon2 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -1137px;
+}
+
+.s-shus-icon3 {
+    background: url("../img/web_organization_two.png") no-repeat 0 -1153px;
+}
+
+.s-jins-icon1 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.s-jins-icon2 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.s-jins-icon3 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.s-jur-icon1 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.s-jur-icon2 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.s-jur-icon3 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.s-shus-icon1 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.s-shus-icon2 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.s-shus-icon3 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.s-xiuc-icon1 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.s-xiuc-icon2 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.s-xiuc-icon3 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.s-zhuangy-icon1 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.s-zhuangy-icon2 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.s-zhuangy-icon3 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.s-zhuangy-icon4 {
+    width: 31px;
+    height: 17px;
+    display: inline-block;
+}
+
+.growth-schr-icon {
+    width: 36px;
+    height: 15px;
+    display: inline-block;
+}
+
+.t-users-icon {
+    width: 69px;
+    height: 67px;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+
+    i {
+        background: url("../img/teac-mark.png") no-repeat\9;
+        margin: 0\9;
+        height: 65px\9;
+        width: 75px\9;
+        text-indent: -10em\9;
+        float: left;
+        width: 100px;
+        height: 50px;
+        margin: -10px 0 0 -35px;
+        line-height: 70px;
+        background: #ffa918;
+        color: #fff;
+        font-style: normal;
+        font-size: 14px;
+        transform: rotate(315deg);
+        -ms-transform: rotate(315deg);
+        -o-transform: rotate(315deg);
+        -khtml-transform: rotate(315deg);
+        -moz-transform: rotate(315deg);
+        -webkit-transform: rotate(315deg);
+    }
+}
+
+.no-study-icon {
+    display: inline-block;
+    width: 17px;
+    height: 17px;
+    background: url("../img/web_organization_two.png") no-repeat -326px -62px;
+}
+
+.my-info-icon {
+    width: 30px;
+    height: 32px;
+    background: url("../img/web_organization_two.png") no-repeat -369px -56px;
+}
+
+.load-icon {
+    width: 20px;
+    height: 18px;
+    background: url("../img/web_organization_two.png") no-repeat -267px -58px;
+}
+
+.position-icon {
+    width: 15px;
+    height: 16px;
+    display: block;
+    background: url("../img/icon18.png") no-repeat -1px 0;
+}
+//我的订单
+
+.list-tab {
+    dd {
+        text-align: center;
+        float: left;
+        line-height: 34px;
+        color: $text-strong-color;
+        font-size: 14px;
+        border: 1px solid $border-color;
+        font-size: 16px;
+        background: #f3f3f3;
+
+        &.curr {
+            background: #67b53d;
+            border: 1px solid #67b53d;
+            color: $text-white-color;
+
+            i {
+                width: 0;
+                height: 0;
+                border-left: 7px solid transparent;
+                border-right: 7px solid transparent;
+                border-top: 8px solid #67b53d;
+                position: absolute;
+                bottom: -8px;
+                left: 45%;
+                display: block;
+                z-index: 5;
+            }
+        }
+    }
+
+    a {
+        padding: 0;
+        margin-right: 4px;
+    }
+
+    a:last-child {
+        margin-right: 0;
+    }
+}
+
+.litit {
+    overflow: hidden;
+    margin-bottom: 27px;
+    border: 1px solid $border-color;
+    background: #ebedec;
+    text-align: center;
+    line-height: 40px;
+}
+
+.g-icon3 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 50px;
+    height: 20px;
+    background: #26ac3d;
+    text-align: center;
+    line-height: 20px;
+    padding: 0;
+    color: $text-white-color;
+    z-index: 10;
+}
+
+.taped-icon {
+    position: absolute;
+    width: 50px;
+    height: 20px;
+    background: #47568c;
+    font-size: 12px;
+    top: 0;
+    left:0;
+    line-height: 20px;
+    color: $text-white-color;
+    text-align: center;
+}
+
+.order-info {
+    border: 1px solid $border-color;
+
+    .pic {
+        padding: 0;
+    }
+
+    .oltcon {
+        border-right: 1px solid #ddd;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        height: 158px;
+
+        &:last-child {
+            border-right: 0;
+        }
+
+        .oltcon_btn {
+            margin-top: 30px;
+        }
+
+        .oltcon_del {
+            line-height: 14px;
+        }
+    }
+
+    .oltit {
+        overflow: hidden;
+        width: 100%;
+        border-top: 1px solid $border-color;
+        background: $gray-background-color;
+        line-height: 30px;
+
+        span {
+            display: inline-block;
+            font-size: 12px;
+            padding-left: 5px;
+        }
+    }
+
+    .oltcon-status {
+        line-height: 30px;
+        padding-top: 48px;
+    }
+
+    .btn-color-f6a,
+    .btn-color-f6a:hover {
+        background: nth($yellow-button-color,1);
+        color: $text-white-color;
+        padding: 3px 10px;
+        line-height: 25px;
+        border-radius: 3px;
+    }
+    @include screen(320px,760px) {
+        .oltcon {
+            height: auto;
+            padding-top:0px;
+            padding-bottom:0px;
+            border:none;
+            &:last-child{
+                padding-bottom: 10px;
+            }
+        }
+        .asdd:last-child{
+
+        }
+
+        .oltcon-status {
+            padding-top: 0;
+            padding-bottom:0px;
+            text-align: left!important;
+            p{
+                display: inline-block;
+            }
+        }
+
+        .oltcon {
+            .oltcon_btn {
+                margin-top: 0px;
+            }
+
+            .oltcon_del {
+                line-height: 30px;
+                margin-top:0px!important;
+            }
+        }
+    }
+}
+//我的收藏
+.rt-colect-content {
+    padding: 17px 0;
+    overflow: hidden;
+    border: 1px solid #eee;
+    margin-bottom: 10px;
+
+    .g-icon3 {
+        left: 15px;
+    }
+}
+
+.s-my-collectcont {
+    .collect-pingfen {
+        dd {
+            width: 22px;
+            height: 22px;
+            float: left;
+            background: url("../img/star.png") no-repeat;
+        }
+
+        .collect-pingfen-solid {
+            background: url("../img/star.png") no-repeat 0 -30px;
+        }
+    }
+}
+.s-collect-content-tp{
+    a{ color:#666; }
+    a.ter{ text-align: right;color:#066cb8;}
+
+}
+@include screen(320px,760px){
+    .s-collect-content-tp{
+        div.mt30{
+            margin-top:0px!important;
+        }
+        a.mt30{
+            margin-top:0px!important;
+        }
+    }
+}
+
+//我的优惠券
+
+.list-search {
+    float: left;
+    width: 100%;
+    display: block;
+
+    .blue-btn,
+    input {
+        float: right;
+        border: 1px solid #ccc;
+        padding: 3px 5px;
+        height: 30px;
+    }
+
+    .blue-btn {
+        border: 1px solid #198fee;
+    }
+
+    input {
+        border-right: none;
+    }
+}
+
+.my-coupons-box {
+    position: relative;
+    z-index: 10;
+    color: #198fee;
+    text-align: right;
+    line-height: 30px;
+    cursor: pointer;
+
+    .my-coupons-tip {
+        position: absolute;
+        top: 20px;
+        right: 0;
+        display: none;
+        padding: 10px 20px;
+        width: 320px;
+        border: 1px solid $border-color;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        background: $white-background-color;
+        text-align: left;
+        cursor: pointer;
+        -o-border-radius: 5px;
+    }
+
+    .border-arrow-up {
+        position: absolute;
+        top: -6px;
+        right: 16%;
+        z-index: 5;
+        display: block;
+    }
+
+    dd {
+        border-bottom: 0;
+        color: $text-strong-color;
+        text-align: left;
+    }
+
+    dt {
+        border-bottom: 0;
+        color: $text-strong-color;
+        text-align: left;
+    }
+}
+//我的课程
+#sc-wrap-my-course {
+    .my-course-content-rt {
+        position: relative;
+        .my-course-item {
+            //border: 1px solid $border-color;
+            padding: 10px;
+            .taped-icon {
+                left: 15px;
+            }
+            &:nth-child(even) {
+                border-left: 0;
+                border-bottom: 0;
+            }
+            &:nth-child(odd) {
+                border-bottom: 0;
+            }
+            &:last-child {
+                border-bottom: 1px solid $border-color;
+            }
+            &:nth-last-child(2) {
+                border-bottom: 1px solid #ddd;
+            }
+            img {
+                width: 100%;
+            }
+            .course-img{
+                padding-right:0;
+                height:130px;
+            }
+            .g-icon3 {
+                position: absolute;
+                top: 0px;
+                left: 15px;
+            }
+            p {
+                width: 90%;
+                height: 26px;
+                line-height: 26px;
+                @extend %ellipsis;
+                display: block;
+                a {
+                    font-size: 14px;
+                    color: $text-color;
+                }
+                &:last-child {
+                    font-size: 16px;
+                }
+            }
+            &:hover {
+                background: #eee;
+            }
+        }
+        .my-course-subname {
+            display: block;
+            width: 100%;
+            @extend %ellipsis;
+        }
+        .t-course-info {
+            float: left;
+            width: 100%;
+            display: block;
+        }
+        .record-icon {
+            position: absolute;
+            width: 67px;
+            height: 25px;
+            top: 0;
+            right: 0;
+            background: url("/assets_v2/img/recorded.png") no-repeat;
+        }
+        .line-icon {
+            position: absolute;
+            width: 67px;
+            height: 25px;
+            top: 0;
+            right: 0;
+            background: url("/assets_v2/img/line.png") no-repeat;
+        }
+        .start-class {
+            height: 25px;
+            line-height: 25px;
+            padding: 0 7px;
+            background-color: #f84b15;
+            color: $text-white-color;
+            position: absolute;
+            top: 0;
+            left: 15px;
+            display: block;
+            z-index: 5;
+        }
+        .end-class {
+            height: 25px;
+            line-height: 25px;
+            color: #fff;
+            padding: 0 7px;
+            text-align: center;
+            background: #999;
+            position: absolute;
+            top: 0;
+            left: 15px;
+            display: block;
+            z-index: 5;
+        }
+        .price-color {
+            color: red;
+        }
+        .free-color {
+            color: #66b444;
+        }
+        .taped-class {
+            width: 70px;
+            line-height: 24px;
+            text-align: center;
+            color: $text-white-color;
+            background: #67b53d;
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: block;
+        }
+        .my-course-subnamep {
+            width: 90%;
+            height: 26px;
+            line-height: 26px;
+            @extend %ellipsis;
+            display: block;
+        }
+    }
+    .search-frame {
+        position: absolute;
+        top: -50px;
+        right: 0;
+        z-index: 5;
+    }
+    .my-course {
+        dd {
+            margin-right: 4px;
+            cursor: pointer;
+        }
+    }
+    .student-course-month {
+        float: right;
+        border-bottom: 1px dotted $horizontal-border-color;
+        position: relative;
+        margin: 10px 0;
+        i {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            margin-right: 50%;
+            background: $main-white-color;
+            font-style: normal;
+            padding: 0;
+            text-align: center;
+        }
+    }
+    .vertical-line {
+        position: relative;
+        padding-top: 32px;
+        text-align: right;
+        padding-right: 40px;
+        p:nth-child(2) {
+            color: $text-strong-color;
+        }
+        .vertical-line-date {
+            color: $text-color;
+        }
+        span {
+            width: 1px;
+            height: 140px;
+            background: #ddd;
+            display: block;
+            position: absolute;
+            right: 14px;
+            top: 0;
+            z-index: 4;
+        }
+        i {
+            position: absolute;
+            top: 44px;
+            right: 7px;
+            background: url("../img/web_organization.png") no-repeat -2px -821px;
+            width: 16px;
+            height: 16px;
+            z-index: 5;
+        }
+    }
+    .my-course-contents {
+        padding: 0;
+        &:hover {
+            i {
+                position: absolute;
+                background: url("../img/web_organization.png") no-repeat -2px -867px;
+                top: 44px;
+                right: 7px;
+                width: 16px;
+                height: 16px;
+                z-index: 5;
+            }
+            .my-course-contents-rt {
+                background: #eee;
+            }
+        }
+    }
+    .my-course-contents-rt {
+        div {
+            padding-left: 0;
+        }
+        img {
+            width: 100%;
+        }
+        h1 {
+            height: 24px;
+            line-height: 24px;
+            width: 100%;
+            @extend %ellipsis;
+        }
+        p {
+            height: 24px;
+            line-height: 24px;
+            width: 100%;
+            @extend %ellipsis;
+        }
+    }
+    .infor-student-btn {
+        text-align: center;
+        margin-top: 16px;
+    }
+}
+.c-pic-taped {
+    .taped-class {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: block;
+        width: 70px;
+        line-height: 24px;
+        text-align: center;
+        color: $text-white-color;
+        background: nth($green-button-color,1);
+    }
+}
+//在线课程
+.culum-course {
+    position: relative;
+    .search-frame .so_student {
+        position: absolute;
+        right: 0;
+        top: -40px;
+    }
+}
+@include screen(320px,768px) {
+    #index-growth {
+        .growth-tab-main {
+            li {
+                .on {
+                    background: url("../img/on-tabbg.png") no-repeat center 0;
+                }
+            }
+        }
+    }
+    #sc-wrap-my-course {
+        .my-course-content-rt {
+            .my-course-item {
+                &:nth-child(even) {
+                    border-left: 1px solid $border-color;
+                }
+                .course-img{
+                    height:auto;
+                    max-height: 105px;
+                    padding:0px;
+                }
+            }
+        }
+    }
+    .tab-button {
+        font-size: 14px;
+    }
+}
+@include screen(320px,375px){
+    #sc-wrap-my-course {
+        .my-course-content-rt {
+            .my-course-item {
+                .course-img{
+                    height:91px;
+                    padding:0px;
+                }
+            }
+        }
+    }
+}
+@include screen(375px,768px){
+    #sc-wrap-my-course {
+        .my-course-content-rt {
+            .my-course-item {
+                .course-img{
+                    height:105px;
+                    padding:0px;
+                }
+            }
+        }
+    }
+}
+
+//Modify the picture
+.photoPicShow {
+    overflow: hidden;
+    margin-top: 15px;
+    padding: 0;
+    height: 300px;
+    background: #f0f0f0 url("../img/bg-uparrow.gif") no-repeat center;
+    text-align: center;
+    line-height: 300px;
+}
+//systerm picture
+ul.photoDefaultLi {
+    li {
+        float: left;
+        margin-top: 12px;
+        padding-right: 0;
+        cursor: pointer;
+        img {
+            width: 100%;
+            border: 1px solid #ccc;
+        }
+    }
+}
+//gift-flow
+.gift-flower-cont{
+    padding-top:5px;
+    text-align:right;
+}
+//学习中心手机端
+@include screen(320px,760px) {
+    .dropdown {
+        width: 100%;
+    }
+    .gi-growth-val {
+        line-height:30px;
+        strong {
+            margin-right: 0;
+            font-size: 16px;
+            float: right;
+        }
+        a {
+            float: left;
+        }
+    }
+    .gi-growth-calendar {
+        display: inline-block;
+        position: relative;
+        margin-bottom:45px;
+        width: 165px;
+        height: 45px;
+        border-radius: 35px;
+        left:50px;
+        a {
+            line-height: 25px;
+            font-size: 18px;
+            color: $text-white-color;
+            &#signed {
+                color: $text-white-color;
+                cursor: default;
+            }
+            &#sign-audo {
+                background: url(/assets_v2/img/sign.png)no-repeat 35px 0;
+                padding-left: 30px;
+            }
+        }
+        .qiand_time {
+            position: absolute;
+            overflow: inherit;
+            top: 30px;
+            left:20px;
+        }
+    }
+    .s-growth-orgsign{
+        background:$vertical-border-color;
+    }
+    .s-growth-hassign{
+        background:$main-yellow-color;
+    }
+    .gi-studey-stats {
+        background: none;
+
+        td {
+            border-right: 1px solid #e8e8e8;
+            line-height: 25px;
+        }
+    }
+    .growth-course-list {
+        .growth-course-tp {
+            span:first-child {
+                i.bor {
+                    float: left;
+                    width: 4px;
+                    height: 20px;
+                    background: $main-theme-color;
+                    margin: 6px;
+                }
+            }
+        }
+    }
+    .gift-flower-cont{
+        padding-top:32px;
+        text-align:center;
+    }
+    .s-grow-left-info{
+        .s-course-infos{
+            p{
+                text-indent: 0;
+            }
+        }
+        .s-course-infos{
+            border-left: 0;
+        }
+    }
+    .s-growth-pr0{ padding: 0;margin-top: 10px;}
+}
+.s-growth-integral{
+    @include sprite($s-growth-integral);
+}
+.course-test-icon{
+    @include sprite($course-test-icon);
+}
+.sign-growth-icon{
+    @include sprite($sign-growth-icon);
+}
+.s-help-icon{
+    @include sprite($help-icon);
+}
+.gray-sign-growth-icon{
+     @include sprite($gray-sign-growth-icon);
+}
+.s-grow-left-info,.s-growth-rigth-info{ border:1px solid #e7e7e7;}
+.s-grow-left-info{
+    padding: 18px 15px;
+    .growth-progress{
+        width: 148px;
+        height: 8px;
+        background: #f5f5f5;
+        border:1px solid #ececec;
+        border-radius:10px;
+        line-height:0;
+    }
+    .s-course-infos{
+        border-left:1px solid #e7e7e7;
+        height: 118px;
+        padding: 30px 0 0 0;
+        p{
+            text-indent: 40px;
+        }
+    }
+    .p24{ padding: 24px;}
+}
+.sign-grobal-info{ border-left:1px solid #e7e7e7;}

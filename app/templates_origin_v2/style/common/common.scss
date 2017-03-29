@@ -1,0 +1,246 @@
+// text color
+//绿色文本
+.cGreen{
+  color:$text-green-color;
+}
+//蓝色文本
+.cBlue{
+  color:$link-blue-color;
+}
+//小手hover
+.cursor_poin{
+   cursor:pointer;
+}
+//文字加粗
+.fontB{
+  font-weight: bold;
+}
+//可点击有链接的文字,hover时候有下划线
+.blue-link{
+  text-decoration:none;
+  cursor: pointer;
+  color:$link-blue-color;
+  &:link{
+    color:$link-blue-color;
+  }
+  &:visited{
+    color:$link-blue-color;
+  }
+  &:hover{
+    color:$hover-blue-color;
+  }
+  &:active{
+    color:$link-blue-color;
+  }
+}
+.white-link{
+  text-decoration:none;
+  cursor: pointer;
+  color:$main-white-color;
+  &:link{
+    color:$main-white-color;
+  }
+  &:visited{
+    color:$main-white-color;
+  }
+  &:hover{
+    color:$main-white-color;
+  }
+  &:active{
+    color:$main-white-color;
+  }
+}
+.orange-link{
+  text-decoration:none;
+  cursor: pointer;
+  color:$text-color;
+  &:link{
+    color:$text-color;
+  }
+  &:visited{
+    color:$text-color;
+  }
+  &:hover{
+    color: $text-orange-color;
+  }
+  &:active{
+    color:$text-color;
+  }
+}
+.theme-link{
+  text-decoration:none;
+  cursor: pointer;
+  color:$text-color;
+  &:link{
+    color:$main-theme-color;
+  }
+  &:visited{
+    color:$text-color;
+  }
+  &:hover{
+    color: $main-theme-color;
+  }
+  &:active{
+    color:$text-color;
+  }
+}
+.theme-text{
+  color: $main-theme-color;
+}
+//成交金额/价格的数字
+.cRed{
+  color:$text-red-color;
+}
+//验证的文本  red verify text
+.vRed{
+  color:$text-verify-red-color;
+}
+//辅助、次要文本 #999
+.cGray{
+  color:$text-subsidiary-color;
+}
+//普通正文文本 #666
+.dGray{
+  color:$text-color;
+}
+//突出、强调使用文本 #333
+.lGray{
+  color:$text-strong-color;
+}
+//橘黄色文本
+.cYellow{
+  color:$text-orange-color;
+}
+//白色文本
+.cWhite{
+  color:$main-white-color;
+}
+// 文本隐藏
+.ellipsis{
+    @extend %ellipsis;
+}
+//白色背景
+.bgf {
+  background: $main-white-color;
+}
+.bg-gray {
+  background: $background-color;
+}
+
+//head title 标题
+//试卷、作业批改等单页面的标题似button
+.tab-button{
+  float: left;
+  @include line-height(30px);
+  padding: 0 10px;
+  border-radius: 3px;
+  text-align: center;
+  background-color: nth($gray-button-color,2);
+  color: $text-color;
+  font-size: 16px;
+}
+
+
+//验证 文本框 样式
+.common-border{
+  border: 1px solid $input-border-color !important;
+}
+.focus-border{
+  border: 1px solid $input-true-border-color !important;
+}
+.error-border{
+  border: 1px solid $input-error-border-color !important;
+}
+//验证失败提示样式
+.tips{
+  margin: 0;
+  @include line-height(32px);
+  position: relative;
+  float: left;
+  padding-left: 5px;
+  @extend %ellipsis;
+  overflow: inherit;
+  color:$text-subsidiary-color;
+  @include screen(0,640px){
+    word-wrap: break-word;
+    text-overflow: none;
+    word-break: normal;
+    overflow: visible;
+    white-space: normal;
+    line-height: normal;
+  }
+  .tips-icon{
+    visibility: hidden;
+    position: absolute;
+    top:10px;
+    left: 5px;
+    @include sprite($validate-error);
+  }
+  &.tips-error{
+    color: $text-verify-red-color;
+    padding-left: 20px;
+    .tips-icon{
+      visibility: visible;
+    }
+  }
+}
+.error{
+  .tips{
+    color: $text-verify-red-color;
+    padding-left: 20px;
+  }
+  .tips-icon{
+    visibility: visible;
+  }
+}
+//点击图片弹出遮罩修改
+.img-set{
+  position: relative;
+  .img-mask{
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    top:0;
+    width: 100%;
+    height: auto;
+    display: none;
+    font-size: 14px;
+    background: rgba(0,0,0,.8);
+    color: $main-white-color;
+    text-align: center;
+    line-height: inherit;
+    z-index: 100;
+    &.mask-show{
+      display: block;
+    }
+  }
+}
+.ellipsis{
+    @extend %ellipsis;
+}
+.p-xs-0{
+  @include screen(320px,768px){
+    padding:0;
+  }
+}
+.mt-xs-5{
+  @include screen(320px,768px){
+    margin-top:5px!important;
+  }
+}
+/*layer积分*/
+.metal-note{
+  position: relative;
+  color: #ffef08;
+  text-align: center;
+  font-size: 34px;
+  font-weight: bold;
+  -webkit-text-stroke: 2px #623014;
+  span{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    line-height: 34px;
+    margin-left: -44px;
+  }
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tinymce upload</title>
+    <style>
+        .mce-btn i.mce-i-upload {
+            width: 19px;
+            background: url('/assets_v2/img/upload_icon.png') 0 0 no-repeat;
+        }
+
+        .mce-btn i.mce-i-upload-disabled {
+            width: 19px;
+            background-position: 0 -16px;
+        }
+    </style>
+    <script src="{utility_cdn::js('/assets_v2/js/tinymce/tinymce.min.js')}"></script>
+    <script src="{utility_cdn::js('/assets_v2/js/tinymce/plugin.js')}"></script>
+    <script type="text/javascript">
+        tinymce.init({
+            selector: "textarea",
+            toolbar: "bold italic strikethrough link unlink numlist bullist blockquote upload image fullscreen tiny_mce_wiris_formulaEditor tiny_mce_wiris_CAS",
+            width: 600,
+            height: 200,
+            upload_action: '/article/index/ajaxUpload',//required
+            upload_file_name: 'userfile',//required
+            plugins: [
+                "advlist autolink lists link image charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime media table contextmenu paste upload",
+                "tiny_mce_wiris"
+            ]
+        });
+    </script>
+</head>
+<body>
+<div style="width: 600px; margin: 20px auto;">
+    <h1>tinymce upload</h1>
+    <form method="post" action="post.php">
+        <textarea name="content"></textarea>
+    </form>
+</div>
+</body>
+</html>

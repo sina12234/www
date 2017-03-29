@@ -1,0 +1,53 @@
+// 公共变量
+
+// base
+$font-family-base:\5fae\8f6f\96c5\9ed1,Arial,"Hiragino Sans GB",Helvetica,sans-serif;
+$font-family-serif:Georgia, "Times New Roman", Times, serif;
+$font-size-base:62.5%;
+$body-bg:#fff !default;//背景颜色
+//color
+$white-color:#fff !default;
+$blank-color:#000 !default;
+$yellow-color:#ffa81e !default;
+$red-color:#F01400 !default;
+$green-color:#009900 !default;
+//background-color
+$bg-color:;
+//text-color
+$text-color:#666 !default;//普通正文文字颜色
+$text-strong-color:#333 !default;//突出、强调使用文字
+$text-subsidiary-color:#999 !default;//辅助、次要文本颜色
+$text-holder-color:#ccc !default;//placeholder文字颜色
+$link-color:$text-color;//链接颜色
+$link-color-hover:$theme-color;//链接hover颜色
+//size
+$font-size-num:30 !default;
+$margin-nums:40 !default;
+
+//Media queries breakpoints
+$screen-xs:480px !default;
+$screen-sm:768px !default;
+$screen-md:992px !default;
+$screen-lg:1200px !default;
+// So media queries don't overlap when required, provide a maximum
+$screen-xs-max:($screen-sm - 1) !default;
+$screen-sm-max:($screen-md - 1) !default;
+$screen-md-max:($screen-lg - 1) !default;
+//Grid system
+$grid-columns:20 !default;
+$grid-gutter-width:30px !default;
+// margin
+$margin-nums:40 !default;
+//== Container sizes
+// Small screen / tablet
+$container-tablet:(720px + $grid-gutter-width) !default;
+$container-sm:$container-tablet !default;
+// Medium screen / desktop
+$container-desktop:(940px + $grid-gutter-width) !default;
+//** For `$screen-md-min` and up.
+$container-md:$container-desktop !default;
+
+// Large screen / wide desktop
+$container-large-desktop:(1140px + $grid-gutter-width) !default;
+//** For `$screen-lg-min` and up.
+$container-lg:$container-large-desktop !default;

@@ -1,0 +1,137 @@
+//单页 详情页面 内部 container
+.main-center{
+  padding:25px 20px;
+  margin: 0 auto;
+  background-color: $main-white-color;
+  border: 1px solid $border-color;
+  float:none
+}
+.main-center:after{
+    clear:both;display:block;content:""
+}
+//单页面标题头部
+.ed-title{
+  @include line-height(30px);
+  width: 100%;
+  .title{
+    @extend %ellipsis;
+    text-align: left;
+    float: left;
+    color: $text-strong-color;
+    font-size: 16px;
+    font-weight: bold;
+  }
+}
+//内容列表页  如:作业列表公用样式
+.block-list{
+  width: 100%;
+  padding-right: 30px;
+  padding-bottom: 40px;
+  .block-floor{
+    padding-top: 25px;
+    &:first-child{
+      padding-top: 0px;
+    }
+  }
+  .zoom-head{
+    width: 100%;
+    position: relative;
+    padding-right: 15px;
+    .zoom-icon{
+      position: absolute;
+      right: 0;
+      top: 4px;
+      cursor: pointer;
+      @include sprite($top-arrow);
+      transition: transform .3s linear;
+      &.down{
+        transform: rotate(180deg);
+      }
+    }
+  }
+  .zoom-title{
+    font-size: 14px;
+  }
+  .zoom-split{
+    padding: 0;
+    border-top: 1px solid  $border-color;
+    margin: 10px 0;
+    display: none;
+    &.show{
+      display: block;
+    }
+  }
+  .zoom-list{
+    padding-top: 25px;
+    padding-left: 10px;
+    width: 100%;
+  }
+  .zoom-info{
+    cursor: pointer;
+    &:nth-of-type(odd){
+      .zoom-info-course{
+        background-color: $tbody-background-color ;
+      }
+    }
+    &:nth-of-type(even){
+      .zoom-info-course{
+        background-color:$main-white-color ;
+      }
+    }
+    &:hover{
+      .zoom-info-course{
+        background-color:$common-background-color;
+      }
+      .zoom-info-icon{
+        top:19px;
+        right: -6px;
+        @include sprite($s-dott-hover);
+      }
+    }
+  }
+  .zoom-info-time{
+    float: left;
+    font-size: 12px;
+    position: relative;
+    padding: 10px 0  0 20px;
+    height: 60px;
+    .vertical-split{
+      width: 1px;
+      background: $frame-border-color;
+      display: block;
+      position: absolute;
+      top:0px;
+      height: 80px;
+      right: 14px;
+      z-index: 4;
+    }
+    .zoom-info-icon{
+      position: absolute;
+      top:20px;
+      right: -6px;
+      z-index: 10;
+      @include sprite($s-dott);
+    }
+  }
+  .zoom-down{
+    &.hidden{
+      display: none;
+    }
+  }
+  .zoom-info-course{
+    height: 60px;
+    font-size: 12px;
+    border-left:1px solid #ccc;
+  }
+  .zoom-info-action{
+    text-align: center;
+  }
+  @include screen(320px,760px){
+    padding:0px;
+      .zoom-info-course{
+          height:auto;
+          font-size: 12px;
+      }
+  }
+
+}

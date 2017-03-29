@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>创建优惠劵 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+	<meta name="title" content="{part '/site.main.orgname'} - 优惠管理 - 云课 - 专业的在线学习平台">
+	<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+	<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+	{part "/site.main.header"}
+</head>
+<body>
+	{part "/site.main.nav"}
+	<section class="pd30">
+		<div class="container">
+			<div class="row">
+				<!-- left menu -->
+				{part "/org.main.menu.discount"}
+				<!-- /left menu -->
+				<!-- right -->
+				<div class="right-main col-md-16 col-xs-20">
+					<!-- path -->
+					<div class="col-xs-20 pd0 fs14">
+						<a href="/org.discount.listnew">优惠管理</a> &gt; 新建优惠
+					</div>
+					<!-- /path -->
+					<form id="SetupForm">
+					<ul class="form-horizontal col-md-15 col-xs-20 p0 mt20" >
+						<li class="form-group">
+							<div class="control-label col-xs-6">
+								<span class="cRed fb">*</span>名称：
+							</div>
+							<div class="col-xs-14 col-md-11 p0">
+								<input type="text" id="discount_name" name="discount_name" placeholder class="col-md-12 col-xs-20 p0 required" data-tip="请输入折扣名称" data-valid="isNonEmpty" data-error="请输入折扣名称" data-status="0"><div class="tips"></div>
+							</div>
+						</li>
+						<li class="form-group">
+							<div class="control-label col-xs-6">
+								<span class="cRed fb">*</span>规则类型：
+							</div>
+							<div class="col-xs-14 col-md-11 p0">
+								<label><input type="radio" checked name="discount_type" value="1">满额减</label>
+								<label><input type="radio" name="discount_type" value="2">打折</label>
+								<div class="bg-gray col-xs-20 col-md-20 p5" id="disValue">
+									满 <input type="text" maxlength="7" onkeyup="clearNum(this)" size="5" name="min_fee" value="1000"> <span class="dType">减</span>  <input type="text" size="5"  onkeyup="clearNum(this)" maxlength="7" name="discount_value" value="500"> <span class="dVal">元</span>
+								</div>
+							</div>
+						</li>
+						<li class="form-group">
+							<div class="control-label col-xs-6">
+								<span class="cRed fb">*</span>优惠范围：
+							</div>
+							<div class="col-xs-14 col-md-11 pt5" id="selectArea">
+								<input type="hidden" value="1" name="object_type">
+								<input type="hidden" value="all" name="object_id">
+								<a href="#" class="cBlue" id="CourseRange">选择范围</a>
+							</div>
+						</li>
+						<li class="form-group">
+							<div class="control-label col-xs-6">
+								<span class="cRed fb">*</span>使用限制：
+							</div>
+							<div class="col-xs-14 col-md-11 p0">
+								<div class="col-xs-20 pd0">
+									<span class="c-fl mt5 mr5 tar" style="width:60px">每个码限用 </span>
+									<input type="text" name="total_num" onkeyup="if(isNaN(value))execCommand('undo')" size="5">
+									<span class="cGray">(可输入0~999，0代表不限使用次数)</span>
+								</div>
+							</div>
+						</li>
+						<li class="form-group">
+							<div class="control-label col-xs-6">
+								<span class="cRed fb">*</span>有限期：
+							</div>
+							<div class="col-xs-14 col-md-11 p0">
+								<div class="col-xs-20 col-md-10 p0">
+									<span class="c-fl mt5">开始时间：</span>
+									<div class="timing">
+										<input type="text" name="start_time" id="start_time"><i class="timing-arrow"></i>
+									</div>
+								</div>
+								<div class="col-xs-20 col-md-10 p0">
+									<span class="c-fl mt5">有效时长：</span>
+									<select name="duration" id="duration">
+										<option value="0">永久</option>
+										<option value="365">一年</option>
+										<option value="183">半年</option>
+										<option value="90">90天</option>
+										<option value="30">30天</option>
+										<option value="7">7天</option>
+									</select>
+								</div>
+							</div>
+						</li>
+						<li class="form-group">
+							<div class="control-label col-xs-6">备注：</div>
+							<div class="col-xs-14 col-md-11 p0">
+								<textarea name="introduction" style="width:100%;" placeholder="最多30个字，有助于你区分设置不同的优惠券哦~"></textarea>
+							</div>
+						</li>
+						<li class="form-group">
+							<div class="control-label col-xs-6">
+								<span class="cRed fb">*</span>生成：
+							</div>
+							<div class="col-xs-14 col-md-11 p0">
+								<input type="text" name="create_code" class="col-xs-3 required" data-tip="请输入个数" data-valid="isNonEmpty" data-error="请输入个数" onkeyup="if(isNaN(value))execCommand('undo')" data-status="0" value="50"><span class="mt5 c-fl">个优惠码</span>
+							</div>
+						</li>
+						<li class="form-group">
+							<div class="control-label hidden-xs">&nbsp;</div>
+							<div class="col-xs-20 tac p0">
+								<a href="javascript:void(0);" class="btn mr10 p0">保存</a>
+								<a href="javascript:void(0);" class="gray-btn p0">取消</a>
+                                <p class="col-xs-20 pd10">保存后，只有优惠范围、有效期和备注可再次编辑。</p>
+							</div>
+						</li>
+					</ul>
+					</form>
+					<!-- /form -->
+					<ul class="couponlist col-md-5 p0 hidden-xs" id="couponList">
+						<li class="coupon-item">
+							<div class="coupon-main">
+								<div class="coupon-type coupon-type-discount tac">
+									<p class="c-price pt25 fb fs30">500元</p>
+									<p class="c-fee fs16">满1000元可用</p>
+									<p class="c-limit pt5">可用1次</p>
+								</div>
+								<div class="coupon-msg">
+									<p class="pb5 choices-date">优惠范围：全部课程</p>
+									<p class="pb5 expiry-date">有效期：永久</p>
+									<p class="pb5">适用机构：{part '/site.main.orgname'}</p>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<!-- /right -->
+			</div>
+		</div>
+	</section>
+<!-- layer -->
+<ul id="range" class="p20 fs14" style="display:none">
+	<li class="pb5">
+		<div class="col-xs-5">&nbsp;</div>
+		<label for="range-all"><input type="radio" checked value="all" name="range" id="range-all">全部课程</label>
+	</li>
+	<li class="pb5">
+		<div class="col-xs-5">&nbsp;</div>
+		<label for="range-course"><input type="radio" value="1" name="range" id="range-course">指定课程</label>
+	</li>
+	<li class="pb20">
+		<div class="col-xs-5">&nbsp;</div>
+		<label for="range-class"><input type="radio" value="3" name="range" id="range-class">指定分类课程</label>
+	</li>
+	<!-- <li class="pb20">
+		<div class="col-xs-5">&nbsp;</div>
+		<label for="range-teacher"><input type="radio" id="range-teacher" name="range">指定老师课程</label>
+	</li> -->
+	<li class="pb5 tac">
+		<button class="btn">下一步</button> <button class="gray-btn">取消</button>
+	</li>
+</ul>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ejs.min.js')}"></script>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="/assets_v2/js/ie8/ejs.ie8.js"></script>
+<![endif]-->
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery.validate.js')}"></script>
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}"></script>
+<script>
+	$(function(){
+		var startime=new Date();
+		var couponList=$('#couponList');
+		var SetupForm=$('#SetupForm');
+		var CourseRange=$('#CourseRange');
+    	startime=startime.toLocaleDateString();
+    	startime=startime.replace(/\//g,'\-');
+		$("#start_time").val(startime);
+
+		$("#start_time").datetimepicker({
+        	format: 'Y-m-d',
+			timepicker:false,
+		});
+		SetupForm.find('.timing-arrow').click(function(){
+			$('#start_time').datetimepicker('show');
+		})
+
+		$('#range').on('click','.btn',function(){
+			var _selectedvalue=$('#range').find('input[name="range"]:checked').val();
+			if(_selectedvalue != "3"){
+				SetupForm.find('input[name="object_type"]').val('1');
+				layer.closeAll();
+				if(_selectedvalue =="all"){
+					if($('.multiple-select').length!=0){
+						$('.multiple-select').remove();
+					}
+					SetupForm.find('input[name="object_id"]').val('all');
+					$('#CourseRange').hide();
+					if(SetupForm.find('#CourseEdit').length==0){
+						$('#selectArea').append('<a id="CourseEdit">全部课程 <i class="choices-icon"></i></a>');
+					}else{
+						SetupForm.find('#CourseEdit').html('全部课程 <i class="choices-icon"></i>');
+					}
+					couponList.find('.choices-date').text('优惠范围：全部课程');
+				}else{
+					selectCourse();
+				}
+			}else{
+				layer.closeAll();
+				selectCate();
+			}
+		});
+
+		$('input[name="discount_value"]').blur(function() {
+			if($(this).val() < 1) {
+				layer.msg('请填写大于1');
+				$(this).val('');
+				$('.c-price').text('0元')
+			}
+		});
+
+		$('#range').on('click','.gray-btn',function(){
+			layer.closeAll();
+		});
+
+		SetupForm.on('click','.gray-btn',function(){
+			history.go(-1);
+		});
+
+		SetupForm.on('click','#CourseRange,#CourseEdit',function(){
+			var object_type=$('#selectArea input[name="object_type"]').val();
+			var object_id=$('#selectArea input[name="object_id"]').val();
+			var w, h;
+			if($(window).width() <= 768) {
+				w = '90%';
+				h = '230px';
+			}else{
+				w = '350px';
+				h = '230px';
+			}
+			layer.open({
+	            type: 1,
+	            title:['优惠范围'],
+	            area: [w ,h],
+	            shadeClose: true,
+	            content: $('#range'),
+				success: function(){
+					$('#range').find('input').removeAttr('checked');
+					if(object_type == 1 && object_id == "all"){
+						$('#range').find('input[value=all]').prop("checked",true);
+					}else{
+						$('#range').find('input[value='+object_type+']').prop("checked",true);
+					}
+  				}
+	        });
+		})
+
+		SetupForm.find('input[name="total_num"]').change(function(){
+			var _selectedvalue = $(this).val();
+			if(_selectedvalue == "0"){
+				couponList.find('.c-limit').text('不限次数');
+			}else{
+				couponList.find('.c-limit').text('可用'+_selectedvalue+'次');
+			}
+		});
+		SetupForm.on('change','select[name="duration"]',function(){
+			var _selectedvalue = $(this).val();
+			var _starttime=$('#start_time').val();
+			if(_selectedvalue==0){
+				couponList.find('.expiry-date').text('有效期：永久');
+			}else{
+				couponList.find('.expiry-date').text('有效期：'+_selectedvalue+'天');
+			}
+		});
+		SetupForm.on('change','input[name="discount_value"],input[name="min_fee"],input[name="discount_type"]',function(){
+			changeMethod();
+		})
+
+		function changeMethod(){
+			var _selectedvalue = $('input[name="discount_type"]:checked').val();
+			var disValue=$('#disValue');
+			var dType=disValue.find('.dType');
+			var dVal=disValue.find('.dVal');
+			couponList.find('.c-fee').text('满'+disValue.find('input[name="min_fee"]').val()+'元可用');
+			if(_selectedvalue==1){
+				couponList.find('.coupon-type').addClass('coupon-type-discount');
+				dType.text('减');
+				dVal.text('元');
+				couponList.find('.c-price').text(disValue.find('input[name="discount_value"]').val()+'元');
+			}else{
+				couponList.find('.coupon-type').removeClass('coupon-type-discount');
+				dType.text('打');
+				dVal.text('折');
+				var zhekou = disValue.find('input[name="discount_value"]').val();
+				if(zhekou>1){
+					zhekou = zhekou/Math.pow(10,zhekou.toString().length-1);
+					disValue.find('input[name="discount_value"]').val(zhekou);
+				}
+				couponList.find('.c-price').text(zhekou+'折');
+			}
+		}
+
+		SetupForm.validate({
+			onBlur: function() {
+				var $parent = this.parent();
+				var _status = parseInt(this.attr('data-status'));
+				if (!_status) {
+					$parent.addClass('error');
+				}
+      			return false;
+    		}
+		});
+		SetupForm.on('click','.btn',function(event) {
+			if(!$(this).validate('submitValidate')){
+		        return false;
+		    }else if($.trim($('#discount_name').val())==''){
+				layer.msg('名称不能为空格！');
+				return false;
+			}else if($('input[name="min_fee"]').val() == '' || $('input[name="discount_value"]').val() == '') {
+				layer.msg('规则类型不能为空格！');
+				return false;
+			}else if($('input[name="discount_value"]').val() <= 0) {
+				layer.msg('请填写大于零');
+				$('input[name="discount_value"]').css('border', '1px solid red');
+				return false;
+			}else if($('input[name="discount_value"]').val() < 1) {
+				layer.msg('请填写大于1');
+				$('input[name="discount_value"]').css('border', '1px solid red');
+				return false;
+			}else{
+				$.ajax({
+			        type:"post",
+			        url: "/org/discount/CreateV2New",
+			        data:$('#SetupForm').serialize(),
+			        dataType:'json',
+			        success:function(ret){
+			            if(ret.error ){
+							layer.msg('有错误');
+			            }else{
+			                location.href = "/org.discount.listnew";
+			            }
+			        }
+			    });
+			}
+		});
+	});
+
+	function selectCourse(){
+		var w, h;
+		if($(window).width() <= 768) {
+			w = '90%';
+			h = '530px';
+		}else{
+			w = '765px';
+			h = '530px';
+		}
+		layer.open({
+			type: 2,
+			title:['选择课程'],
+			area: [w , h],
+			shadeClose: true,
+			content:'/org.discount.courseselect'
+		});
+	}
+	function selectCate(){
+		var w, h;
+		if($(window).width() <= 768) {
+			w = '90%';
+			h = '230px';
+		}else{
+			w = '350px';
+			h = '230px';
+		}
+		layer.open({
+			type: 2,
+			title:['优惠范围'],
+			area: [w ,h],
+			shadeClose: true,
+			content:'/org.discount.cateselect'
+		});
+	}
+	function clearNum(obj) {
+		obj.value = obj.value.replace(/[^\d.]/g,"");
+        obj.value = obj.value.replace(/^\./g,""); 
+        obj.value = obj.value.replace(/\.{ 2, }/g,".");
+        obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); 
+	}
+</script>
+{part "/site.main.footer"}
+</body>
+</html>

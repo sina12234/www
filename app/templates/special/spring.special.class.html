@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="title" content="云课 - 春季专题课">
+    <meta name="keywords" content="云课 - 云课堂 - 春季专题课">
+    <meta name="description" content="春季专题课">
+    <link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets_v2/img/platform/yunke.ico')}" />
+    <script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+    <script type="text/javascript" src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+    <link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/bootstrap/bootstrap.min.css')}">
+    <title>春季专题课</title>
+    <style>
+        body,html{ margin:0;padding:0;background:#E8F8E1;font-family: "微软雅黑"}
+        li{ list-style-type:none;}
+        a:hover,a:link{ text-decoration: none;}
+        .tac{ text-align: center;}
+        .con-wrap{  background:url("/assets_v2/img/special/2017_02_14/bg.png") no-repeat;  -webkit-background-size:100%;  background-size:100%;}
+        .banner img{ width:100%;}
+        .head{ position: relative;}
+        p{ padding:0;margin:0;}
+        .top,.con{ padding:20px 0; float:none; margin:0 auto;margin-top:25px;}
+        .title{ width:28%; background:#FFCC01;  border-radius: 6px;  margin:0 auto;}
+        .title .title-name{ font-weight: bold;  font-size:34px;  color:#fff;  -webkit-text-stroke:1px #FBB507;}
+        .lessons{ background:rgba(216,244,203,0.5); border-radius: 20px;padding:60px 20px 20px 20px;float: none;margin:0 auto;}
+        .list-item{ border-bottom:6px solid #E1A717;padding:0;margin:7px;position: relative;}
+        .list-item:after{ content:' ';display:block;width:100%;height:10px;background-color: #FFE800;}
+        .list-box{ width:95%;margin:0 auto; padding: 0 20px;5px; border:5px solid #FBD60B;}
+        .list-box01{ background:url("/assets_v2/img/special/2017_02_14/list-01.png") no-repeat;background-size:100%;}
+        .list-box02{ background:url("/assets_v2/img/special/2017_02_14/list-02.png") no-repeat;background-size:100%;}
+        .list-box03{ background:url("/assets_v2/img/special/2017_02_14/list-03.png") no-repeat;background-size:100%;}
+        .list-price{ width: 113px;position: absolute;right:3px;bottom:0px;font-weight: bold;}
+        .price-last{ height:30px;line-height:30px;font-size:18px;color:#fff;background-color: #FFBA00;text-decoration: line-through;padding-left:5px;}
+        .price-now{ height:40px;line-height:40px;font-size:14px;color:#fff;background-color: #FFF05A;position: relative;padding-left:25px;font-size:30px;color:#DC1C26;}
+        .price-now span{ position: absolute;left: 5px;top:3px;display:block;width:14px;height:100%;line-height:12px;font-size:12px;}
+        .list-title{ margin:0 auto; width:50%; text-align: center;font-size:16px;color:#fff; background:url("/assets_v2/img/special/2017_02_14/title-bg.png") no-repeat; background-size:100%;padding:7px 0;}
+        .list-content,.list-content01,.list-content02,.list-content03{ color:#fff;}
+        .list-content .main-title{ font-size:30px;}
+        .list-content .sub-title{ font-size:25px;}
+        .list-teacher{ line-height:50px;font-weight: bold;color: #fff; font-size:18px;}
+        .des{ border:4px dotted #fff; padding:20px;position: relative;float: none;margin:0 auto;}
+        .des-left,.des-right{ padding:0 30px;position: relative;}
+        .des-right{ height:100%;}
+        .des-item{ padding:7px;}
+        .des-item img{ width:100%;}
+        .des-box{ margin:0 auto;color:#BA08CE;background:#FBD60B;border:4px solid #fff;text-align: center;padding:40px 40px 60px 40px;}
+        .des-note{ font-weight: bold; font-size:50px;}
+        .des-sub{ margin:10px 0; border-top:1px solid #BA08CE; border-bottom:1px solid #BA08CE; padding:5px;font-size:25px;display:inline-block;}
+        .des-time{ font-size:30px;text-align: left;padding-left:46px;}
+        .des-time span{ display: block; padding-top:10px;}
+        .des-foot{ position: absolute;bottom:-44px; left:0;width:100%;height:auto;}
+        .des-foot img{ width:100%;}
+        .service{ position: absolute;right:-125px;top:-100px;cursor: pointer;}
+        .returnTop{ margin:40px auto;}
+        .pageScroll{ border-radius: 20px; cursor:pointer;font-size:20px;color:#fff;padding:15px 40px;background:#A4D68D;}
+        .courses{ float: none;margin:0 auto; padding: 0px 20px 30px; background:url("/assets_v2/img/special/2017_02_14/top-bg.png") no-repeat;-webkit-background-size: cover; background-size: 100%;}
+        .courses .title{ width:34%;}
+        .course-list{ padding:0 60px; }
+        .course-item{ height:100px; width:33.3%}
+        .course-title{ text-align: center; border-right:2px dashed #D0E870; color:#fff; height:100%;}
+        .course-title01{ background:#26CCFE;}
+        .course-title02{ background:#FF7626;}
+        .course-title03{ background:#A371D0;}
+        .main-title{ font-size:48px;font-weight: bold; }
+        .sub-title{ font-size:20px;}
+        .course-btn{ font-size:20px; line-height:20px; color:#fff; font-weight: bold; height:100%; padding:10px;}
+        .course-btn01{ background:#0FB0FF;}
+        .course-btn02{ background:#FF2D00;}
+        .course-btn03{ background:#6832AA;}
+        .course-share-infos{ position: absolute;bottom: 12%; right: 26%; font-size:18px;color:#fff;}
+        .course-share-infos span{ float: left;line-height: 38px;}
+        .course-share-infos a{ background:url("/assets_v2/img/special/2017_02_14/share-icon-skin.png") no-repeat; width:38px;height:38px;display: block;float: left;margin-right:5px;}
+        .course-share-infos a.share-qq{ background-position: -18px -14px;}
+        .course-share-infos a.share-weixin{ background-position: -74px -14px;}
+        .course-share-infos a.share-tsina{ background-position: -130px -14px;}
+        @media screen and (min-width:320px) and (max-width:768px){
+            .con-wrap{ background-image:none;}
+            .top,.con{ padding-top:10px;padding-bottom:10px; margin:0 auto;}
+            .courses{ background:none;}
+            .courses .title,.title{ width:100%;margin-top:0;}
+            .title .title-name{ font-size:18px;-webkit-text-stroke:initial;}
+            .course-list{ padding:10px 0; margin:0 auto;}
+            .course-item{ margin:5px 0;padding:0 5px 0 0;height:65px;}
+            .courses{ padding:0 10px;}
+            .lesson-list ul{ padding:0;margin:0;}
+            .list-item{ margin:10px 0 0 0;}
+            .des-left, .des-right{ padding:0}
+            .des-left ul{ padding:0;margin:0;}
+            .des-box{ padding:0 0 50px 0;}
+            .des-note{ font-size:25px;}
+            .des-sub{ font-size:12.5px;margin:5px 0;}
+            .des-time{ font-size:15px;line-height: 15px;text-align: center;padding-left:0;}
+            .des-foot{ bottom:-15px;}
+            .course-btn{ max-width: 40px;}
+            .main-title{ font-size:16px;height:35px;line-height:35px; }
+            .sub-title{ font-size:12px; }
+            .course-title{ padding:0;}
+            .course-btn{ padding:0;font-size:16px;line-height:25px;padding-left:6px;padding-top:7px; }
+            .list-title{ width:85%;font-size:12px; }
+            .list-content .main-title{ font-size:12px; }
+            .list-content .sub-title{ font-size:12px; }
+            .list-content .main-title{ height:20px;line-height:20px; }
+            .list-teacher{ font-size:12px;line-height:35px; }
+            .list-price{ width:60px; }
+            .price-last{ font-size:12px; }
+            .price-now{ font-size:12px; }
+            .price-now{ padding-left:15px;padding-top:8px; }
+            .price-now span{ width:50px;left:12px;top:7px; }
+            .customer{ width:25px;position:fixed;z-index:10;right:10px;background:#ff8135;padding-left:6px;color:#fff; }
+			.customer a{ color:#fff; }
+		}
+    </style>
+</head>
+<body>
+
+<section>
+    <div class="head">
+    <div class="share-content course-share-infos hidden-xs hidden-md">
+        <span>分享到：</span>
+        <a href="javascript:;" width="20" height="20" class="share-qq" data-cmd="tqq" title="分享到QQ"></a>
+        <a href="javascript:;" width="20" height="20" class="share-weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="javascript:;" width="20" height="20" class="share-tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    </div>
+        <p class="banner">
+            <img src="/assets_v2/img/special/2017_02_14/banner-img.png" alt="">
+        </p>
+    </div>
+</section>
+<section class="con-wrap">
+    <div class="container">
+        <div class="row main">
+            <section class="top col-lg-18 clearfix">
+                <div class="courses col-lg-16 clearfix">
+                    <p class="title tac"><span class="title-name">一个春季变学霸</span></p>
+                    <ul class="course-list col-lg-20 col-xs-20">
+                       <li class="course-item col-lg-6 col-xs-6">
+                           <a href="/index.course.list?fc=1&sc=7" target="_blank">
+                           <div class="course-title course-title01 col-lg-16 col-xs-15">
+                               <p class="main-title">小学</p>
+                               <p class="sub-title">领跑新学期</p>
+                           </div>
+                           <div class="course-btn course-btn01 col-lg-4 col-xs-5">
+                               <span class="hidden-xs">点击抢课</span>
+                               <span class="visible-xs">抢课</span>
+                           </div>
+                           </a>
+                       </li>
+                        <li class="course-item col-lg-6 col-xs-7">
+                            <a href="/index.course.list?fc=1&sc=8" target="_blank">
+                           <div class="course-title course-title02 col-lg-16 col-xs-15">
+                               <p class="main-title">初中</p>
+                               <p class="sub-title">任性提分</p>
+                           </div>
+                           <div class="course-btn course-btn02 col-lg-4 col-xs-5">
+                               <span class="hidden-xs">点击抢课</span>
+                               <span class="visible-xs">抢课</span>
+                           </div>
+                            </a>
+                       </li>
+                        <li class="course-item col-lg-6 col-xs-20">
+                            <a href="/index.course.list?fc=1&sc=9" target="_blank">
+                           <div class="course-title course-title03 col-lg-16 col-xs-15">
+                               <p class="main-title">高中</p>
+                               <p class="sub-title">迎战高考</p>
+                           </div>
+                           <div class="course-btn course-btn03 col-lg-4 col-xs-5">
+                               <span class="hidden-xs">点击抢课</span>
+                               <span class="visible-xs">抢课</span>
+                           </div>
+                            </a>
+                       </li>
+
+                    </ul>
+                </div>
+            </section>
+            <section class="lessons con clearfix col-lg-18">
+                <div class="service hidden-xs"><img src="/assets_v2/img/special/2017_02_14/QQ.png" /></div>
+                <div class="customer visible-xs"><a href="mqqwpa://im/chat?chat_type=wpa&uin=1041237235&version=1&src_type=web&web_src=oicqzone.com">立即咨询课程</a></div>
+                <p class="title tac"><span class="title-name">小学春季专题课</span></p>
+                <div class="lesson-list">
+                    <ul>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://dengweixing.yunke.com/log/hz/entry?pr=ck63&url=https://dengweixing.yunke.com/course.info.show/21401#1" target="_blank">
+                            <div class="list-box list-box01">
+                                <div class="list-title">六年级/数学</div>
+                                <div class="list-content list-content01">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">小升初综合训练</p>
+                                </div>
+                                <div class="list-teacher">主讲：邓老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：200</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>180
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://quxue.yunke.com/log/hz/entry?pr=cb65&url=https://quxue.yunke.com/course.info.show/22308#1" target="_blank">
+                            <div class="list-box  list-box01">
+                                <div class="list-title">全年级/语文</div>
+                                <div class="list-content list-content01">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">国学系列班</p>
+                                </div>
+                                <div class="list-teacher">主讲：袁老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：400</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>300
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://quxue.yunke.com/log/hz/entry?pr=uh66&url=https://quxue.yunke.com/course.info.show/22313#1" target="_blank">
+                            <div class="list-box list-box01">
+                                <div class="list-title">高年级/奥数</div>
+                                <div class="list-content list-content01">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">春季奥数班</p>
+                                </div>
+                                <div class="list-teacher">主讲：刘老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：500</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>400
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://100.yunke.com/log/hz/entry?pr=yx64&url=https://www.gn100.com/course/info/show/7576" target="_blank">
+                            <div class="list-box list-box01">
+                                <div class="list-title">四年级/数学</div>
+                                <div class="list-content list-content01">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">竞赛/培优班</p>
+                                </div>
+                                <div class="list-teacher">主讲：任老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：1500</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>1200
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://100.yunke.com/log/hz/entry?pr=xe67&url=https://100.yunke.com/course.info.show/22209" target="_blank">
+                            <div class="list-box list-box01">
+                                <div class="list-title">六年级/数学</div>
+                                <div class="list-content list-content01">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">竞赛班</p>
+                                </div>
+                                <div class="list-teacher">主讲：熊老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：1500</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>1200
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://100.yunke.com/log/hz/entry?pr=vo68&url=https://www.gn100.com/course.info.show/7578" target="_blank">
+                            <div class="list-box list-box01">
+                                <div class="list-title">六年级/数学</div>
+                                <div class="list-content list-content01">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">竞赛班</p>
+                                </div>
+                                <div class="list-teacher">主讲：张老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：1500</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>1200
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </section>
+            <section class="lessons con clearfix col-lg-18">
+                <p class="title tac"><span class="title-name">初中春季专题课</span></p>
+                <div class="lesson-list">
+                    <ul>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://cjxxpt.yunke.com/log/hz/entry?pr=hz57&url=https://cjxxpt.yunke.com/course.info.show/11426" target="_blank">
+                            <div class="list-box  list-box02">
+                                <div class="list-title">初二/语文</div>
+                                <div class="list-content list-content02">
+                                    <p class="main-title">小窗语文</p>
+                                    <p class="sub-title">作文系列</p>
+                                </div>
+                                <div class="list-teacher">主讲：李老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：800</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>720
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://yywg.yunke.com/log/hz/entry?pr=xm60&url=https://yywg.yunke.com/course.info.show/22311" target="_blank">
+                            <div class="list-box list-box02">
+                                <div class="list-title">初三/数学</div>
+                                <div class="list-content list-content02">
+                                    <p class="main-title">2017春季</p>
+                                    <p class="sub-title">数学突击班</p>
+                                </div>
+                                <div class="list-teacher">主讲：王老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：200</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>100
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://cjxxpt.yunke.com/log/hz/entry?pr=mz62&url=https://cjxxpt.yunke.com/course.info.show/11409" target="_blank">
+                            <div class="list-box list-box02">
+                                <div class="list-title">初三/英语</div>
+                                <div class="list-content list-content02">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">理实冲刺班</p>
+                                </div>
+                                <div class="list-teacher">主讲：彭老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：1200</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>1080
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://cjxxpt.yunke.com/log/hz/entry?pr=if59&url=https://cjxxpt.yunke.com/course.info.show/11401" target="_blank">
+                            <div class="list-box list-box02">
+                                <div class="list-title">初二/物理</div>
+                                <div class="list-content list-content02">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">物理理实集训</p>
+                                </div>
+                                <div class="list-teacher">主讲：李老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：1200</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>1080
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://cjxxpt.yunke.com/log/hz/entry?pr=zb58&url=https://cjxxpt.yunke.com/course.info.show/11408" target="_blank">
+                            <div class="list-box list-box02">
+                                <div class="list-title">初二/英语</div>
+                                <div class="list-content list-content02">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">英语理实集训</p>
+                                </div>
+                                <div class="list-teacher">主讲：彭老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：1200</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>1080
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://cjxxpt.yunke.com/log/hz/entry?pr=dx61&url=https://cjxxpt.yunke.com/course.info.show/11414" target="_blank">
+                            <div class="list-box list-box02">
+                                <div class="list-title">初三/化学</div>
+                                <div class="list-content list-content02">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">化学中考冲刺班</p>
+                                </div>
+                                <div class="list-teacher">主讲：伍老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：1200</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>1080
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </section>
+            <section class="lessons con clearfix col-lg-18">
+                <p class="title tac"><span class="title-name">高中春季专题课</span></p>
+                <div class="lesson-list">
+                    <ul>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://cjxxpt.yunke.com/log/hz/entry?pr=zk51&url=https://cjxxpt.yunke.com/course.info.show/11392" target="_blank">
+                            <div class="list-box  list-box03">
+                                <div class="list-title">高一/语文</div>
+                                <div class="list-content list-content02">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">语文冲刺600</p>
+                                </div>
+                                <div class="list-teacher">主讲：黄老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：1440</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>1296
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://cjxxpt.yunke.com/log/hz/entry?pr=uh56&url=https://cjxxpt.yunke.com/course.info.show/11407" target="_blank">
+                            <div class="list-box list-box03">
+                                <div class="list-title">高一/数学</div>
+                                <div class="list-content list-content03">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">高考提分班</p>
+                                </div>
+                                <div class="list-teacher">主讲：何老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：1440</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>1296
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://cjxxpt.yunke.com/log/hz/entry?pr=er52&url=https://cjxxpt.yunke.com/course.info.show/11396" target="_blank">
+                            <div class="list-box list-box03">
+                                <div class="list-title">高一/英语</div>
+                                <div class="list-content list-content03">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">英语冲刺600</p>
+                                </div>
+                                <div class="list-teacher">主讲：吕老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：1440</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>1296
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://cjxxpt.yunke.com/log/hz/entry?pr=go54&url=https://cjxxpt.yunke.com/course.info.show/11415" target="_blank">
+                            <div class="list-box list-box03">
+                                <div class="list-title">高一/化学</div>
+                                <div class="list-content list-content03">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">化学冲刺600</p>
+                                </div>
+                                <div class="list-teacher">主讲：李老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：1440</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>1296
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://cjxxpt.yunke.com/log/hz/entry?pr=lq55&url=https://cjxxpt.yunke.com/course.info.show/11457" target="_blank">
+                            <div class="list-box list-box03">
+                                <div class="list-title">高二/数学</div>
+                                <div class="list-content list-content03">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">数学冲刺600</p>
+                                </div>
+                                <div class="list-teacher">主讲：何老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：1440</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>1296
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                        <li class="list-item col-lg-6 col-xs-10">
+                            <a href="http://cjxxpt.yunke.com/log/hz/entry?pr=to53&url=https://cjxxpt.yunke.com/course.info.show/11410 target="_blank">
+                            <div class="list-box list-box03">
+                                <div class="list-title">高一/物理</div>
+                                <div class="list-content list-content03">
+                                    <p class="main-title">2017年春季</p>
+                                    <p class="sub-title">物理冲刺600</p>
+                                </div>
+                                <div class="list-teacher">主讲：钟老师</div>
+                            </div>
+                            <div class="list-price">
+                                <div class="price-last hidden-xs">原价：1440</div>
+                                <div class="price-now">
+                                    <span>折扣价</span>1296
+                                </div>
+                            </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section class="des clearfix col-lg-18">
+                <div class="des-left col-lg-10 col-xs-20">
+                    <ul class="des-list">
+                        <li class="des-item col-lg-10 col-xs-10"><img src="/assets_v2/img/special/2017_02_14/foot-01.png"></li>
+                        <li class="des-item col-lg-10 col-xs-10"><img src="/assets_v2/img/special/2017_02_14/foot-02.png"></li>
+                        <li class="des-item col-lg-10 col-xs-10"><img src="/assets_v2/img/special/2017_02_14/foot-03.png"></li>
+                        <li class="des-item col-lg-10 col-xs-10"><img src="/assets_v2/img/special/2017_02_14/foot-04.png"></li>
+                    </ul>
+                </div>
+                <div class="des-right col-lg-10 col-xs-20">
+                    <div class="des-box">
+                        <div class="des-note">提分不能等</div>
+                        <div class="des-sub">云课给您最优补习方案</div>
+                        <div class="des-time">
+                            活动时间
+                            <span class="time-interval">2月18日-5月31日</span>
+                        </div>
+                    </div>
+                    <div class="des-foot">
+                        <img src="/assets_v2/img/special/2017_02_14/foot-bg.png" />
+                    </div>
+                </div>
+            </section>
+            <section class="returnTop tac">
+                <span class="pageScroll">返回顶部</span>
+            </section>
+        </div>
+    </div>
+</section>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery.share.js')}"></script>
+<script>
+    var sPic = " ";
+    var sTitle = "云课-专业的在线学习平台";
+    var wx_href='{$qrCode}';
+
+    $(".course-share-infos").share({
+        sPic    : sPic,
+        sTitle  : sTitle,
+        wxHref  : wx_href
+    });
+    function openQQ(qq) {
+        window.location.href = "tencent://message/?uin=" + qq + "&Site=gbgjs.com&Menu=yes";
+    }
+    $(".service").click(function(){
+        openQQ(1041237235);
+    })
+	 
+    function pageScroll(){
+        window.scrollBy(0,-100);
+        scrolldelay = setTimeout('pageScroll()',10);
+        var sTop=document.documentElement.scrollTop+document.body.scrollTop;
+        if(sTop==0) clearTimeout(scrolldelay);
+    }
+    $(".pageScroll").click(function(){
+        pageScroll();
+    })
+</script>
+</body>
+</html>

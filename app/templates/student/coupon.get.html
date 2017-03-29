@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>获取优惠劵 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+	<meta name="title" content="{part '/site.main.orgname'} - 优惠管理 - 云课 - 专业的在线学习平台">
+	<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+	<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+	{part "/site.main.header"}
+</head>
+<style>
+.bg{ background:url(/assets_v2/img/getcoupon-bg.png) top center no-repeat #75b131;background-size: 100%;min-height:100%;}
+.person{ position: absolute;right:50px;top:100px;}
+.slogan{ width: 100%;text-align: center;margin-top:100px;}
+h1{ font-size:2em;color:#ffdf00;text-align: center;}
+.cbg{ width:887px;height:541px;background:url(/assets_v2/img/coupon-packets.png) no-repeat top;margin:3rem auto;position:relative;}
+.data{ text-align:center;width:100%;font-size:2.5rem;color:#f23600;padding-top:30px;}
+.discount{ width:100%;float:left;}
+.discount-type{ float: left;font-size:7.5rem;font-weight: bold;color:red;width:45%;text-align:right;}
+.discount-value{ float:right;color:red;display: block;width:52%;font-size:3.5rem;font-weight: bold;margin-top:.2rem;}
+.num{ float:right;color:#f7b52c;display: block;width:52%;font-size:2.6em;font-weight: bold;margin-top:.1em;}
+.area{ color:#ffdf00;font-size:2em;width:100%;text-align: center;}
+.area a{ color:#ffdf00;}
+.get-btn,.ed-btn{ background: #ffdf00;width:10em;font-size:2.6em;font-weight: bold;display: inline-block;text-align: center;box-shadow: 0 .2em .01em #c94036;line-height: 2.3em;border-radius:2em;color: #e94935;}
+.get-btn:hover{ color: #e94935;}
+.ed-btn{ color: #333;background: #dbdbdb;}
+.code-end-info{ font-size: 14px;color:#fff;float: none;overflow: hidden;margin: 0 auto;line-height: 30px;}
+.code-end-info .receive-code-end{ width: 126px;height:120px;display: block;float:left;background: url(/assets_v2/img/receive-code-end.png) no-repeat;background-size: 100%;}
+.code-end-info .fs-txt{ margin-top: 20px;}
+.receive-code-success-bg{ width: 100%;height: 100%;background: #000;opacity: 0.8;filter:Alter(opacity=80); position: fixed;top:0;left:0; z-index:5;}
+.receive-code-success{ width: 416px;height: 255px;position: absolute;top:50%;left:50%;margin-top: -25.5px;margin-left: -208px;background: url(/assets_v2/img/receive-code-success.png) no-repeat;background-size: 100%;z-index: 6;}
+.receive-code-success p{ color:#fff;text-align: center;margin-top: 106px;}
+.receive-code-success .my-recvide-code{ color:#f6ff00;}
+.receive-code-success .use-receive-code{ width: 154px;height: 42px;display: block;margin-top: 73px;margin-left: 140px;}
+.receive-code-success .receive-code-close{ width: 26px;height: 26px;display: block;background: url(/assets_v2/img/receive-code-close.png) no-repeat;position: absolute;top:6px;right:24px;}
+@media screen and (min-width: 320px) and (max-width: 768px) {
+h1,.person { display:none;}
+.code-end-info .fs-txt{ margin-top: 5px;font-size: 12px;}
+.code-end-info .receive-code-end{ width: 50px;height:44px;display: block;float:left;background: url(/assets_v2/img/receive-code-end.png) no-repeat;background-size: 100%;}
+.receive-code-success{ width: 300px;height:200px;margin-top: -80px;margin-left: -150px;}
+.receive-code-success p{ font-size: 12px;margin-top: 76px;margin-left: 14px;}{ }
+.receive-code-success .use-receive-code{ margin-top: 49px; margin-left: 101px; width: 110px;height: 33px;}
+.slogan{ margin-top:5rem;text-align: center;}
+.slogan img{ width:80%;}
+.cbg{ width:100%;height:40rem;background: url(/assets_v2/img/coupon-packets-m.png) no-repeat;background-size: 100%;margin:3rem auto;position: relative;}
+.discount{ width: 100%;}
+.discount-type{ font-size:5rem;width: 100%;left:0;margin-left: 0;margin-right:0;text-align: center;}
+.packets{ margin-bottom:5px;}
+.packets img{ width:5rem;}
+.discount-value{ font-size:2.5rem;margin-top: 0;}
+.num{ font-size:2.5rem;}
+.data{ font-size:1.4rem;padding-top:35px;}
+.get-btn,.ed-btn{ background: #ffdf00;width:16rem;font-size:2.6rem;font-weight: bold;}
+.ed-btn{ color: #333;background: #dbdbdb;}
+}
+</style>
+<body>
+<section class="bg">
+	<div class="container pos-rel">
+		{if !empty($result) && $result->code==0 && isset($result->data[0]->org_name)}
+		<div class="person"><img src="/assets_v2/img/coupon-p.png" alt=""></div>
+		<div class="slogan"><img src="/assets_v2/img/coupon-text.png" alt=""></div>
+		<div class="cbg">
+				<div class="data">有效期：{$result->data[0]->range_time}</div>
+				<div class="discount mb10">
+					{if $result->data[0]->discount_type==1}
+					<div class="discount-type">减{$result->data[0]->discount_value/100}</div>
+					<div class="discount-value hidden-xs hidden-sm">满{$result->data[0]->min_fee/100}可用</div>
+					{/if}
+					{if $result->data[0]->discount_type==2}
+					<div class="discount-type">{$result->data[0]->discount_value/10}折</div>
+					<div class="discount-value hidden-xs hidden-sm">满{$result->data[0]->min_fee/100}可用</div>
+					{/if}
+					<div class="num  hidden-xs hidden-sm">单张劵可用{if $result->data[0]->total_num == 0}无限{else}{$result->data[0]->total_num}{/if}次</div>
+					<p class="col-xs-20 tac packets"><img src="/assets_v2/img/packets.png" alt=""></p>
+				</div>
+				<div class="tac col-xs-20 mb20">
+					{if $operation_status==0}
+					<a href="javascript:;" class="ed-btn">已经领取</a>
+					{else}
+					<a href="javascript:;" class="get-btn">领取优惠劵</a>
+					{/if}
+				<!-- 优惠用完 -->
+					<div class="code-end-info col-md-12 col-xs-16 p0 clearfix" style="display:none;">
+						<span class="receive-code-end mr10"></span>
+						<span class="c-fl fs24 fs-txt">来晚了，优惠券已被领光了</span>
+					</div>
+				<!-- /优惠用完 -->
+				</div>
+				<div class="area mt10 hidden-xs">适用范围：<a href="{$result->data[0]->url}">{$result->data[0]->range_name} </a></div>
+				<h1 class="mt10 hidden-xs">适用机构：{$result->data[0]->org_name}</h1>
+			</div>
+		{else}
+		<div class="person">
+			<img src="/assets_v2/img/coupon-p.png" alt="" />
+		</div>
+		<div class="slogan">
+			<img src="/assets_v2/img/coupon-text.png" alt="" />
+		</div>
+		<div class="cbg">
+			<div class="discount">
+				<div class="discount-type">优惠码不存在</div>
+			</div>
+		</div>
+		{/if}
+		<div class="receive-code-success" style="display:none;">
+			<p class="fs14">优惠券已放入<a href="/student.discount.mydiscount" class="my-recvide-code">我的优惠券</a>中</p>
+			<a href="javascript:;" class="receive-code-close"></a>
+			<a href="/course.list" class="use-receive-code"></a>
+		</div>
+		<div class="receive-code-success-bg" style="display:none;"></div>
+</section>
+<script>
+$(function(){
+	var w,h;
+	if($(window).width()>800){
+		w='476px';
+		h='360px';
+	}else{
+		w='90%';
+		h='400px';
+	}
+	$('.get-btn').click(function(){
+		var _self=$(this);
+		$.ajax('/student/receivecode/Draw',{
+			dataType:'json',
+			type:'post',
+			data:{
+				fk_discount:{$result->data[0]->pk_discount},
+			},
+			success:function (data) {
+				if(data.code==0){
+					_self.addClass('ed-btn').removeClass('get-btn');
+					//layer.msg('成功领取');
+					$('.receive-code-success-bg').show();
+					$('.receive-code-success').show();
+				}else if(data.code == -2) {
+					$('.code-end-info').show();
+					$('.ed-btn').hide();
+					$('.get-btn').hide();
+				}else if(data.code == 30001){
+					layer.open({
+						type: 2,
+						title: false,
+						area: [w, h],
+						shadeClose: true,
+						content: ['/layer.main.userLogin/', 'no']
+					});
+				}else{
+					layer.msg('优惠码失效');
+					_self.addClass('ed-btn').removeClass('get-btn').text('优惠码失效');
+				}
+			},
+			error:function () {
+				layer.msg('网络断了！');
+			}
+		})
+	})
+
+	$('.receive-code-close').click(function() {
+		$('.receive-code-success-bg').hide();
+		$('.receive-code-success').hide();
+	})
+
+});
+</script>
+</body>
+</html>

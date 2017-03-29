@@ -1,0 +1,8 @@
+<?php
+class course_rec extends STpl{
+	function __construct(){
+	}
+	public function pageEntry($inPath){
+		return $this->render("course/rec.html");
+	}
+}

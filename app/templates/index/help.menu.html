@@ -1,0 +1,90 @@
+<div class="col-sm-4 help-menu hidden-xs" id="help-menu-pc">
+    <p class="help-bar fs16"><span class="icon help-arrow-icon"></span><span class="icon help-icon"></span>帮助中心</p>
+    <ul class="nv1">
+        <li {if in_array($type,array('register','edit','unabletospeak'))}class="curr"{/if}>
+            <p href="#" class="fs16"><span class="arrow-down"></span>常见问题</p>
+            <ul class="sub-menu fs14">
+                <li {if $type == 'register'} class="curr"{/if}><a href="/index.help.register">注册和登录</a></li>
+                <li {if $type == 'edit'} class="curr"{/if}><a href="/index.help.edit">修改个人资料</a></li>
+                <li {if $type == 'unabletospeak'} class="curr"{/if}><a href="/index.help.unabletospeak">上课无法语音说话</a></li>
+            </ul>
+        </li>
+        <li {if in_array($type,array('howtopay','howtoclass','mycourse','coupon'))}class="curr"{/if}>
+            <p href="#" class="fs16" id="up"><span class="arrow-down"></span>我是学生</p>
+            <ul class="sub-menu fs14">
+                <li {if $type == 'howtopay'} class="curr"{/if}><a href="/index.help.howtopay">报名与支付</a></li>
+                <li {if $type == 'howtoclass'} class="curr"{/if}><a href="/index.help.howtoclass">如何上课</a></li>
+                <li {if $type == 'mycourse'} class="curr"{/if}><a href="/index.help.mycourse">我的课程</a></li>
+                <li {if $type == 'coupon'} class="curr"{/if}><a href="/index.help.coupon">优惠券</a></li>
+            </ul>
+        </li>
+        <li {if in_array($type,array('howtoteach','editinfo'))}class="curr"{/if}>
+            <p href="#" class="fs16" id="up"><span class="arrow-down"></span>我是老师</p>
+            <ul class="sub-menu fs14">
+                <li {if $type == 'howtoteach'} class="curr"{/if}><a href="/index.help.howtoteach">如何教课</a></li>
+                <li {if $type == 'editinfo'} class="curr"{/if}><a href="/index.help.editinfo">资料维护</a></li>
+            </ul>
+        </li>
+        <li {if in_array($type,array('join','indexmanage','coursemanage','personmanage','order'))}class="curr"{/if}>
+            <p href="#" class="fs16" id="up"><span class="arrow-down"></span>我是管理员</p>
+            <ul class="sub-menu fs14">
+                <li {if $type == 'join'} class="curr"{/if}><a href="/index.help.join">入驻云课</a></li>
+                <li {if $type == 'indexmanage'} class="curr"{/if}><a href="/index.help.indexmanage">首页维护</a></li>
+                <li {if $type == 'coursemanage'} class="curr"{/if}><a href="/index.help.coursemanage">课程管理</a></li>
+                <li {if $type == 'personmanage'} class="curr"{/if}><a href="/index.help.personmanage">老师和学生管理</a></li>
+                <li {if $type == 'order'} class="curr"{/if}><a href="/index.help.order">订单和优惠码</a></li>
+                <li {if $type == 'settle'} class="curr"{/if}><a href="/index.help.settle">结算管理</a></li>
+				<li	{if $type == 'extension'} class="curr"{/if}><a href="/index.help.extension">推广规则</a></li>
+				<li	{if $type == 'distribution'} class="curr"{/if}><a href="/index.help.distribution">渠道分销课程</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+$(function(){
+	$(".help-menu .sub-menu").hide();
+    //$(".help-menu .sub-menu").first().show();
+	$(".nv1>li>p").click(function(){
+		if($(this).parent().find(".sub-menu").css("display")=="none"){
+			$(this).parents('.nv1').find(".sub-menu").slideUp(300);
+            $(this).parent().find(".sub-menu").slideDown(300);
+			$(this).parent().addClass('curr');
+		}else{
+			$(this).parent().find(".sub-menu").slideUp(300);
+			$(this).parent().removeClass('curr');
+		};
+	});
+	var url=document.location.href;
+	var url1=url.split(".com");
+	//console.log(url1[1]);
+	$(".sub-menu a").each(function(){
+		var sss=$(this).attr('href');
+		var url = window.location.href;
+        var loc = url.substring(url.lastIndexOf('/'), url.length);
+      console.log(loc);
+      if(sss===loc){
+			$(this).parent().addClass('curr');
+			$(this).closest('.sub-menu').show();
+			//console.log($(this).parent().html());
+			return false;
+     }
+     if(loc==="/index.help"){
+        $(".help-menu .sub-menu:first").show();
+     }
+     if(loc==="/order"){
+        $(".help-menu .sub-menu:last").show();
+			$(".help-menu .sub-menu:last li:last").addClass('curr');
+     }
+	});
+})
+</script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery.divselect.js')}"></script>
+<script>
+var top_nav_img="{utility_cdn::img('/assets_v2/img/qrcode.jpg')}";
+</script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/top_nav.js')}"></script>
+<script>
+$(function() {
+    //$.divselect(".divselect cite");
+});
+</script>

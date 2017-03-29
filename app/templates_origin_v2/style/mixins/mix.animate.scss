@@ -1,0 +1,12 @@
+@mixin transform($deg:360deg,$duration:0.4s,$timing:ease-out) {
+    //透明度
+    transform: rotateZ($deg);
+    transition: transform $duration $timing;
+}
+@mixin linear-gradient($sColor,$eColor) {
+    background: -webkit-linear-gradient($sColor,$eColor);
+    background: -o-linear-gradient($sColor, $eColor);
+    background: -moz-linear-gradient($sColor,$eColor);
+    background: linear-gradient($sColor,$eColor);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='$sColor',endColorstr='$eColor',GradientType='0');
+}

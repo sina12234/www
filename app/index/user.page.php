@@ -1,0 +1,507 @@
+<?php
+class index_user extends STpl{
+	var $user;
+    function __construct(){
+		$this->user = user_api::loginedUser();
+        if(empty($this->user)){
+			if(!empty($_SERVER['REQUEST_URI'])){
+            	$this->redirect("/index.main.login?url=".$_SERVER['REQUEST_URI']);
+            }else{
+                $this->redirect("/index.main.login");
+            }
+        }
+    }
+
+	public function pageInfo($inPath){
+		$userinfo = user_api::getUser($this->user['uid']);
+		$birthArr = explode('-',$userinfo->birthday);
+		$birthday = new stdclass;
+		$birthday->year  = $birthArr[0];
+		$birthday->month = $birthArr[1];
+		$birthday->day   = $birthArr[2];
+		$userinfo->birthday = $birthday;
+
+		$level0  = region_api::listRegion(0);
+
+		if(empty($userinfo->student->region_level0) && !empty($userinfo->student->province)){
+			foreach($level0 as $le){
+				similar_text($userinfo->student->province,$le->name,$percent);
+				if($percent >= 70){
+					$userinfo->student->region_level0 = $le->region_id;
+					break;
+				}
+			}
+			$level1  = region_api::listRegion(1);
+			foreach($level1 as $le1){
+				similar_text($userinfo->student->city,$le1->name,$percent);
+				if($percent >= 70){
+					$userinfo->student->region_level1 = $le1->region_id;
+					break;
+				}
+			}
+			$params = array();
+			$params['region_level0'] = $userinfo->student->region_level0;
+			$params['region_level1'] = $userinfo->student->region_level1;
+			user_api::setStudentProfile2($this->user['uid'],$params);
+		}
+		//教师资料整合
+        $teacher = user_api::getTeacherInfo($this->user['uid']);
+		if($userinfo->types->teacher==1){
+			$isTeacher=1;
+		}else{
+			$isTeacher=0;
+		}
+		$group = SConfig::getConfig(ROOT_CONFIG."/group.conf","group");
+		$tagRet=teacher_api::getTagUserInUids(array('ids'=>$this->user['uid'],'groupId'=>$group->subject));
+		if(!empty($teacher->good_subject)){
+			$good_subject = explode(",",$teacher->good_subject);
+		}else{
+			$good_subject = !empty($teacher->major) ? (array)$teacher->major : '';
+		}
+		//从t_tag表获取科目标签
+        $setArr = user_api::getsubjectTag($group->subject);
+        $subject_arr= array();
+        if(!empty($setArr)){
+            foreach($setArr as $k=>$v){
+                $subject_arr[$v->pk_tag]=isset($v->name) ? $v->name : ''; 
+            }
+        }
+		$tagArr= array();
+		if(!empty($tagRet->data)){
+			foreach($tagRet->data as $v){
+				$tagArr[] = !empty($v->fk_tag) ? $v->fk_tag : '';
+			} 
+		}
+		$this->assign("subject_id",$good_subject);
+        $this->assign("teacher",$teacher);
+        $this->assign("isTeacher",$isTeacher);
+        $this->assign("good_subject",$tagRet);
+		$this->assign('tagArr',$tagArr);
+        $this->assign('setArr',$setArr);
+		$this->assign("grades",course_grade::$data);
+		$this->assign("level0",$level0);
+		$this->assign("userinfo",$userinfo);
+		$this->render('index/user.info.html');
+	}
+	
+    public function pageSetInfo($inPath){
+		$gender = isset($_POST['gender'])?$_POST['gender']:0;
+		$_POST['real_name'] = addslashes(trim($_POST['real_name']));
+		$briefDesc = !empty(strip_tags($_POST['brief_desc']))?strip_tags($_POST['brief_desc']):'';
+		$title = !empty(strip_tags($_POST['title']))?trim(strip_tags($_POST['title'])):'';
+		$_POST['student_name'] = '';
+		if($this->user['types']->teacher==1){
+			$isTeacher = 1;
+		}else{
+			$isTeacher = 0;
+		}
+		$ret = new stdclass;
+		$ret->result = new stdclass;
+		if(!empty($_POST['name'])){
+			$length_res = utility_tool::check_string($_POST['name'], 15,1);
+			if(!$length_res){
+				$ret->result->code = -1;
+                $ret->result->msg  = '昵称不能超过15个字符';			
+				return json_encode($ret);
+			}		
+			$check_ret =  user_api::checkNickName($this->user['uid'],$_POST['name']);
+			if(!empty($check_ret)){
+				if($check_ret->code == -1){
+					$ret->result->code = -1;
+                	$ret->result->msg  = '昵称已被使用，换一个试试吧';			
+					return json_encode($ret);
+				}
+			}
+		}else{
+			$ret->result->code = -1;
+            $ret->result->msg  = '请填写昵称';			
+			return json_encode($ret);
+		}
+
+		$flag = 0;
+		if(preg_match("/[\x7f-\xff]/", $_POST['real_name'])){
+			$length_res = utility_tool::check_string($_POST['real_name'], 10,1);
+			if(!$length_res){
+				$ret->result->code = -2;
+                $ret->result->msg  = '真实姓名不能超过5个汉字';			
+				return json_encode($ret);
+			}else{
+				$flag = 1;
+			}
+		}
+
+		if(preg_match("/[a-zA-Z\s]+$/", str_replace(' ','',$_POST['real_name']))){
+        	$res = utility_tool::check_string($_POST['real_name'], 50,1);
+			if(!$res){
+                $ret->result->code = -2;
+                $ret->result->msg  = '真实姓名不能超过25个英文字符';
+                return json_encode($ret);
+            }else{
+				$flag = 1;
+			}
+        }
+		if($flag == 0){
+			$ret->result->code = -2;
+            $ret->result->msg  = '真实姓名输入格式不正确';
+            return json_encode($ret);
+		}
+		//个人资料,教师资料整合
+		if($isTeacher==1){
+			$college=!empty($_POST['college'])?trim($_POST['college']):'';
+			if(empty($college)){
+				$ret->result->code = -3;
+				$ret->result->msg  = '毕业院校不能为空';
+				return json_encode($ret);
+			}
+			if(mb_strlen($college,'utf-8')>15){
+			   $ret->result->code = -3;
+			   $ret->result->msg  = '毕业院校不能超过15个汉字';
+			   return json_encode($ret);
+			}
+			$diploma=!empty($_POST['diploma'])?trim($_POST['diploma']):'';
+			
+			$years=!empty($_POST['years'])?(int)$_POST['years']:0;
+			if($years<0){
+			   $ret->result->code = -3;
+			   $ret->result->msg  = '教龄不能为负数';
+			   return json_encode($ret);
+			}
+			$scope=!empty($_POST['scopes'])?$_POST['scopes']:'';
+			$major=!empty($_POST['good_subject'])? $_POST['good_subject']:0;
+		
+			if(empty($major)){
+			   $ret->result->code = -3;
+			   $ret->result->msg  = '请选择在擅长学科';
+			   return json_encode($ret);
+			}
+			$scopeArr=array(
+					'preschool'=>0x01,
+					'primary'=>0x02,
+					'junior'=>0x04,
+					'senior'=>0x08,
+				);
+			$scopes=0;
+			if(is_array($scope)){
+				foreach($scope as $v){
+					if(isset($scopeArr[$v])){
+						$scopes+=$scopeArr[$v];
+					}
+				}
+			}
+			if(strlen(trim($briefDesc) > 20 )){
+			   $ret->result->code = -3;
+			   $ret->result->msg  = '一句话介绍不能超过20个汉字';
+			   return json_encode($ret);
+			}	
+			if(empty($title)){
+			   $ret->result->code = -3;
+			   $ret->result->msg  = '教师个人头衔不能为空';
+			   return json_encode($ret);
+			}
+			if(empty(trim($_POST['desc']))){
+			   $ret->result->code = -3;
+			   $ret->result->msg  = '教师简介不能为空';
+			   return json_encode($ret);
+			}
+			$desc=!empty(strip_tags($_POST['desc']))?strip_tags($_POST['desc']):'';
+			if(empty($desc)){
+				$ret->result->code = -3;
+			    $ret->result->msg  = '教师简介不能输入特殊标签';
+			    return json_encode($ret);
+			}
+			$data=array(
+                'college'=>$college,
+                'title'=>$title,
+                'years'=>$years,
+                'scopes'=>$scopes,
+                'diploma'=>$diploma,
+                'good_subject'=>$major,
+                'desc'=>$desc,
+				'brief_desc'=>$briefDesc
+            );
+			$res1 = user_api::setTeacherInfo($this->user['uid'],$data);
+			$res2=user_api::updateUser($this->user['uid'],array('last_updated'=>date('Y-m-d H:i:s',time())));
+		}
+		$baseRet = user_api::updateBase($this->user['uid'],
+				$_POST['name'],
+				$gender,
+				$_POST['birthday'],
+				$_POST['real_name'],
+				$_POST['address']='',
+				$briefDesc,
+				$_POST['zip_code']=''
+				);
+		$params = $_POST;
+		$profileRet = user_api::setStudentProfile($this->user['uid'],$params);
+		$userInfo = user_api::getUser($this->user['uid']);
+		utility_session::get()['user']['name'] = $userInfo->name;
+		$ret = new stdclass;
+		$ret->result = new stdclass;
+		if( $baseRet && $profileRet){
+			$ret->result->code = 0;
+			$ret->result->msg  = '保存成功!';
+		}else{	
+			$ret->result->code = -3;
+			$ret->result->msg  = '保存失败!';
+		}
+		return json_encode($ret);
+	}
+	
+	public function pageCheckNickName($inPath){
+		$nick_name = !empty($_POST['nickname'])?$_POST['nickname']:'';
+		$uid = $this->user['uid'];
+		$result = array('code'=>-2,'msg' =>'请填写昵称' );
+		if(!empty($nick_name)){
+			$ret = user_api::checkNickName($uid,$nick_name);
+			if($ret->code == -1 ){
+				$result = array('code'=>-1,'msg' =>'昵称已被使用，换一个试试吧' );
+			}elseif($ret->code == 0){
+				$result = array('code'=>0,'msg' =>'可以使用' );
+			}
+		}
+		return json_encode($result);
+	}
+	
+	public function pageListGrade($inPath){
+		$school_type = !empty($_POST['school_type'])?$_POST['school_type']:'';
+		$gradelist = array();
+		if(!empty($school_type)){
+			if($school_type == 1){
+				$gradelist = array(
+					0=>array('grade_id'=>1001,'grade_name'=>'一年级'),
+					1=>array('grade_id'=>1002,'grade_name'=>'二年级'),
+					2=>array('grade_id'=>1003,'grade_name'=>'三年级'),
+					3=>array('grade_id'=>1004,'grade_name'=>'四年级'),
+					4=>array('grade_id'=>1005,'grade_name'=>'五年级'),
+					5=>array('grade_id'=>1006,'grade_name'=>'六年级'),
+				);
+			}elseif($school_type == 6 ){
+				$gradelist = array(
+					0=>array('grade_id'=>2001,'grade_name'=>'初一'),
+					1=>array('grade_id'=>2002,'grade_name'=>'初二'),
+					2=>array('grade_id'=>2003,'grade_name'=>'初三'),
+					3=>array('grade_id'=>3001,'grade_name'=>'高一'),
+					4=>array('grade_id'=>3002,'grade_name'=>'高二'),
+					5=>array('grade_id'=>3003,'grade_name'=>'高三'),
+				);
+			}
+		}
+		return json_encode($gradelist);
+	}
+
+	public function pageMessage($inPath)
+	{
+		$this->assign('userInfo', $this->user);
+		$this->assign('remindOption', json_encode(message_api::getRemindOption()));
+		$this->display("/index/message.list.html");
+	}
+
+	public function pageLeftMenu()
+	{
+		$this->display('/index/message.left.menu.html');
+	}
+
+	public function pagePassword($inPath){
+		if(!empty($_POST)){
+			$old_password = isset($_POST['old_password'])?$_POST['old_password']:'';
+			$new_password = isset($_POST['new_password'])?$_POST['new_password']:'';
+			$re_password  = isset($_POST['re_password'])?$_POST['re_password']:'';
+			$ret = new stdclass;
+			$ret->result = new stdclass;
+			
+			if( empty($old_password) ){
+				$ret->result->code = -1;
+				$ret->result->msg  = '请输入旧密码！';
+				return json_encode($ret);	
+			}
+			if( empty($new_password)){
+				$ret->result->code = -2;
+				$ret->result->msg  = '请输入新密码！';
+				return json_encode($ret);	
+			}
+			if( empty($re_password)){
+				$ret->result->code = -3;
+				$ret->result->msg  = '请确认新密码！';
+				return json_encode($ret);	
+			}
+			/*if(!preg_match( '/^[\\x20-\\x7e]+$/' ,$new_password)){
+				$ret->result->code = -2;
+				$ret->result->msg  = "密码不能为中文或者特殊字符";
+				return json_encode($ret);	
+			}*/		
+			if(strlen($new_password)<6 || strlen($new_password)>16){
+				$ret->result->code = -2;
+				$ret->result->msg  = "密码不能少于6个，多于16个字符";
+				return json_encode($ret);	
+			}
+			if( $new_password != $re_password ){
+				$ret->result->code = -3;
+                $ret->result->msg="确认密码不正确，请重新输入";
+                return json_encode($ret); 
+			}
+
+			$uid= $this->user['uid'];
+			if(user_api::verifyByUid($uid,$old_password)){
+				$r = user_api::updatePassword($uid,$new_password);
+				if($r===false){
+					$ret->result->code = -2;
+					$ret->result->msg  = '新密码长度不合规范';
+					return json_encode($ret);
+				}else{
+					$ret->result->code = 0;
+					$ret->result->msg  = '保存成功!';
+					return json_encode($ret);
+				}
+
+			}else{
+				$ret->result->code = -1;
+				$ret->result->msg  = '旧密码输入不正确！';
+				return json_encode($ret);
+			}
+		}
+		$this->render('/index/user.password.html');
+	}
+	public function getHistoryHead($user_info){
+		$user_thumb = array();
+		$thumb_ret = user_api::getUserThumbByUid($this->user['uid'], 4);
+        if($thumb_ret->result->code == 0 && $thumb_ret->result->data){
+        	$user_thumb = $thumb_ret->result->data->items;
+        }elseif($user_info->student->thumb_small){
+             $user_thumb = array();
+             $data = new stdclass;
+             $data->thumb_big = $user_info->student->thumb_big;
+             $data->thumb_med = $user_info->student->thumb_med;
+             $data->thumb_small = $user_info->student->thumb_small;
+             $user_thumb[] = $data;
+             $data->fk_user = $this->user['uid'];
+             $data->create_time = date('Y-m-d H:i:s', time());
+             $add_ret = user_api::addUserThumb($data);
+         }
+		return $user_thumb;
+	}
+
+	public function pageListRegion($inPath){
+		if(isset($inPath[3])){
+			return region_api::listRegion($parent_region_id = $inPath[3]);
+		}
+	}
+	public function pageListSchool($inPath){
+		$school = region_api::ListSchool($_GET['region_id'],$_GET['school_type']);
+		if($school)return $school;
+		return array();
+	}
+
+	public function pageUploadPicAjax($inPath){
+		if(!empty($_POST['big']) && empty($_POST['w'])){
+			$ret_up = $this->updateThumbs();
+			if($ret_up){
+				return array('ok'=>1);
+			}else{
+				return array('error'=>'保存失败!');
+			}
+			exit;	
+		}
+		$path = ROOT_WWW."/upload/tmp";
+		$filename = $path."/".$this->user['uid'].".jpg";
+		$filename_dst = $path."/".$this->user['uid'].".dst.png";
+		if(!is_file($filename)){
+			return array("error"=>"请上传头像");
+		}
+		list($width, $height, $type, $attr) = getimagesize($filename);
+		if(!$width || !$height){
+			return array("error"=>"不是有效果的图片");
+		}
+		$targ_w = $_REQUEST['w'];
+		$targ_h = $_REQUEST['h'];
+		switch($type){
+			case 1: $img_r = imagecreatefromgif($filename);break;
+			case 2: $img_r = imagecreatefromjpeg($filename);break;
+			case 3: $img_r = imagecreatefrompng($filename);break;
+			default:
+				return array("error"=>"不是有效果的图片");
+		}	
+		$dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
+
+		$bg = imagecolorallocatealpha($dst_r, 0 , 0 , 0 , 127);
+		imagealphablending($dst_r,false);
+		imagecopyresampled($dst_r,$img_r,0,0,$_POST['x'],$_POST['y'],$targ_w,$targ_h,$_REQUEST['w'],$_REQUEST['h']);
+		imagesavealpha($dst_r,true);
+
+		$r = imagepng($dst_r, $filename_dst);
+		if($r){
+			$thumbs = user_thumb::genByFile($filename_dst);
+			if($thumbs){
+				$ret_up = user_api::updateThumbs($this->user['uid'],$thumbs,$_r);
+				$data = new stdclass;
+				$data->thumb_big = $thumbs['large'];
+                $data->thumb_med = $thumbs['medium'];
+                $data->thumb_small = $thumbs['small'];
+                $data->fk_user = $this->user['uid'];
+                $data->create_time = date('Y-m-d H:i:s', time());			
+				user_api::addUserThumb($data);
+				user_api::loginByUid($this->user['uid']);
+			}
+			return array("ok"=>1);
+		}	
+		return array("error"=>"失败，请重试");
+	}
+    //平台用户上传头像	
+	public function pageUploadPic($inPath){
+		$params = !empty($inPath[3])?$inPath[3]:'';
+		if(is_numeric($params) && $params == 1){
+			$user_info = user_api::getUser($this->user['uid']);
+			$user_thumb = $this->getHistoryHead($user_info);	
+			$this->assign('user_thumb',$user_thumb);
+			$this->assign("userinfo",$user_info);
+			$this->render('index/user.upload.pic.html');
+		}elseif(is_numeric($params) && $params == 2){
+			$select = SConfig::getConfig(ROOT_CONFIG."/user.conf","thumb_select");
+			$pics = array();
+			if(!empty($select)){
+				if(is_array($select)){
+					$pics = $select;
+				}else{
+					$pics = array($select);
+				}
+			}
+			$userinfo = user_api::getUser($this->user['uid']);
+			$user_thumb = $this->getHistoryHead($userinfo);	
+			$this->assign('user_thumb',$user_thumb);
+			$this->assign("userinfo",$userinfo);
+			$this->assign('pics', $pics);
+			$this->render('index/user.default.pic.html');	
+		}else{
+        	$this->redirect("/index");
+		}
+
+	}
+    //平台修改系统头像
+	public function pageDefaultPicAjax($inPath){
+		if( !empty($_POST['big'])){
+			$ret_up = $this->updateThumbs();
+			$ret = new stdclass;
+			$ret->result = new stdclass;
+			if( $ret_up ) {
+				$ret->result->code = 0;
+				$ret->result->msg  = '保存成功!';		
+			}else{
+				$ret->result->code = -1;
+				$ret->result->msg  = '保存失败!';		
+			}
+			return json_encode($ret);
+		}
+	}
+	public function updateThumbs(){
+		$pic = new stdclass;
+        $pic->thumb_big = $_POST['big'];
+        $pic->thumb_med = $_POST['med'];
+        $pic->thumb_small = $_POST['small'];
+        $avatar = array("large"=>$pic->thumb_big,"medium"=>$pic->thumb_med,"small"=>$pic->thumb_small);
+        $ret_up = user_api::updateThumbs($this->user['uid'], $avatar);
+        $pic->fk_user = $this->user['uid'];
+        $pic->create_time = date('Y-m-d H:i:s', time());
+        user_api::addUserThumb($pic);
+        user_api::loginByUid($this->user['uid']);
+		return $ret_up;
+	}
+}

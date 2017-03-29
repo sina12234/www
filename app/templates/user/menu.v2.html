@@ -1,0 +1,237 @@
+        <div class="user-left-menu pd0 col-md-4 hidden-xs hidden-sm">
+			{if !in_array($type,$infoMenuNoDisplay)}
+			<input type="hidden" value="{$isTeacher}" name="IsTeacher"/>
+			<input type="hidden" value="{$type}" name="Type"/>
+			<div class="user-info">
+                <div class="u-l-face face-post-icon info-head ">
+                    <a href="student.main.uploadPic/1" class="face-fixed fs14"><em>{'点击修改头像'|tr:'site.user'}</em></a>
+					<img src="{if !empty($userInfo->avatar->large)}{$userInfo->avatar->large}{else}{utility_cdn::img(' /assets_v2/img/1.png')}{/if}" alt="">
+                    {if !empty($isTeacher) and ($type=='teacher' or $type=='default')}
+                    <span class="t-users-icon"><i>{'教师'|tr:'site.user'}</i></span>
+                    {elseif !empty($isTeacher) and $type=='student'}
+                    <span class="s-users-icon"><i>{'学生'|tr:'site.user'}</i></span>
+                    {/if}
+                    <a href="https://{$platform_url}/index.rank.rule" target="_blank" class="level-icon level-icon{$userLevel}" id="levelIconLeft"></a>
+                </div>
+				{if !empty($isTeacher) and ($type=='teacher' or $type=='default')}
+				<div class="tac pt5 gift-flower">
+					<span class="gift-flower-icon"></span>共<em id="gift-total-num">0</em>朵
+				</div>
+				{/if}
+                <div class="name fs18">
+                    {$userInfo->name}
+                </div>
+                <div class="other col-sm-20">
+                    <div class="local col-lg-12 col-md-20">
+						<i class="local-icon"></i>
+						<span class="c-fl">{$province} {$city}</span>
+					</div>
+                    <a href="/student.main.infobase" class="col-lg-8 hidden-md orange-link set c-fr" target="_blank">
+						<i class="set-icon"></i>
+						{'基础设置'|tr:'site.user'}
+					</a>
+                </div>
+				<div class="clear"></div>
+            </div>
+			{/if}
+
+				{if in_array($css,$menuArr)}
+				<ul class="left-menu">
+					<li class=' nav-menu-box ' >
+						<a class="nav-menu {if $css=='infobase'}active{/if}" href="/student.main.infobase">
+							<span class="nav-icon nav-infobase"></span>
+							<span class="nav-tag">
+								{'个人资料'|tr:'site.user'}
+							</span>
+						</a>
+					</li>
+					<li class=' nav-menu-box ' >
+						<a class="nav-menu {if $css=='infouploadpic'}active{/if}" href="/student.main.uploadPic/1">
+							<span class="nav-icon nav-uploadPic"></span>
+								<span class="nav-tag">
+									{'修改头像'|tr:'site.user'}
+								</span>
+						</a>
+					</li>
+					
+					<li class=' nav-menu-box ' >
+						<a class="nav-menu {if $css=='address'}active{/if}" href="/student.main.address/1">
+							<span class="nav-icon nav-uploadPic"></span>
+								<span class="nav-tag">
+									{'收货地址'|tr:'site.user'}
+								</span>
+						</a>
+					</li>
+					
+					{*<li class=' nav-menu-box ' >
+						<a class="nav-menu {if $css=='list'}active{/if}" href="/user.message">
+							<span class="nav-icon nav-message"></span>
+								<span class="nav-tag">
+									{'我的消息'|tr:'site.user'}
+								</span>
+						</a>
+					</li>*}
+					<li class=' nav-menu-box ' >
+						<a class="nav-menu {if $css=='infopassword'}active{/if}" href="/student.security.password">
+							<span class="nav-icon nav-password"></span>
+								<span class="nav-tag">
+									{'安全设置'|tr:'site.user'}
+								</span>
+						</a>
+					</li>
+				</ul>
+				{elseif in_array($learnCss,$teach)}
+				<ul class="left-menu">
+					<li class=' nav-menu-box ' >
+						<a class="nav-menu {if $learnCss=='growth'}active{/if}" href="/student.main.growth">
+							<span class="nav-icon nav-studentMain"></span>
+							<span class="nav-tag">
+								{'首页'|tr:'LearningCenter'}
+							</span>
+						</a>
+					</li>
+					<li class=' nav-menu-box ' >
+						<a class="nav-menu {if $learnCss=='mycourse'}active{/if}" href="/student.course.mycourse">
+							<span class="nav-icon nav-studentCourse"></span>
+							<span class="nav-tag">
+								{'我的课程'|tr:'LearningCenter'}
+							</span>
+						</a>
+					</li>
+					<li class=' nav-menu-box' >
+						<a class="nav-menu  {if $learnCss=='studentTaskListShow'}active{/if}" href="/task.commitTask.studentTaskListShow">
+							<span class="nav-icon nav-studentWork"></span>
+							<span class="nav-tag">
+								{'我的作业'|tr:'LearningCenter'}
+							</span>
+						</a>
+					</li>
+					<li class=' nav-menu-box ' >
+						<a class="nav-menu {if $learnCss=='myorder'}active{/if}" href="/student.order.myorder">
+							<span class="nav-icon nav-studentOrder"></span>
+							<span class="nav-tag">
+								{'我的订单'|tr:'LearningCenter'}
+							</span>
+						</a>
+					</li>
+					<li class=' nav-menu-box ' >
+						<a class="nav-menu {if $learnCss=='myfav'}active{/if}" href="/student.fav.myfav">
+							<span class="nav-icon nav-studentFav"></span>
+							<span class="nav-tag">
+								{'我的收藏'|tr:'LearningCenter'}
+							</span>
+						</a>
+					</li>
+					<li class=' nav-menu-box ' >
+						<a class="nav-menu {if $learnCss=='mydiscount'}active{/if}" href="/student.discount.mydiscount">
+							<span class="nav-icon nav-studentDiscount"></span>
+							<span class="nav-tag">
+								{'我的优惠券'|tr:'LearningCenter'}
+							</span>
+						</a>
+					</li>
+				</ul>
+				{elseif(!empty($isTeacher)&&$type=='teacher')}
+				<ul class="left-menu">
+					{*
+					<li {if $learnCss=="edit"}class="curr"{/if}><a href="/teacher.manage.edit"><span class="icon help-arrow-icon"></span><span class="t-fs c-fl"></span><span class="icon icon7 c-fl"></span>{'教师资料'|tr:'LearningCenter'}</a> </li>
+					*}
+                    <li class=' nav-menu-box ' >
+                        <a class="nav-menu {if $learnCss=='entry'}active{/if}" href="/teacher.detail.entry/{$userId}">
+                            <span class="nav-icon nav-teacherMain"></span>
+							<span class="nav-tag">
+								{'我的主页'|tr:'LearningCenter'}
+							</span>
+                        </a>
+                    </li>
+                    <li class=' nav-menu-box ' >
+                        <a class="nav-menu {if $learnCss=='newtimetable'}active{/if}" href="/teacher.course.timetable2">
+                            <span class="nav-icon nav-teacherCourse"></span>
+							<span class="nav-tag">
+								{'课程表'|tr:'LearningCenter'}
+							</span>
+                        </a>
+                    </li>
+                    <li class=' nav-menu-box ' >
+                        <a class="nav-menu {if $learnCss=='teacherOfCourseList'}active{/if}" href="/teacher.course.teacherOfCourseList">
+                            <span class="nav-icon nav-teacherList"></span>
+							<span class="nav-tag">
+								{'在教课程'|tr:'LearningCenter'}
+							</span>
+                        </a>
+                    </li>
+					<li class=' nav-menu-box' >
+						<a class="nav-menu  {if $learnCss=='teacherTaskList'}active{/if}" href="/task/publishTask/teacherTaskList">
+							<span class="nav-icon nav-workList"></span>
+							<span class="nav-tag">
+								{'作业列表'|tr:'LearningCenter'}
+							</span>
+						</a>
+					</li>
+					<!--
+					<li {if $learnCss=="timetable"}class="curr"{/if}>
+						<a href="/teacher.course.timetable">
+							<span class="menu-list-side"></span>
+							<span class="icon help-arrow-icon"></span>
+							<span class="t-fs c-fl"></span>
+							<span class="icon icon5 c-fl"></span>
+							{'我的课程'|tr:'LearningCenter'}
+							<span class="arrow-down"></span>
+						</a>
+					</li>
+					-->
+                    <li class=' nav-menu-box ' >
+                        <a class="nav-menu {if $learnCss=='student'}active{/if}" href="/teacher.manage.student">
+                            <span class="nav-icon nav-teacherStudent"></span>
+							<span class="nav-tag">
+								{'我的学生'|tr:'LearningCenter'}
+							</span>
+                        </a>
+                    </li>
+                    <li class=' nav-menu-box ' >
+                        <a class="nav-menu {if $learnCss=='help'}active{/if}" href="/teacher.course.help">
+                            <span class="nav-icon nav-teacherHelp"></span>
+							<span class="nav-tag">
+								{'如何上课'|tr:'LearningCenter'}
+							</span>
+                        </a>
+                    </li>
+				</ul>
+				{/if}
+
+                {if !empty($isTeacher)&&$type=='student'}
+                <a href="/teacher.course.timetable2" class="c-fr orange-link" style="margin-top:20px">
+                	<span class="switch-icon  icon"></span>
+                	{'切换教学中心'|tr:'LearningCenter'}
+                </a>
+                {elseif !empty($isTeacher)&&$type=='teacher'}
+                <a href="/student.course.mycourse" class="c-fr orange-link" style="margin-top:20px">
+                	<span class="switch-icon icon"></span>
+                	{'切换学习中心'|tr:'LearningCenter'}
+                </a>
+                {/if}
+        </div>
+		<script>
+            function FlawerSumNum(element,type){
+                $.ajax({
+                    type:'post',
+                    url:'/user/gift/getStudentOrTeacherGiftSum',
+                    data:{ type:type},
+                    dataType:'json',
+                    success:function(data){
+                        if(data.code=='0'){
+                            element.html(data.gift_count);
+                        }
+                    }
+
+                })
+            }
+            $(function(){
+                var giftTotalNum=$("#gift-total-num");
+				var ISteacher=$("input[name='IsTeacher']").val();
+				var Type=$("input[name='Type']").val();
+                if ((ISteacher!='') && (Type=='teacher' || Type=='default')){
+                    FlawerSumNum(giftTotalNum,2);
+                }
+            })
+		</script>

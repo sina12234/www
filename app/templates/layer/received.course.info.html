@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+	<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+	<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+	<title>收件信息</title>
+	{part "/site.main.header"}
+</head>
+
+<body class="bgf">
+	{part "/site.main.nav3"}
+	<section id="received-course-info">
+		<div class="container">
+			<div class="row">
+				<div class="pt15 fs12 tac mb10">
+					<p>授课机构将通过此联系方式将课程学习资料寄送到您的手中，请务必填写准确信息。</p>
+					<p>本地址将同步到个人中心</p>
+				</div>
+				<ul class="fs12">
+					<li class="mb20 clearfix">
+						<span class="col-md-5 col-xs-6 tar">
+							<em class="cRed ">*</em>
+							收件人：
+						</span>
+						<div class="col-md-10 col-xs-13 pl0">
+							<input type="text" placeholder="长度不超过20个字符" maxlength="20" name="name"/>
+						</div>
+					</li>
+					<li class="mb20 clearfix">
+						<span class="col-md-5 col-xs-6 tar">
+							<em class="cRed ">*</em>
+							收件人电话：
+						</span>
+						<div class="col-md-10 col-xs-13 pl0">
+							<input type="text" placeholder="请填写正确的手机号" maxlength="11" name="tel"/>
+						</div>
+					</li>
+					<li class="mb20 clearfix">
+						<span class="col-md-5 col-xs-6 tar">
+							<em class="cRed ">*</em>
+							收件地址：
+						</span>
+						<div class="col-md-10 col-xs-13 mb10 pl0">
+							<select id="level0" value='0'>
+		                        <option>请选择</option>
+								{if(!empty($level0))}
+		                            {foreach $level0 as $region}
+		                                <option value="{$region->region_id}">{$region->name}</option>
+		                            {/foreach}
+		                        {/if}
+							</select>
+							<select id="level1">
+		                            <option value='0'>请选择</option>                                
+		                    </select>
+		                    <select id="level2">
+		                            <option value='0'>请选择</option>                                
+		                    </select>
+						</div>
+						<div class="col-xs-20 col-md-20 p0">
+							<span class="col-md-5 col-xs-6"></span>
+							<div class="col-md-10 col-xs-13 pl0">
+								<input type="text" placeholder="详细地址" name="add" />
+							</div>
+						</div>
+					</li>
+					<li class="mb20 clearfix">
+						<span class="col-md-5 col-xs-6 tar">
+							备注：
+						</span>
+						<div class="col-md-10 col-xs-13 pl0">
+							<input type="text" placeholder="长度不超过50个字符" maxlength="50" name="remark"/>
+						</div>
+					</li>
+					<input type="hidden" name="type" value="{$type}"/>
+					<input type="hidden" name="cid" value="{$cid}"/>
+					<input type="hidden" name="classId" value="{$classId}"/>
+					<input type="hidden" name="num" value="{if isset($num)}{$num}{/if}"/>
+					<input type="hidden" name="source" value="{$source}"/>
+					<input type="hidden" name="setId" value="{if isset($setId)}{$setId}{/if}"/>
+					<input type="hidden" name="resellOrgId" value="{$resellOrgId}"/>
+					<input type="hidden" name="login_url" value="{if isset($login_url)}{$login_url}{/if}"/>
+					<li class="tac mb20 clearfix">
+						<button class="yellow-btn mr10" id="saveBtn">保存</button>
+						<button class="gray-button" onclick="closeReceivedInfo();">取消</button>
+					</li>
+				</ul>
+			</div>
+		</div>	
+	</section>
+{part "/site.main.footer"}
+</body>
+</html>
+<script type="text/javascript">
+$(function() {
+	$('.usernav').hide();
+	var flag = true;
+	if($(window).width() > 768) {
+	$('#received-course-info').css('height', '460px');
+}
+
+$('.mb10').on('change','#level0',function(event){
+    var lel = this.value;
+    $.get('/student.main.getleve/'+lel, function(data){
+        if (data) {            
+          var html = '';
+          $(data).each(function(i,item){
+            html += '<option value="'+item.region_id+'"';
+            html += '>'+item.name+'</option>';
+          })
+          $('#level1').show().html('<option>请选择</option>'+html);  
+        };
+        },'json');
+})
+
+$('.mb10').on('change','#level1',function(event){
+    var lel = this.value;    
+    $.get('/student.main.getleve/'+lel, function(data){
+    console.log(data)
+        if (data) {            
+          var html = '';
+          $(data).each(function(i,item){
+            html += '<option value="'+item.region_id+'"';
+            html += '>'+item.name+'</option>';
+          })
+          $('#level2').show().html('<option>请选择</option>'+html);  
+        }else{
+            $('#level2').hide();
+        }
+        },'json');
+})
+
+$('#received-course-info').on('click', '#saveBtn', function(event){
+	if(!flag){
+        return false;
+    }
+    flag=false;
+	if($('input[name=name]').val() == '') {
+		layer.msg('请输入收件人');
+	}else if($('input[name=tel]').val() == '') {
+		layer.msg('请输入手机号');
+	}else if($('input[name=tel]').val() < 13000000000 || $('input[name=tel]').val() > 19999999999) {
+		layer.msg('请输入有效手机号');
+	}else if($('input[name=add]').val() == '') {
+		layer.msg('请输入详细地址');
+	}else if($('select[id=level0]').val() == 0 || $('select[id=level1]').val() == 0) {
+		layer.msg('请选择省市');
+	}else{
+	    var params = {
+	        'receiver': $('input[name=name]').val(),
+	        'phone': $('input[name=tel]').val(),
+	        'level0':$('select[id=level0]').val(),
+	        'level1':$('select[id=level1]').val(),
+	        'level2':$('select[id=level2]').val(),
+	        'address':$('input[name=add]').val(),
+	        'desc':$('input[name=remark]').val()        
+	    }
+	    var type = $('input[name=type]').val();	    
+	    //自动报名参数
+	    var cid = $('input[name=cid]').val();
+	    var classId = $('input[name=classId]').val();
+	    var num = $('input[name=num]').val();
+	    var source = $('input[name=source]').val();
+	    var setId = $('input[name=setId]').val(); 
+	    var resellOrgId = $('input[name=resellOrgId]').val();
+	    var login_url = $('input[name=login_url]').val();	    
+	    	$.ajax({
+	        type:'POST',
+	        url :'/student.main.adduseraddress',
+	        data: params,
+	        dataType: 'json',
+	        success:function(res){
+	           if (res.code==0 && type == 'm') {
+				   var url1 = '/site.main.regAjax/'+cid+'/'+classId;
+				   {if !empty($resellOrgId)}
+					   url1 += "/{$resellOrgId}";
+					   {elseif !empty($qudaoCode)}
+					   url1 += "/{$qudaoCode}";
+					   {/if}
+	    		        $.post(url1+'/'+login_url, function(r){
+				    		if (r.code == 1) {				    			
+				    			window.location = r.url;
+				    		}
+	    				},'json')
+	           }else if(res.code == 0){
+					   var url1 = '/layer.main.regAjax/'+cid+'/'+classId+'/'+num+'/'+source+'/'+setId;
+					   {if !empty($resellOrgId)}
+						   url1 += "/{$resellOrgId}";
+						   {elseif !empty($qudaoCode)}
+						   url1 += "/{$qudaoCode}";
+						   {/if}
+	                $.post(url1,function(r){
+		                if (r.code == 0) {		                	
+		                    parent.location.reload();
+						} else if (r.code == 100){							
+		                    parent.location.href = "/order.main.memberinfo/"+r.data;
+		                } else if(r.code > 0){
+		                    $(".x_error_left").html(r.message);
+		                    return false;
+		                } else if (r.code == -2) {
+		                    var index = layer.load(2);
+		                    $.post("/course/pay/check", {
+		                                classId: r.data,
+		                                cid: '{$cid}',
+		                                resellOrgId:'{$resellOrgId}'
+		                            }, function (r) {
+		                                layer.close(index);
+		                                if (r.code == 0) {
+		                                    var resellOrgId = '{$resellOrgId}';
+		                                    if(resellOrgId>0){
+		                                    parent.location.href = "/order.main.buy/course/{$cid}/{$classId}/"+resellOrgId+"";}else{
+		                                    parent.location.href = "/order.main.buy/course/{$cid}/{$classId}/{$qudaoCode}";
+		                                    }
+		                                } else {	                                    
+		                                         parent.location.reload();		                                   
+		                                }
+		                            }, "json"
+		                    );
+		                } else if (r.code == -3 || r.code == -4) {		                	
+		                    parent.location.reload();
+		                } else if (r.code == -6){
+		                    layer.msg(r.message, function(){		                    	
+		                        parent.location.reload();
+		                    });
+		                }else if (r.code == -7){
+							var url1 = "/layer/main/AddUserAddressLayer/{$cid}/{$classId}/{$num}/{$source}/{$setId}"
+							{if !empty($resellOrgId)}
+								url1 += "/{$resellOrgId}";
+								{elseif !empty($qudaoCode)}
+
+								url1 += "/{$qudaoCode}";
+								{/if}
+		                    window.location = url1;
+		                }else {
+		                    layer.msg('{'未知错误'|tr:'site.login'}', function(){		                    	
+		                        parent.location.reload();
+		                    });
+		                }
+		            },"json");
+	           }else if(r.data == 0 && type == 'w'){
+	           		$.post('/weixin.user.regAjax/', function(r){	    		        	
+				    		if (r.code == 1) {				    			
+				    			window.location = r.url;
+				    		}
+	    				},'json')
+	           }else{
+	           		layer.msg(res.msg);
+	           }                
+	        }      
+
+	    });
+	    
+	}
+});
+})
+//取消收件地址
+function closeReceivedInfo() {
+	parent.layer.closeAll();
+	parent.location.reload();
+}
+
+
+</script>

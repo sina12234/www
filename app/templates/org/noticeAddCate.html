@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>增加分类- {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 公告增加 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+<body style="background:#f7f7f7;">
+    <div class="release-nav">
+        <ul id="release-ul">
+        {if !empty($cateList->items)}
+		{foreach($cateList->items as $k=>$v)}
+            <li class="Notice-nodify-li">
+                <span class='release-tit cate-name c-fl'>{$v->name|htmlspecialchars}</span>
+                <p class='notice-modify'>
+                    <span class='modify' data-cid="{$v->pk_cate}">{'修改'|tr:'org'}</span>
+                    <span class='delet' data-cid="{$v->pk_cate}" >{'删除'|tr:'org'}</span>					 
+                    <div class="Confirm c-fr" style="display:none;">
+                        <span class='ConfirmDelete' data-cid="{$v->pk_cate}">{'确定删除'|tr:'org'}</span>
+                        <span class='ConfirmCancel' data-cid="{$v->pk_cate}">{'取消'|tr:'org'}</span>
+                    </div>				 
+                </p>
+            </li>
+		{/foreach}	
+        {/if}
+        </ul>
+        <div class="category">
+            <p class="classification fs14">{'新增分类'|tr:'org'}</p>
+            <span style="display:none;">
+                <div class='category-input'>
+                    <input type="text" name="catename" id="" class="notice-name" placeholder="请输入分类名称(12个字符内)">
+                    <p>
+                        <span id="subcate">{'保存'|tr:'org'}</span>
+                        <span href="#" class="cancel cancel_cate">{'取消'|tr:'org'}</span>
+                    </p>
+                </div>
+            </span>
+        </div>
+		{if empty($cateList->items)}
+			<div class="list-tu"> 
+                 <div class="list-img">
+                     <div class="list-book">
+                        <span style="color:#999;" class="contArticleReminder">您还没有创建分类哦~</span>
+                     </div>
+                 </div>
+            </div>
+			{/if}
+            <div class="Thebutton">
+                <a id="closeButtonSubmit">{'关闭'|tr:'org'}</a>
+            </div>
+        </div> 
+       
+</body>
+<script>
+function mystr(str){
+    var l = str.length; 
+    var blen = 0; 
+    for(i=0; i<l; i++) { 
+        if ((str.charCodeAt(i) & 0xff00) != 0) { 
+		    blen ++; 
+        } 
+        blen ++; 
+	}
+    if(blen>12){
+        layer.msg("不能超过12个字符");
+		return false;
+    }
+}
+    $('.category-input .cancel').on('click',function (){
+        $('.category-input>input').val('');
+    })
+    $('.category>p').on('click',function(){
+        $(this).css('display','none');
+        if($(this).css('display','none')){
+            $('.category span').show();
+			$(".contArticleReminder").hide();
+        }
+    })
+	$(".category").on("click","#subcate",function(){
+		var catename = $.trim($("input[name='catename']").val());
+		catename = catename.replace(/<[^>]+>/g,"");
+		if(catename==''){
+			layer.msg("分类名称不能为空");
+			return false;
+		}	
+		catename = catename.replace(/<[^>]+>/g,"");
+		if(catename == ''){
+			layer.msg("分类名称不能使用特殊标签");
+			return false;
+		}
+		var nameStr = mystr(catename);
+		if(nameStr==false){
+				return false;
+		}
+		$.post("/org.main.ajaxAddCate",{ 'catename':catename },function(r){
+			if(r.status > 0){
+					var li = '<li class="Notice-nodify-li"><span class="release-tit cate-name c-fl">'+catename+'</span><p class="notice-modify"><span class="modify" data-cid="'+r.data+'">修改</span><span class="delet" data-cid="'+r.data+'"> 删除</span></p><div class="Confirm c-fr" style="display:none;"> <span class="ConfirmDelete" data-cid="'+r.data+'">确定删除</span><span class="ConfirmCancel" data-cid="'+r.data+'"> 取消</span></div></li>';
+			$("#release-ul").append(li);
+			//$(".category").hide();
+			}
+		},"json");
+		
+		if($("#release-ul li").length>=9){
+			$(".category").hide();
+		}else{
+			$(".category").show();
+		}
+		
+		if($(".category-input").parent().hide()){
+			$("input[name='catename']").val('');
+			$('.classification').show();
+		}
+		
+		
+	});
+	if($("#release-ul li").length>=10){
+			$(".category").hide();
+		}else{
+			$(".category").show();
+		}
+		
+	var checkedIptVal;
+	$(".IptPosition").hide();
+	//删除
+	$("#release-ul").on("click" ,".delet" ,function() {
+		$(this).parents(".Notice-nodify-li").find(".notice-modify").hide();
+		$(this).parents(".Notice-nodify-li").find(".Confirm").show();
+	})
+	//取消
+	$("#release-ul").on("click" ,".ConfirmCancel" ,function() {
+		$(this).parents(".Notice-nodify-li").find(".notice-modify").show();
+		$(this).parents(".Notice-nodify-li").find(".Confirm").hide();
+	})
+	
+	//确认删除
+	$("#release-ul").on("click",".ConfirmDelete",function(){	
+		$(this).parents(".Notice-nodify-li").hide();
+		var cid = $(this).attr("data-cid");	 
+		$.post("/org.main.delnoticeCateInfo",{ cid:cid },function(r){
+				
+		},"json");
+		$(this).parents(".Notice-nodify-li").remove();
+		if($("#release-ul li").length < 10){
+			$(".category").show();
+		}else{
+			$(".category").hide();
+		}
+    });
+		
+	//修改
+	$("#release-ul").on("click" ,".modify" ,function() {
+		checkedIptVal = $(this).parents(".Notice-nodify-li").find(".release-tit").html();
+		var cid = $(this).attr("data-cid");	 
+		var addTxtBtn = '<span class="subcate mr10" data-cid="'+cid+'">保存</span><span class="addCancelBtn" data-cid="'+cid+'">取消</span>';
+		var addIpt = '<input type="text" name="addIptTxt" class="cate-input-text" value="'+checkedIptVal+'"/>';
+		
+		$(this).parents(".Notice-nodify-li").find(".release-tit").html(addIpt);
+		$(this).parents(".Notice-nodify-li").find(".notice-modify").append(addTxtBtn);
+		$(this).parents(".Notice-nodify-li").find(".modify").hide();
+		$(this).parents(".Notice-nodify-li").find(".delet").hide();
+	});
+	//保存
+	$("#release-ul").on("click" ,".subcate" ,function() {
+		    var iptTxtVal = $(this).parents(".Notice-nodify-li").find("input[name='addIptTxt']").val();
+			var cid  	  =  $(this).attr("data-cid");	
+			var object    = $(this);
+			var name      = $("input[name='addIptTxt']").val();
+			
+			if($.trim(name)==''){
+				layer.msg("分类名称不能为空");
+				return false;
+			}	
+			name = name.replace(/<[^>]+>/g,"");
+			if(name==''){
+				layer.msg("分类名称不能使用特殊标签");
+				return false;
+			}
+			var nameStr = mystr(name);
+			if(nameStr==false){
+				return false;
+			}
+			$.post("/org.main.updateNoticeCate",{ cate_name:name,cid:cid},function(r){
+				
+			},"json");	
+		$(this).parents(".Notice-nodify-li").find(".release-tit").html(iptTxtVal);
+		$(this).parents(".Notice-nodify-li").find(".notice-modify").show();
+		$(this).parents(".Notice-nodify-li").find(".modify").show();
+		$(this).parents(".Notice-nodify-li").find(".delet").show();
+		$(this).parents(".Notice-nodify-li").find(".Confirm").hide();
+		$(this).hide();
+		$(this).parents(".Notice-nodify-li").find(".addCancelBtn").hide();
+	})
+	//添加对应的取消
+	$("#release-ul").on("click" ,".addCancelBtn" ,function() {
+		$(this).parents(".Notice-nodify-li").find(".release-tit").html(checkedIptVal);
+		$(this).parents(".Notice-nodify-li").find(".notice-modify").show();
+		$(this).parents(".Notice-nodify-li").find(".Confirm").hide();
+		$(this).parents(".Notice-nodify-li").find(".subcate").hide();
+		$(this).parents(".Notice-nodify-li").find(".addCancelBtn").hide();
+		$(this).parents(".Notice-nodify-li").find(".modify").show();
+		$(this).parents(".Notice-nodify-li").find(".delet").show();
+		$(this).parents(".Notice-nodify-li").find("input[name='addIptTxt']").hide();
+
+	})
+	//取消
+	$(".category").on("click",".cancel_cate",function(){
+		$(this).parents().parents().addClass(".category");
+        if($(".category-input").parent().hide()){
+            $('.classification').show();
+			$(".contArticleReminder").show();
+        }
+	});
+	
+	$("#closeButtonSubmit,.layui-layer-close").click(function(){
+			//parent.window.location.reload();
+            var cate_select=parent.$("select[name='catename']");
+            cate_select.empty();
+            cate_select.append('<option value="0">默认</option>');
+            $("#release-ul li").each(function(){
+                cate_select.append('<option value="'+$('.modify',this).attr('data-cid')+'">'+ $('.release-tit',this).text()+ '</option>');
+            });
+			parent.layer.closeAll();
+	});
+	
+</script>
+<style>
+.release-nav { padding:0 15px 0 15px;}
+.release-nav ul li{ height:40px;line-height:40px;float: left;width: 100%;font-size:14px;border-bottom: 1px solid #ccc;}
+.release-nav ul li .notice-modify { float: right;padding-right: 20px;}
+.release-nav ul li .notice-modify span{ cursor: pointer;color:#337ab7; }
+.release-nav ul li .notice-modify span:hover { color:#ffa81d; }
+.release-nav ul li span.subcate,.release-nav ul li span.cancel{ color:#337ab7;cursor:pointer; }
+.release-nav ul li span.subcate:hover,.release-nav ul li span.cancel:hover { color:#ffa81d; }
+.category { float: left;width: 100%;}
+.category p { margin-top: 10px;float: left;}
+.category-input { margin-top: 10px;padding-right: 20px;}
+.category-input input { font-size:14px;height:35px;width:200px;float: left;background: none;border: 1px solid #ccc;}
+.category-input p { float: right;padding-right:0px;}
+.category-input p span{ cursor: pointer;font-size:14px;color:#337ab7; }
+.category-input p span:hover { color:#ffa81d; }
+.cate-input-text { width:80%;height:35px;line-height:35px;background:#f1f1f1; }
+.classification { color:#337ab7;}
+.classification:hover { color:#ffa81d;cursor:pointer; }
+.Thebutton a{ width:60px;height:30px;background:#ffa81d;color:#fff;float:left;text-align:center;line-height:30px;font-size:14px;position:absolute;bottom:30px;left:43%;border-radius:5px; }
+.ConfirmDelete,.ConfirmCancel{ color:#337ab7;cursor:pointer; }
+.ConfirmDelete:hover,.ConfirmCancel:hover { color:#ffa81d; }
+</style>
+</html>

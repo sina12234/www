@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>{if !empty($info->real_name)}{$info->real_name}{/if} - 主讲课程 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} -  教师首页 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} -  云课(Yunke.com) - 专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+<body class="bgf">
+{part "/site.main.nav"}
+<!--header_index-->
+<div id="teacherNavHeader"></div>
+<script>$("#teacherNavHeader").load("/teacher/detail/NavHeader/{$tid}/course");</script>
+<article class="container pd40">
+    <!--左侧开始-->
+    <div class="col-md-5 th_m_l mt20 hidden-xs hidden-sm">
+        <div class="c-fl m_l_1">
+            <span class="col-sm-6 col-xs-6">
+                <strong>{if(isset($info->student_count))}{$info->student_count}{/if}</strong>
+                <p class="fs14">学生数</p>
+            </span>
+            <span class="col-sm-7 bl_r col-xs-6">
+                <strong>{if(isset($info->course_count))}{$info->course_count}{/if}</strong>
+                <p class="fs14">课程数</p>
+            </span>
+            <span class="col-sm-7 col-xs-6">
+                <strong>{if(isset($info->totaltime))}{number_format($info->totaltime/3600)}{/if}</strong>
+                <p class="fs14">教学时长</p>
+            </span>
+        </div>
+        <article class="c-fl mt20 hidden-xs">
+            <h2 class="th_l_h2"><i></i>基础资料</h2>
+            <div class="mt20 m_l_2">
+                <dl>
+                    <dt>
+                        <span style="margin-right: 60px;">
+                            <i class="icon_1 icon icon_pic"></i>
+                            {if(!empty($info->province))}{$info->province}{/if} {if(!empty($info->city))}{$info->city}{/if}
+                        </span>
+                        {if(isset($info->years))}
+                            <span ><i class="icon_2 icon icon_pic"></i>{$info->years}年教龄</span>
+                        {/if}
+                    </dt>
+                    {if(!empty($info->college))}
+                        <dd><i class="icon_3 icon icon_pic"></i>毕业于 {$info->college} {if(!empty($info->diploma))}{$info->diploma}{/if}</dd>
+                    {/if}
+                    {if(!empty($info->grade))}
+                        <dd><i class="icon_4 icon icon_pic"></i>教学阶段：{$info->grade}</dd>
+                    {/if}
+                    {if(!empty($info->subject))}
+                        <dd><i class="icon_5 icon icon_pic"></i>擅长学科：{$info->subject}</dd>
+                    {/if}
+                </dl>
+                <h3 class=""><i class="icon_6 icon icon_pic"></i>简介</h3>
+                <div class="b_int">
+                    <p class="mt10 intro" >
+                        {if(!empty($info->desc))}{$info->desc}{else}这个老师有一点懒，还没写下什么呢~{/if}
+                    </p>
+                    <a href="javascript:;" class="details">【详细】</a>
+                </div>
+            </div>
+        </article>
+        {if($info->avg_score)}
+        <article class="mt20 c-fl hidden-xs">
+            <h2 class="th_l_h2"><i></i>学生评价</h2>
+            <div class="statistics-cirl-solid-third03 th_eval tac col-md-20 mt40">
+                <!--通过赋值修改font里的百分比-->
+                <font style="display: none"> {if !empty($info->avg_score)}{$info->avg_score*20}{else}00{/if}%</font>
+                <span class="score" style="left: 70px">{$teacher_score}分</span>
+                <div class="eval_pl col-md-20">
+                    <span class="col-md-10" style="border-right:1px solid #e9e9e9;">综合得分<em>{$teacher_score}</em>分</span>
+                    <span class="col-md-10">评价数<em>{$total_user}</em>条</span>
+                </div>
+            </div>
+        </article>
+        {/if}
+    </div>
+    <!--右侧开始-->
+    <div class="col-md-15">
+        <div class="courselist col-md-20 col-sm-20 pd0">
+            <!-- <h2 class="th_l_h2"><i></i>主讲课程
+                 <a href="/teacher/detail/course/{$tid}" class="fr">更多课程>></a>
+            </h2>-->
+            {if (!empty($courseList))}
+            <ul class="techear-courselist fs14 mr_course ">
+                {foreach ($courseList as $v)}
+                <li class="col-md-20 clearfix">
+                    <div class="c-pic col-md-5 col-xs-10 pl0">
+                        <div class="pic">
+                            <a href="//{$v['domain']}/course/info/show/{$v['course_id']}"><img class="imgPic" src="{$v['thumb']}">
+								{if($v['course_type'] == 2)}
+								<span class="taped-class g-icon3 fs12">录播</span>
+                                {elseif($v['course_type'] == 3)}
+								<span class="lineclass-icon taped-icon fs12">线下</span>
+                                {/if}
+							</a>
+                        </div>
+                    </div>
+                    <div class="col-xs-10 col-md-15 row">
+                    <div class="col-md-10 col-xs-20 course_tit pd0 pr0">
+                        <p class="item fs14 new-item ">
+                            <a href="//{$v['domain']}/course/info/show/{$v['course_id']}">{$v['title']}</a>
+                        </p>
+                        <p class="item cDarkgray hidden-xs">
+                            <!--{$v['grade']} {$v['major']} | 共{$v['section_count']}章节 {$v['sectionName']}-->
+                            {if(($v['course_type'] == 1 or $v['course_type'] == 3) && $v['status'] == 3)}
+                                已完结
+                            {/if}
+                        </p>
+
+                    </div>
+                    <div class="col-md-3 col-xs-20 course_buy pl0">
+                        {if($v['fee_type'] == '免费')}
+                        <p class="item fs14 mt38 cGreen">免费</p>
+                        {else}
+                        <p class="item fs14 mt38 cRed">￥{$v['fee_type']}</p>
+                        {/if}
+                    </div>
+                    <div class="rate hidden-xs col-md-5 course_enr">
+                        {if(($v['course_type'] == 1 or $v['course_type'] == 3) && $v['status'] != 1)}
+                            <a href="//{$v['domain']}/course/info/show/{$v['course_id']}">
+                                <p class="item cDarkgray fs12 course_ab2 mt38 cDarkgray fr ">
+                                     {if($v['score'])}{$v['score']}分 | {/if}{if($v['comment'])}{$v['comment']}个评论{/if}
+                                </p>
+                            </a>
+                        {/if}
+                        {if($v['course_type'] == 2)}
+                            <a href="//{$v['domain']}/course/info/show/{$v['course_id']}">
+                                <p class="item cDarkgray fs12 course_ab2 mt38 cDarkgray fr ">
+                                   {if($v['score'])}{$v['score']}分 | {/if}{if($v['comment'])}{$v['comment']}个评论{/if}
+                                </p>
+                            </a>
+                        {/if}
+
+                        {if(($v['course_type'] == 1 or $v['course_type'] == 3) && $v['status'] == 1)}
+                            <p class="course_ab2 cDarkgray fr mt35">{$v['start_time']} 开课</p>
+                        {/if}
+                    </div>
+					<p class="cDarkgray">
+                            <span class="client-logo-name">{$v['orgName']}</span>
+                    </p>
+                    </div>
+                </li>
+                {/foreach}
+            </ul>
+			{/if}
+            {if($offCourse == 1)}
+            <!--既有上架课又有下架课-->
+            <div class="col-md-20 tac pd0">
+                <p class="mt10 c_a3 fs14"  >部分课程已下架没有展示</p>
+            </div>
+            {elseif(!empty($info->course_count) && empty($courseList))}
+            <!--只有下架课-->
+            <div class="col-md-20 tac pd0">
+                <img src="{utility_cdn::img('/assets_v2/img/blank_pic.jpg')}" >
+                <p class="mt10 c_a3 fs14"  >部分课程已下架没有展示，去别处看看吧</p>
+            </div>
+            {elseif(empty($courseList))}
+            <!--没有课程时状态-->
+            <div class="col-md-20 tac pd0">
+                <img src="{utility_cdn::img('/assets_v2/img/blank_pic.jpg')}" >
+                <p class="mt10 c_a3 fs14"  >老师还没有课程，去别处看看吧</p>
+            </div>
+            {/if}
+        </div>
+    </div>
+</article>
+<!-- 内容结束 -->
+<div id="rightWindow"></div>
+<script>$("#rightWindow").load("/org.rightWindow.rightWindow");</script>
+{part "/site.main.footer"}
+<!-- /content -->
+<script src="{utility_cdn::js('/assets_v2/js/jquery.raphael.js')}" type="text/javascript"></script>
+<script src="{utility_cdn::js('/assets_v2/js/jquery.cirls.js')}" type="text/javascript"></script>
+</body>
+</html>

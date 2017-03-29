@@ -1,0 +1,243 @@
+<html>
+<head>
+<title>修改头像 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+<link rel="stylesheet" href="{utility_cdn::css('/assets/js/jcrop/css/jquery.Jcrop.css')}" type="text/css" />
+<script src="{utility_cdn::js('/assets_v2/js/plupload.full.min.js')}"></script>
+<script src="{utility_cdn::js('/assets/js/jcrop/js/jquery.Jcrop.min.js')}"></script>
+</head>
+<style type="text/css">
+.user-menu li a span:nth-child(3) img{ margin-top: 15px;}
+.plupload input{ width: 100%;height: 28px;position: absolute;top:2px;left:2px;z-index: 3;}
+</style>
+<body>
+{part "/site.main.nav3"}
+<!-- mob nav -->
+<div class="g-nav hidden-lg hidden-md">
+	<ul class="swiper-wrapper" id="mob-nav">
+		<li class="swiper-slide"><a href="/student.main.infobase">基础资料</a></li>
+		<li class="swiper-slide"><a href="/student.main.uploadPic/1" class="active">修改头像</a></li>
+		<li class="swiper-slide"><a href="/student.main.address">修改地址</a></li>
+		<li class="swiper-slide"><a href="/student.security.password">安全设置</a></li>
+	</ul>
+</div>
+<section class="org-section">
+<div class="container">
+	<div class="row">
+		{part "/user.main.menu.infouploadpic"}
+        <div class="right-main col-md-16 col-xs-20">
+			<div class="tab-main">
+				<div class="tab-hd">
+                    <a class="tab-hd-opt curr" href="/student.main.uploadPic/1">{'自定义头像'|tr:'site.user'}</a>
+                    <a class="tab-hd-opt" href="/student.main.uploadPic/2">{'系统头像'|tr:'site.user'}</a>
+                </div>
+            </div>
+		<form id="up-form" name="upload" method="post"  >
+			<input name="big" type="hidden" value="">
+			<input name="med" type="hidden" value="">
+			<input name="small" type="hidden" value="">
+ 			<input type="hidden" size="4" id="x" name="x">
+ 			<input type="hidden" size="4" id="y" name="y">
+ 			<input type="hidden" size="4" id="x2" name="x2">
+ 			<input type="hidden" size="4" id="y2" name="y2">
+ 			<input type="hidden" size="4" id="w" name="w">
+ 			<input type="hidden" size="4" id="h" name="h">
+ 			<div class="col-sm-20 col-md-12 mt20 col-xs-20 p0 c-fl upload-but-click" id="upload-but-click">
+                    <button id="browse" class="gray-btn" alt={'本地上传'|tr:'site.user'} style="position: relative; z-index: 1;">{'本地上传'|tr:'site.user'}</button>
+                    <div id="html5_1a62n9ttv1s1n1bcp1ti130u1b533_container" class="moxie-shim moxie-shim-html5 hidden">
+                        <input id="html5_1a62n9ttv1s1n1bcp1ti130u1b533" type="file" accept="image/jpeg,image/gif,image/png">
+                    </div>
+                <div>
+    				<p class="cGray mt10 text_info_pic">{'仅支持.JPG、.PNG图片格式文件，且文件图片小于8M'|tr:'site.user'}</p>
+				</div>
+    			<div class="photoPicShow col-sm-18 col-xs-20 p0 mt20">
+					<img id="img_o" src="" style="display:none;" />{*<a class="fs16 showa"  href="javascript:;" style="text-decoration: none; color:#666;">选择你要上传的头像</a>*}
+					<label id="progress" for="" class="photoRate"></label>
+				</div>
+            </div>
+            <div class="col-sm-8 hidden-xs hidden-sm c-fr">
+    			<p class="fs16 mt20">{'预览'|tr:'site.user'}：</p>
+    			<p class="cYellow mt10 fs14">{'您上传的头像会自动生成两种尺寸，注意清晰度'|tr:'site.user'}</p>
+    			<ul class="photoView mt25">
+      				<li class="c-fl mr10">
+	  					<div id="panel" style="width:128px;height:128px;overflow:hidden">
+      						<img id="img_p" src="{$userinfo->avatar->large}"  style="width:128px;height:128px;"  alt=""/>
+						</div>
+      					<p class="tac mt10 cGray hd-lh30">128*128 {'像素'|tr:'site.user'}</p>
+					</li>
+      				<li class="c-fl">
+	  					<div id="panel-fr" style="width:68px;height:68px;overflow:hidden">
+	  						<img src="{$userinfo->avatar->medium}" style="width:68px;height:68px;" id="img_p2"  alt=""/>
+						</div>
+						<p class="tac mt10 cGray hd-lh30">68*68 {'像素'|tr:'site.user'}</p>
+					</li>
+				</ul>
+    			<div class="clear"></div>
+    			<p class="mt20 clear">{'我使用过的头像'|tr:'site.user'}：</p>
+    			<ul class="mt15">
+					{if(!empty($user_thumb))}
+					{foreach($user_thumb as $k=>$to)}
+      				<li {if($k>0)}class="c-fl ml10"{else} class="c-fl"{/if}>
+					<img class="his-pic" src="{utility_cdn::file($to->thumb_small)}"  bigurl="{utility_cdn::file($to->thumb_big)}" medurl="{utility_cdn::file($to->thumb_med)}"big="{$to->thumb_big}" med="{$to->thumb_med}" small="{$to->thumb_small}"  width="30" height="30"  alt=""/></li>
+					{/foreach}
+					{/if}
+    			</ul>
+        </div>
+  		<button id="up-save" type="button" class="btn col-sm-3 mt20">{'保存头像'|tr:'site.user'}</button>
+        </form>
+	</div>
+	</div>
+</div>
+
+<script>
+$(function  () {
+	$("#login_form").submit(function(){
+		if($("#user_name").val()=='' || $("#user_name").val()=="手机号"){
+			$(".x_error").html("请输入手机号");
+			return false;
+			}else if($("#x_pass").val()=='' || $("#x_pass").val()=="密码"){
+			$(".x_error").html("帐号或密码错误");
+			return false;
+			}else{
+			return true;
+		};
+		parent.layer.close(index);
+	})
+
+	 $('.his-pic').click(function(){
+	 	var med_url = $(this).attr('medurl');
+        var big_url = $(this).attr('bigurl');
+        $('#img_p').attr('src', big_url);
+	    $('#img_p2').attr('src', med_url);
+	    $('input[name=big]').val($(this).attr('big'));
+	    $('input[name=med]').val($(this).attr('med'));
+        $('input[name=small]').val($(this).attr('small'));
+		$('#w').val(0);
+     });
+     $("#up-save").click(function(){
+         var big = $('input[name=big]').val();
+         if(isNaN(parseInt($("#w").val())) && !big){
+             layer.msg("{'请选择头像图片'|tr:'site.user'}");
+             return false;
+         }
+         $.post("/student.main.uploadPicAjax",$('#up-form').serialize(),function(r){
+             if(r.error){
+                 layer.msg(r.error);
+                 return false;
+             }else{
+                 layer.msg("{'保存成功'|tr:'site.user'}");
+                 location.reload();
+             }
+         },"json");
+         return false;
+     });
+     var uploader = new plupload.Uploader({
+         runtimes: 'html5,flash,silverlight,html4',
+         browse_button: 'browse',
+         url: '/file.main.uploadPic',
+         filters: {
+             mime_types : [
+             { title : "Image files", extensions : "jpg,jpeg,gif,png" }
+             ],
+             max_file_size:"8192kb"
+         }
+         ,multi_selection:false
+     });
+
+     uploader.init();
+
+     uploader.bind('FilesAdded', function(up, files) {
+         uploader.start();
+     });
+
+     uploader.bind('UploadProgress', function(up, file) {
+         $("#progress").css({ "height":"100%" });
+         $("#progress").html("上传中："+ file.percent +"%");
+     });
+     uploader.bind('FileUploaded', function(up, file,info) {
+         if(info.response){
+             $("#progress").css({ "height":"0" });
+             if(jcrop_api)jcrop_api.destroy();
+             $('.showa').remove();
+             $("#img_o").attr("src",info.response+"?"+Math.random());
+             $("#img_p").attr("src",info.response+"?"+Math.random());
+             $("#img_p2").attr("src",info.response+"?"+Math.random());
+             $('#img_o').Jcrop({
+                 boxWidth:300,boxHeight:300,
+                 onChange: updatePreview,
+                 onSelect: updatePreview,
+                 aspectRatio: 1 //xsize / ysize
+             },function(){
+                 // Use the API to get the real image size
+                 var bounds = this.getBounds();
+                 boundx = bounds[0];
+                 boundy = bounds[1];
+                 // Store the API in the jcrop_api variable
+                 jcrop_api = this;
+                 this.setSelect([0,0,300,300]);
+             }).show();
+         }
+     });
+     function showCoords(c){
+     };
+     function updatePreview(c){
+         if (parseInt(c.w) > 0){
+             $('#x').val(c.x);
+             $('#y').val(c.y);
+             $('#x2').val(c.x2);
+             $('#y2').val(c.y2);
+             $('#w').val(c.w);
+             $('#h').val(c.h);
+
+             $pcnt = $('#panel');
+             $pimg = $('#img_p');
+
+             xsize = $pcnt.width();
+             ysize = $pcnt.height();
+             var rx = xsize / c.w;
+             var ry = ysize / c.h;
+
+             $pimg.css({
+                 width: Math.round(rx * boundx) + 'px',
+                 height: Math.round(ry * boundy) + 'px',
+                 marginLeft: '-' + Math.round(rx * c.x) + 'px',
+                 marginTop: '-' + Math.round(ry * c.y) + 'px'
+             });
+
+             $pcntfr = $('#panel-fr');
+             $pimgfr = $('#img_p2');
+             xsizefr = $pcntfr.width();
+             ysizefr = $pcntfr.height();
+             var rxr = xsizefr / c.w;
+             var ryr = ysizefr / c.h;
+             $pimgfr.css({
+                 width: Math.round(rxr * boundx) + 'px',
+                 height: Math.round(ryr * boundy) + 'px',
+                 marginLeft: '-' + Math.round(rxr * c.x) + 'px',
+                 marginTop: '-' + Math.round(ryr * c.y) + 'px'
+             });
+         }
+     };
+
+     uploader.bind('Error', function(up, err) {
+         if(err.code==-600){
+             layer.msg("文件太大了,服务器君忙不过来了～请您上传8M以下的图片");
+         }else{
+             layer.msg("\nError #" + err.code + ": " + err.message);
+         }
+     });
+
+     var jcrop_api,
+     boundx,
+     boundy;
+});
+</script>
+</section>
+<div id="rightWindow"></div>
+<script>$("#rightWindow").load("/org.rightWindow.rightWindow");</script>
+{part "/site.main.footer"}
+</body>
+</html>

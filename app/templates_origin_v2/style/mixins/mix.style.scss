@@ -1,0 +1,20 @@
+@mixin opacity($opacity:50) {
+    //透明度
+    -moz-opacity: $opacity / 100;
+    -webkit-opacity: $opacity / 100;
+    -khtml-opacity: $opacity / 100;
+    opacity: $opacity / 100;
+    filter: alpha(opacity=$opacity);
+}
+@mixin b-shadow($opacity:50) {
+    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,$opacity / 100);
+    -moz-box-shadow: 0 1px 5px rgba(0,0,0,$opacity / 100);
+    box-shadow: 0 1px 5px rgba(0,0,0,$opacity / 100);
+    -o-box-shadow: 0 1px 5px rgba(0,0,0,$opacity / 100);
+    -ms-box-shadow: 0 1px 5px rgba(0,0,0,$opacity / 100);
+}
+//简写line-height
+@mixin line-height($height:24px) {
+    line-height: $height;
+    height: $height;
+}

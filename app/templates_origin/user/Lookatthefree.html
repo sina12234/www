@@ -1,0 +1,369 @@
+
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 注册</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<script type="text/javascript" src="../assets/js/jquery/jquery-1.11.1.min.js" ></script>
+		<link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="../assets/css/common.css">
+		<link rel="stylesheet" type="text/css" href="../assets/css/teacherplay.css">
+		<script type="text/javascript" src="../assets/js/jquery/jquery-1.11.1.min.js" ></script>
+		<script src="../assets/js/user.js"></script>
+		<style>
+		    .count-n{ position: relative;}
+		    .count-n .m p{ cursor:pointer;}
+			.reply_star { background-color: #ddd;}
+			#good_list li:nth-child(1){ background:red;}
+			#good_list li:nth-child(2){ background:green;}
+			#good_list li:nth-child(n+3){ background:#ccc;}
+			#good_list { margin-top:8px; }
+			#good_list > p{ float: left; margin-top: 15px; margin-left: 15px; }
+			#good_list > .dy{ width: 16px; height: 16px; background: #FF6745; text-align: center; color: #fff; font-weight: bold; margin-left: 15px;margin-top: 30px;}
+			#good_list > .dy1{ margin-top:30px; }
+			#good_list > .dz{ float: right; margin-top: 30px; padding-right: 20px;}
+			#good_list > .dz b{ color: #FF8468;}
+			#good_list > p img{ border-radius: 50px;}
+			#good_list div:nth-child(2)  p[good2] { background:#3CBC48;}
+			#good_list div:nth-child(2)  b[good] { color:#60D5C1;}
+			#good_list div:nth-child(n+3) p[good2] { background:#ccc;}
+		</style>
+<div class="top">
+	<div class="topCon">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="tlogo"><a href="/index"><img src="../assets/images/logokh.png" width="129" height="48"  alt="高能100"/></a></div>
+				<div class="trt">
+					<ul>
+																		<li ><span><img class="circle" width="28" src=""></span><a href="">&nbsp;赵山根</a></li>
+						<li class='hidden-xs'><a>|</a></li>
+						<li class='hidden-xs' id="instation" style="position: relative;"><a href=""><span><img style="margin-top: 3px;" src="../assets/images/xlb.jpg"></span>消息<b>0</b></a></li>
+						<style type="text/css">
+							.unread { float:right;width:15px;height:15px;border-radius:10px;background:#f00;color:#fff;padding-left:4px;position: absolute;right:-5px;top:0px;}
+						</style>
+						<li class='hidden-xs'><a href="/user.teacher.plan"><span>讲课</span></a></li>
+																		<li class='hidden-xs'><a>|</a></li>
+						<li class='hidden-xs'><a href="/user.course.list">听课</a></li>
+												<li class='hidden-xs'><a>|</a></li>
+						<li class=''><a id="href_logout" href="" style="color:#f00;">退出</a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--nav-->
+<div class="nav">
+	<div class="ncon">
+		<div class="container-fluid">
+			<div class="row" style="overflow:hidden;height: 40px; position: relative;">
+				<ul id="headernav" style="position:absolute;height:100%;width:700px">
+					<li ><a href="/index">首页</a></li>
+					<li ><a href="/course.video">课程点播</a></li>
+					<li ><a href="/course.public">直播公开课</a></li>
+					<li class=""><a href="/course.fee">直播精品课</a></li>
+										<li class="s"><a href="/teacher">明星教师</a></li>
+					<li class=""><a href="/about">关于我们</a></li>
+				</ul>
+			</div>
+		</div>
+		<script>
+		$(document).ready(function(){
+			var start ,end ,width;
+			var nav = $("#headernav");
+			var li_width = 0;$("#headernav li").width();
+			if(nav.width()>nav.parent().width()){
+				nav.find("li").each(function(i, item){
+					if($(item).hasClass("sel")){
+						var left = 0-li_width+30;
+						if(left>0)left=0;
+						nav.offset({ left:left});
+					}
+					li_width+=$(item).outerWidth();
+				});
+			}
+
+			nav.on("touchstart",function(e){
+				width = nav.width() - nav.parent().width();
+				var touch = e.originalEvent.targetTouches[0]; 
+				start = touch.pageX;
+				left =  nav.offset().left ;
+			}).on("touchmove",function(e){
+				var touch = e.originalEvent.targetTouches[0]; 
+				end= touch.pageX;
+				change =  left - (start-end);
+				if(0-change>width)return;
+				if(change>0)return;
+				nav.offset({ left:change});
+				e.preventDefault();
+			});
+		});
+		</script>
+
+	</div>
+	</div>
+					<style>
+						.bottom-l .asd{text-align: center; margin: 200px;}
+						.count .jie img{width: 35px;height: 35px;cursor: pointer;margin:6px;}
+						.count .video-bg{position: relative;}
+						.count .jie{position: absolute;right: 0px;top: 7px;width:50px;height: 50px;}
+						.sk{margin-left:30px;margin-top: 60px;}
+						.sk .sk-box .register{width: 150px;}
+						.sk .sk-box .register .register-1 b{color: #fff;font-weight: normal;}
+						.sk .sk-box .register .register-1 a{color:#FFA81E; }
+						.sk .sk-box .sk-bt{height: 30px;}
+						.sk .sk-box .sk-bt h1{font-size: 12px; color: #999999;}
+						.sk .sk-box .adb {height: 50px;}
+						.sk .sk-box .adb h1{font-size: 20px;color: #fff;}
+						.sk .sk-box .dlzc p{color:#999999;}
+						.sk .sk-box .dlzc p a{color:#FFA81E;}
+						.sk .user_content_lb{height: 150px;}
+						.sk .user_content_lb dl dt{ float: left; margin-right: 17px;}
+						.sk .user_content_lb dl dd h1{font-size: 17px;font-weight:normal;color:#fff;}
+						.sk .user_content_lb dl dd p{height: 23px; line-height:40px; color: #999999;}
+						.sk .user_content_lb dl dd input{width: 90px;height: 35px;margin-top: 20px;border: none;background: #FFA81E;border-radius: 5px;color: #fff;}
+					</style>
+		<div id="content" class='big-box'>
+			<div class='pd5 tittle'>
+				<p>
+				<a href="/course.public">直播公开课</a>
+								<b><a href="/course.info.show/150">新课程</a></b></p>
+			</div>
+			<div class='count col-md-9 col-sm-8 col-xs-12'>
+				<div class="video-bg pd5 col-sm-12 col-xs-12" style="background:#000;">
+						<div class='sk'>
+							<div class='sk-box'>
+								<div class='sk-bt'><h1><b><img src="../assets/images/sk-t.png" alt=""></b>&nbsp;&nbsp;尊敬的用户,本课属于付费课！</h1></div>
+								<div class='adb col-sm-12 col-xs-12'><h1>免费体验直播课堂已结束，购买后可完整上课</h1></div>
+								<div class='user_content_lb'>
+									<dl>
+										<dt>
+											<div class='courseThumb col-sm-6 col-xs-12' style="position:relative;">
+												<img src="../assets/images/icon3.jpg">
+												<div class='iconFee'>
+												</div>
+												<div class='iconStart'>
+												</div>
+											</div>
+										</dt>
+										<dd class='col-sm-6 col-xs-12'>
+											<h1>初一数学满分冲刺班</h1>
+											<p><img src="../assets/images/sk-tt.png" alt="">&nbsp;主讲老师：高海磊</p>
+											<p style="color:#f00;">￥689</p>
+											<a href="course.plan.html" target="_blank"><input type="button" value="立即购买"></a>
+										</dd>
+									</dl>
+								</div>
+							</div> 
+						</div>
+						<div class='sk' style="display:none;">
+							<div class='sk-box'>
+								<div class='sk-bt'><h1><b><img src="../assets/images/sk-t.png" alt=""></b>&nbsp;&nbsp;尊敬的用户,本课属于付费课！</h1></div>
+								<div class='adb'><h1>免费试看时间到，购买后可继续观看</h1></div>
+								<div class='user_content_lb'>
+									<dl>
+										<dt>
+											<div class='courseThumb' style="position:relative;">
+												<img src="../assets/images/icon3.jpg">
+												<div class='iconFee'>
+												</div>
+												<div class='iconStart'>
+												</div>
+											</div>
+										</dt>
+										<dd>
+											<h1>初一数学满分冲刺班</h1>
+											<p><img src="../assets/images/sk-tt.png" alt="">&nbsp;主讲老师：高海磊</p>
+											<p style="color:#f00;">￥689</p>
+											<a href="course.plan.html" target="_blank"><input type="button" value="立即购买"></a>
+										</dd>
+									</dl>
+								</div>
+								<div class='dlzc'>
+									<p>免费试看时间到,<a href="../login.html" target="_blank">登录</a>后可完整观看，没有帐号请<a href="course.plan.html" target="_blank">注册</a></p>
+								</div>
+							</div> 
+						</div>
+				</div>
+				
+				<div class='dalong col-sm-12 col-xs-12'>
+					<div class='daleft'>
+						<div class="pd5 col-sm-4">
+							<div class='message'>
+								<div class='mes'>
+									<span><img src="../assets/images/playzw.png" style="margin-left:10px;">&nbsp;&nbsp;&nbsp;我的座位</span>
+								</div>
+								<div class='playtou'>
+									<img id="self_thumb" width="108" height="111" src="../assets/images/xinxitx.png">
+								</div>
+								<div class='mee'>
+									<P>赵山根&nbsp;&nbsp;<img src="../assets/images/nv.png" style="margin-top:4px;"></P>
+									<div class='mee1' id="ask" ask="ask">
+										<!--
+										<span ask="ask" msg_type=2><img src="/assets/images/xinxiqp.png">举手发言</span>
+										<span ask="cancel" style="display:none;"><img src="/assets/images/dengdai.png">取消举手</span>
+										<span style="background:#F85353;display:none;" ask="stop" ><img src="/assets/images/quxiao.png">停止发言</span>
+										-->
+										<span ask="ask" class="gray" msg_type=2><img src="../assets/images/xinxiqp.png">
+											<input type="button" value="举手发言"></span>
+
+										<!--<span ask="cancel" style="display:none;"><img src="/assets/images/dd.png">
+											<input type="button" value="等待中" style="background:#EDEDED;color:#333333;"></span>-->
+
+										<span ask="cancel" style="display:none;"><img src="../assets/images/qx.png">
+											<input type="button" value="取消举手" style="background:#F85353;color:#333333;"></span>
+
+										<span ask="stop" style="display:none;"><img src="../assets/images/fayan.png">
+											<input type="button" value="停止发言" style="color:#333333; background:#F85353;">
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="pd5  col-sm-8 col-xs-12">
+							<div class='student-mes'>
+								<div id="student_total" class='mes'>
+									<span><img src="../assets/images/playtxue.png" style="margin-left:10px;">&nbsp;&nbsp;&nbsp;同学&nbsp;(<b inline>1</b>/<span total>3</span>)</span>
+								</div>
+								<div id="students" class="teta">
+																											<li uid="152">
+									<div><img title="赵山根" src="//"></div>
+									</li>
+																		<li uid="171">
+									<div><img title="马静" src="//"></div>
+									</li>
+																		<li uid="159">
+									<div><img title="杨红月" src=""></div>
+									</li>
+																										</div>
+							</div>
+						</div>
+						
+					</div>
+					
+					<div class='col-sm-12 col-xs-12 pd5'>
+						<div class='count-bottom '>
+							<div class='bottom-l col-sm-12'>
+								<div class='bottom-hea'>
+									<span><img src="../assets/images/dz.png" style="margin-left:10px;">&nbsp;&nbsp;&nbsp;点赞排行榜</span>
+								</div>
+
+								<div class='asd'><p>请参考新版教师页面</p></div>
+								
+								
+								</div>
+
+							</div>
+					</div>
+				</div>	
+			</div>
+			<div class='count-r col-md-3 col-sm-4 col-xs-12 pd5'>
+				<div class='count-top' style="height:150px;">
+
+					<div class='me'>
+						<div class='me-img'>
+							<img src="../assets/images/playbook.png">
+						</div>
+						<div class='me-tit'>
+							<p>课程信息</p>
+						</div>
+					</div>
+					<div class='clear'></div>
+					<div class='cus'>
+						<p class='h'><a href="/course.info.show/150" target="_blank">新课程</a></p>
+						<p>123 &nbsp;|&nbsp; 1&nbsp;&nbsp;|&nbsp;&nbsp;开课机构:大数据时代</p>
+						<p class="p3"><img src="">&nbsp;&nbsp;上课老师:樊彬彬123</p>
+					</div>
+				</div>
+
+				<div class='count-c'>
+					<div class='mes'>
+						<span><img src="../assets/images/gongg.png" style="margin-left:10px;">&nbsp;&nbsp;&nbsp;公共讨论区</span>
+					</div>
+					<div class="out" id="chat_list">
+											</div>
+					<div class="count-n bto-r-textbox">
+						<div class="m">
+							<p><img id="show_pop" src="../assets/images/emjoy.png" style="margin-top: 10px;margin-left:10px;"></p>
+						</div>
+						<div id="show" class='emjoy'>
+							<!--<p><img show src="/assets/images/emjoydz.png" style="border-right:none;"></p>
+							<p><img show src="/assets/images/emjoyxh.png"></p>-->
+							<p><img show src="../assets/images/QQ/14.gif"></p>
+							<p><img show src="../assets/images/QQ/13.gif"></p>
+							<p><img show src="../assets/images/QQ/19.gif"></p>
+							<p><img show src="../assets/images/QQ/20.gif"></p>
+							<p><img show src="../assets/images/QQ/75.gif"></p>
+							<p><img show src="../assets/images/QQ/65.gif"></p>
+							<p><img show src="../assets/images/QQ/74.gif"></p>
+							<p><img show src="../assets/images/QQ/57.gif"></p>
+							<p><img show src="../assets/images/QQ/50.gif"></p>
+							<p><img show src="../assets/images/QQ/90.gif"></p>
+							<p><img show src="../assets/images/QQ/114.gif"></p>
+							<p><img show src="../assets/images/QQ/29.gif"></p>
+							<p><img show src="../assets/images/QQ/30.gif"></p>
+							<p><img show src="../assets/images/QQ/32.gif"></p>
+							<p><img show src="../assets/images/QQ/24.gif"></p>
+							<p><img show src="../assets/images/QQ/21.gif"></p>
+							<p><img show src="../assets/images/QQ/26.gif"></p>
+							<p><img show src="../assets/images/QQ/17.gif"></p>
+							<p><img show src="../assets/images/QQ/76.gif"></p>
+							<p><img show src="../assets/images/QQ/11.gif"></p>
+							<p><img show src="../assets/images/QQ/25.gif"></p>
+							<p><img show src="../assets/images/QQ/7.gif"></p>
+							<p><img show src="../assets/images/QQ/15.gif"></p>
+							<p><img show src="../assets/images/QQ/36.gif"></p>
+							<p><img show src="../assets/images/QQ/72.gif"></p>
+						</div>
+						<div id="pattern_reply" style="display:none;" class="dt">
+							<p>答题模式</p>
+						</div>
+						<div id="pattern_notalk" style="display:none;" class="dt">
+							<p>禁止讨论</p>
+						</div>
+					</div>
+					<div class='count-l'>
+						<div id="chat_input" contenteditable=true style="overflow:auto;height:100px;"></div>
+						<input type="button" id="chat_send" title="按Ctrl+Enter键发送消息，按Enter键换行" value="发送">
+					</div>
+				</div>
+				<div class="daright">
+					<div class="Ranking">
+						<div class="message">
+							<div class="mes">
+								<span><img src="../assets/images/bjjl.png" style="margin-left:10px;">&nbsp;&nbsp;&nbsp;笔记记录</span>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="call_pop" class='dialog' style="display:none;z-index:2003">
+				<div class="bg3"></div>
+				<div class='box3'>
+					<div class='btop'>
+						<span onclick="$('#call_pop').hide()">×</span>
+					</div>
+					<div class='btu'><img src="../assets/images/icg.png"></div>
+					<div class='bp'>
+						<p>同学们老师点名啦</p>
+					</div>
+					<div class='buttu'>
+						<input id="call_reply" type="button" value="回答'到'">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="footer"> 
+			<div class="ftcon">
+				<!-- <div class="fter_1">
+					<a href="">关于我们</a> | <a href="">加入我们</a> | <a href="">校园代理招募</a> | <a href="">O2O体验店招商</a> | <a href="">企业培训</a> | <a href="">网站地图</a> | <a href="">友情链接</a> 
+				</div> -->
+				<p class="fter_2 mt10">© 2014 北京高能壹佰教育科技有限公司 版权所有</p>
+			</div>
+		</div>
+		</body>

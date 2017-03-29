@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>机构介绍</title>
+<meta charset="utf-8">
+<meta http-equiv=”X-UA-Compatible” content=”IE=edge,chrome=1″/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<meta name="renderer" content="webkit">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+<style>
+body,dd,div,dl,dt,li,ol,p,pre,td,th,ul,h1,h2,h3,h4,h5,h6{ margin:0;padding:0; }
+body,fieldset,html,iframe,img{ border:0; }
+body,input,select,textarea{ outline:0;border:0;font-family:\5fae\8f6f\96c5\9ed1,Arial,"Hiragino Sans GB",Helvetica,sans-serif; }
+html{ font-size:62.5%;width:100%;height:100% }
+body{ font-size:1.4rem;background:#f3f5f7;color:#5c6273;width:100%;height:100%;margin:0 auto }
+.mt20{ margin-top:2rem; }
+a,a:link { color:#5c6273;text-decoration: none }
+.org-intro,.org-info,.org-teacher,.org-course{ background:#fff;padding:0 1.5rem; }
+.org-intro{ -ms-flex-wrap: wrap;-webkit-flex-wrap:wrap;flex-wrap: wrap}
+.org-title{ padding:.5rem 0;width: 100%;flex-direction:row;display:flex;display:-moz-box;display:-webkit-box;display:box; }
+.org-logo,.org-name{ display: -webkit-box;-webkit-box-orient: vertical;display: flex;flex-flow:column;height:2.5rem;line-height:inherit; }
+.org-name{ font-size:1.4rem;width:67%;white-space:pre-wrap;word-break:break-all;word-wrap:break-word;overflow:hidden;padding-left:.5rem; }
+.org-logo{ width:33%;border:1px solid #f1f1f1;text-align:center;line-height:2.5rem;}
+.org-logo img{ max-width:100%;max-height: 100%; height:100%; }
+.org-tel,.org-addr{ height:2.5rem;line-height:2.5rem;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+.org-tel,.org-title,.tit{ border-bottom:1px solid #ececec }
+.icon-phone{ display:inline-block ; margin-right:10px;width:1.9rem;height:1.9rem;background:url(/assets_v2/interface/yunke/img/phone.png) no-repeat; background-size:100%;vertical-align: middle;}
+.icon-add{ display:inline-block ; margin-right:10px;width:1.9rem;height:1.9rem;background:url(/assets_v2/interface/yunke/img/location.png) no-repeat; background-size:100%;vertical-align: middle;}
+.tit{ height:3rem;line-height:3rem;color:#999 }
+.tit a{ float:right;color:#999; }
+.fs13{ font-size:1.3rem;}
+.org-info-content{ padding:1rem 0 2rem; }
+.org-info-content p{ font-size:1.4rem!important;}
+.org-info-content img{ width:100%!important;height:auto!important;}
+.teacher-list{ padding:1rem 0 2rem;display:table;width:100%; }
+.teacher-list a{ width:20%;display: inline-block;text-align:center; }
+.teacher-list img{ width:70%;margin-bottom:.5rem;border:1px solid #ececec;border-radius:50%;-webkit-box-shadow:0 0 10px rgba(0,0,0,.5);-moz-box-shadow:0 0 10px rgba(0,0,0,.5);box-shadow:0 0 10px rgba(0,0,0,.5);}
+.teacher-list em{ width:100%;font-style: normal; display: inline-block;}
+.course-item{ display:flex;width:100%;padding-bottom:1.5rem; }
+.course-img{ width:35%;float:left;}
+.course-img img{ width:100%;height:100%; }
+.course-info{ width:65%; float:left;padding-left:.5rem; }
+.course-price { color:#16d116;}
+.course-num{ color:#a8a8a8;}
+</style>
+</head>
+<body>
+<div class="org-intro mt20">
+	<div class="org-title">
+        {if !empty($info->thumb_med)}
+		<div class="org-logo">
+            <img src="{interface_func::imgUrl($info->thumb_med)}" alt="">
+		</div>
+        {/if}
+        <div class="org-name">{if !empty($info->name)}{$info->name}{else}{$info->subdomain}{/if}</div>
+	</div>
+	<div class="org-tel">
+        <i class="icon-phone"></i><a href="tel:{$info->hotline}">{$info->hotline}</a>
+	</div>
+	<div class="org-addr">
+		<i class="icon-add"></i>{$info->province} {$info->city} {$info->address}
+	</div>
+</div>
+<div class="org-info mt20">
+	<div class="tit fs13">
+		机构简介
+	</div>
+	<div class="org-info-content">
+        {$info->desc}
+	</div>
+</div>
+{if !empty($teacherList)}
+<div class="org-teacher mt20">
+	<div class="tit fs13" style="border-bottom:0">推荐老师
+		<a href="https://www.yunke.com/org/teacher">更多 ></a>
+	</div>
+	<div class="teacher-list">
+        {foreach $teacherList as $val}
+        <a href="https://www.yunke.com/{$val->user_id}">
+            <img src="{interface_func::imgUrl($val->thumb_med)}" alt="">
+            <em>{if !empty($val->real_name)}{$val->real_name}{else}{$val->name}{/if}</em>
+		</a>
+        {/foreach}
+	</div>
+</div>
+{/if}
+{if !empty($courseList)}
+<div class="org-course mt20">
+	<div class="tit fs13" style="border-bottom:0">推荐课程
+		<a href="https://www.yunke.com/org/course">更多 ></a>
+	</div>
+	<div class="course-list">
+        {foreach $courseList as $val}
+        {foreach $val as $v}
+        <a href="https://www.yunke.com/{$v->course_id}" class="course-item">
+            <div class="course-img"><img src="{interface_func::imgUrl($v->thumb_med)}" alt=""></div>
+			<div class="course-info">
+                <p class="course-name fs13">{$v->title}</p>
+                <p class="course-price">{if $v->fee_type == 1}{$v->price/100}{else}免费{/if}</p>
+                <p class="course-num">{$v->user_total}</p>
+			</div>
+		</a>
+        {/foreach}
+        {/foreach}
+	</div>
+</div>
+{/if}
+<script>
+	$(".org-info-content a").contents().unwrap();
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head>
+<script>
+    if(window.opener){
+		window.opener.location="{$url}";
+        window.close();
+	}else{
+		window.location="{$url}";
+    }
+</script>
+</head>
+<body>
+</body>
+</html>

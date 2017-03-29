@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>高能100 - 作业详情</title>
+{part "/index.main.headeruser"}
+<script src="{utility_cdn::js('/assets/js/part.js')}"></script>
+    </head>
+<style> 
+        .btn-reply input{ width: 222px;height: 42px;background:#FFA81D;border: none;border-radius: 5px; color: #fff;font-size: 16px;margin-left: 170px;margin-bottom: 30px;margin-top: 20px; }
+        .user_content_box{ height: 1200px; }
+        .user_content_box .xk{ margin-top: 20px;border-bottom: 1px solid #ccc;height:30px; }
+        .user_content_box .xk p{ cursor: pointer;font-size: 16px; }
+        .user_content_box .jpas{ width: 652px;height: 301px;border: 1px solid #ccc; margin-top: 25px;margin-left: 30px; }
+        .user_content_box .jpas .header-tou{ height: 35px;background:#f7f7f7; }
+        .user_content_box .jpas .header-tou .hea-left p{ line-height: 35px;font-size: 16px; }
+        .user_content_box .jpas .header-tou .hea-left img{ float: left;margin: 13px 10px 0px 15px; }
+        .user_content_box .jpas .header-tou .hea-right{ float: right;margin:-25px 10px 0 0;color: #f00; }
+        .user_content_box .jpas .box{ margin-left: 33px; }
+        .user_content_box .jpas .box .in1 input{ width:114px;height: 40px;background:#f3f3f3;border: none;border-radius: 5px; color: #333333;font-size: 16px;margin:20px 0 30px 20px; }
+        .user_content_box .jpas .box .te1{ position: relative; }
+        .user_content_box .jpas .box .te1 .te2{ position: absolute;top:60%;right:28%; }
+        .user_content_box .jpas .box .te1 .te2 input{ width: 60px;height: 27px;background:#FEA91B;border:none;border-radius: 5px;color: #f4f4f4; }
+        .user_content_box .jpas .box .te1 textarea{ width: 454px;height: 107px;margin-bottom: 10px;margin-top: -10px; }
+        .user_content_box .jpas .box h1{ font-size: 16px;font-weight: normal; }
+        .user_content_box .jpas .box ul { margin-top: 5px; }
+        .user_content_box .jpas .box ul li { line-height: 24px;color:#7A95DC; }
+        .user_content_box .jpas .box-1 .header-t p{ margin-left:10px; }
+        .user_content_box .jpas .box-1 .header-t p b{ color: #e4e4e4; }
+        .user_content_box .jpas .box-1 .header-t .fuji{ margin-top: 35px;margin-left: 30px;float: left; }
+        .user_content_box .jpas .box-1 .header-t .fuji img{ float: left;height: 20px;margin-top: 6px;margin-right: 5px; }
+        .user_content_box .jpas .box-1 .header-t .fuji p{ color: #ccc; }
+        .user_content_box .bigbox .jpas{ height: 400px; }
+        .user_content_box .bigbox .jpas .box-1 .bian .kl { color: #89C386; }
+        .user_content_box .bigbox .jpas .box-1 .bian .ko { color: #f00; }
+        .user_content_box .bigbox .jpas .box-1 .bian .kd{ color:#333333; }
+        .user_content_box .bigbox .jpas .box-1 .hf{ margin-left: 20px;margin-top: 10px; }
+        .user_content_box .bigbox .jpas .box-1 .hf p{ float: left; }
+        .user_content_box .bigbox .jpas .box-1 .hf .hd{ color: #009800; }
+        .user_content_box .bigbox .jpas .box-1 .hf .bd{ color: #f00; }
+
+</style>
+<body>
+  <!--top-->
+  {part "/index.main.nav.user"}
+<div class='count'>
+  <div class='container-fluid'>
+    <div class='row'>
+      <div class='col-md-3 user_menu hidden-xs'>
+        <div id=''>
+          <div id='menu'>
+             {part "/user.home.menu.user"}
+
+          </div>
+        </div>
+      </div>
+      <div class='col-md-9 user_content'>
+        <div class='user_box'>
+          <div class='container-fluid'>
+            <div class='row'>
+              <div class='user_content_box'>
+                 <div class='xk'>
+                      <p><<a href="user.teacher.reply">返回学生作业</a></p>
+                 </div>
+                 <div class='jpas'>
+                    <div class='header-tou'>
+                      <div class='hea-left'><img src="{utility_cdn::img('/assets/images/yjzy.jpg')}" alt=""><p>{$reply->course_title}</p></div>
+                      <div class='hea-right'>
+                        <p>{if $reply->status==0}未完成{elseif $reply->status==1}已交作业{elseif $reply->status==2}已批改作业{/if}</p>
+                    </div>
+                    </div>
+                    <div class='box'>
+                      <h1>{$reply->task_title}</h1>
+                      <ul>
+                        <li>{$reply->task_desc}</li>
+                      </ul>
+                    </div>
+                    <div class='box-1'>
+                          <div class='header-t'>
+                                <p><b>--------------------------------------------------------</b> 附件(1) <b>--------------------------------------------------------</b></p>
+                                {if is_array($reply->task_attach)}
+                                {foreach $reply->task_attach as $t}
+                                <div class='fuji'><img src="http://devf.gn100.com/{$t}" alt="">{$t}<p>393kb</p></div> 
+                                {/foreach}
+                                {else}
+                                <div class='fuji'>本作业没有附件</div> 
+                                {/if}
+                          </div>
+                    </div>
+                 </div> 
+                <div class='bigbox'>
+                 <div class='jpas' style="height:700px;">
+                    <div class='header-tou'>
+                      <div class='hea-left'><img src="{utility_cdn::img('/assets/images/yjzy.jpg')}" alt=""><p>已交作业</p></div>
+                    </div> 
+                    <div class="btn-reply"><input type="button" value="回复"></div>
+                    <div class='box' style="display:none;">
+                      <div class='in1'>
+                        <div id="filelist"></div>
+                        <div id="container">
+                          <input id="browse" type="button" value="选择附件" />
+                          <input id="uploadfiles" type="button" value="开始上传" />
+                        </div>
+                            <script src="{utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js')}"></script>
+                                <script>
+                                    $(document).ready(function(){
+                                        var fid='';
+                                        var uploader = new plupload.Uploader({
+                                            browse_button: 'browse', // this can be an id of a DOM element or the DOM element itself
+                                            container: document.getElementById('container'),
+                                            url: '/file.main.uploadTaskFiles.{$reply->pk_task_reply}',
+                                            filters: {
+                                                mime_types : [],
+                                                max_file_size:"2000kb"
+                                            },
+                                            init: {
+                                                PostInit: function() {
+                                                    document.getElementById('filelist').innerHTML = '';
+
+                                                    document.getElementById('uploadfiles').onclick = function() {
+                                                        uploader.start();
+                                                        return false;
+                                                    };
+                                                },
+
+                                                FilesAdded: function(up, files) {
+                                                    plupload.each(files, function(file) {
+                                                        document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+                                                    });
+                                                },
+
+                                                UploadProgress: function(up, file) {
+                                                    document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+                                                },
+
+                                                Error: function(up, err) {
+                                                    document.getElementById('console').innerHTML += "\nError #" + err.code + ": " + err.message;
+                                                }
+                                            },
+                                            resize: { width: 320, height: 240, quality: 90 },
+                                            multi_selection:false
+                                        });
+                                        uploader.init();
+
+                                        uploader.bind('FileUploaded', function(up, file,info) {
+                                            $("#uploadfiles").val("上传完成");
+                                            if(info.response){
+                                                var r = jQuery.parseJSON(info.response);
+                                                if(r && r.fid){
+                                                    fid+=r.fid+'|';
+                                                    $("#fid").val(fid);
+                                                    return;
+                                                }
+                                                alert("上传失败");
+                                            }
+                                        });
+                                        $("#form").submit(function(){
+                                            $.post("/user.homework.add",$(this).serialize(),function(res){
+                                                if(res){
+                                                    location.reload();
+                                                    return false;
+                                                }else{
+                                                    alert('提交失败');
+                                                    return false;
+                                                }
+                                            },"json");
+                                            return false;
+                                        });
+                                    });
+                                </script>
+                      </div>
+                      <div class='te1'>
+                         <form action="user.homework.add" method="post" id="form">
+                         <input type="hidden" name="fid" id="fid">
+                         <input type="hidden" name="rid" id="rid" value="{$reply->pk_task_reply}">
+                         <input type="hidden" name="tid" id="tid" value="{$reply->fk_task}">
+                         <textarea name="desc" id="desc" cols="30" rows="10"></textarea>
+                         <div class='te2'><input type="submit"  value='发送'></div>
+                        </form>
+                      </div>
+                    </div>
+                    {if !empty($attach)}
+                    {foreach $attach as $k=>$a}
+                    <div class='box-1'>
+                          <div class='header-t bian'>
+                                {if $k==0 && $a->fk_user_owner==0}
+                                <p class='kl'><b>-------------------------------------------------------</b> 已交作业 <b>-------------------------------------------------------</b></p>
+                                {elseif $k==1 && $a->fk_user_reply==0}
+                                <p class='kl ko'><b>-------------------------------------------------------</b> 老师已批改 <b>-------------------------------------------------------</b></p>
+                                {elseif $k==2}
+                                <p class='kl ko kd'><b>----------------------------------------------------------</b> 回复 <b>---------------------------------------------------------</b></p>
+                                {/if}
+                                <p style="padding-top:20px;padding-left:20px;margin-bottom:-20px;font-size:16px;">
+                                    {if $k>1 && $a->fk_user_owner==0}我说：{elseif $k>1 & $a->fk_user_reply==0}老师说：{/if}{$a->desc}
+                                </p>
+                                {if is_array($a->attach)}
+                                {foreach $a->attach as $at}
+                                <div class='fuji'><img src="http://devf.gn100.com/{$at}" alt="">{$at}<p>393kb</p></div> 
+                                {/foreach}
+                                {/if}
+                          </div>
+                    </div>
+                    <div class='clear'></div>
+                    {/foreach}
+                    {/if}
+                 </div>
+                 </div>  
+                  
+               
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{part "/index.main.footer"}
+</body>
+<script>
+$(document).ready(function(){
+    $('.btn-reply input').click(function(){
+        $(this).hide();
+        $('.box').show();
+    })    
+});
+</script>
+</html>

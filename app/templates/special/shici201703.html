@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<meta name="renderer" content="webkit">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>史上最难诗词挑战赛 - 云课网</title>
+<link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets_v2/img/platform/yunke.ico')}" />
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+<meta name="weixin" imgurl="ddd" desc="史上最难诗词大会！飞升上神啦，神器就在不远处，快来参与挑战吧！！！;"/>
+<meta name="description" content="史上最难诗词大会！飞升上神啦，神器就在不远处，快来参与挑战吧！！！;" />
+<style>
+@font-face { font-family:STXinwei;src:url("/assets_v2/img/special/2017_03_14/huaweixinwei.ttf") }
+*{ box-sizing:border-box }
+body,div,section,p{ margin:0;padding:0;font-family:'STLiti','STXinwei',cursive; }
+html{ width:100%;height:100%;max-width:750px;}
+body{ background:#e8dad7;width:100%;height:100%;max-width:750px;font-size:62.5%;overflow:hidden;}
+.loading{ position:absolute;top:50%;margin-top:-4rem;width:100%;z-index:10;text-align:center;}
+.logo{ display:inline-block;width:3rem;height:3rem;}
+.logo img{ width:100%;}
+.back-flip{ margin-top:.5rem;}
+span { position:relative;display:inline-block;text-transform:uppercase;font-family:'Prosto One',cursive;color:#34495e;}
+.back-flip span{ animation-name:letter-back-flip;animation-duration:3s;animation-iteration-count:infinite;animation-timing-function:linier;transform-origin:0px 0px;}
+.back-flip span:nth-child(1) { animation-delay:.1s;}
+.back-flip span:nth-child(2) { animation-delay:.2s;}
+.back-flip > span:nth-child(3) { animation-delay:.3s;}
+.back-flip > span:nth-child(4) { animation-delay:.4s;}
+.back-flip > span:nth-child(5) { animation-delay:.5s;}
+.back-flip > span:nth-child(6) { animation-delay:.6s;}
+.back-flip > span:nth-child(7) { animation-delay:.7s;}
+@keyframes letter-back-flip {
+    from { transform:rotateX(0deg) }
+    50% { transform:rotateX(360deg) }
+    to { transform:rotateX(0deg) }
+}
+.off{ position:absolute;left:1rem;top:1.2rem;z-index:200;width:2.5rem;height:2.5rem;background-image:url(/assets_v2/img/special/2017_03_14/normalmusic.svg);background-size:contain;background-repeat:no-repeat;}
+.time{ color:#fff;border-radius:3rem;overflow:hidden;position:absolute;right:1rem;top:1.2rem;z-index:200;width:5rem;height:2.3rem;background:rgba(0,0,0,.5); }
+.timeicon{ margin-top:.2rem;margin-right:.3rem;float:right;width:2.0rem;height:2.3rem;background-image:url(/assets_v2/img/special/2017_03_14/time.svg);background-size:contain;background-repeat:no-repeat;}
+.times{ margin-top:.2rem;margin-left:.3rem;color:#fff;font-size:1.2rem;float:left;height:2.3rem;line-height:180%;font-family:'STXinwei'}
+.rotate { -webkit-animation:rotating 1.2s linear infinite;-moz-animation:rotating 1.2s linear infinite;-o-animation:rotating 1.2s linear infinite;animation:rotating 1.2s linear infinite;}
+@-webkit-keyframes rotating{ from{ -webkit-transform:rotate(0)}to{ -webkit-transform:rotate(360deg)}}
+@keyframes rotating{
+    from{ transform:rotate(0) }to{ transform:rotate(360deg)}
+}
+@-moz-keyframes rotating{
+    from{ -moz-transform:rotate(0)}to{ -moz-transform:rotate(360deg)}
+}
+.main-page{ background:url(/assets_v2/img/special/2017_03_14/bg.png);background-color:#e8dad7;background-repeat:no-repeat;background-size:100% 100%;position:absolute;width:100%;height:100%;padding:0;}
+.section{ width:100%;height:100%;position:absolute;}
+/*封面*/
+.slogen-img,.slogen-img,.surface-image,.btn1,.btn{ width:100%;text-align:center;}
+.slogen-img{ margin-top:1rem;}
+.surface-image img,.slogen-img img,.btn1 img{ width:80%;}
+.btn{ margin-top:2.5rem;}
+.btn img{ width:40%;}
+.wenhao img{ width:30%;}
+.tac{ text-align:center;}
+.none{ display:none;}
+/*凡人界*/
+.red{ color:#b12761;}
+.cred{ color:#282ceb;font-family:'STXinwei';}
+.jie-title{ text-align:center;font-size:3rem;padding:.8rem .5rem;width:13rem;margin:0 auto;margin-top:5rem;background:url(/assets_v2/img/special/2017_03_14/jie_title_bg.png) no-repeat;background-size:100% 100%;font-family:'STXinwei';}
+.font-text{ font-family:'STXinwei';width:15rem;font-size:2.3rem;margin:0 auto;margin-top:3rem;text-align:center;}
+.font-box{ width:60%;display:flex;flex-direction:row;margin:.5rem auto 0 auto;height:2rem;}
+.font-text2{ width:18rem}
+.font-box3{ width:75%;}
+.font-item{ flex-grow:1;flex-shrink:1;flex-basis:0;background:#b12761;border:1px solid #b12761;margin:0 .3rem;padding:0;text-align:center;color:#fff;border-radius:3px;
+    font-size:1.8rem;overflow:hidden;font-family:'STXinwei';
+}
+.font-box2{ width:80%;font-family:'STXinwei';margin:.5rem auto 0 auto;margin-top:2rem;}
+.font-box2 .font-box-main{ display:flex;flex-direction:row;font-family:'STXinwei';margin-top:.5rem;height:3rem;}
+.font-box2 .font-item{ font-size:2.5rem;}
+.font-box-main .font-item:nth-child(1){ animation-delay:.1s;}
+.font-box-main .font-item:nth-child(2){ animation-delay:.2s;}
+.font-box-main .font-item:nth-child(3){ animation-delay:.3s;}
+.font-box-main .font-item:nth-child(4){ animation-delay:.4s;}
+.font-box-main .font-item:nth-child(5){ animation-delay:.5s;}
+.font-box-main .font-item:nth-child(6){ animation-delay:.6s;}
+.font-box-main .font-item:nth-child(7){ animation-delay:.7s;}
+
+/*result*/
+.result-title{ margin:auto;margin-top:2.8rem;font-size:1.5rem;text-align:center;}
+.result-img{ margin:auto;margin-top:.5rem;text-align:center;position:relative;}
+.result-img img{ width:70%;}
+.result-img .r-name{ position:absolute;left:15%;top:20%;width:18px;font-size:1.2rem; }
+.result-btn{ margin:auto;margin-top:1.5rem;display:flex;flex-direction:row;}
+.btn-item{ flex-grow:1;flex-shrink:1;flex-basis:0;margin:0 .3rem;padding:0 .2rem;text-align:center;overflow:hidden;}
+.btn-item img{ width:85%;}
+.mt10{ margin-top:.5rem;}
+.result-code{ position:absolute;left:0;bottom:.3rem;width:100%;font-size:1rem;text-align:center;padding:.2rem;}
+.result-code img{ width:20%;}
+@media (min-width:320px) and (max-width:360px) {
+    .result-img{ margin-top:.1rem;}
+    .result-btn{ margin-top:0;}
+}
+.progress{ width:50%;height:.3rem;
+    background:#dcc6c1;margin:0 auto;position:relative;border-radius:3px;overflow:hidden;
+}
+.progress-bar{
+    position:absolute;top:0;left:0;height:100%;background:#b12761;
+}
+@-webkit-keyframes fadeInDown{
+    0%{ opacity:0;-webkit-transform:translateY(-20px);transform:translateY(-20px)
+    }100%{ opacity:1;-webkit-transform:translateY(0);transform:translateY(0)}
+}
+@keyframes fadeInDown{
+    0%{ opacity:0;-webkit-transform:translateY(-20px);-ms-transform:translateY(-20px);transform:translateY(-20px)
+    }100%{ opacity:1;-webkit-transform:translateY(0);-ms-transform:translateY(0);transform:translateY(0)}
+}
+.fadeInDown{ -webkit-animation-name:fadeInDown;animation-name:fadeInDown}
+@-webkit-keyframes fadeInDownBig{
+    0%{ opacity:0;-webkit-transform:translateY(-2000px);transform:translateY(-2000px)
+    }100%{ opacity:1;-webkit-transform:translateY(0);transform:translateY(0)}
+}
+@keyframes fadeInDownBig{
+    0%{ opacity:0;-webkit-transform:translateY(-2000px);-ms-transform:translateY(-2000px);transform:translateY(-2000px)
+    }100%{ opacity:1;-webkit-transform:translateY(0);-ms-transform:translateY(0);transform:translateY(0)
+    }
+}
+.fadeInDownBig{ -webkit-animation-name:fadeInDownBig;animation-name:fadeInDownBig}
+.animated { -webkit-animation-duration:1s;animation-duration:1s;-webkit-animation-fill-mode:both;animation-fill-mode:both;}
+@-webkit-keyframes bounceIn{
+    0%{ opacity:0;-webkit-transform:scale(.3);transform:scale(.3)
+    }50%{ opacity:1;-webkit-transform:scale(1.05);transform:scale(1.05)
+    }70%{ -webkit-transform:scale(.9);transform:scale(.9)
+    }100%{ opacity:1;-webkit-transform:scale(1);transform:scale(1)
+    }
+}
+@keyframes bounceIn{
+    0%{ opacity:0;-webkit-transform:scale(.3);-ms-transform:scale(.3);transform:scale(.3)
+    }50%{ opacity:1;-webkit-transform:scale(1.05);-ms-transform:scale(1.05);transform:scale(1.05)
+    }70%{ -webkit-transform:scale(.9);-ms-transform:scale(.9);transform:scale(.9)
+    }100%{ opacity:1;-webkit-transform:scale(1);-ms-transform:scale(1);transform:scale(1)
+    }
+}
+.bounceIn{ -webkit-animation-name:bounceIn;animation-name:bounceIn }
+@-webkit-keyframes bounceOutUp{
+    0%{ -webkit-transform:translateY(0);transform:translateY(0)
+    }20%{ opacity:1;-webkit-transform:translateY(20px);transform:translateY(20px)
+    }100%{ opacity:0;-webkit-transform:translateY(-2000px);transform:translateY(-2000px)
+    }
+}
+@keyframes bounceOutUp{
+    0%{ -webkit-transform:translateY(0);-ms-transform:translateY(0);transform:translateY(0)
+    }20%{ opacity:1;-webkit-transform:translateY(20px);-ms-transform:translateY(20px);transform:translateY(20px)
+    }100%{ opacity:0;-webkit-transform:translateY(-2000px);-ms-transform:translateY(-2000px);transform:translateY(-2000px)
+    }
+}
+.bounceOutUp{ -webkit-animation-name:bounceOutUp;animation-name:bounceOutUp }
+@-webkit-keyframes bounceInUp{
+    0%{ opacity:0;-webkit-transform:translateY(2000px);transform:translateY(2000px)
+    }60%{ opacity:1;-webkit-transform:translateY(-30px);transform:translateY(-30px)
+    }80%{ -webkit-transform:translateY(10px);transform:translateY(10px)
+    }100%{ -webkit-transform:translateY(0);transform:translateY(0)}
+}
+@keyframes bounceInUp{
+    0%{ opacity:0;-webkit-transform:translateY(2000px);-ms-transform:translateY(2000px);transform:translateY(2000px)
+    }60%{ opacity:1;-webkit-transform:translateY(-30px);-ms-transform:translateY(-30px);transform:translateY(-30px)
+    }80%{ -webkit-transform:translateY(10px);-ms-transform:translateY(10px);transform:translateY(10px)
+    }100%{ -webkit-transform:translateY(0);-ms-transform:translateY(0);transform:translateY(0)}
+}
+.bounceInUp{ -webkit-animation-name:bounceInUp;animation-name:bounceInUp}
+.guide,.end{ position:absolute;text-align:right;top:0;left:0;background:rgba(0,0,0,.5);width:100%;height:100%;z-index:300;}
+.guide img{ width:90%;}
+.end{ text-align:center;width:100%; }
+.end img{ width:60%;position:absolute;top:30%;left:20%;}
+@-webkit-keyframes zoomIn{
+    0%{ opacity:0;-webkit-transform:scale3d(.3,.3,.3);transform:scale3d(.3,.3,.3)
+    }50%{ opacity:1}
+}
+.help-layer{ position:absolute;top:0;left:0;width:100%;height:100%;z-index:300;background:url(/assets_v2/img/special/2017_03_14/bg2.png);background-color:#e8dad7;background-repeat:no-repeat;background-size:100% 100%;}
+.help-title{ margin:0 auto;width:50%;text-align:center;margin-top:3.5rem; }
+.help-title img{ width:100%;}
+.help-info{ list-style:none;padding:0;margin:.5rem auto 0 auto;width:80%; }
+.help-info li{ list-style-type:none;color:#b12761;font-size:1rem;line-height:160%; }
+.help-close{ text-align:center;background:rgba(0,0,0,.5);padding:.2rem;width:1.4rem;height:1.4rem;position:absolute;top:1rem;right:1rem;color:#fff;border-radius:50%;font-family:serif;}
+.img-list{ display:flex;flex-direction:row;}
+.img-item,.img-txt{ flex-grow:1;flex-shrink:1;flex-basis:0;margin:0 .3rem;padding:0 .2rem;text-align:center;overflow:hidden;}
+.img-item:nth-child(1) img{ width:60%;}
+.img-item:nth-child(2) img{ width:90%;}
+.img-item:nth-child(3) img{ width:90%;}
+.img-txt{ background:url(/assets_v2/img/special/2017_03_14/liwubg.png) no-repeat;background-size:contain;height:2rem;color:#fff;font-size:.8rem; }
+@media only screen and (min-device-width:414px) and (max-device-width:736px) and (orientation :portrait) {
+    .result-img{ margin-top:0;}
+    .result-img img{ width:50%;}
+}
+
+</style>
+</head>
+<body>
+<input type="hidden" id="num" value="0">
+<div id="loading" class="loading">
+    <div class="logo"><img src="/assets_v2/img/special/2017_03_14/logo.png" alt=""></div>
+    <p class="back-flip">
+        <span>L</span>
+        <span>O</span>
+        <span>A</span>
+        <span>D</span>
+        <span>I</span>
+        <span>N</span>
+        <span>G</span>
+    </p>
+    <p class="progress" id="progress">
+        <span class="progress-bar"></span>
+    </p>
+</div>
+<!-- bgsound -->
+<div id="audio_btn" class="off none">
+    <audio loop="" src="/assets_v2/img/special/2017_03_14/bg.mp3" autoplay="auto" id="media" preload="metadata"></audio>
+</div>
+<!-- /bgsound -->
+<!-- time -->
+<div id="time" class="time none">
+    <i class="timeicon"></i><span class="times">12秒</span>
+</div>
+<!-- /time -->
+<script>
+    $('#progress .progress-bar').animate({ width:"10%" });
+</script>
+
+<section class="main-page none" id="mainPage">
+    <!-- 1. -->
+    <div class="section" id="page1">
+        <div class="slogen-img" id="slogen"><img src="/assets_v2/img/special/2017_03_14/slogen.png" alt=""></div>
+        <div class="surface-image bounceIn animated" id="surface"><img src="/assets_v2/img/special/2017_03_14/face1.png" alt=""></div>
+        <p class="tac wenhao"><img src="/assets_v2/img/special/2017_03_14/wenhao.png" id="wenhao"></p>
+        <p class="btn1"><img src="/assets_v2/img/special/2017_03_14/btn1.png" id="startBtn"></p>
+    </div>
+    <script>
+        $('#progress .progress-bar').animate({ width:"20%" });
+    </script>
+    <!-- 2. start1-->
+    <div class="section none" id="testPage">
+        <div class="jie-title red"></div>
+        <div class="font-text red timu"></div>
+        <div class="font-box daan">
+        </div>
+        <div class="font-box2 xuanxiang">
+            <div class="font-box-main"></div>
+            <div class="font-box-main"></div>
+            <div class="font-box-main"></div>
+        </div>
+        <p class="btn" id="subBtn"><img src="/assets_v2/img/special/2017_03_14/submint-btn.png" alt=""></p>
+    </div>
+    <script>
+        $('#progress .progress-bar').animate({ width:"30%" });
+    </script>
+</section>
+<section class="main-page none" id="resultPage">
+    <div class="result-title red">
+        <p>小花历经9道生死劫</p>
+        <p class="mt10">飞升四海八荒第一绝色美女</p>
+    </div>
+    <div class="result-img">
+        <img src="/assets_v2/img/special/2017_03_14/baizhen.png" alt="" id="zhenren">
+        <div class="r-name red"></div>
+    </div>
+    <div class="result-btn">
+        <a class="btn-item"><img src="/assets_v2/img/special/2017_03_14/share.png" alt="" id="share"></a>
+        <a class="btn-item"><img src="/assets_v2/img/special/2017_03_14/rebtn.png" alt="" id="rebtn"></a>
+    </div>
+    <div class="result-code red">
+        <img src="/assets_v2/img/special/2017_03_14/code.png" alt="">
+        <p id="result-text">我也要玩</p>
+    </div>
+</section>
+<div class="guide none" id="guide">
+    <img src="/assets_v2/img/guide.png" alt="">
+</div>
+<div class="end none" id="end">
+    <img src="/assets_v2/img/special/2017_03_14/time.png" alt="">
+</div>
+<!-- info -->
+<div class="help-layer none" id="help-layer">
+    <span class="help-close" id="close">&#10005</span>
+    <div class="help-title"><img src="/assets_v2/img/special/2017_03_14/gonglv-title.png" alt="" id="startBtn"></div>
+    <ul class="help-info">
+        <li>1.游戏共设15道劫，每道劫限时12s。
+            <img src="/assets_v2/img/special/2017_03_14/img.png" style="width:100%" alt="">
+        </li>
+        <li>2.游戏共设8个上神角色，可渡劫飞升。若80秒内成功渡过15道劫，即可飞升<span class="cred">夜华或白浅上神</span>，赢得<span class="cred">“上古神器”</span>。
+            <div class="img-list">
+                <div class="img-item">
+                    <img src="/assets_v2/img/special/2017_03_14/liwu1.png" alt="">
+                </div>
+                <div class="img-item">
+                    <img src="/assets_v2/img/special/2017_03_14/liwu2.png" alt="">
+                </div>
+                <div class="img-item">
+                    <img src="/assets_v2/img/special/2017_03_14/liwu3.png" alt="">
+                </div>
+            </div>
+            <div class="img-list">
+                <div class="img-txt">桃花瓶</div>
+                <div class="img-txt">小铃铛</div>
+                <div class="img-txt">昆仑扇</div>
+            </div>
+        </li>
+        <li>3.微信搜索<span class="cred">“云课网”</span>公众号，回复“秘籍”，获取传说中的<span class="cred">《通关宝典》</span>！</li>
+    </ul>
+</div>
+<!-- /info -->
+<script>
+    var userInfo;
+    var mHeight=$(window).height();
+
+    var resultArr=[];
+    var testArr=[],answerArr=[];
+    testArr=[{ section:"天雷劫",subject:"床前明月光",result:"疑是地上霜",textlist:["人","无","疑","细","地","桃","边","上","花","霜","映","是"]},{ section:"业火劫",subject:"国破山河在",result:"城春草木深",textlist:["人","木","草","细","春","面","深","上","城","相","边","花"]},{ section:"封印劫",subject:"遥知不是雪",result:"为有暗香来",textlist:["人","无","焚","细","有","面","为","香","暗","相","来","花"]},{ section:"迷魂劫",subject:"行到水穷处",result:"坐看云起时",textlist:["桃","花","木","细","春","桃","看","花","云","坐","起","时"]},{ section:"凡人劫",subject:"日出江花红胜火",result:"春来江水绿如蓝",textlist:["江","日","来","蓝","绿","如","春","水","市","映","绿","红"]},{ section:"情人劫",subject:"停车坐爱枫林晚",result:"霜叶红于二月花",textlist:["江","日","来","蓝","二","月","来","于","叶","花","霜","红"]},{ section:"生死劫",subject:"竹外桃花三两枝",result:"春江水暖鸭先知",textlist:["江","日","鸭","先","暖","知","春","水","叶","花","霜","红"]},{ section:"诛仙劫",subject:"自在飞花轻似梦",result:"无边丝雨细如愁",textlist:["烈","无","焚","细","雨","江","边","中","愁","如","好","丝"]},{ section:"伤情劫",subject:"去年今日此门中",result:"人面桃花相映红",textlist:["人","无","焚","细","雨","桃","边","花","相","映","面","红"]},{ section:"忘情劫",subject:"落红不是无情物",result:"化作春泥更护花",textlist:["草","化","作","细","更","江","边","护","愁","春","泥","花"]},{ section:"拾忆劫",subject:"晴空一鹤排云上",result:"便引诗情到碧霄",textlist:["草","便","作","霄","碧","引","边","护","到","情","诗","花"]},{ section:"相思劫",subject:"不知细叶谁裁出",result:"二月春风似剪刀",textlist:["二","便","作","刀","碧","剪","月","护","似","情","春","风"]},{ section:"桃花劫",subject:"人间四月芳菲尽",result:"山寺桃花始盛开",textlist:["山","寺","桃","花","始","盛","开","护","到","舒","诗","花"]},{ section:"诛心劫",subject:"可怜九月初三夜",result:"露似真珠月似弓",textlist:["草","便","作","霄","露","似","真","珠","月","似","弓","花"]},{ section:"三生劫",subject:"半醒半醉日复日",result:"花落花开年复年",textlist:["到","便","开","霄","复","落","边","护","到","年","诗","花"]}];
+    var answerArr=[{ name:"折颜上神",jpg:"/assets_v2/img/special/2017_03_14/zheyan.png",share:"第一老凤凰"},{ name:"白真上神",jpg:"/assets_v2/img/special/2017_03_14/baizhen.png",share:"第一护妹狂"},{ name:"胭脂公主",jpg:"/assets_v2/img/special/2017_03_14/yanzhi.png",share:"第一善良小公主"},{ name:"青丘白凤九",jpg:"/assets_v2/img/special/2017_03_14/fengjiu.png",share:"第一蠢萌小狐狸"},{ name:"东华帝君",jpg:"/assets_v2/img/special/2017_03_14/qincang.png",share:"第一老干部"},{ name:"太子夜华",jpg:"/assets_v2/img/special/2017_03_14/yehua.png",share:"第一宠妻狂魔"},{ name:"白浅上神",jpg:"/assets_v2/img/special/2017_03_14/baiqian.png",share:"第一绝色美女"}];
+    $('#slogen').load(function(i){
+        $('#progress .progress-bar').animate({ width:"50%" });
+    });
+    $('#surface').load(function(i){
+        $('#progress .progress-bar').animate({ width:"60%" });
+    });
+    $('#zhenren').load(function(i){
+        $('#progress .progress-bar').animate({ width:"80%" });
+    });
+    $('#media').load(function(i){
+        $('#progress .progress-bar').animate({ width:"95%" });
+    });
+    function playAudio(){
+        var audio = document.createElement('audio');
+        audio.src= "/assets_v2/img/special/2017_03_14/bg.mp3";
+        if (window.WeixinJSBridge) {
+          wx.getNetworkType({
+            success: function (res) {
+              audio.addEventListener("canplaythrough", function () {
+                console.log('音频文件已经准备好，随时待命');
+                audio.play();
+              }, false);
+            },
+            fail: function (res) {
+              audio.play();
+            }
+          });
+        }else{
+          document.addEventListener("WeixinJSBridgeReady", function() {
+            wx.getNetworkType({
+              success: function (res) {
+                audio.addEventListener("canplaythrough", function () {
+                  console.log('音频文件已经准备好，随时待命');
+                  audio.play();
+                }, false);
+              },
+              fail: function (res) {
+                audio.play();
+              }
+            });
+          }, false);
+        }
+    }
+$(function(){
+    var clock=new clock();
+    var audioBtn  = $('#audio_btn'),
+        page1 = $('#page1'),
+        testPage = $('#testPage'),
+        resultPage = $('#resultPage'),
+        loading = $('#loading'),
+        subBtn = $('#subBtn'),
+        guide = $('#guide'),
+        rebtn = $('#rebtn'),
+        timer = $('#time'),
+        wenhao =$('#wenhao'),
+        mainPage = $('#mainPage');
+        // 开始提测
+        var xuangxiang=testPage.find('.xuanxiang');
+        var daan=testPage.find('.daan');
+        var startBtn=$('#startBtn');
+        var startTime,endTime;
+// yindaoceng
+    wenhao.on('touchstart',function(){
+        $("#help-layer").show().addClass("bounceInUp animated");
+    });
+    $("#close").on('touchstart',function(){
+        $("#help-layer").addClass("bounceOutUp").removeClass("bounceInUp");
+    });
+    guide.on('touchstart',function(){
+        $(this).hide();
+    });
+    // $("#end").on('touchstart',function(){
+    //     $(this).hide();
+    //     loading.hide();
+    //     mainPage.show();
+    //     testPage.hide().removeClass("bounceInUp");
+    //     page1.removeClass("bounceOutUp")
+    //     playAudio();
+    // });
+    $('#progress .progress-bar').animate({ width:"100%" },function(){
+        loading.hide();
+        mainPage.show();
+        audioBtn.show();
+        playAudio();
+    });
+    var m = document.getElementById('media');
+
+    audioBtn.on('touchstart',function(){
+        if(!m.paused){
+            m.pause();
+            $(this).removeClass("rotate");
+        }else{
+            m.play();
+            $(this).addClass("rotate");
+        }
+    });
+
+
+    startBtn.on('touchstart',function(){
+        startTime=(new Date()).getTime();
+        // var _endTimes=0;
+        // var endTimeId=setInterval(function(){
+        //     _endTimes=(new Date()).getTime();
+        //     console.log(parseInt((_endTimes-startTime)/1000));
+        //     if(parseInt((_endTimes-startTime)/1000)>80){
+        //         clearInterval(endTimeId);
+        //         $("#end").show();
+        //     }
+        // },1000);
+        m.play();
+        audioBtn.addClass("rotate");
+
+        resultPage.hide();
+        page1.addClass("bounceOutUp animated");
+        testPage.show().addClass("bounceInUp animated");
+        fontBox();
+    });
+    resultPage.on('touchstart','#share',function(){
+        guide.show();
+    });
+    //重新开始
+    resultPage.on('touchstart','#rebtn',function(){
+        startTime=(new Date()).getTime();
+        resultPage.removeClass('bounceInUp').addClass("bounceOutUp animated");
+        testPage.show();
+        mainPage.show();
+        $("#num").val(0);
+        resultArr=[];
+        fontBox();
+    });
+    //展示
+    var stimer;
+    function fontBox(){
+        var i = $("#num").val() ? $("#num").val() :0;
+        if(i>14) {
+            correct(resultArr);
+            return;
+        }else{
+            xuangxiang.find(".font-item").remove();
+        };
+
+        var title = testArr[i].section;
+        var subject = testArr[i].subject;
+        testPage.find('.jie-title').html(title);
+        testPage.find('.timu').html(testArr[i].subject);
+        daan.removeClass("ed");
+        getCharacter(subject);
+        randomCharacter(testArr[i].textlist);
+        timer.show();
+        timerId=null;
+        clock.s=12;
+        stimer=setInterval(function(){
+            clock.mover();
+        },1000);
+
+    }
+    function getCharacter(subject){
+        var _html="";
+        if(subject.length>5){
+            testPage.find('.timu').addClass("font-text2");
+            testPage.find('.daan').addClass("font-box3");
+        }
+        for(var i=0,l=subject.length;i<l;i++){
+            _html+='<div class="font-item un"></div>';
+        }
+        testPage.find('.daan').html(_html);
+    }
+
+    function randomCharacter(arr){
+        var _arr = [].concat(arr);
+        var _xHtml='';
+
+        if(_arr.length < 1){
+            return;
+        }else{
+            var rnd = Math.floor(Math.random()*_arr.length);
+            var l=xuangxiang.find('.font-item').length;
+            _xHtml+='<span class="font-item">'+_arr[rnd]+'</span>';
+            if(l<4){
+                xuangxiang.find('.font-box-main:eq(0)').append(_xHtml);
+            }else if(l<8){
+                xuangxiang.find('.font-box-main:eq(1)').append(_xHtml);
+            }else if(l<12){
+                xuangxiang.find('.font-box-main:eq(2)').append(_xHtml);
+            }
+            _arr.splice(rnd,1);
+            return randomCharacter(_arr);
+        }
+    }
+    var timerId = null;
+    xuangxiang.on('touchstart','.font-item',function(){
+        var _this=$(this);
+        daan.find('.un:eq(0)').html(_this.html()).removeClass('un');
+        if(daan.find('.un').length==0){
+            if(!daan.hasClass('ed')){
+                var i=parseInt($("#num").val());
+                if(i>14){ i=14 }
+                $("#num").val(i+1);
+                daan.addClass('ed');
+                var rigthTxt=daan.text();
+                if(rigthTxt==testArr[i].result){
+                    resultArr.push(i);
+                }
+            };
+            if(!timerId){
+                timerId=setTimeout(function(){
+                    timerId=null;
+                    clearInterval(timerId);
+                    clearInterval(stimer);
+                    fontBox();
+                },100);
+            }
+            return;
+        }
+    });
+    subBtn.on('touchstart',function(){
+        daan.find('.font-item').each(function(){
+            $(this).html('').addClass('un');
+        })
+    });
+    function correct(resultArr){
+        var l = resultArr.length;
+        var rnd,_txt,_txt2,_txt3,_jpg,_shareTxt;
+        endTime=(new Date()).getTime();
+        var t=parseInt((endTime-startTime)/1000);
+        if(resultArr.length<5){
+            rnd = 0;
+            _txt='很遗憾！你只渡过'+l+'道生死劫';
+            _txt2='本次渡劫失败，还需潜心修炼哦！';
+            _jpg='/assets_v2/img/special/2017_03_14/noresult.png';
+            _txt3='长按，回复“秘籍”获取“通关宝典”！';
+            resultPage.find('.btn-item:eq(0)').hide();
+            $('#rebtn').css('width','50%');
+            resultPage.find('.result-img>img').css('width','40%');
+            resultPage.find('.r-name').html('');
+            _shareTxt='很遗憾！你只渡过'+l+'道生死劫，本次渡劫失败，还需潜心修炼哦！';
+        }
+        if(resultArr.length>14 && t<=80){
+            rnd = Math.floor(Math.random()*2+(answerArr.length-2));
+            _txt='历经'+l+'道生死劫，仅用时<span class="cred">'+t+'s</span>';
+            _txt2='飞升四海八荒'+answerArr[rnd].share;
+            _txt3='将此截图发至公众号，领取“上古神器”';
+            _jpg=answerArr[rnd].jpg;
+            resultPage.find('.btn-item:eq(0)').show();
+            $('#rebtn').removeAttr('style');
+            resultPage.find('.result-img>img').removeAttr('style');
+            resultPage.find('.r-name').html(answerArr[rnd].name);
+            _shareTxt=' 史上最难诗词大会！本上神仅用'+t+'s就渡劫成功啦，神器就在不远处，快来参与挑战吧！！！';
+        }else if(resultArr.length>5){
+            rnd = Math.floor(Math.random()*(answerArr.length-2));
+            _txt='历经'+l+'道生死劫，仅用时<span class="cred">'+t+'s</span>';
+            _txt2='飞升四海八荒'+answerArr[rnd].share;
+            _txt3='回复“秘籍”，获取”通关宝典”，赢取神器！';
+            _jpg=answerArr[rnd].jpg;
+            resultPage.find('.btn-item:eq(0)').show();
+            $('#rebtn').removeAttr('style');
+            resultPage.find('.result-img>img').removeAttr('style');
+            resultPage.find('.r-name').html(answerArr[rnd].name);
+            _shareTxt=' 史上最难诗词大会！本上神仅用'+t+'s就渡劫成功啦，神器就在不远处，快来参与挑战吧！！！';
+        }
+        $('#result-text').html(_txt3);
+        resultPage.find('.result-title>p:eq(0)').html(_txt);
+        resultPage.find('.result-title>p:eq(1)').html(_txt2);
+        resultPage.find('.result-img>img').attr('src',_jpg);
+
+        $("meta[name='weixin']").attr({ 'imgurl':_jpg,'desc':_shareTxt});
+        $("title").html(_shareTxt);
+        resultPage.show();
+        resultPage.show().addClass("bounceInUp animated")
+        mainPage.hide();
+        timer.hide();
+    }
+
+    function clock(){
+        this.s=12;
+        this.mover=function(){
+            timer.find('.times').html(this.s+'秒');
+            this.s=this.s-1;
+            if(this.s<0){
+                if(!daan.hasClass('ed')){
+                    var i=parseInt($("#num").val());
+                    if(i>14){ i=14 }
+                    $("#num").val(i+1);
+                    clearInterval(stimer);
+                    fontBox();
+                };
+            }
+        }
+    }
+
+});
+</script>
+<div style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253775234'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/stat.php%3Fid%3D1253775234' type='text/javascript'%3E%3C/script%3E"));</script></div>
+</body>
+</html>

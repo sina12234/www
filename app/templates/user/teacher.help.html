@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 如何上课</title>
+		{part "/index.main.headeruser"}
+	</head>
+	<body>
+		<!--top-->
+		{part "/index.main.nav.user"}
+
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='col-sm-3 user_menu hidden-xs'>
+						<div id=''>
+							<div id='menu'>
+								{part "/user.home.menu.user"}
+
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class='col-sm-9 user_content'>
+						<div class='container-fluid'>
+							<div class='row'>
+								<div>
+									<h1 class="title">如何上课</h1>
+								</div>
+							</div>  
+							<div class='row'>
+                              <div class="articleinfo">
+                                <h2 class="aitit mt25">一. 下载OBS</h2>
+                                <p class="col-sm-6 col-xs-6 mt15 fltnone clear">
+								<a style="padding:4px 10px" href="{utility_cdn::img('/assets/obs/OBS_0_64b_Installer.exe')}" class="btn_fp1" type="submit" value="OBS" />下载OBS(Win7/Win8)</a>
+								<a style="padding:4px 10px" href="{utility_cdn::img('/assets/obs/obs-0.8.3-installer.dmg')}" class="" type="submit" value="OBS" />OBS(Mac版本)</a>
+								</p>
+                               
+                                <h2 class="aitit mt25 clear">二. 配置OBS（主推）</h2>
+                                <p>1.安装OBS</p>
+                                <p>2.双击桌面OBS图标 <img src="{utility_cdn::img('/assets/images/attendClass_5.jpg')}" width="19" height="19"  alt=""/> 打开
+								，如果不能运行，请安装directx !<a style="padding:0px 10px" href="{utility_cdn::img('/assets/obs/directx_Jun2010_redist.exe')}" class="btn_fp1" type="" value="OBS" />这里下载</a>
+								</p>
+                                <p>3.点击“设定”（如图1）</p>
+                                <p><img src="{utility_cdn::img('/assets/images/attendClass_1.jpg')}" class="img-responsive" alt=""/></p>
+                                <p>4.在弹出的菜单-左边栏选择“广播设定”（如图2）</p>
+                                <p><img src="{utility_cdn::img('/assets/images/attendClass_2.jpg')}" class="img-responsive" alt=""/></p>
+                                <p>5.将下面提供的{ 上课参数 }复制到对应的“FMS URL”和“播放路径”中（如图3）</p>
+                                <p><img src="{utility_cdn::img('/assets/images/attendClass_3.jpg')}" class="img-responsive" alt=""/></p>
+                                <p>6.设置上课视频带宽</p>
+                                <p>打开OBS,点击“设定”，在弹框的左边栏选择“编码”    设置最大比特率（kb/s) 。建议设置参数为(200—300kbs之间， 保证学生上课流畅度。如图：4</p>
+                                <p><img src="{utility_cdn::img('/assets/images/attendClass_4.jpg')}" class="img-responsive" alt=""/></p>
+                                <h2 class="aitit mt25 clear">三. 上课参数</h2>
+                                <p>1.FMS URL：<span style="background-color:#ddd;padding:2px 10px">{$token->server}</span></p>
+                                <p>2.播放路径：<span style="background-color:#ddd;padding:2px 10px">{$token->stream_name}</span></p>
+                              </div>
+                              <!--如何上课 end-->
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+		</div>              
+
+		{part "/index.main.footer"}
+
+	</body>
+</html>

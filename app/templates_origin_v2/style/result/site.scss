@@ -1,0 +1,118 @@
+@charset "UTF-8";
+/**
+ * @authors Your Name (you@example.org)
+ * @date    2016-06-08 16:02:24
+ * @version $Id$
+ */
+//公用变量
+@import "../common/bootstrap.min";
+@import "../var/var";
+//normalize
+@import "../common/normalize";
+
+// 共用样式
+@import "../var/var.site";
+@import "site.mixin";
+
+//button
+@import "../common/button";
+@import "../common/common.icon";
+//tab 标签切换样式&&下划线菜单
+@import "../common/org.menus";
+//left menu
+@import "../common/left.nav";
+// Reset button or icon style
+@import "../common/lv.set";
+//select style
+@import "../common/divselect";
+// form style
+@import "../common/forms";
+//table css
+@import "../common/table";
+//../page css  分页公用样式
+@import "../common/page";
+//message frame 提示框公用样式
+@import "../common/message.frame";
+//尖角
+@import "../common/jianjiao";
+//右侧 fixed
+@import "../common/right.fixed";
+// Components
+@import "../common/common";
+@import "../page/header";
+@import "../page/footer";
+
+//page 公共样式
+@import "../page/common";
+// 404 无内容样式
+@import "../page/404";
+//page 首页样式
+@import "../page/index";
+// 分类选择
+@import "../page/cate.list";
+
+@import "../page/course.list";
+// 课程列表
+@import "../page/course.list.new";
+//page right main 公用样式
+@import "../page/right.main";
+// org 机构管理
+@import "../page/org.manage";
+@import "../page/org.main.setting";
+//org.teacher.list 教师管理
+@import "../page/org.teacher.list";
+//teacher.list 教师团队
+@import "../page/teacher.list";
+//teacher.list.supply 代讲章节
+@import "../page/chapter.list";
+//student.main.growth 学习中心
+@import "../page/study.center";
+//study center  学习资讯相关页面
+@import "../page/note.list";
+//fast-nav 快速导航
+@import "../page/fast.nav";
+//统计
+//exam exercise details
+@import "../page/exam.detail";
+//钱包
+@import "../page/money";
+//个人资料
+@import "../page/info.base";
+//左右选择
+@import "../page/multiple.select";
+//弹层-课程模板
+@import "../page/layer.tmpl";
+//作业批改页面
+@import "../page/publish.task";
+//登录注册
+@import "../page/login.reg";
+//课程详情
+@import "../page/course.info";
+//机构统计
+@import "../page/org.count";
+//消息
+@import "../page/msg";
+//会员
+@import "../page/vip";
+//分销
+@import "../page/distribut";
+//教师博客
+@import "../page/blog";
+//评论模块
+@import "../page/comment";
+//关于我们
+@import "../page/about";
+//帮助中心
+@import "../page/help.center";
+//视频管理
+@import "../page/org.video.manage";
+//优惠管理
+@import "../page/coupon.manage";
+//media
+@import "../page/media";
+//新版咨询
+@import "../page/activity.list";
+// 机构管理-订单列表
+@import "../page/org.order";
+// 创建课程
+@import "../page/org.course";

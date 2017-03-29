@@ -1,0 +1,350 @@
+<?php
+
+class course_change extends STpl
+{
+
+    public function __construct()
+    {
+        $user = user_api::loginedUser();
+        if (empty($user)) {
+            $this->redirect("/index.main.login");
+        }
+
+        $org = user_organization::subdomain();
+        $this->uid = $user['uid'];
+        $this->name = $user['real_name'] ? $user['real_name'] : $user['name'];
+
+        $this->orgOwner = !empty($org) ? $org->userId : 0;
+    }
+
+    public function pageClass($inPath)
+    {
+        if (empty($inPath[3]) || empty($inPath[4])) {
+            $this->redirect("/index");
+        }
+        $cid = (int)($inPath[3]);
+        $classId = (int)($inPath[4]);
+
+        $isReg = course_api::checkIsRegistration($this->uid, $cid);
+        if ($isReg === false) {
+            $this->redirect("/course/info/show{$cid}");
+        }
+
+        $regId = !empty($isReg[0]->class_id) ? $isReg[0]->class_id : 0;
+
+        $courseInfo = course_api::getCourseone($cid);
+        if (empty($courseInfo)) {
+            $this->redirect('/index');
+        }
+
+        $data = $this->_getPlanClassData(['cid'=>$cid]);
+
+        $this->assign('data', $data);
+        $this->assign('info', $courseInfo);
+        $this->assign('scoreInfo', course_api::getScoreInfo($cid));
+        $this->assign('isReg', $regId);
+        $this->assign('classId', $classId);
+
+        $this->render('/course/change.class.html');
+    }
+
+    public function pageUpdate()
+    {
+        if (empty($_POST['cid']) || empty($_POST['classId']) || empty($_POST['originClassId']) || empty($_POST['originCid'])) {
+            return json_encode(['code' => 1, 'msg' => '参数错误']);
+        }
+
+        $uid = !empty($_POST['uid']) ? (int)($_POST['uid']) : $this->uid;
+
+        $cid = (int)($_POST['cid']);
+        $classId = (int)($_POST['classId']);
+        $originClassId = (int)($_POST['originClassId']);
+        $originCid = (int)($_POST['originCid']);
+        $data = [
+            'orgOwner' => $this->orgOwner,
+            'uid' => $uid,
+            'cid' => $cid,
+            'classId' => $classId,
+            'originCid' => $originCid,
+            'originClassId' => $originClassId
+        ];
+
+        //检查是否报过该课程
+        if($cid != $originCid){
+            $res = course_api::checkIsRegistration($uid, $cid);
+            if(!empty($res)) return interface_func::setMsg(1, '你已报名该课程,无法调班成功');
+        }
+
+        $r = $this->_getMsgContent($cid, $classId, $originCid, $originClassId);
+        $r['title'] = ($r['title'] == $r['originTitle']) ? '' : "【{$r['title']}】";
+
+        $n = user_api::getBasicUser($uid);
+        $studentName = !empty($n->name) ? $n->name : SLanguage::tr('未设置', 'message');
+
+        if ($this->_update($data)) {
+            $sendUser = $this->_getLocalOrgAdmin($originCid);
+            $msgData  = [
+                'userFrom' => $this->uid,
+                'content'  => "{$this->name}管理员已处理了{$studentName}同学从【{$r['originTitle']}】的[{$r['originClassName']}]调到{$r['title']}[{$r['className']}]的申请",
+                'title'    => '管理员处理调班之后给其它管理员发消息',
+                'msgType'  => message_type::SYSTEM_CLASS_CHANGE_FEEDBACK
+            ];
+
+            $stuData = [
+                'userFrom' => $this->uid,
+                'userTo'   => $uid,
+                'content'  => "{$studentName}同学,管理员已将你从【{$r['originTitle']}】的[{$r['originClassName']}]调到{$r['title']}的[{$r['className']}]",
+                'title'    => '管理员处理调班之后给申请的学生发消息',
+                'msgType'  => message_type::SYSTEM_CLASS_CHANGE_FEEDBACK
+            ];
+
+            foreach ($sendUser as $v) {
+                $msgData['userTo'] = $v;
+                if (message_api::addDialog($msgData) === false) {
+                    SLog::fatal('管理员调班给其他管理员发送信息失败,params[%s]',
+                                var_export(
+                                    [
+                                        'data' => $msgData,
+                                        'user' => $sendUser
+                                    ], 1
+                                )
+                    );
+                }
+            }
+
+            if (message_api::addDialog($stuData) === false) {
+                SLog::fatal('管理员调班给申请调班的学生发送信息失败,params[%s]',
+                            var_export(
+                                [
+                                    'data' => $stuData,
+                                    'user' => $uid
+                                ], 1
+                            )
+                );
+            }
+
+            return interface_func::setMsg(0);
+        }
+
+        return interface_func::setMsg(1);
+    }
+
+    public function pageApply()
+    {
+
+        if (empty($_POST['cid']) || empty($_POST['classId']) || !isset($_POST['type']) || empty($_POST['originClassId']) || empty($_POST['originCid'])) {
+            return json_encode(['code' => 1, 'msg' => '参数错误']);
+        }
+
+        $cid = (int)($_POST['cid']);
+        $classId = (int)($_POST['classId']);
+        $originClassId = (int)($_POST['originClassId']);
+        $originCid = (int)($_POST['originCid']);
+
+        $r = $this->_getMsgContent($cid, $classId, $originCid, $originClassId);
+        $r['title'] = ($r['title'] == $r['originTitle']) ? '' : "【{$r['title']}】";
+        $param = [
+            'orgOwner'      => $this->orgOwner,
+            'uid'           => $this->uid,
+            'cid'           => $cid,
+            'classId'       => $classId,
+            'originCid'     => $originCid,
+            'originClassId' => $originClassId
+        ];
+
+        $userProfileInfo = utility_services::call("/user/profile/info/{$this->uid}");
+        !empty($userProfileInfo->result->real_name) && $this->name = $userProfileInfo->result->real_name;
+
+        //免费课 直接调班，发送短信
+        if ((int)($_POST['type']) == 0) {
+            if ($this->_update($param)) {
+                $data = [
+                    'userFrom' => $this->uid,
+                    'userTo'   => $this->uid,
+                    'content'  => "你已成功从课程【{$r['originTitle']}】的[{$r['originClassName']}]调到{$r['title']}的[{$r['className']}]",
+                    'title'    => '免费课申请调班成功',
+                    'msgType'  => message_type::SYSTEM_CLASS_CHANGE_FEEDBACK
+                ];
+
+                if (message_api::addDialog($data) === false) {
+                    SLog::fatal('免费课调班成功之后发送通知信息失败,params[%s]', var_export(
+                        [
+                            'orgOwner' => $this->orgOwner,
+                            'uid'      => $this->uid,
+                            'cid'      => $cid,
+                            'classId'  => $classId,
+                            'data'     => $data
+                        ], 1
+                    )
+                    );
+                }
+
+                return json_encode(['code'=>0, 'msg'=>'调班成功']);
+            }
+
+            return json_encode(['code'=>1, 'msg'=>'调班失败']);
+        }
+
+        // 付费课发消息通知管理员进审核
+        if ((int)($_POST['type'] == 1)) {
+            $data = [
+                'userFrom' => $this->uid,
+                'content' => "{$this->name}同学,申请从【{$r['originTitle']}】的[{$r['originClassName']}]调到{$r['title']}的[{$r['className']}] <a href='//{$_SERVER['HTTP_HOST']}/org/student/detail/{$this->uid}'>【去处理】</a>",
+                'title' => '付费课调班申请',
+                'msgType' => message_type::SYSTEM_CLASS_CHANGE_FEEDBACK
+            ];
+
+            $sendUser = $this->_getLocalOrgAdmin($originCid);
+            foreach ( $sendUser as $v ) {
+                $data['userTo'] = $v;
+                if (message_api::addDialog($data) === false) {
+                    SLog::fatal('发送通知管理员信息失败,params[%s]', var_export(
+                        [
+                            'data' => $data,
+                            'user' => $sendUser
+                        ], 1
+                    ));
+                }
+            }
+
+            return json_encode(['code'=>0, 'msg'=>'申请成功']);
+        }
+
+        return interface_func::setMsg(1);
+    }
+
+    private function _update($data)
+    {
+        $param = [
+            'condition' => ["fk_user_owner={$data['orgOwner']} AND fk_course={$data['originCid']} AND fk_class={$data['originClassId']} AND fk_user={$data['uid']}"],
+            'data' => ['fk_class' => $data['classId'], 'fk_course' => $data['cid']],
+            'params' => [
+                'originCid' => $data['originCid'],
+                'originClassId' => $data['originClassId'],
+                'cid' => $data['cid'],
+                'classId' => $data['classId'],
+            ]
+        ];
+
+        return course_api::updateUserClass($param);
+    }
+
+    private function _getPlanClassData($param)
+    {
+         $data = course_detailed::getCoursePlan($param);
+         if (empty($data[$param['cid']])) return [];
+
+         $res = [];
+         foreach ($data[$param['cid']] as $v) {
+             foreach ($v as $m) {
+                 $res['classList'][$m['classId']] = [
+                     'class_id' => $m['classId'],
+                     'class_name' => $m['className'],
+                     'teacher_name' => $m['adminName'],
+                     'teacher_id' => $m['adminId'],
+                     'classBeginTime' => $m['progress'],
+                     'classStatus' => $m['courseClassStatus']
+                 ];
+
+                 $res['planList'][$m['classId']][$m['planId']] = $m['planId'];
+             }
+         }
+
+         $res['sectionNum'] = count($res['planList'][$m['classId']]);
+
+         return $res;
+    }
+
+    private function _getAdminArr($orgOwner)
+    {
+        $orgInfo = user_organization::getOrgIdsByUid($orgOwner);
+        if (empty($orgInfo)) return [];
+
+        $orgIdArr = [];
+        foreach ($orgInfo as $v) {
+            $orgIdArr[] = $v->fk_org;
+        }
+
+        $orgStr = implode(',', $orgIdArr);
+        $param = [
+            'condition' => "fk_org IN ({$orgStr}) and status<>-1 and role=2"
+        ];
+
+         $r = utility_services::call('/user/organizationUser/GetAdminList', $param);
+
+        $data = [];
+        if (!empty($r->items)) {
+            foreach ($r->items as $v) {
+                $data[] = $v->fk_user;
+            }
+        }
+
+         return array_unique($data);
+    }
+
+    private function _getLocalOrgAdmin($courseId)
+    {
+        $orgId = course_api::getOrgIdByCourseId($courseId);
+        if (!$orgId) return [];
+        $param = [
+            'condition' => "fk_org={$orgId} and status<>-1 and role=2"
+        ];
+
+        $r = utility_services::call('/user/organizationUser/GetAdminList', $param);
+
+        $data = [];
+        if (!empty($r->items)) {
+            foreach ($r->items as $v) {
+                $data[] = $v->fk_user;
+            }
+        }
+
+        return array_unique($data);
+    }
+
+    private function _getMsgContent($cid, $classId, $originCid, $originClassId)
+    {
+        $param = [
+            'q' => [
+                'course_id' => "$cid,$originCid",
+            ],
+            'f' => [
+                'course_id',
+                'title',
+                'class',
+                'public_type',
+            ]
+        ];
+
+        $res = seek_api::seekCourse($param);
+
+        $data[$cid][$classId] = $data[$originCid][$originClassId] = [
+            'title' => '',
+            'public_type' => '',
+            'className' => '',
+        ];
+
+        if (!empty($res->data)) {
+            foreach ($res->data as $v) {
+                foreach ($v->class as $m) {
+                    if (in_array($m->class_id, [$classId, $originClassId])) {
+                        $data[$v->course_id][$m->class_id] = [
+                            'title' => $v->title,
+                            'public_type' => course_status::$courseType[$v->public_type],
+                            'className' => $m->name
+                        ];
+                    }
+                }
+            }
+        }
+
+        return [
+            'originTitle'      => $data[$originCid][$originClassId]['title'], //原课程名称
+            'originPublicType' => $data[$originCid][$originClassId]['public_type'], // 原课程类型 公开 直播
+            'originClassName'  => $data[$originCid][$originClassId]['className'], // 原班级名称
+            'title'            => $data[$cid][$classId]['title'],
+            'publicType'       => $data[$cid][$classId]['public_type'],
+            'className'        => $data[$cid][$classId]['className']
+        ];
+    }
+}

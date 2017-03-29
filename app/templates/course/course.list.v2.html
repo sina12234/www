@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>全部课程 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 全部课程 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}"></script>
+<link rel="stylesheet" type="text/css" href="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+<script>
+
+$(function() {
+    $("#datestart").datetimepicker({
+        timepicker:false,
+        format: 'Y-m-d',
+    });
+
+	$('#datestart').change(function(){
+        $('#ftime').submit();
+    });
+
+    $('.remove_date').click(function(){
+        window.location.href = "{utility_tool::getUrl($path)}";
+    });
+
+    $("#living").click(function() {
+        if($(this).prop('checked')==true){
+            window.location.href = "{utility_tool::getUrl($path,'course_type',1,$pm['start_time'])}";
+        }else{
+            window.location.href = "{utility_tool::getUrl($path,'course_type',0,$pm['start_time'])}";
+        }
+    });
+    $("#video").click(function() {
+        if($(this).prop('checked')==true){
+            window.location.href = "{utility_tool::getUrl($path,'course_type',2,$pm['start_time'])}";
+        }else{
+            window.location.href = "{utility_tool::getUrl($path,'course_type',0,$pm['start_time'])}";
+        }
+    });
+    $("#line").click(function() {
+        if($(this).prop('checked')==true){
+            window.location.href = "{utility_tool::getUrl($path,'course_type',3,$pm['start_time'])}";
+        }else{
+            window.location.href = "{utility_tool::getUrl($path,'course_type',0,$pm['start_time'])}";
+        }
+    });
+});
+</script>
+<style>
+	.bor1px-1{ border-right:none;border-top:none;border-left:none; }
+</style>
+<body>
+{part "/site.main.nav3.course"}
+<section class="pt20 bgf">
+    <div class="container">
+        <div class="row">
+			<dl class="wrap-category-courses clear fs14">
+				<dt>
+					<a href="{if(isset($is_pro)&&$is_pro==0)}/course.list{elseif(isset($is_pro)&&$is_pro==1)}/course.list{/if}">{'全部课程'|tr:'course.list'}</a> >
+				</dt>
+				{if($pm['firstCate'] != -1)}
+				<dd>
+					<a href="/course.list" class="category-label-title tel">
+						{$firstCateInfo->name_display|tr:'course.list'}
+	          <span class="del-icon delMt8"></span>
+					</a> >
+				</dd>
+				{/if}
+				{if($pm['secondCate'] != -1)}
+					<dd>
+						<a href="/course.list?fc={$pm['firstCate']}" class="category-label-title tel">
+							{$secondCateInfo->name_display|tr:'course.list'}
+							<span class="del-icon delMt8"></span>
+						</a> >
+					</dd>
+				{/if}
+				{if($tg != -1)}
+					<dd>
+						<a href="/course.list?fc={$pm['firstCate']}&sc={$pm['secondCate']}" class="category-label-title tel">
+							{$selectedTagName}
+							<span class="del-icon delMt8"></span>
+						</a>
+					</dd>
+				{/if}
+			</dl>
+			<div class="g-list g-course-list fs14 visible-xs">
+				<div class="mobile_show visible-xs">
+					<dl class="clearfix tac bor1px-1">
+						<dt class="fication">{'分类'|tr:'course.list'}<i class="pos-abs"></i></dt>
+						{if($showLevel == 1)}
+						<dd><a href="{utility_tool::getUrl($path,'fc','-1',$pm['start_time'])}" {if($pm['firstCate'] == -1)}class="c-active"{/if}>{'全部'|tr:'course.list'}</a></dd>
+							{if(!empty($firstCateList))}
+							{foreach($firstCateList as $fk=>$fo)}
+								<dd><a href="{utility_tool::getUrl($path,'fc',$fk,$pm['start_time'])}" {if($pm['firstCate'] == $fk)}class="c-active"{/if}>{$fo|tr:'course.list'}</a></dd>
+							{/foreach}
+							{/if}
+						{elseif($showLevel == 2)}
+						<dd><a href="{utility_tool::getUrl($path,'fc','-1',$pm['start_time'])}" {if($pm['secondCate'] == -1)}class="c-active"{/if}>{'全部'|tr:'course.list'}</a></dd>
+							{if(!empty($secondCateList))}
+							{foreach($secondCateList as $sk=>$so)}
+								<dd><a href="{utility_tool::getUrl($path,'sc',$sk,$pm['start_time'])}" {if($pm['secondCate'] == $sk)}class="c-active"{/if}>{$so|tr:'course.list'}</a></dd>
+							{/foreach}
+							{/if}
+						{elseif($showLevel == 3)}
+						<dd><a href="{if($pm['thirdCate'] == -1)}{utility_tool::getUrl($path,'sc','-1',$pm['start_time'])}{else}{utility_tool::getUrl($path,'tc','-1',$pm['start_time'])}{/if}" {if($pm['thirdCate'] == -1)}class="c-active"{/if}>{'全部'|tr:'course.list'}</a></dd>
+							{if(!empty($thirdCateList))}
+							{foreach($thirdCateList as $tk=>$to)}
+								<dd><a href="{utility_tool::getUrl($path,'tc',$tk,$pm['start_time'])}" {if($pm['thirdCate'] == $tk)}class="c-active"{/if}>{$to|tr:'course.list'}</a></dd>
+							{/foreach}
+							{/if}
+						{/if}
+						{if(!empty($attrValueList))}
+						{foreach($attrValueList as $attr)}
+							{if(!empty($attr->attr_value))}
+							<dl class="cond_content col-md-20 col-xs-20">
+								<dt>{$attr->name_display|tr:'course.list'} :</dt>
+								<dd>
+									<a href="{utility_tool::getUrl($path,'vid',$attr->attr_id.'|-1',$pm['start_time'])}" {if($attr->flag == 0)}class="c-active"{/if}>{'全部'|tr:'course.list'}</a>
+								</dd>
+								{foreach($attr->attr_value as $value)}
+								<dd>
+									<a href="{utility_tool::getUrl($path,'vid',$attr->attr_id.'|'.$value->attr_value_id,$pm['start_time'])}" {if($value->checked == 1)}class="c-active"{/if}>{$value->value_name|tr:'course.list'}</a>
+								</dd>
+								{/foreach}
+							</dl>
+							{/if}
+						{/foreach}
+						{/if}
+					</dl>
+				</div>
+				<div class="comprehensive c-fr visible-xs">
+					<div class="col-xs-20 hidden-lg hidden-md mb10 pd0  col-sm-9 col-sm-offset-2 col-sm-offset-lg-0">
+						<button class="course-scrool-btn col-sm-4 mt5 c-fr">综合<i class="pos-abs"></i></button>
+					</div>
+				</div>
+				<style>
+					@media screen and (min-width:320px) and (max-width:760px){
+						.g-course-list dd{ display:none;width:100%;padding:0;}
+						.fication i{ width: 0;height: 0;border-left: 5px solid transparent;border-right: 5px solid transparent;border-top: 5px solid #9d9d9d;margin-top:15px;margin-left:5px; }
+						.fication_btn i{ width: 0;height: 0;border-left: 5px solid transparent;border-right: 5px solid transparent;border-top: 5px solid #9d9d9d;margin-top:15px;margin-left:5px; }
+						.mobile_show{ float:left; }
+						.g-course-list dt{ padding:0 30px; }
+						.bor1px-1{ width:100px; }
+						.bor1px-2{ width:100px; }
+						.mobile_list{ float:left; }
+						.g-list{ background:#fff; }
+						.triangle-down{ margin-top:15px;margin-left:5px; }
+					}
+				</style>
+				<div class="mobile_list visible-xs">
+					<dl class="clearfix tac bor1px-2">
+						{if !empty($selected)}
+						<dt class="fication_btn">{'标签'|tr:'course.list'}<i class="pos-abs"></i></dt>
+						{foreach($selected as $k=>$v)}
+						<dd>
+							<a href="{utility_tool::getUrl($path,'tg',$v->pk_tag,$pm['start_time'])}" {if !empty($tg)&&$tg==$v->pk_tag}class="c-active"{/if}>{$v->name}</a>
+						</dd>
+						{/foreach}
+						{/if}
+					</dl>
+				</div>
+				<div class="mobile_mem c-fr mr15 hidden-xs">
+						<ul class="col-sm-20 col-md-20 pd0 col-xs-20 col-lg-20">
+						{if(!empty($memberSetList))}
+						<li class="col-xs-20 pd0 col-sm-3 col-lg-3 pos-rel pd0 vip-course-category right col-md-6">
+							<span class="vip-icon c-fl"></span>
+							{if($pm['memberSet'] != -1)}
+								{$checkMember}
+							{else}
+								会员课程
+							{/if}
+							<dl class="col-md-20 pos-abs vip-course-list pd0">
+								{if($memberShow == 1)}
+									{foreach($memberSetList as $mo)}
+									<dd class="col-md-20 pd0">
+										<a href="{utility_tool::getUrl($path,'ms',$mo->pk_member_set,$pm['start_time'])}" >{$mo->title}</a>
+									</dd>
+									{/foreach}
+								{/if}
+								{if(!empty($pm['memberSet'] != -1))}
+									<dd>
+										<a href="{utility_tool::getUrl($path,'ms','-1',$pm['start_time'])}">返回全部课程</a>
+									</dd>
+								{/if}
+							</dl>
+						</li>
+						{/if}
+					</ul>
+				</div>
+			</div>
+			<div class="g-list g-course-list fs14 hidden-xs">
+				<dl class="clearfix tac bor1px-1">
+					<dt>{'分类'|tr:'course.list'} :</dt>
+					{if($showLevel == 1)}
+					<dd><a href="{utility_tool::getUrl($path,'fc','-1',$pm['start_time'])}" {if($pm['firstCate'] == -1)}class="c-active"{/if}>{'全部'|tr:'course.list'}</a></dd>
+						{if(!empty($firstCateList))}
+						{foreach($firstCateList as $fk=>$fo)}
+							<dd><a href="{utility_tool::getUrl($path,'fc',$fk,$pm['start_time'])}" {if($pm['firstCate'] == $fk)}class="c-active"{/if}>{$fo|tr:'course.list'}</a></dd>
+						{/foreach}
+						{/if}
+					{elseif($showLevel == 2)}
+					<dd><a href="{utility_tool::getUrl($path,'fc','-1',$pm['start_time'])}" {if($pm['secondCate'] == -1)}class="c-active"{/if}>{'全部'|tr:'course.list'}</a></dd>
+						{if(!empty($secondCateList))}
+						{foreach($secondCateList as $sk=>$so)}
+							<dd><a href="{utility_tool::getUrl($path,'sc',$sk,$pm['start_time'])}" {if($pm['secondCate'] == $sk)}class="c-active"{/if}>{$so|tr:'course.list'}</a></dd>
+						{/foreach}
+						{/if}
+					{elseif($showLevel == 3)}
+					<dd><a href="{if($pm['thirdCate'] == -1)}{utility_tool::getUrl($path,'sc','-1',$pm['start_time'])}{else}{utility_tool::getUrl($path,'tc','-1',$pm['start_time'])}{/if}" {if($pm['thirdCate'] == -1)}class="c-active"{/if}>{'全部'|tr:'course.list'}</a></dd>
+						{if(!empty($thirdCateList))}
+						{foreach($thirdCateList as $tk=>$to)}
+							<dd><a href="{utility_tool::getUrl($path,'tc',$tk,$pm['start_time'])}" {if($pm['thirdCate'] == $tk)}class="c-active"{/if}>{$to|tr:'course.list'}</a></dd>
+						{/foreach}
+						{/if}
+					{/if}
+					{if(!empty($attrValueList))}
+					{foreach($attrValueList as $attr)}
+						{if(!empty($attr->attr_value))}
+						<dl class="cond_content col-md-20 col-xs-20">
+							<dt>{$attr->name_display|tr:'course.list'} :</dt>
+							<dd>
+								<a href="{utility_tool::getUrl($path,'vid',$attr->attr_id.'|-1',$pm['start_time'])}" {if($attr->flag == 0)}class="c-active"{/if}>{'全部'|tr:'course.list'}</a>
+							</dd>
+							{foreach($attr->attr_value as $value)}
+							<dd>
+								<a href="{utility_tool::getUrl($path,'vid',$attr->attr_id.'|'.$value->attr_value_id,$pm['start_time'])}" {if($value->checked == 1)}class="c-active"{/if}>{$value->value_name|tr:'course.list'}</a>
+							</dd>
+							{/foreach}
+						</dl>
+						{/if}
+					{/foreach}
+					{/if}
+					<div class="col-xs-5 hidden-lg hidden-md mb10 pd0  col-sm-9 col-sm-offset-2 col-sm-offset-lg-0">
+        				<button class="course-scrool-btn pos-rel col-sm-4 mt5 c-fr">综合<i class="pos-abs"></i></button>
+        			</div>
+				</dl>
+
+				<dl class="tec borTop clearfix">
+					{if !empty($selected)}
+					<dt>
+						{'标签'|tr:'course.list'} :
+					</dt>
+					{foreach($selected as $k=>$v)}
+					<dd>
+						<a href="{utility_tool::getUrl($path,'tg',$v->pk_tag,$pm['start_time'])}" {if !empty($tg)&&$tg==$v->pk_tag}class="c-active"{/if}>{$v->name}</a>
+					</dd>
+					{/foreach}
+					{/if}
+				</dl>
+			</div>
+
+			<div class='list-scrool'>
+				<div class='scrool-left'>
+					<ul class="col-sm-20 col-md-20 pd0 col-xs-20 col-lg-20">
+						<li class="{if($pm['sort'] == 'create_time:desc')}x{/if} col-xs-20 pd0 col-sm-2 col-lg-2">
+              				<a href="{utility_tool::getUrl($path,'sort','create_time:desc',$pm['start_time'])}">{'最新建课'|tr:'course.list'}</a>
+            			</li>
+						<li class="{if($pm['sort'] == 'comment:desc')}x{/if} col-xs-20 pd0 col-sm-3 col-lg-2">
+              				<a href="{utility_tool::getUrl($path,'sort','comment:desc',$pm['start_time'])}">{'评价最高'|tr:'course.list'}</a>
+            			</li>
+						<li class="{if($pm['sort'] == 'vv:desc')}x{/if} col-xs-20 pd0 col-sm-4 col-lg-2">
+              				<a href="{utility_tool::getUrl($path,'sort','vv:desc',$pm['start_time'])}">{'观看最多'|tr:'course.list'}</a>
+            			</li>
+						<li class="{if($pm['sort'] == 'price:asc' or $pm['sort'] == 'price:desc')}x{/if} col-xs-20 pd0 col-sm-2 col-lg-2">
+							{if $pm['sort']=='price:asc'}
+							<a href="{utility_tool::getUrl($path,'sort','price:desc',$pm['start_time'])}">
+							<span>
+								{'价格'|tr:'course.list'}
+							</span>
+								<img src="{utility_cdn::img('/assets_v2/img/list-x.png')}">
+							</a> {elseif $pm['sort']=='price:desc'}
+							<a href="{utility_tool::getUrl($path,'sort','price:asc',$pm['start_time'])}">
+							<span>
+								{'价格'|tr:'course.list'}
+							</span>
+								<img src="{utility_cdn::img('/assets_v2/img/list-down.png')}">
+							</a> {else}
+							<a href="{utility_tool::getUrl($path,'sort','price:desc',$pm['start_time'])}">
+							<span>
+								{'价格'|tr:'course.list'}
+							</span>
+								<img src="{utility_cdn::img('/assets_v2/img/list-up.png')}">
+							</a> {/if}
+						</li>
+						{if(!empty($memberSetList))}
+						<li class="col-xs-20 pd0 col-sm-3 col-lg-3 pos-rel pd0 vip-course-category right col-md-6">
+							<span class="vip-icon c-fl"></span>
+							{if($pm['memberSet'] != -1)}
+								{$checkMember}
+							{else}
+								会员课程
+							{/if}
+							<dl class="col-md-20 pos-abs vip-course-list pd0">
+								{if($memberShow == 1)}
+									{foreach($memberSetList as $mo)}
+									<dd class="col-md-20 pd0">
+										<a href="{utility_tool::getUrl($path,'ms',$mo->pk_member_set,$pm['start_time'])}" >{$mo->title}</a>
+									</dd>
+									{/foreach}
+								{/if}
+								{if(!empty($pm['memberSet'] != -1))}
+									<dd>
+										<a href="{utility_tool::getUrl($path,'ms','-1',$pm['start_time'])}">返回全部课程</a>
+									</dd>
+								{/if}
+							</dl>
+						</li>
+						{/if}
+					</ul>
+					<!--<div class='scrool-right col-md-8 col-lg-6 col-sm-20 pd0 gn-scrool-right hidden-xs'>-->
+						<!--<label class='scrool-z c-fl'>-->
+							<!--<input type="checkbox" id="living" {if $pm['course_type']==1}checked{/if}>&nbsp;&nbsp;{'直播课'|tr:'course.list'}-->
+						<!--</label>-->
+						<!--<label class='scrool-z c-fl'>-->
+							<!--<input type="checkbox" id="video" {if $pm['course_type']==2}checked{/if}>&nbsp;&nbsp;{'录播课'|tr:'course.list'}-->
+						<!--</label>-->
+						<!--<label class='scrool-z c-fl'>-->
+							<!--<input type="checkbox" id="line" {if $pm['course_type']==3}checked{/if}>&nbsp;&nbsp;{'线下课'|tr:'course.list'}-->
+						<!--</label>-->
+
+						<!--<label class="foem-posi c-fl">-->
+							<!--<form id="ftime" action="{utility_tool::getUrl($path)}" method="post">-->
+							<!--<input type="text" class="form-control" id="datestart" name="start_time" readonly placeholder="{'开课时间'|tr:'course.list'}" value="{if !empty($pm['start_time'])}{$pm['start_time']}{/if}">-->
+							<!--<img src="{utility_cdn::img('/assets_v2/img/list-rl.png')}" style="margin-top:5px;float:right;margin-left:5px;">-->
+							<!--{if !empty($pm['start_time'])}-->
+							<!--<img src="{utility_cdn::img('/assets_v2/img/hide.png')}" class="hide-img remove_date">-->
+							<!--{/if}-->
+							<!--</form>-->
+						<!--</label>-->
+					<!--</div>-->
+				</div>
+			</div>
+			</div>
+    </div>
+  </div>
+</section>
+<section style="z-index:1" class="pd20 bgf">
+  <div class="container">
+      <div class="row">
+          {if !empty($courseList)}
+          <ul class="course-list col-xs-20">
+          {foreach $courseList as $v}
+          <li class="course-list-item course-list-hgh col-lg-5 col-md-5  col-sm-10  col-xs-10">
+			  <a class="course-item-box" href="/course.info.show/{$v->course_id}" target="_blank">
+				  <div class="tab-li-img tab-img-list">
+					  <img  src="{utility_cdn::file($v->thumb_med)}" alt="">
+				  </div>
+				  <div class="tab-tit">
+					  <div class="tab-title">
+						  {$v->title}
+					  </div>
+					  <div class="tab-li-info">
+						  <div class="info-left left">
+							  {if($v->fee_type==0)}
+								  <span class="wo-course-price cGreen">
+										{'免费'|tr:'course.list'}
+									</span>
+                              {elseif isset($v->fee->price)}
+								<span class="wo-course-price cRed">
+                                    {if $v->fee->price%100==0}
+                                        <span class="fs12 mt2 ">￥</span>{$v->fee->price/100}
+                                    {else}
+                                        <span class="fs12 mt2 ">￥</span>{number_format($v->fee->price/100,2)}
+                                    {/if}
+								</span>
+                              {else}
+                              <span class="wo-course-price cRed">
+                                    {if $v->price%100==0}
+                                        <span class="fs12 mt2 ">￥</span>{$v->price/100}
+                                    {else}
+                                        <span class="fs12 mt2 ">￥</span>{number_format($v->price/100,2)}
+                                    {/if}
+								</span>
+                              {/if}
+							  {if($v->try==1)}
+							  <span class="i-course-status">可试看</span>
+							  {/if}
+						  </div>
+                          {if !empty($org_hot_type->hot_type)&&$org_hot_type->hot_type==1}
+						  <div class="info-right right">
+							  <span class="icon count-icon"></span>
+							  <span class="person-count">{$v->user_total}<!--{'学生'|tr:'course.list'}--></span>
+						  </div>
+                          {/if}
+                          {if !empty($org_hot_type->hot_type)&&$org_hot_type->hot_type==3}
+						  <div class="info-right right">
+                              {if $v->vv >=10}
+							  <span class="icon live-icon"></span>
+							  <span class="person-count">{$v->vv}</span>
+                              {/if}
+						  </div>
+                          {/if}
+                          {if !empty($org_hot_type->hot_type)&&$org_hot_type->hot_type==2}
+						  <div class="info-right right">
+                              {if $v->max_user-$v->user_total>5}
+                              <span class="icon hot-icon"></span>
+							  <span class="person-count">热报中</span>
+                              {/if}
+                              {if $v->max_user-$v->user_total>0&&$v->max_user-$v->user_total<=5}
+							  <span class="person-count">{'剩余'|tr:'course.list'}{$v->max_user - $v->user_total}</span>
+                              {/if}
+                              {if $v->max_user-$v->user_total<=0}
+                              <span class="person-count">{'已报满'|tr:'course.list'}</span>
+                              {/if}
+						  </div>
+                          {/if}
+						  <div class="clear"></div>
+					  </div>
+				  </div>
+			  </a>
+          </li>
+          {/foreach}
+		  <div class="clear"></div>
+			</ul>
+                {else}
+                <div class='list-tu show'>
+                    <div class='list-img'>
+                        <img src="{utility_cdn::img('/assets_v2/img/pet3.png')}">
+                        <div class='list-book'>
+                            <span>{'没找到符合您需求的课程'|tr:'course.list'},{'请调整一下再试'|tr:'course.list'}~</span>
+                            <p>{'您可以戳'|tr:'course.list'}<a href="/course.list"><b>{'这里'|tr:'course.list'}</b></a>{'返回默认条件'|tr:'course.list'}~</p>
+                        </div>
+                    </div>
+                </div>
+                {/if}
+
+        <div class="clear"></div>
+        <div class="page-list" id="pagepage"></div>
+		    <script>
+			    page("pagepage","{$path_page}",{$pm['size']},{$pm['page']},{$pm['total']});
+			</script>
+    </div>
+</div>
+</section>
+<div id="rightWindow"></div>
+<script>$("#rightWindow").load("/org.rightWindow.rightWindow");</script>
+{part "/site.main.footer"}
+</body>
+</html>
+<script>
+$(document).ready(function(){
+    $(".g-list ul").find("li:eq(0)").after("<span class='c-fl hidden-xs hidden-sm filter-spn'></span>");
+
+    $('.list-a').each(function(){
+        if($(window).width()<800){
+        var list_a_span=$(this).find('p>span:first');
+        var list_a_sel=$(this).find('.list-sel');
+        if(list_a_sel.text() !='全部'){
+            list_a_span.html(list_a_sel.text());
+        }
+        }
+    });
+    $('.list-a').click(function(){
+        if($(window).width()<800){
+           $('.g-list ul').hide();
+            $('.g-list ul:eq(' + $(this).index() + ')').show();
+        };
+
+    });
+//综合
+    if($(window).width() < 1024) {
+    	$(".course-scrool-btn").click(function() {
+    		if($(".list-scrool").hasClass('list-scrool-active')) {
+    			$(".list-scrool").removeClass('list-scrool-active')
+    			$(".list-scrool").hide();
+    		}else {
+    			$(".list-scrool").addClass('list-scrool-active');
+    			$(".list-scrool").show();
+    		}
+    	})
+    }
+	if($(window).width() < 400){
+		$(".list-scrool").hide();
+	}
+//分类
+if($(window).width() < 1024){
+			$('.fication').click(function(){
+				if($(".bor1px-1>dd").hasClass('fication-active')) {
+						$(".bor1px-1>dd").removeClass('fication-active')
+						$(".bor1px-1>dd").hide();
+						$(".fication").css({ 'color':'#999'})
+					}else {
+						$(".bor1px-1>dd").addClass('fication-active');
+						$(".bor1px-1>dd").show();
+						$(".fication").css({ 'color':'#26b3c0'})
+				}
+			})
+			$('.fication_btn').click(function(){
+				if($(".bor1px-2>dd").hasClass('fication-active')) {
+						$(".bor1px-2>dd").removeClass('fication-active')
+						$(".bor1px-2>dd").hide();
+						$(".fication_btn").css({ 'color':'#999'})
+					}else {
+						$(".bor1px-2>dd").addClass('fication-active');
+						$(".bor1px-2>dd").show();
+						$(".fication_btn").css({ 'color':'#26b3c0'})
+				}
+			})
+			$('.cond_content').click(function(){
+					if($(".cond_content>dd").hasClass('fication-active')) {
+						$(".cond_content>dd").removeClass('fication-active')
+						$(".cond_content>dd").hide();
+						$(".cond_content>dt").css({ 'color':'#999'})
+					}else {
+						$(".cond_content>dd").addClass('fication-active');
+						$(".cond_content>dd").show();
+						$(".cond_content>dt").css({ 'color':'#26b3c0'})
+				}
+			})
+			$('.vip-course-category').click(function(){
+				$(this).find('.vip-course-list').show();
+			})
+}
+//vip
+	$('.vip-course-category').hover(function() {
+		$(this).find('.vip-course-list').show();
+	} ,function() {
+		$(this).find('.vip-course-list').hide();
+	})
+
+});
+</script>

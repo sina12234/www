@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>创建章节 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+    <meta name="title" content="{part '/site.main.orgname'} - 创建课程 - 云课 - 专业的在线学习平台">
+    <meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网">
+    <meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+    {part "/site.main.header"}
+    <link rel="stylesheet" type="text/css" href="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+</head>
+ <style>
+.gn-base-ct .set-course-content li{ padding:0 10px;}
+.gn-base-ct .set-course-content .update-sectionDesc{ border: 1px solid #ddd;padding: 4px;margin-top: 4px;}
+.gn-base-ct .set-course-content .update-startTime,.gn-base-ct .set-course-content .update-endTime{ padding: 4px;border: 1px solid #ddd;margin-top: 2px;} 
+.dropdown .dropdown-show-tab{ width: 20%;padding: 0 10px 0 0; float:left;margin:5px;}
+ </style>
+<body>
+{part "/site.main.nav.home"}
+<section class="p40 divSelectFirstVal" id="divSelectFirstVal">
+    <div class="container addMorePlanInfo" id="addMorePlanInfo">
+        <div class="row">
+    <!-- bdy -->
+        <section>
+            <div class="col-md-20 pr0">
+                <div class="gn-base-ct clearfix">
+                    <section class="col-md-20 fs14">
+                        <h1 class="base-title mb20">
+                            <a href="/user/org/SetCourseDesc" class="cGray">返回</a> > 
+                            <a href="/user.org.checkcourse" class="cGray">创建课程</a> > 
+                            创建设置章节
+                        </h1>
+                        <h2 class="tal fs14 mb20 pb5" style="border-bottom:1px solid #ddd;">班级排课</h2>
+                        <ul class="col-md-20 set-class-info clearfix form-horizontal">
+                            <li class="col-md-6 p0 clearfix">
+                                <span class="c-fl"><em class="cRed">*</em>班级名称：</span>
+                                <input id="section-class-name" maxlength="5" type="text" class="section-class-name class-inpt-text plan-add-val" />
+                            </li>
+                            <li class="col-md-6 clearfix" id="class-number-info" style="display:none;">
+                                <span class="c-fl"><em class="cRed">*</em>班级座位：</span>
+                                <input onkeyup="this.value=this.value.replace(/\D/g,'')" id="section-class-number" type="text" class="class-inpt-text" />
+                            </li>
+                            <li class="col-md-6 clearfix">
+                                <span class="c-fl"><em class="cRed">*</em>班主任：</span>
+                                <div class="divselect col-md-14 p0 c-fl" id="section-class-teacher-name">
+                                    <cite>
+                                        <span class="cite-icon"></span>
+                                        <span class="cite-text" teacherid="">请选择</span>
+                                    </cite>
+                                    <dl class="select-teacher-list"></dl>
+                                </div>
+                            </li>
+                            <li class="col-md-20 p0 clearfix" id="add-adress-info" style="display:none;">
+                                <span class="c-fl col-md-1 p0">地址：</span>
+                                <div class="c-fl col-md-19 p0">
+                                    <div class="divselect divselect-32 col-md-4 mr20 p0" id="get-regLevelv0">
+                                        <cite>
+                                            <span class="cite-icon"></span>
+                                            <span class="cite-text" id="get-address-level0" regid="">请选择</span>
+                                        </cite>
+                                        <dl id="get-address-levelOne"></dl>
+                                    </div>
+                                    <div class="divselect divselect-32 col-md-4 mr20 p0" style="display:none;" id="get-regLevelv1">
+                                        <cite>
+                                            <span class="cite-icon"></span>
+                                            <span class="cite-text" id="get-address-level1" regid="">请选择</span>
+                                        </cite>
+                                        <dl id="get-address-levelTwo"></dl>
+                                    </div>
+                                    <div class="divselect divselect-32 col-md-4 mr20 p0" style="display:none;" id="get-regLevelv2">
+                                        <cite>
+                                            <span class="cite-icon"></span>
+                                            <span class="cite-text" id="get-address-level2" regid="">请选择</span>
+                                        </cite>
+                                        <dl id="get-address-levelThree"></dl>
+                                    </div>
+                                </div>
+                                <textarea class="col-md-19 c-fr address-info-txt" style="display:none;" placeholder="请输入地址" id="get-course-address"></textarea>
+                            </li>
+                        </ul>
+                        <h2 class="tal fs14 mb20 pb5" style="border-bottom:1px solid #ddd;">设置课程章节</h2>
+                        <ul class="gn-base-ct set-course-content clearfix" id="article-list" style="padding:0;border:0;"></ul>
+                        <div class="set-course-content gn-base-ct set-more-course clearfix" style="border:1px solid #e8e8e8;">
+                            <span class="col-md-3 cBlue add-course-lessbtn p5" onclick="addPlanInfoList()">+添加单个课时</span>
+                            <span class="col-md-3 cBlue p5" id="addMoreCoursePlan" type="{$type}" onclick="addMorseCoursePlan(this)">+批量添加课时</span>
+                        </div>
+                        <div class="tac mt40 mb40 p40">
+                            <button class="gray-button" onclick="backHistoryGo()">上一步</button>
+                            <button class="green-button" onclick="createPlanSuccess()">完成创建</button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </section>
+    <!-- /bdy -->
+    <!-- 批量添加 -->
+        <section id="add-more-course" class="add-more-course" style="display:none;">
+            <div class="col-xs-20 mt20 clearfix">
+                <div class="clearfix col-xs-20 p0 mb10">
+                    <div class="col-xs-5 tar fs14">章节名：</div>
+                    <textarea class="col-xs-12 more-txt-content" placeholder="批量添加章节，每行输入一个章节名称，章节按顺序自动排序" id="plan-add-desc"></textarea>
+                    <p class="tar col-xs-18 lGray">批量添加章节，每行输入一个章节名称，章节按顺序自动排序</p>
+                </div>
+                <div class="clearfix col-xs-20 p0 mb10">
+                    <div class="col-xs-5 tar fs14">授课老师：</div>
+                    <div class="divselect divselect-32 col-md-5 p0 section-class-teacher-name">
+                        <cite>
+                            <span class="cite-icon"></span>
+                            <span class="cite-text">请选择</span>
+                        </cite>
+                        <dl class="select-teacher-list"></dl>
+                    </div>
+                </div>
+                <div class="col-xs-20 p0" id="add-more-startTime">
+                    <div class="col-xs-5 fs14 tar">开课时间：</div>
+                    <div class="col-xs-10 p0 course-date mb10 mr10 clearfix">
+                        <input type="text" placeholder="开课时间" class="startime-plan-course course-name col-xs-18">
+                        <img src="/assets_v2/img/list-rl.png" class="c-fr datertime-icon mt5" alt="">
+                    </div>
+                </div>
+                <div class="col-xs-20 p0" id="add-morse-styBtn">
+                    <div class="col-xs-5 fs14 tar">循环方式：</div>
+                    <div class="divselect col-xs-5 p0 mr10" id="selectTweekType">
+                        <cite>
+                            <span class="cite-icon"></span>
+                            <span class="cite-text">请选择</span>
+                        </cite>
+                        <dl>
+                            <dd>
+                                <a href="javascript:;" data-id="1">每天</a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;" data-id="2">每周</a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;" data-id="3">自定义</a>
+                            </dd>
+                        </dl>
+                    </div>
+                    <span class="c-fl mr10">
+                        <img src="/assets_v2/img/list-rl.png" id="select-more-time" style="display:none;" alt="" />
+                    </span>
+                </div>
+                <div class="col-xs-20 p10 dropdown" id="select-addTime" style="display:none;"></div>
+                <div class="col-xs-20 p0" id="add-morse-selectBtn">
+                    <div class="col-xs-5 fs14 tar">课程时长：</div>
+                    <div class="divselect col-xs-5 p0 mr10" id="selectLongType">
+                        <cite>
+                            <span class="cite-icon"></span>
+                            <span class="cite-text">请选择</span>
+                        </cite>
+                        <dl>
+                            <dd>
+                                <a href="javascript:;" data-id="1">0.5小时</a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;" data-id="2">1小时</a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;" data-id="3">1.5小时</a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;" data-id="4">2小时</a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;" data-id="5">2.5小时</a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;" data-id="6">3小时</a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;" data-id="7">自定义</a>
+                            </dd>
+                        </dl>
+                    </div>
+                    <input class="col-xs-8" class="course-name hours-ipt" style="display:none;" placeholder="输入时间（分钟）" id="select-more-minute" /> 
+                </div>
+                <div class="col-xs-20 p0" id="add-morse-typeTwo" style="display:none;">
+                    <div class="col-xs-5 tar fs14">视频：</div>
+                    <div class="divselect divselect-32 col-xs-5 p0">
+                    <cite>
+                        <span class="cite-icon"></span>
+                        <span class="cite-text" time="0" type="0">请选择</span>
+                    </cite>
+                    <dl>
+                        <dd>
+                            <a href="javascript:;" time="0" type="0">无试看</a>
+                        </dd>
+                        <dd>
+                            <a href="javascript:;" time="0" type="1">试看整节</a>
+                        </dd>
+                        <dd>
+                            <a href="javascript:;" time="300" type="2">试看5分钟</a>
+                        </dd>
+                        <dd>
+                            <a href="javascript:;" time="600" type="2">试看10分钟</a>
+                        </dd> 
+                        <dd>
+                            <a href="javascript:;" time="1200" type="2">试看20分钟</a>
+                        </dd>
+                        <dd>
+                            <a href="javascript:;" time="0" type="-2">隐藏视频</a>
+                        </dd>     
+                    </dl>
+                </div>
+                </div>
+                <div class="clearfix mb10 tac">
+                    <button class="green-button" data-status="0" id="quicksetCourse-btn" type="{$type}" onclick="quicksetCourse(this)">确认</button>
+                    <button class="gray-button" onclick="quicksetCourseCancle()" >取消</button>
+                </div>
+            </div>
+        </section>
+    <!-- /批量添加 -->
+        </div>
+    </div>
+</section>
+<input class="hidden" type="{$type}" updateId="0" classId="{$classId}" courseId="{$courseId}" id="grobal-course" />
+<input class="hidden" id="course-plan-class" classId="{$classId}" />
+{part "/site.main.footer"}
+</body>
+</html>
+<script type="text/template" id="getPlanListInfoTpl">
+<<#section>>
+	<li class="col-md-20 planList" data-livetype="<<livePublicType>>" data-videotype="<<videoPublicType>>" data-videotime="<<videoTrialTime>>">
+		<div class="name-h clearfix col-lg-20 p0">
+			<span class="c-fl mt5 global-sectId" data-l="<<orderNo>>" sectionId="<<sectionId>>"><<sectionName>>：</span>
+			<input type="text" value="<<sectiondesc>>" class="col-lg-8 c-fl add-plan-text update-sectionDesc">
+			<a href="javascript:;" authority="<<authority>>" planId="<<planId>>" class="c-fr mt10 cBlue plan-edit-deltBtn" onclick="deltPlanEditBtn(this)">删除</a>
+		</div>
+		<dl class="name-cont clearfix col-lg-20 p0">
+			<dd class="col-md-4 p0">
+				<div class="c-fl mt5 ml22">讲师：</div>
+				<div class="divselect divselect-32 teacher-select col-md-14 p0">
+					<cite>
+						<span class="cite-icon"></span>
+						<span class="cite-text teacher-text" teacherId="<<teacherId>>"><<teacher>></span>
+					</cite>
+					<dl class="select-teacher-list"></dl>
+				</div>
+			</dd>
+			<dd class="col-md-4 p0">
+				<div class="c-fl mt5">时间：</div>
+				<input type="text" class="datestart col-md-15 update-startTime" value="<<startTime>>" placeholder="开始日期">
+			</dd>
+			<dd class="col-md-4 p0">
+				<div class="c-fl mt10">至&nbsp;</div>
+				<input type="text" class="datestart col-md-15 update-endTime"  value="<<endTime>>" placeholder="结束日期">
+			</dd>
+			<dd class="col-md-4 p0" style="display:none;">
+				<div class="c-fl mt5 tar">直播：</div>
+				<div class="divselect divselect-32 live-select col-md-15 p0" livetype="<<livePublicType>>">
+					<cite>
+						<span class="cite-icon"></span>
+						<span class="cite-text livetype-text" livetype="<<livePublicType>>">请选择</span>
+					</cite>
+					<dl>
+						<dd><a href="javascript:;" livetype="0">无试看</a></dd>
+						<dd><a href="javascript:;" livetype="1">试看整节</a></dd>
+					</dl>
+				</div>
+			</dd>
+			<dd class="col-md-4 p0" style="display:none;">
+				<div class="c-fl mt5 tar">视频：</div>
+				<div class="divselect divselect-32 video-select col-md-15 p0" videotype="<<videoPublicType>>" videotime="<<videoTrialTime>>">
+					<cite>
+						<span class="cite-icon"></span>
+						<span class="cite-text videotype-text" videotype="<<videoPublicType>>" videotime="<<videoTrialTime>>">请选择</span>
+					</cite>
+					<dl>
+						<dd><a href="javascript:;" videotime="0" videotype="0">无试看</a></dd>
+						<dd><a href="javascript:;" videotime="0" videotype="1">试看整节</a></dd>
+						<dd><a href="javascript:;" videotime="300" videotype="2">试看5分钟</a></dd>
+						<dd><a href="javascript:;" videotime="600" videotype="2">试看10分钟</a></dd>
+						<dd><a href="javascript:;" videotime="1200" videotype="2">试看20分钟</a></dd>
+						<dd><a href="javascript:;" videotime="0" videotype="-2">隐藏视频</a></dd>
+					</dl>
+				</div>
+			</dd>
+		</dl>
+	</li>
+<</section>>
+</script>
+<script type="text/template" id="courseTutorTpl">
+    <<#classTeacher>>
+        <dd>
+            <a href="javascript:;" onclick="selectCourseTeacher(this)" checkedId="<<checked>>" teacherId="<<teacherId>>"><<teacherName>></a>
+        </dd>  
+    <</classTeacher>>
+</script>
+<script type="text/template" id="courseTeacherTpl">
+    <<#teacher>>
+        <dd>
+            <a href="javascript:;" onclick="selectCourseTeacher(this)" checkedId="<<checked>>" teacherId="<<teacherId>>"><<teacherName>></a>
+        </dd>  
+    <</teacher>>
+</script>
+<script type="text/template" id="getRegionOneTpl">
+<<#region>>
+    <dd>
+        <a href="javascript:;" onclick="getRegionTwo(this)" checkedId="<<checked>>" regId="<<regId>>" level="<<level>>"><<regName>></a>
+    </dd>
+<</region>>
+</script>
+<script type="text/template" id="getRegionTwoTpl">
+<<#region>>
+    <dd>
+        <a href="javascript:;" onclick="getRegionThree(this)" checkedId="<<checked>>" regId="<<regId>>" level="<<level>>"><<regName>></a>
+    </dd>
+<</region>>
+</script>
+<script type="text/template" id="getRegionThreeTpl">
+<<#region>>
+    <dd>
+        <a href="javascript:;" onclick="getRegionLast(this)" checkedId="<<checked>>" regId="<<regId>>" level="<<level>>"><<regName>></a>
+    </dd>
+<</region>>
+</script>
+<script type="text/template" id="updateRegionOneTpl">
+<<#province>>
+    <dd>
+        <a href="javascript:;" onclick="getRegionTwo(this)" regId="<<regionId>>" checkedId="<<checked>>"><<name>></a>
+    </dd>
+<</province>>
+</script>
+<script type="text/template" id="updateRegionTwoTpl">
+<<#city>>
+    <dd>
+        <a href="javascript:;" onclick="getRegionThree(this)" regId="<<regionId>>" checkedId="<<checked>>"><<name>></a>
+    </dd>
+<</city>>
+</script>
+<script type="text/template" id="updateRegionThreeTpl">
+<<#area>>
+    <dd>
+        <a href="javascript:;" onclick="getRegionLast(this)" regId="<<regionId>>" checkedId="<<checked>>"><<name>></a>
+    </dd>
+<</area>>
+</script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/mustache.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery.create.course.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery.course.plan.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}"></script>
+<script type="text/javascript">
+var type="{$type}";
+$(function() {
+    planInfo();
+    $.divselect(".divselect cite");;
+    if(type == 3){
+        getRegion();
+        $('#add-adress-info').show();
+    }else {
+        $('#add-adress-info').hide();
+    }
+    if(type != 2) {
+        $('#class-number-info').show();
+    }else{
+        $('#class-number-info').hide();
+    };
+    $('.startime-plan-course').datetimepicker({
+        format: "Y-m-d H:i",
+        timepicker:true, 
+        step:5,
+        minDate:jQuery('.startime-plan-course').val(),
+    });
+    $('.datertime-icon').click(function() {
+        $('.startime-plan-course').datetimepicker('show');
+    })
+    $( "#select-more-time" ).datetimepicker({ 
+        timepicker:false, 
+        format:'Y-m-d H:i',
+        step:5,
+        minDate:jQuery('#select-more-time').val(),
+        onSelectDate:function(ct,$i){
+            var cts = ct.dateFormat('n月j日');
+            var cts = ct.dateFormat('Y-m-d');
+                orderName = $('#plan-add-desc').val().split("\n");
+                for(var i = 0 ; i<orderName.length; i++) {
+                    if(orderName[i] == "" || typeof(orderName[i]) == "undefined") {
+                      orderName.splice(i, 1);
+                      i = i - 1;
+                    }        
+                }
+            var timeset = $("#select-addTime .dropdown-show-tab").length;
+            var myTime = [];
+            if($('#plan-add-desc').val() == '') {
+                layer.msg('章节内容为空');
+                locationReload();
+                return false;
+            }
+            if(timeset < i){
+                $("<div class='dropdown-show-tab' onclick='deltDate(this)'><div class='tab-delete'></div><div class='left-side'></div>"+cts+"</div>").appendTo("#select-addTime");
+                $('#select-addTime').find('.dropdown-show-tab').each(function() {
+                    myTime.push($(this).text());
+                });
+                $('#select-more-time').attr('myTimes', myTime.join(','));
+            }
+        }
+    });
+});
+</script>

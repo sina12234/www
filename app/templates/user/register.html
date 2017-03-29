@@ -1,0 +1,273 @@
+<!doctype html>
+<html>
+	<head>
+		<title>高能100 注册</title>
+		{part "/index.main.header"}
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/user.css')}">
+		<script src="{utility_cdn::js('/assets/js/user.js')}"></script>
+	</head>
+
+	<body>
+		{part "/index.main.nav"}
+
+		<div class="regCon">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="rcle col-sm-4 hidden-xs">
+						<div class="snsicons_v clearfix" style="margin-left:30px;">
+							<h1>使用社交账号直接登录</h1>
+							<ul class="siv" id="parterner" style="margin-left:15px;">
+								<li><a class="parterner" href="/user/parterner/weixin/"><b class="snsi si_weixin"></b><em>微信</em></a></li>
+								<li><a class="parterner" href="/user/parterner/qq"><b class="snsi si_qq"></b><em>QQ</em></a></li>
+								{*<li><a class="parterner" href="/user/parterner/alipay"><b class="snsi si_taobao"></b><em>淘宝</em></a></li>
+								<li><a class="parterner" href="/user/parterner/sina"><b class="snsi si_weibo"></b><em>微博</em></a></li>
+								*}
+							</ul>
+						</div>
+					</div>
+
+					<div class="rcri col-sm-8">
+						<div class="x_reg_inner_1" id="reg_ok" style="display:none">
+							<h1>注册成功，请<a href="/user/main/login">登录</a></h1>
+						</div>
+						<form action="" method="get" autocomplete="off" id="form">
+						<input type="hidden" id="voice" name="voice" value="0" />
+							<div class="x_reg_inner_1">
+								<h1>欢迎注册</h1>
+								<div class="row x_field2">
+									<span class="col-sm-3 col-xs-3">&nbsp;</span>
+									<span class="col-sm-8 col-xs-8"><div id="error" class="x_error"></div></span>
+								</div>
+
+								<!--<style> .x_field2 .x_input_tx2,.x_btn_reg2{ width:100%; } </style>-->
+								<div class="row x_field2">
+									<span class="col-xs-3 xftit fr">手机号：</span>
+									<span class="col-sm-8 col-xs-8"><input class="col-sm-12 x_input_tx2" style="padding-left:10px;" type="text" placeholder="输入手机号作为登录账号" name="mobile" id="mobile"></span>
+								</div>
+								<style>
+								.x_btn_yanzhengma{
+									margin:0px;
+									margin-right:10px;
+									padding:0px 15px;
+								}
+								#get_verify_code{
+									margin-left:10px;
+								}
+								.x_btn_yanzhengma_v {
+									margin: 0px 10px;
+									line-height: 30px;
+									color: #3366cc;
+								}
+								.yanzheng-gray{
+									color:#666666;
+								}
+								</style>
+								<div class="row x_field2">
+									<span class="col-xs-3 xftit fl">图片验证码：</span>
+
+									<span class="col-sm-3 col-xs-3"><input type="text" placeholder="图片验证码" class="col-sm-12 x_input_tx2 fl" style="padding-left:10px;" name="verify_code_img"></span>
+									<span class="col-xs-4 col-sm-4 col-xs-r">
+									<img style="padding:0 10px" id="cap" src="/captcha.gen" width="110" height="44"  alt=""/>
+									</span>
+								</div>
+								<div class="row x_field2">
+									<span class="col-xs-3 xftit fl">手机验证码：</span>
+
+									<span class="col-sm-3 col-xs-3"><input type="text" placeholder="手机验证码" class="col-sm-12 x_input_tx2 fl" style="padding-left:10px;" name="verify_code"></span>
+									<span class="col-xs-4 col-sm-4 col-xs-r">
+										<a href="javascript:;" id="get_verify_code" class="x_btn_yanzhengma fl">短信获取验证码</a>
+									</span>
+								</div>
+								<div class="row x_field2" id="voice_panel" style="display:none">
+									<span class="col-xs-3 xftit"></span>
+									<span class="col-xs-8 col-sm-8 col-xs-r">
+										没有收到手机短信验证码?，请点击<a href="javascript:;" id="get_verify_code_v" class="x_btn_yanzhengma_v">语音获取验证码</a>
+									</span>
+								</div>
+								<div class="row x_field2">
+									<span class="col-xs-3 xftit fr">姓　名：</span>
+									<span class="col-sm-8 col-xs-8"><input class="col-sm-12 x_input_tx2" style="padding-left:10px;" type="text" placeholder="请输入姓名" name="name" id="name"></span>
+								</div>
+								<div class="row x_field2">
+									<span class="col-xs-3 xftit fl">登录密码：</span>
+									<span class="col-sm-8 col-xs-8"><input type="password" name="password" placeholder="请输入6-20位密码" class="col-sm-12 x_input_tx2" style="padding-left:10px;" id="x_pass"></span>
+								</div>
+								<div class="row x_field2">
+									<span class="col-xs-3 xftit fl">确认密码：</span>
+									<span class="col-sm-8 col-xs-8"><input type="password" name="password2" placeholder="请再输入6-20位密码" class="col-sm-12 x_input_tx2" style="padding-left:10px;" id="x_pass"></span>
+								</div>
+								{*
+								<div class="x_field2">
+									<span class="xftit fl">性别：</span>
+									<label class="allvert fl"><input type="checkbox"> <span>男</span></label>
+									<label class="allvert fl"><input type="checkbox"> <span>女</span></label>
+								</div>
+								*}
+								<div class="row x_field2">
+									<div class="col-sm-3 col-xs-3">&nbsp;</div>
+									<span class="col-sm-8 col-xs-8"><input class="col-xs-12 x_btn_reg2" type="submit" value="注册" /></span>
+								</div>
+								<div class="row x_field2">
+									<div class="col-sm-3 col-xs-2">&nbsp;</div>
+									<div class="col-sm-8 col-xs-8"><span class="allvert_1"><input checked type="checkbox"> <span>我同意相关服务条款和隐私政策</span></span></div>
+								</div>
+								<div class='x_ts' style="font-size:14px;">
+									<p>温馨提示:</br><b style="padding-left:15px;font-weight:normal;">如果出现异常，请联系我们  QQ群<b style="color:blue;">424178773</b></b></p>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--footer-->
+		{part "/index.main.footer"}
+		<script>
+			$("#cap").click(function(){
+				$("#cap").attr("src","/captcha.gen?"+Math.random());
+			});
+			$("#form").submit(function(){
+				$.post("/user.main.registerajax",$("#form").serialize(),function(r){
+					if(r.error){
+						$("#error").html(r.error).show();
+						$("[name="+r.field+"]").focus();
+						if(r.field == "verify_code_img"){
+							$("#cap").trigger("click");
+						}
+						return false;
+					}
+					$("#form").hide();
+					$("#reg_ok").show();
+				},"json");
+				return false;
+			});
+
+			var i=0;
+			var timer;
+			$("#get_verify_code").click(function(){
+				$("#voice").val(0);
+				$("#error").html("");
+				//$mo = parseInt($("[name=mobile]").val());
+				//if($mo<13000000000 || $mo>19999999999){
+				//	$("#error").html("手机号格式错误").show();
+				//	$("[name=mobile]").focus();return;
+				//	}else{
+				//	$("#error").html("");
+				//}
+				if(i>0)return false;
+				i=60;
+				$.post("/user.main.VerifyCode",$("#form").serialize(),function(r){
+					if(r.error){
+						$("#error").html(r.error).show();
+						$("[name="+r.field+"]").focus();
+					}
+					if(!r.ok){
+						i=0;
+						return false;
+						}else{
+						$("#get_verify_code").html("请等候("+i+")秒");
+						$('#voice_panel').show();
+						i=60;
+						$("#get_verify_code").html("请等候("+i+")秒");
+						timer = setInterval(function(){
+							i--;
+							$("#get_verify_code").html("请等候("+i+")秒");
+							if(i==0){
+								clearInterval(timer);
+								$("#get_verify_code").html("获取手机验证码");
+							}
+						},1000);
+					}
+				},"json");
+			});
+			var i2=0;
+			var timer2;
+			$("#get_verify_code_v").click(function(){
+				$("#voice").val(1);
+				$("#error").html("");
+				$mo = parseInt($("[name=mobile]").val());
+				if($mo<13000000000 || $mo>19999999999){
+					$("#error").html("手机号格式错误").show();
+					$("[name=mobile]").focus();return;
+					}else{
+					$("#error").html("");
+				}
+				if(i2>0)return false;
+				$.post("/user.main.VerifyCode",$("#form").serialize(),function(r){
+					if(r.error){
+						$("#error").html(r.error).show();
+						$("[name="+r.field+"]").focus();
+					}
+					if(!r.ok){
+						i=0;
+						return false;
+						}else{
+						i2=60;
+						$("#get_verify_code_v").html("请等候("+i2+")秒");
+						timer2 = setInterval(function(){
+							i2--;
+							$("#get_verify_code_v").html("请等候("+i2+")秒");
+							if(i2==0){
+								clearInterval(timer2);
+								$("#get_verify_code_v").html("语音获取验证码");
+							}
+						},1000);
+					}
+				},"json");
+			});
+			$('#name').blur('focus keyup input paste',function(){
+				var length=$(this).val().length;
+				if(length>5){
+					var textin1=$("#name").val().substr(0,5);
+					$("#name").val(textin1);
+				}
+			});
+		</script>
+	</body>
+</html>
+<script>
+	/*
+	$(document).ready(function(){
+		$("input[type=text],input[type=password],textarea").each(function(){
+			var label=$(this).prev("label");
+			var label_txt=label.text();
+			if(("placeholder" in document.createElement("input"))){
+				$(this).attr("placeholder",label_txt);
+				label.remove();
+				}else{
+				$(this).data("placeholder",label_txt);
+				psuedoPlaceholder($(this));
+				label.remove();
+			}
+		});
+		function psuedoPlaceholder(input){
+			if(input.attr("type")=="password"){
+				var opassword=$("<input type='text' class='"+input.attr("class")+"' value='"+input.data("placeholder")+"' name='addinput' />");
+				input.hide();
+				input.before(opassword);
+				opassword.focus(function(){
+					$(this).hide();
+					input.show().focus();
+				});
+				input.blur(function(){
+					if($(this).val()==""){
+						$(this).hide();
+						opassword.show();
+					}
+				});
+				}else{
+				input.focus(function(){
+					if($(this).val()==$(this).data("placeholder")){
+						$(this).val("");
+					}
+					}).blur(function(){
+					if($(this).val()==""){
+						$(this).val($(this).data("placeholder"));
+					}
+				}).blur();
+			}
+		}
+	})
+	*/
+</script>

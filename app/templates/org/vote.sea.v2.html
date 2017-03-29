@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<meta name="renderer" content="webkit">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>{$info['title']}-【{$orgName}】小伙伴，我正在参与投票。快来参加吧</title>
+<meta name="title" content="{part '/site.main.orgname'} - 资料信息 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{$info['title']}-{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+<script src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+{part "/site.main.header"}
+</head>
+<style>
+body{ padding:0;margin:0;font-family:"Microsoft YaHei" }
+header,section,footer{ float:left;width:100%; }
+a:link{ color:#333; }
+a:hover,a:visited{ text-decoration:none;color:#333; }
+footer{ background:#2f83c2;padding:30px 0;color:#ffffff;margin-top: 50px;line-height:28px; }
+footer a:link,footer a:visited{ color:#ffffff; }
+.circle{ border:none; }
+.Top{ right:22%;width: 48px;position: fixed;bottom: 15%;z-index: 999;background: #fff; }
+	.new-vote-box{ width: 640px;margin: 0 auto;height: auto; }
+	.vote-hea{ display: block;position: relative; }
+	.not_start{ position:absolute;top:160px;left:0; }
+	.vote-hea p{ position: absolute;top:25%;left:5%;right:5%;font-weight:bold;text-align:center;font-size:40px;color: #39595d; }
+	.start-hea span:first-child{ font-weight: bold;font-size: 16px;float: left;color: #39595d }
+	.start-hea span:last-child{ float: right;font-size: 16px;color:#ffa81d; }
+	.vote-text{ float: left;margin-top: 15px;width:100%;position: relative; height:auto;border: 1px solid #ccc;border-radius:10px;padding:10px; }
+	.vote-text p{ width:100%;line-height: 20px;overflow : hidden; }
+	.vote-text div{ width:50px;height:20px;float:right;margin-top:10px; }
+    .vote-text div a{ color:#ffa81d; }
+	.vote-text span{ position: absolute;right:20px;bottom:0px;cursor: pointer;font-size: 14px;color: #ffa81d; }
+	.option-vote{ float: left;clear: both;width: 100%;position:relative;height:46px;background:#fff;}
+	.option-vote p{ float: left;color: #39595d;font-weight: bold;font-size:16px;padding-top:15px; }
+	.my-course-search{ overflow: hidden;position: relative; float:right;margin-top: 10px; }
+	.my-course-search input{ padding:6px 5px;border-right: 0;padding-right: 24px;border: 1px solid #ddd; }
+    .vote-btn-many { float:left;width:100% ;margin-top:30px;}
+	.my-course-search button{ height:33px;border:none;background:url("{utility_cdn::img('/assets_v2/img/icon_vote.png')}") no-repeat -40px -514px;position: absolute;right:0;top:0;width:50px; }
+	.search-delet-btn{ position: absolute;width: 17px;height: 17px;display: block;background: url("{utility_cdn::img('/assets_v2/img/web_organization.png')}") no-repeat -476px -677px;cursor: pointer;z-index: 6;display: none; }
+	.new-vote_cent{ float: left;width: 100%;}
+	.vote_ul { float: left;padding: 0;width: 100%; }
+	.vote_ul li{ float: left;width: 48%;border-radius:3px;border:1px solid #ddd;overflow: hidden;margin-top: 10px; }
+	.vote_ul li:nth-child(odd){ margin-right:21px; }
+	.vote-img-new { position: relative;text-align:left; }
+	.vote-img-new img{ width: 100%; }
+	.vote-img-new-teac { position: relative;text-align: center;background:#f7f7f7; }
+	.vote-img-new-teac img{ border-radius: 50%;margin-top:10px;margin-bottom:30px }
+	.vote-city { position: absolute;bottom:4px;color:#fff;height: 30px;background: #000;opacity: 0.8;width: 100%;line-height: 30px;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden; }
+	.vote-city span{ width:100%;font-size:16px;padding-bottom:2px;padding-left:5px;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden; }
+	.vote-city div{ width:100%;float:left;line-height: 15px;padding-left: 10px;font-size: 14px;padding-top: 3px; }
+	.vote-img-new b{ font-weight: normal;color:#ffa81d;padding:0 10px;position:absolute;top:5px;right:5px;background:#00a7ef
+;color:#fff;text-align:center;border-radius:3px; }
+	.vote-start{ float:left;padding-left:15px;padding-right:15px; }
+
+	.vote-city-teac { position: absolute;bottom: 4px;color:#333;width: 100%;line-height:15px; }
+	.vote-city-teac span{ width:100%;padding-bottom:5px;font-size:16px;color:#333; }
+	.vote-city-teac div{ width:100%;float:left;line-height: 15px;padding-left: 10px;font-size: 14px;padding-top: 3px; }
+	.vote-city-teac b{ font-weight: normal;color:#ffa81d;padding-left: 10px; }
+
+	.vote-city-list { position: absolute;height:40px;bottom:4px;color:#fff;background: #000;opacity: 0.6;width:100%;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;}
+	.vote-city-name{ position:absolute;bottom:4px;z-index:1;padding-left:5px;padding-right:5px; width: 100%;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden; }
+	.vote-city-name span{ font-size:16px; color:#fff;width:100%;}
+	.vote-city-name div{ color:#eee;border-top:1px solid #6e6f64;}
+	.vote-city-list span{ width:100%;padding-bottom:2px;font-size:16px;padding-left:10px; }
+	.vote-city-list div{ width:100%;float:left;padding-left: 10px;font-size: 12px;color:#eee; }
+	.vote-city-list b{ font-weight: normal;color:#fff;padding-left: 10px;padding-right:5px;float:right; }
+
+	.Ballot-box { float: left;padding: 10px; }
+	.Ballot-box a span{ float: left;font-size: 14px; }
+	.Ballot-box a span:last-child{ padding-top: 5px;padding-left: 5px;color:#999; }
+	.Ballot-box a span img{ border-radius: 50%;width: 25px;height: 25px; }
+	.vote-but{ float: right;margin: 7px 10px 0 0 ;position: relative; }
+
+	.vote-but input{ width: 110px;height: 33px;border:none;background:#ffa81d;color:#fff;border-radius: 3px;font-size: 16px; }
+	.vote-but p{ margin:5px 0 0 0;line-height: 25px;width: 90px;text-align:right;color:#666; }
+	.vote-but p img{ float: left; }
+	.vote-logo{ float: left;width: 100%;text-align: center;margin-top:50px;margin-bottom:50px;font-size:14px;color:#3f82a6; }
+	.vote-Selected{ position: absolute;top:5px;left: 5px;width: 25px;height: 25px; }
+	.vote-btn-many input{ float: left;width: 100%;height:60px;background:#ffa81d;color:#fff;font-size: 22px;border:none;border-radius: 3px; }
+	.Top ul li{ width:48px;height:48px;line-height:48px;text-align:center;background:#f1f1f1;border:1px solid #ccc; }
+	.Top ul li a{ font-size:16px; }
+	.Top ul li a:hover{ color:#ffa81d;}
+	.share-qq, .share-tsina, .share-weixin{ margin-left:45px;margin-top:15%;}
+    .Top{ right:22%; }
+	.wrap-vote-scrool{ width:73%;}
+	.wrap-vote-scrool .option-vote{ width:63%;margin-right:5px; }
+	.wrap-vote-scrool .my-course-search{ margin-right:4px; }
+	.wrap-vote-scrool .option-vote p{ padding-left:10px; }
+	@media screen and (max-width:800px) and (min-width:320px){
+		.vote-hea p{ position: absolute;top:25px;left:5%;right:5%;font-weight:bold;text-align:center;font-size:25px;color: #39595d  }
+		.new-vote-box{ width:100%;float: left; }
+		.vote-start{ width:100%;float: left;padding-left:15px;padding-right:15px; }
+		.vote_ul li { width:46%; }
+		.vote-text{ padding:0; width: 100%;padding:5px;height:auto; }
+		.vote-text p{ width:100%;overflow : hidden; }
+		.vote-text span{ bottom:0px; }
+		.vote-hea img{ width: 100%; }
+		.vote-but input{ width:50px; }
+		.vote-but p{ margin: 5px 0 0 0;width:100px; }
+		.vote-but p span { padding:5px; }
+		.vote-text div{ width:50px;height:20px;float:right; }
+		.vote-img-new-teac img{ border-radius:50%; height:auto;}
+		.not_start{ top:85px;z-index:2; }
+		.vote-but{ margin:7px 0 0 0 ; }
+        .Top{ right:5px; }
+		.Ballot-box a span:last-child{ width:50px; white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;}
+		.vote-city-list span{ font-size:12px; width:100%;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;}
+        .Top { right:5px; }
+		.wrap-vote-scrool{ width:100%; }
+		.wrap-vote-scrool .option-vote{ width:100%; }
+	}
+</style>
+<section id="shareInfoContent"  style="display:none;">
+<div class="share-sns-box" style="display:block;">
+    <a href="javascript:;" class="share-qq" data-cmd="tqq" title="分享到QQ"></a>
+    <a href="javascript:;" class="share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="javascript:;" class="share-tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+</div>
+</section>
+<body class="bgf">
+<script src="{utility_cdn::js('/assets_v2/js/jquery.share.js')}"></script>
+	<div class="container">
+	<div class="row">
+	<div class="new-vote-box" id="new-vote-box">
+		<div class="content">
+            <div class="Top" style="display:none\9">
+                <ul style="display:none\9">
+                    <li class="TOP_li1 TopFen visible-lg visible-xs" style="display:none\9">
+                            <a>分享</a>
+                    </li>
+                </ul>
+            </div>
+<script>
+window.onscroll = function(){
+var t = $(window).scrollTop();
+if(t > 350){
+    $('.wrap-vote-scrool').css({
+        'position':'fixed',
+        'top':0,
+		'right':0,
+		'display':'block',
+		'z-index':'10',
+		'float':'left'
+    });
+}else{
+    $('.wrap-vote-scrool').css({
+        'position':'relative',
+        'background':'',
+        'top':'0px',
+		'display':'none'
+    });
+ }
+ }
+$(".Top .TOP_li").hover(
+        function(){
+            $(this).find("div").show();
+            $(this).find(".Top_l").addClass("transf");
+        },
+        function(){
+            $(".Top li").find("div").hide();
+        }
+);
+$(".Top_pic").click(
+        function(){
+            $('html,body').animate({ scrollTop: '0px' },'slow');
+        }
+);
+$(window).scroll(function() {
+    var win_h = $(window).height();
+    if ($(document).scrollTop() > win_h) {
+        $(".Top_pic").css("display", 'block');
+    } else {
+        $(".Top_pic").css("display", 'none');
+    }
+});
+$('.TopFen').click(function(){
+layer.open({
+    type: 1,
+    title:'分享',
+    skin: 'layui-layer-rim', //加上边框
+    area: ['300px', '200px'], //宽高
+    content:$('#shareInfoContent')
+});
+
+})
+
+	var sPic = "{$voteImg}";
+	var sTitle = "{$info['title']}";
+    var orgName = "{$orgName}";
+	$(".share-sns-box").share({
+		sPic    : sPic,
+		sTitle  :''+sTitle+'--'+orgName
+//        sDes:'小伙伴，我正在参与投票。快来参加吧，投上你宝贵的一票！'
+	});
+
+</script>
+		<div class="vote-hea">
+			<img src="{utility_cdn::img('/assets_v2/img/hea-new-vote.jpg')}" alt="">
+			<p>{$info['title']}</p>
+			{if $info['proceedType']==3}
+			<div class="not_start">
+				<img src="{utility_cdn::img('/assets_v2/img/not_start.png')}" alt="">
+			</div>
+			{elseif $info['proceedType']==2}
+			<div class="not_start">
+				<img src="{utility_cdn::img('/assets_v2/img/end_pic.png')}" alt="">
+			</div>
+			{/if}
+		</div>
+		<div class="vote-start">
+			 <div class="start-hea">
+				 {if !empty($info['descript'])}
+			 	<span>投票说明:</span>
+				 {/if}
+			 	<span>{$info['startTime']}——{$info['endTime']}</span>
+			 </div>
+			{if !empty($info['descript'])}
+			 <div class="vote-text">
+			 	<p id="Vote-show">{$info['descript']}</p>
+			 	<div id="read-more">
+                    {*<span>[更多]</span>*}
+                </div>
+                <div id="gradient"></div>
+			 </div>
+			{/if}
+			<div class="option-vote" style="display:block;">
+				<p>{if ($info['selectCount'] > 1) }
+					{'多选'|tr:'org'}: ({'最多'|tr:'org'} {$info['selectCount']} {'项'|tr:'org'})
+					{else}
+					{'单选'|tr:'org'}
+					{/if}</p>
+				<div class="my-course-search">
+					<input type="hidden" name="del" value="0">
+                    <input placeholder="输入编号搜索" autocomplete="off" type="text" name="searchNumber" class="col-sm-16" value="" id="searchNumber">
+                    <button class="col-sm-4" id="form_sub" type="submit"></button>
+                    <span class="search-delet-btn" style="display: none;"></span>
+                </div>
+			</div>
+			<div class="wrap-vote-scrool" style="display:none;">
+				<div class="option-vote">
+				<p>{if ($info['selectCount'] > 1) }
+					{'多选'|tr:'org'}: ({'最多'|tr:'org'} {$info['selectCount']} {'项'|tr:'org'})
+					{else}
+					{'单选'|tr:'org'}
+					{/if}</p>
+				<div class="my-course-search">
+					<input type="hidden" name="del" value="0">
+                    <input placeholder="输入编号搜索" autocomplete="off" type="text" name="searchNumber" class="col-sm-16" value="" id="searchNumber">
+                    <button class="col-sm-4" id="form_sub" type="submit"></button>
+                    <span class="search-delet-btn" style="display: none;"></span>
+                </div>
+			</div>
+			</div>
+			<div class="new-vote_cent">
+				{if $info['objectType'] == 1}
+				<!--课程-->
+				<ul class="vote_ul">
+					{if !empty($optionData)}
+					{foreach $optionData as $v}
+					<li siteId="{$v->pk_option}" id="{$v->order_no}">
+						<a href="{$v->url}"  target="_blank">
+							{if !empty($v->thumbDisplay)}
+							<div class="vote-img-new">
+								<img src="{$v->thumbDisplay}" alt="">
+								<div class="vote-city">
+
+									<span>{$v->name_display}</span>
+								</div>
+								<div class="vote-Selected" style="display:{if $info['status']>0 && $v->isOption>=0}{if $v->isOption==1}block{else}none{/if}{/if};">
+									<img src="{utility_cdn::img('/assets_v2/img/vote-Selected.png')}" alt="">
+								</div>
+								<b>编号:{$v->order_no}</b>
+							</div>
+							{/if}
+							<div class="Ballot-box">
+								<a href="/teacher/detail/entry/{$v->teacherId}"  target="_blank">
+									<span><img src="{utility_cdn::file($v->teacherThumb)}" alt=""></span>
+									<span>{$v->teacherName}</span>
+								</a>
+							</div>
+							{if $info['type']==2 or $isVote==1}
+							<!--已投票-->
+							<div class="vote-but">
+								<p>
+									<span>{$v->total_count}</span>
+									<span>人投票</span>
+								</p>
+							</div>
+							{elseif $info['proceedType']==3}
+							<!--投票未开始-->
+							<div class="vote-but">
+								<div class=" circle"></div>
+								<input type="submit" value="投票" name="vote-toupiao" style="background: #CCC;">
+							</div>
+							{elseif $info['proceedType']==2}
+							<!--投票已结束-->
+							<div class="vote-but">
+								<p>
+									<span>{$v->total_count}</span>
+									<span>人投票</span>
+								</p>
+							</div>
+							{elseif $info['status'] == -1}
+							{else}
+							<!--未投票-->
+							<div class="vote-but">
+								<div class="vote-pic circle"></div>
+								<input type="submit" value="投票" name="vote-toupiao">
+							</div>
+							{/if}
+
+						</a>
+						{if $info['status']>0 && $v->isOption>=0}
+						{if $v->isOption==1}
+						<div class="circle tea_pic choice_h"></div>
+						{/if}
+						{if $isVote!=1}
+						{if ($info['proceedType']==1)}
+						<div class="choice tea_pic circle"></div>
+						{/if}
+						{/if}
+						{/if}
+					</li>
+					{/foreach}
+					{/if}
+				</ul>
+				{elseif $info['objectType'] == 2}
+				<!--老师-->
+                <ul class="vote_ul" id="vote_ul">
+					{if !empty($optionData)}
+					{foreach $optionData as $v}
+					<li siteId="{$v->pk_option}" id="{$v->order_no}">
+						<a href="{$v->url}" target="_blank">
+							<div class="vote-img-new-teac">
+								<img src="{$v->thumbDisplay}" alt="">
+								<div class="vote-city-teac">
+									<span>{$v->name_display}</span>
+								</div>
+								<div class="vote-Selected" style="display:{if $info['status']>0 && $v->isOption>=0}{if $v->isOption==1}block{else}none{/if}{/if};">
+									<img src="{utility_cdn::img('/assets_v2/img/vote-Selected.png')}" alt="">
+								</div>
+							</div>
+							<div class="Ballot-box">
+								<a href="#{$v->order_no}">
+									<span>编号{$v->order_no}</span>
+								</a>
+							</div>
+						{if $isVote==1}
+						<!--已投票-->
+							<div class="vote-but">
+								<p>
+
+									<span>{$v->total_count}</span>
+									<span>人投票</span>
+								</p>
+							</div>
+						{elseif $info['proceedType']==3}
+						<!--投票未开始-->
+							<div class="vote-but">
+								<div class=" circle"></div>
+								<input type="submit" value="投票" name="vote-toupiao" style="background: #CCC;">
+							</div>
+						{elseif $info['proceedType']==2}
+						<!--投票已结束-->
+							<div class="vote-but">
+								<p>
+
+									<span>{$v->total_count}</span>
+									<span>人投票</span>
+								</p>
+							</div>
+						{elseif $info['status'] == -1}
+						{else}
+						<!--未投票-->
+							<div class="vote-but">
+								<div class="vote-pic circle"></div>
+								<input type="submit" value="投票" name="vote-toupiao">
+							</div>
+						{/if}
+						</a>
+						{if $info['status']>0 && $v->isOption>=0}
+						{if $v->isOption==1}
+						<div class="circle tea_pic choice_h"></div>
+						{/if}
+						{if $isVote!=1}
+						{if ($info['proceedType']==1)}
+						<div class="choice tea_pic circle"></div>
+						{/if}
+						{/if}
+						{/if}
+					</li>
+					{/foreach}
+					{/if}
+				</ul>
+				{else}
+				<!--章节-->
+				<ul class="vote_ul">
+					{if !empty($optionData)}
+					{foreach $optionData as $v}
+					<li siteId="{$v->pk_option}" id="{$v->order_no}">
+						<a href="{$v->url}"  target="_blank">
+							<div class="vote-img-new">
+								<img src="{$v->thumbDisplay}" alt="">
+								<div class="vote-city-list"></div>
+								<div class="vote-city-name">
+									<span>{$v->courseName}</span>
+									<div>{$v->className}  {$v->planName}</div>
+								</div>
+								<div class="vote-Selected" style="display:{if $info['status']>0 && $v->isOption>=0}{if $v->isOption==1}block{else}none{/if}{/if};">
+									<img src="{utility_cdn::img('/assets_v2/img/vote-Selected.png')}" alt="">
+								</div>
+								<b>编号:&nbsp;{$v->order_no}</b>
+							</div>
+							<div class="Ballot-box">
+								<a href="/teacher/detail/entry/{$v->teacherId}" target="_blank">
+									<span><img src="{utility_cdn::file($v->teacherThumb)}" alt=""></span>
+									<span>{$v->teacherName}</span>
+								</a>
+							</div>
+							{if $info['type']==2 or $isVote==1}
+							<!--已投票-->
+							<div class="vote-but">
+								<p>
+
+									<span>{$v->total_count}</span>
+									<span>人投票</span>
+								</p>
+							</div>
+							{elseif $info['proceedType']==3}
+							<!--投票未开始-->
+							<div class="vote-but">
+								<div class=" circle"></div>
+								<input type="submit" value="投票" name="vote-toupiao" style="background: #CCC;">
+							</div>
+							{elseif $info['proceedType']==2}
+							<!--投票已结束-->
+							<div class="vote-but">
+								<p>
+
+									<span>{$v->total_count}</span>
+									<span>人投票</span>
+								</p>
+							</div>
+							{elseif $info['status'] == -1}
+							{else}
+							<!--未投票-->
+							<div class="vote-but">
+								<div class="vote-pic"></div>
+								<input type="submit" value="投票" name="vote-toupiao">
+							</div>
+							{/if}
+
+						</a>
+						{if $info['status']>0 && $v->isOption>=0}
+						{if $v->isOption==1}
+						<div class="circle tea_pic choice_h"></div>
+						{/if}
+						{if $isVote!=1}
+						{if ($info['proceedType']==1)}
+						<div class="choice tea_pic circle"></div>
+						{/if}
+						{/if}
+						{/if}
+					</li>
+					{/foreach}
+					{/if}
+				</ul>
+				{/if}
+			</div>
+			{if $isVote!=1}
+			{if ($info['proceedType']==1)}
+			{if ($info['selectCount'] > 1) }
+			<div class="vote-btn-many" style="display:block;">
+				<input type="submit" value="一键投票" id="vote-ipu">
+			</div>
+			{/if}
+			{/if}
+			{if ($info['proceedType']==3)}
+			<div class="vote-btn-many">
+				<input type="submit" value="投票未开始" style="background: #CCC">
+			</div>
+			{/if}
+			{/if}
+			<div class="vote-logo">
+				<span>{$orgName}</span>
+			</div>
+		</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	<script src="{utility_cdn::js('/assets_v2/layer/layer.js')}" ></script>
+	<script>
+		var isVote      = {$isVote};
+		var proceedType = {$info['proceedType']};
+		var status      = {$info['status']};
+		var siteId=[];
+		$("#form_sub").click(function(){
+			var searchNumber = $("#searchNumber").val();
+			if(searchNumber==''){
+				return false;
+			}
+			if($("#"+searchNumber+"").attr('siteid')>0){
+				$("html,body").animate({ scrollTop:$("#"+searchNumber+"").offset().top },100);
+			}else{
+				layer.msg('没有您搜索的编号');
+			}
+			})
+
+            var slideHeight = 58; // px
+            var defHeight = $('#Vote-show').height();
+            if(defHeight >= slideHeight){
+                $('#Vote-show').css('height' , slideHeight + 'px');
+                $('#read-more').append('<a href="#">[更多]</a>');
+                $('#read-more a').click(function(){
+                var curHeight = $('#Vote-show').height();
+                if(curHeight == slideHeight){
+                    $('#Vote-show').animate({
+                        height: defHeight
+                    }, "normal");
+                        $('#read-more a').html('[收起]');
+                        $('#gradient').fadeOut();
+                    }else{
+                        $('#Vote-show').animate({
+                        height: slideHeight
+                    }, "normal");
+                        $('#read-more a').html('[更多]');
+                        $('#gradient').fadeIn();
+                    }
+                        return false;
+                    });
+             }
+
+		{*window.onscroll = function(){
+					var t = document.body.scrollTop;
+					if(t > 10){
+						$('.option-Vvote').css({
+							'background':'#fff',
+							'top':'0',
+							'position':'fixed',
+							'width':'640px',
+							'z-index':'2',
+						});
+					}else{
+						$('.option-vote').css({
+							'background':'',
+							'top':''
+						});
+					}
+		}*}
+        $(".share-weixin").click(function(){
+            $(".layui-layer-shade").hide();
+            $(".layui-layer").hide();
+        })
+		$('.vote-but input').click(function(){
+			if(checkLogin()) {
+				if (isVote || proceedType != 1 || status == -1) {
+					return false;
+				}
+				var maxVote = {$info['selectCount']};
+				var choice_l = $(".vote_ul li").find(".vote-pic-bg").length + 1;
+				var _this = $(this);
+				var siteid = _this.parents("li").attr("siteId");
+				if (_this.parents("li").find(".vote-pic").hasClass("vote-pic-bg")) {
+					var nIndex = $.inArray(siteid, siteId);
+					if (nIndex >= 0) {
+						siteId.splice(nIndex, 1);
+					}
+					_this.parents("li").find(".vote-pic").removeClass("vote-pic-bg");
+					$(this).css('background', '#ffa81d').val('投票');
+					if ($('.vote-pic-bg').length > 0) {
+						$("#vote-ipu").val("一键投票(已选" + $('.vote-pic-bg').length + "择项)");
+					} else {
+						$("#vote-ipu").val("一键投票");
+					}
+				} else {
+					if (choice_l <= maxVote) {
+						siteId.push(siteid);
+						siteId = $.unique(siteId);
+						$(this).css('background', '#ccc').val('已选');
+						$(this).prev().addClass('vote-pic-bg');
+						//$(this).parent().parent().find('.vote-Selected').show();
+						if (maxVote > 1) {
+							end();
+						} else {
+							add();
+						}
+					} else {
+						layer.msg("{'最多选'|tr:'org'} " + maxVote + " {'项'|tr:'org'}");
+						return false;
+					}
+				}
+			}
+		});
+		function end(){
+			$("#vote-ipu").val("一键投票(已选"+$('.vote-pic-bg').length+"择项)");
+		}
+		$("#vote-ipu").click(function(){
+			add();
+		})
+		function add(){
+			if(isVote || proceedType !=1 || status == -1 ) {
+				return false;
+			}
+			var userId = {$uid};
+			var voteId = {$info['voteId']};
+			if(checkLogin()){
+				$.post("/org.poll.VoteAjax",{ voteId:voteId ,siteId:siteId, userId:userId },function(r){
+					if(r.code == 1){
+						layer.msg(r.msg);
+						location.reload();
+					}else{
+						layer.msg(r.msg);
+					}
+				},'json');
+			}
+		}
+		function checkLogin(){
+			var isLogin = {$uid},w,h;
+			var urlId={$info['voteId']};
+			if($(window).width()>800){
+				w='476px';
+				h='283px';
+			}else{
+				w='90%';
+				h='283px';
+			}
+			if(isLogin==0){
+				if($(window).width()>768){
+					layer.open({
+						type: 2,
+						title: ['登录','color:#fff;background:#ffa81d'],
+						area: [w,h],
+						shadeClose: true,
+						content: ['/org.poll.userLogin']
+					});
+				}else{
+
+					location.href='/site.main.login?url=/org/poll/info/'+urlId;
+				}
+				return false;
+			}
+			return true;
+		}
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>高能100 - 我的作业</title>
+{part "/index.main.headeruser"}
+<script src="{utility_cdn::js('/assets/js/part.js')}"></script>
+    </head>
+<style> 
+
+        .user_content_box{ position: relative;height: 500px; }
+        .stepbar_1{ width: 713px;margin-left: 1px; }
+        .user_content_box .tbl-t{ padding:0 16px 0 0; }
+        .user_content_box .tbl-t th{ text-align: center; color:#999999; }
+        .user_content_box .tbl-t td{ border: 1px solid #f7f7f7;height: 75px;border-top: none;border-left: none;line-height: 25px;width: 150px;text-align: center; }
+        .user_content_box .tbl-t .weid{ width: 330px; color:#3465CE;cursor: pointer; }
+        .user_content_box .tbl-t .weid1{ cursor: pointer; }
+        .user_content_box .tbl-t .header{ background: #f7f7f7;height: 40px; }
+        .user_content_box .xk{ margin-top: 20px;margin-bottom: 40px; }
+        .user_content_box .xk form .btn{ margin-top: -3px;}
+</style>
+<body>
+  <!--top-->
+      {part "/index.main.nav.user"}
+<div class='count'>
+  <div class='container-fluid'>
+    <div class='row'>
+      <div class='col-md-3 user_menu hidden-xs'>
+        <div id=''>
+          <div id='menu'>
+             {part "/user.home.menu.user"}
+
+          </div>
+        </div>
+      </div>
+      <div class='col-md-9 user_content'>
+        <div class='user_box'>
+          <div class='container-fluid'>
+            <div class='row'>
+              <div class='user_content_box'>
+             <div class='xk'>
+              <form action = "{$path}" method="post">
+                <select style=" width: 222px;height: 34px;padding-left:10px;" name="class">
+                    <option value="0">请选择班级</option>
+                    {if !empty($class)}
+                    {foreach $class as $c}
+                    <option value="{$c->class_id}" {if $pm['class']==$c->class_id}selected{/if}>{$c->class_name}</option>
+                    {/foreach}
+                    {/if}
+                </select>
+                <select style=" width: 222px;height: 34px;padding-left:10px;" name="section">
+                    <option value="0">请选择章节</option>
+                    {if !empty($section)}
+                    {foreach $section as $s}
+                    <option value="{$s->section_id}" {if $pm['section']==$s->section_id}selected{/if}>{$s->section_name}</option>
+                    {/foreach}
+                    {/if}
+                </select>
+                <input class="btn btn-default" type="submit" value="提交">
+              </form>
+             </div>
+                <div class="stepbar_1 mt25">
+                    <ul>
+                    <li {if !$pm['status']}class="on"{/if}><b></b><a href="user.homework.list" class="fs14">全部</a></li>
+                    <li {if $pm['status']=='not'}class="on"{/if}><b></b><a href="user.homework.list.not" class="fs14">未完成{if isset($count[0]['status']) && $count[0]['status']==0}({$count[0]['count']}){/if}</a></li>
+                    <li {if $pm['status']=='ok'}class="on"{/if}><b></b><a href="user.homework.list.ok" class="fs14">已交完{if isset($count[1]['status']) && $count[1]['status']==1}({$count[1]['count']}){/if}</a></li>
+                    <li {if $pm['status']=='yes'}class="on"{/if}><b></b><a href="user.homework.list.yes" class="fs14">已批改{if isset($count[2]['status']) && $count[2]['status']==2}({$count[2]['count']}){/if}</a></li>
+                    </ul>
+                </div> 
+               
+               <div class='clear'></div>
+               <div class='tbl-t'>
+                   <table>
+                    {if !empty($list->data)}
+                     <tr class='header'>
+                      <th>课程名称</th>
+                      <th>作业名称</th>
+                      <th>完成情况</th>
+                      <th>微信交作业</th>
+                      <th>作业评星</th>
+                    </tr>
+                    {foreach $list->data as $task}
+                    <tr>
+                      <td>{$task->course_title}</td>
+                      <td><a class="weid" href="user.homework.info.{$task->pk_task_reply}">{$task->task_title}</a></td>
+                      <td>{if $task->status==0}未完成{elseif $task->status==1}未批改{elseif $task->status==2}已批改{/if}</td>
+                      <td class='weid1'><span>点击查看二维码</span><img style="display:none;" height="100%" src="{utility_cdn::img('/assets/images/erwi.jpg')}" alt=""></td>
+                      <!--<td><img src="{utility_cdn::img('/assets/images/tmp_3.jpg')}" alt=""></td>-->
+                      <td>
+                        <div class="starbox fl">
+                          <ul class="star_ul fl disblk">
+                            <li><a score="1" class="one-star {if $task->score==1}active-star{/if}" title="很差"></a></li>
+                            <li><a score="2" class="two-star {if $task->score==2}active-star{/if}" title="差"></a></li>
+                            <li><a score="3" class="three-star {if $task->score==3}active-star{/if}" title="还行"></a></li>
+                            <li><a score="4" class="four-star {if $task->score==4}active-star{/if}" title="满意"></a></li>
+                            <li><a score="5" class="five-star {if $task->score==5}active-star{/if}" title="很满意"></a></li>
+                          </ul>
+                          <span class="fl s_result ml10 fs14 fcorange_1" style="color: rgb(255, 113, 27);">{$task->score}</span>
+                        </div>
+                      </td>
+                    </tr>
+                    {/foreach}
+                    {else}
+                    <tr>
+                      <td>暂无作业信息</td>
+                    </tr>
+                    {/if}
+                    <!--<tr>
+                      <td>精品奥数班</td>
+                      <td class='weid'>精品奥数第三届随堂每日更新....</td>
+                      <td>已批改</td>
+                      <td class='weid1'>点击查看二维码</td>
+                      <td><img src="{utility_cdn::img('/assets/images/tmp_3.jpg')}" alt=""></td>
+                    </tr>
+                    <tr>
+                      <td>初三数学</td>
+                      <td class='weid'>精品奥数第三届随堂每日更新....</td>
+                      <td>未批改</td>
+                      <td class='weid1'>点击查看二维码</td>
+                      <td><img src="{utility_cdn::img('/assets/images/tmp_3.jpg')}" alt=""></td>
+                    </tr>
+                    <tr>
+                      <td>初三数学</td>
+                      <td class='weid'>精品奥数第三届随堂每日更新....</td>
+                      <td>未批改</td>
+                      <td class='weid1'><img src="{utility_cdn::img('/assets/images/erwi.jpg')}" alt=""></td>
+                      <td><img src="{utility_cdn::img('/assets/images/tmp_3.jpg')}" alt=""></td>
+                    </tr>-->
+                 </table>
+               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+          <div class="clear"></div>
+    </div>
+  </div>
+
+</div>
+{part "/index.main.footer"}
+</body>
+<script type="text/javascript">
+$(function  () {
+    $('.weid1').click(function(){
+        $(this).find('span,img').toggle();
+    })
+
+})
+</script>
+</html>

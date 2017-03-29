@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>高能100 - 专业的K12在线教育平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+</head>
+<script src="{utility_cdn::js('/assets/libs/ckeditor/ckeditor.js')}"></script>
+<script src="{utility_cdn::js('/assets/libs/ckeditor/adapters/jquery.js')}"></script>
+<script>
+$(function(){
+    $( '#desc' ).ckeditor( { customConfig: '/assets/libs/ckeditor.config.js' } );
+    $(".box-2 form").submit(function(){
+    $.post("/org.main.updateAboutAjax",$(this).serialize(),function(r){
+        if(r.error){
+            alert(r.error);
+            if(r.field){
+                $("[name="+r.field+"]").focus();
+            }
+        }else{
+            window.parent.location.reload();
+        }
+        return false;
+    },"json");
+    return false;
+  });
+});
+</script>
+<body style="background:#f7f7f7;">
+    <div class='box-2'>
+        <form>
+        <div class='box-2-i'>
+            <input type="text" name="name" value="{if empty($res_info->name)}{$orgInfo->name}{else}{$res_info->name}{/if}" placeholder="请输入文字">
+        </div>
+        <div class='box-2-te'>
+            <textarea id="desc" name="desc" placeholder="请输入结构简介">{if empty($res_info->desc)}{$orgInfo->desc}{else}{$res_info->desc}{/if}</textarea>
+        </div>
+        <div class='box-2-in'>
+            <input type="submit" value="完成">
+        </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>云课网- 专业的K12在线教育平台</title>
+{part "/site.main.header"}
+</head>
+<body class="bgf">
+<div class="col-xs-20 p20" id="cate-list">
+    {if !empty($orgCate)}
+    {foreach($orgCate as $k=>$v)}
+    <p class="pd10 fs14">{$v['name']}</p>
+    <p>
+		{if(isset($v['seconde']))}
+        {foreach($v['seconde'] as $a=>$b)}
+        <a href="javascript:void(0);" class="gray-btn mr10 cate_name {if(isset($appcate[$a]['pk_cate'])&&$appcate[$a]['pk_cate']==$b['id'])} app-cate-selected{/if}" data-id="{$b['id']}">{$b['name']}</a>		
+        {/foreach}
+		{else}
+		此分类无课程
+		{/if}
+    </p>
+    {/foreach}
+    {/if}
+</div>
+<p class="col-xs-20 tac"><button class="btn" id="train-btn">确定</button><span class="cGray ml10">最多选8个</span></p>
+</body>
+</html>
+<script>
+$(function(){
+    var cateList = $('#cate-list');
+    var trainBtn = $('#train-btn');
+    var cateApptemplate=parent.$('#cate_apptemplate');
+    var index=parent.layer.getFrameIndex(window.name);
+    //cate选择
+    cateList.on('click','a',function(){
+        if(cateList.find('.app-cate-selected').length >= 8){
+            layer.msg('最多只能选8个');
+        }else{
+            if($(this).hasClass('app-cate-selected')){
+                $(this).removeClass('app-cate-selected');
+            }else{
+                $(this).addClass('app-cate-selected');
+            }
+        }
+    });
+    // 添加
+    var cateTextList='';
+    trainBtn.click(function(){
+		var cate_name='';
+        $("#cate-list .app-cate-selected").each(function(){
+            cateTextList += '<div class="delect-subj dropdown-show-tab pd0 c-fl"><i class="left-side"></i><i class="tab-delete"></i><input type="hidden" name="cate_name" value="'+$(this).attr("data-id")+'">'
+            cateTextList += $(this).text();
+			cate_name+=$(this).attr("data-id")+",";
+            cateTextList += '</div>';
+        });
+        cateApptemplate.html(cateTextList);
+		$.post("/org.main.addOrgCustomerCate",{ cate_name:cate_name },function(r){
+			if(r.result.code==200){
+				parent.layer.close(index);
+			}
+		},"json");
+    });
+});
+</script>

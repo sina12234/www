@@ -1,0 +1,519 @@
+//教师团队
+/*teacher.list*/
+.subject {
+    top: 10%;
+    z-index: 3;
+    padding-top: 13px;
+    width: 100%;
+    height: 100px;
+    .qb {
+        a {
+            background-color: #FFA91C;
+            color: #ffffff;
+            border-radius: 4px;
+        }
+    }
+    ul {
+        display: block;
+        width: 100%;
+    }
+    li {
+        float: left;
+        color: $text-color;
+        list-style: none;
+        line-height: 30px;
+        padding:0 10px;
+        a {
+            display: inline-block;
+            padding: 0 8px;
+            text-decoration: none;
+            color: #333;
+            &:hover {
+                background-color: #FFA91C;
+                color: $text-white-color;
+            }
+        }
+    }
+}
+/*教师列表-首页*/
+.lector-list {
+    margin-bottom: 20px;
+    padding: 0 8px 0 7px;
+    height: 275px;
+}
+.u-lector {
+    position: relative;
+    float: left;
+    display: block;
+    overflow: hidden;
+    margin-right: -10px;
+    width: 100%;
+    .t-video-info{
+        display: none;
+        position: absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        background:rgba(0,0,0,.6);
+        text-align: center;
+        line-height:120px;
+        color:#ccc;
+        @include b-radius(50%);
+    }
+    .t-video-icon{
+        position: absolute;
+        bottom:0;
+        right:0;
+        @include sprite($video-icon);
+    }
+    .pic {
+        overflow: hidden;
+        margin: 0 auto;
+        width:128px;
+        height:128px;
+        text-align: center;
+        position: relative;
+        img {
+            width: 100%;
+            height: 100%;
+            max-width: 128px;
+            border: 1px solid #e5e5e5;
+            @include b-radius(50%);
+        }
+
+
+    }
+    &:hover {
+        color: $text-strong-color;
+        background: #f3f3f3;
+        @include b-shadow($opacity:30);
+        .t-video-info{
+            display:block;
+        }
+        .t-video-icon{
+            @include sprite($video-icon-hover);
+        }
+    }
+    .u-name {
+        position: relative;
+        display: block;
+        margin-top: 5px;
+        margin-bottom: 8px;
+        padding: 0 10px;
+        width: 100%;
+        text-align: center;
+        line-height: 180%;
+        @extend %ellipsis;
+    }
+    .u-title {
+        margin: 0 auto;
+        padding: 5px 0;
+        width: 45%;
+        @include b-radius(20px);
+        @extend %ellipsis;
+        color: $text-subsidiary-color;
+        font-size: $fs14;
+        text-align: center;
+        line-height: 20px;
+    }
+    .college {
+        position: relative;
+        float: left;
+        overflow: hidden;
+        margin: 10px 10px 0;
+        border-top: 1px solid #aaa;
+        padding: 10px 0;
+        width: 90%;
+        height: 55px;
+        color: $text-subsidiary-color;
+        white-space: pre-wrap;
+        line-height: 135%;
+    }
+    .thumb {
+        position: relative;
+        padding: 0 10px;
+        color: #d0d0d0;
+        line-height: 180%;
+    }
+    a:hover {
+        color: $text-strong-color;
+    }
+}
+@include screen (320px,760px) {
+    .subject {
+        height: auto;
+        .pull_rgt{
+            width:295px;
+            float:left;
+        }
+        li{
+            padding:0 6px;
+            a{
+                padding:0 5px;
+            }
+        }
+    }
+}
+/*教师列表-教师页*/
+.teacher-list {
+    margin-bottom: 20px;
+    padding: 0 25px 0 10px;
+    max-height:162px;
+}
+.t-lector {
+    position: relative;
+    float: left;
+    display: block;
+    overflow: hidden;
+    margin-right: -10px;
+    width: 100%;
+    padding:10px;
+    border: 1px solid #e5e5e5;
+    .t-video-info{
+        display: none;
+        position: absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        background:rgba(0,0,0,.6);
+        text-align: center;
+        line-height:143px;
+        color:#ccc;
+        @include b-radius(50%);
+    }
+    .video-icon-span{
+        @include sprite($green-play);
+        margin-right:7px;
+        margin-top:7px;
+        float:left;
+    }
+    .video-icon{
+        position: absolute;
+        bottom:0;
+        left: 70%;
+        width: 30px;
+        height: 30px;
+        padding:0 10px;
+        background-repeat: no-repeat;
+        background-color: #fff;
+        overflow: hidden;
+        border: 2px solid #61A93A;
+        text-align: center;
+        border-radius: 15px;
+        white-space: nowrap;
+        line-height:25px;
+        font-size: 14px;
+        color: #61A93A;
+        z-index: 2;
+        transition: width 1s;
+        &:hover{
+            width:95px;
+            transition: width 1s;
+        }
+    }
+
+    .pic {
+        margin: 0 auto;
+        width:140px;
+        height:140px;
+        text-align: center;
+        position: relative;
+        padding: 0px;
+        .is_tacher{
+            border: 1px solid #e5e5e5;
+            @include b-radius(50%);
+            padding:5px;
+            float: left;
+            width:100%;
+            height:100%;
+        }
+        a{
+            padding:5px;
+            float: left;
+            width:100%;
+            height:100%; 
+        }
+        img {
+            width: 100%;
+            height: 100%;
+            max-width: 140px;
+            @include b-radius(50%);
+        }
+        &:hover {
+            .t-video-info{
+                display:block;
+            }
+            .video-icon{
+                width:95px;
+                transition: width 1s;
+            }
+        }
+    }
+    &:hover{
+        color: $text-strong-color;
+        background: #f3f3f3;
+        @include b-shadow($opacity:30);
+    }
+    .tea-item{
+        display: inline-block;
+        padding-left: 10px;
+    }
+    .u-name {
+        position: relative;
+        display: block;
+        margin-top: 5px;
+        margin-bottom: 8px;
+        padding: 0 10px;
+        width: 100%;
+        line-height: 180%;
+        @extend %ellipsis;
+    }
+    .sex-icon-w{
+        @include sprite($woman);
+        margin: auto 5px;
+    }
+    .sex-icon-m{
+        @include sprite($man);
+        margin: auto 5px;
+    }
+    .u-note{
+        padding:0 5px;
+        font-size:12px;
+        color:$main-yellow-color;
+        border:1px solid $main-yellow-color;
+        @include b-radius(20px);
+    }
+    .u-score{
+        float: left;
+        width:100%;
+        padding:0 10px;
+        margin: 0 0 10px 0;
+        font-size:15px;
+        text-align: center;
+        li{
+            float: left;
+            padding-right:15px;
+            padding-left:15px;
+            border-right:1px solid #ccc;
+            &:last-child{
+                border-right:none;
+            }
+            &:first-child{
+                padding-left:0px;
+            }
+        }
+    }
+    .u-course{
+        float: left;
+        width:100%;
+        padding:0 10px;
+        margin:0 0 10px 0;
+        li{
+            float:left;
+            margin-right:20px;
+            text-align: center;
+            width:23%;
+            line-height: 27px;
+            @include b-radius(2px);
+            background:#E3F1FD;
+            &:last-child{
+                background:#FFF0E6;
+                margin-right:0;
+            }
+        }
+    }
+    .u-title {
+        margin: 0 auto;
+        padding: 5px 0;
+        width: 45%;
+        @include b-radius(20px);
+        @extend %ellipsis;
+        color: $text-subsidiary-color;
+        font-size: $fs14;
+        line-height: 20px;
+    }
+    .college {
+        position: relative;
+        float: left;
+        overflow: hidden;
+        padding: 0 10px;
+        width: 100%;
+        color: $text-subsidiary-color;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .thumb {
+        position: relative;
+        padding: 0 10px;
+        color: #d0d0d0;
+        line-height: 180%;
+    }
+    a:hover {
+        color: $text-strong-color;
+    }
+}
+@include screen (320px,768px) {
+    .t-lector{
+        .pic{
+            width:30%;
+            height:auto;
+            margin-top:10px;
+        }
+        .tea-item{
+            padding-right:0;
+        }
+        .u-name{
+            font-size:16px;
+            line-height: auto;
+            margin-bottom:5px;
+            padding:0 0 0 5px;
+            float:left;
+            .t-name{
+                width:90px; 
+                white-space:nowrap; 
+                text-overflow:ellipsis; 
+                -o-text-overflow:ellipsis; 
+                overflow: hidden; 
+                float:left;
+            }
+        }
+        .u-score{
+            margin-bottom:5px;
+            font-size:12px;
+            padding-right:0;
+            padding-left:5px;
+            li{
+                padding:0 5px;
+            }
+        }
+        .u-course{
+            padding:0 0 0 5px;
+            margin-bottom:5px;
+            li{
+                margin-right:10px;
+                line-height: 22px;
+                width:25%;
+            }
+        }
+        .college{
+            font-size:12px;
+        }
+    }
+    .teacher-list{
+        margin-top:20px;
+        margin-bottom:0;
+    }
+}
+//上传资料
+.new-upload-data {
+    position: relative;
+    float: left;
+    width: 100%;
+    height: 230px;
+    .up-most {
+        width: 100%;
+        text-align: center;
+        margin-top: 35px;
+        font-size: 14px;
+    }
+    .up-format {
+        font-size: 14px;
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+        line-height: 100px;
+    }
+}
+
+.new-upload-btn {
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+    float: left;
+    button {
+        width: 130px;
+        height: 40px;
+        background: #ffa81d;
+        color: #fff;
+        border: none;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        -o-border-radius: 5px;
+        -ms-border-radius: 5px;
+        -khtml-border-radius: 5px;
+        border-radius: 5px;
+        &#uploadthis {
+            width: 130px;
+            height: 40px;
+            background: #ffa81d;
+            color: #fff;
+            border: none;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            -o-border-radius: 5px;
+            -ms-border-radius: 5px;
+            -khtml-border-radius: 5px;
+            border-radius: 5px;
+        }
+    }
+}
+.new-data-list {
+    float: left;
+    width: 100%;
+    padding: 10px;
+}
+.new-upload-data {
+    .fs12 {
+        float: left;
+        width: 100%;
+        padding: 0 10px 5px 20px;
+    }
+}
+.new-data-list {
+    li {
+        float: left;
+        width: 100%;
+        line-height: 30px;
+        padding-bottom: 5px;
+        input {
+            border: 1px solid #d2d2d2;
+            padding: 0 5px;
+            font-size: 14px;
+            width: 210px;
+        }
+    }
+    .c-fl {
+        img {
+            float: left;
+            width: 30px;
+        }
+    }
+    .named {
+        float: right;
+        width: 280px;
+    }
+    .finish-icon {
+        float: right;
+        width: 30px;
+        height: 30px;
+        background: url("../img/web_organization_two.png") no-repeat 5px -640px;
+        display: inline-block;
+    }
+}
+#wrap-course-details {
+    .nav-path {
+        float: left;
+        width: 100%;
+        padding-bottom: 20px;
+    }
+    .my-course-info {
+        h1 {
+            height: 25px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+}

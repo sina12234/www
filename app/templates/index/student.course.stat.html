@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>课堂统计 - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="课程详情 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/index.main.header"}
+</head>
+<body>
+<!-- content -->
+<section id="wrap-clasroom-stats">
+<div class="c-stats-tp"></div> 
+		<dl class="head-note-position">
+			<dt></dt>
+			<dd></dd>
+			<dd></dd>
+			<dd></dd>
+			<dd></dd>
+			<dd></dd>
+			<dd></dd>
+			<dd></dd>
+			<dd></dd>
+			<dd></dd>
+			<dd></dd>
+		</dl>
+	<div class="c-stats-container">
+	<!--
+		<h1 class="fs18">{if(!empty($course_ret))}{$course_ret->title}{/if}   {if(!empty($section_ret))}{$section_ret->name}{/if}    课堂统计</h1>
+	-->
+		<table>
+			<thead>
+				<tr>
+					<th colspan="3" class="fs16">学习统计</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="col-sm-4"><i></i>排名：第<span>{$sort}</span>名</td>
+					{*<td class="col-sm-4"><i></i>到课：准时</td>*}
+					<td class="col-sm-4"><i></i>获赞：<span>{$good_count}</span>次</td>
+					<td class="col-sm-4"><i></i>答题：<span>{$right_count}/{$question_count}</span>题</td>
+				</tr>
+				{*<tr>
+					<td class="col-sm-4"><i></i>发言：<span>14</span>次</td>
+					<td class="col-sm-4"><i></i>点名：<span>3/6</span>次</td>
+					<td class="col-sm-4"><i></i>答题：<span>{$right_count}/{$question_count}</span>题</td>
+				</tr>*}
+			</tbody>
+		</table>
+		{if(!empty($question_count))}
+		<h2 class="fs16">答题情况</h2>
+		<ol class="fs14 clearfix">
+			<li class="col-sm-3">
+				<label>
+					<input type="radio" name="question" value="all" checked  class="q-radio"/> 共{$question_count}题
+				</label>
+			</li>
+			<li class="col-sm-3">
+				<label>
+					<input type="radio" name="question" value="right"  class="q-radio"/> 答对{$right_count}题
+				</label>
+			</li>
+			<li class="col-sm-3">
+				<label>
+					<input type="radio" name="question" value="wrong" class="q-radio"/> 答错{$wrong_count}题
+				</label>
+			</li>
+			<li class="col-sm-3">
+				<label>
+					<input type="radio" name="question" value="no" class="q-radio"/> 未答{$no_count}题
+				</label>
+			</li>
+		</ol>
+		<ul class="fs14 ques-ul" id="q_all">
+			{*<li>
+				<label>
+					<input type="checkbox" name="allchk[]" /> 全选
+				</label>
+				<button>加入题库</button>
+			</li>*}
+		{if(!empty($question_data))}
+			{foreach($question_data as $ko=>$qo)}
+			<li>
+				{*<input type="checkbox" name="chks[]" />*}
+				<dl>
+					<dt>{$ko+1}. {if(!empty($qo->q_desc_img))}<img src="{utility_cdn::file($qo->q_desc_img)}">{else}{$qo->q_desc}{/if}</dt>
+					{if(!empty($qo->a))}<dd>A ．{$qo->a}</dd>{/if}
+					{if(!empty($qo->b))}<dd>B ．{$qo->b}</dd>{/if}
+					{if(!empty($qo->c))}<dd>C ．{$qo->c}</dd>{/if}
+					{if(!empty($qo->d))}<dd>D ．{$qo->d}</dd>{/if}
+					{if(!empty($qo->e))}<dd>E ．{$qo->e}</dd>{/if}
+				</dl>
+				<div class="col-sm-12">
+					{if($qo->correct == 'right')}
+					<span class="c-answer-true-icon c-fl"></span>
+					{elseif($qo->correct == 'wrong')}
+					<span class="c-answer-error-icon c-fl"></span>
+					{/if}
+					<p class="c-fl">正确答案：<span class="c-answer">{strtoupper($qo->answer)}</span></p>
+					{if(!empty($qo->options) && $qo->correct == 'wrong')}
+					<p class="c-fl">&nbsp;我的答案：<span class="c-my-answer">{strtoupper($qo->options)}</span></p>
+					{/if}
+				</div>
+			</li>
+			{/foreach}
+		{/if}
+		</ul>
+		<ul class="fs14 ques-ul" id="q_right">
+			{*<li>
+				<label>
+					<input type="checkbox" name="allchk[]" /> 全选
+				</label>
+				<button>加入题库</button>
+			</li>*}
+		{if(!empty($user_right_question))}
+			{foreach($user_right_question as $ko=>$qo)}
+			<li>
+				{*<input type="checkbox" name="chks[]" />*}
+				<dl>
+					<dt>{$ko+1}. {if(!empty($qo->q_desc_img))}<img src="{utility_cdn::file($qo->q_desc_img)}">{else}{$qo->q_desc}{/if}</dt>
+					{if(!empty($qo->a))}<dd>A ．{$qo->a}</dd>{/if}
+					{if(!empty($qo->b))}<dd>B ．{$qo->b}</dd>{/if}
+					{if(!empty($qo->c))}<dd>C ．{$qo->c}</dd>{/if}
+					{if(!empty($qo->d))}<dd>D ．{$qo->d}</dd>{/if}
+					{if(!empty($qo->e))}<dd>E ．{$qo->e}</dd>{/if}
+				</dl>
+				<div class="col-sm-12">
+					{if($qo->correct == 'right')}
+					<span class="c-answer-true-icon c-fl"></span>
+					{elseif($qo->correct == 'wrong')}
+					<span class="c-answer-error-icon c-fl"></span>
+					{/if}
+					<p class="c-fl">正确答案：<span class="c-answer">{strtoupper($qo->answer)}</span></p>
+					{if(!empty($qo->options) && $qo->correct == 'wrong')}
+					<p class="c-fl">&nbsp;我的答案：<span class="c-my-answer">{strtoupper($qo->options)}</span></p>
+					{/if}
+				</div>
+			</li>
+			{/foreach}
+		{/if}
+		</ul>
+		<ul class="fs14 ques-ul" id="q_wrong">
+			{*<li>
+				<label>
+					<input type="checkbox" name="allchk[]" /> 全选
+				</label>
+				<button>加入题库</button>
+			</li>*}
+		{if(!empty($user_wrong_question))}
+			{foreach($user_wrong_question as $ko=>$qo)}
+			<li>
+				{*<input type="checkbox" name="chks[]" />*}
+				<dl>
+					<dt>{$ko+1}. {if(!empty($qo->q_desc_img))}<img src="{utility_cdn::file($qo->q_desc_img)}">{else}{$qo->q_desc}{/if}</dt>
+					{if(!empty($qo->a))}<dd>A ．{$qo->a}</dd>{/if}
+					{if(!empty($qo->b))}<dd>B ．{$qo->b}</dd>{/if}
+					{if(!empty($qo->c))}<dd>C ．{$qo->c}</dd>{/if}
+					{if(!empty($qo->d))}<dd>D ．{$qo->d}</dd>{/if}
+					{if(!empty($qo->e))}<dd>E ．{$qo->e}</dd>{/if}
+				</dl>
+				<div class="col-sm-12">
+					{if($qo->correct == 'right')}
+					<span class="c-answer-true-icon c-fl"></span>
+					{elseif($qo->correct == 'wrong')}
+					<span class="c-answer-error-icon c-fl"></span>
+					{/if}
+					<p class="c-fl">正确答案：<span class="c-answer">{strtoupper($qo->answer)}</span></p>
+					{if(!empty($qo->options) && $qo->correct == 'wrong')}
+					<p class="c-fl">&nbsp;我的答案：<span class="c-my-answer">{strtoupper($qo->options)}</span></p>
+					{/if}
+				</div>
+			</li>
+			{/foreach}
+		{/if}
+		</ul>
+		<ul class="fs14 ques-ul" id="q_no">
+			{*<li>
+				<label>
+					<input type="checkbox" name="allchk[]" /> 全选
+				</label>
+				<button>加入题库</button>
+			</li>*}
+		{if(!empty($user_no_question))}
+			{foreach($user_no_question as $ko=>$qo)}
+			<li>
+				{*<input type="checkbox" name="chks[]" />*}
+				<dl>
+					<dt>{$ko+1}. {if(!empty($qo->q_desc_img))}<img src="{utility_cdn::file($qo->q_desc_img)}">{else}{$qo->q_desc}{/if}</dt>
+					{if(!empty($qo->a))}<dd>A ．{$qo->a}</dd>{/if}
+					{if(!empty($qo->b))}<dd>B ．{$qo->b}</dd>{/if}
+					{if(!empty($qo->c))}<dd>C ．{$qo->c}</dd>{/if}
+					{if(!empty($qo->d))}<dd>D ．{$qo->d}</dd>{/if}
+					{if(!empty($qo->e))}<dd>E ．{$qo->e}</dd>{/if}
+				</dl>
+				<div class="col-sm-12">
+					{if($qo->correct == 'right')}
+					<span class="c-answer-true-icon c-fl"></span>
+					{elseif($qo->correct == 'wrong')}
+					<span class="c-answer-error-icon c-fl"></span>
+					{/if}
+					<p class="c-fl">正确答案：<span class="c-answer">{strtoupper($qo->answer)}</span></p>
+					{if(!empty($qo->options) && $qo->correct == 'wrong')}
+					<p class="c-fl">&nbsp;我的答案：<span class="c-my-answer">{strtoupper($qo->options)}</span></p>
+					{/if}
+				</div>
+			</li>
+			{/foreach}
+		{/if}
+		</ul>
+		{/if}
+	</div>
+</section>
+<!-- /content -->
+</body>
+</html>
+<script type="text/javascript">
+$(function() {
+//Allchk
+	$(".c-stats-container input[name='allchk[]']").click(function(){
+	    if(this.checked){
+	        $(".c-stats-container input[name='chks[]']").each(function(){
+	            this.checked = true;
+	        }); 
+	    }else{ 
+	        $(".c-stats-container input[name='chks[]']").each(function(){
+	            this.checked = false;
+	        }); 
+	    } 
+	});
+
+	$('.ques-ul:eq(0)').show();
+	$('.ques-ul:eq(1)').hide();
+	$('.ques-ul:eq(2)').hide();
+	$('.ques-ul:eq(3)').hide();
+	$('.q-radio').click(function(){
+	
+		var type = $(this).val();
+		if(type == 'all'){
+			$('#q_all').show();
+			$('#q_right').hide();
+			$('#q_wrong').hide();
+			$('#q_no').hide();
+		}
+		if(type == 'right'){
+			$('#q_all').hide();
+			$('#q_wrong').hide();
+			$('#q_no').hide();
+			$('#q_right').show();
+		}
+		if(type == 'wrong'){
+			$('#q_all').hide();
+			$('#q_right').hide();
+			$('#q_no').hide();
+			$('#q_wrong').show();
+		}
+		if(type == 'no'){
+			$('#q_all').hide();
+			$('#q_right').hide();
+			$('#q_wrong').hide();
+			$('#q_no').show();
+		}
+	
+	});
+
+
+})
+</script>

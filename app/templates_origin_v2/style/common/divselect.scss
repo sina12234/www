@@ -1,0 +1,81 @@
+//divselect
+.divselect{
+    position:relative;
+    z-index:1;
+    height: 28px;
+    float:left;
+    font-size: 12px;
+    margin-bottom: 10px;
+    input{
+      display: none;
+    }
+    cite{
+        @include width-border(100%,$common-border-color);
+        height: 28px;
+        line-height: 26px;
+        min-width: 80px;
+        z-index:1;
+        display:block;
+        overflow:hidden;
+        padding:0px 30px 0px 5px;
+        color:$text-strong-color;
+        font-style:normal;
+        cursor:pointer;
+        float: left;
+        span.cite-icon{
+          position: absolute;
+          right: 5px;
+          top:10px;
+          @include sprite($arrow);
+        }
+    }
+    dl{
+        position:absolute;
+        top:27px;
+        z-index:3;
+        display:none;
+        width: 100%;
+        @include borderDeleteDirection('top',$common-border-color);
+        background-color:$main-white-color;
+        max-height: 200px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        dd{
+            @include line-height(23px);
+            a{
+                display:block;
+                padding: 0 5px;
+                @include line-height(23px);
+                color:$text-strong-color;
+                text-decoration:none;
+                @extend %ellipsis;
+                &:hover{
+                  background-color:$common-background-color;
+                }
+            }
+        }
+    }
+  &.divselect-32{
+    height: 32px;
+    font-size: 14px;
+    cite{
+      height:32px;
+      line-height: 30px;
+      padding:0px 40px 0px 8px;
+      span.cite-icon{
+        right: 10px;
+        top:12px;
+      }
+    }
+    dl{
+      top:31px;
+      dd{
+        @include line-height(32px);
+        a{
+          padding: 0 8px;
+          @include line-height(32px);
+        }
+      }
+    }
+  }
+}

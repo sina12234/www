@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>系统审核-机构入驻</title>
+{part "/index.main.header"}
+</head>
+<body>
+    <!-- header -->
+	{part "/index.main.top"}
+	{part "/index.main.nav.join"}
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="join-step col-sm-20 fs16">
+                    <div class="col-sm-5 step">
+                        <p class="bg"></p>
+                        <p class="num">1</p>
+                        <p class="text">在线协议</p>
+                    </div>
+                    <div class="step col-sm-5">
+                        <p class="bg"></p>
+                        <p class="num">2</p>
+                        <p class="text">填写基础资料</p>
+                    </div>
+                    <div class="step col-sm-5">
+                        <p class="bg"></p>
+                        <p class="num">3</p>
+                        <p class="text">资质证明</p>
+                    </div>
+                    <div class="step col-sm-5">
+                        <p class="blue-bg"></p>
+                        <p class="blue-num">4</p>
+                        <p class="blue-text">系统审核</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="p20">
+        <div class="container">
+            <div class="row">
+                <div class="join-info cGray2">
+                    <h1 class="fs16">系统审核</h1>
+                    <div class="pos-rel status">
+                    {if !empty($success)}
+                        <!-- 资料提交完 -->
+                        <div class="pos-abs status-tips cGray2">
+                            <p><img src="{utility_cdn::img('/assets_v2/img/platform/pet3.png')}" alt="" width="90"></p>
+                            <p class="fs16">感谢您申请加入我们，我们将在两个工作日内完成资料审核，并通过邮箱和短信进行反馈~</p>
+                        </div>
+                    {else}
+                        {if $orgInfo->status==0}
+                        <!-- 审核中 -->
+                        <div class="pos-abs status-tips cGray2">
+                            <p><img src="{utility_cdn::img('/assets_v2/img/platform/pet3.png')}" alt="" width="90"></p>
+                            <p class="fs16">资料正在审核中，请耐心等待~</p>
+                        </div>
+                        {elseif $orgInfo->status==-1}
+                        <!-- 未通过 -->
+                        <div class="pos-abs status-tips cGray2">
+                            <p><img src="{utility_cdn::img('/assets_v2/img/platform/pet3.png')}" alt="" width="90"></p>
+                            <p class="fs16">非常抱歉您提交的资料未通过审核，原因已经通过邮箱和短信进行反馈，请查收~</p>
+                            <p class="p10"><button class="btn col-sm-3 blue-btn" id="jump">点击重新申请</button></p>
+                        </div>
+                        {else}
+                        <!-- 通过审核 -->
+                        <div class="pos-abs status-tips cGray2">
+                            <p><img src="{utility_cdn::img('/assets_v2/img/platform/pet3.png')}" alt="" width="90"></p>
+                            <p class="fs16">
+                                您的资料已经通过审核，并完成入驻，点击下方链接访问专属您的网站 <a href="http://{$subdomain}" target="_blank" class="cBlue">{$subdomain}</a>
+                            </p>
+                        </div>
+                        {/if}
+                    {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- footer -->
+	{part '/index.main.footer'}
+</body>
+<script>
+$(function(){
+    $('#jump').click(function(){
+      location='/index/join/step1';
+    });
+});
+</script>
+</html>

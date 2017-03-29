@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>查看投票参与人数</title>
+<meta name="title" content="{part '/site.main.orgname'} - 资料信息 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script type="text/javascript" src="/assets_v2/js/page.js"></script>
+</head>
+<body style="background:#f7f7f7">
+{part "/site.main.nav"}
+<section id="operat-tols" class="pd40">
+	<div class="container">
+		<div class="row">
+		<!-- lt -->
+		{part "/org.main.menu.vote"}
+		<!-- /lt -->
+		<!-- rt -->
+		<div class="right-main col-md-16 col-sm-16 col-lg-16">
+			<div class="content">
+                <div class="course-bt col-md-20">
+                    <p>
+                        <a href="/org.vote.list">
+                            {'返回'|tr:'org'}&gt;<b></b>
+                        </a>
+                        <b style="color:#666;">{'参与投票人'|tr:'org'}({$total})</b>
+                    </p>
+					{if($total>=0)}
+					<div class="num fs14 c-fr cBlue hidden-xs hidden-sm hidden-md">
+						<a href="javascript:;" target="_blank" id="phpexcelexport">导出Excel</a>
+					</div>
+					{/if}
+                </div>
+                <ul class="genger-content clearfix">
+                	<li style="display:block; clear: both" >
+                		<div class="wrap-gnger-tab">
+                			<div class="wrap-gnger-tab-title bor1px fs14 clearfix">
+                				<div class="col-md-3">{'学生姓名'|tr:'org'}</div>
+                				<div class="col-md-3">{'手机号'|tr:'org'}</div>
+                				<div class="col-md-2">{'性别'|tr:'org'}</div>
+                				<div class="col-md-2">{'年龄'|tr:'org'}</div>
+                				<div class="col-md-5">{'学校'|tr:'org'}</div>
+                				<div class="col-md-3">{'投票时间'|tr:'org'}</div>
+                				<div class="col-md-2">{'选项'|tr:'org'}</div>
+                			</div>
+
+                            {if (!empty($userInfo))}
+                            {foreach ($userInfo as $v)}
+                			<div class="wrap-gnger-tab-bd bor1px fs14 clearfix">
+                				<div class="col-md-3 h40">
+                					<img class="user-img" src="{$v['thumbMed']}" alt="">
+                                    {$v['name']}
+                				</div>
+                				<div class="col-md-3 h40">
+                                    {$v['mobile']}
+                				</div>
+                				<div class="col-md-2 h40">{$v['gender']|tr:'org'}</div>
+                				<div class="col-md-2 h40">{$v['age']}</div>
+                				<div class="col-md-5 h40">
+                					{$v['school']}
+                				</div>
+                				<div class="col-md-3 h40">
+                				    {$v['voteTime']}
+                				</div>
+                				<div class="col-md-2 h40">
+                                   {$v['optionId']}
+                				</div>
+                			</div>
+                            {/foreach}
+                            {/if}
+                		</div>
+                		<!-- page -->
+                		<div class="page-list" id="page_list"></div>
+						<!-- /page -->
+						</li>
+					</ul>    
+					<div class="page-list" id="pagepage">
+					</div>
+				</div>	
+			</div>
+			<!-- /rt -->
+		</div>
+	</div>
+	</section>
+	{part "/site.main.footer"}
+	<script>
+		page("pagepage","{$path}",{$size},{$page},{$totalsize});	
+
+		$(document).ready(function(){
+			$("#phpexcelexport").click(function(){
+				var voteid = "{$voteId}";
+				window.location.href="/phpexcel/votetenderer/entry/"+voteid;
+			});
+		});
+</script>
+</body>
+</html>

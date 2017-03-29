@@ -1,0 +1,460 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 注册</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="../assets/css/common.css">
+		<link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+		<script type="text/javascript" src="/assets/js/jquery/jquery-1.11.1.min.js" ></script>
+		<script src="../assets/js/user.js"></script>
+		<script src="../assets/js/part.js"></script>
+	</head>
+		<style type="text/css">
+		.title{margin:22px 0 22px 0 ;}
+		.title p{color: #999999;font-weight: normal; }
+		.title p b{color: #333333; font-weight: normal;}
+		.play-count{ max-width: 1000px; height:575px;}
+		.play-count .play-left{float: left; background: #0f0;margin-right: 10px; background: url(../images/playbg.png)no-repeat; position: relative;}
+		.play-count .play-left .control{ position: absolute; right:0px; bottom: 11px;background:url(../images/playbj.png) repeat-x;}
+		.play-count .play-left .control .yl{ float: left; margin-left:20px; cursor: pointer;}
+		.play-count .play-left .stop{position: absolute;bottom: 0px; cursor: pointer;}
+		.play-count .play-left .playthecher{position: absolute;right: 10px; top:10px; cursor: pointer;}
+		.play-count .play-right{height: 565px;width:260px; float: right;}
+		.play-count .play-right .message{ border:1px solid #e4e4e4;height: 128px;width: 260px; background: #fff;}
+		.play-count .play-right .message .mes{height: 30px; line-height: 30px; border-bottom:1px dashed #ccc;}
+		.play-count .play-left1 .message .mes{height: 30px; line-height: 30px; border-bottom:1px dashed #ccc;}
+		.play-count .play-left1 .message{ border:1px solid #ccc;height: 128px;width: 260px; background: #fff;}
+		.play-count .play-left1 .message .mes{height: 30px; line-height: 30px; border-bottom:1px dashed #ccc;}
+		.count{ background: #F7F7F7;}
+		.dalong{height: 537px;}
+		.dalong .daleft{float: left;width: 730px; margin-right: 10px;}
+		.dalong .daleft .message{border:1px solid #e4e4e4; width: 246px;height: 144px; background: #fff; float: left;}
+		.dalong .daleft .message .mes{height: 30px;line-height: 30px; border-bottom:1px dashed #ccc;}
+		.dalong .daleft .message .playtou span img{ margin-top: 9px; margin-left: 15px; float: left; margin-right: 20px;}
+		.dalong .daleft .message .mee{ padding-top: 20px; line-height: 20px;}
+		.dalong .daleft .message .mee .lan { width: 70px; height: 20px; background: #30ABD8; color: #fff; border-radius: 5px; float: left;text-align: center; margin-left: -5px; margin-top: 5px;}
+
+		.dalong .daright{float: left;margin-right: 10px;}
+		.dalong .daright .message{border:1px solid #e4e4e4; width: 260px;height: 144px; background: #fff; float: left; margin-bottom: 10px;}
+		.dalong .daright .message .mes{height: 30px;line-height: 30px; border-bottom:1px dashed #ccc;}
+		.dalong .daright .message .playtou span img{ margin-top: 9px; margin-left: 15px; float: left; margin-right: 20px;}
+		.dalong .daright .message .mee{ padding-top: 20px; line-height: 20px;}
+		.dalong .daright .message .mee .lan { width: 80px; height: 30px; background:#FFA81E; color: #fff; border-radius: 5px; float: left;text-align: center; margin-left: -5px; margin-top: 5px; line-height: 30px; cursor: pointer;}
+		.dalong .daright .message .mee .lan span img{ margin-top: 10px; margin-right: 8px;}
+		.dalong .daright .message .mee .lan .tutu span { float: left; width: 80px; height:30px; background: #EDEDED; border-radius: 5px; color: #000;}
+		.dalong .daright .message .mee .lan .tutu {display: none;}
+		.student-mes .teta li{ float: left;}
+		.student-mes .teta li div img{ border-radius: 20px; margin: 10px 0 0 6px;width: 40px; height: 40px;}
+		.box{ padding-left: 10px; padding-right: 10px;}
+		.dhk .mess p{ background:#f3fff4;max-width:211px;border-radius: 13px;}
+		.message .mes span{ font-size: 14px; color: #999999;}
+		.play-left .sk{background: #000;height: 100%;}
+		.play-left .sk{padding-left: 170px;padding-top: 100px;}
+		.play-left .sk .sk-box .register{width: 150px;}
+		.play-left .sk .sk-box .register .register-1 b{color: #fff;font-weight: normal;}
+		.play-left .sk .sk-box .register .register-1 a{color:#FFA81E; }
+		.play-left .sk .sk-box .sk-bt{height: 30px;}
+		.play-left .sk .sk-box .sk-bt h1{font-size: 12px; color: #999999;}
+		.play-left .sk .sk-box .adb {height: 50px;}
+		.play-left .sk .sk-box .adb h1{font-size: 20px;color: #fff;}
+		.play-left .sk .dlzc p{color:#999999;}
+		.play-left .sk .dlzc p a{ color:#999999;}
+		.play-left .sk .user_content_lb{height: 150px;}
+		.play-left .sk .user_content_lb dl dt{margin-right: -130px;}
+		.play-left .sk .user_content_lb dl dd h1{font-size: 17px;font-weight:normal;color:#fff;}
+		.play-left .sk .user_content_lb dl dd p{height: 23px; line-height:40px; color: #999999;}
+		.play-left .sk .user_content_lb dl dd input{width: 90px;height: 35px;margin-top: 20px;border: none;background: #FFA81E;border-radius: 5px;color: #fff;}
+		.box{height:340px;overflow: auto hidden;position: relative;}
+		.box .xt{position: absolute;bottom: 10px;right: 5px;}
+		.box .xt img{cursor: pointer;}
+		</style>
+	<body>
+		<!--top-->
+		<div class="part" url="/part.top.html"></div>
+		<!-- nav -->
+		<div class="part" url="/part.nav.html"></div>
+		<div class="part" url="/user/part.nav.user.html"></div>
+
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='title'>
+						<p>公益讲堂>初一>数学><b>初一数学 高中知识全掌握-晚课 语数英理化生政史化生史事历史</b></p>
+					</div>
+					<div class='play-count col-sm-12 col-xs-12'>
+							<div class='play-left col-sm-12 col-xs-12'>
+								<div class='sk' style="display:none;">
+									<div class='sk-box col-sm-12'>
+										<div class='sk-bt col-sm-12 col-xs-12'><h1><b><img src="../assets/images/sk-t.png" alt=""></b>&nbsp;&nbsp;尊敬的用户,本课属于付费课！</h1></div>
+										<div class='adb col-sm-12 col-xs-12'><h1>免费体验已结束，购买后可完整观看。</h1></div>
+										<div class='user_content_lb col-sm-12 col-xs-12'>
+											<dl>
+												<dt class='col-sm-8 col-xs-8'>
+													<div class='courseThumb' style="position:relative;">
+														<img src="../assets/images/icon3.jpg">
+														<div class='iconFee'>
+														</div>
+														<div class='iconStart'>
+														</div>
+													</div>
+												</dt>
+												<dd class='col-sm-4 col-xs-4'>
+													<h1>初一数学满分冲刺班</h1>
+													<p><img src="../assets/images/sk-tt.png" alt="">&nbsp;主讲老师：高海磊</p>
+													<p style="color:#f00;">￥689</p>
+													<a href="course.plan.html" target="_blank"><input type="button" value="立即购买"></a>
+												</dd>
+											</dl>
+										</div>
+										
+									</div> 
+								</div>
+								<!-- <div class='sk' style="display:none;">
+									<div class='sk-box col-sm-12'>
+										<div class='adb col-sm-12 col-xs-12'><h1>免费试看时间到，购买后可继续观看。</h1></div>
+										<div class='user_content_lb col-sm-12 col-xs-12'>
+											<dl>
+												<dt class='col-sm-8 col-xs-8'>
+													<div class='courseThumb' style="position:relative;">
+														<img src="../assets/images/icon3.jpg">
+														<div class='iconFee'>
+														</div>
+														<div class='iconStart'>
+														</div>
+													</div>
+												</dt>
+												<dd class='col-sm-4 col-xs-4'>
+													<h1>初一数学满分冲刺班</h1>
+													<p><img src="../assets/images/sk-tt.png" alt="">&nbsp;主讲老师：高海磊</p>
+													<p style="color:#f00;">￥689</p>
+													<a href="course.plan.html" target="_blank"><input type="button" value="立即购买"></a>
+												</dd>
+											</dl>
+										</div>
+										
+									</div> 
+									<div class='dlzc' style="display:none;">
+										<p>免费试看时间到,<a href="../login.html" target="_blank">登录</a>后可完整观看，没有帐号请<a href="course.plan.html" target="_blank">注册</a></p>
+									</div>
+								</div> -->
+
+									<div class='sk' style="display:none;">
+										<div class='sk-box col-sm-12'>
+											<div class='dlzc' style="height:50px;">
+												<p style="font-size:20px;">免费试看时间到,<a href="../login.html" target="_blank">立即报名</a>后可完整观看。</p>
+											</div>
+
+											<div class='user_content_lb col-sm-12 col-xs-12'>
+												<dl>
+													<dt class='col-sm-8 col-xs-8'>
+														<div class='courseThumb' style="position:relative;">
+															<img src="../assets/images/icon3.jpg">
+															<div class='iconFee'>
+															</div>
+															<div class='iconStart'>
+															</div>
+														</div>
+													</dt>
+													<dd class='col-sm-4 col-xs-4'>
+														<h1>初一数学满分冲刺班</h1>
+														<p><img src="../assets/images/sk-tt.png" alt="">&nbsp;主讲老师：高海磊</p>
+														<p style="color:green;">免费</p>
+														<a href="course.plan.html" target="_blank"><input type="button" value="立即报名"></a>
+													</dd>
+												</dl>
+											</div>
+											
+										</div> 
+									</div>
+									<div class='sk'>
+										<div class='sk-box col-sm-12'>
+											<div class='dlzc' style="height:50px;">
+												<p style="font-size:20px;">免费试看时间到,<a href="../login.html" target="_blank">登录</a>后可完整观看。</p>
+											</div>
+
+											<div class='user_content_lb col-sm-12 col-xs-12'>
+												<dl>
+													<dt class='col-sm-8 col-xs-8'>
+														<div class='courseThumb' style="position:relative;">
+															<img src="../assets/images/icon3.jpg">
+															<div class='iconFee'>
+															</div>
+															<div class='iconStart'>
+															</div>
+														</div>
+													</dt>
+													<dd class='col-sm-4 col-xs-4'>
+														<h1>初一数学满分冲刺班</h1>
+														<p><img src="../assets/images/sk-tt.png" alt="">&nbsp;主讲老师：高海磊</p>
+														<p style="color:green;">免费</p>
+														<a href="course.plan.html" target="_blank"><input type="button" value="马上登录"></a>
+													</dd>
+												</dl>
+											</div>
+											
+										</div> 
+									</div>
+								
+							</div>
+
+							
+
+
+							<div class='play-right col-sm-4'>
+								<div class='message'>
+								<div class='mes'>
+									<span><img src="../assets/images/playbook.png" style="margin-top:10px; margin-left:10px;">&nbsp;&nbsp;&nbsp;课程信息</span>
+								</div>
+								<div class='xinxi' style="margin:17px 0px 0px 10px;">
+									<span>
+										<h1>初一数学高中知识全掌握-晚课语数...</h1>
+										<p>共十节&nbsp;&nbsp;|&nbsp;&nbsp;开课机构:高能100</p>
+										<p><img src="../assets/images/playtx.png">&nbsp;&nbsp;主讲老师:高海磊</p>
+									</span>
+								</div>
+								</div>
+								
+								<div class='message' style="margin-top:12px; height:424px;">
+								<div class='mes'>
+									<span><img src="../assets/images/gongg.png" style="margin-top:10px; margin-left:10px;">&nbsp;&nbsp;&nbsp;公共讨论区</span>
+								</div>
+								
+								<div class='xinxi'>
+									 <p class='time'>11:05</p>
+								</div>
+								<div class='box'>
+										<div class='dhk'>
+											<span><img src="../assets/images/grtx.jpg"></span>
+											<div class='jjj'></div>
+											<div class='mess'>
+												<p>赵山根说:<b>老师讲的很清晰，我现在很有信心了，老师谢谢你</b></p>
+											</div>
+										</div>
+										<div class='dhk' style="margin-top:10px;">
+											<span><img src="../assets/images/grtx.jpg"></span>
+											<div class='jjj'></div>
+											<div class='mess'>
+												<p>赵山根说:<b>老师讲的很清晰，我现在很有信心了，老师谢谢你</b></p>
+											</div>
+										</div>
+										<div class='xinxi'>
+											 <p class='time'>12:00</p>
+										</div>
+										<div class='dhk2' style="margin-top:10px;">
+											<span><img src="../assets/images/grtx.jpg"></span>
+											<div class='jjj'></div>
+											<div class='mess'>
+												<p>我说:<b>老师讲的很清晰，我现在很有信心了，老师谢谢你</b></p>
+											</div>
+										</div>
+										<div class='dhk1' style="margin-top:10px;">
+											<span><img src="../assets/images/grtx.jpg"></span>
+											<div class='ddd'></div>
+											<div class='mess'>
+												<p>老师说:<b>老师讲的很清晰，我现在很有信心了，老师谢谢你</b></p>
+											</div>
+										</div>
+										<div class='xt'>
+											<img src="../assets/images/xxx.png" alt="">
+										</div>
+								</div>
+								<div class='boxx'>
+									<div class='emjoy'>
+										<span><img src="../assets/images/emjoy.png"></span>
+									</div>
+									<div class='fas'>
+											<textarea class='chat-textarea' style="width:258px;height:112px;border:none;"></textarea>
+											<input type="button" value="发送">
+									</div>
+								</div>
+								</div>
+
+					</div>
+					</div>
+				
+						<div class='dalong'>
+							<div class='daleft'>
+								<div class='message'>
+								<div class='mes'>
+									<span><img src="../assets/images/playls.png" style="margin-top:10px; margin-left:10px;">&nbsp;&nbsp;&nbsp;主讲老师</span>
+								</div>
+								<div class='playtou'>
+									<span><img src="../assets/images/playtou.png"></span>
+								</div>
+									<div class='mee'>
+									<a href="#">高海磊&nbsp;&nbsp;<img src="../assets/images/b1_r1_c3.png" style="margin-top:4px;"></a>
+									<p>中考专家</p>
+									<div class='lan'>
+										<span>12年教龄</span>
+									</div>
+									
+									</div>
+								</div>
+								<div class='student-mes'>
+									<div class='mes'>
+										<span><img src="../assets/images/playtxue.png" style="margin-top:10px; margin-left:10px;">&nbsp;&nbsp;&nbsp;同学&nbsp;(<b>20</b>/30)</span>
+									</div>
+									<div class="teta">
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+										<li>
+											<div><img src="../assets/images/xuestx.png"></div>
+										</li>
+									</div>
+
+								</div>
+							</div>
+
+								<div class='daright' style="width:260px;height:536px; float:left">
+									<div class='daright'>
+										<div class='message'>
+										<div class='mes'>
+											<span><img src="../assets/images/playzw.png" style="margin-top:10px; margin-left:10px;">&nbsp;&nbsp;&nbsp;我的座位</span>
+										</div>
+										<div class='playtou'>
+											<span><img src="../assets/images/xinxitx.png"></span>
+										</div>
+											<div class='mee'>
+											<a href="#">唐猫小雨&nbsp;&nbsp;<img src="../assets/images/b1_r1_c3.png" style="margin-top:4px;"></a>
+											
+											<div class='lan'>
+												<span><img src="../assets/images/xinxiqp.png">举手发言</span>
+												<div class='tutu'>
+													<span id="dd"><img src="../assets/images/dengdai.png">等待中...</span>
+													<span style="background:#F85353;" id="qq"><img src="../assets/images/quxiao.png">取消</span>
+												</div>
+											</div>
+											
+											</div>
+										</div>
+										<div class='Ranking'>
+											<div class='message'>
+											<div class='mes'>
+												<span><img src="../assets/images/dz.png" style="margin-top:10px; margin-left:10px;">&nbsp;&nbsp;&nbsp;点赞排行榜</span>
+											</div>
+											<div class='Ranking-p'>
+												<p class='dy'>1</p>
+												<p><img src="../assets/images/txpng.png"></p>
+												<p class='dy1'>唐猫小雨</p>
+												<p class='dz'>
+													点赞<b>19</b>次	
+												</p>
+											</div>
+											<div class='clear'></div>
+											<div class='Ranking-p'>
+												<p class='dy' style="background:#3CBC48;">2</p>
+												<p><img src="../assets/images/txpng.png"></p>
+												<p class='dy1'>唐猫小雨</p>
+												<p class='dz'>
+													点赞<b style="color:#60D5C1;">15</b>次	
+												</p>
+											</div>
+											<div class='clear'></div>
+											<div class='Ranking-p'>
+												<p class='dy' style="background:#ccc;">3</p>
+												<p><img src="../assets/images/txpng.png"></p>
+												<p class='dy1'>唐猫小雨</p>
+												<p class='dz'>
+													点赞<b>2</b>次	
+												</p>
+											</div>
+											<div class='clear'></div>
+											<div class='Ranking-p'>
+												<p class='dy' style="background:#ccc;">4</p>
+												<p><img src="../assets/images/txpng.png"></p>
+												<p class='dy1'>唐猫小雨</p>
+												<p class='dz'>
+													点赞<b>3</b>次	
+												</p>
+											</div>
+											<div class='clear'></div>
+											<div class='Ranking-p'>
+												<p class='dy' style="background:#ccc;">5</p>
+												<p><img src="../assets/images/txpng.png"></p>
+												<p class='dy1'>唐猫小雨</p>
+												<p class='dz'>
+													点赞<b>6</b>次	
+												</p>
+											</div>
+
+											</div>
+											
+										</div>
+									</div>
+								</div>
+
+
+
+						</div>	
+					</div>
+					</div>
+					</div>
+</div>
+		<div class="footer"> 
+			<div class="ftcon">
+				<!-- <div class="fter_1">
+					<a href="">关于我们</a> | <a href="">加入我们</a> | <a href="">校园代理招募</a> | <a href="">O2O体验店招商</a> | <a href="">企业培训</a> | <a href="">网站地图</a> | <a href="">友情链接</a> 
+				</div> -->
+				<p class="fter_2 mt10">© 2014 北京高能壹佰教育科技有限公司 版权所有</p>
+			</div>
+		</div>
+	</body>

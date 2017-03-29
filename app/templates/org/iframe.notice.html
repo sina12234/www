@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>高能100 - 专业的K12在线教育平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+</head>
+<script src="{utility_cdn::js('/assets/libs/ckeditor/ckeditor.js')}"></script>
+<script src="{utility_cdn::js('/assets/libs/ckeditor/adapters/jquery.js')}"></script>
+<script>
+$(function(){
+    $( '#notice_content' ).ckeditor( { customConfig: '/assets/libs/ckeditor.config.js' } );
+    $(".box-2 form").submit(function(){
+        if($(this).find('input[name=act]').val()=='edit'){
+            $.post("/user.org.updateNoticeAjax",$(this).serialize(),function(r){
+                if(r.error){
+                    layer.msg(r.error);
+                     $("[name="+r.field+"]").focus();
+                }else{
+                    window.parent.location.reload();
+                }
+            },"json");
+        }else{
+            $.post("/user.org.addnoticeAjax",$(this).serialize(),function(r){
+                if(r.error){
+                    layer.msg(r.error);
+                    $("[name="+r.field+"]").focus();
+                }else{
+                    parent.location.reload();
+                }
+            },"json");
+        }
+        return false;
+    });
+});
+</script>
+<body style="background:#fff">
+    <div class='box-2'>
+        <form>
+        <div class='box-2-i'>
+            <input type="text"name="notice_title" placeholder="请输入文字" value="{if !empty($notice)}{$notice->notice_title}{/if}">
+        </div>
+        <div class='box-2-te'>
+            <textarea name="notice_content" id="notice_content">{if !empty($notice)}{$notice->notice_content}{/if}</textarea>
+        </div>
+        <div class='box-2-in'>
+            <input type="hidden" name="act" value="{$act}">
+            <input type="hidden" name="nid" value="{if !empty($notice)}{$notice->pk_notice_id}{/if}">
+            <input type="submit" value="完成">
+        </div>
+        </form>
+    </div>
+</body>
+</html>

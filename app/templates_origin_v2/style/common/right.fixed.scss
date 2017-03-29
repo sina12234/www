@@ -1,0 +1,128 @@
+//右侧定位 导航样式
+ /*
+ right top */
+//右侧导航
+.wo-top {
+  width: 40px;
+  position: fixed;
+  bottom: 15%;
+  right: 20px;
+  z-index: 999;
+  border-top:1px solid $border-color;
+  li{
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    background-color: $main-white-color;
+    border: 1px solid $border-color;
+    border-top: none;
+    position: relative;
+    overflow: hidden;
+    &:hover{
+      overflow: inherit;
+    }
+    .icon{
+      @include center(20px,20px);
+    }
+    .QR-code{
+      @include sprite($-q-r-code);
+    }
+    .QQ{
+      @include sprite($-q-q);
+    }
+    .advice{
+      @include  sprite($advice);
+    }
+    .back-top{
+      @include sprite($back-top);
+    }
+    .QQ-qun{
+      @include sprite($qq-qun);
+    }
+    &:hover{
+      background-color: $main-theme-color;
+      .QR-code{
+        @include sprite($-q-r-code-hover);
+      }
+      .QQ{
+        @include sprite($-q-q-hover);
+      }
+      .advice{
+        @include  sprite($advice-hover);
+      }
+      .back-top{
+        @include sprite($back-top-hover);
+      }
+      .QQ-qun{
+        @include sprite($qq-qun-hover);
+      }
+    }
+  }
+  .QR-code-li{
+    &:hover{
+      .QR-code-box{
+        z-index: 100;
+        opacity: 1;
+        left:-108px ;
+      }
+    }
+  }
+  .info-li{
+    &:hover{
+      .info-box{
+        z-index: 100;
+        opacity: 1;
+        left:-141px ;
+      }
+    }
+  }
+  .info-box{
+    height: auto;
+    width: 140px;
+    position: absolute;
+    left: -200px;
+    top:0;
+    padding: 0 5px;
+    line-height: 40px;
+    text-align: center;
+    background-color: $main-theme-color;
+    color: $main-white-color;
+    opacity: 0;
+    @extend %ellipsis;
+    transition: all 0.3s linear;
+    a{
+      color: $main-white-color;
+      &:hover{
+        color: $main-white-color;
+      }
+    }
+  }
+  .QR-code-box{
+    background:$main-theme-color ;
+    width: 107px;
+    height: 125px;
+    position: absolute;
+    left: -200px;
+    top:-45px;
+    opacity: 0;
+    transition: all 0.3s linear;
+    .QR-tag{
+      text-align: center;
+      color: $main-white-color;
+      @include line-height(27px);
+    }
+    .QR-box{
+      padding:0 8px 8px 8px;
+      img{
+        background-color: $main-white-color;
+        width: 92px;
+        height: 92px;
+      }
+    }
+  }
+}
+@include screen(320px,768px){
+  .wo-top{
+    display:none
+  }
+}

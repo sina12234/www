@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>调班</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<meta name="renderer" content="webkit">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/bootstrap/bootstrap.min.css')}">
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/index.css')}">
+<link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets_v2/img/favicon.ico')}" />
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+<script src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+</head>
+<style type="text/css" media="screen">
+.move-class{ line-height:28px;float: none; width: 420px;margin: 0 auto; color:#666;}
+select{ height: 28px;}
+</style>
+<body class="pt30">
+<ul class="move-class fs14">
+    <li class="mb10">
+        <span class="col-xs-2 p0">{'姓名'|tr:'org'}{if(!empty($info['studentName']))}{$info['studentName']}{/if}：</span>
+        {if(!empty($info['courseName']))}{$info['courseName']}{/if} ({if(!empty($info['class_name']))}{$info['class_name']}{/if})
+    </li>
+    <li class="mb10">
+        <span class="col-xs-2 p0">{'讲师'|tr:'org'}：</span>
+        {if(!empty($info['teacher_name']))}{$info['teacher_name']}{/if}
+    </li>
+    <li class="cYellow mb10">
+        <span class="dGray col-xs-2 p0">{'价格'|tr:'org'}：</span>
+        {if(!empty($info['price']))}{$info['price']}{/if} 
+    </li>
+    <li class="mb10">
+        <span class="col-xs-2 p0">{'进度'|tr:'org'}：</span>
+        {if(!empty($info['classSectionName']))}{$info['classSectionName']}{/if}
+        {'共'|tr:'org'}{if(!empty($info['num']))}{$info['num']}{/if}{'章'|tr:'org'} 
+    </li>
+</ul>
+<div class="move-class col-xs-20 clearfix mb20 p0 fs14">
+    <span class="cYellow c-fl col-xs-2 p0">{'调至'|tr:'org'}：</span>
+    <div class="c-fl mr10">
+        <select id="studentsubject" class="col-xs-20 p0">
+            <option value="1">----{'请选择课程'|tr:'org'}----</option>
+            {foreach($course as $val)}
+            <option value="{$val['course_id']}">{$val['title']}</option>
+            {/foreach}
+        </select>
+    </div>
+    <div class="c-fl">
+        <span class="cYellow col-xs-10 p0"></span>
+        <select id='classId'  name="" class="studentclass">
+            <option value="">--{'选择班级'|tr:'org'}--</option>
+        </select>
+    </div>
+</div>
+<div class="move-class col-xs-20 p0 tac">
+    <button class="yellow-btn" id='apply'>{'确定'|tr:'org'}</button>
+</div>
+</body>
+<script>
+//var a = document.cookie;
+//console.log(a);
+//下拉选中状态
+$("#studentsubject").change(function(){
+    var cid = $(this).val();
+    getClassData(cid);
+});
+
+
+function getClassData(cid){
+    var classData = {$class};
+    var classId   = {$classId};
+    var html = '';
+    for(var i in classData)
+    {
+       if(i==cid)
+       {
+            for(var j in classData[i])
+            {
+                if(classData[i][j].class_id!=classId)
+                {
+                    html+="<option value='"+classData[i][j].class_id+"'>"+classData[i][j].name+"</option>";
+                }
+            }
+       }
+    }
+    $("#classId").html(html);
+}
+
+//确定按钮事件
+$('#apply').click(function(){
+        var uid = {$uid};
+        var originCid = {$cid};
+        var originClassId = {$classId};
+        var cid = $("#studentsubject option:selected").val();
+        var classId = $("#classId option:selected").val();
+
+        if (uid && cid && classId) {
+            $.post("/course/change/update", {
+                "cid":cid,
+                "classId":classId,
+                "uid":uid ,
+                "originCid":originCid,
+                "originClassId":originClassId
+            }, function(r){
+                if (r.code == 0) {
+                    layer.msg(r.errMsg,{ icon:1 }, function(){
+                         parent.location.reload();
+                    });
+                } else {
+                    layer.msg(r.errMsg);
+                    /*layer.msg(r.errMsg,{
+                         icon:1,
+                         time:3000
+                    }, function(){
+                         parent.location.reload();
+                    });*/
+                }
+            }, "json");
+        }
+})
+</script>
+</html>

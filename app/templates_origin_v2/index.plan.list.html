@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>直播列表 - 云课 - 专业的在线学习平台</title>
+        <meta name="title" content="云课 - 直播列表 - 专业的在线学习平台">
+        <meta name="keywords" content="云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+        <meta name="description" content=" 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<meta name="renderer" content="webkit">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="icon" type="image/x-icon" href="http:zhaoshangen.gn100.com/assets_v2/img/platform/yunke.ico" />
+<script type="text/javascript" src="http:zhaoshangen.gn100.com/assets_v2/js/jquery/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="http:zhaoshangen.gn100.com/assets_v2/layer/layer.js"></script>
+<link rel="stylesheet" type="text/css" href="http:zhaoshangen.gn100.com/assets_v2/css/bootstrap/bootstrap.min.css">
+<!--[if lt IE 9]>
+<link rel="stylesheet" type="text/css" href="/assets_v2/css/bootstrap/bootstrap.min.css">
+<script src="http:zhaoshangen.gn100.com/assets_v2/bootstrap-3.3.0/js/html5shiv.min.js"></script>
+<script src="http:zhaoshangen.gn100.com/assets_v2/bootstrap-3.3.0/js/respond.min.js"></script>
+<![endif]-->
+<!--[if lt IE 8]>
+<script src="http:zhaoshangen.gn100.com/assets_v2/js/ie8.js" ></script>
+<![endif]-->  
+<link rel="stylesheet" type="text/css" href="http:zhaoshangen.gn100.com/assets_v2/css/platform/index.css">
+    </head>
+    <script type="text/javascript" src="http:zhaoshangen.gn100.com/assets_v2/js/common.js"></script>
+    <script src="http:zhaoshangen.gn100.com/assets_v2/js/swiper.min.js"></script>
+    <script src="http:zhaoshangen.gn100.com/assets_v2/js/user.js"></script>
+<script type="text/javascript" src="jquery.calendar-v3.js"></script>
+</head>
+<style>
+.right-tj{float:right;padding-right:0}
+.title-bar{float:left;padding-left:10px;width:100%;border:1px solid #eaeaea;border-bottom:none;background:#f5f5f5;line-height:45px}
+.list-recommend{float:left;margin-bottom:20px;padding:0 5px;padding-bottom:10px;width:100%;border:1px solid #eaeaea;border-top:0;background:#f5f5f5}
+.list-recommend li{float:left;margin-bottom:5px;padding:10px 10px;border:1px dashed #eee;background:#fff}
+.list-recommend p{float:left;width:100%;line-height:180%}
+.list-recommend p.pic{position:relative;overflow:hidden;width:100%;height:100px;line-height:100px}
+.list-recommend p img{width:100%}
+.list-recommend .title{float:left;display:block;overflow:hidden;padding:0;width:100%;text-overflow:ellipsis;white-space:nowrap;line-height:210%}
+.curr-day{padding:0;background:#faf9f9}
+.calendar-day{float:right;padding-right:0}
+.calendar-title{float:left;color:#fff;text-align:center;line-height:30px}
+.curr-day .calendar-title{width:100%;background:#fd875d}
+.calendar-day .calendar-title{border-right:1px solid #b9ac9b;border-left:1px solid #b9ac9b;background:#b9ac9b}
+.calendar-day .calendar-title td{float:left;border-right:1px solid #fff;width:14%;background: #8e8e8e;}
+.calendar-day .calendar-title td:last-child{border-right:none;width:16%;}
+.calendar-show{float:left;padding:10px;width:100%;border:1px solid #ddd;background:url(../img/calendar-bg.jpg) repeat-x bottom}
+.calendar-show-base,.calendar-show-panel{float:left;width:100%}
+.calendar-show-panel{height:153px;color:#ff6e3a;text-align:center;font-weight:700;font-size:70px;line-height:145px}
+.calendar-main{float:left;height:192px;border:1px solid #ddd;background-color:#f6f6f6}
+.calendar-main td{position:relative;float:left;width:14%;border-right:1px solid #ddd;border-bottom:1px solid #ddd;text-align:center;font-size:14px;line-height:31px}
+.calendar-main td:last-child{width:16%;}
+.calendar-main td:hover a{background:#fd875d;cursor:pointer;color:#fff;}
+.calendar-main td:last-child{border-right:none}
+.calendar-main tr:nth-child(odd){background-color:#fff}
+.calendar-main tr:nth-child(even){background-color:#f6f6f6}
+.calendar-nothis{color:#aaa}
+.calendar-main td.calendar-nothis:hover{background:0 0;cursor:default}
+.calendar-dott{position:absolute;top:5px;right:30%;width:6px;height:6px;border-radius:50%;background:#ff6e3a}
+.calendar-this i{display:inline-table;width:25px;height:25px;border-radius:50%;background:#ff6e3a;color:#fff;font-size:12px;line-height:26px}
+.calendar-select i{font-style:normal;display:inline-block;width:25px;height:25px;border-radius:50%;color:#ff6e3a;border:2px solid #ff6e3a;font-size:12px;line-height:22px}
+.calendar-main i{font-style:normal}
+.calendar-main a{float:left;width:100%}
+.calendar-yellow{color:#666}
+.live-class-list{float:left;width:100%}
+.live-class-list li{float:left;padding:20px 0;width:100%}
+.live-class-list li:nth-child(odd){background-color:#fff}
+.live-class-list li:nth-child(even){background-color:#f7f7f7}
+.live-class-time{float:left;padding-top:4%;text-align:center;font-size:18px}
+.live-class-pic{position:relative;padding:0}
+.live-class-pic img{width:100%}
+.live-class-pic span{position:absolute;top:5px;left:0}
+.live-class-pic .live-course-time{position:absolute;top:50%;left:50%;font-size: 18px;color: #fff;background-color: #000;display: block;width: 100px;height: 50px;text-align: center;line-height: 50px;margin-top: -25px;
+margin-left: -50px;opacity:0.8;}
+.live-class-info{float:left;height:100%}
+.live-class-pic span.liveing-icon{padding:3px 5px;background-color:#f06739;color:#fff;top:0px;right:0px;left:inherit}
+.live-class-info p{padding-bottom:5px}
+.live-class-info .title{float:left;overflow:hidden;overflow:hidden;width:100%;text-overflow:ellipsis;white-space:nowrap}
+.live-class-info span{float:left;padding-top:14px}
+.live-class-btn{padding-top:5%}
+.live-class-btn a{float:left;width:100%;border-radius:3px;text-align:center;line-height:35px}
+.live-class-btn a.watch-btn{background:#009beb;color:#fff}
+.live-class-btn a.watch-btn:hover{background:#00a8ff}
+.live-class-btn a.entry-btn{background:#78be4e;color:#fff}
+.live-class-btn a.entry-btn:hover{background:#91cf63}
+.live-class-btn a.sign-btn{background:#ffa81e;color:#fff}
+.live-class-btn a.sign-btn:hover{background:#ffbe27}
+.live-class-btn a.no-btn{background:#e3e3e3;color:#666;cursor:default;}
+.live-class-btn a.no-btn:hover{background:#e3e3e3}
+.degree{float:left;width:100%;padding:5px 10px 5px 0}
+.degree a{display:block;margin-right:20px;float:left;padding:3px 8px}
+.degree a.curr,.time-table .degree a:hover{background:#efeeee;-moz-border-radius:3px;-webkit-border-radius:3px;-o-border-radius:3px;-ms-border-radius:3px;border-radius:3px;background:#67cbf7;color:#f4f4f4}
+</style>
+<body>
+
+<div class="col-sm-20 col-xs-20 col-lg-16 col-md-20">
+            <div class="content">
+                <div class="pd0">
+                    <!--日历 -->
+                    <div id="calendar">
+                        <div class="curr-day col-lg-5 col-md-5 col-sm-5">
+                            <div class="calendar-title">
+                                <a id="month_perv" class="cWhite pdh30" href="javascript:void(0)"> &lt; </a>
+                                <span id="calendar-select-year" class="fs14">2016</span>年
+                                <span id="select-month" class="fs14">6</span>月
+                                <a id="month_next" class="cWhite pdh30" href="javascript:void(0)"> &gt; </a>
+                            </div>
+                            <div class="calendar-show" id="calendar-show">
+                                <div class="calendar-show-base"><a href="#" "=" class="c-fr calendar-yellow" id="course_num">1节课</a></div>
+                                <div class="calendar-show-panel hidden-xs">27</div>
+                            </div>
+                        </div>
+                        <div class="calendar-day col-lg-15 col-xs-20 col-md-15 col-sm-15">
+                            <table id="calendar-table" class="col-xs-20 col-md-20 pd0">
+                                <thead class="calendar-title col-xs-20 col-md-20 pd0">
+                                <tr class="col-md-20 col-xs-20 pd0">
+                                    <td>一</td>
+                                    <td>二</td>
+                                    <td>三</td>
+                                    <td>四</td>
+                                    <td>五</td>
+                                    <td>六</td>
+                                    <td>日</td>
+                                </tr>
+                                </thead>
+                                
+                            <tbody class="calendar-main col-md-20 col-xs-20 pd0" id="calendar-main"><tr class="col-md-20 col-xs-20 pd0"><td class="aboluo-pervMonthDays"><a href="javascript:;" date="2016-5-30" onclick="javascript:pervA(2016,5,30,this);" style="color: rgb(191, 191, 197);"><i>30</i></a></td><td class="aboluo-pervMonthDays"><a href="javascript:;" date="2016-5-31" onclick="javascript:pervA(2016,5,31,this);" style="color: rgb(191, 191, 197);"><i>31</i></a></td><td><a href="javascript:;" date="2016-6-1" onclick="javascript:setRigth(2016,6,1);"><i>1</i></a></td><td><a href="javascript:;" date="2016-6-2" onclick="javascript:setRigth(2016,6,2);"><i>2</i></a></td><td><a href="javascript:;" date="2016-6-3" onclick="javascript:setRigth(2016,6,3);"><i>3</i></a></td><td><a href="javascript:;" date="2016-6-4" onclick="javascript:setRigth(2016,6,4);"><i>4</i></a></td><td><a href="javascript:;" date="2016-6-5" onclick="javascript:setRigth(2016,6,5);"><i>5</i></a></td></tr><tr class="col-md-20 col-xs-20 pd0"><td><a href="javascript:;" date="2016-6-6" onclick="javascript:setRigth(2016,6,6);"><i>6</i><span class="calendar-dott"></span></a></td><td><a href="javascript:;" date="2016-6-7" onclick="javascript:setRigth(2016,6,7);"><i>7</i><span class="calendar-dott"></span></a></td><td><a href="javascript:;" date="2016-6-8" onclick="javascript:setRigth(2016,6,8);"><i>8</i></a></td><td><a href="javascript:;" date="2016-6-9" onclick="javascript:setRigth(2016,6,9);"><i>9</i></a></td><td><a href="javascript:;" date="2016-6-10" onclick="javascript:setRigth(2016,6,10);"><i>10</i></a></td><td><a href="javascript:;" date="2016-6-11" onclick="javascript:setRigth(2016,6,11);"><i>11</i></a></td><td><a href="javascript:;" date="2016-6-12" onclick="javascript:setRigth(2016,6,12);"><i>12</i></a></td></tr><tr class="col-md-20 col-xs-20 pd0"><td><a href="javascript:;" date="2016-6-13" onclick="javascript:setRigth(2016,6,13);"><i>13</i><span class="calendar-dott"></span></a></td><td><a href="javascript:;" date="2016-6-14" onclick="javascript:setRigth(2016,6,14);"><i>14</i><span class="calendar-dott"></span></a></td><td><a href="javascript:;" date="2016-6-15" onclick="javascript:setRigth(2016,6,15);"><i>15</i></a></td><td><a href="javascript:;" date="2016-6-16" onclick="javascript:setRigth(2016,6,16);"><i>16</i></a></td><td><a href="javascript:;" date="2016-6-17" onclick="javascript:setRigth(2016,6,17);"><i>17</i></a></td><td><a href="javascript:;" date="2016-6-18" onclick="javascript:setRigth(2016,6,18);"><i>18</i></a></td><td><a href="javascript:;" date="2016-6-19" onclick="javascript:setRigth(2016,6,19);"><i>19</i></a></td></tr><tr class="col-md-20 col-xs-20 pd0"><td><a href="javascript:;" date="2016-6-20" onclick="javascript:setRigth(2016,6,20);"><i>20</i><span class="calendar-dott"></span></a></td><td><a href="javascript:;" date="2016-6-21" onclick="javascript:setRigth(2016,6,21);"><i>21</i><span class="calendar-dott"></span></a></td><td><a href="javascript:;" date="2016-6-22" onclick="javascript:setRigth(2016,6,22);"><i>22</i></a></td><td><a href="javascript:;" date="2016-6-23" onclick="javascript:setRigth(2016,6,23);"><i>23</i></a></td><td><a href="javascript:;" date="2016-6-24" onclick="javascript:setRigth(2016,6,24);"><i>24</i></a></td><td><a href="javascript:;" date="2016-6-25" onclick="javascript:setRigth(2016,6,25);"><i>25</i></a></td><td><a href="javascript:;" date="2016-6-26" onclick="javascript:setRigth(2016,6,26);"><i>26</i></a></td></tr><tr class="col-md-20 col-xs-20 pd0"><td><a href="javascript:;" date="2016-6-27" class="calendar-this" onclick="javascript:setRigth(2016,6,27);"><i>今天</i><span class="calendar-dott"></span></a></td><td><a href="javascript:;" date="2016-6-28" onclick="javascript:setRigth(2016,6,28);"><i>28</i><span class="calendar-dott"></span></a></td><td><a href="javascript:;" date="2016-6-29" onclick="javascript:setRigth(2016,6,29);"><i>29</i></a></td><td><a href="javascript:;" date="2016-6-30" onclick="javascript:setRigth(2016,6,30);"><i>30</i></a></td><td class="aboluo-nextMonthDays"><a href="javascript:;" date="2016-7-1" onclick="javascript:nextA(2016,7,1,this);" style="color: rgb(191, 191, 197);"><i>1</i></a></td><td class="aboluo-nextMonthDays"><a href="javascript:;" date="2016-7-2" onclick="javascript:nextA(2016,7,2,this);" style="color: rgb(191, 191, 197);"><i>2</i></a></td><td class="aboluo-nextMonthDays"><a href="javascript:;" date="2016-7-3" onclick="javascript:nextA(2016,7,3,this);" style="color: rgb(191, 191, 197);"><i>3</i></a></td></tr><tr class="col-md-20 col-xs-20 pd0"><td class="aboluo-nextMonthDays"><a href="javascript:;" date="2016-7-4" onclick="javascript:nextA(2016,7,4,this);" style="color: rgb(191, 191, 197);"><i>4</i></a></td><td class="aboluo-nextMonthDays"><a href="javascript:;" date="2016-7-5" onclick="javascript:nextA(2016,7,5,this);" style="color: rgb(191, 191, 197);"><i>5</i></a></td><td class="aboluo-nextMonthDays"><a href="javascript:;" date="2016-7-6" onclick="javascript:nextA(2016,7,6,this);" style="color: rgb(191, 191, 197);"><i>6</i></a></td><td class="aboluo-nextMonthDays"><a href="javascript:;" date="2016-7-7" onclick="javascript:nextA(2016,7,7,this);" style="color: rgb(191, 191, 197);"><i>7</i></a></td><td class="aboluo-nextMonthDays"><a href="javascript:;" date="2016-7-8" onclick="javascript:nextA(2016,7,8,this);" style="color: rgb(191, 191, 197);"><i>8</i></a></td><td class="aboluo-nextMonthDays"><a href="javascript:;" date="2016-7-9" onclick="javascript:nextA(2016,7,9,this);" style="color: rgb(191, 191, 197);"><i>9</i></a></td><td class="aboluo-nextMonthDays"><a href="javascript:;" date="2016-7-10" onclick="javascript:nextA(2016,7,10,this);" style="color: rgb(191, 191, 197);"><i>10</i></a></td></tr></tbody></table>
+                        </div>
+                    </div>
+                    <p class="degree fs14">
+                        <a data="" href="/index.plan.list" class="curr">全部</a>
+                        <a data="9" href="/index.plan.list?cate=9">高中</a>
+                        <a data="8" href="/index.plan.list?cate=8">初中</a>
+                        <a data="7" href="/index.plan.list?cate=7">小学</a>
+                    </p>
+                    <ul id="live_list_today" class="mt20 live-class-list"><li><div class="live-class-time col-lg-2 hidden-xs">18:00</div><div class="live-class-pic col-lg-4 col-xs-10 col-md-5 col-sm-5"><a href="http:teacher.course.detail/3094/1199" target="_blank"></a><img src="http:devf.gn100.com/3,315706356c42"><span class="live-course-time visible-xs">18:00</span><span class="g-icon3 lessons-icon c-fl hidden-lg hidden-xs hidden-sm hiddne-md">录播课</span></div><div class="live-class-info col-lg-11 col-xs-8"><a href="/teacher.course.detail/3094/1199" target="_blank"><p class="title fs14">爱爱爱</p></a><p class="cGray fs12">第11章&nbsp;&nbsp;12</p><p class="cGray fs12">2班</p><p class="cGray fs12">学生：（0人）</p></div><div class="live-class-btn col-lg-3 hidden-xs col-md-3 c-fr col-sm-3"><a href="javascript:void(0);" class="no-btn">未开课</a></div><p class="tec mt10 c-fl ml30"><a href="./teacher.manage.plan/4106" title="" target="_blank">备课</a> | <a href="./user.teacher.upload/4106/1" title="" target="_blank">上传视频</a></p></li></ul>
+                </div>
+            </div>
+
+<div class="col-sm-4 col-xs-20 visible-lg col-lg-4"></div>
+</body>
+</html>

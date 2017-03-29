@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>优惠管理 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 优惠管理 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/laypage/laypage.js')}" ></script>
+</head>
+<body>
+{part "/site.main.nav"}
+<section class="pd30">
+	<div class="container">
+		<div class="row">
+			{part "/org.main.menu.discount"}
+			<!-- right-main -->
+			<div class="right-main col-md-16 col-xs-20">
+				<!-- path -->
+				<div class="col-xs-20 pd0 fs14">
+					<a href="/org.discount.listnew">优惠管理</a> &gt; 优惠详情
+				</div>
+				<ul class="couponlist col-xs-20 col-md-5 p0" id="couponList">
+					<li class="coupon-item">
+						<a href="#" target="_blank" class="coupon-main">
+							<div class="coupon-type coupon-type-discount tac" style="height:100px">
+								<p class="c-price pt5 fb fs30"></p>
+								<p class="c-fee fs16"></p>
+								<p class="c-limit pt5"></p>
+							</div>
+							<div class="coupon-msg" style="height:60px;padding:10px">
+								<p class="pb5 choices-date"></p>
+								<p class="pb5 expiry-date"></p>
+							</div>
+						</a>
+					</li>
+				</ul>
+				<div class="col-xs-20 col-md-6" id="codeIntro">
+					<p class="mt5 fs14 codenum1"></p>
+					<p class="mt5 fs14 codenum2"></p>
+					<p class="mt5 fs14 codenum3"></p>
+					<p style="margin-top:60px" class="pos-rel">
+						<a href="javascript:;" id="Btn" class="btn">生成优惠码</a>
+						<a href="javascript:;" id="copyBtn" class="gray-btn">复制链接</a>
+					</p>
+				</div>
+				<!-- list -->
+				<div class="col-xs-20 col-md-20 p0 fs14 fb mt10">使用详情</div>
+				<div class="col-md-20 col-xs-20 p0 mt10 mb10">
+					<span class="c-fl mt5">状态：</span>
+					<select style="width:100px;" id="conpunStatus" class="divselected">
+                        <option value="" selected="selected">全部</option>
+						<option value="on">可用</option>
+                        <option value="off">已用完</option>
+                        <option value="-1">失效</option>
+                    </select>
+					<a href="javascript:void(0);" id="excel" class="cBlue c-fr mt5">导出Excel</a>
+				</div>
+				<ul class="table-grid-code" id="codeList">
+					<li class="fs14">
+                    	<dl class="hd-title clearfix">
+                    		<dd class="col-md-4 col-xs-5 p0">优惠名称</dd>
+                            <dd class="col-md-3 col-xs-5 p0">使用次数</dd>
+                            <dd class="col-md-6 col-xs-5 p0">绑定用户</dd>
+                            <dd class="col-md-3 hidden-xs p0">状态</dd>
+                            <dd class="col-md-4 col-xs-5 p0">操作</dd>
+                   		</dl>
+                	</li>
+					<li class="listHtml">
+						<div class="tac mt20" style="height:240px">
+							<p>优惠劵不存在~</p>
+						</div>
+					</li>
+				</ul>
+				<!-- pagelist -->
+				<div id="pager" class="mt10 tac"></div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- layer -->
+<ul id="build" class="p20 fs14 form-horizontal" style="display:none">
+	<li class="pd10 tac">
+		生成 <input type="text" value="50" size="5" id="codeNum"> 个优惠码
+	</li>
+	<li class="pt10 tac">
+		<button class="btn">生成</button> <button class="gray-btn">取消</button>
+	</li>
+</ul>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ejs.min.js')}"></script>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="/assets_v2/js/ie8/ejs.ie8.js"></script>
+<![endif]-->
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery.zclip.js')}"></script>
+
+<script id="listHtml" type="template">
+	<% for(var i=0;i<items.length;i++){  %>
+	<dl class="clearfix">
+		<dd class="col-md-4 col-xs-5 p0 itemcode"><a href="/org.discount.usedlist#<%=items[i].code%>"><%=items[i].code%></a></dd>
+		<dd class="col-md-3 col-xs-5 p0"><%=items[i].uselimit%></dd>
+		<dd class="col-md-6 col-xs-5 p0"><%=items[i].binduser%></dd>
+		<% if(openstatus == "-1"){ %>
+		<dd class="col-md-3 hidden-xs">停用</dd>
+		<dd class="col-md-4 col-xs-5 p0"><a href="javascript:void(0);" data-status="<%=items[i].status%>" class="opted">---</a></dd>
+		<% }else{ %>
+		<dd class="col-md-3 hidden-xs"><%=items[i].usestatus%></dd>
+		<dd class="col-md-4 col-xs-5 p0"><a href="javascript:void(0);" data-status="<%=items[i].status%>" class="opt"><%=items[i].operation%></a></dd>
+		<% }; %>
+	</dl>
+	<% };%>
+</script>
+<script>
+	$(function(){
+		var pk_discount = location.hash.substring(1);
+		var curr;
+		var codeList=$('#codeList');
+		var listHtml=$('#listHtml').html();
+		var build = $('#build');
+		cList();
+
+		$('#Btn').click(function(){
+			var w, h;
+			if($(window).width() <= 768) {
+				w = '90%';
+				h = '200px';
+			}else{
+				w = '300px';
+				h = '200px';
+			}
+			layer.open({
+	            type: 1,
+	            title:['生成优惠码'],
+	            area: [w , h],
+	            shadeClose: true,
+	            content: build
+	        });
+		})
+
+		// 复制链接
+		$("#codeIntro").clipData({
+			ele: '#copyBtn',
+			copyurl:'data-url',
+		});
+		build.on('click','.btn',function(){
+			var _num=build.find('#codeNum').val() || 0;
+			$.ajax('/org/discount/createcodev2new',{
+				dataType:'json',
+				type:'post',
+				data:{
+					discount_id:pk_discount,
+	        		num:_num,
+				},
+				success:function (data) {
+					if(data.code==0){
+						location.reload();
+					}
+				}
+			});
+		})
+
+        build.on('click','.gray-btn',function(){
+            layer.closeAll();
+        })
+
+		$('#excel').click(function(){
+			var used_num = $('#conpunStatus').val() || '';
+			var page = $('#pager').find('.laypage_curr').text() || '';
+			window.open("/org/discount/CodeListExcel?pk_discount="+pk_discount+"&used_num="+used_num+"&page="+page+"");
+		})
+		// 改变状态筛选
+		$('#conpunStatus').change(function(){
+			cList();
+		});
+
+		codeList.on('click','.opt',function(){
+			var _self = $(this);
+			var _status=$(this).attr('data-status');
+			var _code = _self.closest('dl').find('.itemcode').text();
+			(_status==0)? _status = -1 :  _status = 0 ;
+			$.ajax('/org/discount/CodeDisableAndEnable',{
+				dataType:'json',
+				type:'get',
+				data:{
+					code:_code,
+	        		status:_status,
+				},
+				success:function (data) {
+					if(data.code==0){
+						location.reload();
+					}
+				},
+				error:function () {
+					layer.msg('网络出错了');
+				},
+			});
+		});
+		function cList(curr){
+			var page = curr || 1;
+			var used_num = $('#conpunStatus').val() || '';
+			$.ajax('/org/discount/discountListInfo',{
+				dataType:'json',
+				type:'get',
+				data:{
+					page:page,
+					pk_discount:pk_discount,
+	        		// status:_status,
+	        		used_num:used_num,
+				},
+				success:function (data) {
+					if(data.code==0){
+						var couponList=$('#couponList');
+						var discount=data.discount_data;
+						$('#copyBtn').attr('data-url',discount.url);
+						couponList.find('.coupon-main').attr("href",discount.view_url);
+						couponList.find('.choices-date').html('优惠范围：'+discount.range_name);
+						couponList.find('.c-fee').html('满'+discount.min_fee+'元可用');
+						if(discount.per_limit==0){
+							couponList.find('.c-limit').html('单张券不限次数');
+						}else{
+							couponList.find('.c-limit').html('单张券可用'+discount.per_limit+'次');
+						}
+						if(discount.discount_type==2){
+							couponList.find('.c-price').html(discount.discount_value*10 +'折');
+							couponList.find('.coupon-type').removeClass('coupon-type-discount');
+						}else{
+							couponList.find('.c-price').html(discount.discount_value+'元');
+						}
+						if(discount.per_limit==0){
+							$('#codeIntro .codenum1').html('共'+discount.total_num+'个优惠码，可优惠无限次');
+							$('#codeIntro .codenum2').html('剩余有效优惠码：'+discount.limit_num+'个');
+							$('#codeIntro .codenum3').html('剩余有效优惠次数：'+ '无限'+'次');
+						}else{
+							$('#codeIntro .codenum1').html('共'+discount.total_num+'个优惠码，可优惠'+discount.total_num * discount.per_limit+'次');
+							$('#codeIntro .codenum2').html('剩余有效优惠码：'+discount.limit_num+'个');
+							$('#codeIntro .codenum3').html('剩余有效优惠次数：'+discount.limit_num * discount.per_limit +'次');
+						}
+
+						couponList.find('.expiry-date').html('有效期：'+discount.endtime);
+						var items=data.data.items;
+						var openstatus=data.discount_data.openstatus;
+						if(items.length > 0){
+							codeList.find('.listHtml').html(ejs.render(listHtml, { items:items,openstatus:openstatus }));
+							laypage({
+		                        cont: $("#pager"),
+		                        pages: data.data.totalPage,
+		                        curr: curr || 1,
+		                        jump: function(obj, first){
+		                            if(!first){
+		                                cList(obj.curr);
+		                            }
+		                        }
+		                    });
+						}else{
+							var _html='<div class="tac mt20" style="height:240px"><img src="/assets_v2/img/platform/pet3.png"><p>暂无使用详情~</p></div>';
+							codeList.find('.listHtml').html(_html);
+							$("#pager").empty();
+						}
+					}else{
+						var _html='<div  class="tac mt20" style="height:240px"><img src="/assets_v2/img/platform/pet3.png"><p>暂无使用详情~</p></div>';
+						codeList.find('.listHtml').html(_html);
+						$("#pager").empty();
+					}
+				},
+				error:function () {
+					layer.msg('网络出错了');
+				},
+			});
+		}
+	})
+</script>
+{part "/site.main.footer"}
+</body>
+</html>

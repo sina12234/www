@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>教师详情 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 查看详情 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+</head>
+<body>
+{part "/site.main.nav"}
+<section class="pd30">
+    <div class="container">
+		<div class='row'>
+            <!-- leftmenu -->
+            {part "/org.main.menu.teacher"}
+            <!-- rightmain -->
+            <div class="right-main col-sm-9 col-md-16">
+                    <div class="manage-path fs14"><a href="/org.teacher.list">{'返回'|tr:'org'}</a>><span class="cGray">{'查看详情'|tr:'org'}</span></div>
+                    <div class="t-data">
+                        <div class="face col-sm-3"><img src="{if $userInfo->avatar->large}{$userInfo->avatar->large}{else}{utility_cdn::img('/assets_v2/img/1.png')}{/if}" alt=""></div>
+                        <div class="info col-sm-9 fs14 col-md-16">
+                            <p class="account col-sm-12"><span class="label">{'登录账号'|tr:'org'}：</span><span class="label-for">{$userInfo->mobile}</span></p>
+                            <ul class="col-sm-5 col-md-8">
+                                <li>
+                                    <div class="label">{'教师姓名'|tr:'org'}：</div>
+                                    <div class="label-for">{if !empty($userInfo->profile->real_name)}{$userInfo->profile->real_name}{else}{$userInfo->name}{/if}</div>
+                                </li>
+                                <li>
+                                    <div class="label">{'头衔'|tr:'org'}：</div>
+                                    <div class="label-for">{if !empty($teacherInfo->title)}{$teacherInfo->title}{else}无{/if}</div>
+                                </li>
+                                <li>
+                                    <div class="label">{'科目'|tr:'org'}：</div>
+                                    <div class="label-for">{if !empty($teacherInfo->subject)}{$teacherInfo->subject}{else}未设置{/if}</div>
+                                </li>
+                                <li>
+                                    <div class="label">{'教龄'|tr:'org'}：</div>
+                                    <div class="label-for">{if !empty($teacherInfo->years)}{$teacherInfo->years}{else}0{/if}</div>
+                                </li>
+                                <li>
+                                    <div class="label">{'毕业于'|tr:'org'}：</div>
+                                    <div class="label-for">{if !empty($teacherInfo->college)}{$teacherInfo->college}{/if}</div>
+                                </li>
+                            </ul>
+                            <ul class="col-sm-6 col-md-8">
+                                <li>
+                                    <div class="label">{'上课课时'|tr:'org'}：</div>
+                                    <div class="label-for">已上{count($finishPlan)}节 未上{count($normalPlan)}节</div>
+                                </li>
+                               {*<li>
+                                    <div class="label">出勤率：</div>
+                                    <div class="label-for">80%</div>
+                                </li>*}
+                                <li>
+                                    <div class="label">{'学生'|tr:'org'}：</div>
+                                    <div class="label-for">{if !empty($countStudent->num)}{$countStudent->num}{else}0{/if}</div>
+                                </li>
+                                {*<li>
+                                    <div class="label">学生评价：</div>
+                                    <div class="label-for">
+                                        <div class="star"><span class="sel"></span><span class="sel"></span><span class="sel"></span><span></span><span></span></div>
+                                    </div>
+                                </li>*}
+                            </ul>
+                        </div>
+                        <div class="bar"><span class="t-info-icon">{'上课列表'|tr:'org'}</span>{if !empty($total)}<span class="c-fr">共{$total}个</span>{/if}</div>
+                        {if !empty($planList)}
+                        <ul class="t-class-list">
+                            {foreach $planList as $plv}
+                            <li>
+                                <div class="t-course col-sm-7 col-md-10">
+                                    <div class="item fs16">{$plv->course_name}</div>
+                                    <div class="item cgray">{$plv->class_name} | <span class="cLightgray">共{if !empty($allClassPlan[$plv->class_id])}{count($allClassPlan[$plv->class_id])}{else}0{/if}章 进度</span> {if !empty($nowClassPlan[$plv->class_id])}{$plv->section_name}{else}0{/if} </div>
+                                    <div class="item fs14 cDarkgray">{date('m月d日',strtotime($courses[$plv->course_id]->start_time))} 至 {date('m月d日',strtotime($courses[$plv->course_id]->end_time))}</div>
+                                </div>
+                                <div class="t-class col-sm-4 col-md-10">
+                                    <div class="item fs14">{'班级情况'|tr:'org'}</div>
+                                    <div class="item fs14"><span class="num-icon"></span> {'学生'|tr:'org'}
+ {if($plv->course_type==2)}                                  {$plv->user_total}{else}{$plv->user_total}/{$plv->max_user}{/if}</div>
+                                    {if $plv->status==1}
+                                    <div class="item fs14">{'下节课时间'|tr:'org'}：{date('m月d日H:i',strtotime($plv->start_time))}</div>
+                                    {/if}
+                                </div>
+                            <!-- 新增内容
+                                <div class="col-sm-1 cy-new-t-info">
+
+                                   <a href="javascript:;" class="cy-t-delet">踢出</a>
+                                   <a href="javascript:;" class="cy-t-class">调班</a>
+                                </div>
+                            -->
+                            </li>
+                            {/foreach}
+                        </ul>
+                        {else}
+                        <div class="my-collect-no-class c-fl col-lg-offset-0 col-xs-offset-0 col-sm-offset-0 col-sm-20 col-md-20 col-lg-20 col-xs-20">
+                            <img class="mt40" src="{utility_cdn::img('/assets_v2/img/platform/pet3.png')}"  alt="">
+                            <p style="font-weight:bold;color:#666;">{'您还没有直播的课程哦'|tr:'LearningCenter'}~! {'快去'|tr:'LearningCenter'}<a href="/">{'首页'|tr:'LearningCenter'}</a>{'看看吧'|tr:'LearningCenter'}</p>
+                        </div>
+                        <div class="page-list" id="pagepage"></div>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+            <div class='clear'></div>
+        </div>
+</section>
+{part "/site.main.footer"}
+</body>
+<script type="text/javascript">
+$(function  () {
+    page("pagepage",'{$path}',{$length},{$page},{$totalPage});
+})
+</script>
+</html>

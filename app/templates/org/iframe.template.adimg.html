@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{part '/site.main.orgname'} - 首页 - 小沃学堂 - 专业的在线学习平台</title>
+<meta name="title" content="小沃学堂 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="小沃学堂 - 专业的K12在线教育平台 小沃学堂 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="小沃学堂 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+</head>
+<script src="{utility_cdn::js('/assets/js/jcrop/js/jquery.Jcrop.min.js')}"></script>
+<link rel="stylesheet" href="{utility_cdn::css('/assets/js/jcrop/css/jquery.Jcrop.css')}" type="text/css" />
+<script src="{utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js')}"></script>
+<script type="text/javascript">
+$(function  () {
+    var imgid= window.location.hash;
+        imgid= imgid.substring(1);
+	var arr  = imgid.split("/");
+	var thumbType = arr[1];
+	var picid = arr[0];
+	//console.log(picid);return;
+	var tpic = picid.replace(/[^0-9]/ig,"");
+	//$("#save").append("<input type='hidden' name='thumbType' value='"+thumbType+"'/>");
+	//$("#save").append("<input type='hidden' name='tpic' value='"+tpic+"'/>");
+    var logo = new plupload.Uploader({
+        runtimes:'html5,flash,silverlight,html4',
+        browse_button: 'logo', // this can be an id of a DOM element or the DOM element itself
+        url: '/file.main.UploadTemplatePic',
+        filters: {
+            mime_types : [
+                { title : "Image files", extensions : "jpg,jpeg,gif,png" }
+            ],
+            max_file_size:"2048kb"
+        }
+        ,multi_selection:false
+    });
+    logo.init();
+    logo.bind('FilesAdded', function(up, files) {
+        logo.start();
+    });
+    logo.bind('UploadProgress', function(up, file) {
+        $("#logo").val("上传中："+ file.percent +"%");
+    });
+    logo.bind('FileUploaded', function(up, file,info) {
+        $("#save").show();
+		$("#logo").val("重新选择").css({
+        "background":"#f5f5f5",
+        "border":"1px solid #ccc",
+        "color":"#333",
+        });
+        if(info.response){
+			$(".ifrem-log-box2").hide();
+            if(jcrop_api)jcrop_api.destroy();
+            $('.ifrem-log').find('.ifrem-box img').attr("src",info.response+"?"+Math.random());
+            parent.$("#"+arr[0]).html('<img src='+info.response+"?"+Math.random()+'>');
+            $('.ifrem-log').find('.ifrem-box img').Jcrop({
+                boxWidth:230,boxHeight:390,
+                onChange: updatePreview,
+                onSelect: updatePreview,
+                minSize:[230,390],
+                //aspectRatio: //xsize / ysize
+            },function(){
+                // Use the API to get the real image size
+                var bounds = this.getBounds();
+                boundx = bounds[0];
+                boundy = bounds[1];
+                // Store the API in the jcrop_api variable
+                jcrop_api = this;
+                this.setSelect([0,0,230,390]);
+            }).show();
+        }
+    });
+
+    function showCoords(c){
+    };
+    function updatePreview(c){
+        if (parseInt(c.w) > 0){
+            $('#x').val(c.x);
+            $('#y').val(c.y);
+            $('#x2').val(c.x2);
+            $('#y2').val(c.y2);
+            $('#w').val(c.w);
+            $('#h').val(c.h);
+
+            $pcnt = $('#panel');
+            $pimg = $('#img_p');
+			$('#img_p').Jcrop({
+				boxWidth:230,boxHeight:390,
+				onChange: updatePreview,
+				onSelect: updatePreview,
+				minSize:[230,390],
+				aspectRatio:1 //xsize / ysize
+			    },function(){
+						// Use the API to get the real image size
+						var bounds = this.getBounds();
+						boundx = bounds[0];
+						boundy = bounds[1];
+						// Store the API in the jcrop_api variable
+						jcrop_api = this;
+						this.setSelect([0,0,230,390]);
+					}).show();
+
+            var xsize=$pcnt.width();
+            var ysize=$pcnt.height();
+            var rx = xsize / c.w;
+            var ry = ysize / c.h;
+
+            $pimg.css({
+                width: Math.round(rx * boundx) + 'px',
+                height: Math.round(ry * boundy) + 'px',
+                marginLeft: '-' + Math.round(rx * c.x) + 'px',
+                marginTop: '-' + Math.round(ry * c.y) + 'px'
+            });
+        }
+    };
+    logo.bind('Error', function(up, error) {
+        if(error.code == -600){
+			$(".ifrem-box img").hide();
+			$(".ifrem-log-box2").show();
+			$("#logo").val("重新选择");
+			//$(".prompt").next().attr("id","logo2");
+            //layer.msg("文件太大了，请选择小于3M的文件");
+        }else{
+            //layer.msg("出错了，请重新选择文件或者刷新页面再重新选择文件");
+            $('.ifrem-box').append('<div class="ifrem-erro">图片上传失败</div>');
+        }
+    });
+
+    $('#save').click(function(){
+		$.post("/org.main.updateThumbPic",$('#updateimg').serialize(),function(r){
+					if(r.code=="100"){
+						layer.msg("{'成功'|tr:'org'}",{ icon: 1 },function(){
+						parent.location.reload();
+						});
+					}else if(r.code=="-8"){
+						layer.msg(r.error);
+						return false;
+					}else{
+						layer.msg("失败");
+						return false;
+					}
+        },"json");
+    });
+
+    var jcrop_api,
+        boundx,
+        boundy;
+
+	//重新选择//
+	$(".ifrem-log-box2").on("click","#logo2",function(){
+		//$(".ifrem-log-box2").remove();
+		//$(".ifrem-log").show();
+		$("input[name='file_logo']").click(
+
+		);
+		var logo = new plupload.Uploader({
+        runtimes:'html5,flash,silverlight,html4',
+        browse_button: 'logo2', // this can be an id of a DOM element or the DOM element itself
+        url: '/file.main.uploadLogoPic',
+        filters: {
+            mime_types : [
+                { title : "Image files", extensions : "jpg,jpeg,gif,png" }
+            ],
+            max_file_size:"100kb"
+        }
+        ,multi_selection:false
+    });
+    logo.init();
+    logo.bind('FilesAdded', function(up, files) {
+        logo.start();
+    });
+	});
+
+});
+</script>
+<body style="background:#fff">
+	<form id="updateimg">
+    <div class="ifrem-log">
+        <div class="ifrem-box">
+          <img src="{if($tinfo->type==1&&!empty($tinfo->thumb_left))}{utility_cdn::file($tinfo->thumb_left)}{elseif($tinfo->type==2&&!empty($tinfo->thumb_right))}{utility_cdn::file($tinfo->thumb_right)}{else}{utility_cdn::img('/assets_v2/img/video-img.png')}{/if}">
+        </div>
+		<input type="hidden" size="4" id="x" name="x">
+		<input type="hidden" size="4" id="y" name="y">
+		<input type="hidden" size="4" id="x2" name="x2">
+		<input type="hidden" size="4" id="y2" name="y2">
+		<input type="hidden" size="4" id="w" name="w">
+		<input type="hidden" size="4" id="h" name="h">
+        <div class="ifrem-btn">
+
+			{if($tinfo->type==1&&!empty($tinfo->thumb_left) or ($tinfo->type==2&&!empty($tinfo->thumb_right)))}
+			<input type="button" id="logo" style="display:inline-table;" class="btn" value="重新选择">
+            <input type="button" id="save" style="display:inline-table;" class="btn" value="保存">
+			{else}
+			 <input type="button"  id="logo" value="上传图片" class="btn">
+			{/if}
+			<input type="button" id="save" style="display:none;" class="btn" value="保存">
+			<input type='hidden' name='thumbType' value='{$tinfo->type}'/>
+			<input type='hidden' name='tpic' value='{$tinfo->template_id}'/>
+            <p>图片尺寸230*390px支持JPG，PNG格式</p>
+        </div>
+        <div class="ifrem-url">
+            <input placeholder="链接地址" name="pic_url" value="{if($tinfo->type==1)}{$tinfo->thumb_left_url}{else if($tinfo->type==2)}{$tinfo->thumb_right_url}{/if}">
+        </div>
+    </div>
+	</form>
+    <div class="ifrem-log-box2" style="display:none;">
+        <div class="ifren-box-1">
+        <div class="ifrem-box2">
+           <img src="{utility_cdn::img('/assets_v2/img/Uploadfailed.png')}">
+           <span class="">图片上传失败！</span>
+        </div>
+        <div class="prompt" style="display:none">
+            <span>友情提示：图片尺寸230*390px支持JPG，PNG格式</span>
+        </div>
+        </div>
+    </div>
+
+
+</body>
+<style>
+    body{ padding:20px 10px;margin:0;overflow:hidden}
+    .ifrem-title { height:40px;line-height:40px;background:#eaeaea;width:350px;margin:0 auto; }
+    .ifrem-title span{ font-size:22px;padding-right:10px;float:right; }
+    .ifrem-title p{ padding-left:10px; }
+    .ifrem-title p span{ cursor:pointer; }
+    .ifrem-erro{ position:absolute;top:45%;margin:0 auto;width:100%;padding:0 5px;}
+    .ifrem-box{ float:left;width:230px;height:390px;border:1px solid #ccc;background:#ececec;overflow:hidden;position:relative;}
+    .ifrem-box2{ padding-top:50px;text-align: center;}
+    .ifrem-log-box2{ position: absolute;width:230px;margin:0 auto;padding-top: 120px; }
+    .ifren-box-1{ height:160px; }
+    .ifren-box-1 button { float:left;height:30px;border:1px solid #ccc;background:#f5f5f5;border-radius:5px;margin:20px 0 0 65px; }
+    .ifrem-btn{ float:left;width:230px;text-align:center;padding-top:140px;color:#ccc;}
+    .ifrem-url{ float:left;width:230px;padding:10px 0 0 10px}
+    .ifrem-url input{ float:left;line-height:30px;border:1px solid #dcdcdc;padding:5px;width:100%}
+    .ifrem-btn input{ width:100px;border-radius:5px;height:35px;font-size:14px;color:#fff; }
+    .ifrem-btn input:last-child{ background:#f1f1f1;color:#333;margin-left:30px;border:1px solid #ccc; }
+    .prompt span{ padding-left:70px; }
+    .jcrop-holder { margin:0 auto; }
+    .btn{ margin-bottom:10px}
+</style>
+</html>

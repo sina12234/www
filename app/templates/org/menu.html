@@ -1,0 +1,193 @@
+<div class="hidden-xs col-sm-5 col-md-4 user-left-menu pd0">
+    <ul class="left-menu">
+        <li class=' nav-menu-box '  data-open="0" >
+          <a class="nav-menu {if $subnav=='home'}active{/if}" href="/org">
+              <span class="nav-icon nav-center"></span>
+              <span class="nav-tag">
+                    {'机构中心'|tr:'org'}
+              </span>
+          </a>
+        </li>
+        <li class=' nav-menu-box' >
+            <a class="nav-menu open {if $subnav=='setting' or $subnav=='template' or $subnav=='apptemplate' or $subnav=='channelSet' or $subnav=='classify'}active{/if}" data-open="1" >
+                <span class="nav-icon nav-page-set"></span>
+                <span class="nav-tag">
+                    {'页面设置'|tr:'org'}
+                </span>
+                <span class="inner-level-icon"></span>
+            </a>
+            <ul class="second-level {if $subnav=='setting' or $subnav=='template' or $subnav=='apptemplate' or $subnav=='channelSet' or $subnav=='classify' }show{/if}">
+                <li class="second-level-menu">
+                    <a href="/org.main.setting">
+                        <span class="{if $subnav=='setting'}active{/if}">基础设置</span>
+                    </a>
+                </li>
+                <li class="second-level-menu">
+                    <a href="/org.main.template">
+                        <span class="{if $subnav=='template'}active{/if}">首页模块</span>
+                    </a>
+                </li>
+                {if (isset($is_pro)&&$is_pro==1)}
+                <li class="second-level-menu">
+                    <a href="/org.channel.channelList">
+                        <span class="{if $subnav=='channelSet'}active{/if}">频道设置</span>
+                    </a>
+                </li>
+				<li class="second-level-menu">
+                    <a href="/org.main.classify">
+                        <span class="{if $subnav=='classify'}active{/if}">分类设置</span>
+                    </a>
+                </li>
+				{if(isset($is_pro)&&$is_pro==1&&$orgInfo->have_app==1)}
+                <li class="second-level-menu">
+                    <a href="/org.main.apptemplate">
+                        <span class="{if $subnav=='apptemplate'}active{/if}">App设置</span>
+                    </a>
+                </li>
+				{/if}
+                {/if}
+            </ul>
+        </li>
+        <li class="nav-menu-box">
+            <a class="nav-menu {if $subnav=='course'}active{/if} " href="/user.org.course">
+                <span class="nav-icon nav-course"></span>
+                <span class="nav-tag">
+                     {'课程管理'|tr:'org'}
+                </span>
+            </a>
+        </li>
+        <li class="nav-menu-box">
+            <a class="nav-menu {if $subnav=='stat'}active{/if} " href="/org/stat/UserStatistical">
+                <span class="nav-icon nav-stat"></span>
+                <span class="nav-tag">
+                     {'数据统计'|tr:'org'}
+                </span>
+            </a>
+        </li>
+        <li class=' nav-menu-box '  >
+            <a class="nav-menu {if $subnav=='teacher'}active{/if}" href="/org.teacher.list">
+                <span class="nav-icon nav-teacher"></span>
+                <span class="nav-tag">
+                     {'教师管理'|tr:'org'}
+                </span>
+            </a>
+        </li>
+        <li class=' nav-menu-box '  >
+            <a class="nav-menu {if $subnav=='student'}active{/if}" href="/org.student.list">
+                <span class="nav-icon nav-student"></span>
+                <span class="nav-tag">
+                     {'学生管理'|tr:'org'}
+                </span>
+            </a>
+        </li>
+        <li class=' nav-menu-box '  >
+            <a class="nav-menu {if $subnav=='promote'}active{/if}" href="/course.promote.center">
+                <span class="nav-icon nav-promote"></span>
+                <span class="nav-tag">
+                     {'云课推广'|tr:'org'}
+                </span>
+            </a>
+        </li>
+        <li class=' nav-menu-box '  >
+            <a class="nav-menu {if $subnav=='discount'}active{/if}" href="/org.discount.listnew">
+                <span class="nav-icon nav-discount"></span>
+                <span class="nav-tag">
+                     {'优惠管理'|tr:'org'}
+                </span>
+            </a>
+        </li>
+        <li class=' nav-menu-box '  >
+            <a class="nav-menu {if $subnav=='order'}active{/if}" href="/org.main.order">
+                <span class="nav-icon nav-order"></span>
+                <span class="nav-tag">
+                     {'订单管理'|tr:'org'}
+                </span>
+            </a>
+        </li>
+        <li class=' nav-menu-box '  >
+            <a class="nav-menu {if $subnav=='settle'}active{/if}" href="/org.settle">
+                <span class="nav-icon nav-settle"></span>
+                <span class="nav-tag">
+                     {'结算管理'|tr:'org'}
+                </span>
+            </a>
+        </li>
+        {*<li><a href="#"><span class="menu-icon8"></span>{'数据统计'|tr:'org'}</a></li>*}
+        <li class=' nav-menu-box '  >
+            <a class="nav-menu {if $subnav=='info'}active{/if}" href="/org.main.info">
+                <span class="nav-icon nav-info"></span>
+                <span class="nav-tag">
+                     {'资料信息'|tr:'org'}
+                </span>
+            </a>
+        </li>
+        <li class=' nav-menu-box '  >
+            <a class="nav-menu open {if $subnav=='vote' or $subnav=='tool' or $subnav=='customer' or $subnav=='sms' }active{/if}" data-open="1">
+                <span class="nav-icon nav-vote"></span>
+                <span class="nav-tag">
+                     {'运营管理'|tr:'org'}
+                </span>
+                <span class="inner-level-icon"></span>
+            </a>
+            <ul class="second-level {if $subnav=='vote' or $subnav=='tool' or $subnav=='customer' or $subnav=='sms' }show{/if}">
+                <li class="second-level-menu">
+                    <a href="/org.vote.list">
+                        <span class="{if $subnav=='vote'}active{/if}">投票</span>
+                    </a>
+                </li>
+                <li class="second-level-menu">
+                    <a href="/org.customerTools.list">
+                        <span class="{if $subnav=='tool'}active{/if}">QQ管理</span>
+                    </a>
+                </li>
+                <li class="second-level-menu">
+                    <a href="/org.customerServices.list">
+                        <span class="{if $subnav=='customer'}active{/if}">客服设置</span>
+                    </a>
+                </li>
+                <li class="second-level-menu">
+                    <a href="/org.message.SmsIndex">
+                        <span class="{if $subnav=='sms'}active{/if}">消息推送</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class=' nav-menu-box '  >
+            <a class="nav-menu {if $subnav=='activeNotice'} active{/if}" href="/org.main.activeNoticeList">
+                <span class="nav-icon nav-notice"></span>
+                <span class="nav-tag">
+                     {'学习资讯'|tr:'org'}
+                </span>
+            </a>
+        </li>
+        <li class=' nav-menu-box '  >
+            <a class="nav-menu {if $subnav=='member'}active{/if}" href="/org.member">
+                <span class="nav-icon nav-member"></span>
+                <span class="nav-tag">
+                     {'会员管理'|tr:'org'}
+                </span>
+            </a>
+        </li>
+    </ul>
+</div>
+<script>
+    $('.nav-menu-box').on('click','.nav-menu',function () {
+        var open = $(this).attr('data-open');
+        var initNav = $(this).parent().find('.second-level');
+        if(!$(this).hasClass('active')){
+            var href = initNav.find('.second-level-menu').eq(0).find('a').attr('href');
+            location.href = href;
+        }
+        if(open){
+            if($(this).hasClass('open')){
+                $(this).find('.inner-level-icon').addClass('pull-up');
+                $(this).removeClass('open');
+                initNav.removeClass('show');
+            }else{
+                $(this).find('.inner-level-icon').removeClass('pull-up');
+                $(this).addClass('open');
+                initNav.addClass('show');
+            }
+        }
+    })
+</script>

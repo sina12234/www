@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>我的学生 - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="我的学生 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/index.main.header"}
+</head>
+<body>
+<!--header-->
+{part "/index.main.usernav.teacher"}
+<section class="p20">
+    <div class='container'>
+    <div class="row">
+    <!-- leftmenu start-->
+    {part "/index.main.menu.teacher"}
+    <!-- leftmenu end -->
+		<div class="col-lg-16 col-md-16 col-sm-20 col-xs-20">
+		<!--mob-->
+    <p class="mob-nav hidden-lg hidden-md">
+        <a href="/index.teacher.student" class="col-xs-7">我的学生</a>
+        <a href="/index.teacher.timetable" class="col-xs-7">我的课程</a>
+        <a href="/index.teacher.edit" class="col-xs-6">教师资料</a>
+    </p>
+            <div class="right-content">
+					<div class="list-filter">
+						<div class="c-fl">
+							<select name="course_id" id="course_id" class="form-control">
+								<option value="0">请选择课程</option>
+								{foreach $courses as $_course}
+								{if(mb_strlen($_course->title,'utf8')>16)}
+								<option title="{$_course->title}" {if $course_id==$_course->course_id}selected{/if} value={$_course->course_id}>{mb_substr($_course->title,0,15,'utf-8')}... (报名:{$_course->user_total})</option>
+								{else}
+								<option {if $course_id==$_course->course_id}selected{/if} value={$_course->course_id}>{$_course->title} (报名:{$_course->user_total})</option>
+								{/if}
+								{/foreach}
+							</select>
+							<select id="class" name="class_id" class="form-control">
+								<option value="0">所有班级</option>
+							</select>
+				{*			<select name="" id="">
+								<option value="">课程</option>
+								<option value="">初一数学</option>
+							</select>
+							<select name="" id="">
+								<option value="">班级</option>
+								<option value="">火箭班</option>
+								<option value="">冲刺班</option>
+							</select>
+				*}
+						</div>
+						{*  <div class="num fs14 c-fl">共有学生<span class="cYellow">30</span>个</div> *}
+						  {if(!empty($sedata))}
+				  <div class="num fs14 c-fl cBlue visible-lg"><a href="/phpexcel/platformstusearch?course_id={$course_id}&class_id={$class_id}&sedata={$sedata}" target="_blank">导出Excel</a></div>
+				  		{else}
+						  <div class="num fs14 c-fl cBlue hidden-xs"><a href="/phpexcel/platformstusearch?course_id={$course_id}&class_id={$class_id}" target="_blank">导出Excel</a></div>
+						  {/if}
+                          <div class="so-student hidden-xs" id="so_student">
+	                          <input type="text" id="searchdata" placeholder="输入手机号或姓名" value="{if !empty($sedata)}{$sedata}{/if}">
+	                          <span class="del-btn icon"></span>
+	                          <span class="so-btn icon"></span>
+	                          <span class="icon s-so-icon new-so-icon"></span>
+                          </div>
+					</div>
+					<ul class="list-student t-list-students">
+						<li class="fs16">
+						<div class="col-md-3 row col-lg-3 col-sm-4 col-xs-10">姓名</div>
+						<div class="row hidden-xs col-lg-2 col-sm-2 col-md-2 col-xs-4">性别</div>
+						<div class="col-md-4 row col-lg-3 col-sm-3 col-xs-10">手机号</div>
+						<div class="col-md-2 row col-lg-3 col-sm-2 hidden-xs">地区</div>
+						<div class="col-md-5 row col-lg-3 col-sm-5 hidden-xs">课程</div>
+						<div class="col-md-4 row col-lg-3 col-sm-4 hidden-xs">班级</div>
+						<div class="col-sm-4 hidden-md hidden-sm hidden-xs row col-lg-3 col-md-4">报名时间</div>
+					{*
+						<div class="col-md-4 row">出勤率</div>
+						<div class="col-md-4 row">发消息</div>
+						<div class="col-md-2 row">作业完成情况</div>
+						*}
+						</li>
+						{if(empty($ret))}
+						<div class="row">
+							<div class="col-md-10 col-md-offset-5 course-schedule mt15">
+								<div class="col-md-20 mt15 fs14 tec">
+									<img src="{utility_cdn::img('/assets_v2/img/platform/pet3.png')}"/> <br>
+									{if(empty($course_id))}
+									<span class="fs14" style="font-weight:bold;color:#666;">请选择需要查看的课程</span>
+									{else}
+									<span class="fs14" style="font-weight:bold;color:#666;">这个课程还没有报名的学生</span>
+									{/if}
+								</div>
+							</div>
+						</div>
+						{else}
+						{foreach $ret as $v1}
+							{if(!empty($v1))}
+							{foreach $v1 as $k=>$v}
+						<li class="fs14">
+						{if(isset($v->user_info->name))}
+						<div class="col-sm-4 row col-lg-3 col-md-3 col-xs-10"><span class="avatar">
+						{if(!empty($v->user_info->thumb_small))}
+						{*<img src="{utility_cdn::file($v->user_info->thumb_small)}">*}
+						<img src="{utility_cdn::img('/assets_v2/img/platform/no-img.png')}">
+						{else}
+						<img src="{utility_cdn::img('/assets_v2/img/platform/no-img.png')}">
+						{/if}
+						</span>{$v->user_info->name}</div>
+						{else}
+						<div class="col-sm-2 col-xs-10 row col-lg-3">TOM</div>
+						{/if}
+						{if !empty($v->user_info)}
+						{if($v->user_info->gender ==1)}
+						<div class="col-sm-2 row hidden-xs col-lg-2 col-xs-4">男</div>
+						{elseif($v->user_info->gender ==2)}
+						<div class="col-sm-2 row col-lg-2 hidden-xs col-xs-4">女</div>
+						{else}
+						<div class="col-sm-2 hidden-xs row col-lg-2 col-xs-4">未设置</div>
+						{/if}
+						{else}
+						<div class="col-sm-2 row col-lg-2 col-xs-4">未设置</div>
+						{/if}
+						{if(isset($v->user_info->mobile))}
+						<div class="col-sm-3 col-md-4 row col-lg-3 col-xs-10">{$v->user_info->mobile}</div>
+						{else}
+						<div class="col-sm-3 col-xs-10 col-md-4 row col-lg-3">未设置</div>
+						{/if}
+						{if(!empty($v->user_info))}
+						{if($v->user_info->province==$v->user_info->city)}
+						<div class="col-sm-2 row col-lg-3 hidden-xs">{$v->user_info->province}</div>
+						{else}
+						<div class="col-sm-2 row col-lg-3 hidden-xs">{$v->user_info->province} {$v->user_info->city}</div>
+						{/if}
+						{else}
+						<div class="col-sm-2 row col-lg-3 hidden-xs">未设置</div>
+						{/if}
+						{*<div class="col-sm-3 row col-lg-3">{$course->title}</div>*}
+						<div class="col-sm-5 row col-lg-3 hidden-xs">
+						{if(!empty($course->title))}
+							{$course->title}
+						{else}
+							{if(!empty($coursesdata[$v->cid]->course_name))}
+							{$coursesdata[$v->cid]->course_name}
+							{else}
+							课程加载失败
+							{/if}
+						{/if}
+						</div>
+						{*<div class="col-sm-2 row col-lg-3">{$classes[$v->class_id]->name}</div>*}
+						<div class="col-sm-4 row col-lg-3 hidden-xs">
+						{if(!empty($classes[$v->class_id]->name))}
+						{$classes[$v->class_id]->name}
+						{else}
+							{if(!empty($classesdata[$v->class_id]->name))}
+							{$classesdata[$v->class_id]->name}
+							{/if}
+
+						{/if}
+
+						</div>
+						<div class="col-sm-2 hidden-md hidden-xs hidden-sm row col-lg-3" style="text-overflow:clip;display:inline;">{date("Y-m-d",strtotime($v->create_time))}</div>
+			{*			<div class="col-sm-1 row">80%</div>
+						<div class="col-sm-2 row">80%</div>
+			*}
+						</li>
+							{/foreach}
+							{/if}
+						{/foreach}
+						{/if}
+			{*			<li class="fs14">
+						<div class="col-sm-1 row">李天一</div>
+						<div class="col-sm-1 row">男</div>
+						<div class="col-sm-2 row">13800110011</div>
+						<div class="col-sm-2 row">初一数学</div>
+						<div class="col-sm-1 row">火箭班</div>
+						<div class="col-sm-2 row">2015-01-10</div>
+						<div class="col-sm-1 row">80%</div>
+						<div class="col-sm-2 row">80%</div>
+						</li>
+				*}
+					</ul>
+					<div class="col-sm-12">
+						{*
+						<div class="page-list">
+							<ul>
+								<li class="prev prev-disabled">
+								首页
+								</li>
+								<li class="prev"><a href="#">上一页</a></li>
+								<li class="active">1</li>
+								<li><a href="#">2</a></li>
+								<li><a href="#">3</a></li>
+								<li class="dot">...</li>
+								<li><a href="#">10</a></li>
+								<li class="next"><a  href="#">下一页</a></li>
+								<li class="next prev-disabled">末页</li>
+							</ul>
+						</div>
+						*}
+					</div>
+				</div>
+			</div>
+			<div class='clear'></div>
+		</div>
+        </div>
+		</section>
+		{part "/index.main.footer"}
+	</body>
+</html>
+		<script type="text/javascript">
+			{if(!empty($courses))}
+			var course_data={SJson::encode($showData)};
+			{else}
+			var course_data=[];
+			{/if}
+			var class_id="{$class_id}";
+			$(document).ready(function(){
+				//	$("#course_id").change(function(){
+					var tmp_cid = $("#course_id ").val();
+					for(var i in course_data){
+						if(course_data[i].course_id==tmp_cid){
+							$("#class").html("");
+							$("#class").append('<option value="0">所有班级</option>');
+							for(var j in course_data[i].class){
+								s="";
+								console.log(course_data[i]);
+								if(class_id == course_data[i].class[j].class_id)s=" selected ";
+								$("#class").append('<option '+s+' value="'+course_data[i].class[j].class_id+'">'+course_data[i].class[j].name+'</option>');
+							}
+						}
+					}
+			//	}).trigger("change");
+			//	});
+
+				//t-my-student-wrap无内容时填充内容高度
+				if(screen.availWidth > 768) {
+					if($('.t-my-student-wrap').outerHeight() <= 223){
+						$('.t-my-student-wrap').css('height','400');
+					}
+				}
+
+			});
+
+			$('#class').change(function(){
+				var p1 = $("#course_id").val();
+				var p2 = $(this).children('option:selected').val();//这就是selected的值
+				var sedata = $("#searchdata").val();
+				if(sedata.length==0){
+					window.location.href="/index.teacher.student?course_id="+p1+"&&class_id="+p2;//页面跳转并传参
+				}else{
+					window.location.href="/index.teacher.student?course_id="+p1+"&&class_id="+p2+"&&sedata="+sedata;//页面跳转并传参
+				}
+		//		console.log("p1"+p1);
+		//		console.log("p2"+p2);
+				//window.location.href="/index.teacher.student?course_id="+p1+"&&class_id="+p2;//页面跳转并传参
+			})
+
+			$('#course_id').change(function(){
+				var p1 = $("#course_id").val();
+				var p2 = $("#class").children('option:selected').val();//这就是selected的值
+				var sedata = $("#searchdata").val();
+				//window.location.href="/index.teacher.student?course_id="+p1+"&&class_id="+p2;//页面跳转并传参
+				if(sedata.length==0){
+					window.location.href="/index.teacher.student?course_id="+p1+"&&class_id="+p2;//页面跳转并传参
+				}else{
+					window.location.href="/index.teacher.student?course_id="+p1+"&&class_id="+p2+"&&sedata="+sedata;//页面跳转并传参
+				}
+			})
+
+			/*$('.num').click(function(){
+				var sedata = $("#searchdata").val();
+				//console.log("112 is"+sedata);
+				window.location.href="/index.teacher.student?sedata="+sedata;//页面跳转并传参
+			})
+			*/
+			$("#searchdata").keydown(function(e){
+				var p1 = $("#course_id").val();
+				var p2 = $("#class").children('option:selected').val();//这就是selected的值
+				var curKey = e.which;
+				if(curKey == 13){
+					var sedata = $("#searchdata").val();
+					//window.location.href="/index.teacher.student?sedata="+sedata;//页面跳转并传参
+					if(sedata.length==0){
+						window.location.href="/index.teacher.student?course_id="+p1+"&&class_id="+p2;//页面跳转并传参
+					}else{
+						window.location.href="/index.teacher.student?course_id="+p1+"&&class_id="+p2+"&&sedata="+sedata;//页面跳转并传参
+					}
+					//window.location.href="/index.teacher.student?course_id="+p1+"&&class_id="+p2+"&&sedata="+sedata;//页面跳转并传参
+				}
+			});
+           /* $("#so_student .s-so-icon").click(function(){
+                $(this).hide();
+                $("#so_student input").show();
+                $("#so_student .so-btn").show();
+            })
+			*/
+			{if(!empty($sedata))}
+			$("#so_student .s-so-icon").hide();
+			$("#so_student input").show();
+			$("#so_student .so-btn").show();
+			{else}
+            $("#so_student .s-so-icon").click(function(){
+                $(this).hide();
+                $("#so_student input").show();
+                $("#so_student .so-btn").show();
+            })
+			{/if}
+            $("#so_student input").keyup(function(){
+                $("#so_student .del-btn").show();
+                $("#so_student .so-btn").hide();
+            })
+            $("#so_student .del-btn").click(function(){
+                $("#so_student input").val('');
+            })
+		</script>

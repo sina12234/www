@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+<title>关于我们 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 联系我们 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+<body>
+{part "/site.main.nav.about"}
+<section class="pd30">
+    <div class="container">
+        <div class="row">
+            {part "/about.main.left"}
+            <div class='right-main col-sm-16 about-con'>
+              {$org_info->desc}
+            </div>
+        </div>
+    </div>
+</section>
+<div id="rightWindow"></div>
+<script>$("#rightWindow").load("/org.rightWindow.rightWindow");</script>
+<!--<script>
+    $(function(){
+        //左右内容对齐
+        var win_height = $(window).height();
+        var header_height = $('header').outerHeight();
+        var footer_height = $('footer').outerHeight();
+        var section_height = $('section').outerHeight();
+        if((header_height+footer_height+section_height) < win_height){
+            $('section').height(win_height-(header_height+footer_height));
+            $('section').height(win_height-(header_height+footer_height));
+        }
+    })
+</script>-->
+{part "/site.main.footer"}
+</body>
+</html>

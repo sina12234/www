@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>专业的K12在线教育平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+</head>
+<body class="bgf">
+<div class="col-xs-20 pt20" id="classify">
+	<select name="cate1" id="cate1">
+		<option value="all">一级全部</option>
+	</select>
+	<select name="cate2" id="cate2">
+		<option value="all">二级全部</option>
+	</select>
+	<select name="cate3" id="cate3">
+		<option value="all">三级全部</option>
+	</select>
+</div>
+<div class="col-xs-20 pt20 pb20" id="subject">
+</div>
+<p class="col-xs-20 tac">
+    <button class="btn">确定</button>
+    <button class="gray-btn">取消</button>
+</p>
+<script>
+$(function() {
+	var s_index=parent.layer.getFrameIndex(window.name);
+	var classify=$('#classify');
+	var subject=$('#subject');
+	var object_type=parent.$('input[name="object_type"]').val()
+	var object_id=parent.$('input[name="object_id"]').val() || 0;
+	var classid=object_id.split(',');
+	var n=classid.length;
+
+	getClass();
+	switch (n) {
+		case 1:
+			getClass();
+			break;
+		case 2:
+			getClass(classid[0],2);
+			getClass(classid[1],3);
+			break;
+		case 3:
+			getClass(classid[0],2);
+			getClass(classid[1],3);
+			break;
+		default:
+			getClass();
+	}
+
+	classify.find('#cate1').change(function(){
+		var _selectId=$(this).val();
+		if(_selectId != "all"){
+			getClass(_selectId,2);
+			classify.find('#cate3').html('<option value="all">三级全部</option>');
+		}
+	})
+	classify.find('#cate2').change(function(){
+		var _selectId=$(this).val();
+		if(_selectId != "all"){
+			getClass(_selectId,3);
+		}
+	})
+
+	subject.on('change','#subject1',function(){
+		var _selectId=$(this).val();
+		if(_selectId != "all"){
+			getType(_selectId);
+		}
+	})
+
+	classify.find('#cate3').change(function(){
+		var _selectId=$(this).val();
+		// if(_selectId != "0"){
+		// 	getSubject(_selectId,3);
+		// }
+	})
+
+	$('.gray-btn').click(function(){
+       parent.layer.close(s_index);
+    });
+
+	$('.btn').click(function(){
+		if(parent.$('.multiple-select').length!=0){
+			parent.$('.multiple-select').hide();
+		}
+		var data_id=[];
+		$('select').each(function(){
+			if($(this).val() == "all"){
+				return false
+			};
+			data_id.push($(this).val());
+			parent.$('input[name="object_id"]').val(data_id);
+		});
+
+		parent.$('input[name="object_type"]').val(3);
+		if(parent.$('#CourseEdit').length==0){
+			parent.$('#CourseRange').hide();
+			parent.$('#selectArea').append('<a id="CourseEdit">指定分类课程 <i class="choices-icon"></i></a>');
+		}else{
+			parent.$('#CourseEdit').html('指定分类课程  <i class="choices-icon"></i>');
+		}
+		parent.layer.close(s_index);
+    });
+
+	function getClass(id,ctype){
+		$.ajax({
+			type:"post",
+			url: "/org/discount/GetCate",
+			data: { cateId:id },
+			dataType:'json',
+			success:function(r){
+				if(r.code==0){
+					var _html='';
+					var data=r.result.cateList;
+					if(data.length > 0){
+						var classed;
+						if(ctype=="2"){
+							classed = classid[1];
+						}else if(ctype=="3"){
+							classed = classid[2];
+						}else{
+							classed = classid[0];
+						}
+						for(var i=0;i<data.length;i++){
+							if(classed == data[i].cateId){
+								_html=_html+'<option value="'+data[i].cateId+'" selected>'+data[i].name+'</option>';
+							}else{
+								_html=_html+'<option value="'+data[i].cateId+'">'+data[i].name+'</option>';
+							}
+
+						}
+					}
+				}else{
+					_html='<option value="0">暂无</option>'
+				}
+				if(ctype=="2"){
+					classify.find('#cate2').html('<option value="all">二级全部</option>'+_html);
+				}else if(ctype=="3"){
+					classify.find('#cate3').html('<option value="all">三级全部</option>'+_html);
+				}else{
+					classify.find('#cate1').html('<option value="all">一级全部</option>'+_html);
+				}
+			}
+		});
+	}
+
+	function getSubject(id){
+		$.ajax({
+			type:"post",
+			url: "/org/discount/GetAttr",
+			data: { cateId:id },
+			dataType:'json',
+			success:function(r){
+				if(r.code==0){
+					var _html=$('<select name="subject1" id="subject1"></select>');
+					var _htmlOpt='<option value="all">科目全部</option>';
+					var data=r.result.attr;
+					if(data.length > 0){
+						for(var i=0;i<data.length;i++){
+							_htmlOpt=_htmlOpt + '<option value="'+data[i].attrId+'">'+data[i].name+'</option>';
+						}
+					}
+					if(subject.find('#subject1').length==0){
+						_html.append(_htmlOpt);
+						subject.append(_html);
+					}else{
+						subject.find('#subject1').html(_htmlOpt);
+					}
+				}else{
+					_html='<option value="0">暂无</option>'
+				}
+
+			}
+		});
+	}
+
+	function getType(id){
+		$.ajax({
+			type:"post",
+			url: "/org/discount/GetCourseType",
+			data: { attrId:id },
+			dataType:'json',
+			success:function(r){
+				if(r.code==0){
+					var _html=$('<select name="subject2" class="ml5" id="subject2"></select>');
+					var _htmlOpt='<option value="all">类型全部</option>';
+					var data=r.result.course_type;
+					for(i in data){
+						_htmlOpt=_htmlOpt + '<option value="'+data[i].course_type+'">'+data[i].name+'</option>';
+					}
+					if(subject.find('#subject2').length==0){
+						_html.append(_htmlOpt);
+						subject.append(_html);
+					}else{
+						subject.find('#subject2').html(_htmlOpt);
+					}
+				}else{
+					_html='<option value="0">暂无</option>'
+				}
+
+			}
+		});
+	}
+
+});
+
+</script>
+</body>
+</html>

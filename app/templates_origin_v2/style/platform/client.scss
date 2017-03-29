@@ -1,0 +1,92 @@
+/*kehuduan*/
+.client_m1{ 
+	background: url("/assets_v2/img/main1_pic.jpg") top center ;
+	overflow: hidden; 
+	height: 100%;
+}
+.m1_cont{ 
+	margin-bottom: 5%;
+	.m1bg_pic{ 
+		width: 76%;
+	}
+}
+.m1_cont_l{
+	position: relative;
+	.iph_and{ 
+		position: absolute;
+		bottom: 32%; 
+		right: 18%;
+	}
+}
+.m1_cont_r{  
+	padding-left: 35px;
+}
+.download{
+	a.ios{
+	display:block;
+	width:125px;
+	height:40px;
+	margin-top:10px;
+	background:url("/assets_v2/img/platform/ios.png") no-repeat;
+	}
+	a.ios:hover{
+		background:url("/assets_v2/img/platform/ios-hover.png");
+	}
+	a.android{
+		display:block;
+		width:125px;
+		height:40px;
+		margin-top:10px;
+		background:url("/assets_v2/img/platform/android.png") no-repeat;
+	}
+	a.android:hover{
+		background:url("/assets_v2/img/platform/android-hover.png");
+	}
+}
+.client_m1,.client_m2,.client_m3,.client_m4,.client_m5{ overflow: hidden;padding:4% 0;  height: 100%;}
+.m1_cont_r{
+	.downL{ 
+		font-size: 20px;
+		color: #fff;
+		text-align: center;
+		position:absolute;
+		bottom:-60px;
+		left:35%;
+	}
+}
+.client_m2{ 
+	background:#f2f2f2;
+}
+.m2_cont{
+	img{ 
+		width: 100%;
+		max-width: 1060px;
+	}
+}
+.client_m3{ 
+	background: url("/assets_v2/img/main3_pic.jpg") top center ;
+}
+.m3_cont{
+	img{ 
+		width: 100%;
+		max-width: 1100px;
+	}
+}
+.client_m4{
+	 background: url("/assets_v2/img/main4_pic.jpg") top center ;
+}
+.m4_cont{
+	img{ 
+		width: 100%;
+		max-width: 1146px;
+	}
+}
+.client_m5{ 
+	background:#73c5ff;
+}
+.m5_cont{
+	img{ 
+		width: 100%;
+		max-width: 1100px;
+	}
+}

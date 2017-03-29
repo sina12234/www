@@ -1,0 +1,106 @@
+<html>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	<meta name="renderer" content="webkit">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	<meta name="renderer" content="webkit">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<TITLE>迎春杯成绩查询</TITLE>
+	<META content="text/html; charset=UTF-8" http-equiv=Content-Type>
+	<STYLE type=text/css>BODY {
+		FONT-SIZE: 16px; FONT-FAMILY: "微软雅黑", Arial, "Trebuchet MS", Verdana, Georgia,Baskerville,Palatino,Times; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RIGHT: 0px
+	}
+	DIV {
+		MARGIN-LEFT: auto; MARGIN-RIGHT: auto
+	}
+	A {
+		TEXT-DECORATION: none; COLOR: #1064a0
+	}
+	A:hover {
+		COLOR: #0078d2
+	}
+	H1 {
+		FONT-FAMILY: "微软雅黑", Arial, "Trebuchet MS", Helvetica, Verdana; FONT-WEIGHT: normal; MARGIN: 0px
+	}
+	H2 {
+		FONT-FAMILY: "微软雅黑", Arial, "Trebuchet MS", Helvetica, Verdana; FONT-WEIGHT: normal; MARGIN: 0px
+	}
+	H3 {
+		FONT-FAMILY: "微软雅黑", Arial, "Trebuchet MS", Helvetica, Verdana; FONT-WEIGHT: normal; MARGIN: 0px
+	}
+	H4 {
+		FONT-FAMILY: "微软雅黑", Arial, "Trebuchet MS", Helvetica, Verdana; FONT-WEIGHT: normal; MARGIN: 0px
+	}
+	H1 {
+		FONT-SIZE: 30px; COLOR: #0188de; PADDING-BOTTOM: 10px; PADDING-TOP: 20px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px
+	}
+	H2 {
+		FONT-SIZE: 16px; COLOR: #0188de; PADDING-BOTTOM: 20px; PADDING-TOP: 10px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px
+	}
+	#wrapper {
+		WIDTH: 100%
+	}
+	#page {
+		PADDING-BOTTOM: 40px; PADDING-TOP: 20px; PADDING-LEFT: 20px; MARGIN-TOP: 80px; PADDING-RIGHT: 20px
+	}
+</STYLE>
+
+
+<script>
+//location.replace("https://hnhbs0731.yunke.com/activity.2015");
+</script>
+<META name=GENERATOR content="MSHTML 11.00.9600.17207"></HEAD>
+<BODY>
+	<DIV id=wrapper>
+		<DIV id=page style="BORDER-TOP-STYLE: dashed; BORDER-TOP-COLOR: #e4e4e4; BORDER-BOTTOM-STYLE: dashed; BORDER-LEFT-COLOR: #e4e4e4; BORDER-BOTTOM-COLOR: #e4e4e4; BORDER-RIGHT-STYLE: dashed; BORDER-LEFT-STYLE: dashed; BORDER-RIGHT-COLOR: #e4e4e4; LINE-HEIGHT: 30px">
+			<H1>迎春杯成绩查询</H1>
+			<H2>开始时间：12月23日上午10:00查询</br>
+			<h2>离可以查询还剩余<div id="digits" style="color:red">&nbsp;</div> </h2>
+			<h2>试题讲解：<a href="https://ycb2016.yunke.com/">点击进入--》</a><br/>
+			</h2>
+
+<script>
+	function time_format(s) {
+		var t;
+		if(s > -1){
+			hour = Math.floor(s/3600);
+			min = Math.floor(s/60) % 60;
+			sec = s % 60;
+			day = parseInt(hour / 24);
+			if (day > 0) {
+				hour = hour - 24 * day;
+				t = day + "天," + hour + "小时";
+			}
+			else t = hour + "小时";
+
+			if(min < 10){t += "0";}
+			t += min + "分";
+			if(sec < 10){t += "0";}
+			t += sec+'秒';
+		}else{
+		t = "0:00:0x";
+		}
+		return t;
+	}
+	var t =parseInt(Date.parse('2015-12-23 10:00:00')/1000);
+
+	console.log(t);
+	setInterval(function(){
+		var t2 = parseInt((new Date).getTime()/1000);
+		console.log(t-t2);
+		//console.log(time_format(t-t2));
+		document.getElementById("digits").innerHTML = time_format(t-t2);
+
+	},1000);
+</script>
+
+<div style="display:none">
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256969875'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/stat.php%3Fid%3D1256969875%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+</div>
+</DIV></DIV></BODY></HTML>
+

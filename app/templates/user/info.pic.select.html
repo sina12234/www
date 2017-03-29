@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 选择头像</title>
+		{part "/index.main.headeruser"}
+	</head>
+
+	<body>
+		<!--top-->
+		{part "/index.main.nav.user"}
+
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='col-sm-3 user_menu hidden-xs'>
+						<div id='menu'>
+							{part "/user.home.menu.user"}
+						</div>
+					</div>
+					<div class='col-sm-9 user_content'>
+					<form method="post" action="/user.info.picselect">
+						<div class='container-fluid'>
+							<div class='row'>
+								<div>
+									<h1 class="title">选择头像</h1>
+								</div>
+							</div>  
+							<style>
+							.pic li{
+							display:inline;padding:10px;
+							}
+							.pic img{
+							border:2px solid white;
+							}
+							.pic img.sel{
+								border:2px solid;
+								border-color:red;
+							}
+							.pic img:hover{
+								border:2px solid;
+								border-color:red;
+							}
+							</style>
+							<div class="pic">
+								<input type="hidden" name="big" />
+								<input type="hidden" name="med" />
+								<input type="hidden" name="small" />
+								<ul>
+									{if !empty($pics)}
+									{foreach $pics as $pic}
+									<li><img med="{$pic->med}" big="{$pic->big}" small="{$pic->small}" src="{utility_cdn::file($pic->med)}" /></li>
+									{/foreach}
+									{/if}
+								</ul>
+							</div>
+							<script>
+								$(".pic li").click(function(){
+									$(".pic img").removeClass("sel");
+									var img = $(this).find("img");
+									img.addClass("sel")
+									$("input[name=big]").val(img.attr("big"));
+									$("input[name=small]").val(img.attr("small"));
+									$("input[name=med]").val(img.attr("med"));
+								});
+							</script>
+						</div>
+
+						<div class='but'>
+							<input type='submit' value='设置' style="color:#fff;">
+						</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>  
+
+		<div class="footer"> 
+			<div class="ftcon">
+				<!-- <div class="fter_1">
+					<a href="">关于我们</a> | <a href="">加入我们</a> | <a href="">校园代理招募</a> | <a href="">O2O体验店招商</a> | <a href="">企业培训</a> | <a href="">网站地图</a> | <a href="">友情链接</a> 
+				</div> -->
+				<p class="fter_2 mt10">© 2014 北京高能壹佰教育科技有限公司 版权所有</p>
+			</div>
+		</div>
+	</body>
+</html>

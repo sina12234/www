@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>{part '/site.main.orgname'} - 用户登录 - 专业的K12在线教育平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+</head>
+<body>
+<div class="gn-alert-main">
+    <div class="form-c col-xs-14">
+        <form novalidate id="login_form" method='post' autocomplete="off">
+            <input type="hidden" name="url" value="{if !empty($url)}{$url}{/if}"> 
+            <input type="password" style="display:none;">
+            <ul class="form col-xs-20 cy-new-form">
+                <li><input type="tel" id="user_name" name='uname' class="col-xs-20" placeholder="{'请输入手机号'|tr:'site.login'}"></li>
+                <li><input type="password" id="x_pass" name='pass' placeholder="{'请输入密码'|tr:'site.login'}" class="col-xs-12"></li>
+                <li style="line-height:30px;padding:0">
+                    <div class="col-xs-20">
+                        <div class="row fs14">
+                                <input type="checkbox" id="checkbox">
+                            <label for="checkbox">{'下次自动登录'|tr:'site.login'}</label>
+                            <span class="c-fr"><a href="/site.main/forget1" target='_top' class="cYellow">{'忘记密码'|tr:'site.login'}？</a></span>
+                            </div>
+
+                        </div>
+                    </li>
+            <li style="padding:0"><div class="x_error" style="display:block;"></div></li>
+                    <li style="height:40px;line-height:30px;">
+                    <div class="row">
+                        <div class="col-xs-10"><button type="submint">{'登录'|tr:'site.login'}</button></div>
+                    </div>
+
+                    </li>
+                </ul>
+            </form>
+        </div>
+        <dl class="other col-xs-6">
+            <dt class="fs14">{'还没有云课账号'|tr:'site.login'}？</dt>
+            <dt style="height:80px;" class="fs16"><a href="/site.main.register" style="color:#ef9303;" target="_blank">{'立即注册'|tr:'site.login'}</a></dt>
+            <dt>{'可以用以下方式登录'|tr:'site.login'}</dt>
+            <dd><a href="/user/parterner/weixin?from={$from}" target='_top'><span class="weixin"></span></a></dd>
+            <dd><a href="/user/parterner/qq?from={$from}" target='_top'><span class="qq"></span></a></dd>
+        </dl>
+    </div>
+</body>
+<script>
+$(function() {
+    $("#login_form").submit(function(){
+        if($("input[name=uname]").val()=='' || $("input[name=uname]").val()=="{'手机号'|tr:'site.login'}"){
+            $(".x_error").html("{'请输入手机号'|tr:'site.login'}");
+            return false;
+        }
+        if($("input[name=pass]").val()=='' || $("input[name=pass]").val()=="{'密码'|tr:'site.login'}"){
+            $(".x_error").html("{'请输入密码'|tr:'site.login'}");
+            return false;
+        }
+
+        $.post("/site.main.loginAjax",$("#login_form").serialize(),function(r){
+            if(r.error){
+                $(".x_error").html(r.error);
+            }else{
+                parent.location.href=r.url;
+            }
+        },"json");
+        return false;
+    });
+    $('input[name=uname],input[name=pass]').change(function(){
+        if($(this).val()!=''){
+            $(this).css("border","solid 1px #dfdfdf").next().html('&nbsp;')
+        }
+    });
+    //边框颜色
+    $("input[type='text']").focus(function(){
+        $(this).css("border","solid 1px #ffa81e");
+    });
+    $("input[type='text']").blur(function(){
+        $(this).css("border","solid 1px #dddddd");
+    });
+    $("input[type='password']").focus(function(){
+        $(this).css("border","solid 1px #ffa81e");
+    });
+    $("input[type='password']").blur(function(){
+        $(this).css("border","solid 1px #dddddd");
+    });    
+});    
+</script>
+</html>

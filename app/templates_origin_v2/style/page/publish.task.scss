@@ -1,0 +1,523 @@
+//公用样式
+.ed-title{
+  position: relative;
+}
+.delete-icon{
+  position: absolute;
+  @include sprite($del);
+  right: 0;
+  top:7px;
+  cursor: pointer;
+  &.hidden{
+    display: none;
+  }
+}
+//作业等级 小红花
+$list: $task-one-flower $task-two-flower $task-three-flower $task-four-flower $task-five-flower  ;
+@for $i from 1 through 5 {
+  .task-#{$i}-flower{
+      @include sprite(nth( $list , $i ));
+  }
+}
+//文件框
+.file-tag-box{
+    border-top:1px solid $frame-border-color;
+    padding-top:5px;
+  height: 52px;
+  width: 100%;
+}
+.file-tag{
+  width: 200px;
+  height: 52px;
+  padding-right: 35px;
+  position: relative;
+  float: left;
+  margin-right: 24px;
+  border: 1px solid $frame-border-color;
+  &:last-child{
+    margin-right: 0;
+  }
+  &:hover{
+    .file-clear{
+      background-color: $background-color;
+    }
+  }
+  .file-clear{
+    width: 35px;
+    height: 100%;
+    position: absolute;
+    right:0;
+    top:0;
+    cursor: pointer;
+  }
+  .delete-icon{
+    top:17px;
+    right: 8px;
+  }
+}
+.file-info-box{
+  padding: 10px;
+}
+.info-img{
+  float: left;
+  padding: 0;
+  img{
+    max-width: 30px;
+    max-height: 30px;
+  }
+}
+.file-info{
+  float: left;
+  padding:0 0 0 5px;
+  p{
+    width: 100%;
+  }
+  .file-info-name{
+    float: left;
+    width: 100%;
+    @extend %ellipsis;
+  }
+}
+//布置作业
+.task-content{
+  width: 100%;
+  .task-tag{
+    line-height: 36px;
+    font-size: 14px;
+    color: $text-strong-color;
+    text-align: right;
+  }
+  .add-image{
+    cursor: pointer;
+    width: 64px;
+    height: 64px;
+  }
+  .add-image-icon{
+    @include sprite($add-icon);
+  }
+  .add-image-info{
+    padding-left: 10px;
+    padding-top: 44px;
+    font-size: 12px;
+    color: $text-subsidiary-color;
+  }
+  .task-action{
+    .result-box{
+      margin: 10px 0;
+    }
+    .task-result{
+      width: 100%;
+    }
+    .button-box{
+      padding: 10px 0;
+    }
+    .image-box{
+      margin-right: 40px;line-height: 150px;
+      text-align:center;
+    }
+
+  }
+  .clear-icon{
+    position: absolute;
+    right: 6px;
+    top:6px;
+    cursor: pointer;
+    @include sprite($task-delete);
+    &:hover{
+      @include sprite($task-delete-hover);
+    }
+  }
+  .textarea-box{
+    width: 100%;
+    position: relative;
+    .textarea{
+      padding: 10px 24px 25px 10px;
+      border: 1px solid $input-border-color;
+      width: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+      _overflow-y: visible;
+      word-wrap: break-word;
+      outline:0;
+      min-height: 160px;
+      font-size: 14px;
+      &:focus{
+        border: 1px solid $input-true-border-color;
+      }
+    }
+    .place-holder{
+      position: absolute;
+      right:5px;
+      bottom:10px;
+      font-size: 12px;
+      color: $text-subsidiary-color;
+    }
+  }
+  .image-box{
+    position: relative;
+    width: 152px;
+    height: 152px;
+    border: 1px solid $frame-border-color;
+    img{
+      max-width: 150px;
+      max-height: 150px;
+    }
+    .clear-icon{
+      right: -25px;
+      top:0px;
+    }
+  }
+  .file-box{
+    padding-top: 26px;
+    border-top: 1px solid $horizontal-border-color;
+    width: 100%;
+    .file-name{
+      padding-bottom: 14px;
+    }
+    .cBlue{
+      cursor: pointer;
+    }
+  }
+  .dropdown{
+    min-width:290px;
+    .dropdown-box{
+      width: 100%;
+    }
+    .course-name{
+      float: left;
+      padding-left: 5px;
+      line-height: 26px;
+      font-size: 12px;
+    }
+  }
+  .dropdown-tips{
+    .tips-text{
+      padding: 5px 0;
+    }
+  }
+  .pt-dropdown{
+    height: 36px;
+    .dropdown-show-tab{
+      margin-top: 6px;
+      cursor: pointer;
+      padding: 0 14px;
+      &.active{
+        border-color: $main-yellow-color;
+        .left-side{
+          @include sprite($tab-left-side-hover);
+        }
+        background-color:$main-yellow-color ;
+        color: $main-white-color;
+      }
+    }
+  }
+  @include screen (320px,720px){
+    .task-tag {
+        text-align:left;
+    }
+  }
+}
+.task-time{
+  height: 37px;
+  .task-tag{
+    line-height: 37px;
+  }
+  .start-time,.end-time{
+    padding: 10px;
+    height: 37px;
+    width: 100%;
+    border: 1px solid $input-border-color;
+  }
+}
+.submit-box{
+  width: 100%;
+  padding-top:30px;
+  .submit{
+    width: 180px;
+    margin: 0 auto;
+  }
+}
+.pt-send-task-info{
+  .divselect{
+    dl{
+      max-height:100px;
+    }
+  }
+}
+//作业列表
+.tab-hd-opt{
+  position: relative;
+  .prompt{
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    right: 10px;
+    top:0;
+    background-color: #e60012;
+    display: none;
+    &.show{
+      display: block;
+    }
+  }
+}
+.zoom-info-course{
+   .task_text_info{
+        width:155px;
+        white-space:nowrap;
+        text-overflow:ellipsis;
+        -o-text-overflow:ellipsis;
+        overflow: hidden;
+   }
+   @include screen(320px,640px){
+     .task_text_info{
+        width:100px;
+        white-space:nowrap;
+        text-overflow:ellipsis;
+        -o-text-overflow:ellipsis;
+        overflow: hidden;
+     }
+   }
+}
+//查看作业
+.pt-work-detail{
+  .delete-icon-box{
+    position: relative;
+    height: 60px;
+  }
+  .link-icon{
+    @include sprite($copy-link);
+    cursor: pointer;
+    margin-top: 21px;
+    margin-right: 4px;
+  }
+  .pt-delete-icon{
+    @include sprite($del);
+    cursor: pointer;
+    @include center(18px,18px);
+  }
+  .look-task-unfolded{
+    position: relative;
+  }
+  .copy-link{
+    height: 60px;
+    position: relative;
+    cursor: pointer;
+    .link{
+      @include center(104px,60px);
+    }
+  }
+  .table-grid{
+    &.hidden{
+      display: none;
+    }
+    tr{
+      background-color: $lighter-background-color;
+    }
+    td{
+      font-size: 14px;
+      border-right:none;
+      line-height: 60px;
+      height: 60px;
+      &:last-child{
+        border-right:1px solid $common-border-color;
+      }
+    }
+  }
+  .look-task-content{
+    border:1px solid $common-border-color;
+    border-top: 0;
+    width:100%;
+    position: relative;
+    overflow:hidden;
+    padding: 0 20px 24px 30px;
+    &.flow{
+      min-height:264px;
+      height: 264px;
+      overflow:hidden;
+    }
+    &.show{
+      height: auto;
+      overflow-x: hidden;
+      overflow-y: inherit;
+    }
+    .text-box{
+      padding: 10px 0;
+      font-size: 14px;
+    }
+    .task-result{
+        position: relative;
+      width: 100%;
+      padding: 10px 0;
+      .img-box{
+        padding-bottom: 10px;
+      }
+      img{
+        cursor: pointer;
+        max-width: 752px;
+        max-height: 500px;
+      }
+      .correct-box{
+        display: inline-block;
+        position: relative;
+        border: 1px solid transparent;
+        .correct-action{
+          width: 110px;
+          height: 40px;
+          background-color: $main-red-color;
+          color: $main-white-color;
+          position: absolute;
+          right: 0;
+          bottom:0;
+          font-size: 14px;
+          display: none;
+          text-align: center;
+          line-height: 40px;
+          cursor: pointer;
+        }
+        &:hover{
+          border: 1px solid $main-red-color;
+          .correct-action{
+            display: block;
+          }
+        }
+      }
+      .level-flower-box{
+        padding-left: 40px;
+      }
+    }
+    .file-tag-box{
+      margin-bottom: 10px;
+      .download-icon{
+        position: absolute;
+        top:15px;
+        left: 10px;
+        @include sprite($download);
+      }
+    }
+    .look-task-unfolded{
+      width:100%;
+      height: 24px;
+      background: $lighter-background-color;
+      cursor: pointer;
+      position: absolute;
+      left: 0;
+      bottom:0 ;
+      .title{
+        width: 68px;
+        margin: 0 auto;
+        font-size: 12px;
+        line-height: 24px;
+        position: relative;
+        padding-right: 20px;
+      }
+      .display-icon{
+        @include sprite($top-arrow);
+        position: absolute;
+        right: 0;
+        top:8px;
+        transform: rotate(180deg);
+        transition: transform 0.3s linear;
+        &.down{
+          transform: rotate(0deg);
+        }
+      }
+    }
+    .upload-file-info li{
+      border:1px solid #f1f1f1;
+      border-radius: 3px;
+      -moz-border-radius: 3px;
+      -o-border-radius: 3px;
+      -webkit-border-radius: 3px;
+      padding:6px;
+      margin-right: 10px;
+      :last-child{
+        margin-right: 0;
+      }
+    }
+    &.show-task-content{
+      .look-task-type{
+         h3{
+           padding-top: 30px;
+           font-size: 14px;
+         }
+      }
+    }
+  }
+  @include screen(320px,760px){
+     .look-task-content{
+        .task-result{
+           img {
+              width:100%;
+           }
+        }
+     }
+     .table-grid td:last-child{
+          border:none;
+     }
+  }
+}
+#pt-work-table{
+  .cBlue{
+    color:$text-blue-color;
+  }
+}
+//批改作业
+.ct-content{
+  .correct-submit{
+    width: 230px;
+    padding-bottom: 40px;
+  }
+}
+//查看批改结果
+.pt-main-center{
+  .look-task-content{
+    border-top:1px solid $common-border-color;
+    margin-top: 30px;
+    &:first-child{
+      margin-top: 0;
+      border-top:none;
+    }
+    &.not-first{
+      border-top:1px solid $common-border-color;
+      margin-top: 30px;
+    }
+  }
+}
+
+@include screen(320px,760px){
+    .task-title{ 
+        line-height: 30px;
+        height: 30px;
+        width: 100%;
+        .title{
+            text-align: left;
+            float: left;
+            color: #333;
+            font-size: 16px;
+            font-weight: bold;
+            text-overflow: initial;
+            white-space: initial;
+            overflow: hidden;
+        }
+     }
+.pt-work-detail{
+  .look-task-content{
+      border:1px solid $common-border-color;
+      border-top: 0;
+      width:100%;
+      position: relative;
+      overflow:hidden;
+      padding: 0 10px 24px 10px;
+    }
+}
+    .task-content{
+      .textarea-box{
+          width: 100%;
+          position: relative;
+          .textarea{
+            padding: 10px 10px 25px 10px;
+          }
+        }
+    }
+}

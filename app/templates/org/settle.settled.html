@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>已结算查看明细 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 机构中心 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+<style type="text/css">
+.refund-icon{ padding:0 3px; border: 1px solid #ff8135; color:#ff8135;}
+</style>
+<body style="background:#f7f7f7">
+{part "/site.main.nav"}
+<section class="pd40 org-view-Settled">
+    <div class="container">
+        <div class="row">
+        	<!-- 左侧 -->
+            {part "/org.main.menu.settle"}
+        	<!-- /左侧 -->
+        	<!-- 右侧 -->
+        	<div class="right-main col-md-16">
+        		<div class="content">
+        			<h1 class="col-md-20">
+        				<a href="/org/settle/accountlist/" class="fs14" title="">&lt;&lt; 返回</a>
+        			</h1>
+        			<div class="col-md-20 pd0 fs14 mt30">
+        				<div class="col-md-6 cDarkgray">{$clearData['endTime']}  已结算明细</div>
+        				<div class="col-md-7 cDarkgray">账单周期：{$clearData['startTime']}--{$clearData['endTime']}</div>
+        				<div class="col-md-6 ter">
+        					<a href="/phpexcel/settle/accountdetail/{$clearData['clearId']}" class="sBlue" title="">导出账单EXCEL</a>
+        				</div>
+        				<div class="col-md-20 mt10 fs14 cDarkgray">
+        					本期结算收入：
+        					<span style="color:#fc401b;" class="fs20">
+                                ￥<em class="settled-money">{$clearData['price']}</em>
+                            </span>
+                            <dl style="">
+                                <dd class="sl-title cDarkgray fs14 mt20">
+                                    <span class="mr20">在线分销总收入:<em class="cRed">{$clearData['price_resell']}</em>元 </span>
+                                    <span class="mr20">推广支出:<em class="cRed">{$clearData['resell_pay_price']}</em>元 </span>
+                                    <span class="mr20">平台使用费:<em class="cRed">{$clearData['platform_rate_price']}</em>元 </span>
+                                    <span class="mr20">税费:<em class="cRed">{$clearData['tax_rate_price']}</em>元 </span>
+                                    <span class="mr20">支付手续费:<em class="cRed">{$clearData['gateway_rate_price']}</em>元 </span>
+                                    <span class="mr20">渠道分成:<em class="cRed">{$clearData['distribute_rate_price']}</em>元 </span>
+                                </dd>
+                            </dl>
+        				</div>
+        			</div>
+        			<div class="col-md-20 mt10">
+        				<p class="c-orange bor1px tel">
+        					<span class="settles-icon c-fl"></span>
+        					结算订单范围：每周一结算上周一至周日成功支付的订单即为可结算内容( 本期结算收入= 课程收入+会员收入+渠道分销收入-平台推广税费 )
+        				</p>
+        			</div>
+        			<div class="col-md-20 mt15">
+        				<ul class="bor1px fs14 tac clearfix view-settled-btn">
+        					<li class="col-md-4 pd0 curr">
+        						课程收入明细
+        						<i class="c-fr mt10"></i>
+        					</li>
+        					<li class="col-md-4 pd0">
+        						会员收入明细
+        						<i class="c-fr mt10"></i>
+        					</li>
+        					<li class="col-md-4 pd0">
+        						线上分销收入明细
+        						<i class="c-fr mt10"></i>
+        					</li>
+        					<!--<li class="col-md-4 pd0">
+        						推广费支出明细
+        						<i class="c-fr mt10"></i>
+        					</li>-->
+        				</ul>
+        			</div>
+        			<div class="col-md-20 fs14">
+        				<ul class="view-settled-content	clearfix" id="list">
+							<!--课程明细-->
+        					<li class="cDarkgray"></li>
+							<!--会员明细-->
+        					<li class="cDarkgray"></li>
+							<!--渠道分销-->
+        					<li class="cDarkgray"></li>
+							<!--推广费用-->
+        					<li class="cDarkgray"></li>
+        				</ul>
+        			</div>
+        		</div>
+        	</div>
+        	<!-- /右侧 -->
+        </div>
+    </div>
+</section>
+<div class="order-info-text" id="order-tips">
+	<p>
+		<span class="fb">支付手续费</span>：使用不同的支付方式，扣去不同的网关手续费，联通网关为支付金额的30%；
+	</p>
+	<p>
+		<span class="fb">税费</span>：在线支付需缴纳税费，为支付金额的5%；
+	</p>
+	<p>
+		<span class="fb">平台使用费</span>：订单成功出售，平台需收取价格的20%的平台使用费用；
+	</p>
+</div>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ie8/ejs.ie8.js')}"></script>
+<![endif]-->
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ejs.min.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/scorll.js')}" ></script>
+<script id='course_list' type='text/template'>
+    <% data.forEach(function(item,i){ %>
+	<dl class="col-md-20 pd0">
+		<dd>
+            <div class="col-md-8">
+                <%= item.courseName %>
+                <p class="data-refund-info">班级：
+                    <%= item.className %>
+                    <% if(item.clearingStatus == 0 && item.contentRefundStatus > 0) { %>
+                        <em class="refund-icon">已退费</em>
+                    <% };%>
+                    <span class="cGreen3"><%= item.isFee %></span>
+                </p>
+            </div>
+            <p class="col-md-4"><span class="cRed mr5">￥<%= item.price %></span><br>
+                <% if(item.clearingStatus == 0 && item.contentRefundStatus>0) { %>
+                    <span class="refund-price">退费金额:￥<%= item.priceRefund %></span>
+                <% };%>
+            </p>
+            <p class="col-md-4">￥<%= item.income %></p>
+            <p class="col-md-4">￥<%= item.pricePromote %></p>
+            <%if(item.gateway_price>0 && item.platform_price>0 && item.tax_price>0){ %>
+            <div class="col-md-12 fs12">
+                (<div class="order-tips-icon mr5">
+                <div class="order-info-text tal">
+                    <%if(item.gateway_price>0){ %>
+                        <p><b>支付手续费：</b>订单交易成功后根据不同的支付方式按比例进行扣取。使用联通支付第三方收取支付金额的<%= item.gateway_rate %>%。</p>
+                    <% };%>
+                    <%if(item.tax_price>0){ %>
+                        <p><b>税费：</b>订单交易成功后需要缴纳税费，默认扣取支付金额的<%=item.tax_rate%>%。</p>
+                    <% };%>
+                    <%if(item.platform_price>0){ %>
+                        <p><b>平台使用费：</b>订单交易成功后，平台需收取支付价格<%= item.platform_rate %>%的平台使用费。</p>
+                    <% };%>
+                    <p>实际收入:<%= item.pricePromote %>=支付金额（<%= item.price %>）
+                        <%if(item.gateway_price>0){ %>
+                             - 支付手续费<%= item.gateway_rate %>%（<%= item.gateway_price %>）
+                        <%};%>
+                        <%if(item.platform_price>0){ %>
+                             - 平台使用费<%= item.platform_rate %>%（<%= item.platform_price %>）
+                        <%};%>
+                        <%if(item.distributeText !=''){ %>
+                             - <%= item.distributeText %>（<%= item.distributePrice %>）
+                        <%};%>
+                        <%if(item.tax_price>0){ %>
+                             - 税费<%= item.tax_price_rate %>%（<%= item.tax_price %>）
+                        <%};%>
+                        <%if(item.priceRefund>0){ %>
+                             - 退费（<%= item.priceRefund %>）
+                        <%};%>
+                    </p>
+                    <p class="tar"><a href="https://www.yunke.com/index.help.settle#6" target="_blank" style="color: #066cb8">费用说明</a></p>
+                </div>
+            </div>实际收入扣除：
+            <%if(item.gateway_price>0){ %>支付手续费￥<%= item.gateway_price%><% }; %>
+                <%if(item.tax_price>0){ %>税费￥<%= item.tax_price%><% }; %>
+                <%if(item.platform_price>0){ %>平台使用费￥<%= item.platform_price%><% }; %> )
+            </div>
+            <%}%>
+        </dd>
+		<dd class="cGray">
+            <p class="col-md-6">订单ID：<%= item.orderId %>
+                <%if(item.distributeStatus==1){ %>
+                <span class="order-distr-icon fs12"><%= item.statusText %></span>
+                <%};%>
+            </p>
+            <p class="col-md-5">交易时间：<%= item.createTime %></p>
+            <p class="col-md-4">支付方式：<%= item.payType %></p>
+            <p class="col-md-5">购买者：<%= item.userName %></p>
+        </dd>
+	</dl>
+    <% }); %>
+</script>
+<script id='member_list' type='text/template'>
+    <% data.forEach(function(item,i){ %>
+	<dl class="col-md-20 pd0">
+		<dd><p class="col-md-15">会员名称：<%= item.memberName %></p><p class="col-md-5"><span class="fsRed">￥<%= item.price %></span></p></dd>
+		<dd><p class="col-md-7">购买人：<%= item.userName %></p><p class="col-md-13">会员时限：<%= item.useTime %></p></dd>
+		<dd class="cGray"><p class="col-md-5">订单ID：<%= item.orderId %></p><p class="col-md-5">交易时间：<%= item.createTime %></p><p class="col-md-5">支付方式：<%= item.payType %></p></dd>
+            <%if(item.gateway_price>0 && item.platform_price>0 && item.tax_price>0){ %>
+            <div class="col-md-12 fs12">
+                (<div class="order-tips-icon mr5">
+                    <div class="order-info-text tal">
+                        <%if(item.gateway_price>0){ %><p><b>支付手续费：</b>订单交易成功后根据不同的支付方式按比例进行扣取。使用联通支付第三方收取支付金额的<%= item.gateway_rate %>%。</p><%};%>
+                        <%if(item.tax_price>0){ %><p><b>税费：</b>订单交易成功后需要缴纳税费，默认扣取支付金额的<%= item.tax_rate %>%。</p><%};%>
+                        <%if(item.platform_price>0){ %><p><b>平台使用费：</b>订单交易成功后，平台需收取支付价格<%= item.platform_rate %>%的平台使用费。</p><%};%>
+                        <p>实际收入:<%= item.pricePromote %>=支付金额（<%= item.price %>）
+                            <%if(item.gateway_price>0){ %>-支付手续费<%= item.gateway_rate %>%（<%= item.gateway_price %>）<%};%>
+                            <%if(item.platform_price>0){ %>-平台使用费<%= item.platform_rate %>%（<%= item.platform_price %>）<%};%>
+                            <%if(item.distributeText !=''){ %> - <%= item.distributeText %>（<%= item.distributePrice %>）<%};%>
+                            <%if(item.tax_price>0){ %>-税费<%= item.tax_price_rate %>%（<%= item.tax_price %>）<%};%>
+                        </p>
+                        <p class="tar"><a href="https://www.yunke.com/index.help.settle#6" target="_blank" style="color: #066cb8">费用说明</a></p>
+                    </div>
+         </div>
+         实际收入扣除：
+         <%if(item.gateway_price>0){ %>支付手续费￥<%= item.gateway_price%><% }; %>
+             <%if(item.tax_price>0){ %>税费￥<%= item.tax_price%><% }; %>
+             <%if(item.platform_price>0){ %>平台使用费￥<%= item.platform_price%><% }; %> )
+         </div>
+        <%};%>
+	</dl>
+    <% }) %>
+</script>
+<script id='ditch_list' type='text/template'>
+    <% data.forEach(function(item,i){ %>
+	<dl class="col-md-20 pd0">
+		<dd><p class="col-md-10"><%= item.title %></p><p class="col-md-5">推广商：<%= item.resellOrgName %></p></dd>
+		<dd>
+            <p class="col-md-10">班级：<%= item.className %></p>
+            <p class="col-md-5">成本价：￥<%= item.pricePromote %><br>订单价格：￥<%= item.price %></p>
+            <p class="col-md-5 tac"><span class="fsRed">￥<%= item.income %></span></p>
+        </dd>
+		<dd>
+            <p class="col-md-5 cGray">订单ID：<%= item.orderId%></p>
+            <p class="col-md-5 cGray">交易时间：<%= item.createTime%></p>
+            <p class="col-md-5 cGray">支付方式：<%= item.payType%></p>
+            <p class="col-md-5 cGray">购买者：<%= item.userName%></p>
+		</dd>
+        <%if(item.gateway_price>0 && item.platform_price>0 && item.tax_price>0){ %>
+        <div class="col-md-12 fs12">
+            (<div class="order-tips-icon mr5">
+                <div class="order-info-text tal">
+                    <%if(item.gateway_price_resell>0){ %><p><b>支付手续费：</b>订单交易成功后根据不同的支付方式按比例进行扣取。使用联通支付第三方收取支付金额的<%= item.gateway_rate_resell %>%。</p><%};%>
+                    <%if(item.platform_price_resell>0){ %><p><b>税费：</b>订单交易成功后需要缴纳税费，默认扣取支付金额的<%= item.tax_rate_resell%>%。</p><%};%>
+                    <%if(item.tax_price>0){ %><p><b>平台使用费：</b>订单交易成功后，平台需收取支付价格<%= item.platform_rate_resell%>%的平台使用费。</p><%};%>
+                    <p>实际收入:<%= item.income %>=支付金额（<%= item.price %>）
+                        <%if(item.gateway_price_resell>0){ %>-支付手续费<%= item.gateway_rate %>%（<%= item.gateway_price_resell %>）<%};%>
+                        <%if(item.platform_price_resell>0){ %>-平台使用费<%= item.platform_rate_resell %>%（<%= item.platform_price_resell %>）<%};%>
+                        <%if(item.distributeText !=''){ %> - <%= item.distributeText %>（<%= item.distributePrice %>）<%};%>
+                        <%if(item.tax_price_resell>0){ %>-税费<%= item.tax_price_resell %>%（<%= item.tax_price_resell %>）<%};%>
+                    </p>
+                    <p class="tar"><a href="https://www.yunke.com/index.help.settle#6" target="_blank" style="color: #066cb8">费用说明</a></p>
+                </div>
+     </div>实际收入扣除：
+     <%if(item.gateway_price_resell>0){ %>支付手续费￥<%= item.gateway_price_resell%><% }; %>
+         <%if(item.tax_price_resell>0){ %>税费￥<%= item.tax_price_resell%><% }; %>
+         <%if(item.platform_price_resell>0){ %>平台使用费￥<%= item.platform_price_resell%><% }; %> )
+ </div><% }; %>
+	</dl>
+    <% }) %>
+</script>
+<script id='expand_list' type='text/template'>
+    <% data.forEach(function(item,i){ %>
+	<dl class="col-md-20 pd0">
+		<dd>
+            <p class="col-md-9"><%= item.title%></p>
+		    <p class="col-md-5">推广商：<%= item.orgSubname%>
+        </dd>
+		<dd>
+			<p class="col-md-8">班级：<%= item.className%></p>
+                        <p class="col-md-9"> 成本价：￥<%= item.priceResell%></p>
+			<p class="col-md-5">订单价格：￥<%= item.price%></p>
+		</dd>
+		<dd><p class="col-md-9"><span class="fsRed">￥<%= item.income%></span></p></dd>
+		<dd>
+			<p class="col-md-5 cGray">订单ID：<%= item.orderId%></p>
+			<p class="col-md-5 cGray">交易时间：<%= item.createTime%></p>
+			<p class="col-md-5 cGray">支付方式：<%= item.payType%></p>
+			<p class="col-md-5 cGray">购买者：<%= item.userName%></p>
+		</dd>
+	</dl>
+    <% }) %>
+</script>
+<script type="text/javascript">
+var page  = 1;
+var data = {$params};
+var type1 = 1;
+data.type  = type1;
+var param = {  };
+param.linum = 0;
+param.head  = "<div class='col-md-7 bgf5 mt10 view-settled-title'>课程名称</div>\n\<div class='col-md-4 bgf5 mt10 view-settled-title'>销售价格</div>\n\<div class='col-md-4 bgf5 mt10 view-settled-title'>推广支出</div>\n\<div class='col-md-4 bgf5 mt10 view-settled-title'>实际收入</div>\n\<div id='courseCont'></div>";
+param.txt   = '本期没有符合结算的课程收入~';
+param.appentId = "#courseCont";
+param.tplId    = "#course_list";
+
+$(function() {
+    getData(data,param,page);
+    windowScroll();
+    $('.view-settled-btn li').click(function() {
+        var data = {$params};
+        $(this).addClass('curr').siblings().removeClass('curr');
+        $('.view-settled-content li:eq(' + $(this).index() + ')').show().siblings().hide();
+        param.linum = $(this).index();
+        if(param.linum == 0){
+            type1 = 1;
+            param.head  = "<div class='col-md-7 bgf5 mt10 view-settled-title'>课程名称</div>\n\<div class='col-md-4 bgf5 mt10 view-settled-title'>销售价格</div>\n\<div class='col-md-4 bgf5 mt10 view-settled-title'>推广支出</div>\n\<div class='col-md-4 bgf5 mt10 view-settled-title'>实际收入</div>\n\<div id='courseCont'></div>";
+            param.txt   = '本期没有符合结算的课程收入~';
+            param.appentId = "#courseCont";
+            param.tplId    = "#course_list";
+        }else if(param.linum == 1){
+            type1 = 11;
+            param.head  = "<div class='col-md-15 bgf5 mt10 view-settled-title'>交易详情</div><div class='col-md-5 bgf5 mt10 view-settled-title'>实际收入</div><div id='memCont'></div>";
+            param.txt   = '本期没有符合结算的会员收入~';
+            param.appentId = "#memCont";
+            param.tplId    = "#member_list";
+        }else if(param.linum == 2){
+            type1 = 21;
+            data.resellOrgId = {$orgId};
+            param.head  = "<div class='col-md-8 bgf5 tac mt10 view-extension'>课程信息</div><div class='col-md-6 bgf5 tac mt10 view-extension'>推广信息</div><div class='col-md-6 bgf5 tac mt10 view-extension'>总收入</div></div><div id='ditchCon'></div>";
+            param.txt   = '本期没有符合结算的渠道分销收入~';
+            param.appentId = "#ditchCon";
+            param.tplId    = "#ditch_list";
+        }else if(param.linum == 3){
+            type1 = 21;
+            data.promoteOrgId = {$orgId};
+            param.head  = "<div class='col-md-9 bgf5 tac mt10 view-distribut'>课程信息</div><div class='col-md-4 bgf5 tac mt10 view-distribut'>分销信息</div><div class='col-md-4 bgf5 tac mt10 view-distribut'>费用情况</div><div class='col-md-3 bgf5 tac mt10 view-distribut'>总支出</div><div id='expandCon'></div>";
+            param.txt   = '本期没有符合结算的推广费用支出~';
+            param.appentId = "#expandCon";
+            param.tplId    = "#expand_list";
+        }
+        page = 1;
+        data.type  = type1;
+        getData(data,param,page);
+        windowScroll();
+    });
+});
+function windowScroll() {
+    $(window).scroll(function() {
+        var scrollTop    = $(this).scrollTop();
+        var scrollHeight = $(document).height();
+        var offetHeight  = $(this).height();
+
+        if( scrollTop + offetHeight == scrollHeight){
+            page++;
+            data.type  = type1;
+            $.post("/org/ajax/SettleInfoData",{ data:data,page:page },function(r){
+                if(r.code == 1){
+                    var tpl  = $(param.tplId).html();
+                    var list = ejs.render(tpl,{ data:r.data });
+                    $(param.appentId).append(list);
+
+                }else{
+                    $(window).unbind('scroll');
+                }
+            },'json');
+        }
+    });
+}
+function getData(data,param,page){
+    $.post("/org/ajax/settleInfoData",{ data:data,page:page },function(r){
+        if(r.code == 1){
+            $('.view-settled-content li:eq(' + param.linum + ')').html(param.head);
+            var tpl  = $(param.tplId).html();
+            var list = ejs.render(tpl,{ data:r.data });
+            $(param.appentId).html(list);
+        }else{
+            html = '';
+            html += '<div class="list-img tac mt40">';
+            html += '<img src="/assets_v2/img/pet3.png">';
+            html += "<p class='fs12 cGray'>"+ param.txt +"</p>";
+            html += '</div>';
+            $('.view-settled-content li:eq(' + param.linum + ')').html(html);
+        }
+    },'json');
+}
+</script>
+{part "/site.main.footer"}
+</body>
+</html>

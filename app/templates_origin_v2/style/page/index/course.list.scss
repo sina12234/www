@@ -1,0 +1,153 @@
+/*
+index.course.list
+课程列表,
+右侧热门推荐列表
+ */
+
+
+.list {
+	padding-top: 10px;
+
+	li {
+		height: 190px;
+	}
+
+	p {
+		position: relative;
+		overflow: hidden;
+		width: 100%;
+		height: 115px;
+	}
+
+	.title {
+		span {
+			float: left;
+			max-width: 80%;
+			@extend %ellipsis;
+		}
+
+	}
+
+	.thumb {
+		.cost {
+			float: left;
+			max-width: 70%;
+			@extend %ellipsis;
+		}
+
+		.num {
+			float: right;
+			overflow: hidden;
+			max-width: 30%;
+			white-space: nowrap;
+		}
+
+	}
+
+}
+
+.list-recommend {
+	margin-bottom: 20px;
+	padding: 0 5px;
+	padding-bottom: 10px;
+	border: 1px solid #eaeaea;
+	border-top: 0;
+	background: #f5f5f5;
+
+	li {
+		float: left;
+		margin-bottom: 5px;
+		padding: 10px 10px;
+		background: #fff;
+
+		&:last-child {
+			.thumb {
+				border-bottom: none;
+			}
+
+		}
+
+	}
+
+	p {
+		position: relative;
+		overflow: hidden;
+		width: 100%;
+		height: 100px;
+	}
+
+	.thumb {
+		height: 25px;
+	}
+
+}
+
+.list li,
+.list-recommend li {
+	float: left;
+	padding: 15px 15px 0 15px;
+}
+
+.list a,
+.list-recommend a {
+	display: block;
+	float: left;
+	width: 100%;
+}
+
+.list p img,
+.list-recommend p img {
+	width: 100%;
+}
+
+.list .title,
+.list-recommend .title {
+	line-height: 210%;
+	display: block;
+	float: left;
+	width: 100%;
+	padding: 0;
+	@extend %ellipsis;
+}
+
+.list .thumb,
+.list-recommend .thumb {
+	line-height: 210%;
+	float: left;
+	width: 100%;
+	padding: 0 5px 5px 5px;
+	color: $text-subsidiary-color;
+}
+
+@mixin screen(320px, 375px) {
+	.list p {
+		height: 75px;
+	}
+
+	.live-list li {
+		height: 210px;
+	}
+
+}
+
+@mixin screen(375px, 768px) {
+	.list p {
+		height: 100px;
+	}
+
+	.live-list li {
+		height: 210px;
+	}
+
+}
+
+@mixin screen(768px, 1024px) {
+	.list p {
+		height: 95px;
+	}
+
+	.list li {
+		height: 170px;
+	}
+
+}

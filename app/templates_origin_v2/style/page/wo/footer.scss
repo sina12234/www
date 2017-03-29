@@ -1,0 +1,102 @@
+//footer
+//底部
+.index-foot{
+  height: auto;
+  background-color: $foot-background;
+  .container{
+    padding: 30px 0 ;
+  }
+  .foot-tag{
+    .tag-title{
+      font-size: 16px;
+      color: $foot-title-color;
+      padding-bottom: 10px;
+    }
+    .tag-list{
+      text-align: left;
+      border-right: 1px solid $foot-vertical-border-color;
+      padding: 0 20px 0 40px;
+      &:last-child{
+        border-right: none;
+      }
+    }
+    .tag{
+      padding: 8px 0;
+      font-size: 12px;
+      a{
+        color: $foot-text-color;
+      }
+      &:hover{
+        a{
+          color: $foot-text-hover-color;
+        }
+      }
+    }
+  }
+  .QR-code{
+    .img-box{
+      width: 108px;
+      height: 108px;
+      background-color: $main-white-color;
+      img{
+        width: 108px;
+        height: 108px;
+      }
+    }
+    .img-dec{
+      text-align: center;
+      font-size: 12px;
+      color: $foot-strong-title-color;
+    }
+  }
+  .project-info{
+    text-align: right;
+    padding-left: 30px;
+    .project-title{
+      font-size: 26px;
+      color: $foot-strong-title-color;
+    }
+    .project-tag{
+      padding: 8px 0;
+      font-size: 14px;
+      a{
+        color:$foot-text-color;
+      }
+      .split{
+        margin: 0 8px;
+      }
+    }
+    .company-name,.company-regId{
+      padding: 3px 0;
+      color:$foot-text-color;
+      font-size: 12px;
+    }
+  }
+}
+@include screen(320px,768px){
+    .index-foot{
+        background:#444444;
+        .project-info{
+            padding:0;
+            width:100%;
+            text-align:center;
+          .project-tag{
+              padding: 8px 0;
+              font-size: 16px;
+              a{
+                color:#ccc;
+              }
+            }
+          .company-name,.company-regId{
+                padding: 3px 0;
+                color:$foot-text-color;
+                font-size: 14px;
+          }
+        }
+        .container{
+            padding:12px 0;
+        }
+
+    }
+
+}

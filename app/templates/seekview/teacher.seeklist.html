@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 查询结果</title>
+		{part "/index.main.headeruser"}
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/style.css')}">
+		<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+		<style>
+			table{
+				border-spacing: 0px; 
+			}
+			table th{
+				border:1px solid #bcbcbc;
+			}
+			td{
+				border:1px solid #bcbcbc;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container-fluid" style="margin-top:70px;">
+			<div class="row col-sm-12">
+			</div>
+				<label class="col-sm-1 control-label">共{$ret_seek->total}条</label>
+				<label class="col-sm-1 control-label">第{$ret_seek->page}页</label>
+				<label class="col-sm-1 control-label">每页{$ret_seek->pagelength}个</label>
+				<label class="col-sm-1 control-label">耗时{$ret_seek->time}秒</label>
+		</div>
+		<table class="table table-bordered">
+			<thead>
+				<tr class="top" style="left:0px;top:0px;z-index: 1;background: azure;">
+					{if(!empty($f_array))}
+						{foreach($f_array as $fo)}
+							<th>{$fo}</th>
+						{/foreach}
+					{/if}
+				</tr>
+			</thead>
+			<tbody>
+				{if(!empty($teacherList))}
+				{foreach ($teacherList as $co)}
+				<tr>
+					{foreach($f_array as $fv)}
+						{if(isset($co[$fv]))}
+							{if(is_array($co[$fv]))}
+								<td scope="row" nowrap="nowrap">{var_dump($co[$fv])}</td>
+							{else}
+								<td scope="row">{$co[$fv]}</td>
+							{/if}
+						{else}
+							<td scope="row"></td>
+						{/if}
+					{/foreach}
+				</tr>
+				{/foreach}
+				{/if}
+			</tbody>			
+		</table>
+	</body>
+</html>

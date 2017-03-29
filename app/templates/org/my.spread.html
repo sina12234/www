@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>我引入的课程 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 订单管理 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}"></script>
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+</head>
+<style type="text/css">
+.layui-layer-btn a.layui-layer-btn0{ background: #ffa81d;}
+.layui-layer-btn a.layui-layer-btn0:hover{ background: #ffb949;}
+.layui-layer-btn .layui-layer-btn1,.layui-layer-btn .layui-layer-btn1:hover{ background: #e5e5e5;border:1px solid #ddd;}
+</style>
+<body style="background:#f7f7f7;">
+{part "/site.main.nav"}
+<!--直播列表 start-->
+<section class="pd40">
+    <div class="container">
+        <div class="row">
+            {part "/org.main.menu.spread"}
+            <div class="col-lg-16 right-main">
+                <div class="content">
+                    <dl class="switch-tab fs16 col-lg-20">
+                        <dd><a href="/org.main.spreadlist">云课推广中心</a><span class="c-fr">|</span></dd>
+                        <dd><a href="/org.main.placelist">我推广的课程</a><span class="c-fr">|</span></dd>
+                        <dd class="curr"><a href="/org.main.myspread">我引入的课程</a><span class="c-fr">|</span></dd>
+                        <dd><a href="/org.main.spreadinfo">成交记录</a></dd>
+                        <div class="right">
+                            <div class="so-input org-class-course">
+                                <input name="keyword" id="sc_title" type="text" value="" placeholder="搜索课程名称">
+                                <div class="t-list-img" style="display:none">
+                                    <img id="imgSrc" src="/assets_v2/img/hide.png">
+                                </div>
+                            </div>
+                            <button class="so-btn" id="subsearch"></button>
+                        </div>
+                    </dl>
+                    <div class="col-md-20 pd0 mt20">
+                        <span class="c-fl fs14 mt5 mr20">推广状态</span>
+                        <ul class="c-fl bor1px distriSpread-option clearfix fs12">
+                            <li class="curr">
+                                <a href="#" title="">全部</a>
+                            </li>
+                            <li>
+                                <a href="#" title="">正常</a>
+                            </li>
+                            <li>
+                                <a href="#" title="">已失效</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--推广列表-->
+                    <div class="order-list-num">
+                        <span class="left fs14 cGray c-fl">共 14 个课程</span>
+                        <a href="#" class="c-fr mt5 mark-ask">推广规则</a>
+                    </div>
+                    <dl class="order-list mt5">
+                        <dt class="fs16">
+                            <p class="col-lg-12">课程信息</p>
+                            <p class="col-lg-4">推广规则</p>
+                            <p class="col-lg-4">推广状态</p>
+                        </dt>
+                        <dd class="fs14">
+                            <p class="col-lg-12 order-item-pro">
+                                <a href="/course.info.show/" class="col-lg-8 order-item-img">
+                                    <img src="/assets_v2/img/222.png" alt="">
+                                </a>
+                                <a href="/course.info.show/" class="col-lg-12 order-item-title">
+                                    <span class="col-sm-20 pd0">开启新纪元-进击Node.js（一）</span>
+                                    <span class="cGray col-sm-20 pd0 mt5">共十章 初中/初一/数学</span>
+                                    <span class="cGray col-sm-20 pd0 mt5"><span class="cRed">￥500</span><span class="ml10">剩余人数：</span><span class="cDarkgray">300</span></span>
+                                    <span class="cDrakgray col-sm-20 pd0 mt25">已被6个机构引入</span>
+                                </a>
+                            </p>
+                            <p class="col-lg-4 tec">
+                                <em class="cGray">成本价：800</em>
+                                <em class="cGray">出售价1200</em>
+                            </p>
+                            <p class="col-lg-4 tec">
+                                <em class="distriStatus">正常</em>
+                            </p>
+                            <p class="col-lg-20 order-item-thumb fs12">
+                                <span class="col-lg-5 pd0">共成交订单 <a href="#" class="cYellow">20</a> 个</span>
+                                <span class="col-lg-5">预期总收益：2222</span>
+                                <span class="right">
+                                    <a href="javascript:;" class="ml10 distriListPriceBtn">改价</a>
+                                    <a href="javascript:;" class="ml10 distriListDeltBtn">删除</a>
+                                </span>
+                            </p>
+                        </dd>
+                        <dd class="fs14">
+                            <p class="col-lg-12 order-item-pro">
+                                <a href="/course.info.show/" class="col-lg-8 order-item-img">
+                                    <img src="/assets_v2/img/222.png" alt="">
+                                </a>
+                                <a href="/course.info.show/" class="col-lg-12 order-item-title">
+                                    <span class="col-sm-20 pd0">开启新纪元-进击Node.js（一）</span>
+                                    <span class="cGray col-sm-20 pd0 mt5">共十章 初中/初一/数学</span>
+                                    <span class="cGray col-sm-20 pd0 mt5"><span class="cRed">￥500</span><span class="ml10">剩余人数：</span><span class="cDarkgray">300</span></span>
+                                    <span class="cDarkgray col-sm-20 pd0 mt25">已被6个机构引入</span>
+                                </a>
+                            </p>
+                            <p class="col-lg-4 tec">
+                                <em class="cGray">成本价：800</em>
+                                <em class="cGray">出售价1200</em>
+                            </p>
+                            <p class="col-lg-4 tec">
+                                <em class="colored distriStatus">已失效</em>
+                            </p>
+                            <p class="col-lg-20 order-item-thumb fs12">
+                                <span class="col-lg-5 pd0">共成交订单 <a href="#" class="cYellow">20</a> 个</span>
+                                <span class="col-lg-5">预期总收益：2222</span>
+                                <span class="right">
+                                    <a href="javascript:;" class="cGray">重新引入</a>
+                                    <a href="javascript:;" class="ml10 distriListDeltBtn">删除</a>
+                                </span>
+                            </p>
+                        </dd>
+                        <dd class="fs14">
+                            <p class="col-lg-12 order-item-pro">
+                                <a href="/course.info.show/" class="col-lg-8 order-item-img">
+                                    <img src="/assets_v2/img/222.png" alt="">
+                                </a>
+                                <a href="/course.info.show/" class="col-lg-12 order-item-title">
+                                    <span class="col-sm-20 pd0">开启新纪元-进击Node.js（一）</span>
+                                    <span class="cGray col-sm-20 pd0 mt5">共十章 初中/初一/数学</span>
+                                    <span class="cGray col-sm-20 pd0 mt5">
+                                        <span class="cGreen">免费</span>
+                                        <span class="ml10">剩余人数：</span>
+                                        <span class="cDarkgray">300</span>
+                                    </span>
+                                    <span class="cDarkgray col-sm-20 pd0 mt25">暂无机构引入</span>
+                                </a>
+                            </p>
+                            <p class="col-lg-4 tec">
+                                <em class="cGreen">免费</em>
+                            </p>
+                            <p class="col-lg-4 tec">
+                                <em class="distriStatus">正常</em>
+                            </p>
+                            <p class="col-lg-20 order-item-thumb fs12">
+                                <span class="col-lg-5 pd0">暂无记录</span>
+                                <span class="col-lg-5">预期总收益：2222</span>
+                                <span class="right">
+                                    <a href="javascript:;" class="ml10 distriListPriceBtn">改价</a>
+                                    <a href="javascript:;" class="ml10 distriListDeltBtn">删除</a>
+                                </span>
+                            </p>
+                        </dd>
+                    </dl>
+                    <!--分页开始-->
+                    <div class="page-list" id="pagepage"></div>
+                    <!-- 无内容 -->
+                    <div class="col-xs-20 fs14 tac" style="padding-top:60px;display:block;">
+                        <img src="{utility_cdn::img('/assets_v2/img/platform/pet3.png')}">
+                        <p>您还没有引入课程哦~快去推广中心引入吧！</p>
+                    </div>
+                    <!-- /无内容 -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--直播列表 end-->
+{part "/site.main.footer"}
+<!-- 设置课程 -->
+<section id="setDistriCourse">
+    <ul class="col-xs-20 clearfix">
+        <li class="mt20 col-xs-20 pd0">
+            <span class="col-xs-5 fs14 mt5 pd0 ter">选择课程：</span>
+            <input class="inputpd bor1px col-xs-15" />
+        </li>
+        <li class="mt20 col-xs-20 pd0">
+            <span class="col-xs-5 fs14 mt5 pd0 ter">成本价：</span>
+            <input class="inputpd bor1px col-xs-15" />
+        </li>
+        <li class="mt20 col-xs-20 pd0">
+            <div class="col-xs-5 pd0"></div>
+            <div class="cl-xs-15 cLightgray fs12">（请输入800-1200之间的价格）</div>
+        </li>
+        <li class="mt20 col-xs-20 pd0 tec">
+            <button class="btn mr10 setDistriRequestBtn">确认</button>
+            <span class="cLightgray">还可以推广<em class="colored">10</em>个课程</span>
+        </li>
+    </ul>
+</section>
+<!-- /设置课程 -->
+<!-- 修改价格 -->
+<section id="distriListPrice">
+    <ul class="col-xs-20 clearfix">
+        <li class="mt20 col-xs-20 pd0">
+            <span class="col-xs-7 fs14 mt5 pd0 ter">设置新的成本价：</span>
+            <input class="inputpd bor1px col-xs-13" />
+        </li>
+        <li class="mt20 col-xs-20 pd0">
+            <div class="col-xs-7 pd0"></div>
+            <div class="cl-xs-13 cLightgray fs12">（请输入800-1200之间的价格）</div>
+        </li>
+        <li class="mt20 col-xs-20 pd0 tec">
+            <button class="btn mr10 setDistriRequestBtn">确认</button>
+            <span class="cLightgray">还可以推广<em class="colored">10</em>个课程</span>
+        </li>
+    </ul>
+</section>
+<!-- /修改价格 -->
+</body>
+</html>
+<script type="text/javascript">
+$(function() {
+
+//修改价格
+    $('.distriListPriceBtn').click(function() {
+        layer.open({
+            type: 1,
+            title:['修改价格','color:#fff;background:#ffa81d'],
+            area: ['400px' ,'260px'],
+            shadeClose: true,
+            content: $('#distriListPrice')
+        });
+    })
+//删除推广
+    $('.distriListDeltBtn').click(function() {
+        var distriDeltElement = $(this).parents('dd');
+        layer.confirm('<p class="tec mt40">删除后将不能恢复，确定删除？</p>', {
+          btn: ['确定','取消'],
+          area: ['400px' ,'260px'],
+          title:['删除','color:#fff;background:#ffa81d']
+        }, function(){
+                distriDeltElement.remove();
+            layer.msg('确认', { icon: 1 } );
+        }, function(){
+            layer.msg('取消', { icon: 1 } );
+        });
+    })
+//关闭弹层
+    $('.setDistriRequestBtn').click(function() {
+        layer.closeAll();
+    })
+
+    $('.order-item-thumb').find('a').hover(function() {
+        $(this).css('color' ,'#f93');
+    } ,function() {
+        $(this).css('color' ,'#333');
+    })
+    $('.order-list dd').each(function() {
+        var ddParents = $(this);
+        var isCheckHasInfo = ddParents.find('.distriStatus').html();
+        if(isCheckHasInfo == '已失效') {
+            $(this).css('background' ,'#f7f7f7');
+        }
+
+    })
+
+
+})
+</script>

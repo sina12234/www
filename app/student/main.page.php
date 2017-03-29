@@ -1,0 +1,984 @@
+<?php
+class student_main extends STpl{
+	var $user;
+	private $domain;
+	private $orgOwner;
+	private $shusheng = array(
+		'0' => 'level-icon1',
+		'31' => 'level-icon2',
+		'211' => 'level-icon3',
+		'661' => 'level-icon4',
+	);
+	private $xiucai = array(
+		'661' => 'level-icon4',
+		'1381' => 'level-icon5',
+		'2371' => 'level-icon6',
+		'3631' => 'level-icon7',
+	);
+	private $juren = array(
+		'3631' => 'level-icon7',
+		'5161' => 'level-icon8',
+		'6961' => 'level-icon9',
+		'9031' => 'level-icon10',
+	);
+	private $jinshi = array(
+		'9031' => 'level-icon10',
+		'11371' => 'level-icon11',
+		'13981' => 'level-icon12',
+		'15861' => 'level-icon13',
+	);
+	private $tanhua = array(
+		'15861' => 'level-icon13',
+		'20011' => 'level-icon14',
+		'23431' => 'level-icon15',
+		'27121' => 'level-icon16',
+	);
+	private $banyan = array(
+		'27121' => 'level-icon16',
+		'34081' => 'level-icon17',
+		'44001' => 'level-icon18',
+		'60001' => 'level-icon19',
+	);
+	private $zhuangyuan = array(
+		'60001' => 'level-icon19',
+		'800001' => 'level-icon20',
+		'110001' => 'level-icon21',
+		'150000' => 'level-icon22',
+	);
+	private $week = array(
+			1 => '周一',
+			2 => '周二',
+			3 => '周三',
+			4 => '周四',
+			5 => '周五',
+			6 => '周六',
+			7 => '周日',
+	);
+	function __construct(){
+		$domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","domain");
+		$this->domain = $domain_conf->domain;
+		$this->user = user_api::loginedUser();
+		if(empty($this->user)){
+			if(!empty($_SERVER['REQUEST_URI'])){
+                $this->redirect("/site.main.login?url=".$_SERVER['REQUEST_URI']);
+           	}else{
+                $this->redirect("/site.main.login");
+           	}
+		}
+		$org=user_organization::subdomain();
+        if(!empty($org)){
+            $this->orgOwner=$org->userId;
+        }else{
+            header('Location: https://www.'.$this->domain);
+        }
+
+	}
+
+	public function pageGrowth(){
+		$uid = $this->user['uid'];
+		$unFinishNum = task_api::unfinishNumByUserId($uid);
+		//获取成长值
+		$user_level = user_api::getUserLevel($uid);
+		if(!$user_level){
+			$user_level = new stdclass;
+			$user_level->score = 0;
+			$user_level->fk_level= 1;
+			$user_level->title = '书生1';
+			$user_level->fk_user = $uid;
+			$percent = '0%';
+		}else{
+			$all_sort = user_api::getUserAllSortByUid($uid);
+			$all_user_count = user_api::getAllUserCount();
+			if(empty($all_user_count)){
+				$all_user_count = 0;
+			}
+			if(!empty($all_sort)){
+				$less_count = $all_user_count-$all_sort+1;
+				$percent = floor(($less_count/$all_user_count)*1000)/10 . '%';
+			}else{
+				$percent = '0%';
+			}
+		}
+		$level_info = array();
+		$temp_title = mb_substr($user_level->title,0,2,'utf-8');
+		if($temp_title == '书生'){
+			$level_info = $this->shusheng;
+		}elseif($temp_title == '秀才'){
+			$level_info = $this->xiucai;
+		}elseif($temp_title == '进士'){
+			$level_info = $this->jinshi;
+		}elseif($temp_title == '举人'){
+			$level_info = $this->juren;
+		}elseif($temp_title == '探花'){
+			$level_info = $this->tanhua;
+		}elseif($temp_title == '榜眼'){
+			$level_info = $this->banyan;
+		}elseif($temp_title == '状元'){
+			$level_info = $this->zhuangyuan;
+		}
+		$next_level = user_api::getNextLevel($user_level->fk_level);
+		$cha_score  = 0;
+		if(!empty($next_level)){
+			$cha_score = $next_level->score_min - $user_level->score;
+		}
+
+		//获取签到
+		$day = date('Y-m-d',time());
+		$yesterday = date('Y-m-d',time()-3600*24);
+		$sign_info = user_api::getUserSignByDay($day,$uid);
+		$last_sign = user_api::getLastUserSign($uid);
+		if(!empty($last_sign) && !empty($sign_info)){
+			$user_combo = $sign_info->combo;
+		}elseif(!empty($last_sign) && empty($sign_info)){
+			if($last_sign->day != $yesterday ){
+				$user_combo = 0;
+			}elseif($last_sign->day == $yesterday ){
+				$user_combo = $last_sign->combo;
+			}
+		}else{
+			$user_combo = 0;
+		}
+
+		//获取周课表数据
+		foreach($this->week as &$wo){
+			$wo = SLanguage::tr($wo,'LearningCenter');
+		}
+		$user_course_count = 0;
+		$planlist = array();
+		$my_courseid_arr = array();
+		$my_classid_arr  = array();
+		$start = date("Y-m-d H:i:s",mktime(0,0,0,date("m"),date("d")-date("w"),date("Y")));
+		$end = date("Y-m-d H:i:s",mktime(23,59,59,date("m"),date("d")-date("w")+7,date("Y")));
+		$reg_info = course_api::listRegistration(array("uid"=>$uid,"user_owner"=>$this->orgOwner));
+		//,"user_owner"=>$this->orgOwner
+		if(!empty($reg_info->data)){
+			foreach($reg_info->data as $rv){
+				$cflag = 0;
+				if($rv->status == 2){
+					$isExpire = course_api::checkUserCourseIsExpire($uid,$rv->cid);
+					if(!$isExpire){
+						$cflag = 1;
+					}
+				}else{
+					$cflag = 1;
+				}
+				if($cflag == 1){
+					$my_courseid_arr[] = $rv->cid;
+					$my_classid_arr[]  = $rv->class_id;
+				}
+			}
+			$user_course_count = count($my_courseid_arr);
+			$course_info = $this->getCourseInfo($my_courseid_arr);
+			$status = '1,2,3';
+			$order = array('start_time'=>'asc');
+			$course_type = '1,3';
+			$temp_planlist = $this->getPlanList($my_courseid_arr,$my_classid_arr,$status,$order,$course_type,$start,$end);
+			$curr_date  = date('m-d',time());
+			$planlist = $this->handlePlan($temp_planlist, $curr_date, $course_info);
+		}
+
+		$week_arr = array();
+		$we_date = $end;
+		$ws_date = $start;
+		$week_date = $this->timeFormat($ws_date, $we_date);
+		$curr_year = date('Y',time());
+		$curr_month = date('m',time());
+		foreach($week_date as $k=>$v){
+			$month = date('m',strtotime($v));
+			$wdate =  date('m-d',strtotime($v));
+			$week_arr[$month][$k]['date'] = $wdate;
+			if( $month != $curr_month ){
+				$week_arr[$month][$k]['day'] = $wdate;
+			}else{
+				$week_arr[$month][$k]['day'] = substr($wdate,-2);
+			}
+			$week_arr[$month][$k]['week'] = $this->week[date('N', strtotime($v))];
+			if(empty($planlist[$wdate])){
+				$planlist[$wdate]= array();
+				$week_arr[$month][$k]['course_count'] = 0;
+			}else{
+				$week_arr[$month][$k]['course_count'] = count($planlist[$wdate]);
+			}
+		}
+		//$curr_date = date('m.d',time());
+		$curr_date = date('Y-m-d',time());
+		$curr_day = date('d',time());
+		$curr_week = $this->week[date('N',time())];
+		//学习统计
+		$study_time = 0;
+		$user_stat_ret = user_api::getUserStatByUid($uid);
+		if(!empty($user_stat_ret)){
+			$study_time = ceil(($user_stat_ret->vt_live + $user_stat_ret->vt_record)/3600);
+		}
+
+		$study_plan_count = 0;
+		$look_plan_count = user_api::getUserPlanStatCountByUid($uid);
+		$plan_id_arr = array();
+		if(!empty($my_courseid_arr)){
+			$status = '1,2,3';
+			$order = array('start_time'=>'asc');
+			$course_type = '1,2';
+			$user_plan_list = $this->getPlanList($my_courseid_arr,$my_classid_arr,$status,$order,$course_type,'','');
+			if(!empty($user_plan_list)){
+				foreach($user_plan_list as $vo){
+					$plan_id_arr[] = $vo->plan_id;
+				}
+				$study_plan_count = user_api::getUserPlanStatCountByPid($uid,$plan_id_arr);
+			}
+		}
+		$domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","platform");
+		$platform_url = $domain_conf->platform;
+		$userScorePoint = user_api::getUserScoreAndPoint($uid);
+		$userPoint = !empty($userScorePoint->items[0]->point) ? $userScorePoint->items[0]->point : 0;
+		$this->assign('userPoint',$userPoint);
+		$this->assign('unFinishNum',$unFinishNum);
+		$this->assign('user_combo',$user_combo);
+		$this->assign('platform_url',$platform_url);
+		$this->assign('study_plan_count',$study_plan_count);
+		$this->assign('look_plan_count',$look_plan_count);
+		$this->assign('study_time',$study_time);
+		$this->assign('user_course_count',$user_course_count);
+		$this->assign('curr_date',$curr_date);
+		$this->assign('curr_day',$curr_day);
+		$this->assign('curr_week',$curr_week);
+		$this->assign('level_info',$level_info);
+		$this->assign('level_count',count($level_info));
+		$this->assign('percent', $percent);
+		$this->assign('sign_info',$sign_info);
+		$this->assign('last_sign',$last_sign);
+		$this->assign('user_level', $user_level);
+		$this->assign('next_level',$next_level);
+		$this->assign('cha_score',$cha_score);
+		$this->assign('planlist',$planlist);
+		$this->assign('week_arr',$week_arr);
+		$this->render('student/my.growth.html');
+	}
+
+	public function timeFormat($begin, $end){
+    	$time = range(strtotime($begin), strtotime($end),24*60*60);
+        return  array_map(create_function('$v', 'return date("Y-m-d", $v);'), $time);
+    }
+
+	public function handlePlan($plan_info, $curr_date, $course_info){
+  		if( !empty($plan_info) ) {
+			$owner_arr = array();
+        	foreach($plan_info as $pv){
+            	$start_date = date('m-d',strtotime($pv->start_time));
+                $start_hour = date('H:i',strtotime($pv->start_time));
+				$month = date('m',strtotime($pv->start_time)).SLanguage::tr('月','LearningCenter');
+                $pv->start_date = $start_date;
+                $pv->start_day = $start_date;
+                $pv->start_month = $month;
+                $pv->start_hour = $start_hour;
+				if(!empty($course_info[$pv->course_id])){
+               	 	$pv->thumb_sma  = utility_cdn::file($course_info[$pv->course_id]->thumb_sma);
+                	$pv->fee_type   = $course_info[$pv->course_id]->fee_type;
+                	$pv->fee_class  = $course_info[$pv->course_id]->fee_class;
+                	//$pv->section_count  = $course_info[$pv->course_id]->section_count;
+				}else{
+               	 	$pv->thumb_sma  = '';
+                	$pv->fee_type   = '';
+                	$pv->fee_class  = '';
+                	$pv->section_count  = 0;
+				}
+                $temp[$pv->start_date][] = $pv;
+				$owner_arr[$pv->owner_id] = $pv->owner_id;
+            }
+			$video_type_arr = array(0,-2);
+			foreach($temp as $k=>$v){
+				foreach($v as $kkk=>$vvv){
+					$start_date = $vvv->start_date;
+					$vvv->start_date = str_replace('-',SLanguage::tr('月','LearningCenter'),$vvv->start_date).SLanguage::tr('日','LearningCenter');
+					$vvv->course_url = '/course.info.show/'.$vvv->course_id.'/'.$vvv->class_id;
+					$vvv->plan_url = '/course.plan.play/'.$vvv->plan_id;
+					$vvv->teacher_url = '/teacher.detail.entry/'.$vvv->teacher_id;
+					$vvv->plan_stat_url = '/student.course.stat/'.$vvv->plan_id;
+					if(!empty($vvv->teacher_real_name)){
+						$vvv->teacher_name = $vvv->teacher_real_name;
+					}
+					$vvv->plan_button = '';
+					if($vvv->course_type == 3){
+						$vvv->plan_button = "<a href='{$vvv->course_url}' class='col-md-20 col-xs-20 tec' target='_blank'><button class='come-look-btn mt30'>".SLanguage::tr('查看课程','LearningCenter')."</button></a>";
+					}else{
+						if($curr_date == $start_date){
+							if($vvv->status != 3){
+								$vvv->plan_button = "<a href='{$vvv->plan_url}' class='col-md-20 col-xs-20 tec' target='_blank'><button class='come-look-btn mt30'>".SLanguage::tr('进入课堂','LearningCenter')."</button></a>";
+							}
+							if($vvv->status == 3 && $vvv->video_public_type != -2 ){
+								$vvv->plan_button = "<a href='{$vvv->plan_url}' class='col-md-20 tec' target='_blank'><button class='look-cone-btn mt30' >".SLanguage::tr('课程回播','LearningCenter')."</button></a>";
+							}elseif($vvv->status == 3 && $vvv->video_public_type == -2){
+								$vvv->plan_button="<p class='col-sm-20 col-xs-20 mt30'>".SLanguage::tr('课程已结束','LearningCenter')."</p>";
+							}
+						}else{
+							if($vvv->status == 1){
+								$vvv->plan_button="<p class='col-sm-20 col-xs-20 lh22 mt30'>".SLanguage::tr('未开课','LearningCenter')."</p>";
+							}elseif($vvv->status == 2){
+								$vvv->plan_button = "<a href='{$vvv->plan_url}' class='col-md-20 col-xs-20 tec' target='_blank'><button class='come-look-btn mt30'>".SLanguage::tr('进入课堂','LearningCenter')."</button></a>";
+							}elseif($vvv->status == 3 && $vvv->video_public_type != -2){
+								$vvv->plan_button = "<a href='{$vvv->plan_url}' class='col-md-20 tec' target='_blank'><button class='look-cone-btn mt30'>".SLanguage::tr('课程回播','LearningCenter')."</button></a>";
+							}elseif($vvv->status == 3 && $vvv->video_public_type == -2 ){
+								$vvv->plan_button="<p class='col-sm-20 col-xs-20 mt30'>".SLanguage::tr('课程已结束','LearningCenter')."</p>";
+							}
+						}
+					}
+					$planlist[$k][] = $vvv;
+				}
+			}
+        }else{
+			$planlist = array();
+		}
+		return $planlist;
+	}
+
+	public function getCourseInfo( $my_courseid_arr ){
+
+		$f_array = array(
+                  "course_id","title","thumb_big","thumb_med","thumb_sma","course_type",
+                  "user_id","public_type","fee_type","price","status","admin_status",
+                  "class_id","start_time","end_time","class","avg_score",
+        		);
+
+		$q_array=array(
+            'course_id'=> implode(',', $my_courseid_arr),
+        );
+
+        $seek_arr = array(
+                  "f"=>$f_array,
+                  "q"=>$q_array,
+                  "ob"=>array('start_time'=>'asc'),
+                  "p"=>1,
+                  "pl"=>1000,
+        		);
+        $ret_seek = seek_api::seekcourse($seek_arr);
+		$course_info = array();
+		if(!empty($ret_seek->data)){
+        	$ret_course = $ret_seek->data;
+        	foreach($ret_course as $cv){
+        		$course_info[$cv->course_id] = $cv;
+            	if( $cv->fee_type == 0 ) {
+            		$course_info[$cv->course_id]->fee_type = "免费";
+					$course_info[$cv->course_id]->fee_class = 'cGreen';
+            	}else{
+                	$course_info[$cv->course_id]->fee_type = '￥'.$cv->price/100;
+					$course_info[$cv->course_id]->fee_class = 'cYellow';
+           		}
+        	}
+		}
+		return $course_info;
+	}
+
+	public function getPlanList($my_courseid_arr,$my_classid_arr,$status,$order,$course_type,$start_time='',$end_time=''){
+
+		if(empty($start_time) && empty($end_time)){
+			$plan_condition = array(
+                  'course_id'=>implode(',', $my_courseid_arr),
+                  'class_id' =>implode(',', $my_classid_arr),
+                  'status'   =>$status,
+				  'course_type' => $course_type,
+              );
+
+		}else{
+			$plan_condition = array(
+                  'course_id'=>implode(',', $my_courseid_arr),
+                  'class_id' =>implode(',', $my_classid_arr),
+                  'status'   =>$status,
+                  'start_time'=>"$start_time,$end_time",
+				  'course_type' => $course_type,
+              );
+		}
+        $planArr=array(
+                    "f"=>array(
+                          'course_id',
+                          'plan_id',
+                          'class_id',
+                          'teacher_id',
+						  'admin_id',
+						  'owner_id',
+                          'section_id',
+                          'course_name',
+                          'class_name',
+                          'section_name',
+                          'teacher_name',
+                          'teacher_real_name',
+						  'admin_name',
+						  'admin_real_name',
+						  'course_type',
+                          'start_time',
+                          'end_time',
+                          'max_user',
+                          'user_total',
+						  'video_public_type',
+                          'status',
+                          ),
+                     "q" =>$plan_condition,
+                     "ob"=>$order,
+                     "p" =>1,
+                     "pl"=>1000,
+                );
+        $seek_plan=seek_api::seekPlan($planArr);
+		if(!empty($seek_plan->data)){
+			return $seek_plan->data;
+		}else{
+			return array();
+		}
+	}
+
+
+
+	public function pageSignAjax($inPath){
+		$uid = !empty($_POST['uid'])?$_POST['uid']:0;
+		if(!empty($uid)){
+			$res = user_api::changeUserLevelAndScore($uid,'SIGN');
+			$all_sort = user_api::getUserAllSortByUid($uid);
+			$all_user_count = user_api::getAllUserCount();
+			if(empty($all_user_count)){
+				$all_user_count = 0;
+			}
+			if(!empty($all_sort)){
+				$less_count = $all_user_count-$all_sort+1;
+				$percent = floor(($less_count/$all_user_count)*1000)/10 . '%';
+			}else{
+				$percent = '0%';
+			}
+			if(!empty($res->data)){
+				$res->data->percent = $percent;
+			}
+			return json_encode($res);
+		}else{
+			$res = array('code'=>-2,'msg'=>'params error','data'=>'');
+			return json_encode($res);
+		}
+	}
+
+	public function pageInfoBase($inPath){
+
+		$userinfo = user_api::getUser($this->user['uid']);
+		$birthArr = explode('-',$userinfo->birthday);
+		$birthday = new stdclass;
+		$birthday->year  = $birthArr[0];
+		$birthday->month = $birthArr[1];
+		$birthday->day   = $birthArr[2];
+		$userinfo->birthday = $birthday;
+		$level0  = region_api::listRegion(0);
+
+		if(empty($userinfo->student->region_level0) && !empty($userinfo->student->province)){
+			foreach($level0 as $le){
+				similar_text($userinfo->student->province,$le->name,$percent);
+				if($percent >= 70){
+					$userinfo->student->region_level0 = $le->region_id;
+					break;
+				}
+			}
+			$level1  = region_api::listRegion(1);
+			foreach($level1 as $le1){
+				similar_text($userinfo->student->city,$le1->name,$percent);
+				if($percent >= 70){
+					$userinfo->student->region_level1 = $le1->region_id;
+					break;
+				}
+			}
+			$params = array();
+			$params['region_level0'] = $userinfo->student->region_level0;
+			$params['region_level1'] = $userinfo->student->region_level1;
+			user_api::setStudentProfile2($this->user['uid'],$params);
+		}
+		//教师资料整合
+		$teacher = user_api::getTeacherInfo($this->user['uid']);
+		$isTeacher=user_api::isTeacher($this->orgOwner,$this->user['uid']);
+		$group = SConfig::getConfig(ROOT_CONFIG."/group.conf","group");
+		$tagRet=teacher_api::getTagUserInUids(array('ids'=>$this->user['uid'],'groupId'=>$group->subject));
+		if(!empty($teacher->good_subject)){
+			$goodSubject = explode(",",$teacher->good_subject);
+		}else{
+			$goodSubject = !empty($teacher->major) ? (array)$teacher->major : '';
+		}
+        //从t_tag表获取科目标签
+        $setArr = user_api::getsubjectTag($group->subject);
+        $subjectArr= array();
+        if(!empty($setArr)){
+            foreach($setArr as $k=>$v){
+                $subjectArr[$v->pk_tag]=isset($v->name) ? $v->name : '';
+            }
+        }
+		$tagArr= array();
+		if(!empty($tagRet->data)){
+			foreach($tagRet->data as $v){
+				$tagArr[] = !empty($v->fk_tag) ? $v->fk_tag : '';
+			}
+		}
+		$this->assign("subject_id",$goodSubject);
+		$this->assign("isTeacher",$isTeacher);
+        $this->assign("teacher",$teacher);
+        $this->assign("good_subject",$tagRet);
+        $this->assign('tagArr',$tagArr);
+        $this->assign('setArr',$setArr);
+		$this->assign("grades",course_grade::$data);
+		$this->assign("level0",$level0);
+		$this->assign("userinfo",$userinfo);
+		$this->render('student/info.base.html');
+
+	}
+
+	public function pageSetInfo($inPath){
+
+		$gender = isset($_POST['gender'])?$_POST['gender']:0;
+		$_POST['real_name'] = trim($_POST['real_name']);
+		$_POST['student_name'] = '';
+		$briefDesc=!empty(strip_tags($_POST['brief_desc']))?trim(strip_tags($_POST['brief_desc'])):'';
+		$isTeacher=user_api::isTeacher($this->orgOwner,$this->user['uid']);
+		$ret = new stdclass;
+		$ret->result = new stdclass;
+		if(!empty($_POST['name'])){
+			$length_res = utility_tool::check_string($_POST['name'], 15,1);
+			if(!$length_res){
+				$ret->result->code = -1;
+                $ret->result->msg  = SLanguage::tr('昵称不能超过15个字符','site.user')."!";
+				return json_encode($ret);
+			}
+
+			$check_ret =  user_api::checkNickName($this->user['uid'],$_POST['name']);
+			if(!empty($check_ret)){
+				if($check_ret->code == -1){
+					$ret->result->code = -1;
+                	$ret->result->msg  = '昵称已被使用，换一个试试吧';
+					return json_encode($ret);
+				}
+			}
+		}else{
+			$ret->result->code = -1;
+            $ret->result->msg  = SLanguage::tr('请填写昵称','site.user');
+			return json_encode($ret);
+		}
+
+		$flag = 0;
+		if(preg_match("/[\x7f-\xff]/", $_POST['real_name'])){
+			$length_res = utility_tool::check_string($_POST['real_name'], 10,1);
+			if(!$length_res){
+				$ret->result->code = -2;
+                $ret->result->msg  = '真实姓名不能超过10个汉字';
+				return json_encode($ret);
+			}else{
+				$flag = 1;
+			}
+		}
+		if(preg_match("/[a-zA-Z\s]+$/", str_replace(' ','',$_POST['real_name']))){
+        	$res = utility_tool::check_string($_POST['real_name'], 50,1);
+			if(!$res){
+                $ret->result->code = -2;
+                $ret->result->msg  = '真实姓名不能超过50个英文字符';
+                return json_encode($ret);
+            }else{
+				$flag = 1;
+			}
+        }
+		if($flag == 0){
+			$ret->result->code = -2;
+            $ret->result->msg  = '真实姓名输入格式不正确';
+            return json_encode($ret);
+		}
+		//个人资料,教师资料整合
+		if($isTeacher===true){
+			$college=!empty($_POST['college'])?trim($_POST['college']):'';
+			if(empty($college)){
+				$ret->result->code = -3;
+				$ret->result->msg  = '毕业院校不能为空';
+				return json_encode($ret);
+			}
+			if(mb_strlen($college,'utf-8')>15){
+			   $ret->result->code = -3;
+			   $ret->result->msg  = '毕业院校不能超过15个汉字';
+			   return json_encode($ret);
+			}
+			$diploma=!empty($_POST['diploma'])?trim($_POST['diploma']):'';
+
+			$years=!empty($_POST['years'])?(int)$_POST['years']:0;
+			if($years<0){
+			   $ret->result->code = -4;
+			   $ret->result->msg  = '教龄不能为负数';
+			   return json_encode($ret);
+			}
+			$scope=!empty($_POST['scopes'])?$_POST['scopes']:'';
+			$major=!empty($_POST['good_subject'])? $_POST['good_subject']:0;
+
+			if(empty($major)){
+			   $ret->result->code = -6;
+			   $ret->result->msg  = '请选择在擅长学科';
+			   return json_encode($ret);
+			}
+			$scopeArr=array(
+					'preschool'=>0x01,
+					'primary'=>0x02,
+					'junior'=>0x04,
+					'senior'=>0x08,
+				);
+			$scopes=0;
+			if(is_array($scope)){
+				foreach($scope as $v){
+					if(isset($scopeArr[$v])){
+						$scopes+=$scopeArr[$v];
+					}
+				}
+			}
+			if(strlen(trim($briefDesc) > 20 )){
+			   $ret->result->code = -3;
+			   $ret->result->msg  = '一句话介绍不能超过20个汉字';
+			   return json_encode($ret);
+			}
+			$title=!empty(strip_tags($_POST['title']))?trim(strip_tags($_POST['title'])):'';
+			if(empty(trim($title))){
+			   $ret->result->code = -8;
+			   $ret->result->msg  = '教师个人头衔不能为空';
+			   return json_encode($ret);
+			}
+			if(empty(trim($_POST['desc']))){
+			   $ret->result->code = -5;
+			   $ret->result->msg  = '教师简介不能为空';
+			   return json_encode($ret);
+			}
+			$desc=!empty(strip_tags($_POST['desc']))?strip_tags($_POST['desc']):'';
+			if(empty($desc)){
+				$ret->result->code = -3;
+			    $ret->result->msg  = '教师简介不能输入特殊标签';
+			    return json_encode($ret);
+			}
+			$data=array(
+                'college'=>$college,
+                'title'=>$title,
+                'years'=>$years,
+                'scopes'=>$scopes,
+                'diploma'=>$diploma,
+                'good_subject'=>$major,
+                'desc'=>$desc,
+				'brief_desc'=>$briefDesc
+            );
+			$res1 = user_api::setTeacherInfo($this->user['uid'],$data);
+			$res2=user_api::updateUser($this->user['uid'],array('last_updated'=>date('Y-m-d H:i:s',time())));
+		}
+		$baseRet = user_api::updateBase($this->user['uid'],
+				$_POST['name'],
+				$gender,
+				$_POST['birthday'],
+				$_POST['real_name'],
+				$_POST['address']='',
+				$briefDesc,
+				$_POST['zip_code']=''
+				);
+		$params = $_POST;
+		$profileRet = user_api::setStudentProfile($this->user['uid'],$params);
+		$userInfo = user_api::getUser($this->user['uid']);
+		utility_session::get()['user']['name'] = $userInfo->name;
+		$ret = new stdclass;
+		$ret->result = new stdclass;
+		if( $baseRet && $profileRet){
+			$ret->result->code = 0;
+			$ret->result->msg  =  SLanguage::tr('保存成功','site.user')."!";
+		}else{
+			$ret->result->code = -3;
+			$ret->result->msg  = SLanguage::tr('保存失败','site.user')."!";
+		}
+		return json_encode($ret);
+	}
+
+	public function pageListGrade($inPath){
+
+		$school_type = !empty($_POST['school_type'])?$_POST['school_type']:'';
+		$gradelist = array();
+		if(!empty($school_type)){
+			if($school_type == 1){
+				$gradelist = array(
+					0=>array('grade_id'=>1001,'grade_name'=>'一年级'),
+					1=>array('grade_id'=>1002,'grade_name'=>'二年级'),
+					2=>array('grade_id'=>1003,'grade_name'=>'三年级'),
+					3=>array('grade_id'=>1004,'grade_name'=>'四年级'),
+					4=>array('grade_id'=>1005,'grade_name'=>'五年级'),
+					5=>array('grade_id'=>1006,'grade_name'=>'六年级'),
+				);
+			}elseif($school_type == 6 ){
+				$gradelist = array(
+					0=>array('grade_id'=>2001,'grade_name'=>'初一'),
+					1=>array('grade_id'=>2002,'grade_name'=>'初二'),
+					2=>array('grade_id'=>2003,'grade_name'=>'初三'),
+					3=>array('grade_id'=>3001,'grade_name'=>'高一'),
+					4=>array('grade_id'=>3002,'grade_name'=>'高二'),
+					5=>array('grade_id'=>3003,'grade_name'=>'高三'),
+				);
+			}
+		}
+		return json_encode($gradelist);
+
+	}
+
+	public function pageCheckNickName($inPath){
+		$nick_name = !empty($_POST['nickname'])?$_POST['nickname']:'';
+		$uid = $this->user['uid'];
+		$result = array('code'=>-2,'msg' =>'请填写昵称' );
+		if(!empty($nick_name)){
+			$ret = user_api::checkNickName($uid,$nick_name);
+			if($ret->code == -1 ){
+				$result = array('code'=>-1,'msg' =>'昵称已被使用，换一个试试吧' );
+			}elseif($ret->code == 0){
+				$result = array('code'=>0,'msg' =>'可以使用' );
+			}
+		}
+		return json_encode($result);
+	}
+
+	public function pageUploadPic($inPath){
+		$params = !empty($inPath[3])?$inPath[3]:'';
+		if(is_numeric($params) && $params == 1){
+			$user_info = user_api::getUser($this->user['uid']);
+			$user_thumb = $this->getHistoryHead($user_info);
+			$this->assign('user_thumb',$user_thumb);
+			$this->assign("userinfo",$user_info);
+			$this->render('student/info.upload.pic.html');
+		}elseif(is_numeric($params) && $params == 2){
+			$select = SConfig::getConfig(ROOT_CONFIG."/user.conf","thumb_select");
+			$pics = array();
+			if(!empty($select)){
+				if(is_array($select)){
+					$pics = $select;
+				}else{
+					$pics = array($select);
+				}
+			}
+			$userinfo = user_api::getUser($this->user['uid']);
+			$user_thumb = $this->getHistoryHead($userinfo);
+			$this->assign('user_thumb',$user_thumb);
+			$this->assign("userinfo",$userinfo);
+			$this->assign('pics', $pics);
+			$this->render('student/info.default.pic.html');
+		}else{
+        	$this->redirect("/index");
+		}
+	}
+
+	public function pageDefaultPicAjax($inPath){
+
+		if( !empty($_POST['big'])){
+			$ret_up = $this->updateThumbs();
+			$ret = new stdclass;
+			$ret->result = new stdclass;
+			if( $ret_up ) {
+				$ret->result->code = 0;
+				$ret->result->msg  = '保存成功!';
+			}else{
+				$ret->result->code = -1;
+				$ret->result->msg  = '保存失败!';
+			}
+			return json_encode($ret);
+		}
+	}
+
+	public function getHistoryHead($user_info){
+		$user_thumb = array();
+		$thumb_ret = user_api::getUserThumbByUid($this->user['uid'], 4);
+        if($thumb_ret->result->code == 0 && $thumb_ret->result->data){
+        	$user_thumb = $thumb_ret->result->data->items;
+        }elseif($user_info->student->thumb_small){
+             $user_thumb = array();
+             $data = new stdclass;
+             $data->thumb_big = $user_info->student->thumb_big;
+             $data->thumb_med = $user_info->student->thumb_med;
+             $data->thumb_small = $user_info->student->thumb_small;
+             $user_thumb[] = $data;
+             $data->fk_user = $this->user['uid'];
+             $data->create_time = date('Y-m-d H:i:s', time());
+             $add_ret = user_api::addUserThumb($data);
+         }
+		return $user_thumb;
+	}
+
+	public function pageUploadPicAjax($inPath){
+		if(!empty($_POST['big']) && empty($_POST['w'])){
+			$ret_up = $this->updateThumbs();
+			if($ret_up){
+				return array('ok'=>1);
+			}else{
+				return array('error'=>'保存失败!');
+			}
+			exit;
+		}
+		$path = ROOT_WWW."/upload/tmp";
+		$filename = $path."/".$this->user['uid'].".jpg";
+		$filename_dst = $path."/".$this->user['uid'].".dst.png";
+		if(!is_file($filename)){
+			return array("error"=>"请上传头像");
+		}
+		list($width, $height, $type, $attr) = getimagesize($filename);
+		if(!$width || !$height){
+			return array("error"=>"不是有效果的图片");
+		}
+		$targ_w = $_REQUEST['w'];
+		$targ_h = $_REQUEST['h'];
+		switch($type){
+			case 1: $img_r = imagecreatefromgif($filename);break;
+			case 2: $img_r = imagecreatefromjpeg($filename);break;
+			case 3: $img_r = imagecreatefrompng($filename);break;
+			default:
+				return array("error"=>"不是有效果的图片");
+		}
+		$dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
+
+		$bg = imagecolorallocatealpha($dst_r, 0 , 0 , 0 , 127);
+		imagealphablending($dst_r,false);
+		imagecopyresampled($dst_r,$img_r,0,0,$_POST['x'],$_POST['y'],$targ_w,$targ_h,$_REQUEST['w'],$_REQUEST['h']);
+		imagesavealpha($dst_r,true);
+
+		$r = imagepng($dst_r, $filename_dst);
+		if($r){
+			$thumbs = user_thumb::genByFile($filename_dst);
+			if($thumbs){
+				$ret_up = user_api::updateThumbs($this->user['uid'],$thumbs,$_r);
+				$data = new stdclass;
+				$data->thumb_big = $thumbs['large'];
+                $data->thumb_med = $thumbs['medium'];
+                $data->thumb_small = $thumbs['small'];
+                $data->fk_user = $this->user['uid'];
+                $data->create_time = date('Y-m-d H:i:s', time());
+				user_api::addUserThumb($data);
+				user_api::loginByUid($this->user['uid']);
+			}
+			return array("ok"=>1);
+		}
+		return array("error"=>"失败，请重试");
+
+	}
+
+
+	public function updateThumbs(){
+
+		$pic = new stdclass;
+        $pic->thumb_big = $_POST['big'];
+        $pic->thumb_med = $_POST['med'];
+        $pic->thumb_small = $_POST['small'];
+        $avatar = array("large"=>$pic->thumb_big,"medium"=>$pic->thumb_med,"small"=>$pic->thumb_small);
+        $ret_up = user_api::updateThumbs($this->user['uid'], $avatar);
+        $pic->fk_user = $this->user['uid'];
+        $pic->create_time = date('Y-m-d H:i:s', time());
+        user_api::addUserThumb($pic);
+        user_api::loginByUid($this->user['uid']);
+		return $ret_up;
+
+	}
+
+    public function pageIndex($inPath){
+		$this->render('student/index.html');
+    }
+
+    //收货地址
+    public function pageAddress($inPath){	    	    		         	
+	    	$uid = $this->user['uid'];    	
+	    	if (empty($uid)) {
+	    		return false;
+	    	}
+	    	$result = user_api::getUserAddress($uid);
+	    	$level0  = region_api::listRegion(0);
+	    	if (!empty($level0)) {
+	    		$this->assign('level0',$level0);
+	    	}    	
+	    	if (!empty($result->result->items)) {    		
+	    		$this->assign('userAddressInfo',$result->result->items);
+	    		$this->assign('level0',utility_region::$region[$result->result->items['0']->province]);
+	    		$this->assign('level1',utility_region::$region[$result->result->items['0']->city]);
+	    		$this->assign('level2',utility_region::$region[$result->result->items['0']->country]);
+	    		$this->assign('location',1);
+	    	}    	
+	        $this->render('student/info.address.html');
+    }
+
+     public function pageGetUserAddressExist($inPath){	    	    		         	
+	    	$uid = $this->user['uid'];
+	    	$cid = !empty($inPath['3']) ? $inPath['3'] : 0;    	
+	    	if (empty($uid)) {
+	    		return false;
+	    	}	    		    	
+	    	$result = user_api::getUserAddress($uid);
+	    	$document = course_api::getCourseOne($cid);
+	    	if (empty($result->result->items) && !empty($document->document)) {
+	    		return 0;
+	    	}else{
+	    		return 1;
+	    	}
+    }
+
+    public function pageAddUserAddress($inPath){
+    	$data = new stdclass;
+    	$data->fk_user = $this->user['uid'];
+    	$data->receiver = !empty($_POST['receiver']) ? $_POST['receiver'] : '';
+    	if (empty($data->receiver)) {
+    		return array('code'=>1,'msg'=>'收件人不能为空');
+    	}
+    	if (mb_strlen($data->receiver) > 20) {
+    		return array('code'=>1,'msg'=>'收件人不超过20个字符');
+    	}
+    	$data->phone = !empty($_POST['phone']) ? $_POST['phone'] : 1;
+    	if(utility_valid::mobile($data->phone)==false){
+			return array('code'=>1,'msg'=>'手机号不合法');
+		}
+    	$data->province = !empty($_POST['level0']) ? $_POST['level0'] : 0;
+    	$data->city = !empty($_POST['level1']) ? $_POST['level1'] : 0;
+    	$data->country = !empty($_POST['level2']) ? $_POST['level2'] : 0;
+    	if (empty($data->province) || empty($data->city)) {
+    		return array('code'=>1,'msg'=>'省市不能为空');
+    	}
+    	$data->address = !empty($_POST['address']) ? $_POST['address'] : '';
+    	if (empty($data->address)) {
+    		return array('code'=>1,'msg'=>'详细地址不能为空');
+    	}    	
+    	$data->desc = !empty($_POST['desc']) ? $_POST['desc'] : '';
+    	$data->create_time = date('Y-m-d H:i:s', time());
+    	$res = user_api::addUserAddress($data);
+    	return json_encode($res);    	
+    }
+
+    public function pageGetUserAddressByAddressId($inPath){
+    	$addressId = !empty($inPath['3']) ? $inPath['3'] : 0;
+    	if (empty($addressId)) {
+    		return false;
+    	}
+    	$result = user_api::getUserAddressByAddressId($addressId);    	
+    	if (!empty($result->result->items)) {
+    		return $result->result->items;
+    	}
+    	return false;
+    }
+
+    public function pageUpdateUserAddress($inPath){
+    	$addressId = !empty($inPath['3']) ? $inPath['3'] : 0;
+    	$data = new stdclass;
+    	$data->fk_user = $this->user['uid'];    	
+    	$data->receiver = !empty($_POST['receiver']) ? $_POST['receiver'] : '';
+    	if (empty($data->receiver)) {
+    		return array('code'=>1,'msg'=>'收件人不能为空');
+    	}
+    	if (mb_strlen($data->receiver) > 20) {
+    		return array('code'=>1,'msg'=>'收件人不超过20个字符');
+    	}
+    	$data->phone = !empty($_POST['phone']) ? $_POST['phone'] : 1;
+    	if(utility_valid::mobile($data->phone)==false){
+			return array('code'=>1,'msg'=>'手机号不合法');
+		}
+    	$data->province = !empty($_POST['level0']) ? $_POST['level0'] : 0;
+    	$data->city = !empty($_POST['level1']) ? $_POST['level1'] : 0;
+    	$data->country = !empty($_POST['level2']) ? $_POST['level2'] : 0;
+    	if (empty($data->province) || empty($data->city)) {
+    		return array('code'=>1,'msg'=>'省市不能为空');
+    	}
+    	$data->address = !empty($_POST['address']) ? $_POST['address'] : '';
+    	if (empty($data->address)) {
+    		return array('code'=>1,'msg'=>'详细地址不能为空');
+    	}    	
+    	$data->desc = !empty($_POST['desc']) ? $_POST['desc'] : '';    	
+    	$res = user_api::updateUserAddress($addressId,$data);
+    	return json_encode($res);    	
+    }
+
+    public function pageGetLeve($inPath){
+    	$le1 = !empty($inPath['3']) ? $inPath['3'] : 0;    	
+    	$result = region_api::listRegion($le1);
+    	if (!empty($result)) {
+    		return $result;
+    	}
+    	return 0;    	
+    }
+}

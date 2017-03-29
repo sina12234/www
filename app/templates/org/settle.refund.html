@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>退费记录 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 机构中心 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}"></script>
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+<style>
+    #refund-reason{ cursor: pointer;}
+    #refund-reason:hover .bubble-box{ display: block;}
+    .bubble-box{ display: none;position: absolute;top: 30px;left: 10px;width: 250px;padding: 10px;border: 1px solid #FFEBCB;text-align: left;background-color: #FFF1DA;border-radius: 5px; z-index:2;}
+    .bot{ width: 0;height: 0;font-size: 0;overflow: hidden;position: absolute;border-width: 12px;border-style: solid dashed solid dashed;border-color: transparent transparent #FFEBCB transparent;left: 35px;top: -24px;}
+    .bot-hidden{ width: 0;height: 0;font-size: 0;overflow: hidden;position: absolute;border-width: 10px;border-style: dashed solid dashed dashed;border-color: transparent transparent #FFF1DA transparent;left: 37px;top: -20px;}
+</style>
+</head>
+<body>
+{part "/site.main.nav"}
+<section class='pd30'>
+    <div class="container">
+        <div class="row">
+            <!--左侧-->
+            {part "/org.main.menu.settle"}
+            <!--右侧-->
+            <div class="right-main col-md-16">
+                <div class="content">
+                    <div class="tab-main">
+                        <div class="tab-hd fs14">
+                            <a class="tab-hd-opt" href="/org/settle">账户概览</a>
+                            <a class="tab-hd-opt" href="/org/settle/accountlist">结算账单</a>
+                            <a class="tab-hd-opt" href="/org.settle.withdraw">提现记录</a>
+                            <a class="tab-hd-opt curr" href="#">退费记录</a>
+                        </div>
+                    </div>
+					<style type="text/css">
+						.bor1px{ border:1px solid #ddd;}
+						.time-picker{ width:90px;}
+						.time-picker-fr select{ height:32px;vertical-align:middle;margin-left:50px;}
+						.settle-main-log dt{ line-height: 20px;padding: 10px 0;}
+                        .settle-main-study-list dt{ border-left:1px solid #ddd;border-right:1px solid #ddd;}
+					</style>
+                    <div class="settle-list col-md-20 mt10">
+                        <div class="sl-title fs14">
+                            <div class="time-picker-fr">
+								<input class="p5 bor1px time-picker tac fs14" type="text" name='time' readonly placeholder="选择日期" value="{if !empty($params['time'][0])}{$params['time'][0]}{/if}"  id="time-picker">
+								<span>—</span>
+								<input class="p5 bor1px time-picker tac fs14" type="text" name='time' readonly placeholder="选择日期"value="{if !empty($params['time'][1])}{$params['time'][1]}{/if}"  id="time-picker2">
+								<select name="orderType" id="refundType">
+									<option value="all" {if $params['status']=='all'}selected=""{/if}>全部</option>
+									<option value="0" {if $params['status']=='0'}selected=""{/if}>审核中</option>
+									<!--<option value="11">退款中</option>-->
+                                    <option value="1,2" {if $params['status']=='1,2'}selected=""{/if}>已退费</option>
+                                    <option value="-1" {if $params['status']=='-1'}selected=""{/if}>退费失败</option>
+		                        </select>
+							</div>
+                        </div>
+                        <a class="blue-link fs12 c-fr" href="/phpexcel/settle/ExportRefund?{if !empty($params['time'][0])}st={$params['time'][0]}&{/if}{if !empty($params['time'][1])}et={$params['time'][1]}&{/if}status={$params['status']}" style="margin-top:-15px">导出Excel</a>
+                        <div class="settle-main settle-main-log">
+                            <dl>	
+                            <dd class="sl-th fs23 mt10 tac">
+	                            <p class="col-md-3">订单号</p>
+	                            <p class="col-md-5">信息</p>
+	                            <p class="col-md-2">申请人</p>
+	                            <p class="col-md-2">学情</p>
+	                            <p class="col-md-2">实付</p>
+	                            <p class="col-md-2">退费状态</p>
+	                            <p class="col-md-2">退费原因</p>
+	                            <p class="col-md-2">退费金额</p>
+                            </dd>
+                            {if !empty($list)}
+                            {foreach $list as $val}
+                                <dt>
+                                    <div class="col-md-3 pr0">
+                                        <p class="col-md-20 p0 ellipsis">{$val->refund_create_time}</p>
+                                        <p class="col-md-20 p0 ellipsis">单号：{$val->orderSn}</p>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <p class="col-md-10 ellipsis">{$val->course['name']}</p>
+                                        <p class="col-md-10 ellipsis">{$val->course['className']}</p>
+                                        <p class="col-md-20 ellipsis">共{$val->course['planNum']}章  已学{$val->course['progress']}节</p>
+                                    </div>
+                                    <div class="col-md-2 mt10 tac">{$val->stuName}</div>
+                                    <div class="col-md-2 mt10 tac"><a class="blue-link show-study" href="javascript:volid(0)" student_id="{$val->content_fk_user}">查看</a></div>
+                                    <div class="col-md-2 mt10 tac">￥{$val->price}</div>
+                                    <div class="col-md-2 mt10 tac">
+                                        {if $val->content_refund_status==-1}
+                                        <p>退费失败</p>
+                                        <p><a class="blue-link" href="/org.main.refund/{$val->fk_order}">重新申请</a></p>
+                                        {elseif($val->content_refund_status==0)}
+                                        <p>审核中</p>
+                                        {else}
+                                        <p>已退费</p>
+                                        {/if}
+                                    </div>
+                                    <div class="col-md-2 mt10 tac pos-rel" id="refund-reason">
+                                        <div class="ellipsis">
+                                            {if !empty($val->refund_why)}
+                                                {$val->refund_why}
+                                            {else}
+                                                --
+                                            {/if}
+                                        </div>
+                                        <div class="bubble-box tal">
+                                            <span class="bot"></span>
+                                            <span class="bot-hidden"></span>
+                                            {if !empty($val->refund_why)}
+                                                {$val->refund_why}
+                                            {else}
+                                                --
+                                            {/if}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 cYellow mt10 tac">￥{$val->price_refund}</div>
+                                </dt>
+                            {/foreach}
+							{else}
+							<div class="list-img tac mt40 col-md-20">
+								<img src="/assets_v2/img/pet3.png">
+								{if(!empty($params["time"]))}
+								<p class="fs16 cGray">{'没有符合该日期的退费账单哦！'|tr:'org'}，{'请调整一下再试~'|tr:'org'}~</p>
+								<p class="fs12 cGray">{'您可以点击'|tr:'org'}<a href="/org.settle.refund" class="sBlue"> {'这里'|tr:'org'} </a>{'返回默认'|tr:'org'}</p>
+								{else}
+								<p class="fs12 cGray">{'您还没有退费记录哦'|tr:'org'}~</p>
+								{/if}
+							</div>
+                            {/if}
+				            </dl>
+                            <div class="page-list" id="pagepage"></div>
+                        </div>
+                    </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="template" id="moduleStudy">
+<div class="settle-main-log settle-list bgf settle-main-study-list" style="width:100%;height:100%;">
+    <div class="pt20 pb10 pl20 pr20">共报名<span class="pl5 pr5"><%= data.courseCount %></span>个课程<span class="pl20">共退费<span class="pl5 pr5"><%= data.refundCount %></span>次</span></div>
+    <dl class="pl20 pr20 pb20 clear"> 
+    <dd class="sl-th fs23 tac">
+        <p class="col-md-3">报名课程</p>
+        <p class="col-md-2">课程类型</p>
+        <p class="col-md-2">讲师</p>
+        <p class="col-md-2">支付金额</p>
+        <p class="col-md-3">学习进度</p>
+        <p class="col-md-2">到课次数</p>
+        <p class="col-md-2">观看直播</p>
+        <p class="col-md-2">观看录播</p>
+        <p class="col-md-2">退费</p>
+    </dd>
+    </dl>
+<% if(data.data.length>0){ %>
+    <div class="pos-abs clear" style="top:85px;bottom:20px;left:20px;right:20px;overflow:auto;">
+    <% $.each(data.data,function(i,v){ %>
+        <dt <% if(i%2 == 1){ %>class="bg-gray"<% } %>>
+        	<div class="col-md-3 mt10 ellipsis tac"><%= v.course.name %></div>
+        	<div class="col-md-2 mt10 tac"><%= v.course.courseType == 1?'直播课':v.course.courseType == 2?'录播课':'线下课' %></div>
+        	<div class="col-md-2 mt10 tac"><%= v.stuName %></div>
+        	<div class="col-md-2 mt10 tac">￥<%= v.price %></div>
+        	<div class="col-md-3">
+        		<p class="ellipsis">共<%= v.course.planNum %>章</p>
+        		<p class="ellipsis">上课进度：<%= v.course.progress %>课时</p>
+        	</div>
+        	<div class="col-md-2 mt10 tac"><%= v.stat.planCount==0?'--':v.stat.planCount %></div>
+        	<div class="col-md-2 mt10 tac"><%= !v.stat.vtLive?'--':v.stat.vtLive %></div>
+        	<div class="col-md-2 mt10 tac"><%= !v.stat.vtRecord?'--':v.stat.vtRecord %></div>
+        	<div class="col-md-2 mt10 tac"><%= v.content_refund_status == 0?'审核中':v.content_refund_status == -1?'--':v.content_refund_status == null ?'--':'已退费' %></div>
+        </dt>
+    <% }); %>
+    </div>
+<% }else{ %>
+	<div class="list-img tac mt40 col-md-20">
+		<img src="/assets_v2/img/pet3.png">
+		<p class="fs12 cGray">{'您还没有记录哦'|tr:'org'}~</p>
+	</div>
+<% } %>
+</div>
+</script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ejs.min.js')}"></script>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ie8/ejs.ie8.js')}"></script>
+<![endif]-->
+<script>
+(function() {
+    var submitData = { };
+    submitData['st'] = getUrlParam('st');
+    submitData['et'] = getUrlParam('et');
+    submitData['status'] = getUrlParam('status') || 'all';
+    $(".time-picker").datetimepicker({
+        lang: 'ch',
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+    $('.show-study').click(function (event) {
+        event.preventDefault();
+        var userid = $(this).attr('student_id');
+        var m = $('#moduleStudy').html();
+        $.ajax({
+            url: '/org/ajax/RefundAjax',
+            type: 'POST',
+            dataType: 'json',
+            data: { userId: userid}
+        })
+        .done(function(res) {
+            //console.log(res.data.map(x=> x.content_refund_status));
+            if(res.code == 0){
+                var content = ejs.render(m, { data: res});
+            }else{
+                var content = ejs.render(m, { data: {
+                    code:res.code || '',
+                    courseCount:0,
+                    refundCount:0,
+                    data:[],
+                    msg:res.msg || ''
+                }});
+            }
+            layer.open({
+                type: 1,
+                skin: 'layui-layer-rim', //加上边框
+                area: ['1000px', '400px'], //宽高
+                content: content
+            });
+        });
+
+    });
+    $('.time-picker').change(function (event) {
+        if ($(this).val() != '') {
+            var value = $(this).val().replace(/\//g, '-');
+            if (event.target.id == 'time-picker') {
+                submitData['st'] = value;
+            } else if (event.target.id == 'time-picker2') {
+                submitData['et'] = value;
+            }
+        }
+
+        if (submitData['st'] && submitData['et']) {
+            updatePage();
+        }
+    });
+    $('#refundType').change(function () {
+       var val = $(this).val();
+        if(val == undefined){
+            submitData['status'] = 'all';
+        }else{
+            submitData['status'] = val;
+        }
+        updatePage();
+    });
+    function  updatePage() {
+        var str = '';
+        $.each(submitData,function (key,data) {
+            if(data != '' && data != null && key != 'shelf' ){
+                str += "&"+key+"="+data;
+            }
+        });
+        window.location.href="/org.settle.refund?"+str;
+    }
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]);
+        return null; //返回参数值
+    }
+
+    page("pagepage", "{$path}", {$length}, {$page}, {$totalPage});
+})();
+</script>
+{part "/site.main.footer"}
+</body>
+</html>
+

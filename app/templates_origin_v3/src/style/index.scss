@@ -1,0 +1,13 @@
+@charset "UTF-8";
+// themes
+@import "themes/platform";
+//variables minxins function
+@import "mixins/variables";
+@import "mixins/mixins";
+//general
+@import "general/general";
+// modules
+@import "modules/index/site.nav.bd";
+@import "modules/index/header";
+@import "modules/index/slide.banner";
+@import "modules/index/footer";

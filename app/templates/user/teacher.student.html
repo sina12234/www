@@ -1,0 +1,298 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>高能100 - 学生统计</title>
+{part "/index.main.headeruser"}
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/style.css')}">
+<style type="text/css">
+.user_content{ background: #fff;height: auto;}
+.user_content .heada{ height: 70px;line-height: 70px;}
+.user_content .heada span img{ float: left; margin-top: 30px;margin-left: 18px;margin-right: 10px;}
+.user_content .heada span p{ font-size: 18px; color: #ccc;}
+.user_content .heada span p b{ color: #000;font-weight: normal;}
+.class-ul ul{ background: url(../images/tiao.png) repeat-x bottom;height:30px;}
+.class-ul li{ float: left; padding-left: 75px; width:100px;}
+.class-ul ul .black{ background: url(../images/bbj.png)no-repeat bottom;}
+.user_content_box .user_content_lb{ margin-top: -20px; height:10px;}
+.user_content .user_content_box .user_content_lb{ height:auto;}
+.user_content_box .user_content_lb{ margin-top: -20px; height:10px;}
+.user_content_box .user_content_lb dl dt{ padding-top: 15px; }
+.borcol { border:1px dashed #ccc; border-bottom:none;}
+</style>
+</head>
+<body>
+{part "/index.main.nav.user"}
+<div class='count'>
+    <div class='container-fluid'>
+				<div class='row'>
+					<div class='col-sm-3 user_menu hidden-xs'>
+						<div id=''>
+							<div id='menu'>
+								{part "/user.home.menu.user"}
+
+							</div>
+						</div>
+					</div>
+
+					<div class='col-sm-9 user_content' style="background:#fff;">
+						<div class='container-fluid'>
+							<div class="row">
+								<div class="heada">
+									<span><img src="{utility_cdn::img('/assets/images/fangk.png')}"><p>学生统计：</p></span>
+								</div>
+							</div>
+							<div class='row'>
+
+								<form action=" " method="get" class="col-sm-10">
+									<div class="col-sm-1"></div>
+									<div class='intpt col-sm-4'>
+										<select name = "course_id" id = "course_id" class="form-control">
+											<option value="0">请选择课程</option>
+											{foreach $courses as $_course}
+											<option {if $course_id==$_course->course_id}selected{/if} value={$_course->course_id}>{$_course->title} (报名:{$_course->user_total})</option>
+											{/foreach}
+										</select>
+									</div>
+									<div class='intpt col-sm-4'>
+										<select id="class" name="class_id" class="form-control">
+											<option value="0">所有班级</option>
+										</select>
+									</div>
+									<input class="btn btn-default" type="submit" value="提交">
+								</form>
+								<script type="text/javascript">
+									{if(!empty($courses))}
+									var course_data={SJson::encode($courses)};
+									{else}
+									var course_data=[];
+									{/if}
+									var class_id="{$class_id}";
+									$(document).ready(function(){
+										$("#course_id").change(function(){
+											var tmp_cid = $("#course_id ").val();	
+											for(var i in course_data){
+												if(course_data[i].course_id==tmp_cid){
+												$("#class").html("");
+												$("#class").append('<option value="0">所有班级</option>');
+													for(var j in course_data[i].class){
+													s="";
+													console.log(course_data[i]);
+													if(class_id == course_data[i].class[j].class_id)s=" selected ";
+$("#class").append('<option '+s+' value="'+course_data[i].class[j].class_id+'">'+course_data[i].class[j].name+'</option>');
+													}
+												}
+											}
+										}).trigger("change");
+									});		
+								</script>
+
+								<div class='table_teacher'>
+									<table class='table classup'>
+										<tr class="hui">
+											<td >姓名</td>
+											{*		<td style="">编号</td> *}
+											{*		<td style="">头像</td> *}
+											<td style="">学生姓名</td>
+											<td style="">报名时间</td>
+											<td >所学课程</td>
+											<td >所在班级</td>
+											<td >手机号</td>
+											<td >区域</td>
+											<td ><a href="">调班</a></td>
+											{* 		<td >课程进度</td> *}
+										</tr>
+										{if(empty($ret))}
+										<p>还未有学生报名</p>
+										{else}
+										{foreach $ret as $v1}
+										{if(!empty($v1))}
+										{foreach $v1 as $k=>$v}
+										<tr>
+											{*		<td id='Numberone'>{$v->course_user_view_id}</td>  *}
+											<td id='Numbertwo'>{$v->user_info->name}</td>
+											<td id='Numbertwo'>{$v->user_info->student_name}</td>
+											{*		<td class="noborder" id='Numberfore'><img src="{utility_cdn::file($v->thumb_big)}"></td> *}
+											<td id='Numberthree'>{$v->create_time}</td>
+											<td id='Numberthree'>{$course->title}</td>
+											<td id='Numberfore'>{$classes[$v->class_id]->name}</td>
+											<td id='Numberfore'>{$v->user_info->mobile}</td>
+											<td class="noborder" id='Numberfore'>
+												{if($v->user_info->province == $v->user_info->city)}
+												{$v->user_info->province}
+												{else}
+												{$v->user_info->province},{$v->user_info->city}
+												{/if}
+											</td>
+											<td ><a href="/user.teacher.stutest?course_id={$course->course_id}&class_id={$v->class_id}">调班</a></td>
+											{*		<td class="noborder" id='Numberfore'>已学三结</td> *}
+
+										</tr>
+										{/foreach}
+										{/foreach}
+										{/if}
+										{/if}
+										{*	<tr>
+											<td id='Numberone'>02</td>
+											<td class="noborder" id='Numberfore'><img src="{utility_cdn::img('/assets/images/grtx.jpg')}"></td>
+											<td id='Numbertwo'>张萌</td>
+											<td id='Numberthree'>2014.10.23 13:25</td>
+											<td class="noborder" id='Numberfore'>初三数学扩展</td>
+											<td id='Numberthree'>二班</td>
+											<td class="noborder" id='Numberfore'>已学三结</td>
+										</tr>
+										<tr>
+											<td id='Numberone'>03</td>
+											<td class="noborder" id='Numberfore'><img src="{utility_cdn::img('/assets/images/grtx.jpg')}"></td>
+											<td id='Numbertwo'>张萌</td>
+											<td id='Numberthree'>2014.10.23 13:25</td>
+											<td class="noborder" id='Numberfore'>初三数学扩展</td>
+											<td id='Numberthree'>二班</td>
+											<td class="noborder" id='Numberfore'>已学三结</td>
+										</tr>
+										<tr>
+											<td id='Numberone'>04</td>
+											<td class="noborder" id='Numberfore'><img src="{utility_cdn::img('/assets/images/grtx.jpg')}"></td>
+											<td id='Numbertwo'>张萌</td>
+											<td id='Numberthree'>2014.10.23 13:25</td>
+											<td class="noborder" id='Numberfore'>初三数学扩展</td>
+											<td id='Numberthree'>二班</td>
+											<td class="noborder" id='Numberfore'>已学三结</td>
+										</tr>
+										<tr>
+											<td id='Numberone'>05</td>
+											<td class="noborder" id='Numberfore'><img src="{utility_cdn::img('/assets/images/grtx.jpg')}"></td>
+											<td id='Numbertwo'>张萌</td>
+											<td id='Numberthree'>2014.10.23 13:25</td>
+											<td class="noborder" id='Numberfore'>初三数学扩展</td>
+											<td id='Numberthree'>二班</td>
+											<td class="noborder" id='Numberfore'>已学三结</td>
+										</tr>
+										<tr>
+											<td id='Numberone'>06</td>
+											<td class="noborder" id='Numberfore'><img src="{utility_cdn::img('/assets/images/grtx.jpg')}"></td>
+											<td id='Numbertwo'>张萌</td>
+											<td id='Numberthree'>2014.10.23 13:25</td>
+											<td class="noborder" id='Numberfore'>初三数学扩展</td>
+											<td id='Numberthree'>二班</td>
+											<td class="noborder" id='Numberfore'>已学三结</td>
+										</tr>
+										*}
+									</table>
+								</div>
+								<!--老师个人中心 end-->                
+								<!--分页开始-->
+								<div class="row-fluid>"
+									<div class="span6">
+										<div class="dataTables_paginate paging_bootstrap pagination">	
+											<!--新加style-->
+											<ul class="pagination" style="margin-left:300px">
+												{if !empty($list->page)}
+												{if $list->page != 1}
+												<li class="prev"><a href="{if !empty($path)}{$path}?page=1&size={$num}{/if}{if !empty($uri)}&{$uri}{/if}"  title="首页">首 页</a></li>
+												{/if}
+												{if $list->page - 1 > 0}
+												<li class="prev"><a href="{if !empty($path)}{$path}{/if}?page={$list->page -1}&size={$num}{if !empty($uri)}&{$uri}{/if}" title="上一页">上一页</a></li>
+												{/if}
+												{if $list->page - 2 > 0}
+												<li><a href="{if !empty($path)}{$path}{/if}?page={$list->page-2}&size={$num}{if !empty($uri)}&{$uri}{/if}">{$list->page - 2}</a></li>
+												{/if}
+												{if $list->page - 1 > 0}
+												<li><a href="{if !empty($path)}{$path}{/if}?page={$list->page-1}&size={$num}{if !empty($uri)}&{$uri}{/if}">{$list->page - 1}</a><li>
+												{/if}
+												<li class="active"><a href="">{$list->page}</a></li>
+												{if $list->page + 1 <= $list->total}
+												<li><a href="{if !empty($path)}{$path}{/if}?page={$list->page+1}&size={$num}{if !empty($uri)}&{$uri}{/if}">{$list->page + 1}</a><li>
+												{/if}
+												{if $list->page + 2 <= $list->total}
+												<li><a href="{if !empty($path)}{$path}{/if}?page={$list->page+2}&size={$num}{if !empty($uri)}&{$uri}{/if}">{$list->page + 2}</a><li>
+												{/if}
+												{if $list->page + 1 <= $list->total}
+												<li class="next"><a href="{if !empty($path)}{$path}{/if}?page={$list->page+1}&size={$num}{if !empty($uri)}&{$uri}{/if}" title="下一页">下一页</a></li>
+												{/if}
+												{if $list->page != $list->total}
+												<li class="next"><a href="{if !empty($path)}{$path}{/if}?page={$list->total}&size={$num}{if !empty($uri)}&{$uri}{/if}" title="尾页">尾 页</a></li>
+												{/if}
+												{/if}
+											</ul>
+										</div>	
+									</div>
+								</div>
+								<!--分页结束-->
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+		</div>  
+
+		<div class="footer"> 
+			<div class="ftcon">
+				<!-- <div class="fter_1">
+					<a href="">关于我们</a> | <a href="">加入我们</a> | <a href="">校园代理招募</a> | <a href="">O2O体验店招商</a> | <a href="">企业培训</a> | <a href="">网站地图</a> | <a href="">友情链接</a> 
+				</div> -->
+				<p class="fter_2 mt10">© 2014 北京高能壹佰教育科技有限公司 版权所有</p>
+			</div>
+		</div>
+	</body>
+
+	<script>
+		// 提交验证代码
+		$("#x_submit_form").submit(function(){
+			if($("#x_user_name").val()=='' || $("#x_user_name").val()=="手机号"){
+				$(".x_error").html("请输入手机号");
+				return false;
+				}else if($("#x_pass").val()=='' || $("#x_pass").val()=="密码"){
+				$(".x_error").html("请输入密码");
+				return false;
+				}else{
+				return true;
+			}
+		})
+
+		$(document).ready(function(){
+			$("input[type=text],input[type=password],textarea").each(function(){
+				var label=$(this).prev("label");
+				var label_txt=label.text();
+				if(("placeholder" in document.createElement("input"))){
+					$(this).attr("placeholder",label_txt);
+					label.remove();
+					}else{
+					$(this).data("placeholder",label_txt);
+					psuedoPlaceholder($(this));
+					label.remove();
+				}
+			});
+			function psuedoPlaceholder(input){
+				if(input.attr("type")=="password"){
+					var opassword=$("<input type='text' class='"+input.attr("class")+"' value='"+input.data("placeholder")+"' name='addinput' />");
+					input.hide();
+					input.before(opassword);
+					opassword.focus(function(){
+						$(this).hide();
+						input.show().focus();
+					});
+					input.blur(function(){
+						if($(this).val()==""){
+							$(this).hide();
+							opassword.show();
+						}
+					});
+					}else{
+					input.focus(function(){
+						if($(this).val()==$(this).data("placeholder")){
+							$(this).val("");
+						}
+						}).blur(function(){
+						if($(this).val()==""){
+							$(this).val($(this).data("placeholder"));
+						}
+					}).blur();
+				}
+			}
+		})
+	</script>
+
+

@@ -1,0 +1,896 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>APP下载页面</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="nameverticalCenterediewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets_v2/img/platform/yunke.ico')}" />
+<link rel="stylesheet" href="{utility_cdn::css('/assets_v2/css/bootstrap/bootstrap.min.css')}">
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+{part "/site.main.header"}
+<link rel="stylesheet" type="text/css" href="{utility_cdn::js('/assets_v2/css/jquery.fullPage.css')}">
+<!--<link rel="stylesheet" type="text/css" href="{utility_cdn::js('/assets_v2/css/skin_blue.css')}">-->
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery.fullPage.js')}"></script>
+<style>
+  .ptb5{ padding:5% 0;}
+  .plr5{ padding:0 5%;}
+  .pd5{ padding: 5%;}
+  .mf{ position: absolute;left:0;bottom:0;text-align:center;width: 100%;}
+  .mf footer{ height: 40px; color: #999; text-align: center;}
+  footer a,footer span{ margin:0 6px;font-size: 1em; color:#999;}
+  footer p{ display: inline-block;}
+  .client_m1, .client_m2, .client_m3, .client_m4, .client_m5{ overflow: hidden; padding: 5% 0;height: 100%;}
+  .client_m1{ padding:3% 0;}
+  .client_m1{ background:url(/assets_v2/img/wo_img/01_bg.jpg) bottom left no-repeat #49BECD;background-size:100%; }
+  .client_m2,.client_m4{  background: #FAEDDD; }
+  .client_m3{  background:url(/assets_v2/img/wo_img/02_bg.png) bottom left no-repeat #667BBA; padding:0;}
+  .download span:nth-child(2) img{ width:200px;height:200px; }
+  .client_m1 img,.client_m2 img,.client_m3 img,.client_m4 img{ width:100%; }
+  img.m1-code{ border-radius: 5px;}
+  .m3-text{ position: absolute;top:25%;right:15%;}
+  .iph_and{ position: absolute;top:45%; }
+  .down-p{ padding:15px 20%;}
+  .tac{ text-align: center;}
+  .arrow {
+      display: block;
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      margin-left: -11px;
+      border: 3px solid transparent;
+      border-bottom: 3px solid #DEE0E3;
+      border-right: 3px solid #DEE0E3;
+      z-index: 99;
+      opacity: .8;
+      -webkit-transform: rotate(45deg);
+      -webkit-animation: arrow 1.5s infinite ease-in-out;
+  }
+  @-webkit-keyframes arrow {
+      0% {
+          opacity:0;
+          -webkit-transform:translate(0, -30px) rotate(45deg)
+      }
+      50% {
+          opacity:1;
+          -webkit-transform:translate(0, -20px) rotate(45deg)
+      }
+      100% {
+          opacity:0;
+          -webkit-transform:translate(0, -10px) rotate(45deg)
+      }
+  }
+  .m1iphone{
+      -webkit-animation: shake 1s 1 ease-out .1s;
+      -moz-animation: shake 1s 1 ease-out .1s;
+      -ms-animation: shake 1s 1 ease-out .1s;
+      animation: shake 1s 1 ease-out .1s;
+  }
+  .circle1{
+      position: absolute;
+      background-image: url(/assets_v2/img/wo_img/01.png);
+      width:94px;
+      height:94px;
+      top: -16px;
+      left: 65px;
+      opacity: 0;
+  }
+  .circle2{
+      position: absolute;
+      background-image: url(/assets_v2/img/wo_img/02.png);
+      width:94px;
+      height:94px;
+      top: 140px;
+      left: 85px;
+      opacity: 0;
+  }
+  .circle3{
+      position: absolute;
+      background-image: url(/assets_v2/img/wo_img/03.png);
+      width: 94px;
+      height: 94px;
+      bottom: 179px;
+      right: 46px;
+      opacity: 0;
+  }
+  .circle4{
+      position: absolute;
+      background-image: url(/assets_v2/img/wo_img/04.png);
+      width: 78px;
+      height: 78px;
+      bottom: 104px;
+      right: 6px;
+      opacity: 0;
+  }
+  .circle5{
+      position: absolute;
+      background-image: url(/assets_v2/img/wo_img/teacher.png);
+      width: 87px;
+      height: 93px;
+      top: -38px;
+      left: 68px;
+      opacity: 0;
+  }
+  .circle6{
+      position: absolute;
+      background-image: url(/assets_v2/img/wo_img/course.png);
+      width: 88px;
+      height: 98px;
+      top: 113px;
+      right: 61px;
+      opacity: 0;
+  }
+  .glass{
+      position: absolute;
+      background-image: url(/assets_v2/img/wo_img/glass.png);
+      width: 376px;
+      height: 323px;
+      bottom: 18px;
+      left: 103px;
+      opacity: 0;
+  }
+  .halo1,.halo2,.halo3{
+      position: absolute;
+      background-image: url(/assets_v2/img/wo_img/halo.png);
+      width:123px;
+      height:123px;
+  }
+  .halo1{
+      top:61px;
+      left:529px;
+  }
+  .halo2{
+      left: 30px;
+      bottom: 200px;
+  }
+  .halo3{
+      left: 600px;
+      bottom: 202px;
+  }
+  .m2_cont .circle1{
+      -webkit-animation: m3pop1 .3s ease-in forwards;
+      -moz-animation: m3pop1 .3s ease-in forwards;
+      -ms-animation: m3pop1 .3s ease-in forwards;
+      animation: m3pop1 .3s ease-in forwards;
+  }
+  .m2_cont .circle2{
+      -webkit-animation: m3pop2 .3s ease-in .7s forwards;
+      -moz-animation: m3pop2 .3s ease-in .7s forwards;
+      -ms-animation: m3pop2 .3s ease-in .7s forwards;
+      animation: m3pop2 .3s ease-in .7s forwards;
+  }
+  .m2_cont .circle3{
+      -webkit-animation: m3pop3 .3s ease-in .3s forwards;
+      -moz-animation: m3pop3 .3s ease-in .3s forwards;
+      -ms-animation: m3pop3 .3s ease-in .3s forwards;
+      animation: m3pop3 .3s ease-in .3s forwards;
+  }
+  .m2_cont .circle4{
+      -webkit-animation: m3pop4 .3s ease-in .9s forwards;
+      -moz-animation: m3pop4 .3s ease-in .9s forwards;
+      -ms-animation: m3pop4 .3s ease-in .9s forwards;
+      animation: m3pop4 .3s ease-in .9s forwards;
+  }
+    .m4iphone{
+        -webkit-animation: m4iphone-s 1s ease-in forwards;
+        -moz-animation: m4iphone-s 1s ease-in forwards;
+        -ms-animation: m4iphone-s 1s ease-in forwards;
+        animation: m4iphone-s 1s ease-in forwards;
+    }
+    .m4_cont .circle5{
+        -webkit-animation: m4teacher 2s ease-in-out .6s alternate infinite forwards;
+        animation: m4teacher 2s ease-in-out .6s alternate infinite forwards;
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+    }
+    .m4_cont .circle6{
+        -webkit-animation: m4course .3s ease-in 1s forwards;
+        -moz-animation: m4course .3s ease-in 1s forwards;
+        -ms-animation: m4course .3s ease-in 1s forwards;
+        animation: m4course .3s ease-in 1s forwards;
+    }
+    .m4_cont .glass{
+        -webkit-animation: m4glass .3s ease-in 1.2s forwards;
+        -moz-animation: m4glass .3s ease-in 1.2s forwards;
+        -ms-animation: m4glass .3s ease-in 1.2s forwards;
+        animation: m4glass .3s ease-in 1.2s forwards;
+    }
+    .halo1{
+        -webkit-animation:m3halo 1s ease-in 1s alternate infinite forwards;
+        -moz-animation:m3halo 1s ease-in 1s alternate infinite forwards;
+        -ms-animation:m3halo 1s ease-in 1s alternate infinite forwards;
+        animation: m3halo 1s ease-in 1s alternate infinite forwards;
+    }
+    .halo2{
+        -webkit-animation:m3halo 1s ease-in .3s alternate infinite forwards;
+        -moz-animation:m3halo 1s ease-in .3s alternate infinite forwards;
+        -ms-animation:m3halo 1s ease-in .3s alternate infinite forwards;
+        animation: m3halo 1s ease-in .3s alternate infinite forwards;
+    }
+    .halo3{
+        -webkit-animation:m3halo 1s ease-in .7s alternate infinite forwards;
+        -moz-animation:m3halo 1s ease-in .7s alternate infinite forwards;
+        -ms-animation:m3halo 1s ease-in .7s alternate infinite forwards;
+        animation: m3halo 1s ease-in .7s alternate infinite forwards;
+    }
+    /*shake*/
+    @-moz-keyframes shake {
+        0%, 100% { -moz-transform: translateY(0); }
+        25% { -moz-transform: translateY(15px); }
+        60% { -moz-transform: translateY(-5px); } }
+    @-ms-keyframes shake {
+        0%, 100% { -ms-transform: translateY(0); }
+        25% { -ms-transform: translateY(15px); }
+        60% { -ms-transform: translateY(-5px); } }
+    @keyframes shake {
+        0%, 100% { transform: translateY(0); }
+        25% { transform: translateY(15px); }
+        60% { transform: translateY(-5px); }
+    }
+    @-webkit-keyframes m3pop1 {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(30px,20px,0) scale(0.7);
+            transform: translate3d(30px,20px,0) scale(0.7)
+        }
+
+        90% {
+            opacity: 1;
+            -webkit-transform: translate3d(0,0,0) scale(1.1);
+            transform: translate3d(0,0,0) scale(1.1)
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: translate3d(0px,0px,0) scale(1);
+            transform: translate3d(0px,0px,0) scale(1)
+        }
+    }
+    @keyframes m3pop1 {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(30px,20px,0) scale(0.7);
+            transform: translate3d(30px,20px,0) scale(0.7)
+        }
+
+        90% {
+            opacity: 1;
+            -webkit-transform: translate3d(0,0,0) scale(1.1);
+            transform: translate3d(0,0,0) scale(1.1)
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: translate3d(0px,0px,0) scale(1);
+            transform: translate3d(0px,0px,0) scale(1)
+        }
+    }
+    @-webkit-keyframes m3pop2 {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(30px,-20px,0) scale(0.7);
+            transform: translate3d(30px,-20px,0) scale(0.7)
+        }
+
+        90% {
+            opacity: 1;
+            -webkit-transform: translate3d(0,0,0) scale(1.1);
+            transform: translate3d(0,0,0) scale(1.1)
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: translate3d(0px,0px,0) scale(1);
+            transform: translate3d(0px,0px,0) scale(1)
+        }
+    }
+    @keyframes m3pop2 {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(30px,-20px,0) scale(0.7);
+            transform: translate3d(30px,-20px,0) scale(0.7)
+        }
+
+        90% {
+            opacity: 1;
+            -webkit-transform: translate3d(0,0,0) scale(1.1);
+            transform: translate3d(0,0,0) scale(1.1)
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: translate3d(0px,0px,0) scale(1);
+            transform: translate3d(0px,0px,0) scale(1)
+        }
+    }
+    @-webkit-keyframes m3pop3 {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(-30px,0,0) scale(0.7);
+            transform: translate3d(-30px,0,0) scale(0.7)
+        }
+
+        90% {
+            opacity: 1;
+            -webkit-transform: translate3d(0,0,0) scale(1.1);
+            transform: translate3d(0,0,0) scale(1.1)
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: translate3d(0px,0px,0) scale(1);
+            transform: translate3d(0px,0px,0) scale(1)
+        }
+    }
+    @keyframes m3pop3 {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(-30px,0,0) scale(0.7);
+            transform: translate3d(-30px,0,0) scale(0.7)
+        }
+
+        90% {
+            opacity: 1;
+            -webkit-transform: translate3d(0,0,0) scale(1.1);
+            transform: translate3d(0,0,0) scale(1.1)
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: translate3d(0px,0px,0) scale(1);
+            transform: translate3d(0px,0px,0) scale(1)
+        }
+    }
+    @-webkit-keyframes m3pop4 {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(-30px,0,0) scale(0.7);
+            transform: translate3d(-30px,0,0) scale(0.7)
+        }
+
+        90% {
+            opacity: 1;
+            -webkit-transform: translate3d(0,0,0) scale(1.1);
+            transform: translate3d(0,0,0) scale(1.1)
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: translate3d(0px,0px,0) scale(1);
+            transform: translate3d(0px,0px,0) scale(1)
+        }
+    }
+    @keyframes m3pop4 {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(-30px,0,0) scale(0.7);
+            transform: translate3d(-30px,0,0) scale(0.7)
+        }
+
+        90% {
+            opacity: 1;
+            -webkit-transform: translate3d(0,0,0) scale(1.1);
+            transform: translate3d(0,0,0) scale(1.1)
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: translate3d(0px,0px,0) scale(1);
+            transform: translate3d(0px,0px,0) scale(1)
+        }
+    }
+    @-webkit-keyframes m4iphone {
+        0%{
+            opacity:0;
+        }
+        25%{
+            opacity:1;
+            transform: rotateY(30deg);
+            -ms-transform: rotateY(30deg);	/* IE 9 */
+            -webkit-transform: rotateY(30deg);	/* Safari and Chrome */
+            -o-transform: rotateY(30deg);	/* Opera */
+            -moz-transform: rotateY(30deg);
+        }
+        25%{
+            opacity:1;
+        }
+        75%{
+            opacity:1;
+            transform: rotateY(-30deg);
+            -ms-transform: rotateY(-30deg);	/* IE 9 */
+            -webkit-transform: rotateY(-30deg);	/* Safari and Chrome */
+            -o-transform: rotateY(-30deg);	/* Opera */
+            -moz-transform: rotateY(-30deg);
+        }
+        100%{
+            opacity:1;
+        }
+    }
+    @keyframes m4iphone {
+        0%{
+            opacity:0;
+        }
+        25%{
+            opacity:1;
+            transform: rotateY(30deg);
+            -ms-transform: rotateY(30deg);	/* IE 9 */
+            -webkit-transform: rotateY(30deg);	/* Safari and Chrome */
+            -o-transform: rotateY(30deg);	/* Opera */
+            -moz-transform: rotateY(30deg);
+        }
+        25%{
+            opacity:1;
+        }
+        75%{
+            opacity:1;
+            transform: rotateY(-30deg);
+            -ms-transform: rotateY(-30deg);	/* IE 9 */
+            -webkit-transform: rotateY(-30deg);	/* Safari and Chrome */
+            -o-transform: rotateY(-30deg);	/* Opera */
+            -moz-transform: rotateY(-30deg);
+        }
+        100%{
+            opacity:1;
+        }
+    }
+    @-webkit-keyframes m4teacher {
+        0% {
+            opacity: 1;
+            -webkit-transform: rotate(20deg);
+            transform: rotate(20deg)
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: rotate(-15deg);
+            transform: rotate(-15deg)
+        }
+    }
+    @keyframes m4teacher {
+        0% {
+            opacity: 0.5;
+            -webkit-transform: rotate(0);
+            transform: rotate(0);
+        }
+
+        33% {
+            opacity: 1;
+            -webkit-transform: rotate(20deg);
+            transform: rotate(20deg);
+        }
+
+        66% {
+            opacity: 1;
+            -webkit-transform: rotate(-15deg);
+            transform: rotate(-15deg);
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+    }
+    @-webkit-keyframes m4course {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(30px,-20px,0) scale(0.7);
+            transform: translate3d(30px,-20px,0) scale(0.7)
+        }
+
+        60% {
+            opacity: 1;
+            -webkit-transform: translate3d(0,0,0) scale(1.1);
+            transform: translate3d(0,0,0) scale(1.1)
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: translate3d(0px,0px,0) scale(1);
+            transform: translate3d(0px,0px,0) scale(1)
+        }
+    }
+    @keyframes m4course {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(30px,-20px,0) scale(0.7);
+            transform: translate3d(30px,-20px,0) scale(0.7)
+        }
+
+        60% {
+            opacity: 1;
+            -webkit-transform: translate3d(0,0,0) scale(1.1);
+            transform: translate3d(0,0,0) scale(1.1)
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: translate3d(0px,0px,0) scale(1);
+            transform: translate3d(0px,0px,0) scale(1)
+        }
+
+    }
+    @-webkit-keyframes m4glass {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate(0,0);
+            transform: translate(0,0)
+        }
+
+        50% {
+            opacity: 1;
+            -webkit-transform: translate(20px,0);
+            transform: translate(20px,0)
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: translate(0,0);
+            transform: translate(0,0)
+        }
+    }
+    @keyframes m4glass {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate(0,0);
+            transform: translate(0,0)
+        }
+
+        50% {
+            opacity: 1;
+            -webkit-transform: translate(20px,0);
+            transform: translate(20px,0)
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: translate(0,0);
+            transform: translate(0,0)
+        }
+    }
+    @-webkit-keyframes m3halo {
+        0%,100%{
+            opacity: 0;
+        }
+        50%{
+            opacity: 1;
+        }
+    }
+    @keyframes m3halo {
+        0%,100%{
+            opacity: 0;
+        }
+        50%{
+            opacity: 1;
+        }
+    }
+    @media screen and (min-width:320px) and (max-width:768px) {
+        #iph1{ width:70%;}
+        .client_m3{ background-size: 100%;}
+        .m3-text { position: absolute; top: 100%; left: 2%;}
+        .glass {  width: 230px;height: 160px;bottom: 82px;left: 103px;background-size: 100%;}
+        footer p{ display: block;}
+    }
+    @media (min-width: 1200px){
+        .section .m1_cont,.section .m2_cont,.section .m4_cont{
+          height: auto;position: absolute;left: 50%;top: 50%;margin-top: -268px;margin-left: -600px;
+        }
+        .section .m1_cont{ margin-top:-274px;}
+    }
+</style>
+</head>
+<body>
+  <!-- container -->
+<div id="fullpage">
+    <!--main1-->
+    <div class="section">
+        <header class="index-head">
+            <div class="container">
+                <div class="row">
+                    <div class="logo col-lg-4 col-md-4 col-sm-3 col-xs-4 pd0">
+                        <a href="javascript:;" id="logo">
+                            <img src="{utility_cdn::file($orgInfo->thumb_big)}" alt="">
+                        </a>
+                    </div>
+                    <div class="col-xs-3 pd0 visible-xs visible-sm">
+                        <div class="m-sub-menu" id="m-sub-menu">
+                            <i class="m-sub-menu-icon"></i>
+                        </div>
+                    </div>
+                    <div id="login" class="login col-lg-16 col-md-16 col-sm-12 col-xs-4 pd0 right" >
+                        <div class="m-sub-seach" id="m-sub-seach">
+                            <i class="m-sub-seach-icon m-sub-sec"></i>
+                        </div>
+                        <div class="no-login right hidden">
+					<span class="hidden-xs">
+						<a class="right theme-link" href="/site.main.register">
+							<span class="tag">注册</span>
+						</a>
+							<span class="right">
+								|
+							</span>
+						<a class="right theme-link" href="/site.main.login">
+							<span class="tag m-login-img">登录</span>
+						</a>
+					</span>
+                            <a class="right visible-xs" href="/site.main.login">
+                                <span class="m-login-img"></span>
+                            </a>
+                        </div>
+                        <a href="/user.message" id="msg" class="msg right hidden-xs hidden-sm">
+                            <i class="message-icon"></i>
+                            <i class="msg-num"></i>
+                        </a>
+                        <div class="i-user-menu right" >
+                            <div class="user-menu-info">
+                                <script type="text/html" id="user-menu-info">
+                                    <span class="face">
+                                <img src="<%= user.small%>" alt="">
+                            </span>
+                                    <span class="i-user-name left hidden-xs">
+                                <%= user.name%>
+                            </span>
+                                    <span class="menu-icon hidden-xs">
+                            </span>
+                                    <div class="clear"></div>
+                                    <ul class="user-menu-list">
+                                        <% if(user.types.organization){ %>
+                                        <li class="menu-tag hidden-xs hidden-sm">
+                                            <a href="/org">{'机构管理'|tr:'site.header'}</a>
+                                        </li>
+                                        <% } %>
+                                        <% if(user.types.organization && user.types.teacher){ %>
+                                        <li class="menu-tag hidden-sm">
+                                            <a href="/teacher.course.teacherOfCourseList">{'教学管理'|tr:'site.header'}</a>
+                                        </li>
+                                        <% } %>
+                                        <li class="menu-tag">
+                                            <a href="/student.course.mycourse">学习中心</a>
+                                        </li>
+                                        <li class="menu-tag">
+                                            <a href="/student.main.infobase">基础资料</a>
+                                        </li>
+                                        <li class="menu-tag">
+                                            <a href="/student.order.myorder">我的订单</a>
+                                        </li>
+                                        <li class="menu-tag hidden-lg">
+                                            <a href="/user.message">我的消息</a>
+                                        </li>
+                                        <li class="menu-tag">
+                                            <a href="/student.security.password">安全设置</a>
+                                        </li>
+                                        <li class="menu-tag">
+                                            <a href="/site.main.logout">退出</a>
+                                        </li>
+                                    </ul>
+                                </script>
+                            </div>
+                        </div>
+                        <form id="search_form" class="left col-lg-offset-3">
+                            <div class="wi-search-box hidden-xs hidden-sm ">
+                                <input type="text" class="c-fl wi-search-input fs14" id="search_form" autocomplete="off"  name="search_field" maxlength="15" placeholder="课程名称，科目"  />
+                                <span class="wi-search-icon fs16"  id="search">搜索</span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="d_container client_m1">
+            <div class="container m1_cont">
+                <div class="row">
+                    <div class="col-md-20">
+                        <div class="col-md-8 tac">
+                            <img id="iph1" class="m1iphone" src="/assets_v2/img/wo_img/iphone01.png" alt=""/>
+                        </div>
+                        <div class="col-md-12 ptb5">
+                            <img class="m1-text" src="/assets_v2/img/wo_img/text.png" alt="" />
+                            <div class="col-md-14 ptb5">
+                                <div class="col-md-12 col-xs-10">
+                                    <p class="down-p"><a href="https://itunes.apple.com/us/app/xiao-wo-xue-tang/id1132432606?l=zh&ls=1&mt=8" target="_blank"><img src="/assets_v2/img/wo_img/iphone-down.png" /></a></p>
+                                    <p class="down-p"><a href="{$downloadUrl}"><img src="/assets_v2/img/wo_img/android-down.png" /></a></p>
+                                </div>
+                                <div class="col-md-8 col-xs-10">
+                                    <img class="m1-code" src="/assets_v2/img/wo_img/QR-code.png" alt="" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="arrow"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--main2-->
+    <div class="section">
+        <div class="client_m2 d_container">
+            <div class="m2_cont container">
+                <div class="row">
+                    <div class="col-md-20">
+                        <div class="col-md-10 pd5">
+                            <img src="/assets_v2/img/wo_img/text2.png" alt=""/>
+                        </div>
+                        <div class="col-md-8">
+                            <img src="/assets_v2/img/wo_img/iphone02.png" alt=""/>
+                            <div class="" id="circle1"></div>
+                            <div class="" id="circle2"></div>
+                            <div class="" id="circle3"></div>
+                            <div class="" id="circle4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--main3-->
+    <div class="section">
+        <div class="client_m3">
+            <div class="m3_cont">
+                <div class="row">
+                    <div class="col-md-20">
+                        <div class="col-md-20 plr5">
+                            <img src="/assets_v2/img/wo_img/iPhone03.png" alt=""/>
+                            <div class="halo1" id="halo1"></div>
+                            <div class="halo2" id="halo2"></div>
+                            <div class="halo3" id="halo3"></div>
+                        </div>
+                        <div class="col-md-6 m3-text">
+                            <img src="/assets_v2/img/wo_img/text3.png" alt=""/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--main4-->
+    <div class="section">
+        <div class="client_m4">
+            <div class="container m4_cont">
+                <div class="row">
+                    <div class="col-md-20">
+                        <div class="col-md-10 pd5">
+                            <img src="/assets_v2/img/wo_img/text4.png" alt=""/>
+                        </div>
+                        <div class="col-md-8 m4iphone" id="iph4">
+                            <img src="/assets_v2/img/wo_img/iPhone04.png" alt=""/>
+                            <div class="" id="circle5"></div>
+                            <div class="" id="circle6"></div>
+                            <div class="" id="glass"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mf">
+            <footer class="tac">
+                <a>常见问题</a>
+                <a>如何上课</a>
+                <a>合作共赢</a>
+                <a>联系我们</a>
+                <a>关于我们</a>
+                <p><span>2016 中国联通小沃科技有限公司 京ICP备14053191号</span></p>
+            </footer>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ejs.min.js')}"></script>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ie8/ejs.ie8.js')}"></script>
+<![endif]-->
+<script>
+$(function() {
+wotop();
+    $('#fullpage').fullpage({
+        'verticalCentered': false,
+        'css3': true,
+        'sectionsColor': ['#fff', '#00FF00'],
+        anchors: ['1', '2','3','4'],
+        'navigationPosition': 'right',
+        loopBottom:true,
+        afterLoad: function(anchorLink, index){
+            switch(index){
+                case 1:
+                    var $iphone1=$('#iph1');
+                    $iphone1.addClass('m1iphone');
+                    break;
+                case 2:
+                    $('#circle1').addClass('circle1');
+                    $('#circle2').addClass('circle2');
+                    $('#circle3').addClass('circle3');
+                    $('#circle4').addClass('circle4');
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    $('#iph4').addClass('m4iphone');
+                    $('#circle5').addClass('circle5');
+                    $('#circle6').addClass('circle6');
+                    $('#glass').addClass('glass');
+                    break;
+            }
+        },
+        onLeave:function(index,nextIndex,direction){
+            switch(index){
+                case 1:
+                    var $iphone1=$('#iph1');
+                    $iphone1.removeClass('m1iphone');
+                    break;
+                case 2:
+                    $('#circle1').removeClass('circle1');
+                    $('#circle2').removeClass('circle2');
+                    $('#circle3').removeClass('circle3');
+                    $('#circle4').removeClass('circle4');
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    $('#iph4').removeClass('m4iphone');
+                    $('#circle5').removeClass('circle5');
+                    $('#circle6').removeClass('circle6');
+                    $('#glass').removeClass('glass');
+                    break;
+            }
+
+        }
+    });
+    setInterval(function() {
+        $.fn.fullpage.moveSlideRight();
+    }, 10000);
+    var pic_h=$(window).height();
+    if(pic_h>670){
+        $(".m1_cont .m1bg_pic").css({
+            width : '100%',
+            bottom:  '0'
+        });
+        $(".m1_cont_l .iph_and").css({
+            right:'10px'
+        })
+    }
+});
+//用户头部信息
+function wotop() {
+  $.ajax('/site.main.wotop',{
+      type:'get',
+      dataType:'json',
+      success:function (data) {
+          var login = $('#login');
+          if(data.user.name!=''){
+              login.find('.no-login').addClass('hidden');
+          }else{
+              login.find('.no-login').removeClass('hidden');
+          }
+          if(!data.user.types.student){
+              login.find('.i-user-menu,#msg').addClass('hidden');
+              return false;
+          }else{
+              if(data.user.retMessagesNum == 0){
+                login.find('.msg-num').addClass('hidden');
+              }
+              var userHtml = $('#user-menu-info').html();
+              login.find('.user-menu-info').html(ejs.render(userHtml,{ user:data.user}));
+          }
+      },
+      error:function (data) {
+          var login = $('#login');
+          login.find('.no-login').removeClass('hidden');
+      }
+  })
+}
+
+;(function() {
+    $('.user-menu-info').click(function(){
+        var menulist_hide = $(this).children('.user-menu-list');
+        if(menulist_hide.css('display')=='none'){
+          menulist_hide.css('display','block')
+        }else{
+          menulist_hide.css('display','none')
+        }
+    })
+})();
+</script>

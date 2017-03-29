@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>高能100 - 专业的K12在线教育平台</title>
+    <meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+    <meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+    <meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+    {part "/site.main.header"}
+</head>
+<script src="{utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js')}"></script>
+<script type="text/javascript">
+$(function  () {
+    var uploader = new plupload.Uploader({
+        runtimes:'html5,flash,silverlight,html4',
+        browse_button: 'browse', // this can be an id of a DOM element or the DOM element itself
+        url: '/file.main.uploadOrgSlide',
+        filters: {
+            mime_types : [
+            { title : "Image files", extensions : "jpg,gif,png" }
+            ],
+            max_file_size:"1000kb"
+        }
+        ,multi_selection:false
+    });
+    uploader.init();
+    uploader.bind('FilesAdded', function(up, files) {
+        uploader.start();
+    });
+    uploader.bind('UploadProgress', function(up, file) {
+        $("#browse").val("上传中："+ file.percent +"%");
+    });
+    uploader.bind('FileUploaded', function(up, file,info) {
+        $("#browse").val("上传完成");
+        if(info.response){
+            var r = jQuery.parseJSON(info.response);
+            if(r.error){
+                layer.msg(r.error);
+            }else{
+                $('#add-pic-box').find('.mty img').attr('src',r.src+"?"+Math.random());
+                $('#add-pic-box').find('input[name=fid]').val(r.fid);
+            }
+        }
+    });
+    $('#add-pic-box form').submit(function(){
+        $.post("/user.org.uploadOrgSlideAjax",$(this).serialize(),function(r){
+            if(r.error){
+                layer.msg(r.error);
+                return false;
+            }else{
+                parent.location.reload();
+            }
+        },"json");
+        return false;
+    });
+});
+</script>
+<body style="background:#fff">
+    <div class='message-show' id="add-pic-box">
+      <form>
+        <div class='mty'>
+          <img width="380" height="154" src="{if !empty($slide->slide_url)}{utility_cdn::file($slide->slide_url)}{else}/assets_v2/img/mty.png{/if}" alt="">
+        </div>
+        <div class='scbtn'>
+            <input type="button" id="browse" value="上传图片">
+            <p>尺寸1920*360  支持jpg,png格式 最大800K</p>
+        </div>
+        <div class='show-wc'>
+            <input type="hidden" name="sid" value="{if !empty($slide->pk_slide)}{$slide->pk_slide}{/if}">
+            <input type="hidden" name="fid">
+            <input type="hidden" name="act" value="{$act}">
+             <input type="submit" value="完成">
+        </div>
+      </form>
+    </div>
+</body>
+</html>

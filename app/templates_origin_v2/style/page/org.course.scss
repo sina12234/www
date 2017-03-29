@@ -1,0 +1,51 @@
+//新建课程
+//org/plan.add_v2.html
+#course-last-step,.course-edit-wrap{
+  .base-title{
+    color: #000;
+    .rectangle-title{
+      @include sprite($rectangle-title);
+      margin-right:5px;
+      vertical-align: middle;
+    }
+  }
+  .grade-con-edit{
+    border:1px solid #ddd;
+    padding:10px;
+    margin:10px 0;
+  }
+  .class-setting-wrap{
+    li:nth-child(even) {
+      background: $background-color;
+      border-top:1px solid $input-border-color;
+      border-bottom:1px solid $input-border-color;
+    }
+    li:last-child{
+      border-bottom:none;
+    }
+  }
+  .bacGray{
+    background:$background-color;
+  }
+  .tab-add{
+    @include sprite($tab-add-active);
+  }
+}
+.add-single-course,.add-single-course-e{
+  input{
+    border:1px solid $border-color;
+  }
+  .single-txt-content{
+    border:1px solid $border-color;
+    padding: 5px;
+  }
+}
+.class-lists{
+  moz-user-select: -moz-none;
+  -moz-user-select: none;
+  -o-user-select:none;
+  -khtml-user-select:none;
+  -webkit-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+}

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>视频剪辑-{part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 首页 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+<script src="{utility_cdn::js('/assets_v2/js/player.js')}"></script>
+<script src="{utility_cdn::js('/assets_v2/js/HTML5Player.js')}"></script>
+<script src="{utility_cdn::js('/assets_v2/js/swfobject.js')}"></script>
+<script>
+var totalTime = {$totaltime};
+var planId = {$plan_id};
+$(document).ready(function(){
+	$(window).resize(function(){
+		var w = $("#playerContent").innerWidth();
+		var h = parseInt(w/16*9);
+		var box_h=$(window).height()-120;
+		if(h>box_h){
+			h=box_h;
+		}
+		$("#playerContent").height(h);
+		$('#partlist .ov-partlist-content').css('height',h-30);
+		}).trigger("resize");
+		//fix ie8 trigger (twice)
+		setTimeout(function(){ $(window).trigger("resize");},50);
+		$("#fullscreen").click(function(){
+			FullScreen.toggle();
+		});
+		var flashvars = {
+			auto_play:true,
+			stream_type:"高清",
+			fullscreen_func:"FullScreen.toggle",
+			error_func:"Player.error",
+			plan_id:""+planId+"",
+			direct:"false",
+			original:"true",
+			uiAnimation:"false"
+		};
+		var params = {
+			menu: "false",
+			scale: "noScale",
+			allowFullscreen: "true",
+			allowScriptAccess: "always",
+			bgcolor: "",
+			wmode:"opaque"
+		};
+		var attributes = {
+			id:"player",
+			name:"player"
+		};
+		swfobject.embedSWF(
+			"{utility_cdn::swf('/assets/swf/Player.swf')}",
+			"player", "100%", "100%", "13.0.0",
+			"{utility_cdn::swf('/assets/swf/expressInstall.swf')}",
+			flashvars, params, attributes,function(r){
+				if(r.success==false){
+					H5Player.init(planId,"");
+				}
+		});
+});
+</script>
+<body>
+{part "/site.main.usernav.home"}
+<section class="pd30">
+	<div class="container">
+		<div class="col-md-20 main-center">
+			<p class="fb fs14" style="padding-left:18px">视频管理</p>
+			<p style="padding-left:18px">{$plan_info->title} {$plan_info->class_name|tr:'site.index'} {$plan_info->section_name|tr:'site.index'} {$secDesc}</p>
+			<!-- tab -->
+			<div class="tab-main mb30">
+                <div class="tab-hd fs14" id="tab-hd">
+                    <a href="/video.point.VideoPart/" class="tab-hd-opt curr">内容剪辑</a>
+                    <a href="/video.point.VideoPoint/" class="tab-hd-opt">打点注释</a>
+                    <a href="/video.point.videocover/" class="tab-hd-opt">视频封面</a>
+                </div>
+				<a href="/video.point.videoUpload/" class="gray-btn fs14 c-fr" id="video-upload">重新上传</a>
+            </div>
+			<!-- 视频播放区 -->
+            <div class="org-video-player col-md-15"  id="playerContent">
+                <div id="player">视频播放区</div>
+            </div>
+			<!-- 剪辑列表 -->
+            <div class="org-video-partlist col-md-5" id="partlist">
+                <div class="ov-tit fs14 tac">剪辑列表</div>
+				<div class="ov-partlist-content">
+					<!-- 没有数据 -->
+                    {if(empty($segs))}
+					<ul class="ov-partlist ov-pointlist" id="part-list"></ul>
+					<div class="no-part tac">
+						还没视频剪辑！
+						<a href="javascript:void(0);" class="btn mt20" id="add-part">添加剪辑片段</a>
+					</div>
+					<div class="ov-partlist-btn tac p10">
+						<p class="tal mb10">
+							<a href="javascript:void(0);" class="theme-link" id="add-morepart">+继续剪辑</a><span class="cGray">(最多保存10个剪辑片段)</span>
+						</p>
+						<a href="javascript:void(0);" class="btn" id="addPart">确认剪辑</a>
+						{if(!empty($segsTotalTime))}
+						<p class="mt5 cGray">剪辑后视频时长为：{$segsTotalTime}</p>
+						{/if}
+					</div>
+                    {else}
+					<!-- 剪辑列表 -->
+					<ul class="ov-partlist ov-pointlist" id="part-list">
+                        {foreach $segs as $k=>$v}
+						<li data-id={$k}>
+							<b>{'片段'|tr:'site.course'}{$k}：</b><span>{$v['start']}-{$v['end']}</span>
+						</li>
+                        {/foreach}
+					</ul>
+					<div class="ov-partlist-btn tac p10" style="display:none">
+						<p class="tal mb10">
+							<a href="javascript:void(0);" class="theme-link" id="add-morepart">+继续剪辑</a><span class="cGray">(最多保存10个剪辑片段)</span>
+						</p>
+						<a href="javascript:void(0);" class="btn" id="addPart">确认剪辑</a>
+						{if(!empty($segsTotalTime))}
+						<p class="mt5 cGray">剪辑后视频时长为：{$segsTotalTime}</p>
+						{/if}
+					</div>
+					<p class="tac mt20"><a id="preview" href="javascript:void(0);" class="gray-btn mr10">预览</a><a id="rePart" href="javascript:void(0);" class="btn">重新剪辑</a></p>
+					<div class="no-part tac" style="display:none">
+						还没视频剪辑！
+						<a href="javascript:void(0);" class="btn mt20" id="add-part">添加剪辑片段</a>
+					</div>
+					{/if}
+				</div>
+            </div>
+			<!-- 时间轴 -->
+			<div class="org-video-timeline col-md-15 pd0" id="timeLine">
+				<p>编辑时间轴</p>
+				<div class="ov-timeline-handle" id="left-handle"></div>
+				<div class="ov-timeline-handle" id="right-handle"></div>
+				<div class="ov-timeline-base">
+					<div class="ov-timeline-opacity"></div>
+				</div>
+				<ul class="ov-timeline-scale">
+
+				</ul>
+				<ul class="ov-timeline-point">
+
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>
+<script src="{utility_cdn::js('/assets_v2/js/video.part.js')}"></script>
+<script>
+	viodInit();
+	var partlist=$('#part-list'),plist=$('#partlist'),timeLines=$('#timeLine'),partArr= [];
+	$(function(){
+		addPartFun();
+		var ptime1,ptime2;
+		partlist.on('change','.part-time',function(){
+			if(!RegDataTime.test($(this).val())){
+				layer.msg('时间格式不正确');
+				return false;
+			};
+			var _this=$(this),
+			    ptime1=formatTimes(partlist.find('.part-time:eq(0)').val()),
+				ptime2=formatTimes(partlist.find('.part-time:eq(1)').val()),
+				_left=timeLineWidth*ptime1/totalTime,
+				_width=timeLineWidth*(ptime2-ptime1)/totalTime,
+				_dataId=_this.parent().attr('data-id');
+				handleShow(_left,_width,_dataId);
+			timeLines.find('p[data-id="'+_dataId+'"]').css({ "left":_left+'px',width:_width+'px' });
+
+		})
+
+		partlist.on('click','.btn',function(){
+			var _this=$(this);
+			var time1=_this.siblings('input:eq(0)').val();
+			var time2=_this.siblings('input:eq(1)').val();
+			if(!RegDataTime.test(time1) || !RegDataTime.test(time2)){
+				layer.msg('时间格式不正确');
+				return false;
+			};
+			if(formatTimes(time1)>totalTime || formatTimes(time2)>totalTime){
+				layer.msg('时间超出总时长');
+				return false;
+			};
+			if($.trim(time1)=='' || $.trim(time2)==''){
+				layer.msg('时间不能为空！');
+				_this.siblings('input').css('border','1px solid red');
+				return false;
+			}else{
+				var vhtml;
+				if(formatTimes(time2)>formatTimes(time1)){
+					vhtml='<b>'+_this.siblings('b').html()+'</b>'+'<span>'+time1+'-'+time2+'</span><i class="del-icon c-fr ml5"></i><i class="edit-icon c-fr"></i>';
+				}else{
+					vhtml='<b>'+_this.siblings('b').html()+'</b>'+'<span>'+time2+'-'+time1+'</span><i class="del-icon c-fr ml5"></i><i class="edit-icon c-fr"></i>';
+				}
+				_this.parent().empty().html(vhtml);
+				handleHide();
+			}
+		});
+
+		partlist.on('click','.edit-icon',function(){
+			var _this=$(this),
+				_thisId=_this.parent('li').attr('data-id'),
+				time1=_this.siblings('span').text().split('-')[0],
+				time2=_this.siblings('span').text().split('-')[1],
+				inputLength=partlist.find('input'),
+				_left=timeLineWidth*formatTimes(time1)/totalTime,
+				_width=timeLineWidth*(formatTimes(time2)-formatTimes(time1))/totalTime;
+			handleShow(_left,_width,_thisId);
+			if(inputLength.length>0){
+				layer.msg('有未保存的剪辑！');
+				_this.siblings('input').css('border','1px solid red');
+				return false;
+			}else{
+				_this.parent('li').find('b').after('<input type="text" class="part-time" value="'+time1+'" data-v="'+time1+'">-<input type="text" class="part-time" value="'+time2+'" data-v="'+time2+'">');
+				_this.parent('li').append('<br><a href="javascript:void(0);" class="gray-btn c-fr mt5">取消</a><a href="javascript:void(0);" class="btn c-fr mt5 mr5">确定</a>');
+				_this.parent('li').find('span,.del-icon,.edit-icon').remove();
+			}
+		});
+
+		partlist.on('click','.del-icon',function(){
+			var _this=$(this),_thisId=_this.parent().attr('data-id');
+			_this.parent('li').remove();
+			removeTimeline(_thisId);
+			if(partlist.find('li').length==0){
+				timeLines.find('.ov-timeline-base').append('<p class="ov-timeline-bar" style="width:100%;"></p>');
+			}
+		});
+
+		partlist.on('click','.gray-btn',function(){
+			var _this=$(this),vhtml,_thisId=_this.parent().attr('data-id');
+			var time1=_this.parent('li').find('.part-time:eq(0)').attr('data-v');
+			var time2=_this.parent('li').find('.part-time:eq(1)').attr('data-v');
+			var inputLength=partlist.find('input');
+			if(time1 !=0){
+				vhtml='<b>'+_this.siblings('b').html()+'</b>'+'<span>'+time1+'-'+time2+'</span><i class="del-icon c-fr"></i><i class="edit-icon c-fr"></i>';
+				_this.parent().empty().html(vhtml);
+				timeLines.find('.ov-timeline-bar[data-id="'+_thisId+'"]').css({ "left":timeLineWidth*(formatTimes(time1))/totalTime+'px',"width":timeLineWidth*(formatTimes(time2)-formatTimes(time1))/totalTime+'px' });
+
+			}else{
+				_this.parent('li').remove();
+				removeTimeline(_thisId);
+			}
+			handleHide();
+		});
+
+		// 剪辑
+		$('#addPart').click(function(){
+			addPartFunc();
+		});
+
+		// 重新剪辑
+		$('#rePart').click(function(){
+			var _self=$(this);
+			_self.parent().hide();
+			if(partlist.find('li').length==0){
+				plist.find('.no-part').show();
+			}else{
+				plist.find('.ov-partlist-btn').show();
+				partlist.find('li').each(function(){
+					$(this).append('<i class="del-icon c-fr"></i><i class="edit-icon c-fr"></i>');
+				});
+			}
+		});
+		$('#preview').click(function(){
+			Player.pause();
+			layer.open({
+	            type: 2,
+	            title:false,
+	            shadeClose: true,
+	            area: ['620px', '345px'],
+				scrollbar: false,
+	            content: '/video.point.VideoPreview/'+planId+'/2' //iframe的url
+			});
+		});
+	});
+
+function removeTimeline(id){
+	timeLines.find('p[data-id="'+id+'"]').remove();
+}
+function addPartFunc(){
+	var flag    = true;
+	var status  = 2;
+	partlist.find('li').each(function(i){
+		var stime = formatTimes($(this).find("span").html().split('-')[0]);
+		var etime = formatTimes($(this).find("span").html().split('-')[1]);
+
+		if(etime <= 0){
+			layer.msg('{"结束时间不能小于0"|tr:"site.course"}');
+			flag = false;
+			return false;
+		}
+
+		if(stime > totalTime || etime > totalTime){
+			layer.msg('{"时间不能大于总时间"|tr:"site.course"}');
+			flag = false;
+			return false;
+		}
+		partArr[i] = stime+','+etime;
+	});
+	if(partArr.length==0){
+		partArr[0] = 0+','+totalTime;
+	}
+	if(flag){
+		$.post("/user.teacher.dopart",{ plan_id:planId, partArr:partArr, status:status },function(r){
+			if(r.code == 1){
+				layer.msg('裁剪成功');
+				location.reload(true);
+			}else{
+				layer.msg(r.msg);
+			}
+		},'json');
+	}
+}
+</script>
+{part "/site.main.footer"}
+</body>
+</html>

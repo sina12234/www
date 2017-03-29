@@ -1,0 +1,70 @@
+//select 下拉框
+@mixin select($height:28px) {
+    .select-label {
+        text-align: right;
+        color: $text-strong-color;
+        @if $height == 28px {
+            font-size: 12px;
+        }
+        @else if $height == 32px {
+            font-size: 14px;
+        }
+    }
+    .select {
+        text-align: left;
+        position: relative;
+        cursor: pointer;
+        border: 1px solid $select-border-color;
+        @if $height == 28px {
+            width: 80px;
+        }
+        @else if $height == 32px {
+            width: 110px;
+        }
+        .select-btn {
+            float: left;
+            height: $height;
+            padding-left: 10px;
+            line-height: $height;
+            border: none;
+        }
+        .select-icon {
+            position: absolute;
+            @if $height == 28px {
+                right: 10px;
+                top: 8px;
+            }
+            @else if $height == 32px {
+                right: 10px;
+                top: 12px;
+            }
+            @include sprite($arrow);
+        }
+        .option-box {
+            width: inherit;
+            overflow: hidden;
+            position: absolute;
+            border: 1px solid $select-border-color;
+            border-top: none;
+            left: -1px;
+            top: $height;
+            z-index: 100;
+            background-color: $main-white-color;
+        }
+        .option {
+            margin: 0;
+            padding: 0 0 0 10px;
+            opacity: 0;
+            display: none;
+            @if $height == 28px {
+                 @include line-height(23px);
+            }
+            @else if $height == 32px {
+                 @include line-height(27px);
+            }
+            &:hover {
+                background-color: $option-background-color;
+            }
+        }
+    }
+}

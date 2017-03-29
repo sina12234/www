@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>我的课程 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 我的课表 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}" ></script>
+<script tyee="text/javascript" src="{utility_cdn::js('/assets_v2/js/scorll.js')}" ></script>
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery.calendar-v2.js')}"></script>
+</head>
+<body id="scrollTops">
+{part "/site.main.nav.home"}
+<!-- mob nav -->
+<div class="g-nav hidden-lg hidden-md">
+    <p class="swiper-wrapper" id="mob-nav">
+        <a href="/teacher.detail.entry/{$userId}" class="swiper-slide">我的主页</a>
+        <a href="/teacher.course.timetable2" class="swiper-slide active">课程表</a>
+        <a href="/teacher.course.teacherOfCourseList" class="swiper-slide">在教课程</a>
+        <a href="/teacher.manage.student" class="swiper-slide">我的学生</a>
+    </p>
+</div>
+<!--header-->
+<section class="org-section">
+<div class="container">
+    <div class="row">
+    <!-- leftmenu start -->
+	{part "/user.main.menu.teacher.timetable"}
+    <!-- leftmenu end -->
+    <!-- 我的课表 -->
+    <div class="right-main col-sm-20 col-md-16 col-xs-20" id="wrap-my-course">
+        <div class="content">
+            <div class="col-lg-20 pd0" style="display:none;">
+                <!--日历 -->
+                <div id="calendar">
+                    <div class="curr-day col-lg-5 col-md-5 col-sm-5">
+                        <div class="calendar-title">
+                            <a id="month_perv" class="cWhite pdh30" href="#"> &lt; </a>
+                            <span id="calendar-select-year" class="fs14"></span>年
+                            <span id="select-month" class="fs14"></span>月
+                            <a id="month_next" class="cWhite pdh30" href="#"> &gt; </a>
+                        </div>
+                        <div class="calendar-show" id="calendar-show">
+                            <div class="calendar-show-base"><a href="#" class="c-fl toToday">返回今天</a><a href="#" class="c-fr calendar-yellow" id="course_num">4节课</a></div>
+                            <div class="calendar-show-panel hidden-xs">31</div>
+                        </div>
+                    </div>
+                    <div class="calendar-day col-lg-15 col-xs-20 col-md-15 col-sm-15">
+                        <table id="calendar-table" class="col-xs-20 col-md-20 pd0">
+                            <thead class="calendar-title col-xs-20 col-md-20 pd0">
+                                <tr class="col-md-20 col-xs-20 pd0">
+                                    <td>一</td>
+                                    <td>二</td>
+                                    <td>三</td>
+                                    <td>四</td>
+                                    <td>五</td>
+                                    <td>六</td>
+                                    <td>日</td>
+                                </tr>
+                            </thead>
+                            <tbody class="calendar-main" id="calendar-main">
+                            <tr>
+                                <td>6</td>
+                                <td>7</td>
+                                <td>8</td>
+                                <td><span class="calendar-this">今天</span><span class="calendar-dott"></span></td>
+                                <td>10</td>
+                                <td>11<span class="calendar-dott"></span></td>
+                                <td>12</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {*<h1 class="fs22 hidden-xs">{'我的课表'|tr:'site.teacher'}</h1>*}
+            <dl class="list-tab fs16 col-xs-20 col-md-20 col-sm-20">
+                <dd class="col-sm-3 col-md-3 col-xs-8 curr">{'待上课'|tr:'site.teacher'}<i></i></dd>
+                <dd class="col-sm-4 col-md-3 col-xs-8">{'教学课程'|tr:'site.teacher'}（{$classCount}）<i></i></dd>
+            </dl>
+            <ul id="list">
+            <!-- 直播课程 -->
+                <li id="notEnd">
+				{if(!empty($showData))}
+				{foreach($showData as $k=>$v)}
+                <!-- 月份 -->
+			 	{if(!empty($v["start_time_month"]))}
+                    <div class="student-course-month col-sm-17 hidden-xs"><i class="col-sm-1 fs12">{$v["start_time_month"]|tr:'site.teacher'}</i></div>
+                {/if}
+                <!-- /月份 -->
+                <!-- list -->
+                <div class="my-course-contents col-sm-20 col-xs-20 c-fl" m_d="{$v['m_d']}" s_t_m_d="{$v['start_time_month_num']}" >
+                    <div class="col-sm-3 fs14 vertical-line col-xs-6">
+                        <p>{$v["start_time_m_d"]}</p>
+                        {if(!empty($v["start_time_H_i"]))}
+                        <p>{$v["start_time_H_i"]}</p>
+						{/if}
+                        <span></span>
+                        <i></i>
+                    </div>
+                    <div class="col-sm-17 my-course-contents-rt col-xs-14">
+                        <div class="col-sm-5">
+                            <a href="{$v['course_title_link']}">
+                                <img src="{$v['thumb']}" alt="" />
+                                {$v["course_type"]}
+                                <!--
+                                    <div class="g-icon3">录播课</div>
+                                    <div class="taped-icon">线下课</div>
+                                -->
+                            </a>
+                        </div>
+                        <div class="col-sm-11 infor-subject">
+                            <a href="{$v['course_title_link']}">
+								<h1 class="fs16">{$v["course_name"]}</h1>
+							</a>
+                            <p>{$v["class_name"]} &nbsp;({$v["user_total_class"]}/{$v["max_user_class"]}){'人'|tr:'site.teacher'}</p>
+                            <p class="hidden-xs">{$v["section_name"]}</p>
+                        </div>
+                                <div class="col-sm-7 col-md-4 infor-student-btn hidden-xs hidden-sm hidden-md">
+								<a href="{$v['b_status_link']}" target="_blank">
+                                    <button class="{$v['btn_color']}">{$v["b_status"]}</button>
+								</a>
+                                    <p>
+                                        <a href="{$v['left_link']}" title="" target="_blank">{$v["left_status"]}</a>{$v['mid_status']}<a href="{$v['right_link']}" title="" target="_blank">{$v["right_status"]}</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                     <!-- /list -->
+					 {/foreach}
+					 {else}
+                     <div class=" col-md-20 col-sm-20 col-xs-20">
+                        <div class="mt20 tac">
+                        <img src="{utility_cdn::img('/assets_v2/img/pet3.png')}"><br>
+                        {'还没有课程，联系机构为你排课吧'|tr:'site.teacher'}
+                        </div>
+                     </div>
+					 {/if}
+                    </li>
+            <!-- /直播课程 -->
+			{if !empty($tips)}
+			<div class="tp-lg-success-tip hidden-xs hidden-sm hidden-md">
+				<div class="base-set-layer">
+					<a href="javascript:;" class="c-fr"></a>
+				</div>
+			</div>
+<script type="text/javascript">
+$("body").css("overflow-y","hidden");
+$(".base-set-layer a").click(function() {
+    $.post( "teacher.course.CloseGrowthTips", function(r) {
+        $(".tp-lg-success-tip").hide();
+        $("body").css("overflowY","scroll")
+    });
+})
+</script>
+			{/if}
+            <!-- 报名课程 -->
+                    <li>
+                        <div class="my-course-content col-sm-20">
+                            <!-- 搜索 -->
+                                <div class="col-sm-4 my-course-search-tp hidden-xs" style="padding:0;">
+                                    <div class="my-course-search">
+                                        <input placeholder="{'课程搜索'|tr:'site.teacher'}" type="text" class="col-sm-16" name="title" id="search_data"  value="{$scourse_title}"/>
+                                        <button class="col-sm-4" id="scourse_title"></button>
+                                    </div>
+                                </div>
+                            <!-- /搜索 -->
+                            <ul class="my-course-content-rt col-md-20 col-xs-20 pd0">
+								{if(!empty($classListShow->data))}
+								{foreach($classListShow->data as $k=>$v)}
+
+                                <li class="col-sm-10 bor1px col-xs-20">
+                                <a href="/teacher.course.detail/{$v->course_id}/{$v->class_id}" target="_blank" title="">
+                                    <div class="col-sm-10 col-xs-20">
+                                       <img src="{utility_cdn::file($v->course_thumb)}" alt="" />
+										{if ($v->status==2)}
+                                        <span class="start-class">{'正在上课'|tr:'site.teacher'}</span>
+										{/if}
+										{if($v->type==3)}
+                                        <span class="taped-icon">{'线下'|tr:'LearningCenter'}</span>
+										{elseif($v->type==2)}
+                                        <span class="g-icon3">{'录播'|tr:'LearningCenter'}</span>
+										{/if}
+                                    </div>
+                                    <div class="col-sm-10">
+                                        <p class="fs16 my-course-subname">{$v->course_title}</p>
+                                        <p>{$v->name} &nbsp;{$v->user_total}{'人'|tr:'site.teacher'}</p>
+
+										{if($v->type==2)}
+                                        	<p>{'共'|tr:'site.teacher'}{$v->section_info->section_count}{'章'|tr:'site.teacher'}  {'完成度'|tr:'site.teacher'}
+											{$v->plan_info->planend_count}
+											{'章'|tr:'site.teacher'}</p>
+										{else}
+
+                                        	<p>{'共'|tr:'site.teacher'}{$v->section_info->section_count}{'章'|tr:'site.teacher'}  {'进度第'|tr:'site.teacher'}
+											{if($v->section_info->section_count==1)}
+											1
+											{elseif($v->plan_info->planend_count +1 >= $v->section_info->section_count)}
+											{$v->plan_info->planend_count}
+											{else}
+											{$v->plan_info->planend_count+1}
+											{/if}
+											{'章'|tr:'site.teacher'}</p>
+										{/if}
+										{if($v->fee_type==1)}
+                                        <p style="color:#f71b25;">
+										{$v->price/100}{'元'|tr:'site.teacher'}
+										{else}
+                                        <p class="free-color">
+										{'免费'|tr:'site.teacher'}
+										{/if}
+										</p>
+                                    </div>
+                                    </a>
+                                </li>
+								{/foreach}
+								{else}
+								 <div class="col-md-20 col-sm-20 col-xs-20">
+									<div class="mt20 tac">
+									<img src="{utility_cdn::img('/assets_v2/img/pet3.png')}"><br>
+									{'还没有课程，联系机构为你排课吧'|tr:'site.teacher'}
+									</div>
+								 </div>
+								{/if}
+                            </ul>
+                        </div>
+						<div class="page-list" id="pagepage">
+						</div>
+						</li>
+            <!-- /报名课程 -->
+                    </ul>
+                </div>
+            </div>
+            </div>
+<!-- /我的课表 -->
+        <div class='clear'></div>
+    </div>
+</div>
+<!--分页开始-->
+<!--分页结束-->
+</section>
+<div id="rightWindow"></div>
+<script>$("#rightWindow").load("/org.rightWindow.rightWindow");</script>
+<footer>
+{part "/site.main.footer"}
+</footer>
+</body>
+</html>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/mustache.js')}"></script>
+<script>
+var tab = {$tab};
+$(document).ready(function() {
+    $('#list li').first().show();
+	$('.list-tab>dd').click(function() {
+        $(this).addClass('curr').siblings().removeClass('curr');
+		$('#list>li:eq(' + $(this).index() + ')').show().siblings().hide();
+	})
+    $("#scourse_title").click(function(){
+		var search_data = $("#search_data").val();
+        location.href="/teacher.course.timetable?searchdata="+search_data;
+	})
+	page("pagepage","{$url}",{$length},{$page},{$total});
+});
+</script>
+<script id='planListnotend' type='text/template'>
+	<<#data>>
+	<div class="student-course-month col-sm-17 hidden-xs"><i class="col-sm-2 fs12"><<start_time_month>></i></div>
+	<div class="my-course-contents col-xs-20 col-sm-20 c-fl" m_d="<<m_d>>" s_t_m_d="<<start_time_month_num>>" >
+		<div class="col-sm-3 fs14 vertical-line col-xs-5">
+			<p><<start_time_m_d>></p>
+			<p><<start_time_H_i>></p>
+			<span></span>
+			<i></i>
+		</div>
+		<div class="col-sm-17 my-course-contents-rt col-xs-15">
+			<div class="col-sm-5">
+				<a href="<<course_title_link>>">
+					<img src="<<thumb>>" alt="" />
+					<<&course_type>>
+				</a>
+			</div>
+			<div class="col-sm-14 infor-subject">
+				<a href="<<course_title_link>>">
+					<h1 class="fs16"><<course_name>></h1>
+				</a>
+				<p><<class_name>> &nbsp;(<<user_total_class>>/<<max_user_class>>){'人'|tr:'site.teacher'}</p>
+				<p><<section_name>></p>
+			</div>
+			<div class="col-sm-7 infor-student-btn col-lg-4 hidden-xs hidden-sm hidden-md">
+				<a href="<<b_status_link>>" target="_blank">
+					<button class="<<btn_color>>"><<b_status>></button>
+				</a>
+				<p>
+				<a href="<<left_link>>" title="" target="_blank"><<left_status>></a> <<mid_status>> <a href="<<right_link>>" title="" target="_blank"><<right_status>></a>
+				</p>
+			</div>
+		</div>
+	</div>
+{*
+	<li>
+	<div class="line-date col-sm-4 col-md-4 new-line-date ">
+		<div class="list-icon new-list-icon hidden-xs"></div>
+		<div class="list-date"><span class="fs14"><<start_date>></span></div>
+	</div>
+	<div class="new-list-right">
+		<div class="pic col-sm-7 col-md-7 col-xs-10 col-lg-5"><a href="./course.plan.play/<<plan_id>>"><p><img src="<<thumb>>" alt=""></p></a></div>
+		<div class="intro col-sm-5 col-md-5 col-xs-10 col-lg-7">
+			<a href="./course.plan.play/<<plan_id>>"><p class="fs16"><<course_name>> <<class_name>></p></a>
+			<p><span class="<<fee_info_color>>"><<fee_rnfo>></span> | 共<<countsecs>>章 进度 <<section_name>></p>
+			<p><span style="margie-top:-1px;float:left"></span> 学生(<<user_total_class>>/<<max_user_class>>)</p>
+			{*	<p><span class="cGreen"><<fee_info>></span> | 共<<countsecs>>章 学生(<<user_total_class>>/<<max_user_class>>)</p> <p><span style="margin-top:-1px;float:left"></span> 进度 <<section_name>></p> *}
+		</div>
+		<div class="col-sm-5 row c-fl lin-h col-xs-14"><p></p></div>
+		<div class="btn col-sm-5 col-md-5 row col-xs-10 hidden-xs hidden-sm">
+			<p><<&plan_status>></p>
+			<p class="hidden-xs"><a href="<<lesson_link>>"><<lesson>></a> | <a href="<<plan_manage_link>>"><<plan_manage>></a> </p>
+		</div>
+		</li>
+*}
+		<</data>>
+	</script>
+<script>
+	var arrend = [];
+	var arrnotend = [];
+	$(document).ready(function() {
+    var getUrl=GetUrl("page");
+    if(getUrl!=null){
+		$(".list-tab dd:last").addClass('curr').siblings().removeClass('curr');
+		$('#list>li:last').show().siblings().hide();
+    }else{
+		$('#list li').first().show();
+    }
+		$('.list-tab>dd').click(function() {
+			$(this).addClass('curr').siblings().removeClass('curr');
+			$('#list>li:eq(' + $(this).index() + ')').show().siblings().hide();
+		})
+		if(tab==2){
+			$(".list-tab>dd:eq(1)").trigger("click");
+			//$("#list li").first().hide();
+			//console.log("131233");
+			//$("#list>li:eq(1)").hide();
+		}
+		var loaded = true;
+		//var loaded = false;
+		var loadend = true;
+		//var loadend = true;
+		var startTime = "{$startTime}";
+		var endstartTime = "{$endstartTime}";
+		var Uid = "{$uid}";
+		var Page = 1;
+		var Pagestart = 1;
+		//var domisend = $("#isEnd li:last")[0];
+		var domnotend = $("#notEnd .my-course-contents:last")[0];
+		var md = $("#notEnd .my-course-contents:last").attr("m_d");
+		var stmd = $("#notEnd .my-course-contents:last").attr("s_t_m_d");
+							console.log("1md is "+md);
+							console.log("1stmd is "+stmd);
+		//var domnotend = $("#notEnd li:last")[0];
+		//arrend.push(domisend);
+		arrnotend.push(domnotend);
+		$(window).scroll(function(){
+			var tops = $(window).scrollTop();
+			var contents = $(window).height();
+			var prec1 = getClient();
+			jiance(arrnotend, prec1, function(){
+				Pagestart++;
+				if(loaded){
+					$.ajax({
+						type: "POST",
+						url: "/teacher.course.timetablestartAjaxnew",
+						data:{ start_time:startTime,endstart_time:endstartTime,uid:Uid,page:Pagestart,m_d:md,stmd:stmd},
+						dataType: "json",
+						beforeSend: function () {
+							//$("#submit").attr({ disabled: "disabled" });
+						},
+						success: function(r){
+							data = r;
+							var planListTpl1 = $('#planListnotend').html();
+							var planList2 = Mustache.render(planListTpl1, data);
+							$('#notEnd').append(planList2);
+							domnotend = $("#notEnd .my-course-contents:last")[0];
+							md = $("#notEnd .my-course-contents:last").attr("m_d");
+							stmd = $("#notEnd .my-course-contents:last").attr("s_t_m_d");
+							console.log("md is "+md);
+							console.log("stmd is "+stmd);
+							arrnotend.push(domnotend);
+							if(r.error){
+								//  $("#error").html(r.error);
+								alert(r.error);
+								//      location.reload();//这里未完善
+								return false;
+							}
+							if(r){
+								if(r.data.length ==0){
+									loaded = false;
+								}
+							}
+						},
+						complete: function () {
+							//$("#submit").removeAttr("disabled");
+						},
+						error: function (r) {
+							Page--;
+							domnotend = $("#notEnd li:last")[0];
+							arrnotend.push(domnotend);
+							//console.info("error: " + r.error);
+						}
+
+					});
+				}
+
+			})
+
+		});
+
+
+	});
+function GetUrl(name){
+    var reg=new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r=window.location.search.substr(1).match(reg);
+    if(r!=null){
+        return unescape(r[2]);
+    }
+    return null;
+}
+</script>

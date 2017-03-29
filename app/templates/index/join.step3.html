@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>资质证明-机构入驻</title>
+{part "/index.main.header"}
+</head>
+<body>
+    <!-- header -->
+	{part "/index.main.top"}
+	{part "/index.main.nav.join"}
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="join-step col-sm-20 fs16">
+                    <div class="col-sm-5 step">
+                        <p class="bg"></p>
+                        <p class="num">1</p>
+                        <p class="text">在线协议</p>
+                    </div>
+                    <div class="step col-sm-5">
+                        <p class="bg"></p>
+                        <p class="num">2</p>
+                        <p class="text">填写基础资料</p>
+                    </div>
+                    <div class="step col-sm-5">
+                        <p class="blue-bg"></p>
+                        <p class="blue-num">3</p>
+                        <p class="blue-text">资质证明</p>
+                    </div>
+                    <div class="step col-sm-5">
+                        <p class="bg"></p>
+                        <p class="num">4</p>
+                        <p class="text">系统审核</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="p20">
+        <div class="container">
+            <div class="row">
+                <form id="owner-form" autocomplete="off">
+                <input type="password" style="display:none;">
+                <div class="join-info cGray2">
+                    <h1 class="fs16">机构信息</h1>
+                    <ul class="form fs14 pd-t30">
+                        <li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed">*</span>申请人：
+                            </div>
+                            <div class="label-for col-sm-17 row">
+                                <input type="text" class="col-sm-6 lh-35" placeholder="请务必填写真实申请人" id="real_name" name="real_name" value="{if !empty($userInfo)}{$userInfo->profile->real_name}{/if}">
+                            </div>
+                        </li>
+                        <li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed">*</span>手机号：
+                            </div>
+                            <div class="label-for col-sm-17 row">
+                                <input type="text" class="col-sm-6 lh-35" placeholder="请务必填写真实手机号" name="mobile" id="mobile" disabled value="{if !empty($userInfo)}{substr_replace($userInfo->mobile,'****',3,4)}{/if}">
+                                <a class="verif col-sm-2" id="check-mobile">验证手机</a>
+                            </div>
+                        </li>
+                        <li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed">*</span>验证码：
+                            </div>
+                            <div class="label-for col-sm-17 row">
+                                <input type="text" class="col-sm-6 lh-35"  placeholder="请务必填写真实验证码" id="code" name="code" value="">
+                            </div>
+                        </li>
+                        <li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed">*</span>邮箱：
+                            </div>
+                            <div class="label-for col-sm-17 row">
+                                <input type="text" class="col-sm-6  lh-35" placeholder="请务必填写真实邮箱" id="email" name="email" value="{if !empty($userInfo->email)}{$userInfo->email}{elseif !empty($verify->email)}{$verify->email}{/if}">
+                            </div>
+                        </li>
+                        <li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed">*</span>身份证：
+                            </div>
+                            <div class="label-for col-sm-17 row">
+                                <div class="card-img col-sm-6" id="idcard" style="padding:0;">
+                                {if !empty($verify->idcard_pic)}
+                                <img src="{utility_cdn::file($verify->idcard_pic)}" style="height:158px;width:277px;">
+                                {else}
+                                上传身份证照片
+                                {/if}
+                                </div>
+                                <input type="hidden" name="idcard_pic" id="idcard_pic" placeholder="请务必填写真实身份证" value="{if !empty($verify->idcard_pic)}{$verify->idcard_pic}{/if}">
+                                <span class="tips fs12 cGray3">
+                                请上传申请人手持身份证半身照片，<br>
+                                确保身份证和人脸清晰可辨，<br>
+                                图片质量小于8M，<br>
+                                支持JPG、PNG格式。
+                                </span>
+                            </div>
+                        </li>
+                        <li class="pd-b30">
+                            <div class="label col-sm-3 text-right">
+                                <span class="cRed">*</span>机构资质：
+                            </div>
+                            <div class="label-for col-sm-17 row">
+                                <div class="datum-img col-sm-6" id="qualify" style="padding:0;">
+                                {if !empty($verify->qualify_pic)}
+                                <img src="{utility_cdn::file($verify->qualify_pic)}" style="height:158px;width:277px;">
+                                {else}
+                                上传资质照片
+                                {/if}
+                                </div>
+                                <input type="hidden" name="qualify_pic" id="qualify_pic" placeholder="请务必填写真实机构资质" value="{if !empty($verify->qualify_pic)}{$verify->qualify_pic}{/if}">
+                                <span class="tips fs12 cGray3">
+                                请上传市级以上教育部门的办学许可证明文件，<br>
+                                请确保机构名字和证件号清晰可辨,<br>
+                                图片质量小于8M，<br>
+                                支持JPG、PNG格式。
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="join-btn">
+                    <div class="label col-sm-3"></div>
+                    <div class="label-for col-sm-17 fs16">
+                        <button class="btn col-sm-3" type="button" onClick="location='/index/join/step2'">上一步</button>
+                        <button class="btn col-sm-3 blue-btn" type="submit">下一步</button>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- footer -->
+	{part '/index.main.footer'}
+</body>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+<script src="{utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js')}"></script>
+<script type="text/javascript">
+$(function  () {
+    var idcard = new plupload.Uploader({
+        browse_button: 'idcard', // this can be an id of a DOM element or the DOM element itself
+        url: '/file.main.uploadIdcard',
+        filters: {
+            mime_types : [
+            { title : "Image files", extensions : "jpg,png" }
+            ],
+            max_file_size:"8192kb"
+        }
+        ,multi_selection:false
+    });
+    idcard.init();
+    idcard.bind('FilesAdded', function(up, files) {
+        idcard.start();
+    });
+    idcard.bind('Error', function(up, err) {
+        if(err.code=='-600'){
+            layer.msg('图片大小不符合标准');
+        }
+    });
+    idcard.bind('FileUploaded', function(up, file,info) {
+        $('#idcard_pic').parent().find('.wrong-icon,.right-icon').remove();
+        if(info.response){
+            var r = jQuery.parseJSON(info.response);
+            if(r.error){
+                layer.msg(r.error);
+                $('#idcard_pic').focus().after('<span class="wrong-icon icon"></span>');
+            }else{
+                $('#idcard').html('<img src="'+r.src+"?"+Math.random()+'" style="height:158px;width:277px;">');
+                $('#idcard_pic').val(r.fid);
+                $('#idcard_pic').after('<span class="right-icon icon"></span>');
+            }
+        }
+
+    });
+    var qualify = new plupload.Uploader({
+        browse_button: 'qualify', // this can be an id of a DOM element or the DOM element itself
+        url: '/file.main.uploadQualify',
+        filters: {
+            mime_types : [
+            { title : "Image files", extensions : "jpg,png" }
+            ],
+            max_file_size:"8192kb"
+        }
+        ,multi_selection:false
+    });
+    qualify.init();
+    qualify.bind('FilesAdded', function(up, files) {
+        qualify.start();
+    });
+    qualify.bind('Error', function(up, err) {
+        if(err.code=='-600'){
+            layer.msg('图片大小不符合标准');
+        }
+    });
+    qualify.bind('FileUploaded', function(up, file,info) {
+        $('#qualify_pic').parent().find('.wrong-icon,.right-icon').remove();
+        if(info.response){
+            var r = jQuery.parseJSON(info.response);
+            if(r.error){
+                layer.msg(r.error);
+                $('#qualify_pic').focus().after('<span class="wrong-icon icon"></span>');
+            }else{
+                $('#qualify').html('<img src="'+r.src+"?"+Math.random()+'" style="height:158px;width:277px;">');
+                $('#qualify_pic').val(r.fid);
+                $('#qualify_pic').after('<span class="right-icon icon"></span>');
+            }
+        }
+
+    });
+    $('#real_name').blur(function(){
+        var real_name=$(this).val();
+        $('#real_name').parent().find('.wrong-icon,.right-icon').remove();
+        if(real_name!=''){
+            $.post("/index/join/checkRealNameAjax",{ 'real_name':real_name },function(r){
+                if(r.error){
+                    layer.msg(r.error);
+                    $('#real_name').focus().after('<span class="wrong-icon icon"></span>');
+                }else{
+                    $('#real_name').after('<span class="right-icon icon"></span>');
+                }
+            },"json");
+        }else{
+            $('#real_name').focus().after('<span class="wrong-icon icon"></span>');
+        }
+    });
+    $('#email').blur(function(){
+        var email=$(this).val();
+        $('#email').parent().find('.wrong-icon,.right-icon').remove();
+        if(email!=''){
+            $.post("/index/join/checkEmailAjax",{ 'email':email },function(r){
+                if(r.error){
+                    layer.msg(r.error);
+                        $('#email').focus().after('<span class="wrong-icon icon"></span>');
+                }else{
+                    $('#email').after('<span class="right-icon icon"></span>');
+                }
+            },"json");
+        }else{
+            $('#email').focus().after('<span class="wrong-icon icon"></span>');
+
+        }
+    });
+    var ii={if !empty($time)}{$time}{else}0{/if};
+    if(ii>0){
+    var tt=setInterval(function(){
+        ii--;
+        $("#check-mobile").html(ii+"秒")
+        $("#code").focus();
+        if(ii==0){
+            clearInterval(tt);
+            $("#check-mobile").html("重新获取")
+        }
+    },1000);
+    }
+    $('#check-mobile').click(function(){
+        var mobile=$('#mobile').val();
+        $.post("/index/join/checkMobileAjax",function(r){
+            if(!r.ok){
+                layer.msg(r.error);
+            }else{
+                layer.msg("验证码发送成功");
+                $("#code").focus();
+                var i =60;
+                    ii=60;
+                var timer = setInterval(function(){
+                    i--;
+                    $("#check-mobile").html(i+"秒")
+                    if(i==0){
+                        clearInterval(timer);
+                        $("#check-mobile").html("重新获取")
+                    }
+                },1000);
+            }
+        },"json");
+
+    });
+    $('#owner-form').submit(function(){
+        $.post("/index/join/step3Ajax",$(this).serialize(),function(r){
+            if(r.error){
+                layer.msg(r.error);
+                if(r.field){
+                    $("[name="+r.field+"]").parent().find('.wrong-icon,.right-icon').remove();
+                    $("[name="+r.field+"]").focus().after('<span class="wrong-icon icon"></span>');
+                }
+            }else{
+                location='/index/join/step4?success=1';
+            }
+        },"json");
+        return false;
+    });
+});
+</script>
+</html>

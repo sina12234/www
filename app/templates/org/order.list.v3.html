@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>订单管理 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 订单管理 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}"></script>
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+</head>
+<body>
+{part "/site.main.nav3"}
+<!-- mob nav -->
+<div class="g-nav hidden-lg hidden-md">
+	<ul class="swiper-wrapper" id="mob-nav">
+		<li class="swiper-slide"><a href="/org.discount.listnew">优惠管理</a></li>
+		<li class="swiper-slide"><a href="/org.main.order" class="active">订单管理</a></li>
+	</ul>
+</div>
+<!--直播列表 start-->
+<section class="org-section">
+    <div class="container">
+        <div class="row">
+            {part "/org.main.menu.order"}
+            <div class="col-lg-16 right-main">
+                <div class="tab-main hidden-xs hidden-sm fs14">
+                    <div class="tab-hd">
+                        <a class="tab-hd-opt {if $flag=='all'}curr{/if}" href="org.main.order?shelf=all">{'全部订单'|tr:'org'}</a>
+                        <a class="tab-hd-opt {if $flag=='success'}curr{/if}" href="org.main.order?shelf=success">{'交易成功'|tr:'org'}</a>
+                        <a class="tab-hd-opt {if $flag=='expired'}curr{/if}" href="org.main.order?shelf=expired">{'已失效'|tr:'org'}</a>
+                        <a class="tab-hd-opt {if $flag=='initial'}curr{/if}" href="org.main.order?shelf=initial">{'待支付'|tr:'org'}</a>
+                    </div>
+                </div>
+                <!--搜索-->
+                <div class="order-so mt10">
+					<!--时间搜索-->
+					<div class="order-so-time hidden-xs hidden-sm">
+						{if !empty($params['start_time'])}
+						<div class="pos-rel c-fl mr5">时间：<input type="text"   readonly name="start_time"  id="start_time" value="{if !empty($params['start_time'])}{$params['start_time']}{/if}" placeholder="{'开始时间'|tr:'org'}">
+						</div>
+						{else}
+						<div class="pos-rel c-fl mr5">时间：<input type="text" readonly name="start_time"  id="start_time" value="{if !empty($params['start_time'])}{$params['start_time']}{/if}" placeholder="{'开始时间'|tr:'org'}">
+							<!--<a href="javascript:void(0)" class="close-data" id="close_start"></a>-->
+                        </div>
+						{/if}
+						<div class="pos-rel c-fl">至 <input type="text" class="ml5"  readonly name="end_time" id="end_time" value="{if !empty($params['end_time'])}{$params['end_time']}{/if}" placeholder="{'结束时间'|tr:'org'}">
+							<a href="javascript:void(0)" class="close-data" id="close_end" style="top:5px;" ></a>
+						</div>
+					</div>
+
+					<div class="order-so-discount c-fl mr10">
+						<span class="hidden-xs hidden-sm">订单类型：</span>
+						<select name="orderType" >
+							<option value="0" {if $orderType==0}selected{/if}>全部</option>
+							<option value="1" {if $orderType==1}selected{/if}>课程订单</option>
+							<option value="11" {if $orderType==11}selected{/if}>会员订单</option>
+                        </select>
+					</div>
+
+					<select name='search' id="sea" class="left"  >
+						<option value='3' {if $search==3}selected{/if}>手机号</option>
+						<option value='1' {if $search==1}selected{/if}>订单号</option>
+						<option value='2' {if $search==2}selected{/if}>课程名</option>
+						<option value='4' {if $search==4}selected{/if}>用户名</option>
+					</select>
+					<input type="text" style="float: left;" name="keywords" value="{if $keywords!=''}{$keywords}{/if}">
+					<button id="search"></button>
+                    <!--<a href="javascript:void(0)" class="close-key" id="close_key"></a>-->
+                    <div class="so-more hidden-xs hidden-sm" id="so_more_btn">
+						<em>更多条件</em>
+						<span class="arrow"></span>
+					</div>
+                </div>
+                <!--高级搜索-->
+                <div class="order-so-more mt10" id="order_more" style="display:{if $type}block{else}none{/if};">
+                    <div class="order-so-price" id="order_so_price">
+                        金额：<input type="text" name="price1" value="{if !empty($params['price1'])}{$params['price1']}{/if}" class="mr5">至 <input type="text" name="price2" value="{if !empty($params['price2'])}{$params['price2']}{/if}" class="mr10 ml5">
+                        <button id='so_price'>确定</button>
+                    </div>
+                    <div class="order-so-discount c-fl">优惠：
+                        <select name="discount" >
+                            <option value="2" {if $discount=='2'}selected{/if}>全部</option>
+                            <option value="1" {if $discount==1}selected{/if}>有优惠</option>
+                            <option value="0" {if $discount==0}selected{/if}>无优惠</option>
+                        </select>
+                    </div>
+                    <div class="distribution-order">
+						<input type="checkbox" {if !empty($params['resell'])}checked{/if} id="resell" />
+                        <span class="tag">分销订单</span>
+                    </div>
+                </div>
+                <!--订单列表-->
+                <p class="order-list-num hidden-xs hidden-sm">
+					<span class="left fs14 cGray" id="order-num">共 <span>{$totalSize}</span> 个订单</span>
+                    <a id="exportOrderData" class="c-fr blue-link" href="javascript:void(0);">{'导出excel'|tr:'org'}</a>
+				</p>
+                <dl class="order-list mt5" id="order-list">
+                    <dt class="hidden-xs hidden-sm">
+                        <p class="col-lg-8">{'商品'|tr:'org'}</p>
+                        <p class="col-lg-3">{'用户信息'|tr:'org'}</p>
+                        <p class="col-lg-3">{'优惠'|tr:'org'}</p>
+                        <p class="col-lg-3">{'支付金额'|tr:'org'}</p>
+                        <p class="col-lg-3">{'实际收入'|tr:'org'}</p>
+                    </dt>
+					{if !empty($orderList)}
+					{foreach $orderList as $val}
+                    <dd class="fs14">
+						{if !empty($val->member)}
+						<div class="col-lg-8 col-xs-10 order-item-pro">
+							<div class="col-lg-8 order-item-img">
+								<img src="{utility_cdn::img('/assets_v2/img/member-order.jpg')}" alt="">
+							</div>
+                            <a href="javascript:;" class="col-lg-12 order-item-title">
+                                <span class="col-sm-20 pd0 order-title-info">{$val->member['name']}</span>
+								<span class="cLightgray col-sm-20 pd0">有效期：{$val->member['day']}</span>
+                            </a>
+                        </div>
+						{elseif !empty($val->course)}
+                        <p class="col-lg-4 col-xs-10 order-item-pro">
+                            <a href="/course.info.show/{$val->object_id}" class="order-item-img">
+								<img src="{$val->course['img']}" alt="">
+							</a>
+                        </p>
+                        <p class="col-lg-4 col-xs-10 order-item-title order-item-pro">
+                            <a href="/course.info.show/{$val->object_id}">
+                                <span class="col-sm-20 col-xs-20 pd0 order-title-info">{$val->course['name']}</span>
+                                <span class="cLightgray col-sm-20 col-xs-20 pd0">班级：{if !empty($val->course['class'][$val->ext]['className'])}{$val->course['class'][$val->ext]['className']}{else}{/if}</span>
+                            </a>
+                        </p>
+                        {elseif !empty($val->sms)}
+                        <p class="col-lg-4 col-xs-10 order-item-pro">
+                            <a href="" class="order-item-img">
+                                <img src="{$val->sms['img']}" alt="">
+                            </a>
+                        </p>
+                        <p class="col-lg-4 col-xs-10 order-item-title order-item-pro">
+                            <a href="">
+                                <span class="col-sm-20 col-xs-20 pd0 order-title-info">{$val->sms['title']}</span>
+                            </a>
+                        </p>
+						{/if}
+                        <p class="col-lg-3 col-xs-10 order-item-tac order-item-pro"><em>{$val->stuName}</em><em>{$val->mobile}</em></p>
+						<div class="col-lg-6 col-xs-20 order-item-pro">
+							<p class="col-xs-10 order-item-tac">
+	                            <span>
+	                                <em>
+										<span class="hidden-lg hidden-md">优惠：</span>
+	                                    {if $val->discount_status == 0}无
+	                                    {else}
+	                                  ￥{$val->disPrice}
+	                                    {/if}
+	                                </em>
+	                                <em class="hidden-xs hidden-sm">
+	                                    {$val->discount}
+	                                </em>
+	                            </span>
+	                        </p>
+							{if !empty($val->member['price'])}
+							<p class="col-lg-6 hidden-sm order-item-tac">
+								<span class="hidden-lg hidden-md">实付款：</span>
+								<em class="cYellow" id="price_{$val->fk_order}">
+									<span>{$val->member['price']}</span>
+	                                {if $val->price_old!=$val->price && $val->change_status==1}<var class="fs_dsc">￥{$val->price_old}</var>{/if}
+								</em>
+	                            <!--修改价格-->
+	                            {if $val->status=="initial" && empty($val->promote_status) && empty($val->discount_status) && $val->object_type!=21}
+	                            <em><a href="javascript:;" data-price="{$val->price_old}" class="update-order-price" orderId = "{$val->fk_order}">修改价格</a></em>
+	                            {/if}
+	                            <!--不可修改价格-->
+	                            {if $val->status=="initial" && !empty($val->promote_status)}
+	                            <span class="fs12 cGray">
+	                                <var class="set-info-gray-icon"></var>
+	                                推广课程不可以修改价格
+	                            </span>
+	                            {elseif $val->status=="initial" && !empty($val->discount_status)}
+	                            <span class="fs12 cGray">
+	                            <var class="set-info-gray-icon"></var>
+	                            优惠课程不可以修改价格
+	                            </span>
+	                            {/if}
+							</p>
+							{else}
+							<p class="col-xs-10 order-item-tac">
+								<span class="hidden-lg hidden-md">实付款：</span>
+								<em class="cYellow fs14" id="price_{$val->fk_order}">
+									<span>{$val->price}</span>
+	                                {if $val->price_old!=$val->price && $val->change_status==1}<var class="fs_dsc">￥{$val->price_old}</var>{/if}
+	                            </em>
+	                            <em class="hidden-xs hidden-sm">
+									{if !empty($val->discount_status)}
+									<s class="cGray fs12">{$val->price_old}</s>
+									{/if}
+								</em>
+                                {if $val->status=="success"&& !is_null($val->content_refund_status)&&($val->content_refund_status==1 or $val->content_refund_status==2)}
+                                    <em class="cYellow fs14">
+                                        <var class="fs_dsc">已退费￥{$val->price_refund}</var>
+                                    </em>
+                                {/if}
+	                            <!--修改价格-->
+	                            {if $val->status=="initial" && empty($val->promote_status) && empty($val->discount_status) && $val->object_type!=21}
+	                            <em><a href="javascript:;" data-price="{$val->price_old}" class="update-order-price" orderId = "{$val->fk_order}">修改价格</a></em>
+	                            {/if}
+								{if ($val->promote_status)}
+	                            <span class="distribution-price col-md-20 p0">
+	                                <span class="distribution-content">(含推广费: ￥{$val->price_promote}) <br/> </span>
+	                                <span class="distribution-tag">{$val->resellName}分销</span>
+	                            </span>
+								{/if}
+	                            <!--不可修改价格-->
+	                            {if $val->status=="initial" && !empty($val->promote_status)}
+	                            <span class="fs12 cGray">
+	                                <var class="set-info-gray-icon"></var>
+	                                推广课程不可以修改价格
+	                            </span>
+	                            {elseif $val->status=="initial" && !empty($val->discount_status)}
+	                            <span class="fs12 cGray">
+	                            <var class="set-info-gray-icon"></var>
+	                            优惠课程不可以修改价格
+	                            </span>
+	                            {/if}
+							</p>
+							{/if}
+						</div>
+                        <p class="col-lg-3 col-xs-20 hidden-sm order-item-tac order-item-pro">
+                            {if $val->status=="success"}
+							    <em class="sBlue">￥{$val->actual_price}</em>
+                            {else}
+                                <em class="sBlue">--</em>
+                            {/if}
+							<span class="fs12">  </span>
+                            {if $val->status=="success"}
+                                {if !is_null($val->content_refund_status) && $val->content_refund_status==0}
+                                    <em class="sBlue">退费审核中</em>
+                                {elseif !is_null($val->content_refund_status)&&($val->content_refund_status==1 or $val->content_refund_status==2)}
+                                    <em class="sBlue">退费成功</em>
+                                {elseif $val->price>0&&$val->promote_status==0&&$val->object_type==1&&$val->distribute_status==0 && $val->object_type!=21}
+                                    <em class="sBlue"><a href="/org.main.refund/{$val->fk_order}">+申请退费</a></em>
+                                {/if}
+                            {/if}
+						</p>
+                        {if $val->status=="success" && ($val->gateway_price>0 or $val->platform_price>0 or $val->distribute_price>0 or $val->tax_price>0 or $val->price_refund>0) && $val->actual_price>0}
+						<div class="col-lg-12 c-fr tar mt25 fs12">
+                            {if $val->gateway_price>0 or $val->tax_price>0 or $val->platform_price>0 or $val->distribute_price>0}
+							(<div class="order-tips-icon mr5">
+								<div class="order-info-text tal" id="order-tips">
+                                    {if $val->pay_type==5 && $val->gateway_price>0}
+									<p><b>支付手续费：</b>订单交易成功后,联通支付第三方收取支付金额的{$val->gateway_rate*100}%。</p>
+                                    {elseif $val->pay_type==2 && $val->gateway_price>0}
+                                    <p><b>支付手续费：</b>订单交易成功后,微信支付第三方收取支付金额的{$val->gateway_rate*100}%。</p>
+                                    {elseif $val->pay_type==3 && $val->gateway_price>0}
+                                    <p><b>支付手续费：</b>订单交易成功后,支付宝支付第三方收取支付金额的{$val->gateway_rate*100}%。</p>
+                                    {/if}
+                                    {if $val->tax_price>0}
+                                    <p><b>税费：</b>订单交易成功后需要缴纳税费，扣取支付金额的{$val->tax_rate*100}%。</p>
+                                    {/if}
+                                    {if $val->platform_price>0}
+                                    <p><b>平台使用费：</b>订单交易成功后，平台需收取支付价格{$val->platform_rate*100}%的平台使用费。</p>
+                                    {/if}
+                                    <p>实际收入{$val->actual_price}=支付金额（{$val->price}）{if $val->gateway_price>0}-支付手续费{$val->gateway_rate*100}%（{$val->gateway_price}）{/if}{if $val->platform_price>0}-平台使用费{$val->platform_rate*100}%（{$val->platform_price}）{/if}{if $val->promote_status==1 && ($val->price-$val->price_promote)>0}-推广支出（{$val->price-$val->price_promote}）{elseif $val->distribute_status==1&&$val->distribute_price>0}-
+                                        {if $val->distribute_qudao==100860}
+                                            沃学堂渠道分成
+                                        {elseif $val->distribute_qudao==100100}
+                                            和教育渠道分成
+                                        {elseif $val->distribute_qudao==100000}
+                                            天翼渠道分成
+                                        {else}
+                                            渠道分成
+                                        {/if}
+                                        （{$val->distribute_price}）
+                                        {/if}{if $val->tax_price>0}-税费{$val->tax_rate*100}%（{$val->tax_price}）{/if}{if !empty($val->refund_status)&&$val->refund_status>=1}-退费（{$val->price_refund}）{/if}</p>
+								</div>
+							</div>
+
+                            实际收入扣除：{if $val->gateway_price>0}支付手续费￥{$val->gateway_price}{/if}{if $val->tax_price>0} 税费￥{$val->tax_price}{/if}{if $val->platform_price>0} 平台使用费￥{$val->platform_price}{/if}{if $val->promote_status==1} 推广支出￥{$val->price-$val->price_promote}{elseif $val->distribute_status==1&&$val->distribute_price>0}
+                                {if $val->distribute_qudao==100860}
+                                    沃学堂渠道分成
+                                {elseif $val->distribute_qudao==100100}
+                                    和教育渠道分成
+                                {elseif $val->distribute_qudao==100860}
+                                    天翼渠道分成
+                                {else}
+                                    渠道分成
+                                {/if}
+                                ￥{$val->distribute_price}
+                            {/if})
+                            {/if}
+						</div>
+                        {/if}
+                        <p class="col-lg-20 col-xs-20 order-item-thumb fs12">
+							<span class="left">订单ID:{$val->orderSn}</span>
+							<span class="ml10">{$val->orderStatus} {date('Y-m-d H:i',strtotime($val->create_time))}</span>
+                            {if $val->promote_status==1}
+							<span class="order-distr-icon">线上分销</span>
+                            {elseif $val->distribute_status==1}
+                            <span class="order-distr-icon">线下分销</span>
+                            {/if}
+							<span class="right hidden-xs">
+								{$val->payType}{if !empty($val->uniqueOrderId)}支付ID: {$val->uniqueOrderId}{/if}
+							</span>
+						</p>
+                    </dd>
+					{/foreach}
+                </dl>
+				<div class="page-list" id="pagepage"></div>
+				{else}
+					<div class="col-xs-20 fs14 tac" style="padding-top:60px;display:block;">
+                        <img src="{utility_cdn::img('/assets_v2/img/platform/pet3.png')}">
+                        <p>您查询的订单不存在~</p>
+                    </div>
+				{/if}
+            </div>
+        </div>
+    </div>
+</section>
+<div class="col-xs-20 pd20 tac" id="execl-layer" style="display:none">
+    <p class="pb10 fs14">导出条数超出上线(1000)，<br>请修改删选条件</p>
+    <a href="javascript:void(0);" class="btn">确定</a>
+</div>
+<section id="update-price-info" style="display:none;">
+    <ul class="fs14 update-price-info clearfix mt25">
+        <li class="col-xs-20 p0 mb20">
+            <span class="col-xs-5">订单原价：</span>
+            <span class="col-xs-15 cYellow p0">￥<i id="orderPrice">800</i></span>
+        </li>
+        <li class="col-xs-20 p0 mb30">
+            <span class="col-xs-5">改后价格：</span>
+            <input class="col-xs-8 new-order-price mr5" onkeyup="clearNum(this)" type="text" id="updatePrice" />
+            <span class="col-xs-1 p0">元</span>
+        </li>
+        <li class="col-xs-20 p0 tac">
+            <button class="yellow-btn mr10">确认</button>
+            <button class="gray-button">取消</button>
+            <input type="hidden" value="" id="orderId">
+        </li>
+    </ul>
+</section>
+<div class="order-info-text" id="order-tips">
+	<p>
+		<span class="fb">支付手续费</span>：使用不同的支付方式，扣去不同的网关手续费，联通网关为支付金额的30%；
+	</p>
+	<p>
+		<span class="fb">税费</span>：在线支付需缴纳税费，为支付金额的5%；
+	</p>
+	<p>
+		<span class="fb">平台使用费</span>：订单成功出售，平台需收取价格的20%的平台使用费用；
+	</p>
+</div>
+{part "/site.main.footer"}
+</body>
+<script>
+    // 导出execl
+    $("#exportOrderData").click(function(){
+        var str  = '';
+        var flag = "{$flag}";
+        var resell= getUrlParam('resell');
+        var search = $("#sea option:selected").val();
+        var discount = $("select[name='discount'] option:selected").val();
+        var orderType = $("select[name='orderType'] option:selected").val();
+        var keywords = $("input[name='keywords']").val();
+        var price1 = $("input[name='price1']").val();
+        var price2 = $("input[name='price2']").val();
+        var startTime = $("#start_time").val();
+        var endTime   = $("#end_time").val();
+        var date1 = new Date(startTime);
+        var date2 = new Date(endTime);
+        var orderNum = $('#order-num span').text();
+
+        var date4 = Math.floor((date2 - date1)/(24*3600*1000));
+
+        str+="start_time="+startTime+"&end_time="+endTime+"&shelf="+flag+"&resell="+resell+"&orderType="+orderType+"&discount="+discount
+        if(price1!=''&&price2!=''){
+            str+="&price1="+price1+"&price2="+price2;
+        }
+        if(keywords!=''&&search!=''){
+            str+="&keywords="+keywords+"&search="+search;
+        }
+        if(orderNum > 1000) {
+            $('#execl-layer p').html('导出条数超出上线(1000)，<br>请修改筛选条件');
+            layer.open({
+                type: 1,
+                shadeClose: true,
+                title: '提示',
+                closeBtn: 2,
+                area: ['315px', '180px'],
+                content: $('#execl-layer')
+            });
+            return false;
+        }
+        location.href = "/org.main.orderExcel?" + str;
+    });
+    $('#execl-layer .btn').click(function(){
+        layer.closeAll();
+    });
+    $(function(){
+        //初始化 提交数据
+        var submitData={  };
+        submitData['start_time'] = getUrlParam('start_time');
+        submitData['end_time'] = getUrlParam('end_time');
+        submitData ['keywords'] = getUrlParam('keywords');
+        submitData['shelf'] = getUrlParam('shelf') ? getUrlParam('shelf') : 'all';
+        submitData['search'] = getUrlParam('search');
+        submitData['discount'] = getUrlParam('discount');
+        submitData['orderType'] = getUrlParam('orderType');
+        submitData['price1'] = getUrlParam('price1');
+        submitData['price2'] = getUrlParam('price2');
+		submitData['resell'] = getUrlParam('resell');
+        var order_so_price = $("#order_so_price");
+        $("#so_more_btn").click(function(){
+            if($("#order_more").is(":hidden")){
+                $(this).find(".arrow").css("background-position","5px -33px");
+                $(this).find("em").text("收起条件");
+            }else{
+                $(this).find(".arrow").css("background-position","5px -18px");
+                $(this).find("em").text("更多条件");
+            }
+            $("#order_more").toggle();
+        });
+        $("#start_time").datetimepicker({
+            format: 'Y/m/d',
+            onShow:function( ct ){
+                this.setOptions({
+                    maxDate:$('#end_time').val()?$('#end_time').val():false
+                })
+            },
+            timepicker: false
+        });
+        $("#end_time").datetimepicker({
+            format: 'Y/m/d',
+            onShow:function( ct ){
+                this.setOptions({
+                    minDate:$('#start_time').val()?$('#start_time').val():false
+                })
+            },
+            timepicker: false
+        });
+        $('#so_price').show();
+        order_so_price.on({
+            mouseover:function () {
+                $(this).find("button").css('visibility','visible');
+            },
+            mouseout:function () {
+                $(this).find("button").css('visibility','hidden');
+            }
+        }).find('#so_price').on('click',function () {
+            var price1 =  $.trim(order_so_price.find('input[name=price1]').val());
+            var price2 =  $.trim(order_so_price.find('input[name=price2]').val());
+            submitData['price1'] = price1 == "" ? 0: price1;
+            submitData['price2'] = price2 == "" ? 0: price2;
+            if(price1!=0||price2!=0){
+                updatePage();
+            }
+        });
+        page("pagepage","{$path}",{$length},{$page},{$totalPage});
+        var _end_time = submitData['end_time'];
+        if (!_end_time && typeof(_end_time)!="undefined" && _end_time!=0){
+
+        }else{
+            $('#close_end').show();
+        }
+        var discountSelect = $('div.order-so-discount');
+        discountSelect.find('select').change(function (event) {
+            if($(this).val()!=''){
+                if(event.target.name=='discount'){
+                    submitData['discount']=$(this).val() ;
+                }else if(event.target.name=='orderType'){
+                    submitData['orderType']=$(this).val();
+                }
+                updatePage();
+            }
+        });
+        //keywords
+        $('div.order-so').on('click','#search',function () {
+            var keywords = $(this).prev('input').val();
+            submitData['search'] = $('#sea').val();
+            submitData['keywords'] = keywords;
+            updatePage();
+        });
+        $('#start_time,#end_time').change(function (event) {
+            if($(this).val() != ''){
+                var value = $(this).val().replace(/\//g,'-');
+                if(event.target.id=='start_time'){
+                    submitData['start_time']=value ;
+                }else if(event.target.id=='end_time'){
+                    submitData['end_time']=value;
+                }
+            }
+
+            if( submitData['start_time']&& submitData['end_time']){
+                updatePage();
+            }
+        })
+        $('#close_end').click(function () {
+            $('#start_time,#end_time').val('');
+            submitData['start_time']=null ;
+            submitData['end_time']=null;
+            $(this).hide();
+            updatePage();
+        })
+		$('#resell').on('change',function(){
+			if($(this).is(':checked')){
+				submitData['resell']=1;
+			}else{
+				submitData['resell']=0;
+			}
+			updatePage();
+		})
+        function  updatePage() {
+            var str='shelf='+submitData['shelf'];
+            $.each(submitData,function (key,data) {
+                if(data != '' && data != null && key != 'shelf' ){
+                    str += "&"+key+"="+data;
+                }
+            });
+            window.location.href="/org.main.order?"+str;
+        }
+    });
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
+    }
+    function clearNum(obj) {
+        obj.value = obj.value.replace( /[^\d.]/g, "" );
+        obj.value = obj.value.replace( /^\./g, "" );
+        obj.value = obj.value.replace( /\.{ 2, }/g, "." );
+        obj.value = obj.value.replace( ".","$#$" ).replace( /\./g, "" ).replace( "$#$", "." );
+        obj.value = obj.value.replace( /^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3' );
+    }
+;(function() {
+    $('.order-list .update-order-price').click(function() {
+        var price = $(this).attr('data-price');
+        $('#update-price-info .cYellow').html('￥<i id="orderPrice">' + price+'</i>');
+        $('#update-price-info .cYellow').attr('data-price', price);
+        var orderId =  $(this).attr('orderId');
+        $('#orderId').val(orderId);
+        layer.open({
+          type: 1,
+          shade: true,
+          title: ['修改订单价格'],
+          area:['400px', '220px'],
+          content: $('#update-price-info'),
+          cancel: function(){
+            $('#update-price-info .new-order-price').val('');
+            layer.closeAll();
+          }
+        });
+    });
+    $('#update-price-info .yellow-btn').click(function() {
+        var price = $('#update-price-info .cYellow').attr('data-price');
+        if($('#update-price-info .new-order-price').val() == '') {
+            layer.msg('请输入价格');
+            return false
+        }
+        var updatePrice = $('#updatePrice').val()*100;
+        var orderPrice = $.trim($('#orderPrice').text());
+        var orderId = $('#orderId').val();
+        if(orderId===''){
+            layer.msg('请刷新页面！');
+            return false;
+        }
+        if(updatePrice===''){
+            layer.msg('请输入价格');
+            return false;
+        }
+        if(updatePrice>=(orderPrice*100)){
+            layer.msg('输入的价格应为0-'+orderPrice+'之间');
+            return false
+        }
+        $.post("/org/ajax/updateOrderPrice",{ price:updatePrice,orderId:orderId },
+                function(r){
+                    if(r.code==0){
+                        $('#price_'+orderId).html('￥<span>'+(updatePrice/100)+'</span><br/><var class="fs_dsc">￥'+orderPrice+'</var>');
+                        layer.msg('修改成功！');
+                        $('#update-price-info .new-order-price').val('');
+                        layer.closeAll();
+                    }else{
+                        if(r.code==-4 || r.code==-5 || r.code==-6){
+                            layer.msg(r.msg);
+                            return false;
+                        }else{
+                            layer.msg('修改订单价格失败！');
+                            return false;
+                        }
+
+                    }
+                },
+                "json");
+
+    });
+    $('#update-price-info .gray-button').click(function() {
+        $('#update-price-info .new-order-price').val('');
+        layer.closeAll();
+    });
+    $('#updatePrice').keyup(function(){
+        var updatePrice = $(this).val()*100;
+        var orderPrice = $.trim($('#orderPrice').text());
+        if(updatePrice>=(orderPrice*100)){
+            layer.msg('输入的价格应为0-'+orderPrice+'之间');
+            return false
+        }
+    });
+})()
+</script>
+</html>

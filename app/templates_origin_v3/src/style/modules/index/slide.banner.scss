@@ -1,0 +1,57 @@
+/*banner*/
+.slide_wrap {
+	position: relative;
+	width: 100%;
+	height: 360px;
+	overflow: hidden;
+	z-index: 1;
+	.switcher{
+		overflow: hidden;
+		margin: 0 auto;
+		position: absolute;
+		z-index:10;
+		bottom: 10%;
+		left: 45%;
+	}
+	.switcher a {
+		overflow: hidden;
+		margin-right: 10px;
+		background-color: #fff;
+		border: 1px solid #ccc;
+		cursor: pointer;
+		display: inline;
+		float: left;
+		height: 5px;
+		width: 30px;
+		border-radius: 5px;
+	}
+	.switcher .cur {
+		background-color: #fe4102;
+	}
+}
+.slide_imglist {
+	position: absolute;
+	left: 50%;
+	margin-left: -960px;
+	width: 1920px;
+	height: 360px;
+	li {
+		position: absolute;
+		display: inline;
+		background: #f3e01b;
+		width: 100%;
+		text-align: center;
+		opacity: 0;
+		height: 360px;
+	}
+	a {
+		float: left;
+		position: relative;
+		width: 100%;
+		height: 360px;
+		overflow: hidden;
+	}
+	img {
+		height: 100%;
+	}
+}

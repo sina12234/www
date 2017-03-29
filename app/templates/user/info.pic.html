@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 修改头像</title>
+		{part "/index.main.headeruser"}
+	</head>
+
+	<body>
+		<!--top-->
+		{part "/index.main.nav.user"}
+		<script src="{utility_cdn::js('/assets/js/jcrop/js/jquery.Jcrop.min.js')}"></script>
+		<script src="{utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js')}"></script>
+		<link rel="stylesheet" href="{utility_cdn::css('/assets/js/jcrop/css/jquery.Jcrop.css')}" type="text/css" />
+
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='col-sm-3 user_menu hidden-xs'>
+						<div id='menu'>
+							{part "/user.home.menu.user"}
+						</div>
+					</div>
+					<div class='col-sm-9 user_content'>
+						<div class='container-fluid'>
+							<div class='row'>
+								<div>
+									<h1 class="title">修改头像</h1>
+								</div>
+							</div>  
+							<form id="form" class="form-horizontal" role="form">
+								<input type="hidden" size="4" id="x" name="x">
+								<input type="hidden" size="4" id="y" name="y">
+								<input type="hidden" size="4" id="x2" name="x2">
+								<input type="hidden" size="4" id="y2" name="y2">
+								<input type="hidden" size="4" id="w" name="w">
+								<input type="hidden" size="4" id="h" name="h">
+								<div class="form-group">
+
+
+
+
+
+
+
+
+
+
+
+
+									<label for="" class="col-sm-2 control-label"></label>
+									<div class="col-sm-2">
+										<button id="browse" type="button" class="btn btn-default">选择文件</button>
+										<label for="" class=" control-label"><font style="color:red;">请上传2M以下的图片</font></label>
+									</div>
+									<label id="progress" for="" class="col-sm-2 control-label"></label>
+								</div>
+								<div class="form-group">
+									<style>
+										.img{
+											border: 1px rgba(0,0,0,.4) solid; background-color: white; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2); -moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2); box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+										}
+									</style>
+									<label for="" class="col-sm-2 control-label"></label>
+									<div class="col-sm-6">
+										<div class="img" style="overflow:hidden;width:300px;height:300px;border:1px;">
+											<img id="img_o" src="{utility_cdn::img('/assets/images/defaultPhoto1.png')}" style="margin-top:40px;margin-left:20px;"/>
+										</div>
+									</div>
+									<div id="panel" class="col-sm-2">
+										<div class="img" style="width:128px;height:128px;overflow:hidden">
+											<img id="img_p" src="{utility_cdn::img('/assets/images/defaultPhoto.1281.png')}"style="margin-top:26px;margin-left:15px;"/>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-offset-2 col-sm-10">
+										<button type="submit" class="btn btn-primary" style="background-color:#ffa81d;border:none;">修改</button>
+									</div>
+								</div>
+							</form>
+
+							<script type="text/javascript">
+
+								$(document).ready(function(){
+									$("#form").submit(function(){
+										if(isNaN(parseInt($("#w").val()))){
+											alert("请选择头像图片");
+											return false;
+										}
+										$.post("/user.info.picajax",$(this).serialize(),function(r){
+											if(r.error){
+												alert(r.error);
+												return false;
+											}else{
+												alert("修改成功");
+												location=location;
+											}
+										},"json");
+										return false;
+									});
+									var uploader = new plupload.Uploader({
+										browse_button: 'browse', // this can be an id of a DOM element or the DOM element itself
+										url: '/file.main.uploadPic',
+										filters: {
+											mime_types : [
+												{ title : "Image files", extensions : "jpg,gif,png" }
+											],
+											max_file_size:"2000kb"
+											//prevent_duplicates:true
+										}
+										,multi_selection:false
+									});
+
+
+									uploader.bind('FilesAdded', function(up, files) {
+										uploader.start();
+									});
+
+									uploader.bind('UploadProgress', function(up, file) {
+										$("#progress").html("上传中："+ file.percent +"%");
+									});
+									uploader.bind('FileUploaded', function(up, file,info) {
+										if(info.response){
+											if(jcrop_api)jcrop_api.destroy();
+											$("#img_o").hide().attr("src",info.response+"?"+Math.random());
+											$("#img_p").attr("src",info.response+"?"+Math.random());
+											$('#img_o').Jcrop({
+												boxWidth:300,boxHeight:300,
+												onChange: updatePreview,
+												onSelect: updatePreview,
+												aspectRatio: 1 //xsize / ysize
+											},function(){
+												// Use the API to get the real image size
+												var bounds = this.getBounds();
+												boundx = bounds[0];
+												boundy = bounds[1];
+												// Store the API in the jcrop_api variable
+												jcrop_api = this;
+												this.setSelect([0,0,300,300]);
+											}).show();
+
+
+										}
+									});
+									function showCoords(c){
+									};
+									function updatePreview(c){
+										if (parseInt(c.w) > 0)
+										{
+											$('#x').val(c.x);
+											$('#y').val(c.y);
+											$('#x2').val(c.x2);
+											$('#y2').val(c.y2);
+											$('#w').val(c.w);
+											$('#h').val(c.h);
+
+									$pcnt = $('#panel .img');
+									$pimg = $('#panel img');
+
+									xsize = $pcnt.width();
+									ysize = $pcnt.height();
+											var rx = xsize / c.w;
+											var ry = ysize / c.h;
+
+											$pimg.css({
+												width: Math.round(rx * boundx) + 'px',
+												height: Math.round(ry * boundy) + 'px',
+												marginLeft: '-' + Math.round(rx * c.x) + 'px',
+												marginTop: '-' + Math.round(ry * c.y) + 'px'
+											});
+										}
+									};
+									uploader.init();
+
+									uploader.bind('Error', function(up, err) {
+										if(err.code==-600){
+											alert("文件太大了,服务器君忙不过来了～请您上传2000kb一下的图片");
+										}else{
+											alert("\nError #" + err.code + ": " + err.message);
+										}
+									});
+
+
+									var jcrop_api,
+									boundx,
+									boundy;
+
+								});
+							</script>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>  
+
+		{part "/index.main.footer"}
+	</body>
+</html>

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="title" content="{part '/site.main.orgname'} - 首页 - 云课 - 专业的在线学习平台">
+    <meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+    <meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+    <title>绑定银行卡</title>
+    <link rel="stylesheet" href="../../../../www/assets_v2/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../../www/assets_v2/css/index.css">
+    <script type="text/javascript" src="../../../../www/assets_v2/js/jquery/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="../../../../www/assets_v2/layer/layer.js"></script>
+    <script type="text/javascript" src="../../../../www/assets_v2/js/common/common.js"></script>
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" type="text/css" href="/assets_v2/css/bootstrap/bootstrap.min.css">
+    <script src="//dev.gn100.com/assets_v2/bootstrap-3.3.0/js/html5shiv.min.js?ver=13"></script>
+    <script src="//dev.gn100.com/assets_v2/bootstrap-3.3.0/js/respond.min.js?ver=13"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <script src="//dev.gn100.com/assets_v2/js/ie8.js?ver=13"></script>
+    <![endif]-->
+</head>
+<body>
+<section class='pd40'>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-20 pd0">
+                <div class="m-bc-path fs16 pl30">添加银行卡
+                    <span class="cGray">(申请提现需绑定银行卡)</span>
+                </div>
+                <div class="m-bc-form">
+                    <ul class="form form-horizontal fs14">
+                        <form id="card_form">
+                            <li class="form-group">
+                                <div class="control-label col-xs-8 col-sm-5">真实姓名</div>
+                                <div class="label-for col-xs-10 col-sm-10">
+                                    <input class="required col-xs-20 col-sm-12" type="text" name="real_name" value="" data-tip="请输入您的真实姓名" data-valid="isNonEmpty||onlyZh||between:2-5" data-error="请输入您的真实姓名||姓名只能为中文||姓名长度为2-5位" data-status="0">
+                                    <span class="tips col-xs-20 col-sm-8"></span>
+                                </div>
+                            </li>
+                            <li id="card_name" class="form-group common-select-32" >
+                                <div class="control-label  col-xs-8 col-sm-5">银行卡 </div>
+                                <div class="label-for col-xs-10 col-sm-7">
+                                    <ul  class="select">
+                                        <span class="select-icon">
+                                        </span>
+                                        <div class="select-btn">请选择银行</div>
+                                        <input type="hidden" class="required c-fl" value="0"  name="bank" data-valid="isNonEmpty" data-error="请选择银行" data-status="0"  />
+                                        <div class="option-box">
+                                            <li class="option" value="0">111</li>
+                                            <li class="option" value=''>222</li>
+                                            <li class="option" value=''>3333</li>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="form-group common-select-32">
+                                <div class="control-label  col-xs-8 col-sm-5">所在省/市</div>
+                                <div class="label-for col-xs-5 col-sm-15">
+                                    <ul  class="select mr10 mb10 c-fl">
+                                        <span class="select-icon">
+                                        </span>
+                                        <div class="select-btn">请选择省份</div>
+                                        <input type="hidden" value="0" id="level0" name="region_level0" class="required " data-valid="isNonEmpty" data-error="请选择省" data-status="0" />
+                                        <div class="option-box">
+                                            <li class="option" value="0">111</li>
+                                            <li class="option" value=''>222</li>
+                                            <li class="option" value=''>3333</li>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </ul>
+                                    <ul  class="select mr10  mb10 c-fl">
+                                        <span class="select-icon">
+                                        </span>
+                                        <div class="select-btn">请选择市</div>
+                                        <input type="hidden" name="region_level1" id="level1" class="required  " data-valid="isNonEmpty" data-error="请选择市" data-status="0" />
+                                        <div class="option-box">
+                                            <li class="option" value="0">111</li>
+                                            <li class="option" value=''>222</li>
+                                            <li class="option" value=''>3333</li>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </ul>
+                                    <ul  class="select mr10 mb10 c-fl">
+                                        <span class="select-icon">
+                                        </span>
+                                        <div class="select-btn">请选择区</div>
+                                        <input type="hidden" class="required  " data-valid="isNonEmpty" data-error="请选择区" data-status="0" name="region_level2" id="level2"/>
+                                        <div class="option-box">
+                                            <li class="option" value="0">111</li>
+                                            <li class="option" value=''>222</li>
+                                            <li class="option" value=''>3333</li>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li  class="form-group">
+                                <div class="control-label  col-xs-8 col-sm-5">银行开户网点</div>
+                                <div class="label-for col-xs-10 col-sm-10">
+                                    <input class="col-xs-20 col-sm-12 required" type="text" name="branch" data-valid="isNonEmpty" data-error="请输入开户行" data-status="0" value="">
+                                    <span class="tips col-xs-20 col-sm-8"></span>
+                                </div>
+                            </li>
+                            <li class="form-group">
+                                <div class="control-label  col-xs-8 col-sm-5">银行卡号</div>
+                                <div class="label-for col-xs-10 col-sm-10">
+                                    <input class="required  col-xs-20 col-sm-12" type="text" name="card_no" value="" data-tip="请输入您的银行卡号" data-valid="isNonEmpty||onlyInt" data-error="请输入您的银行卡号||只能为数字"  onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                                    <span class="tips col-xs-20 col-sm-8">请输入银行卡号</span>
+                                </div>
+                            </li>
+                            <li class="form-group">
+                                <div class="control-label  col-xs-8 col-sm-5">图形验证码</div>
+                                <div class="label-for col-xs-10 col-sm-10">
+                                    <input class="required  col-xs-20 col-sm-12" type="text" name="verifyImage" value="" data-tip="请输入验证码" data-valid="isNonEmpty" data-error="请输入图形验证码||验证码错误"  onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                                    <span class="tips col-xs-20 col-sm-8">
+                                        <img src="" alt="">
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="form-group">
+                                <div class="control-label  col-xs-8 col-sm-5">手机号</div>
+                                <div class="label-for col-xs-10 col-sm-10">
+                                    <input class="required  col-xs-20 col-sm-12" type="text" name="mobile" value="" data-tip="请输入您的手机号" data-valid="isNonEmpty||isMobile" data-error="请输入您的手机号||手机号格式不对"  onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                                    <span class="tips col-xs-20 col-sm-8">请填写注册时的手机号码</span>
+                                </div>
+                            </li>
+                            <li class="form-group verif">
+                                <div class="control-label  col-xs-8 col-sm-5">验证码</div>
+                                <div class="label-for  col-xs-10 col-sm-10">
+                                    <input class="required col-xs-20 col-sm-6" type="text" name="mobileCode" value="" data-valid="isNonEmpty||onlyInt" data-error="请输入验证码||只能为数字" data-status="0">
+                                    <div class="input-box col-xs-20 col-sm-12 ">
+                                        <div  name="code" id ="get_verify_code" class="c-fl gray-button verif" onclick="getVerificatCode(this)" >获取验证码</div>
+                                        <div class="cBlue ml10 c-fl fs12 verif-tips-a">没收到短信？
+                                            <div class="verif-tips message-frame"><span class="frame-icon"></span>
+                                                <p class="vRed">手机号码有误？</p>
+                                                <p class="fb">可按以下步骤依次确认解决问题：</p>
+                                                <p>1.请确认该预留手机号是当前使用手机号</p>
+                                                <p>2.若银行预留手机号已停用，请联系银行修改</p>
+                                                <p>3.银行预留手机号修改完毕后请重新绑定</p>
+                                                <p>4.获取更多帮助，可以联系客服<span class="sBlue">010-5689846</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="tips col-sm-5 col-xs-20"></span>
+                                </div>
+                            </li>
+                            <li class="form-group mt10">
+                                <div class="control-label  col-xs-8 col-sm-7">&nbsp;</div>
+                                <div class="label-for col-xs-10 col-sm-13">
+                                    <button  class="yellow-button" id="card_button">申请添加</button>
+                                </div>
+                            </li>
+                        </form>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="/assets_v2/js/jquery/jquery.validate.js"></script>
+</body>
+</html>

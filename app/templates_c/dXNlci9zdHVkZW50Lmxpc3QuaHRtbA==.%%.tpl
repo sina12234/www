@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>学员列表 - <?php echo tpl_function_part('/site.main.orgname'); ?> - 云课 - 专业的在线学习平台</title>
+    <meta name="title" content="<?php echo tpl_function_part('/site.main.orgname'); ?> - 创建课程 - 云课 - 专业的在线学习平台">
+    <meta name="keywords" content="<?php echo tpl_function_part('/site.main.orgname'); ?> - 云课 - Yunke K12 在线学习 直播 云课网">
+    <meta name="description" content="<?php echo tpl_function_part('/site.main.orgname'); ?> - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+	<script type="text/javascript" src="<?php echo utility_cdn::js('/assets_v2/js/ejs.min.js'); ?>"></script>
+    <?php echo tpl_function_part("/site.main.header"); ?>
+</head>
+<body>
+<?php echo tpl_function_part("/site.main.nav3"); ?>
+<!-- tpInfo -->
+<?php echo tpl_function_part("/org.course.managetop.".SlightPHP\Tpl::$_tpl_vars["courseId"]); ?>
+<!-- tpInfo -->
+<section class="pb40">
+    <div class="container">
+        <div class="row">
+            <!-- bdy -->
+            <section>
+                <?php echo tpl_function_part("/org.course.managenav.".SlightPHP\Tpl::$_tpl_vars["courseId"]); ?>
+                <div class="col-md-16 pr0 col-xs-20 parinfoWidth">
+                    <div class="gn-base-ct clearfix">
+                        <ul class="tab-main clearfix" id="get-class-list"></ul>
+					<div class="col-xs-20 pd10">
+                        <span class="file-total c-fl mt5" style="display:none;">共<em id="get-list-total"></em>个学生</span>
+						<div class="c-fl" >
+							<div class="c-fl ml10" id="group-select" groupId="-1" style="display:none;"></div>
+						</div>
+						<a href="javascript:void(0);" class="add-button c-fr" id="add-group-btn">添加分组</a>
+                        <div class="search-frame c-fr mr20">
+                            <input name='mobile'  class="search-input" id='mobile' type="text" value="" placeholder="手机号/姓名">
+                            <button class="search-box org-t-search-btn">
+                                 <span class="search-icon search_name" onclick="searchStuentsInfo()" style="margin:0"></span>
+                                 <div class='t-list-img clear-icon' id="t-delt-btn" style="display:none;"></div>
+                            </button>
+                        </div>
+						<a href="javascript:;" id="class-student-excel" class="cBlue mr10 pt5 c-fr hidden-xs">导出EXCEL</a>
+					</div>
+                        <div class="file-more">
+                            <table class="table-grid fs14" id="student-list">
+                                <thead>
+                                    <tr>
+										<td class="hidden-xs"><input type="checkbox" id="allselect"></td>
+                                        <td class="col-xs-5 col-lg-3">姓名</td>
+                                        <td class="col-xs-5 col-lg-3">手机号</td>
+                                        <td class="hidden-xs col-lg-3">地区</td>
+										<td class="col-xs-5 col-lg-4">所在分组</td>
+                                        <td class="col-xs-5 col-lg-4">报名时间</td>
+                                        <td class="hidden-xs col-lg-3">操作</td>
+                                    </tr>
+                                </thead>
+                                <tbody class="fs12" id="get-base-student"></tbody>
+                            </table>
+							<a href="javascript:void(0);" id="batch-eidt-btn" style="display:none;">批量修改</a>
+                            <div class="get-load-data"></div>
+                        </div>
+                        <!-- page -->
+                        <div id="page-num" class="mt20 col-md-20 tac"></div>
+                        <!-- /page -->
+                    </div>
+                </div>
+            </section>
+            <!-- /bdy -->
+        </div>
+    </div>
+</section>
+<!-- 收件信息 -->
+<section id="received-course-info" style="display:none;">
+    <ul class="fs12 mt10 pr15">
+        <li class="cGray">
+            <span class="col-xs-6 tar fs14 dGray received-student-name">学生姓名：</span>
+        </li>
+        <li class="cGray">
+            <span class="col-xs-6 tar fs14 dGray received-name">收件人：</span>
+        </li>
+        <li class="cGray">
+            <span class="col-xs-6 tar fs14 dGray received-phone">收件人电话：</span>
+        </li>
+        <li class="cGray">
+            <span class="col-xs-6 tar fs14 dGray received-adress">收件地址：</span>
+        </li>
+        <li class="cGray">
+            <span class="col-xs-6 tar fs14 dGray received-desc">备注：</span>
+        </li>
+        <li class="cRed tac" style="display:none;">该同学尚未填写收件信息，请提醒学生尽快完善收件信息！</li>
+    </ul>
+</section>
+<!-- /收件信息 -->
+<?php echo tpl_function_part("/site.main.footer"); ?>
+</body>
+</html>
+<script type="text/javascript" src="<?php echo utility_cdn::js('/assets_v2/js/jquery.create.course.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo utility_cdn::js('/assets_v2/js/mustache.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo utility_cdn::js('/assets_v2/laypage/laypage.js'); ?>"></script>
+<script type="text/template" id="getClassListTpl">
+    <<#classList>>
+        <li class="tab-hd-opt" onclick="classUser(<<classId>>, this)" classId="<<classId>>">
+            <span  class="org-slide-a">
+                <<className>>
+            </span>
+        </li>
+    <</classList>>
+</script>
+<script type="text/template" id="getClassUserTpl">
+    <<#userCourse>>
+        <tr id="student_<<user_id>>">
+			<td class="hidden-xs"><input type="checkbox" name="uid" data-uid="<<user_id>>"></td>
+            <td class="col-xs-5 col-lg-3">
+                <a href="/course.stat.GetStudentPlanStatByPid/<<class_id>>/<<user_id>>" class="cBlue" target="_blank">
+					<<real_name>>
+				</a>
+			</td>
+            <td class="col-xs-5 col-lg-3"><<mobile>></td>
+            <td class="hidden-xs col-lg-3"><<address>></td>
+            <td class="select-list-option col-xs-5 col-lg-4" groupId="<<groupid>>"></td>
+			<td class="col-xs-5 col-lg-4"><<register_time>></td>
+            <td class="hidden-xs col-lg-3">
+                <a href="javascript:void(0);" style="display:none;" class="blue-link mr10 student-rece-btn" data-isDocument="<<isDocument>>" onclick="studentReceInfo(<<user_id>>, '<<real_name>>')">收货信息</a>
+                <a href="javascript:void(0);" onclick="delClassStudent(<<user_id>>, <<class_id>>)" class="blue-link">移除</a>
+            </td>
+        </tr>
+    <</userCourse>>
+</script>
+<!-- 分组下拉列表 -->
+<script type="text/html" id="group-select-html">
+<% if(itemlist.length > 0) { %>
+    <span class="c-fl mt5 ml10">分组：</span>
+    <select class="form-control c-fl" id="group" name="group_id">
+        <option value="-1">全部学员</option>
+        <option value="-2">未分组</option>
+    <% for(var i = 0;i < itemlist.length; i++ ) { %>
+        <option value="<%=itemlist[i].pk_group%>"><%=itemlist[i].group_name%></option>
+    <% };%>
+    </select>
+<% };%>
+</script>
+<!-- 批量修改 -->
+<div id="batch-edit-tmpl" class="col-xs-20 p30" style="display:none;">
+    <div class="col-xs-20 pb10 tac select-group">
+        <span class="fs14">将所选学员调整至：</span>
+    </div>
+    <div class="col-xs-20 tac mt10">
+        <a href="javascript:void(0);" class="btn">保存</a>
+        <a href="javascript:void(0);" class="gray-btn ml10">取消</a>
+    </div>
+</div>
+<!-- 添加分组 -->
+<div id="add-group-tmpl" class="col-xs-20 p15" style="display:none;">
+    <div class="col-xs-20 pb10 clearfix" id="group-privilege">
+        <div id="layer-group-left" class="c-fl" style="display:none;">
+            设置：
+            <input type="radio" onclick="setGroupPrivilege(this)" value="0" name="visible-group" id="visible-group">
+    		<label for="visible-group" class="mr10">可见全部聊天</label>
+            <input type="radio" onclick="setGroupPrivilege(this)" value="1" name="visible-group" id="visible-group2">
+    		<label for="visible-group2">仅见组内聊天</label>
+        </div>
+        <div class="c-fr">
+            <a href="javascript:void(0);" class="theme-link" id="add-group-item">+创建分组</a>
+        </div>
+    </div>
+    <table class="table-grid mt10">
+        <thead>
+            <tr>
+                <td>分组名称</td>
+                <td>助教姓名</td>
+                <td>分组学员</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody id="table-grid"></tbody>
+    </table>
+</div>
+<script type="text/html" id="group-list-html">
+<% if(itemlist.items.length == 0) { %>
+    <tr>
+        <td colspan="4" class="no-data">
+            <img src="/assets_v2/img/platform/pet3.png" class="mt30" alt=""><div class="fs14 mb30">还没有分组</div>
+        </td>
+    </tr>
+<% }else{ for(var i = 0;i < itemlist.items.length; i++ ) { %>
+    <tr>
+        <td><%=itemlist.items[i].group_name%></td>
+        <td class="teacherlist" checkStatus="<%=itemlist.items[i].checkStatus%>" data-teac-id="<%=itemlist.items[i].group_teacher_id%>">
+           <%=itemlist.items[i].real_name%>
+        </td>
+        <td><%=itemlist.items[i].user_count%></td>
+        <td><a href="javascript:void(0);" class="edit-icon" data-id="<%=itemlist.items[i].pk_group%>"></a><a href="javascript:void(0);" class="ml10 del-icon"  data-id="<%=itemlist.items[i].pk_group%>"></a></td>
+    </tr>
+<% }; } %>
+</script>
+
+<script type="text/javascript">
+var courseId = <?php echo SlightPHP\Tpl::$_tpl_vars["courseId"]; ?>, classId;
+var groupSelectlist = 0;
+var Winwidth = $(window).width();
+if( Winwidth <= 760){
+	$('.parinfoWidth').css(
+		'padding-left','0'
+	)
+}
+window.onload = function() {
+    classList();
+    setTimeout(function() {
+        var index = window.location.href.split('#')[1]||0;
+        $('#get-class-list').find('li').eq(index).addClass('curr');
+        classId = $('.tab-main').find('li').eq(index).attr('classid');
+        $('#add-group-btn').attr('classId', classId);
+        classUser(classId);
+        groupListAjax(classId);
+        groupListAjax2(classId);
+    }, 500)
+    $("#t-delt-btn").click(function(){
+        window.location.href = window.location.href.split('#')[0]+'#'+$('#get-class-list .curr').index();
+        window.location.reload();
+    });
+    $('.search-input').keydown(function(e){
+        var e = e || event,
+        keycode = e.which || e.keyCode;
+        if (keycode==13) {
+            searchStuentsInfo();
+        }
+    })
+}
+function searchStuentsInfo() {
+    var classId = $('#add-group-btn').attr('classid');
+    classUser(classId);
+    groupListAjax2(classId);
+    $("#t-delt-btn").show();
+}
+
+function classUser(classId, obt, curr) {
+    $(obt).addClass('curr').siblings().removeClass('curr');
+    $('.file-more .table-grid:eq('+$(obt).index()+')').show().siblings().hide();
+	$('#class-student-excel').attr('href', '/phpexcel/platformstu/?course_id=<?php echo SlightPHP\Tpl::$_tpl_vars["courseId"]; ?>&class_id='+classId);
+    if(typeof($(obt).attr('classid')) != 'undefined'){
+        classId = $(obt).attr('classid');
+        $('#add-group-btn').attr('classId', classId);
+        groupListAjax(classId);
+        groupListAjax2(classId);
+        $('#group-select').attr('groupid', -1);
+    }
+	var mobile = $('#mobile').val();
+    var groupId = $('#group-select').attr('groupid');
+    var page = curr || 1;
+    var params = {
+        courseId  : courseId,
+        classId   : classId,
+        page      : page,
+		groupId   : groupId,
+		mobile	  : mobile
+    };
+    var getClassUserTpl = $('#getClassUserTpl').html();
+    setTimeout(function() {
+        $('#group-select').find('option').each(function() {
+            if($(this).val() == groupId) {
+                $(this).attr('selected', true);
+            }else{
+                $(this).attr('selected', false);
+            }
+        });
+        trSelectedVal();
+    }, 600)
+    $.ajax({
+        url: '/user/supCourseAjax/ClassUser',
+        type: 'post',
+        dataType: 'json',
+        data: JSON.stringify(params),
+        success:function(r) {
+            if(r.code == 0) {
+                if(r.result.userCourse != '') {
+                    $("#page-num").show();
+                    $(".file-total").show();
+                    $("#batch-eidt-btn").show();
+                    $('#get-base-student').show();
+                    $('.get-load-data').hide();
+                    $('#get-list-total').text(r.result.total);
+                    $('#get-base-student').html(Mustache.render(getClassUserTpl, r.result));
+                    $('#get-base-student').find('.student-rece-btn').each(function() {
+                        if($(this).attr('data-isdocument') == 0) {
+                            $(this).hide();
+                        }else{
+                            $(this).show();
+                        }
+                    })
+                    laypage({
+                        cont: $("#page-num"),
+                        pages: r.result.pageTotal,
+                        curr: curr || 1,
+                        jump: function(obj, first){
+                            if(!first){
+                                classUser(classId, obt, obj.curr);
+                                groupListAjax2(classId);
+                            }
+                        }
+                    });
+                }else{
+                    $("#page-num").hide();
+                    $("#page-num").html('');
+                    $('#batch-eidt-btn').hide();
+                    $(".file-total").hide();
+                    $('.get-load-data').show();
+                    $('.get-load-data').html('<div style="width:100%;height:300px;" class="my-collect-no-class p40"><img src="/assets_v2/img/platform/pet3.png" alt="" /><div class="fs14">暂时还没有报名的学员哦！</div></div>');
+                    $('#get-base-student').hide();
+                    return false;
+                }
+            }else {
+                $('#batch-eidt-btn').hide();
+                $(".file-total").hide();
+                $("#page-num").hide();
+                $("#page-num").html('');
+                $('.get-load-data').show();
+                $('.get-load-data').html('<div style="width:100%;height:300px;" class="my-collect-no-class p40"><img src="/assets_v2/img/platform/pet3.png" alt="" /><div class="fs14">暂时还没有报名的学员哦！</div></div>');
+                $('#get-base-student').hide();
+                return false;
+            }
+        }
+    });
+}
+function trSelectedVal() {
+    $('#get-base-student').find('tr').each(function() {
+        var groupId = $(this).find('.select-list-option').attr('groupid');
+        $(this).find('.select-list-option').find('option').each(function() {
+            if($(this).val() == groupId) {
+                $(this).attr('selected', true);
+            }else{
+                $(this).attr('selected', false);
+            }
+        })
+    })
+}
+//分组列表
+function groupListAjax(classId){
+    $.ajax('/user/group/groupListAjax',{
+        type:'post',
+        dataType:'json',
+        data:{ classid:classId,courseId:courseId},
+        success:function (data) {
+            if(data.code == 0){
+				var groupSelectlist='';
+				if(data.data.items !=''){
+					$(data.data.items).each(function(i,item){
+						groupSelectlist+='<option value="'+item.pk_group+'">'+item.group_name+'</option>';
+					});
+					html = '<select name="group_id"><option value="-1">全部学员</option><option value="-2">未分组</option>'+groupSelectlist+'</select>';
+					$("#group-select").html(html);
+                    $('.select-list-option').html(html);
+                    $('#group-select').show();
+                    $('#batch-eidt-btn').show();
+                    $('#layer-group-left').show();
+				}else{
+                    $('#group-select').hide();
+                    $('#batch-eidt-btn').hide();
+                    $('#layer-group-left').hide();
+                }
+            }
+        }
+    });
+}
+function groupListAjax2(classId){
+    setTimeout(function() {
+    $.ajax('/user/group/groupListAjax',{
+        type:'post',
+        dataType:'json',
+        data:{ classid:classId,courseId:courseId },
+        success:function (data) {
+            if(data.code == 0){
+                var groupSelectlist='';
+                if(data.data.items !=''){
+                    $('#batch-eidt-btn').show();
+                    $('#layer-group-left').show();
+                    $(data.data.items).each(function(i,item){
+                        groupSelectlist+='<option value="'+item.pk_group+'">'+item.group_name+'</option>';
+                    });
+                    html = '<select name="group_id"><option value="-1">全部学员</option><option value="-2">未分组</option>'+groupSelectlist+'</select>';
+                    $('#batch-edit-tmpl .select-group').html('<span class="fs14">将所选学员调整至：</span>'+html);
+                    $('#get-base-student').find('.select-list-option').html(html);
+                }else{
+                    $('#batch-eidt-btn').hide();
+                    $('#layer-group-left').hide();
+                }
+            }
+        }
+    });
+    }, 200)
+}
+ //分组权限
+function setGroupPrivilege(obj) {
+	var classId = $('#add-group-btn').attr('classid');
+	var privilege = $(obj).val();
+	$.ajax('/user/group/setGroupPrivilegeAjax',{
+		type:'post',
+		dataType:'json',
+		data:{ classid:classId, privilege:privilege },
+		success:function (data) {
+			if(data.code == 0) {
+				layer.msg(data.msg);
+			}else{
+				layer.msg(data.msg);
+			}
+		}
+	});
+}
+//收货信息
+function studentReceInfo(userId, name) {
+    $.post('/user.supCourseAjax.getdocumentuser', { userId:userId }, function(r) {
+        if(r.code == 0) {
+            $('#received-course-info').find('.received-student-name').after(name);
+            $('#received-course-info').find('.received-name').after(r.result.name);
+            $('#received-course-info').find('.received-phone').after(r.result.phone);
+            $('#received-course-info').find('.received-adress').after(r.result.address);
+            $('#received-course-info').find('.received-desc').after(r.result.desc);
+            $('#received-course-info').find('.cRed').hide();
+        }else{
+            $('#received-course-info').find('.received-student-name').after(name);
+            $('#received-course-info').find('.received-name').after('—');
+            $('#received-course-info').find('.received-phone').after('—');
+            $('#received-course-info').find('.received-adress').after('—');
+            $('#received-course-info').find('.received-desc').after('—');
+            $('#received-course-info').find('.cRed').show();
+        }
+    }, 'json');
+    layer.open({
+      type: 1,
+      shade: true,
+      area:['440px', '260px'],
+      title: ['收件信息'], 
+      content: $('#received-course-info')
+    });
+}
+
+function delClassStudent(userId, classId) {
+    layer.confirm(
+        '学生将从班级中移除，无法继续学习该课程，<br>确定移除？',
+        {
+            btn: ['确认','取消'], //按钮
+            title: '移除学生'
+        },
+        function(){
+        $.post("/user/supCourseAjax/delClassStudent",{ studentId:userId,classId:classId,courseId:courseId },
+            function(r){
+                if(r.code==0){
+                    layer.msg('移除成功！');
+                    $('#student_'+userId).remove();
+                    layer.closeAll();
+                }else{
+                    layer.msg('移除学生失败！');
+                    return false;
+                }
+            },
+        "json");
+    }, function(){
+        layer.closeAll();
+    });  
+}
+
+$(function(){
+	var groupprivilege;
+    //查看分组学生
+    $('#group-select').on('change','select',function() {
+        var classId = $('#get-class-list').find('li.curr').attr('classid');
+        $('#group-select').attr('groupid' , $(this).val());
+        classUser(classId);
+        groupListAjax2(classId);
+    });
+    // 修改分组
+    $('#student-list').on('change','select',function(){
+        var _userid=$(this).parents('tr').find('input[name="uid"]').attr('data-uid');
+        var _g_id=$(this).find('option:selected').val();
+        var classId = $('#add-group-btn').attr('classid');
+        $.ajax('/user/group/batchHandleGroupUserAjax',{
+            type:'post',
+            dataType:'json',
+            data:{ classId:classId,courseId:courseId,groupId:_g_id,userId:_userid},
+            success:function (data) {
+                if(data.code==0){
+                    layer.msg('修改成功');
+                }else{
+                    layer.msg('修改失败');
+                }
+            }
+        });
+    });
+    // 分组权限
+    $.ajax('/user/group/getGroupPrivilege',{
+        type:'post',
+        dataType:'json',
+        data:{ classid:classId},
+        success:function (data) {
+            if(data.code==0){
+                groupprivilege=data.data.group_message;
+            }
+        }
+    });
+    //助教列表
+    var tList="";
+    $.ajax('/user/group/getCourseOfTeacherList',{
+        type:'post',
+        dataType:'json',
+        data:{ courseId:courseId},
+        success:function (data) {
+            if(data.code == 0){
+                tList = data.data;
+            }
+        }
+    });
+    var studentListId;
+    $("#allselect").click(function(){
+        var studentList=$('#student-list tbody');
+        studentList.find('input[name="uid"]').each(function(){
+            if($(this).attr('checked')){
+                $(this).removeAttr('checked');
+            }else{
+                $(this).attr('checked','checked');
+                $(this).prop('checked',true);
+            }
+        });
+    });
+    $('#batch-edit-tmpl .gray-btn').click(function(){
+        layer.closeAll();
+    })
+    //批量修改
+    $('#batch-edit-tmpl .btn').click(function(){
+        var userId = 0;
+        $('#student-list').find('input[name="uid"]:checked').each(function(){
+            if(userId == 0){
+                userId = $(this).attr('data-uid');
+            }else{
+                userId = userId + ','+$(this).attr('data-uid');
+            }
+        });
+        var groupId = $('#batch-edit-tmpl').find('select>option:selected').val();
+        var classId = $('#add-group-btn').attr('classid');
+        $.ajax('/user/group/batchHandleGroupUserAjax',{
+            type:'post',
+            dataType:'json',
+            data:{ classId:classId, courseId:courseId, groupId:groupId, userId:userId },
+            success:function (data) {
+                if(data.code == 0){
+                    window.location.reload();
+                }else{
+                    layer.msg('修改失败');
+                }
+            }
+        });
+    })
+    $('#batch-eidt-btn').click(function(){
+        var _g_list=$(groupSelectlist);
+        var studentList=$('#student-list tbody');
+        _g_list.find('option:nth-child(2)').remove();
+        if(studentList.find('input:checked').length == 0){
+            layer.msg('请先选择学生');
+            return false;
+        }else{
+            if($('#batch-edit-tmpl').find('select').length == 0){
+                groupListAjax2(classId);
+            }
+            layer.open({
+    			type: 1,
+    			title: '批量修改',
+    			closeBtn:true,
+                shadeClose: true,
+    			area: ['380px', '210px'],
+    			content: $('#batch-edit-tmpl')
+    		});
+        }
+    });
+    $('#add-group-btn').click(function() {
+        var groupList = $('#table-grid');
+        var groupListHtml = $('#group-list-html').html();
+        var classId = $(this).attr('classid');
+        $.ajax('/user/group/groupListAjax',{
+            type:'post',
+            dataType:'json',
+            data:{ classid:classId,courseId:courseId },
+            success:function (data) {
+                if(data.code == 0){
+                    data.data.teacherlist=tList;
+                    groupList.html(ejs.render(groupListHtml,{ itemlist:data.data }));
+					var checkStatus = $('#table-grid').find('.teacherlist').attr('checkStatus');
+					if(checkStatus == 0) {
+						$('#visible-group').attr('checked', true);
+					}else{
+						$('#visible-group2').attr('checked', true);
+					}
+                }
+            }
+        });
+        $('input[name="visible-group"][value="'+groupprivilege+'"]').attr("checked",'checked');
+		layer.open({
+			type: 1,
+			title: ['添加分组<span class="cGray">（在基本信息中设置为助教才可以在这里添加分组）</span>'],
+			closeBtn:true,
+            shadeClose: true,
+			area: ['560px', '400px'],
+			content: $('#add-group-tmpl'),
+            cancel: function(){ window.location.reload(); }
+		});
+
+	});
+    var groupItem=$('<tr><td></td>'+
+                  '<td class="addteachelist"></td><td>0</td>'+
+                  '<td><a href="javascript:void(0);" class="add-group">保存</a><a href="javascript:void(0);" class="cancel-add ml10">取消</a></td></tr>');
+    $('#add-group-item').click(function(){
+        if($('#table-grid').find('.group-input').length>0){
+            layer.msg('请先保存');
+        }else{
+            $('#table-grid').find('.no-data').remove();
+            var g_teacher_list='';
+
+            if(tList.length > 0){
+                g_teacher_list ='<select>';
+                for(var i=0;i < tList.length;i++){
+                    g_teacher_list +='<option value="'+tList[i].teacherId+'">'+tList[i].teacherName+'</option>';
+
+                }
+                g_teacher_list +="</select>";
+            }
+            groupItem.find('td:first').html('<input type="text" class="group-input" autocomplete="off" value="" placeholder="分组名称，少于五个字">');
+            groupItem.find('.addteachelist').html(g_teacher_list);
+            groupItem.find('group-input').value=='';
+            $('#table-grid').append(groupItem);
+        }
+
+    });
+    // 添加分组
+    $('#table-grid').on('click','.add-group',function(){
+        var _self=$(this);
+        var classId = $('#add-group-btn').attr('classid');
+        var gName=$.trim(_self.parents('tr').find('.group-input').val());
+        var gTeacher=_self.parents('tr').find('select>option:selected').val();
+        if (gName==''){
+            layer.msg('请先添加分组名称');
+            return false;
+        }else if(gTeacher==0){
+            layer.msg('请先选择助教');
+            return false;
+        }else if(gName.length>5){
+            layer.msg('分组名称不能超过5个字');
+            _self.parents('tr').find('.group-input').css('border','1px solid red');
+            return false;
+        }else{
+            $.ajax('/user/group/addGroupAjax',{
+                type:'post',
+                data:{ class:classId,course:courseId,group_name:gName,teacher_id:gTeacher},
+                success:function (data) {
+                    data=jQuery.parseJSON(data);
+                    if(data.code==0){
+                        layer.msg('添加成功');
+                        _self.parents('tr').before('<tr><td>'+gName+'</td><td class="teacherlist" data-teac-id="'+_self.parents('tr').find('select>option:selected').val()+'">'+_self.parents('tr').find('select>option:selected').text()+'</td><td>0</td><td><a href="javascript:void(0);" class="edit-icon" data-id="'+data.data+'"></a><a href="javascript:void(0);" class="ml10 del-icon"  data-id="'+data.data+'"></a</td></tr>');
+                        _self.parents('tr').remove();
+                        $('#layer-group-left').show();
+                    }else{
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+        }
+    });
+    // 取消添加
+    $('#table-grid').on('click','.cancel-add',function(){
+        var _self=$(this);
+        _self.parents('tr').remove();
+    });
+    //取消分组
+    $('#table-grid').on('click','.cancel-edit',function(){
+        var _self=$(this);
+        var gName=_self.parents('tr').find('.group-input').attr('data-val');
+        var gTeacher=_self.parents('tr').find('option[value="'+_self.parents('tr').find('.teacherlist').attr('data-teac-id')+'"]').text();
+        var gId=_self.attr('data-tid');
+        _self.parents('tr').find('td:nth-child(1)').html(gName);
+        _self.parents('tr').find('.teacherlist').html(gTeacher);
+        _self.parent().html('<a href="javascript:void(0);" class="edit-icon" data-id="'+gId+'"></a><a href="javascript:void(0);" class="ml10 del-icon"  data-id="'+gId+'"></a>');
+
+    });
+    // 保存分组
+    $('#table-grid').on('click','.save-group',function(){
+        var _self=$(this);
+        var gName=_self.parents('tr').find('.group-input').val();
+        var gTeacher=_self.parents('tr').find('select>option:selected').val();
+        var gTeacherName=_self.parents('tr').find('select>option:selected').text();
+        var g_id=_self.attr('data-tid');
+        if (gName==''){
+            layer.msg('请先添加分组名称');
+            return false;
+        }else if(gTeacher==0){
+            layer.msg('请先选择助教');
+            return false;
+        }else{
+            $.ajax('/user/group/upGroupAjax',{
+                type:'post',
+                data:{ groupid:g_id,group_name:gName,teacher_id:gTeacher},
+                success:function (msg) {
+                    msg=jQuery.parseJSON(msg);
+                    if(msg.code==0){
+                        _self.parents('tr').find('td:first').html(gName);
+                        _self.parents('tr').find('td.teacherlist').html(gTeacherName).attr('data-teac-id',gTeacher);
+                        _self.parent().html('<a href="javascript:void(0);" class="edit-icon" data-id="'+g_id+'"></a><a href="javascript:void(0);" class="ml10 del-icon"  data-id="'+g_id+'"></a>');
+                    }else{
+                        layer.msg(msg.msg);
+                    }
+                }
+            });
+        }
+    });
+    //删除分组
+    $('#table-grid').on('click','.del-icon',function(){
+        var self = $(this);
+        var this_id=self.attr('data-id');
+        layer.confirm('确定删除分组？', {
+            btn: ['确定','取消'] //按钮
+            }, function(index){
+                $.ajax('/user/group/delGroupAjax',{
+                    type:'post',
+                    data:{ classid:classId,groupid:this_id},
+                    success:function (data) {
+                        self.parents('tr').remove();
+                        layer.close(index);
+                        if($('#table-grid').find('tr').length==1 || $('#table-grid').find('tr').length==0){
+                            $('#table-grid').html('<tr><td colspan="4" class="no-data"><img src="/assets_v2/img/platform/pet3.png" class="mt30" alt=""><div class="fs14 mb30">还没有分组</div></td></tr>');
+                            $('#layer-group-left').hide();
+                        }
+                    }
+                });
+            }, function(index){
+                layer.close(index);
+            });
+
+    });
+    // 修改分组
+    $('#table-grid').on('click','.edit-icon',function(){
+        var self = $(this);
+        var g_name=self.parents('tr').find('td:nth-child(1)').html(),
+            g_teacher_id=self.parents('tr').find('.teacherlist').attr('data-teac-id'),
+            g_id=self.attr('data-id'),
+            g_teacher_list;
+        if(tList.length > 0){
+            g_teacher_list ='<select><option value="0">选择助教</option>';
+            for(var i=0;i < tList.length;i++){
+                g_teacher_list +='<option value="'+tList[i].teacherId+'"';
+                if(tList[i].id==g_teacher_id){
+                    g_teacher_list +='selected="selected"';
+                }
+                g_teacher_list +='>'+tList[i].teacherName+'</option>';
+            }
+            g_teacher_list +="</select>";
+        }
+        self.parents('tr').find('td:nth-child(1)').html('<input value="'+g_name+'" class="group-input" data-val="'+g_name+'">');
+        self.parents('tr').find('.teacherlist').html(g_teacher_list);
+        self.parents('tr').find('.teacherlist').find('option').each(function() {
+            var selectedTeacherId = self.parents('tr').find('.teacherlist').attr('data-teac-id');
+            if($(this).val() == selectedTeacherId) {
+                $(this).attr('selected', true);
+            }else{
+                $(this).attr('selected', false);
+            }
+        });
+        self.parent('td').html('<a href="javascript:void(0);" class="save-group" data-tid="'+g_id+'">保存</a><a href="javascript:void(0);" class="cancel-edit ml10" data-tid="'+g_id+'">取消</a>');
+    });
+});
+</script>

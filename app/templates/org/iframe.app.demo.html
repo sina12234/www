@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>高能100 - 专业的K12在线教育平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+<style>
+body{
+	overflow:hidden;
+}
+.classify{
+	float:left;
+	width:100%;
+	background:#fff;
+	padding:5px 10px;
+}
+.classify li{
+	padding:5px;
+	text-align:center;
+}
+.classify span{
+	width:40px;
+	height:40px;
+	border-radius:50%;
+	background:#49cc9a;
+	display:inline-block;
+}
+.classify li:nth-child(2n) span{
+	background:#4dbecd;
+}
+.classify li:nth-child(3n) span{
+	background:#ff7372;
+}
+.classify li:nth-child(4n) span{
+	background:#ffaf00;
+}
+
+</style>
+</head>
+<body>
+<p>
+	<img src="/assets_v2/img/app-tmpl_01.png" alt="">
+</p>
+<p>
+	<img src="/assets_v2/img/app-tmpl_02.png" alt="">
+</p>
+<ul class="classify" id="classify">
+	<li class="col-xs-5">
+		<span></span>
+		<p>数学</p>
+	</li>
+	<li class="col-xs-5">
+		<span></span>
+		<p>数学</p>
+	</li>
+	<li class="col-xs-5">
+		<span></span>
+		<p>数学</p>
+	</li>
+	<li class="col-xs-5">
+		<span></span>
+		<p>数学</p>
+	</li>
+</ul>
+<p>
+	<img src="/assets_v2/img/app-tmpl_03.png" alt="">
+</p>
+</body>
+</html>
+<script>
+	$(function(){
+		var cate_apptemplate = parent.$('#cate_apptemplate');
+		var classify = $('#classify');
+		var c_html='';
+			cate_apptemplate.find('.delect-subj').each(function(){
+				c_html += '<li class="col-xs-5"><span></span><p>'+$(this).text()+'</p></li>';
+			});
+			classify.html(c_html);
+	})
+</script>

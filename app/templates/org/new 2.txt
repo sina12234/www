@@ -1,0 +1,9 @@
+var html = '';
+		var tagHtml = '';
+        $('.tagas-modify span').each(function(){
+            var that=$(this).text();
+            html+='<span class="on"><b></b>'+$(this).text()+'<i></i></span>';
+			tagHtml+="<input type='hidden' name='tagName[]' value='"+$(this).text()+"'/>";
+        });
+		$('#onmouse').html(html);
+		$(".tagNameStr").html(tagHtml);

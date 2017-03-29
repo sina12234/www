@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>高能100 - 专业的K12在线教育平台</title>
+    <meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+    <meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+    <meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+    {part "/site.main.header"}
+</head>
+<body style="background:#f7f7f7;">
+    <div class='lesson-t' id="showthis">
+		<form action="./teacher.manage.upload.{$plan_id}.{$class_id}" enctype="multipart/form-data" method="post"  name="uploadfile" id="form">
+		<button class="btn c-fl" type="button" id="browse">{'上传资料'|tr:'site.teacher'}</button>
+		<p attr="{$errorcode}" id="code" style="text-align:center;line-height:40px;">{$error}</p>
+		<div class="clear"></div>
+        <div class='lesson-name'>
+            <label class='fs14'>{'名称'|tr:'site.teacher'}:</label>
+			<label><input type="text" name="title" id="title" placeholder="{'课件标题'|tr:'site.teacher'}"></label>
+			<label><input type="text" name="attach" id="attach" hidden></label>
+			<label><input type="text" name="thumb" id="thumb" hidden></label>
+			<label><input type="text" name="type" id="type" hidden></label>
+		</div>
+        <div class='mt10 lesson-count'>
+            &nbsp;<label class='fs14 cGray clear pdr20'>{'便于学生识别,请给文件命名,文字少于10字'|tr:'site.teacher'}</label>
+            &nbsp;<label class='fs14 cGray'><p class='c-fl'>{'支持格式'|tr:'site.teacher'}：</p> <b class='cGreen'>txt,pdf,jpg,doc,docx,ppt,pptx,xls,xlsx</b></label>
+        </div>
+        <div class='lesson-butwc mt20'>
+		<label>
+            <input type="submit" value="{'完成'|tr:'site.teacher'}" id="submit">
+        </label>
+		</div>
+        </form>
+    </div>
+</body>
+<script src="{utility_cdn::js('/assets/js/jcrop/js/jquery.Jcrop.min.js')}"></script>
+<link rel="stylesheet" href="{utility_cdn::css('/assets/js/jcrop/css/jquery.Jcrop.css')}" type="text/css" />
+<script src="{utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js')}"></script>
+<script>
+	$("#showthis").hide();
+	$(document).ready(function(){
+		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+		var code = $("#code").attr("attr");
+		if(code == 200){
+			$("#showthis").hide();
+			parent.location.reload();
+			parent.layer.close(index);
+			}else{
+			$("#showthis").show();
+		}
+		var form = $("#form");
+		var clName = $("#title");
+		form.submit(function(){
+			var flagthis = true;
+			var	clNamelen = clName.val().length;
+			var thisval = clName.val();
+			//	console.log("ha000000000000"+thisval.length);
+			if(0==thisval.length){
+				flagthis = false;
+				$(this).css({ "borderColor":"red"});
+				}else{
+				$(this).css({ "borderColor":"#ccc"});
+			}
+			if(clNamelen >= 11){
+				layer.msg("课件名称不能超过10个字");
+				flagthis = false;
+			}
+			if(!flagthis){
+				return false;
+			}
+		});
+		/*	
+		console.log(code);
+		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+		$("#submit").click(function(){
+			parent.location.reload();
+			parent.layer.close(index);
+
+			return false;
+
+
+		});
+		*/
+		var uploader = new plupload.Uploader({
+			browse_button: 'browse', // this can be an id of a DOM element or the DOM element itself
+			url: '/file.main.uploadattach.{$plan_id}',
+			filters: {
+				mime_types : [
+				{ title : "Attach Files", extensions : "jpg,txt,pdf,doc,docx,ppt,pptx,xls,xlsx" }
+				],
+				prevent_duplicates:false,
+				max_file_size:"10mb"
+			}
+			,multi_selection:false
+			,file_data_name:'upfile'
+		});
+
+
+		uploader.bind('FilesAdded', function(up, files) {
+			var att = files[0].name.split(".");
+			var attrtitle = att[0].substr(0,9);
+			$("#title").val(attrtitle);
+			$("#code").html( "已选择："+files[0].name );
+			uploader.start();
+		});
+
+		uploader.bind('UploadProgress', function(up, file) {
+			$("#browse").html("上传中："+ file.percent +"%");
+		});
+		uploader.bind('FileUploaded', function(up, file,info) {
+			var r = jQuery.parseJSON(info.response);
+			if(r.errorcode=="200"){
+				$("#browse").html("上传完成");
+				$("#type").val(r.type);
+				$("#attach").val(r.attach);
+				$("#thumb").val(r.thumb);
+			}
+		});
+
+		uploader.bind('Error', function(up, err) {
+			if(err.code==-600){
+				alert("文件太大了");
+				}else{
+				alert("\nError #" + err.code + ": " + err.message);
+			}
+		});
+		uploader.init();
+	});
+
+</script>
+</html>
+

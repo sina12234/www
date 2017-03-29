@@ -1,0 +1,139 @@
+<!--header-->
+<header>
+    <div class="container">
+        <div class="row">
+            <a href="/" class="g-logo col-lg-3 col-xs-10 col-md-3">
+                {if !empty($orgInfo->thumb_big)}
+                <img src="{utility_cdn::file($orgInfo->thumb_big)}" alt="{$orgInfo->name}">
+                {else}
+                <img src="{utility_cdn::img('/assets_v2/img/logo.png')}" alt="高能100" >
+                {/if}
+            </a>
+			<div id="sitenav" class="g-navright col-md-5" style="float:right"></div>
+			<form id="search_form" method="get" action="">
+				<div class="so-input org-seach-box fs14 hidden-xs col-sm-3 pd0" style="float:right">
+					<!--
+						<div class="divselect divselect-bg mtop22">
+							<cite>课程</cite>
+							<dl style="z-index:10;">
+								<dd class="se-dd"><a selectid='course' >课程</a></dd>
+								<dd class="se-dd"><a selectid='teacher'>老师</a></dd>
+							</dl>
+						</div>
+					-->
+					<div class="c-fr mtop22 w-ipt visible-lg">
+						{if isset($searchField) && !empty($searchField)}
+						<input type="tel" class="c-fl fs14" autocomplete="off" name="search_field" maxlength="15" value="{$searchField}" placeholder="课程名称，科目"/>
+						{else}
+						<input type="tel" class="c-fl fs14" autocomplete="off" name="search_field" maxlength="15" placeholder="课程名称，科目"  />
+						{/if}
+						<img id="s_cha" src="{utility_cdn::img('/assets_v2/img/hide.png')}" alt="">
+						<div class="c-fl subsearch-btn col-sm-4" id="search"></div>
+					</div>
+				</div>
+			</form>
+			<script>
+			$("#sitenav").load("/site.main.usernav2.{$subnav}");
+			</script>
+            <nav class="g-nav col-xs-20 col-md-10 col-lg-8 swiper-container3">
+                <ul id="headernav" class="swiper-wrapper" style="position:absolute;height:100%;">
+                    <li class="swiper-slide">
+                        <a href="/" {if $subnav=="home"}class="selected"{/if}>{'首页'|tr:'site.header'}</a>
+                    </li>
+                    {if $cateId > 0}
+                    <li class="swiper-slide">
+                        <a href="/course.list?fc={$cateId}" {if $subnav=="course"}class="selected"{/if}>{'全部课程'|tr:'site.header'}</a>
+                    </li>
+	                {else}
+	                <li class="swiper-slide">
+                        <a href="/course.list" {if $subnav=="course"}class="selected"{/if}>{'全部课程'|tr:'site.header'}</a>
+                    </li>
+	                {/if}
+                    <li class="swiper-slide"><a href="/teacher.list" {if $subnav=="teacher"}class="selected"{/if}>{'教师团队'|tr:'site.header'}</a></li>
+                	<li class="swiper-slide"><a href="/activity.main.list" {if $subnav=="activity"}class="selected"{/if}>{'学习资讯'|tr:'site.header'}</a></li>
+	                <li class="swiper-slide visible-sm visible-xs"><a href="/live.list" {if $subnav=="live"}class="selected"{/if}>{'直播列表'|tr:'site.header'}</a></li>
+	                <li class="swiper-slide visible-sm visible-xs"><a href="/member.list" {if $subnav=="member"}class="selected"{/if}>{'会员专区'|tr:'site.header'}</a></li>
+	                <li class="swiper-slide visible-sm visible-xs"><a href="/about" {if $subnav=="about"}class="selected"{/if}>{'关于我们'|tr:'site.header'}</a></li>
+	                <li class="swiper-slide fs20 hidden-sm hidden-md hidden-xs" id="navmore">
+	                    <a href="javascript:void(0)"></a>
+	                    <p>
+	                    <i></i>
+                        <a href="/live.list">{'直播列表'|tr:'site.header'}</a>
+	                    {if(!empty($orgmemberset))}
+	                    <a href="/member.list">{'会员专区'|tr:'site.header'}</a>
+	                    {/if}
+	                    <a href="/about">{'关于我们'|tr:'site.header'}</a>
+	                    </p>
+	                </li>
+                </ul>
+            </nav>
+            <div id="mob-bg" style="display:none;position:fixed;top:0px;right:0;bottom:0;left:0;background:rgba(255,255,255,.8);z-index:334"></div>
+        </div>
+    </div>
+</header>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/swiper.min.js')}"></script>
+<script>
+;(function(){ //移动端导航
+	if ($(window).width() < 768) {
+	    var mySwiper = new Swiper('.swiper-container3',{
+	        slidesPerView : 3,});
+	    var li_width = 0;
+	        li_width=$("#headernav li").outerWidth();
+	    var li_index=$("#headernav li").length;
+	    $("#headernav").css('width',li_width*li_index);
+	}
+})
+function searchSubmit() {
+	var url = '';
+	var search_name = $(".divselect cite").text();
+		url = '/course.list';
+	/*
+	if(search_name == '课程'){
+		url = '/course.list';
+	}else if(search_name == '老师'){
+		url = '/teacher.list';
+	}
+	*/
+	$('#search_form').attr('action', url);
+	$('#search_form').submit();
+}
+$(function(){
+	if($("input[name='search_field']").val() != ''){
+		$('#s_cha').show();
+	}
+    $('#checkLogin').on('click',function(){
+        if($(window).width()>768){
+            w='476px';
+            h='283px';
+            layer.open({
+                title:['{'登录并开始学习吧'|tr:'site.header'}','color:#fff;background:#ffa81d'],
+                type: 2,
+                area: [w,h],
+                shadeClose: true,
+                content: '/site.main.alertLogin?url=/student.course.mycourse&from='+encodeURIComponent(window.location)
+            });
+        }else{ location.href='/site.main.login?url=/student.course.mycourse';
+        }
+    });
+
+    $.divselect(".divselect cite");
+
+	$("#search").click(function(){
+		searchSubmit();
+	});
+
+	$("#s_cha").click(function() {
+		$(this).hide();
+		$("input[name='search_field']").val("");
+		searchSubmit();
+	})
+
+	$("#search_form").keydown(function(e){
+		var e = e || event,
+		keycode = e.which || e.keyCode;
+		if (keycode==13) {
+			searchSubmit();
+		}
+	})
+});
+</script>

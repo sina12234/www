@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 收藏的课程</title>
+		{part "/index.main.headeruser"}
+		<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}" ></script>
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+	</head>
+		<style>
+			.user_content .user_content_box .user_content_lb{ height:auto;}
+		    .borcol { border:1px dashed #ccc; border-bottom:none;}
+			
+		</style>
+	<body>
+		<!--top-->
+		{part "/index.main.nav.user"}
+
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='col-sm-3 user_menu hidden-xs'>
+						<div id=''>
+							<div id='menu'>
+								{part "/user.home.menu.user"}
+
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class='col-sm-9 user_content'>
+						<div class='container-fluid'>
+
+							<div class="row">
+							<h1 class="title">喜欢的课程</h1>
+								<div class="user_content_box">
+									<!--div class="user_content_lb">
+									<dl>
+										<dt><img src="{utility_cdn::img('/assets/images/user_r2_c2.png')}"></dt>
+										<dd>
+										<h1>好意数学满分冲刺班<span>(5小时33分钟后开始上课)</span></h1>
+										<p>清华大学_高老师&nbsp;&nbsp;|&nbsp;高能100</p>
+										<p>家长好17长沙中考3群(289007545)</p>
+										<p><b style="color:#f00;">￥689</b>&nbsp;&nbsp;|&nbsp;共七节课</p>
+										</dd>
+									</dl>
+									<div class="user_content_bon">
+
+										<li class="se"><a href="" style="color:#fff">立即报名</a></li>
+									</div>
+								</div>
+								<div class="user_content_lagary"></div>
+								<div class="user_content_lb">
+									<dl>
+										<dt><img src="{utility_cdn::img('/assets/images/user_two_r1_c1.png')}"></dt>
+										<dd>
+										<h1>好意数学满分冲刺班<span>(5小时33分钟后开始上课)</span></h1>
+										<p>清华大学_高老师&nbsp;&nbsp;|&nbsp;高能100</p>
+										<p>家长好17长沙中考3群(289007545)</p>
+										<p><b style="color:#78BE4E;">免费</b>&nbsp;&nbsp;|&nbsp;共七节课</p>
+										</dd>
+									</dl>
+									<div class="user_content_bon">
+
+										<li class="se"><a href="" style="color:#fff">立即报名</a></li>
+									</div>
+									</div-->
+									{if(!empty($cou_info))}
+									{foreach $cou_info as $cou}
+									<div class="borcol col-xs-11">
+									<div class="user_content_lb">
+										<dl>
+											<div class="col-xs-1 visible-xs-block"></div>
+											<div class="col-sm-5 col-xs-11">
+												<dt><a href="/course.info.show/{$cou->course_id}"><img src="{utility_cdn::file($cou->thumb_small)}"></a></dt>
+											</div>
+											<div class="col-xs-1 visible-xs-block"></div>
+											<div class="col-sm-5 col-xs-9">
+												<dd>
+												<h1><a href="/course.info.show/{$cou->course_id}">{$cou->title}</a><br/><span>开课时间:{$cou->start_time}</span></h1>
+												<p>{$cou->user->username}</p>
+												<p></p>
+												<p><b style="color:#78BE4E;">
+											{if($cou->fee_type ==1)}
+												{if (empty($cou->fee->price))}
+													免费
+												{else}	
+													{if isset($cou->fee->price)}
+														￥{$cou->fee->price}
+													{/if}
+												{/if}	
+											{else}
+											免费
+											{/if}
+												</b>&nbsp;&nbsp;|&nbsp;共{$cou->count_sec}节课</p>
+												</dd>
+											</div>
+											<div class="col-sm-2 col-xs-12">
+											<div class="col-xs-3 visible-xs-block"></div>
+										</dl>
+									</div>
+									<div class="user_content_lagary col-xs-12"></div>
+									</div>
+									{/foreach}	
+									{else}
+									<div class="user_content_lagary">
+										<p>您还没有喜欢的课程</p>
+									</div>
+									{/if}
+
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+		</div>              
+
+		{part "/index.main.footer"}
+
+	</body>
+</html>

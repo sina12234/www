@@ -1,0 +1,339 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>高能100-明星教师</title>
+	{part "/index.main.header"}
+	<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/startteac.css')}">
+</head>
+<body>
+{part "/index.main.nav.teacher"}
+<div class="startbanner">
+			<div class="count">
+				<div class="container-fluid" style="z-index:22">
+					<div class='startnav' style="padding-top:0px 20px;width:1000px;background:url({utility_cdn::img('/assets/images/nav_bg.png')}) no-repeat;height:50px;line-height:25px;z-index:2;">
+			{*		{foreach $teachers as $_teacher}
+					{if(!empty($_teacher->name))}
+						<div {if $teacher_id == $_teacher->user_id} class="nav2 teanavup" {else} class="nav2"{/if} style="height:50px;width:120px;">
+							<a href="/teacher.main.entry.{$_teacher->user_id}">
+								<p><b {if $teacher_id == $_teacher->user_id} style="color:#ec860d;"{/if}>{$_teacher->name}</b></p>
+								<p><b {if $teacher_id == $_teacher->user_id} style="color:#ec860d;font-weight:normal;"{/if}>{$_teacher->college}</b></p>
+							</a>
+						</div>
+					{else}
+						<div class='nav2 upt' style="height:50px;width:220px;">
+							<a href="#">
+								<p><b>此位置暂无</b></p>
+								<p>此位置暂无</p>
+							</a>
+						</div>
+					{/if}
+					{/foreach}
+				*}
+					</div>
+					<script>
+					</script>
+				</div>
+			</div>
+
+
+			<div class="count">
+				<div class='startcount'>
+					<div class='startbox'>
+						<div class='startbox1'>
+							<div class='starth1'>
+								<h1>教师简介</h1>
+							</div>
+							<div class='startsp'>
+								<div class='col-xs-12 col-sm-6' style="text-align:center">
+								{if (!empty($teacher_id))}
+								{if $teacher_id==2}
+								<iframe style="width:100%;min-height:300px;"class="img-responsive" src="http://player.youku.com/embed/XOTA5Mjg0NTE2" frameborder=0 allowfullscreen></iframe>
+								{elseif $teacher_id==12}
+								<iframe style="width:100%;min-height:300px;"class="img-responsive" src="http://player.youku.com/embed/XOTA5MjkzOTg0" frameborder=0 allowfullscreen></iframe>
+								{elseif $teacher_id==11}
+								<iframe style="width:100%;min-height:300px;"class="img-responsive" src="http://player.youku.com/embed/XOTA5Mjg5MjA4" frameborder=0 allowfullscreen></iframe>
+								{elseif $teacher_id==10}
+								<iframe style="width:100%;min-height:300px;"class="img-responsive" src="http://player.youku.com/embed/XOTA5MjkxOTQ0" frameborder=0 allowfullscreen></iframe>
+								{elseif $teacher_id==195}
+								<iframe style="width:100%;min-height:300px;"class="img-responsive" src="http://player.youku.com/embed/XOTI5NjYyMDIw" frameborder=0 allowfullscreen></iframe>
+								{elseif $teacher_id==1115}
+								<iframe style="width:100%;min-height:300px;"class="img-responsive" src="http://player.youku.com/embed/XOTE5NjUxMTg0" frameborder=0 allowfullscreen></iframe>
+								{else}
+								<img src="{utility_cdn::file($teacher->thumb_big)}"/>
+								{/if}
+								{else}
+								<img src="{utility_cdn::file($teacher->thumb_big)}"/>
+								{/if}
+								</div>
+								<div class='col-xs-12 col-sm-6 startweb'>
+									{if(!empty($teacher))}
+									<h1>{$teacher->name}</h1>
+									{if(!empty($teacher->desc))}
+									<span>
+										<p><b>教师简介:</b></p>
+										{if(mb_strlen($teacher->desc,'utf8')>70)}
+										{mb_substr($teacher->desc,0,89,'utf-8')}...
+										{else}
+										{$teacher->desc}
+										{/if}
+									</span>
+									{else}
+									<p><b>教师简介:</b>暂无</p>
+									{/if}
+									{if(!empty($teacher->college))}
+									<p><b>毕业学校:</b>{$teacher->college}</p>
+									{else}
+									<p><b>毕业学校:</b>暂无</p>
+									{/if}
+									{if(!empty($teacher->title))}
+									<p><b>头衔:</b>{$teacher->title}</p>
+									{else}
+									<p><b>头衔:</b>暂无</p>
+									{/if}
+									{*<p><b>座右铭:</b>{$teacher->diploma}</p>*}
+								{/if}
+								</div>
+								<div class="clear"></div>
+							</div>
+							<div class='starth1 row'>
+								<h1>精彩课程</h1>
+							</div>
+							<div class="">
+							{if(!empty($plans))}
+								{foreach $plans->data as $plan}
+								{if($plan->admin_status=="1")}
+								<div class='col-sm-4 col-xs-6 box'>
+									<div href="#" class="public" style="padding:20px;">
+										<a href="/course.info.show/{$plan->course_id}">
+											<div style="padding:10px;">
+												<div class="courseThumb">
+													<div><img src="{utility_cdn::file($plan->thumb_small)}" alt="" style="width:100%;max-height: 121px;" class='img-responsive'/></div>
+													{if $plan->course_status=='finished'}
+													{elseif $plan->course_status=='living'}
+													<div class="iconLive"></div>
+													{/if}
+												</div>
+											</div>
+										</a>
+
+										<p class="title"style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{$plan->title}&nbsp;|&nbsp;{$plan->section_name}</p>
+										{if($plan->fee_type==0)}
+										<p class="free"><span style="color:green;">免费</span>&nbsp;&nbsp;|&nbsp;&nbsp;已报名:{$plan->user_total_course}人 &nbsp;剩余<span>
+		  {if empty($plan->max_user_course - $plan->user_total_course)}
+	      0
+		  {else}
+		  {$plan->max_user_course - $plan->user_total_course}
+		  {/if}
+		  </span>人</p>
+										{else}
+										<p class="free"><span style="color:red;">￥{$plan->price}</span>&nbsp;&nbsp;|&nbsp;&nbsp;已报名:{$plan->user_total_course}人 &nbsp;剩余<span>
+
+		  {if empty($plan->max_user_course - $plan->user_total_course)}
+	      0
+		  {else}
+		  {$plan->max_user_course - $plan->user_total_course}
+		  {/if}
+								</span>人</p>
+										{/if}
+										<p class="free">开课时间:{$plan->start_time}</p>
+									</div>
+								</div>
+								{*
+								<div class='col-sm-4 col-xs-6' style="margin-left:0px;">
+									<div href="#" class="public" style="padding:20px;">
+										<div style="padding:10px;">
+											<div class='courseThumb' style="position:relative;">
+												<img src="{utility_cdn::img('/assets/images/icon2.jpg')}" class='img-responsive'>
+												<div class='iconPublic'>
+
+												</div>
+
+											</div>
+										</div>
+
+										<p class="free">&nbsp;&nbsp;&nbsp;&nbsp;<span>免费</span>&nbsp;&nbsp;|&nbsp;&nbsp;高一数学满分冲刺班</p>
+										<p class="free">&nbsp;&nbsp;&nbsp;&nbsp;198人已学 &nbsp;好评：98%</p>
+
+									</div>
+								</div>
+								*}
+									{/if}
+								{/foreach}
+								{else}
+								<div class='col-sm-4 col-xs-6 box'>
+									<p>暂无</p>
+								</div>
+								{/if}
+								<div class='clear'></div>
+							</div>
+							{*
+							<div class='clear'></div>
+							<div class='starth1'>
+								<h1>好学生评价</h1>
+							</div>
+							<div calss='startop' style="margin-top:20px;">
+								<div calss='startdl' style="margin-left:30px; float:left">
+									<dl>
+										<dt><img src="{utility_cdn::img('/assets/images/startimg.jpg')}"></dt>
+										<dd style="padding-left:50px;padding-top:10px;">肖同学</dd>
+									</dl>
+								</div>
+								<div calss='startdl' style="margin-left:30px; float:left">
+									<dl>
+										<dt><img src="{utility_cdn::img('/assets/images/startimg.jpg')}"></dt>
+										<dd style="padding-left:50px;padding-top:10px;">肖同学</dd>
+									</dl>
+								</div>
+								<div calss='startdl' style="margin-left:30px; float:left">
+									<dl>
+										<dt><img src="{utility_cdn::img('/assets/images/xiaotx.jpg')}"></dt>
+										<dd style="padding-left:50px;padding-top:10px; color:#FFAA1C;">肖同学</dd>
+									</dl>
+								</div>
+								<div calss='startdl' style="margin-left:30px; float:left">
+									<dl>
+										<dt><img src="{utility_cdn::img('/assets/images/startimg.jpg')}"></dt>
+										<dd style="padding-left:50px;padding-top:10px;">肖同学</dd>
+									</dl>
+								</div>
+								<div calss='startdl' style="margin-left:30px; float:left">
+									<dl>
+										<dt><img src="{utility_cdn::img('/assets/images/startimg.jpg')}"></dt>
+										<dd style="padding-left:50px;padding-top:10px;">肖同学</dd>
+									</dl>
+								</div>
+
+								<div class='clear'></div>
+								<div class='webkuang'>
+									<p>就打开拉萨就打开拉萨家里的空间阿斯利康到家啦看似简单快乐撒娇的喀什就打开拉萨就打开拉萨家里的空间阿斯利康到家啦看似简单快乐撒娇的喀什就打开拉萨就打开拉萨家里的空间阿斯利康到家啦看似简单快乐撒娇的喀什就打开拉萨就打开拉萨家里的空间阿斯利康到家啦看似简单快乐撒娇的喀什萨家里的空间阿斯利康到家啦看似简单快乐撒娇的喀什</p>
+								</div>
+							</div>
+							<div class='starth1'>
+								<h1>所有课程</h1>
+							</div>
+							<div class='startlook'>
+								<div class='col-sm-3 col-xs-3 box' style="float:left; margin-left:45px;">
+									<div href="#" class="public_one" style="background:#fff;">
+										<div href="">
+											<div style="padding:10px;">
+												<div class='courseThumb' style="position:relative;">
+													<img src="{utility_cdn::img('/assets/images/icon5.jpg')}" class='img-responsive'>
+
+												</div>
+											</div>
+											<div class="free1" style="font-weight:bold;font-size:14px;">&nbsp;&nbsp;&nbsp;高一数学满分冲刺班</div>
+											<div class="num">&nbsp;&nbsp;&nbsp;&nbsp;<span>￥689</span>&nbsp;&nbsp;|&nbsp;&nbsp;讲座时间:11月30日19:00</div>
+											<div class="free">&nbsp;&nbsp;&nbsp;&nbsp;已报名:198人 &nbsp;剩余<span>13</span>人</div>
+											<div class="free">&nbsp;&nbsp;&nbsp;&nbsp;<s class="teacher_1"></s>小熊老师 主讲</div>
+											<div class="buy_btn"><a href="">立刻购买</a></div>
+										</div>
+									</div>
+
+								</div>
+								<div class='col-sm-3 col-xs-3 box' style="float:left; margin-left:45px;">
+									<div href="#" class="public_one" style="background:#fff;">
+										<div href="">
+											<div style="padding:10px;">
+												<div class='courseThumb' style="position:relative;">
+													<img src="{utility_cdn::img('/assets/images/icon5.jpg')}" class='img-responsive'>
+
+												</div>
+											</div>
+											<div class="free1" style="font-weight:bold;font-size:14px;">&nbsp;&nbsp;&nbsp;高一数学满分冲刺班</div>
+											<div class="num">&nbsp;&nbsp;&nbsp;&nbsp;<span>￥689</span>&nbsp;&nbsp;|&nbsp;&nbsp;讲座时间:11月30日19:00</div>
+											<div class="free">&nbsp;&nbsp;&nbsp;&nbsp;已报名:198人 &nbsp;剩余<span>13</span>人</div>
+											<div class="free">&nbsp;&nbsp;&nbsp;&nbsp;<s class="teacher_1"></s>小熊老师 主讲</div>
+											<div class="buy_btn"><a href="">立刻购买</a></div>
+										</div>
+									</div>
+
+								</div>
+								<div class='col-sm-3 col-xs-3 box' style="float:left; margin-left:45px;">
+									<div href="#" class="public_one" style="background:#fff;">
+										<div href="">
+											<div style="padding:10px;">
+												<div class='courseThumb' style="position:relative;">
+													<img src="{utility_cdn::img('/assets/images/icon5.jpg')}" class='img-responsive'>
+
+												</div>
+											</div>
+											<div class="free1" style="font-weight:bold;font-size:14px;">&nbsp;&nbsp;&nbsp;高一数学满分冲刺班</div>
+											<div class="num">&nbsp;&nbsp;&nbsp;&nbsp;<span>￥689</span>&nbsp;&nbsp;|&nbsp;&nbsp;讲座时间:11月30日19:00</div>
+											<div class="free">&nbsp;&nbsp;&nbsp;&nbsp;已报名:198人 &nbsp;剩余<span>13</span>人</div>
+											<div class="free">&nbsp;&nbsp;&nbsp;&nbsp;<s class="teacher_1"></s>小熊老师 主讲</div>
+											<div class="buy_btn"><a href="">立刻购买</a></div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class='startlook'>
+								<div class='col-sm-3 col-xs-3 box' style="float:left; margin-left:45px;">
+									<div href="#" class="public_one" style="background:#fff;">
+										<div href="">
+											<div style="padding:10px;">
+												<div class='courseThumb' style="position:relative;">
+													<img src="{utility_cdn::img('/assets/images/icon5.jpg')}" class='img-responsive'>
+
+												</div>
+											</div>
+											<div class="free1" style="font-weight:bold;font-size:14px;">&nbsp;&nbsp;&nbsp;高一数学满分冲刺班</div>
+											<div class="num">&nbsp;&nbsp;&nbsp;&nbsp;<span>￥689</span>&nbsp;&nbsp;|&nbsp;&nbsp;讲座时间:11月30日19:00</div>
+											<div class="free">&nbsp;&nbsp;&nbsp;&nbsp;已报名:198人 &nbsp;剩余<span>13</span>人</div>
+											<div class="free">&nbsp;&nbsp;&nbsp;&nbsp;<s class="teacher_1"></s>小熊老师 主讲</div>
+											<div class="buy_btn"><a href="">立刻购买</a></div>
+										</div>
+									</div>
+
+								</div>
+								<div class='col-sm-3 col-xs-3 box' style="float:left; margin-left:45px;">
+									<div href="#" class="public_one" style="background:#fff;">
+										<div href="">
+											<div style="padding:10px;">
+												<div class='courseThumb' style="position:relative;">
+													<img src="{utility_cdn::img('/assets/images/icon5.jpg')}" class='img-responsive'>
+
+												</div>
+											</div>
+											<div class="free1" style="font-weight:bold;font-size:14px;">&nbsp;&nbsp;&nbsp;高一数学满分冲刺班</div>
+											<div class="num">&nbsp;&nbsp;&nbsp;&nbsp;<span>￥689</span>&nbsp;&nbsp;|&nbsp;&nbsp;讲座时间:11月30日19:00</div>
+											<div class="free">&nbsp;&nbsp;&nbsp;&nbsp;已报名:198人 &nbsp;剩余<span>13</span>人</div>
+											<div class="free">&nbsp;&nbsp;&nbsp;&nbsp;<s class="teacher_1"></s>小熊老师 主讲</div>
+											<div class="buy_btn"><a href="">立刻购买</a></div>
+										</div>
+									</div>
+
+								</div>
+								<div class='col-sm-3 col-xs-3 box' style="float:left; margin-left:45px;">
+									<div href="#" class="public_one" style="background:#fff;">
+										<div href="">
+											<div style="padding:10px;">
+												<div class='courseThumb' style="position:relative;">
+													<img src="{utility_cdn::img('/assets/images/icon5.jpg')}" class='img-responsive'>
+
+												</div>
+											</div>
+											<div class="free1" style="font-weight:bold;font-size:14px;">&nbsp;&nbsp;&nbsp;高一数学满分冲刺班</div>
+											<div class="num">&nbsp;&nbsp;&nbsp;&nbsp;<span>￥689</span>&nbsp;&nbsp;|&nbsp;&nbsp;讲座时间:11月30日19:00</div>
+											<div class="free">&nbsp;&nbsp;&nbsp;&nbsp;已报名:198人 &nbsp;剩余<span>13</span>人</div>
+											<div class="free">&nbsp;&nbsp;&nbsp;&nbsp;<s class="teacher_1"></s>小熊老师 主讲</div>
+											<div class="buy_btn"><a href="">立刻购买</a></div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							*}
+
+
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+{part "/index.main.footer"}
+</body>
+</html>

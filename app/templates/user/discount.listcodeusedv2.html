@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>优惠码使用详情 - {part '/site.main.orgname'} - 专业的K12在线教育平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}" ></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	{if $discounts->total>0}
+	page("page_list", "/org.discount.listcodeusedv2/{$discountcode}", {$limit}, {$page}, Math.ceil({$discounts->total}/{$limit}));
+	{/if}
+	$("#exportPromoCodeUsedOfnumber").click(function(){
+		var discount_id = $(this).attr("data-item");
+		window.location.href="/phpexcel/platformstu/exportPromoCodeUsedOfnumber/"+discount_id;
+	});
+});
+</script>
+</head>
+<body style="background:#f7f7f7;">
+{part "/site.main.nav.home"}
+<section class="pd40">
+	<div class="container">
+		<div class="row">
+			{part "/org.main.menu"}
+			<div class="right-main col-sm-16">
+				<div class="content" style="padding:1px;">
+
+					<div class='col-sm-20 col-xs-20' style="margin-bottom:20px;">
+						<div class='color-plan-1'>
+							<div class='nav-color col-sm-20 col-xs-20'>
+								<a href="coupon-list-2.html">{'优惠码列表'|tr:'org'}</a>>{$discountcode}{'使用详情'|tr:'site.teacher'}
+							</div>
+							<span><a id="exportPromoCodeUsedOfnumber" data-item="{if !empty($discountcode)}{$discountcode}{/if}">导出excel</a></span>
+						</div>
+
+						<div class='coupon-nav-list'>
+						
+							<ul>
+								<li>{'使用人'|tr:'org'}</li>
+								<li>{'使用时间'|tr:'org'}</li>
+							</ul>
+						</div>
+						{if $discounts->total>0}
+						{foreach $discounts->used as $v}
+						<div class='coupon-nav-1-list'>
+							<ul>
+								<li>{$v->name}</li>
+								<li>{$v->createtime}</li>
+							</ul>
+						</div>
+						{/foreach}
+						{/if}
+						<!-- 分页 -->
+						<div class="col-sm-20">
+							<div class="page-list" id="page_list">
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class='clear'></div>
+</section>
+{part "/site.main.footer"}
+</body>
+</html>

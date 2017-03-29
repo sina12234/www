@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" style="background:fff;">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" id="viewport" content="target-densitydpi=1,width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1" />
+        <title>流量查询</title>
+        <link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/interface/liantong/css/init.css')}" />
+        <link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/interface/liantong/css/reset-min.css')}" />
+        <link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/interface/liantong/css/style.css')}" />
+        <script type="text/javascript" src="{utility_cdn::js('/assets_v2/interface/liantong/js/jquery172min.js')}"></script>
+        <script type="text/javascript" src="{utility_cdn::js('/assets_v2/interface/liantong/js/layer.m/layer.m.js')}"></script>
+        <script type="text/javascript" src="{utility_cdn::js('/assets_v2/interface/liantong/js/tripledes.js')}"></script>
+        <script type="text/javascript" src="{utility_cdn::js('/assets_v2/interface/liantong/js/mode-ecb.js')}"></script>
+    </head>
+    <body style="background:fff;">
+        <div class="page" style="display:none">
+            <div class="goback">
+                <img src="{utility_cdn::img('/assets_v2/interface/liantong/img/goback1.png')}" alt="">
+            </div>
+            <div class="pagebody" id="haslimit">
+                <div class="pagetitle">在“我的 -> 商城 -> 专属流量”<br />查询流量使用情况</div>
+                <div class="canvasform">
+                    <div class="cavasback"></div>
+                    <canvas id="mycanvas1" class="mycanvas" width="400" height="400"></canvas>
+                    <canvas id="mycanvas2" class="mycanvas" width="400" height="400"></canvas>
+                    <div class="flowinfo">
+                        本月剩余<br />
+                        <span class="lastflow" id="lastflow">0</span>M
+                    </div>
+                    <p class="totalflow">小沃学堂流量包：<span class="totalflowpk" id="totalflowpk">0M</span></p></p>
+                </div>
+                <div class="flowstatusform">
+                    <p class="flowstatus" id="flowstatus1">小沃学堂流量已开启</p>
+                    <p>手机号码：<span class="sp_userphone"></span></p>
+                    <p>截至：<span id="sp_querytime1">2016/10/25 19:53</span></p>
+                </div>
+            </div>
+            <div class="pagebody" style="height:600px;display:none"  id="nolimit">
+                <div class="pagetitle">在“我的 -> 商城 -> 专属流量”<br />查询流量使用情况</div>
+                <div class="flowstatusform">
+                    <div class="flowstatus" id="flowstatus2" style="height:26rem">小沃学堂流量已开启</div>
+                    <p style="text-align:center">手机号码：<span class="sp_userphone"></span></p>
+                </div>
+            </div>
+            <div class="pagefoot">
+                <!-- <a href="javascript:;" class="btn_submit" id="btn_flowswitch">暂停使用</a> -->
+                <div class="link_btnsform">
+                    <div class="link_btns clearfix">
+                        <a href="unorder.html" class="leftlink"><b>去退订>></b></a>
+                        <a href="active.html" class="rightlink"><b>去激活>></b></a>
+                    </div>
+                </div>
+            </div>
+            <div class="packageinfo">
+                <p>
+<b style="color:#4abdcc">温馨提示：</b><br />
+免流声明：以下内容暂不计算在免流量里面<br />
+1）首页-频道页面访问内容;<br />
+2）学习视频下载；<br />
+3）客户端的下载、更新、安装；<br />
+4）Android小沃系统1.2.2及以下版本；<br /><br />
+                </p>
+            </div>
+        </div>
+        <script type="text/javascript" src="{utility_cdn::js('/assets_v2/interface/liantong/js/formatDate.js')}"></script>
+        <script type="text/javascript" src="{utility_cdn::js('/assets_v2/interface/liantong/js/flowquery.js')}"></script>
+        <script type="text/javascript" src="{utility_cdn::js('/assets_v2/interface/liantong/js/public.js')}"></script>
+        <script type="text/javascript" src="{utility_cdn::js('/assets_v2/interface/liantong/js/jquery-pagezoom.js')}"></script>
+    </body>
+</html>

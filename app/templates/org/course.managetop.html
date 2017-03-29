@@ -1,0 +1,72 @@
+<!-- tip -->
+{if empty($courseInfo['thumbMed'])}
+<section>
+<div class="tac course-hd-tip">
+	<div class="container">
+		<div class="row">
+			您还没有添加课程图片，不能上架课程，请先添加图片
+			<a href="/org.course.setimg.{$courseInfo['courseId']}" title="">去添加</a>
+			<span class="close-btn-tip"></span>
+		</div>
+	</div>
+</div>
+</section>
+{/if}
+<!--
+<div class="container">
+	<div class="row">
+		<h1 class="fs14 mt20">
+		    <a href="{$sourceUrl}">课程管理列表</a> > 
+		    管理课程
+		</h1>
+	</div>
+</div>
+-->
+<!-- /tip -->
+<section class="pt20">
+	<div class="container">
+		<div class="row">
+			<div class="gn-base-ct mb20 clearfix">
+				<div class="col-md-10 pl0 pb15">
+                    <a class="col-md-6 course-load-img p0 pos-rel col-xs-10" href="/course.info.show/{$courseInfo['courseId']}">
+						<img src="{$courseInfo['thumbMed']}" type="{$type}" width="160" height="90" alt="">
+						<div class="taped-icon pos-abs" id="course-top-taped-icon" style="display:none;">线下课</div>
+						<div class="g-icon3 pos-abs" id="course-top-lubo-icon" style="display:none;">录播课</div>
+					</a>
+					<div class="col-md-12 col-xs-10">
+                        <a href="/course.info.show/{$courseInfo['courseId']}" class="fs14 col-md-20 p0 course-title mb15">{$courseInfo['title']}</a>
+						<p class="clearfix mb10 mt10">
+	                        <span class="fs14 c-fl">
+	                        	{if $courseInfo['price'] <= 0}
+	                        	<span class="cGreen">免费</span>
+	                        	{else}
+	                        	<span class="cRed">￥{$courseInfo['price']}</span>
+	                        	{/if}
+	                        </span>
+							{if $courseInfo['publicType'] !=''}
+							<span class="tryicon c-fl">{$courseInfo['publicType']}</span>
+							{/if}
+						</p>
+						<p class="fs12">共{$courseInfo['sectionNum']}课时</p>
+					</div>
+				</div>
+				<div class="col-md-7 fs14 pb15 col-xs-20">
+					<span class="mr30 mt40 c-fl">
+						<i class="source-icon"></i> {$courseInfo['commNum']}分 <em class="ml20">|</em>
+					</span>
+					<span class="mr30 mt40 c-fl">
+						<i class="trynum-icon"></i> {$courseInfo['vv']}次 <em class="ml20">|</em>
+					</span>
+					<span class="c-fl mt40">
+						<i class="mannum-icon"></i> {$courseInfo['userTotal']}个
+					</span>
+				</div>
+				{if $isAdmin}
+				<div class="col-md-3 tac pb15 hidden-xs">
+                    <button {if $courseInfo['adminStatus'] == 'normal'}class="fs14 mt30 green-button"{else}class="fs14 mt30 gray-button"{/if} adminStatus="{$courseInfo['adminStatus']}" courseId="{$courseInfo['courseId']}" onclick="setCourseAdminStatus(this)">{$courseInfo['adminStatusName']}</button>
+				</div>
+				{/if}
+			</div>
+		</div>
+	</div>	
+</section>

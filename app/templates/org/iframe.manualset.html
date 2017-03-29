@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+{part "/site.main.header"}
+<style>
+.form { margin-top:5px }
+.form li div{ padding:0 5px 0px 0 }
+.form li div:last-child{ padding:0 5px 0 0 }
+#addCourse .last { position: absolute; width:100%; height:135px; border: 1px solid #ccc; top:34px; background: #f7f7f7;z-index:10 }
+#addCourse .last li { width: 100%; height: 30px; line-height: 30px; padding-left:5px; }
+#addCourse>li { padding-right:50px;position:relative }
+#addCourse .last li:hover { background: #eeeeee; }
+.m-del{ position:absolute;top:5px;right:5px}
+</style>
+</head>
+<body style="background:#fff">
+<section class="col-sm-12">
+    <form class="form">
+        <ul>
+            <li>
+                <div class="label col-sm-2">{'标题'|tr:'org'}：</div>
+                <div class="label-for col-sm-10">
+                    <input type="text" name="title" class="col-sm-8" placeholder="{'模版名称'|tr:'org'}" value="{if !empty($template->title)}{$template->title}{/if}">
+                    <span class="tips">{'少于8个字的长度'|tr:'org'}</span></a>
+                </div>
+            </li>
+            {*<li>
+                <div class="label col-sm-2">&nbsp;</div>
+                <div class="label-for col-sm-10">
+                    <label><input name="setType" type="radio" value="SystemSet" checked="checked" />自动推荐 </label>
+                    <label><input name="setType" type="radio" value="ManualSet"/>手动推荐 </label>
+                </div>
+            </li>*}
+            <li>
+                <div class="label col-sm-2">{'行数'|tr:'org'}：</div>
+                <div class="label-for col-sm-10">
+                    <input type="text" class="col-xs-5" name="rowCount" placeholder="1" value="{if !empty($template->row_count)}{$template->row_count}{/if}">
+                    <span class="tips">{'最多4行'|tr:'org'}</span>
+                </div>
+            </li>
+            {*<li>
+                <div class="label col-sm-2">{'内容展示'|tr:'org'}</div>
+            </li>
+            <li>
+                <select name="grade">
+                    <option value="0">{'全年级'|tr:'org'}</option>
+                    {if !empty($grades)}
+                    {foreach $grades as $gv}
+                    <option value="{$gv->pk_tag}" {if !empty($template->query_arr->grade_id) and $template->query_arr->grade_id==$gv->pk_tag}selected{/if}>{$gv->name|tr:'course.list'}</option>
+                    {/foreach}
+                    {/if}
+                </select>
+                <select name="subject">
+                    <option value="0">{'全科目'|tr:'org'}</option>
+                    {if !empty($subjects)}
+                    {foreach $subjects as $sv}
+                    <option value="{$sv->pk_tag}" {if !empty($template->query_arr->subject_id) and $template->query_arr->subject_id==$sv->pk_tag}selected{/if}>{$sv->name|tr:'course.list'}</option>
+                    {/foreach}
+                    {/if}
+                </select>
+                <select name="courseType">
+                    <option value="1" {if !empty($template->query_arr->course_type) and $template->query_arr->course_type==1}selected{/if}>{'直播'|tr:'org'}</option>
+                    <option value="2" {if !empty($template->query_arr->course_type) and $template->query_arr->course_type==2}selected{/if}>{'录播'|tr:'org'}</option>
+                    <option value="3" {if !empty($template->query_arr->course_type) and $template->query_arr->course_type==3}selected{/if}>{'线下课'|tr:'org'}</option>
+                </select>
+                <select name="feeType">
+                    <option value="0" {if !empty($template->query_arr->fee_type) and $template->query_arr->fee_type==0}selected{/if}>{'免费'|tr:'org'}</option>
+                    <option value="1" {if !empty($template->query_arr->fee_type) and $template->query_arr->fee_type==1}selected{/if}>{'收费'|tr:'org'}</option>
+                </select>
+            </li>*}
+        </ul>
+        {*<ul class="fs14" id="addCourse">
+            <li >
+                <div class="col-xs-3">
+                    <input type="text" class="col-xs-12" placeholder="{'添加课程'|tr:'org'}">
+                    <ul class='last' style="display:none;">
+                    </ul>
+                    <input type="hidden" name="cids[]" >
+                </div>
+                <div class="col-xs-3">
+                    <input type="text" class="col-xs-12" placeholder="{'添加课程'|tr:'org'}">
+                    <ul class='last' style="display:none;">
+                    </ul>
+                    <input type="hidden" name="cids[]" >
+                </div>
+                <div class="col-xs-3">
+                    <input type="text" class="col-xs-12" placeholder="{'添加课程'|tr:'org'}">
+                    <ul class='last' style="display:none;">
+                    </ul>
+                    <input type="hidden" name="cids[]" >
+                </div>
+                <div class="col-xs-3">
+                    <input type="text" class="col-xs-12" placeholder="{'添加课程'|tr:'org'}">
+                    <ul class='last' style="display:none;">
+                    </ul>
+                    <input type="hidden" name="cids[]" >
+                </div>
+            </li>
+        </ul>*}
+        <p style="text-align:center">
+            <input type="hidden" name="tid" value="{if !empty($template->template_id)}{$template->template_id}{/if}">
+                <input type="hidden" name="act" value="{$act}">
+                <input type="hidden" name="recommend" value="{if !empty($recommend)}{$recommend}{/if}">
+                <button class="col-xs-5 fltnone">{'保存'|tr:'org'}</button>
+                {*<a href="javascript:void(0)" id="addli" class="cYellow ml10">+{'添加一行'|tr:'org'}*}
+        </p>
+    </form>
+</section>
+</body>
+</html>
+<script type="text/javascript">
+$(function  () {
+    /*$('#addCourse').on('keyup','div>input',function(){
+        $(this).parent('div').siblings().find('.last').hide();
+        var keyword=$(this).val();
+        var last=$(this).parent('div').find('.last');
+        //last.show();
+        $.post("/org.main.SearchCourseAjax",{ 'keyword':keyword },function(r){
+            if(r.data!=''){
+                var html='';
+                $(r.data).each(function(i,item){
+                    html+='<li cid="'+item.course_id+'">'+item.title+'</li>';
+                });
+                last.show().html(html);
+            }else{
+                last.hide();
+            }
+        },"json");
+    });
+    $('#addCourse').on('click','.last>li',function(){
+        var cid=$(this).attr('cid');
+        var title=$(this).html();
+        $(this).parent().prev().val(title);
+        $(this).parent().next().val(cid);
+        $(this).parent().hide()
+    });
+    $('#addCourse').on('mouseover mouseout','li',function(event){
+        if(event.type=='mouseover'){
+            if($(this).find('.m-del').length < 1){
+            $(this).append('<a class="m-del" href="javascript:void(0);">删除行</a>');
+            }
+        }else if(event.type=='mouseout'){
+            setTimeout(function(){
+                $(this).find('a').remove();
+            },500);
+        }
+    });
+    $('#addCourse').on('click','.m-del',function(event){
+        $(this).closest('li').remove();
+    })
+    $('#addli').click(function(){
+        var this_parent_li=$('#addCourse');
+        var this_nums=this_parent_li.find('div').length;
+        if (this_nums<16){
+            //var this_del='<a href="javascript:void(0)" class="c-fr add-class-id">删除行</a>';
+            //var ul_c='<ul class="set-class"></ul>';
+            var html_c='<li>';
+                html_c+='<div class="col-xs-3"><input type="text" class="col-xs-12" placeholder="添加课程"><ul class="last" style="display:none;"></ul><input type="hidden" name="cids[]"></div>';
+                html_c+='<div class="col-xs-3"><input type="text" class="col-xs-12" placeholder="添加课程"><ul class="last" style="display:none;"></ul><input type="hidden" name="cids[]"></div>';
+                html_c+='<div class="col-xs-3"><input type="text" class="col-xs-12" placeholder="添加课程"><ul class="last" style="display:none;"></ul><input type="hidden" name="cids[]"></div>';
+                html_c+='<div class="col-xs-3"><input type="text" class="col-xs-12" placeholder="添加课程"><ul class="last" style="display:none;"></ul><input type="hidden" name="cids[]"></div>';
+                html_c+='</li>';
+            //$(this).before(ul_c);
+            this_parent_li.append(html_c);
+        }else{
+            layer.msg('最多能添加4行');
+        }
+        $('input[name=rowCount]').val(this_parent_li.find('li').length/4);
+    });*/
+    $("form").submit(function(){
+        if($(this).find('input[name=act]').val()=='edit'){
+            $.post("/org.main.updateTemplateAjax",$(this).serialize(),function(r){
+                if(r.error){
+                    layer.msg(r.error);
+                     $("[name="+r.field+"]").focus();
+                }else{
+                    parent.location.href("/org.main.template#bottom");
+                }
+            },"json");
+        }else{
+            $.post("/org.main.addTemplateAjax",$(this).serialize(),function(r){
+                if(r.error){
+                    layer.msg(r.error);
+                    $("[name="+r.field+"]").focus();
+                }else{
+                    parent.location.href("/org.main.template#bottom");
+                }
+            },"json");
+        }
+        return false;
+    });
+});
+</script>

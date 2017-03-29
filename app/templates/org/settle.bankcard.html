@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>添加银行卡 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 机构中心 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+
+<body style="background:#f7f7f7">
+{part "/site.main.nav"}
+<section class='pd40'>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-20 pd0">
+                <div class="bc-path fs16 pl30">{'添加银行卡'|tr:'org'}</div>
+                <div class="bc-form">
+                    <ul class="form fs14" style="overflow: visible;">
+					<form id="card_form">
+                        <li>
+                            <div class="label col-sm-6">{'真实姓名'|tr:'org'}</div>
+                            <div class="label-for col-sm-14">
+                                <input class="required col-xs-8" type="text" name="real_name" value="" data-tip="请输入您的真实姓名" data-valid="isNonEmpty||onlyZh||between:2-30" data-error="请输入您的真实姓名||姓名只能为中文||姓名长度为2-30位" data-status="0">
+                                <span class="tips"></span>
+                            </div>
+                        </li>
+                        <li id="card_name">
+                            <div class="label col-sm-6">{'银行卡'|tr:'org'} </div>
+                            <div class="label-for col-sm-14">
+                                <select name="bank" class="required c-fl" data-valid="isNonEmpty" data-error="请选择银行" data-status="0">
+									{if(!empty($cardList))}
+									<option value>请选择银行</option>
+									{foreach($cardList as $co)}
+									<option value="{$co->name}">{$co->name}</option>
+									{/foreach}
+									{/if}
+								</select>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="label col-sm-6">{'所在省/市'|tr:'org'} </div>
+                            <div class="label-for col-sm-14">
+                                <select name="region_level0" id="level0" class="required c-fl mr10" data-valid="isNonEmpty" data-error="请选择省" data-status="0">
+									<option value="">{'请选择'|tr:'site.user'}</option>
+									{if(!empty($level0))}
+									{foreach $level0 as $region}
+									<option value="{$region->region_id}">{$region->name}</option>
+									{/foreach}
+									{/if}
+								</select>
+								<select name="region_level1" id="level1" class="required c-fl mr10" data-valid="isNonEmpty" data-error="请选择市" data-status="0">
+									<option value="">{'请选择'|tr:'site.user'}</option>
+								</select>
+								<select style="display:none" class="c-fl mr10" name="region_level2" id="level2">
+									<option value="">{'请选择'|tr:'site.user'}</option>
+								</select>
+                            </div>
+                        </li>
+						<li>
+                            <div class="label col-sm-6">{'银行开户网点'|tr:'org'}</div>
+                            <div class="label-for col-sm-14">
+                                <input class="col-xs-8 required" type="text" name="branch" data-valid="isNonEmpty" data-error="请输入开户行" data-status="0" value="">
+                                <span class="tips"></span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="label col-sm-6">{'银行卡号'|tr:'org'}</div>
+                            <div class="label-for col-sm-14">
+                                <input class="required col-xs-8" type="text" name="card_no" value="" data-tip="请输入您的银行卡号" data-valid="isNonEmpty||onlyInt" data-error="请输入您的银行卡号||只能为数字"  onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                                <div class="col-xs-8 card_no_tips" id="card_no_tips" style="display:none;"></div>
+                                <span class="tips">{'请输入银行卡号'|tr:'org'}</span>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="label col-sm-6">{'手机号'|tr:'org'}</div>
+                            <div class="label-for col-sm-14">
+                                <input class="required col-xs-8" type="text" name="mobile" value="" data-tip="请输入您的手机号" data-valid="isNonEmpty||isMobile" data-error="请输入您的手机号||手机号格式不对"  onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                                <span class="tips">{'请输入机构创建者手机号'|tr:'org'}</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="label col-sm-6">{'验证码'|tr:'org'}</div>
+                            <div class="label-for col-sm-14">
+                                <input class="required col-xs-2" type="text" name="mobileCode" value="" data-valid="isNonEmpty||onlyInt" data-error="请输入验证码||只能为数字" data-status="0">
+                                <input type="button" value="{'获取验证码'|tr:'org'}" name="code" id ="get_verify_code" class="col-md-3 ml10 verif" onclick="getVerificatCode(this)" />
+								<div class="sBlue ml10 c-fl fs12 verif-tips-a">{'没收到短信'|tr:'org'}？
+                                    <div class="verif-tips">
+                                        <i class="border-arrow-left"></i>
+                                        <p class="cRed">手机号码有误？</p>
+                                        <p class="fb">可按以下步骤依次确认解决问题：</p>
+                                        <p>1.请确认该预留手机号是当前使用手机号</p>
+                                        <p>2.若银行预留手机号已停用，请联系银行修改</p>
+                                        <p>3.银行预留手机号修改完毕后请重新绑定</p>
+                                        <p>4.获取更多帮助，可以联系客服<span class="sBlue">010-5689846</span></p>
+                                    </div>
+                                </div>
+                                <span class="tips"></span>
+                            </div>
+                        </li>
+                        <li class="mt10">
+                            <div class="label col-sm-6">&nbsp;</div>
+                            <div class="label-for col-sm-14">
+                                <input type="submit" value="{'申请添加'|tr:'org'}"  class="col-md-3 btnyellow" id="card_button">
+                                <span class="cGray ml10" >{'5个工作日内完成'|tr:'org'}</span>
+                            </div>
+                        </li>
+						</form>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="/assets_v2/js/jquery/jquery.validate.js"></script>
+<script type="text/javascript">
+  $('#card_form').validate({
+    onBlur: function() {
+      var $parent = this.parent();
+      var _status = parseInt(this.attr('data-status'));
+      if (!_status) {
+        $parent.addClass('error');
+      }
+      return false;
+    }
+  });
+
+  $('#card_form').on('submit', function(event) {
+    event.preventDefault();
+    if(!$(this).validate('submitValidate')){
+        return false;
+    }
+    $.ajax({
+        type:"post",
+        url: '/org.settle.addCard',
+        data:$('#card_form').serialize(),
+        dataType:'json',
+        success:function(ret){
+            if(ret.error ){
+				$('input[name='+ret.field+']').parent().find('.tips').remove();
+                $('input[name='+ret.field+']').parent().removeClass('success tip error').addClass('error').append('<span class="tips">' + ret.error + '</span>');
+            }else{
+                location.href = "/org.settle";
+            }
+        }
+    });
+  });
+  </script>
+<script type="text/javascript">
+var wait = 60;
+function getVerificatCode(obj) {
+    var mobile = $('input[name=mobile]').val();
+    var owner_mobile = {$mobile};
+    if( mobile == '' || mobile.length != 11 || mobile != owner_mobile){
+        layer.msg("{'请输入机构创建者的手机号码'|tr:'org'}");
+    }else {
+        if(wait == 0) {
+            obj.removeAttribute('disabled');
+            obj.value = "{'获取验证码'|tr:'org'}";
+            wait = 60;
+        }else {
+           obj.setAttribute('disabled', true);
+           obj.value = "{'重新发送'|tr:'org'}("+ wait +")";
+           wait -- ;
+           setTimeout(function() {
+                getVerificatCode(obj);
+           }, 1000)
+        }
+
+    }
+}
+$(document).ready(function() {
+    var owner_mobile = {$mobile};
+    $('#get_verify_code').click(function() {
+        var mobile = $('input[name=mobile]').val();
+        if( mobile == '' || mobile.length != 11 || mobile != owner_mobile){
+            return false;
+        }
+        $.post("/org.settle.sendcode",{ mobile:mobile },function(r){
+            if(r.error){
+                layer.msg(r.error);
+            }
+        },"json");
+    });
+    $('input[name=card_no]').keyup(function(){
+        var card_no=$('input[name=card_no]').val().replace(/(^\s+)|(\s+$)/g,"");
+        if(card_no != ''){
+            $('#card_no_tips').show();
+            //console.log(card_no.length);
+            $('#card_no_tips').html(card_no);
+        }
+    });
+    $('input[name=card_no]').blur(function(){
+        $('#card_no_tips').hide();
+    });
+    $('select[name=bank]').change(function(){
+        if($(this).val() == '其他'){
+            var conli = '<li id="bank_name">'+
+                           ' <div class="label col-sm-6">'+"{'银行卡名称'|tr:'org'}"+'</div>'+
+                            '<div class="label-for col-sm-14">'+
+                                '<input class="col-xs-8" type="text" name="bank_name" value="">'+
+                            '</div>'+
+                        '</li>';
+            $('#card_name').after(conli);
+        }else{
+            $('#bank_name').remove();
+        }
+    });
+
+	$('input[name=mobileCode]').focus(function(){
+		$(this).parent().find('.tips').remove();
+		$(this).parent().removeClass('success tip error').addClass('tip');
+	});
+	$('input[name=mobileCode]').blur(function(){
+		var mcode = $(this).val();
+		var mobile = $('input[name=mobile]').val();
+		if(mcode){
+			$.post("/org.settle.checkMobileCode",{ mobile:mobile,code:mcode },function(r){
+				if(r.error){
+					$('input[name='+r.field+']').parent().find('.tips').remove();
+					$('input[name='+r.field+']').parent().removeClass('success tip error').addClass('error').append('<span class="tips">' + r.error + '</span>');
+				}else{
+					$('input[name='+r.field+']').parent().find('.tips').remove();
+					$('input[name='+r.field+']').parent().removeClass('success tip error').addClass('success');
+				}
+			},"json");
+		}
+	})
+
+	$("#level0").change(function(){
+			var pid = $(this).val();
+			if(pid){
+				$.get("/user.course.ListRegion."+pid,{ },function(item){
+					$("#level1").html("");
+					if(item){
+						$("#level1").append("<option  value=''>请选择</option>");
+						for(var i in item){
+							var s="";
+							$("#level1").append("<option "+s+" value='"+item[i].region_id+"'>"+item[i].name+"</option>");
+						}
+						$("#level1").show().trigger("change");
+					}else{
+						$("#level1").hide();
+					}
+				},"json");
+				$('#level2').hide();
+			}else{
+				$('#level1').empty();
+				$("#level1").append("<option  value=''>请选择</option>");
+				$('#level2').empty();
+				$("#level2").append("<option  value=''>请选择</option>");
+				$('#level2').hide();
+			}
+		}).trigger("change");
+
+
+		$("#level1").change(function(){
+			var pid = $(this).val();
+			$("#level2").empty();
+			$("#level2").append("<option  value=''>请选择</option>");
+			if(pid){
+				$.get("/user.course.ListRegion."+pid,{ },function(item){
+					$("#level2").html("");
+					if(item){
+						$("#level2").append("<option value=''>请选择</option>");
+						for(var i in item){
+							var s="";
+							$("#level2").append("<option "+s+" value='"+item[i].region_id+"'>"+item[i].name+"</option>");
+							}
+						$("#level2").show().trigger("change");
+					}else{
+						$("#level2").hide();
+					}
+				},"json").fail(function(){
+				$("#level2").hide();
+				});
+			}
+		});
+});
+</script>
+{part "/site.main.footer"}
+</body>
+</html>

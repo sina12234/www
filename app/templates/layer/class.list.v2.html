@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+{part "/site.main.header"}
+</head>
+<body class="bgf">
+<!-- confirmClass  -->
+    <section id="course-info-show">
+        <div class="p30 course-confirm-class">
+            <div class="clearfix">
+                <img src="{$courseInfo['thumb']}" width="160" height="90" class="c-fl" alt="" />
+                {if (!empty($info))}
+                <ul class="c-fr">
+                    <li>班级：{$info['className']}</li>
+                    <li>课时：{$info['progress']}</li>
+                    <li>主讲：{$info['teacherName']}</li>
+                </ul>
+                {/if}
+            </div>
+            <div class="course-infos-btn">
+                <button id="request-btn" class="add-course mr10">确定</button>
+                <button id="cancel-btn" class="gray-button">取消</button>
+            </div>
+        </div>
+    </section>
+<!-- /confirmClass -->
+</body>
+</html>
+<script>
+$(document).ready(function () {
+$("#wrap-course-success").hide();
+	$("#cancel-btn").on('click',function(){
+      var index=parent.layer.getFrameIndex(window.name);
+	  parent.layer.close(index);
+	});
+    $("#request-btn").on('click',function () {
+        var class_id = {$info['classId']};
+        var cid = {$courseInfo['courseId']};
+        var resellOrgId = {$resellOrgId};
+		var type = {$courseInfo['feeType']};
+        var qudaoCode = '{$qudaoCode}';
+		{if($courseInfo['is_member'] == 1)}
+			type = 0;
+		{elseif($courseInfo['price'] >0)}
+            type = 1;
+        {/if}
+        var index = layer.load(2);
+            var coursePrice ={$courseInfo['price']};
+        if (type==1 && coursePrice>0) {
+            // 付费课程报名，需要先支付
+            $.post("/course/pay/check", {
+                classId:class_id,
+                cid:cid,
+                resellOrgId:resellOrgId
+            }, function (r) {
+                layer.close(index);
+                    if (r.code == 0) {
+                        if(resellOrgId){
+                            parent.location.href = "/order.main.buy/course/"+cid+"/"+class_id+"/"+resellOrgId;
+                        }else if(qudaoCode){
+                            parent.location.href = "/order.main.buy/course/"+cid+"/"+class_id+"/"+qudaoCode;
+                        }else{
+                            parent.location.href = "/order.main.buy/course/"+cid+"/"+class_id;
+                        }
+
+                    } else {
+                        //layer.msg(r.errMsg);
+                        location.reload();
+                    }
+                }, "json");
+        } else {
+            $.post("/course/info/AddReg", {
+                classId: class_id,
+                cid: cid
+            }, function (r) {
+                layer.close(index);
+                if (r.code == 0) {
+                    parent.location.reload();
+                } else {
+                    layer.msg(r.errMsg);
+                    return false;
+                }
+            }, "json");
+        }
+
+    });
+})
+</script>

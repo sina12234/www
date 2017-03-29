@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>云课网- 专业的K12在线教育平台</title>
+    {part "/site.main.header"}
+</head>
+<body class="bgf">
+    <div id="at-nav-setting" class="at-nav-setting col-xs-20">
+        <div class="nav-info col-xs-20">
+            <div class="input-box col-xs-6 ">
+                <input class="theme-input theme-title" onKeyUp="ThemTitle(this)" name="title" placeholder="导航名称" type="text">
+            </div>
+            <div class="input-box col-xs-13 pl0">
+                <input class="theme-input" name="url" placeholder="链接地址" type="text">
+            </div>
+            <div class="del-box col-xs-1">
+                <span class="del-icon"></span>
+            </div>
+        </div>
+        <div id="at-add-nav" class="at-add-nav theme-text col-xs-18">
+            +添加
+        </div>
+        <div class="save-action col-xs-20">
+            <div id="save-button" class="save-button btn">
+                保存
+            </div>
+            <div id="cancel-button" class="cancel-button gray-button">
+                取消
+            </div>
+        </div>
+    </div>
+    <textarea id="nav-info" class="hidden">
+         <div class="nav-info col-xs-20">
+            <div class="input-box col-xs-6 ">
+                <input class="theme-input theme-title" onKeyUp="ThemTitle(this)"  name="title" placeholder="导航名称" type="text">
+            </div>
+            <div class="input-box col-xs-13 pl0">
+                <input class="theme-input" name="url" placeholder="链接地址" type="text">
+            </div>
+            <div class="del-box col-xs-1">
+                <span class="del-icon"></span>
+            </div>
+        </div>
+    </textarea>
+    <script>
+		function ThemTitle(obj) {
+		
+			var value = $(obj).val().replace(/[^/d] /g,'');
+			var length = value.length;
+			var strVal = $(obj).val().replace(/[^\u4E00-\u9FA5]/g,'');
+			var strLength = strVal.length;
+			if(length > 10){
+				value = value.substring(0, 12);
+				$(obj).val(value);
+				layer.msg('最多12个英文字母');
+			}
+			if(strLength > 6) {
+				strVal = strVal.substring(0, 6);
+				$(obj).val(strVal);
+				layer.msg('最多6个汉字');
+			}
+		}
+       $(function () {
+           var removeId = [ ];
+		   var leg = $(this).find('.theme-input').val().length;
+            $('#at-add-nav').on('click',function () {
+                var size = $(this).parent().find('.nav-info').size();
+                if(size > 6){
+                    layer.msg('最多可添加7个导航');
+                    return false;
+                }else if(size==1){
+                    $(this).parent().find('.del-icon').show();
+                }
+                var navHtml = $('#nav-info').val();
+                $(this).before(navHtml);
+            })
+           $('.at-nav-setting').on('click','.del-icon',function () {
+               var parent = $(this).parents('.at-nav-setting');
+               var size = parent.find('.nav-info').size();
+               var delId = $(this).attr('data-id');
+               if(delId){
+                   removeId.push(delId);
+               }
+               if(size == 1){
+                   $(this).parents('.nav-info').find('input').val('');
+                   $(this).parents('.nav-info').find('.del-icon').hide();
+               }else{
+                   $(this).parents('.nav-info').remove();
+               }
+
+           })
+           $.ajax('/org.custom.SelCustomNav',{
+               type:'post',
+               dataType:'json',
+               success:function (data) {
+                   var items = data.items;
+                   if(items){
+                     for(var i = 0;i < items.length ; i++){
+                         if(i != 0){
+                             var navHtml = $('#nav-info').val();
+                             $('#at-add-nav').before(navHtml);
+                         }
+                         $('#at-nav-setting').find('.nav-info').eq(i).find('input[name=title]').val(items[i].title);
+                         $('#at-nav-setting').find('.nav-info').eq(i).find('input[name=url]').val(items[i].url);
+                         $('#at-nav-setting').find('.nav-info').eq(i).find('.del-icon').attr('data-id',items[i].id);
+                     }
+                   }
+               }
+           })
+           $('#save-button').on('click',function () {
+               var data =  [ ];
+               $('.nav-info').each(function () {
+                   var item = { };
+                   var delId = $(this).find('.del-icon').attr('data-id');
+                   if(delId){
+                       item['id'] = delId;
+                   }
+                   item['title'] = $(this).find('input[name=title]').val();
+                   item['url'] = $(this).find('input[name=url]').val();
+                   data.push(item)
+               })
+               $.ajax('/org.custom.EditCustomNav',{
+                   type:'post',
+                   dataType:'json',
+                   data:{
+                       item:data,
+                       removeId:removeId
+                   },
+                   success:function (data) {
+                      parent.location.reload();
+//                       var index = parent.layer.getFrameIndex(window.name);
+//                       parent.layer.close(index);
+                   }
+               })
+           })
+           $('#cancel-button').on('click',function () {
+               var index = parent.layer.getFrameIndex(window.name);
+               parent.layer.close(index);
+           })
+
+       })
+    </script>
+</body>
+</html>

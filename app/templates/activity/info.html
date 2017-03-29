@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>学习资讯 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+<script type="text/javascript"   src="{utility_cdn::js('/assets_v2/js/user.js')}"></script>
+</head>
+<body style="background:#f7f7f7;">
+{part "/site.main.nav3"}
+<section>
+<div class="container">
+    <div class="row">
+    {*<div class="root-nav fs14">
+        <span>
+            <a href="/">{'首页'|tr:'site.header'}</a>
+        </span> >
+        <span>
+            <a href="/activity.main.list">{'学习资讯'|tr:'site.header'}</a>
+        </span> >
+    <!--
+        <span class="cGray">{'公告详情'|tr:'site.header'}</span>
+    -->
+    </div>*}
+    <div class="n-main col-lg-16 col-lg-offset-2 col-xs-20">
+        <div class="n-content">
+            <h1 class="n-title">{$notice->notice_title}</h1>
+                <div class="n-time-soure cGray">{$notice->update_time}　{'来源'|tr:'org'}: <span rel="nofollow" class="cGray">{$orgInfo->subname}</span>&nbsp;&nbsp;  {'分类'|tr:'org'}: <span rel="nofollow" class="cGray">{$notice->cate_name}</span></div>
+                <div>
+                    {$notice->notice_content}
+                </div>
+            </div>
+			<div class="col-sm-3 col-xs-10 hidden-xs col-lg-20 pb40 info-share-bom mt40 hidden">
+                        <div class="share tel wrap-courseshare right col-lg-5 pd0">
+                            <span class="col-lg-6 pd0 mt20 fs14">分享到：</span>
+							<div class="share-sns-box col-lg-14 pd0">
+                                <a href="javascript:;" class="share-qq" data-cmd="tqq" title="分享到QQ"></a>
+                                <a href="javascript:;" class="share-weixin" data-cmd="weixin" title="分享到微信"></a>
+                                <a href="javascript:;" class="share-tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+                            </div>
+                        </div>
+            </div>
+			<div class="tac col-lg-20 col-xs-20 pt20 fabulous hidden">
+				<div class="fabulous-icon-zan mt40">
+					<span class="fabulous-gray"></span><span class="fabulous-swite"></span>
+					<em id="fabulous-num" class="fabulous-num">0</em>
+				</div>
+			</div>
+			<div class="info-review col-lg-20 mt20">
+				 <div class="info-review-title col-lg-20 p0">
+					 <b class="fs14">发表评论</b>
+				 </div>
+				 <div class="info-review-frame col-lg-20 mt10 p0 col-xs-20">
+					  <textarea name="comment" id="textValue" placeholder="您可以在这里发表评论" maxlength="350" class="info-review-area col-lg-20 col-xs-20"></textarea>
+				 </div>
+				 <div class="info-review-btn col-lg-20 mt10 p0"> 
+					   <a href="javascript:;" class="fr review-btn mt10 addcomment btn">
+							发表评论
+					   </a>
+					   <input type="hidden" name="notice_id" value="{$notice_id}"/>
+				 </div>
+			</div>
+			<div class="info-comment-review col-lg-20 col-xs-20 mt5 p15">
+					<span class="col-lg-20 p0 fs14 fb">评论</span>
+					{if(!empty($commentList))}
+					{foreach($commentList as $k=>$v)}
+					<div class="info-comment-face fl mt15 col-lg-20 col-xs-20 pd0 comment_li">
+						<div class="col-lg-2 pd0 pos-rel comment-face-review col-xs-4">
+							<img class="info-icon-img" src="{$v->c_thumb_med}" alt="">
+							<a href="/index.rank.rule" target="_blank" class="pos-abs info-lv-icon level-sicon{if(!empty($v->c_level))}{$v->c_level}{/if}"></a>
+						</div>
+						<div class="col-lg-14 col-xs-15 info-mob-comment pl0">
+							<p class="fs14 col-xs-8 p0">{$v->c_name}<p class="col-xs-12 p0 visible-xs tar">{$v->create_time}</p></p>
+							<p class="fs14 mt5 col-xs-20 p0">{$v->comment}</p>
+							<p class="fr mt5 info-cur visible-xs" data-cid="{$v->pk_comment}">回复</p>
+							{if($user_id == $v->comment_fk_user)}
+							<p class="fr mt5 mb10 delete_comment visible-xs" data-cid="{$v->pk_comment}">删除</p>
+							{/if}
+						</div>
+						{if(!empty($v->from_comment_fk_user))}
+						<div class="info-course-play">回复{if(!empty($v->f_name))}{$v->f_name}{/if}：{if(!empty($v->from_comment))}{$v->from_comment}{/if}
+						</div>
+						{/if}
+						<div class="col-lg-4 col-xs-20 pos-abs info-comment-time mt5">
+							<p class="hidden-xs">{$v->create_time}</p>
+							<p class="fr mt5 mb10 info-cur hidden-xs" data-cid="{$v->pk_comment}"><span class="blue-link">回复</span></p>
+							{if($user_id == $v->comment_fk_user)}
+							<p class="fr mt5 mb10 delete_comment hidden-xs" data-cid="{$v->pk_comment}">删除</p>
+							{/if}
+						</div>
+						<input type="hidden" name="comment_id" value="{$v->pk_comment}" />
+					</div>
+					{/foreach}
+					{/if}
+			</div>
+		</div>
+    </div>
+    </div>
+</section>
+<script>
+$(function(){
+    if($(window).width()<800){
+        $('.n-text').find('table,img,td').removeAttr('style');
+    }
+	$(".addcomment").click(function(){
+		var notice_id 	= $("input[name='notice_id']").val();
+		var comment 	= $("textarea[name='comment']").val();
+		if(userApi.isLogin()){
+			/*$.post( "/activity.main.info", function(r) {
+				if(r){
+					location="/activity.main.info.{$notice_id}";
+				}else{
+					location="/index.join.step1";
+				}
+			});*/
+		}else{
+			if($(window).width()>800){
+				w='480px';
+				h='400px';
+			}else{
+				w='90%';
+				h='400px';
+			}
+			layer.open({
+				title:false,
+				type: 2,
+				area: [w,h],
+				shadeClose: true,
+				content: '/activity.main.userLogin/'+notice_id+'/'+comment
+			});
+		}
+		$.post("/activity.main.AddNoticeComment",{ notice_id:notice_id,comment:comment},function(r){
+                if(r.error){
+					layer.msg(r.error);
+					return false;
+                }else if(r.msg){
+                    return false;
+                }else{
+                    location.reload();
+                }
+		},"json");
+	});
+	
+	
+})
+//删除
+$(".delete_comment").click(function(){
+	var comment_id = $(this).attr("data-cid");
+	layer.confirm("{'确定删除吗'|tr:'org'}?", {
+                    title:"{'评论信息'|tr:'org'}",
+                    btn: ["{'确定'|tr:'org'}","{'取消'|tr:'org'}"], //按钮
+                    shade: false //不显示遮罩
+                    }, function(){
+                    $.post("/activity.main.deleteNoticeComment",{ comment_id:comment_id},function(r){
+						if(r.code < 0){
+						layer.msg(r.error);
+							return false;
+						}else{
+							location.reload();
+							return false;
+						}
+					},"json");
+				
+         }, function(){
+
+        });
+})
+$(".info-cur").click(function(){
+	var _this=$(this);
+	if(!$('#info-coursereply')[0]){
+		var reHtml='<div class="info-coursereply" id="info-coursereply"><textarea name="from_comment" class="reply-input"></textarea><p class="click-but-reply"><button class="gray-btn cannel_comment">取消</button><button class="btn from_comment_sub">确定</button></p></div>';
+		_this.closest('.info-comment-face').append(reHtml)
+	}else{
+		_this.closest('.info-comment-face').append($('#info-coursereply'));
+		$('#info-coursereply').find('.reply-input').val('').end().show();
+	}
+	//_this.hide();
+	_this.closest(".delete_comment").remove();
+})
+$(".info-comment-face").on('click','.cannel_comment',function(){
+	var _this=$(this);
+	//_this.closest(".info-coursereply").remove();
+	$('#info-coursereply').hide();
+})
+//回复提交
+$(".comment_li").on('click','.from_comment_sub',function(){
+	var notice_id	 = "{$notice_id}";
+	var comment_id	 = $(this).closest('.info-comment-face').find(".info-cur").attr('data-cid');
+	var comment 	 = $(this).parents(".info-coursereply").find("textarea[name='from_comment']").val();
+	var notice       = notice_id+","+comment_id;
+	if(userApi.isLogin()){
+			$.post("/activity.main.AddNoticeComment",{ notice_id:notice_id,comment:comment,comment_id:comment_id },function(r){
+				if(r.code < 0){
+				layer.msg(r.error);
+					return false;
+				}else{
+					location.reload();
+					return false;
+				}
+			},"json");
+		}else{
+			if($(window).width()>800){
+				w='480px';
+				h='400px';
+			}else{
+				w='90%';
+				h='400px';
+			}
+			layer.open({
+				title:false,
+				type: 2,
+				area: [w,h],
+				shadeClose: true,
+				content: "/activity.main.userLogin/"+notice+"/"+comment+""
+			});
+		}
+	return;
+	
+	
+})
+/*$(".fabulous-icon-zan").click(function(){
+	var item = $(this); 
+	var elNum = item.find('.fabulous-num');
+	var n = parseInt(elNum.text());
+	if(!item.hasClass('active')){
+		n++;
+	}else{
+		n--;
+		n = n < 0 ? 0 : n;
+	}
+	elNum.text(n);
+	item.toggleClass('active');	
+	})
+//分享
+var sPic = "{$data['courseInfo']['thumb']}";
+var sTitle = "{htmlentities($data['courseInfo']['title'])}";
+$(".wrap-courseshare").share({
+      sPic    : sPic,
+      sTitle  : sTitle
+});*/
+</script>
+{part "/site.main.footer"}
+</body>
+</html>
+<script>
+    $(".n-text img").removeAttr("style");
+</script>

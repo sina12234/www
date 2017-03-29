@@ -1,0 +1,97 @@
+@charset "UTF-8";
+/**
+* @authors Your Name (you@example.org)
+* @date    2016-06-08 16:02:24
+* @version $Id$
+*/
+//公用变量
+@import "../common/bootstrap.min";
+@import "wo.mixin";
+@import "../var/var.site";
+@import "../common/normalize";
+
+@import "../common/common";
+@import "../common/button";
+@import "../common/common.icon";
+@import "../common/org.menus";
+@import "../page/right.main";
+@import "../common/left.nav";
+//select style
+@import "../common/divselect";
+// form style
+@import "../common/forms";
+//右侧 fixed
+@import "../common/right.fixed";
+//课程列表
+@import "../page/course.list.new";
+//首页
+@import "../page/wo/index";
+//header
+@import "../page/wo/header";
+//footer
+@import "../page/wo/footer";
+//直播列表
+@import "../page/wo/live.list";
+//推荐老师
+@import "../page/wo/teacher.list";
+//common
+@import "../page/common";
+//页面设置
+@import "../page/wo/page.set";
+//弹层-课程模板
+@import "../page/layer.tmpl";
+//login
+@import "../page/login.reg";
+//机构统计
+@import "../page/org.count";
+//app
+@import "../page/wo/app.template";
+//../page css  分页公用样式
+@import "../common/page";
+//student.main.growth 学习中心
+@import "../page/study.center";
+//table css
+@import "../common/table";
+@import "../page/org.manage";
+@import "../page/org.main.setting";
+@import "../page/org.teacher.list";
+@import "../page/teacher.list";
+@import "../page/note.list";
+//关于我们
+@import "../page/about";
+//帮助中心
+@import "../page/help.center";
+//课程详情
+@import "../page/course.info";
+//消息
+@import "../page/msg";
+//会员
+@import "../page/vip";
+//分销
+@import "../page/distribut";
+//教师博客
+@import "../page/blog";
+//评论模块
+@import "../page/comment";
+//作业批改页面
+@import "../page/publish.task";
+// 404 无内容样式
+@import "../page/404";
+//视频管理
+@import "../page/org.video.manage";
+//优惠管理
+@import "../page/coupon.manage";
+//章节学生统计
+@import "../page/exam.detail";
+//机构管理-课程分类设置
+@import "../page/org.classify";
+//media
+@import "../page/media";
+// 分类选择
+@import "../page/cate.list";
+// 机构管理-订单列表
+@import "../page/org.order";
+//机构管理-文章咨询
+@import "../page/activity.list";
+//机构管理-短信推送
+@import "../page/money";

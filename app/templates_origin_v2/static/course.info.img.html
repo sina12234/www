@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>课程封面 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+	<meta name="title" content="{part '/site.main.orgname'} - 创建课程 - 云课 - 专业的在线学习平台">
+	<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网">
+	<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+	{part "/site.main.header"}
+	<link rel="stylesheet" type="text/css" href="{utility_cdn::js('/assets/js/jcrop/css/jquery.Jcrop.css')}">
+</head>
+
+<body>
+{part "/site.main.nav.home"}
+<!-- bd -->
+<section class="pd40">
+	<div class="container">
+		<div class="row bgf gn-base-ct">
+			<h1 class="base-title mb30">课程封面</h1>
+			<section class="c-content-info fs14 clearfix">
+				<ul class="fs14 course-fans-text mb20">
+					<li class="mb20 clearfix">
+						<div class="c-fl">
+							<div class="set-course-pic mb10 mr20" id="set-course-pic">
+								<img id="img_p" width="480" height="270" src="http://liuchangyuan.gn100.com/assets_v2/img/org-logo.png" alt="" />
+							</div>
+							<input type="hidden" size="4" id="x" name="x">
+							<input type="hidden" size="4" id="y" name="y">
+							<input type="hidden" size="4" id="x2" name="x2">
+							<input type="hidden" size="4" id="y2" name="y2">
+							<input type="hidden" size="4" id="w" name="w">
+							<input type="hidden" size="4" id="h" name="h">
+						</div>
+						<div class="c-fl cGray fs14">
+							<p class="mt40">
+								图片大于480*270
+							</p>
+							<p>
+								支持JPG，PNG，BMP格式（6M以下）
+							</p>
+						</div>
+					</li>
+					<li class="mb20 clearfix">
+						<span class="c-fl mt5">适合范围：</span>
+						<input maxlength="100" class="suitable-range-text" placeholder="请输入适合人群和阶段（100字内）" />
+					</li>
+					<li class="mb20">课程简介：</li>
+					<li>
+						<textarea name="descript" class="descript-text" id="descript"></textarea>
+					</li>
+					<li class="tac">
+						<button class="gray-button">上一步</button>
+						<button class="green-button">下一步</button>
+					</li>
+				</ul>
+			</section>
+		</div>
+	</div>	
+</section>
+<!-- /bd -->
+{part "/site.main.footer"}
+<!-- img -->
+<section id="upload-img-content" style="display:none;">
+	<div class="p20 tac">
+		<img id="img_o" src="" width="320" height="180" alt="" />
+	</div>
+	<button id="uploadImg" class="yellow-button">上传封面</button>
+</section>
+<!-- /img -->
+</body>
+</html>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/plupload.full.min.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets/js/jcrop/js/jquery.Jcrop.min.js')}"></script>
+<script src="{utility_cdn::js('/assets/libs/ckeditor/ckeditor.js')}"></script>
+<script src="{utility_cdn::js('/assets/libs/ckeditor/adapters/jquery.js')}"></script>
+<script type="text/javascript">
+var jcrop_api, boundx, boundy;
+$(function(){
+	$('#set-course-pic').click(function() {
+        layer.open({
+            type: 1,
+            title:['添加封面','color:#fff;background:#ffa81d'],
+            area: ['550px', '440px'],
+            shadeClose: true,
+            content: $('#upload-img-content')
+        });
+	})
+
+    var uploader = new plupload.Uploader({
+    	runtimes: 'html5,flash,silverlight,html4',
+        browse_button: 'uploadImg',
+        url: '',
+        filters: {
+            mime_types : [
+            { title : "Image files", extensions : "jpg, bpm, png" }
+            ],
+            max_file_size:"6000kb"
+        }
+        ,multi_selection:false
+     });
+
+       
+	uploader.init();
+
+	uploader.bind('FilesAdded', function(up, files) {
+		uploader.start();
+	});
+
+	uploader.bind('Error', function(up, error) {
+        if(error.errorcode == -600){
+            layer.msg('文件太大了，请选择小于6M的文件');
+        }else if(error.errorcode == -601){
+        	layer.msg('图片格式不正确')
+        }else{
+            layer.msg('出错了，请重新选择文件或者刷新页面再重新选择文件');
+        }
+	});
+
+	uploader.bind('UploadProgress', function(up, file) {
+		$("#progress").css({ "height":"100%" });
+		$("#progress").attr('filePercent', file.percent);
+		if(file.percent == 100) {
+
+		}
+	});
+
+	uploader.bind('FileUploaded', function(up, file, info) {
+		if(info.response){
+			var r = jQuery.parseJSON(info.response);
+				if(!r) {
+					layer.msg('上传失败');
+					return false;
+				}else if(r.error){
+					layer.msg(r.error);	
+					return false;
+				};
+
+				$("#progress").css({ "height":"0" });
+				if(jcrop_api)jcrop_api.destroy();
+				$("#img_o").hide().attr("src",r.file+"?"+Math.random());
+				$("#img_o").attr("src",r.file+"?"+Math.random());
+				$("#img_p").attr("src",r.file+"?"+Math.random());
+
+				$('#img_o').Jcrop({
+					onChange: updatePreview,
+					onSelect: updatePreview,
+					aspectRatio: 1.778,
+					setSelect:[0, 0, this.width, this.height/1.778]
+				},function(){
+					var bounds = this.getBounds();
+					boundx = bounds[0];
+					boundy = bounds[1];
+					jcrop_api = this;
+					this.setSelect([120, 120, 320, 180]);
+				}).show();
+		}
+	});
+
+	function updatePreview(c){
+		if (parseInt(c.w) > 0){
+			$('#x').val(c.x);
+			$('#y').val(c.y);
+			$('#x2').val(c.x2);
+			$('#y2').val(c.y2);
+			$('#w').val(c.w);
+			$('#h').val(c.h);
+
+			$pcnt = $('#panel');
+			$pimg = $('#img_p');
+
+			xsize = $pcnt.width();
+			ysize = $pcnt.height();
+			var rx = xsize / c.w;
+			var ry = ysize / c.h;
+
+			$pimg.css({
+				width: Math.round(rx * boundx) + 'px',
+				height: Math.round(ry * boundy) + 'px',
+				marginLeft: '-' + Math.round(rx * c.x) + 'px',
+				marginTop: '-' + Math.round(ry * c.y) + 'px'
+			});
+		}
+	};
+
+	(function() {
+		$('#descript').ckeditor( { customConfig: '/assets/libs/activeNotice.config.js' } );
+		$("input[type=text]").each(
+		function(){
+		    $(this).keypress( function(e) {
+		        var key = window.event ? e.keyCode : e.which;
+		        if(key.toString() == "13"){
+		            return false;
+		        }
+		    });
+		});
+	})();
+});
+</script>

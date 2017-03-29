@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>{part "/site.main.orgname"}-申请调班</title>
+        {part "/site.main.header"}
+    </head>
+
+    <body>
+        {part "/site.main.nav"}
+        <!-- 内容开始 -->
+        <section class="hidden-xs">
+            <div class="w">
+                <div class="root-nav fs14">
+                    <strong><a href="/">{'首页'|tr:'course.info'}</a></strong> > <span><a href="/course/list">{'全部课程'|tr:'course.info'}</a></span> >{$info->title}
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="w">
+                <div class="course-intro">
+                    <div class="course-pic col-sm-6 col-xs-12"><div class="row"><img src="{utility_cdn::file($info->thumb_med)}"></div></div>
+                    <div class="course-item-info col-sm-6 col-xs-12">
+                        <div class="name"><strong>{$info->title}</strong></div>
+                        <div class="num cGray">{'共'|tr:'course.info'}{$data['sectionNum']}{'节'|tr:'course.info'} | {'共'|tr:'course.info'}{count($data['classList'])}{'班'|tr:'course.info'}</div>
+                        {if !empty($scoreInfo['avg_score'])}
+                        <div class="rate">
+                            {for $i=1; $i<=$scoreInfo['avg_score']; $i++}<span class="sel"></span>{/for}
+                            {for $i=1; $i<=5-$scoreInfo['avg_score']; $i++}<span></span>{/for}
+                            ({$scoreInfo['avg_score']}{'分'|tr:'course.info'})
+                        </div>
+                        {/if}
+                        <div class="price">{if(!empty($info->fee->price))}{$info->fee->price}{/if}</div>
+                        <div class='class-nav'>
+                            <ul>
+                                <li><img src="{utility_cdn::img('/assets_v2/img/class-d.png')}"><span>{'所报班级'|tr:'course.info'}:</span><span class='sp1'>{$data['classList'][$isReg]['class_name']}</span></li>
+                                <li><img src="{utility_cdn::img('/assets_v2/img/class-d.png')}"><span>{'讲师'|tr:'course.info'}:</span><span class='sp1'>{$data['classList'][$isReg]['teacher_name']}</span></li>
+                                <li><img src="{utility_cdn::img('/assets_v2/img/class-d.png')}"><span>{'课程进度'|tr:'course.info'}:</span><span class='sp1'>{$data['classList'][$isReg]['classBeginTime']}</span></li>
+                            </ul>
+                            {if($isReg)}
+                            <div class='class-navtu'>
+                                {if($info->fee_type == 0)}
+                                <img src="{utility_cdn::img('/assets_v2/img/reg.png')}">
+                                {/if}
+                                {if($info->fee_type == 1)}
+                                <img src="{utility_cdn::img('/assets_v2/img/seal.png')}">
+                                {/if}
+                            </div>
+                            {/if}
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </section>
+        <!-- 内容结束 -->
+        <section>
+            <div class='w class-tb'>
+                <div class="bought fs16"><a href="#" class="btn2">{'调班'|tr:'course.info'}</a></div>
+            </div>
+        </section>
+
+        <section class='mt20' id='classList'>
+            <div class='w pd20' style='background:#f7f7f7;'>
+                <div class='course-intro-1 col-sm-9 col-xs-12'>
+                    <div class='c-fl col-sm-2 col-xs-12 fs22 change-class-title'>
+                        <span>{'调    至'|tr:'course.info'}</span>
+                    </div>
+                    <div class="class-list col-sm-10 c-fl col-xs-12">
+                        <ul>
+                            {if (!empty($data['classList']))}
+                            {foreach ($data['classList'] as $v)}
+                            {if ($v['class_id'] != $isReg)}
+                            <li dataId = {$v['class_id']} tid={$v['teacher_id']} {if($v['class_id'] == $classId)}class='selected'{/if}>
+                                    <div class="class-name col-sm-3 col-xs-4">{$v['class_name']}</div>
+                                    <div class="class-teacher col-sm-3 col-xs-4">{$v['teacher_name']}</div>
+                                    <div class="class-time col-sm-3 col-xs-4">{$v['classBeginTime']}</div>
+                                    <!--<div class="class-other col-sm-3 col-xs-6">{$v['classStatus']}</div>-->
+                                </li>
+                            {/if}
+                            {/foreach}
+                            {/if}
+                        </ul>
+                    </div>
+                </div>
+                <div class='clear'></div>
+                <div class='mt20 show-buton change-class-btn'>
+                    <button id='apply' classId={$classId} tid={$data['classList'][$classId]['teacher_id']}>{'确定'|tr:'course.info'}</button>
+                </div>
+            </div>
+        </section>
+        <section class='mt20' id='success' style='display:none' >
+            <div class='w pd20' style='background:#f7f7f7;'>
+                <div class='course-intro-1 col-sm-4 '>
+                    <div class="class-list col-sm-11 c-fl">
+                        <p class='tac'><img src="{utility_cdn::img('/assets_v2/img/Feedback-pic.png')}"></p>
+                        <p class='fs20 tac'>{'申请成功!'|tr:'course.info'}</p>
+                        <p class='tac cGray'>{'我们将会有工作人员人员在24小时内与您取得联系'|tr:'course.info'}</p>
+                    </div>
+                </div>
+                <div class='clear'></div>
+            </div>
+        </section>
+        {part "/site.main.footer"}
+    </body>
+<script>
+$(document).ready(function() {
+    $('.class-list>ul>li').click(function() {
+        var classId = $(this).attr('dataId');
+        var tid = $(this).attr('tid');
+        $('#apply').attr('classId', classId);
+        $('#apply').attr('tid', tid);
+        $(this).addClass('selected').siblings().removeClass('selected');
+    });
+
+    $('#apply').click(function(){
+        var cid = {$info->course_id};
+        var classId = $('#apply').attr('classId');
+        var type = {$info->fee_type};
+        var tid = $('#apply').attr('tid');
+        var index = layer.load(2);
+        $(this).attr('disabled',"true");
+
+        $.post("/course/change/apply", {
+            "cid":cid,
+            "classId":classId,
+            "originCid":cid,
+            "originClassId":{$isReg},
+            "type":type,
+            "tid":tid
+        }, function(r){
+            layer.close(index);
+            if (r.code) {
+                layer.msg(r.msg);
+            } else {
+                $('#success').show();
+                $('#classList').hide();
+                layer.msg(r.msg,{
+                     icon:1,
+                     time:3000
+                }, function(){
+                    location.href = "/course.info.show/"+cid;
+                });
+            }
+        }, "json");
+    });
+});
+</script>
+</html>

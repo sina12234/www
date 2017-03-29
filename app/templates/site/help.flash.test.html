@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>高能100 - 专业的K12在线教育平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+    <style>
+        .note-container{ display: inline-block;min-height: 400px;}
+        .float-none{ float:none;}
+        .tel{ text-align: left;}
+        #noflash{ display: none;}
+        #yesflash{ display: none;}
+        h1{ font-weight: bold;font-size: 14px;}
+        #altContent{ width:1000px;height:630px;}
+        .btn{ background-color: #0aa4ea;border:1px solid #0aa4ea;}
+        .link-con{ display: inline-block;background-color:#f5f5f5;border:1px solid #eee; border-radius: 5px;}
+    </style>
+    <script src="{utility_cdn::js('/assets_v2/js/swfobject.js')}"></script>
+    <script>
+        var flashvars = {
+        };
+        var params = {
+            menu: "true",
+            scale: "noScale",
+            allowFullscreen: "true",
+            allowScriptAccess: "always",
+            bgcolor: "",
+            browerInfo:navigator.userAgent,  //浏览器版本信息
+            wmode: "direct" // can cause issues with FP settings & webcam
+        };
+        var attributes = {
+            id:"ImageEditer"
+        };
+        swfobject.embedSWF(
+                "{utility_cdn::swf('/assets_v2/swf/WebDeviceTester.swf')}",
+                "altContent", "100%", "100%", "10.0.0",
+                flashvars, params, attributes);
+    </script>
+</head>
+<body>
+{part "/site.main.nav.home"}
+<section id="noflash" class="container pd30">
+    <div class="row tac">
+        <div class="col-md-14 col-xs-20 bgf float-none note-container p20">
+            <h1 class="tel">检测中心</h1>
+            <div class="tac pt40">
+                <div class="note-ui mb30 fs14">
+                    <span class="tips-icon"></span>
+                    <span class="note-con fs16">你当前的flash版本低，无法正常上课</span>
+                    <a href="https://get.adobe.com/cn/flashplayer/?fpchrome" target="_blank" class="blue-link fs12">下载最新版本></a>
+                </div>
+                <div class="link-con col-md-8 p20 float-none tel">
+                    <p class="fs16">建议下载：</p>
+                    <a class="mr20" href="http://www.google.cn/intl/zh-CN/chrome/browser/desktop/index.html" target="_blank"><span class="google-icon"></span><span class="fs14">Google浏览器</span></a>
+                    <a href="http://se.360.cn/" target="_blank" ><span class="browser-icon"></span><span class="fs14">360浏览器</span></a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<section id="yesflash" class="container pd30">
+    <div class="row tac">
+        <div class="flash-con bgf float-none note-container p20" id="altContent">
+        </div>
+    </div>
+</section>
+<footer>
+    {part "/site.main.footer"}
+</footer>
+<script>
+    function flashChecker() {
+        var hasFlash = 0;　　　　 //是否安装了flash
+        var flashVersion = 0;　　 //flash版本
+        if(document.all) {      //true is IE
+            var swf = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+            if(swf) {
+                hasFlash = 1;
+                VSwf = swf.GetVariable("$version");
+                flashVersion = parseInt(VSwf.split(" ")[1].split(",")[0]);
+            }
+        } else {
+            if(navigator.plugins && navigator.plugins.length > 0) {
+                var swf = navigator.plugins["Shockwave Flash"];
+
+                if(swf) {
+                    hasFlash = 1;
+                    var words = swf.description.split(" ");
+                    for(var i = 0; i < words.length; ++i) {
+                        if(isNaN(parseInt(words[i]))) continue;
+                        flashVersion = parseInt(words[i]);
+                    }
+                }
+            }
+        }
+        return {
+            f: hasFlash,
+            v: flashVersion
+        };
+    }
+$(function(){
+    var noflash = $("#noflash");
+    var yesflash = $("#yesflash");
+    var noteCon = $(".note-con");
+    var fls = flashChecker();
+    var s = "";
+    if(fls.f){
+        if(fls.v<20){
+            noteCon.html('您当前的flash版本低，无法正常上课');
+            noflash.show();
+        }else{
+            yesflash.show();
+        }
+    }else{
+        noteCon.html('您当前未安装flash，请先下载安装');
+        noflash.show();
+    }
+})
+
+</script>
+</body>
+</html>

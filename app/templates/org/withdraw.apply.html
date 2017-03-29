@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>申请提现 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 机构中心 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+<body style="background:#f7f7f7">
+{part "/site.main.nav"}
+<section class="pd40 org-view-Settled">
+    <div class="container">
+        <div class="row">
+            <!-- 左侧 -->
+            {part "/org.main.menu.settle"}
+            <!-- /左侧 -->
+            <!-- 右侧 -->
+                <div class="right-main col-md-16">
+                    <div class="content">
+                        <div class="tab-main">
+                            <div class="tab-hd fs14">
+                                <a class="tab-hd-opt curr" href="/org.settle">账户概览</a>
+                                <a class="tab-hd-opt" href="/org/settle/accountlist/">结算账单</a>
+                                <a class="tab-hd-opt" href="/org.settle.withdraw">提现记录</a>
+                                <a class="tab-hd-opt" href="/org.settle.refund">退费记录</a>
+                            </div>
+                        </div>
+						<form id="wform" >
+                        <ul class="form" style="min-height:345px">
+                            <li>
+                                <div class="col-md-3 label">
+                                    <span class="fsRed">*</span>
+                                    {'转出金额'|tr:'org'}
+                                </div>
+                                <div class="label-for col-md-17">
+                                    <input type="text" placeholder="{'请输入转出金额'|tr:'org'}" name="withdraw" class="required col-md-6 mr10" data-tip="请输入转出金额" data-valid="isNonEmpty||onlyNum||maxValue:{$withdraw}" data-error="请输入转出金额||数字格式不对||最多提现{$withdraw}" data-status="0"/>
+									<span class="col-md-1 p0">元</span>
+									<span class="tips">{'您的账户余额'|tr:'org'}<span class="fsRed">{$withdrawOld}</span>元，{'最多可提现'|tr:'org'}<span class="fsRed">{$withdraw}</span>元，{'保证金不可提取'|tr:'org'}，{'每天最多转'|tr:'org'}<span class="fsRed">5</span>万元</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="col-md-3 label">
+                                    <span class="fsRed">*</span>
+                                    {'转入银行卡'|tr:'org'}
+                                </div>
+                                <div class="label-for col-md-17">
+									{if(!empty($cardInfo))}
+										{if($cardInfo->status == 2)}
+										<span>{$cardInfo->bank} {'尾号'|tr:'org'}{$cardInfo->last_no}</span>
+										{elseif($cardInfo->status == 0)}
+										{'您绑定的银行卡还未审核通过'|tr:'org'}，{'不能提现'|tr:'org'}
+										{/if}
+									{elseif($isAdmin == 1)}
+										  <a href="/org.settle.bankcard" class="sBlue mr10">{'立即添加银行卡'|tr:'org'}</a>{'您还未添加银行卡'|tr:'org'}，{'不能提现'|tr:'org'}
+									{elseif($isAdmin == 0)}
+										  {'请联系机构创建者添加银行卡'|tr:'org'}
+									{/if}
+									<span class="tips"></span>
+									<input name="cardId" type="hidden" value="{if(!empty($cardInfo) && $cardInfo->status == 2)}{$cardInfo->pk_card}{/if}">
+                                </div>
+                            </li>
+                            <li>
+                                <div class="col-md-3 label">
+                                    <span class="fsRed">*</span>
+                                    {'手机号'|tr:'org'}
+                                </div>
+                                <div class="label-for col-md-17">
+                                    <input type="text" name="mobile" placeholder="{'请输入手机号'|tr:'org'}" class="required col-md-6 mr10" data-tip="请输入您的手机号" data-valid="isNonEmpty||isMobile||isField:{$mobile}" data-error="请输入您的手机号||手机号格式不对||请输入机构创建者手机号"  onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" />
+									<span class="tips">{'请输入机构创建者手机号'|tr:'org'}</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="col-md-3 label">
+                                    <span class="fsRed">*</span>
+                                    {'手机验证码'|tr:'org'}
+                                </div>
+                                <div class="label-for col-md-17">
+                                    <input type="text" name="mobileCode" placeholder="{'请输入手机验证码'|tr:'org'}" data-valid="isNonEmpty||onlyInt" data-error="请输入验证码||只能为数字" data-status="0" class="required col-md-4 mr10" />
+                                    <input type="button" value="{'获取验证码'|tr:'org'}" id ="get_verify_code" onclick="getVerificatCode(this)" class="col-md-3 verif">
+                                    <div class="sBlue ml10 c-fl fs12 verif-tips-a">{'没收到短信'|tr:'org'}？
+                                        <div class="verif-tips"><i class="verif-tips-icon"></i>
+                                        <p class="cRed">手机号码有误？</p>
+                                        <p class="fb">可按以下步骤依次确认解决问题：</p>
+                                        <p>1.请确认该预留手机号是当前使用手机号</p>
+                                        <p>2.若银行预留手机号已停用，请联系银行修改</p>
+                                        <p>3.银行预留手机号修改完毕后请重新绑定</p>
+                                        <p>4.获取更多帮助，可以联系客服<span class="sBlue">010-5689846</span></p>
+                                        </div>
+                                    </div>
+									<span class="tips"></span>
+                                </div>
+                            </li>
+                            <li >
+                                <div class="col-md-3 label">
+                                    {'备注'|tr:'org'}（{'选填'|tr:'org'}）
+                                </div>
+                                <div class="label-for col-md-17">
+                                    <input maxlength="10" type="text" name="descript" class="col-md-6" placeholder="{'少于10个字'|tr:'org'}">
+									<span class="tips"></span>
+                                </div>
+                            </li>
+                            <li class="mt10">
+                                <div class="col-md-3 label">&nbsp;</div>
+                                <input type="submit" id="apply_withdraw" class="col-md-3 btnyellow" value="{'申请提现'|tr:'org'}">
+                            </li>
+                        </ul>
+						</form>
+                    </div>
+                </div>
+            <!-- /右侧 -->
+        </div>
+    </div>
+</section>
+<script src="/assets_v2/js/jquery/jquery.validate.js"></script>
+<script type="text/javascript">
+$('#wform').validate({
+    onBlur: function() {
+      var $parent = this.parent();
+      var _status = parseInt(this.attr('data-status'));
+      if (!_status) {
+        $parent.addClass('error');
+      }
+      return false;
+    }
+});
+$('#wform').on('submit', function(event) {
+    event.preventDefault();
+    $(this).validate('submitValidate'); //return boolean;
+    $.ajax({
+        type:"post",
+        url: '/org.settle.applywithdrawajax',
+        data:$('#wform').serialize(),
+        dataType:'json',
+        success:function(ret){
+            if(ret.error ){
+                if(ret.field != 'add'){
+					$('input[name='+ret.field+']').parent().find('.tips').remove();
+					$('input[name='+ret.field+']').parent().removeClass('success tip error').addClass('error').append('<span class="tips">' + ret.error + '</span>');
+                }else{
+                    layer.msg(ret.error);
+                }
+            }else{
+                location.href = "/org.settle.applywithdrawsuccess";
+            }
+        }
+    });
+});
+</script>
+{part "/site.main.footer"}
+</body>
+</html>
+<script type="text/javascript">
+var wait = 60;
+function getVerificatCode(obj) {
+	var owner_mobile = {$mobile};
+	var mobile = $('input[name=mobile]').val();
+	if(mobile != owner_mobile || mobile == ''){
+		$('input[name=mobile]').parent().addClass('error');
+        return false;
+	}else {
+
+        if(wait == 0) {
+            obj.removeAttribute('disabled');
+            obj.value = "{'获取验证码'|tr:'org'}";
+            wait = 60;
+        }else {
+           obj.setAttribute('disabled', true);
+           obj.value = "{'重新发送'|tr:'org'}("+ wait +")";
+           wait -- ;
+           setTimeout(function() {
+                getVerificatCode(obj);
+           }, 1000)
+        }
+
+    }
+}
+$(document).ready(function() {
+	var owner_mobile = {$mobile};
+	var more_withdraw = {$withdraw};
+	$('#get_verify_code').click(function() {
+        var mobile = $('input[name=mobile]').val();
+		if(mobile != owner_mobile || mobile == ''){
+			return false;
+		}else{
+			$(this).css('border','1px solid greed');
+            $(this).siblings('.tips').html('').removeAttr('style');
+		}
+        $.post("/org.settle.sendCode",{ mobile:mobile },function(r){
+            if(r.error){
+				$('input[name='+r.field+']').parent().find('.tips').remove();
+				$('input[name='+r.field+']').parent().removeClass('success tip error').addClass('error').append('<span class="tips">' + r.error + '</span>');
+            }
+        },"json");
+    })
+	
+	$('input[name=mobileCode]').focus(function(){
+		$(this).parent().find('.tips').remove();
+		$(this).parent().removeClass('success tip error').addClass('tip');
+	});
+	$('input[name=mobileCode]').blur(function(){
+		var mcode = $(this).val();
+		var mobile = $('input[name=mobile]').val();
+		if(mcode){
+			$.post("/org.settle.checkMobileCode",{ mobile:mobile,code:mcode },function(r){
+				if(r.error){
+					$('input[name='+r.field+']').parent().find('.tips').remove();
+					$('input[name='+r.field+']').parent().removeClass('success tip error').addClass('error').append('<span class="tips">' + r.error + '</span>');
+				}else{
+					$('input[name='+r.field+']').parent().find('.tips').remove();
+					$('input[name='+r.field+']').parent().removeClass('success tip error').addClass('success');
+				}
+			},"json");
+		}
+	})
+	
+	
+});
+</script>

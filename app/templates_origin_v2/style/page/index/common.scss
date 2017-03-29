@@ -1,0 +1,37 @@
+%list {
+	display: block;
+	float: left;
+	width: 100%;
+	padding: 0;
+}
+
+//mixins end
+
+header, section, footer {
+    width: 100%;
+    z-index: 1;
+}
+
+.list {
+	@extend %list;
+}
+
+.list-recommend {
+	@extend %list;
+}
+
+.teacher-list {
+	@extend %list;
+}
+
+.course-list {
+	@extend %list;
+}
+
+.instit-list {
+	@extend %list;
+}
+
+.right-tj {
+	padding-right: 0;
+}

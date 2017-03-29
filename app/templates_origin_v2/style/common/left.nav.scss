@@ -1,0 +1,257 @@
+//左侧菜单栏
+$org-left:(
+  center : $org-center $org-center-active,
+  page-set : $org-page-set $org-page-set-active,
+  course : $org-course $org-course-active,
+  teacher : $org-teacher $org-teacher-active,
+  student : $org-student $org-student-active,
+  promote : $org-promote $org-promote-active,
+  discount: $org-discount $org-discount-active,
+  order: $org-order $org-order-active,
+  settle: $org-settle  $org-settle-active,
+  service: $org-service $org-service-active,
+  info: $org-info  $org-info-active,
+  vote: $org-vote $org-vote-active,
+  notice: $org-notice $org-notice-active,
+  member:$org-member $org-member-active,
+  infobase: $org-infobase $org-infobase-active,
+  uploadPic : $org-upload-pic $org-upload-pic-active,
+  message: $org-message $org-message-active,
+  password: $org-password $org-password-active,
+  studentMain: $org-main $org-main-active,
+  studentCourse: $org-student-course $org-student-course-active,
+  studentOrder:$org-student-order $org-student-order-active,
+  studentFav: $org-student-fav $org-student-fav-active,
+  studentDiscount: $org-student-discount $org-student-discount-active,
+  teacherMain: $org-main $org-main-active,
+  teacherCourse: $org-teacher-course $org-teacher-course-active,
+  teacherHelp : $org-teacher-help $org-teacher-help-active,
+  teacherList:$org-teacher-list $org-teacher-list-active,
+  teacherStudent:$org-teacher $org-teacher-active,
+  workList:$org-work-list $org-work-list-hover,
+  about:$org-about $org-about-active,
+  contact:$org-contact $org-contact-active,
+  recruit:$org-recruit $org-recruit-active,
+  collaborateBusiness:$org-collaborate-business $org-collaborate-business-active,
+  collaborateTechnical:$org-collaborate-technical $org-collaborate-technical-active,
+  que:$org-que $org-que-active,
+  stat:$org-stat $org-stat-active,
+  studentWork:$org-student-task $org-student-task-active,
+);
+//左侧菜单
+.user-left-menu{
+    background-color:$org-lm-background;
+    border-top:1px solid $border-color;
+    border-left:1px solid $border-color;
+    border-bottom:1px solid $border-color;
+}
+.left-menu{
+  @include clearFix();
+  min-width: 230px;
+  @at-root .nav-menu-box{
+    height: auto;
+    cursor:pointer;
+  }
+  .org-address{
+    @include sprite($org-address);
+  }
+  .nav-menu{
+    text-align: left;
+    line-height: 42px;
+    padding-left: 103px;
+    position: relative;
+    display: block;
+    &.active{
+      background-color:$main-theme-color;
+      .nav-tag{
+        color: $text-white-color;
+        &:hover{
+          color: $text-white-color;
+        }
+      }
+      @each $icon-name,$icon-list in $org-left{
+        .nav-#{$icon-name}{
+          @include sprite(nth($icon-list,2));
+        }
+      }
+      .org-address{
+        @include sprite($org-address-active);
+      }
+    }
+  }
+  .inner-level-icon{
+    @include sprite($white-arrow-down);
+    position: absolute;
+    top:20px;
+    right: 24px;
+    transition: transform 0.3s linear;
+    &.pull-up{
+      transform: rotate(-90deg);
+    }
+  }
+  .nav-icon{
+    position: absolute;
+    left: 64px;
+    top:14px;
+  }
+  .nav-tag{
+    font-size: 14px;
+    color: $text-color;
+    &:hover{
+      color: $text-strong-color;
+    }
+  }
+  .second-level{
+    width: 100%;
+    padding-left: 103px;
+    padding-top: 7px;
+    display: none;
+    &.show{
+      display: block;
+    }
+  }
+  .second-level-menu{
+    padding: 7px 0;
+    span{
+      font-size: 12px;
+      &.active{
+        color: $main-theme-text-color;
+      }
+    }
+  }
+  @each $icon-name,$icon-list in $org-left{
+    .nav-#{$icon-name}{
+      @include sprite(nth($icon-list,1));
+    }
+  }
+}
+//左侧 头像 个人资料
+.user-info{
+  background-color:$org-lm-background;
+  height:250px;
+  border-bottom:1px solid $border-color;
+  .info-head{
+    position: relative;
+    height:160px;
+    img{
+      border-radius: 50%;
+      @include center(100px,100px);
+      z-index:5;
+      border:1px solid $border-color;
+    }
+    .face-fixed{
+      border-radius:50%;
+      @include center(100px,100px);
+      line-height:100px;
+      color:$main-white-color;
+      text-align:center;
+      z-index:5;
+      &:hover{
+        background: rgba(0, 0, 0, 0.5);
+        em{
+          display: block;
+        }
+      }
+      em{
+        display:none;
+      }
+    }
+    .level-icon {
+      position:absolute;
+      top:115px;
+      right:72px;
+      z-index:5;
+    }
+  }
+  .name{
+    float: left;
+    width: 100%;
+    line-height: 22px;
+    height: 22px;
+    text-align: center;
+  }
+  .other{
+    float: left;
+    padding-top: 15px;
+    width: 100%;
+    line-height: 22px;
+    height: 22px;
+    text-align: center;
+    position: relative;
+    .local{
+      padding: 0 0 0 15px;
+      @extend %ellipsis;
+    }
+    .local-icon{
+      @include sprite($org-local);
+      position: absolute;
+      left: 0;
+      top:2px;
+    }
+    .set{
+      padding: 0 0 0 15px;
+      position: relative;
+    }
+    .set-icon{
+      @include sprite($org-set);
+      position: absolute;
+      left: 0;
+      top:2px;
+    }
+  }
+  .s-users-icon,.t-users-icon{
+    position: absolute;
+    left: 0;
+    top:0;
+    width: 69px;
+    height: 69px;
+    @extend %ellipsis;
+    line-height: 20px;
+    max-width: 80%;
+    display: none\9;
+    i{
+      float: left;
+      width: 100px;
+      height: 50px;
+      width: 50px\9;
+      height: 40px\9;
+      line-height: 70px;
+      line-height: 40px\9;
+      background-color: $background-theme-color;
+      font-style: normal;
+      font-size: 14px;
+      color: $main-white-color;
+      transform: rotate(315deg);
+      text-align: center;
+      margin: -10px 0 0 -35px;
+      margin: 0\9;
+    }
+  }
+}
+//新建课程 左侧菜单
+.course-menu-nav{
+  .set-course-ltmenu{
+    border-top:1px solid $border-color ;
+  }
+  li{
+    border: 1px solid $border-color;
+    border-top: none;
+    height: 46px;
+    line-height: 46px;
+    text-align: center;
+    background-color: $main-white-color;
+    .doubt-icon{
+      @include sprite($set-info-icon);
+      display: inline-block;
+    }
+    a{
+      font-size: 14px;
+      &.active{
+        color: $text-orange-color;
+      }
+      &.curr{
+        color: $text-orange-color;
+      }
+    }
+  }
+}

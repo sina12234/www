@@ -1,0 +1,19 @@
+{if(!empty($commentList->list))}
+<h3 class="clear ment_h3 fs16 mt40">最新评论</h3>
+<ul class="new_comment">
+    {foreach($commentList->list as $v)}
+    <li>
+        <div class="col-md-2">
+            <img  class="title-pic" src="{utility_cdn::file($v->thumb)}">
+        </div>
+        <div class="col-md-14 mb20">
+            <p class="fs14 ">{$v->name}<em class="c_a9 ml5"></em></p>
+            <p class="fs16 mt10 ">{htmlentities($v->comment)}</p>
+        </div>
+        <div class="col-md-3 data">
+            <p class=" c_a9">{$v->time}</p>
+        </div>
+    </li>
+    {/foreach}
+</ul>
+{/if}

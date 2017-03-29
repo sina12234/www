@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>专业的K12在线教育平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+</head>
+<body>
+<ul class="subject-list fs14" id="subject-list">
+	{if(!empty($attrValue))}
+	{foreach($attrValue as $vo)}
+    <li class="col-xs-3">
+        <a href="javascript:void(0);" data-id="{$vo->pk_attr_value}">{$vo->name}</a>
+    </li>
+	{/foreach}
+	{/if}
+</ul>
+<input type="hidden" id="subjectList" value=" ">
+<p class="subject-btn">
+    <button class="btn-green">确定</button>
+    <button class="btn-gray">取消</button>
+</p>
+<script>
+$(function() {
+    var sub_list=[];
+    var sub_list_txt=[];
+    var s_index=parent.layer.getFrameIndex(window.name);
+    $('#subject-list a').click(function(){
+        if($(this).attr('class') != 'on'){
+            $(this).addClass('on');
+            sub_list.push($(this).attr('data-id'));
+            sub_list_txt.push($(this).html());
+        }else{
+            $(this).removeClass('on');
+            sub_list.splice(jQuery.inArray($(this).attr('data-id'),sub_list),1);
+            sub_list_txt.splice(jQuery.inArray($(this).html(),sub_list_txt),1);
+        }
+    });
+    $('.btn-green').click(function(){
+       parent.$('#subject-list-txt').val(sub_list_txt.join('/'));
+       parent.$('#subject-list-txt').attr('data-id',sub_list);
+       parent.layer.close(s_index);
+    })
+    $('.btn-gray').click(function(){
+       parent.layer.close(s_index);
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>选择短信充值</title>
+	<link rel="stylesheet" href="http://liuchangyuan.gn100.com/assets_v2/css/index.css">
+	<script type="text/javascript" src="http://liuchangyuan.gn100.com/assets_v2/js/jquery/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="http://liuchangyuan.gn100.com/assets_v2/layer/layer.js"></script>
+</head>
+<style type="text/css">
+.sms-recharge{ width: 80%;margin: 0 auto; line-height:26px;}
+.sms-recharge .select-sms-price li{ border:1px solid #ddd; margin-right: 10px;padding:0;line-height:35px;cursor: pointer;}
+.sms-recharge .select-sms-price li:last-child{ margin-right: 0;}
+.sms-recharge .select-sms-price li.curr{ border: 1px solid #fe8135;}
+.sms-recharge .add-sms-price{ border:1px solid #ddd;padding: 3px 5px; line-height:0;height: 32px;}
+</style>
+<body>
+	<!-- ct -->
+	<section>
+		<div class="container">
+			<div class="row">
+				<div class="bgf sms-recharge p20 fs14">
+					<h1 class="mb15">
+						<a href="#" title="">返回</a>
+					</h1>		
+					<p class="mb15">
+						<span class="col-md-2 p0">短信余额：</span>
+						<span class="cYellow">4.48</span>元
+					</p>
+					<div class="col-md-20 p0 mb15">
+						<div class="col-md-2 p0">充值金额：</div>
+						<ul class="col-md-18 mb10 p0 select-sms-price">
+							<li class="col-md-3 tac">100元</li>
+							<li class="col-md-3 tac">200元</li>
+							<li class="col-md-3 tac">400元</li>
+							<li class="col-md-3 tac">1000元</li>
+						</ul>
+						<div class="col-md-20 p0">
+							<span class="col-md-2"></span>
+							<p class="cBlue">其他金额</p>
+						</div>
+						<div class="col-md-20 p0">
+							<span class="col-md-2"></span>
+							<input type="text" onkeyup='this.value=this.value.replace(/\D/gi,"")' class="add-sms-price mr5" />元
+						</div>
+					</div>
+					<p>预计发送：<span class="cYellow">200</span>条</p>
+					<div class="tac mb30 mt15">
+						<button class="yellow-btn">下一步</button>
+					</div>
+				</div>	
+			</div>
+		</div>	
+	</section>
+	<!-- /ct -->
+</body>
+</html>
+<script type="text/javascript">
+$(function() {
+	$('.select-sms-price').on('click', 'li', function() {
+		if($(this).hasClass('curr')) {
+			$(this).removeClass('curr');
+		}else{
+			$(this).addClass('curr').siblings().removeClass('curr');
+		}
+	})
+})
+</script>

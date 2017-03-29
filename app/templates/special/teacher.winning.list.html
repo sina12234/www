@@ -1,0 +1,891 @@
+ <!DOCTYPE html>
+ <html>
+ <head>
+ 	<meta charset="utf-8">
+ 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+ 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+ 	<meta name="title" content="首页 - 云课 - 专业的在线学习平台">
+ 	<meta name="keywords" content="云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+ 	<meta name="description" content="云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+ 	<title>"感念师恩最亮教师"全国微课评选排行榜</title>
+	<link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets_v2/img/platform/yunke.ico')}" />
+	<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+	<script type="text/javascript" src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+	<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/platform/index.css')}">
+	<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/index.css')}">
+	<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/bootstrap/bootstrap.min.css')}">
+	<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+	<!--[if lt IE 9]>
+	<link rel="stylesheet" type="text/css" href="/assets_v2/css/bootstrap/bootstrap.min.css">
+	<script src="//dev.gn100.com/assets_v2/bootstrap-3.3.0/js/html5shiv.min.js?ver=13"></script>
+	<script src="//dev.gn100.com/assets_v2/bootstrap-3.3.0/js/respond.min.js?ver=13"></script>
+	<![endif]-->
+	<!--[if lt IE 8]>
+	<script src="//dev.gn100.com/assets_v2/js/ie8.js?ver=13"></script>
+	<![endif]-->
+ </head>
+    <script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/common.js')}"></script>
+    <script src="{utility_cdn::js('/assets_v2/js/swiper.min.js')}"></script>
+<style>
+body,html{ padding:0;margin:0;background:#f9fdfe;font-size:14px;font-family: \5fae\8f6f\96c5\9ed1,Arial,"Hiragino Sans GB",Helvetica,sans-serif; }
+header,footer,section{ float:left;width:100%;position:relative }
+header img,footer img{ float:left;width:100%;max-width:1920px; }
+footer{ float:left;width:100%;position:relative }
+footer img{ float:left;width:100%;max-width:1920px;height:105px; }
+footer { padding:0;background:url(/assets_v2/img/special/2016_08_25/footer-m.png)no-repeat;height:109px;}
+footer p{ float:left;line-height:180%;z-index:333;width:100%;bottom:10px;text-align:center;color:#333;position:absolute;padding-bottom:0 }
+footer a{ color:#333;text-decoration: none }
+.blue_link{ color:#666; }
+.head { position: relative; }
+.head p.banner img{ width:100%; }
+.head p.start_btn{ position: absolute;right:20%;bottom:0px;cursor:pointer; }
+.end_btn{  position: absolute;right:20%;bottom:0px; }
+.content{ background:#f9fdfe;width:1070px;margin:0 0 0 55px;}
+.content .title span{ color:#f00;font-size:16px; }
+.content .title p{ font-size:16px;text-indent:24px; }
+.content .title .title_box{ height:98px;width:100%;border:1px solid #a6deed;background:#dbf5fd;border-radius:3px;margin-top:10px; }
+.content .title .title_box a{ padding-right:15px;padding-top:15px; }
+.content .title .tit_text{ padding-top: 20px; padding-left:15px;font-size:16px;color:#174268; }
+.content .title .tit_text1{ padding-top:3px; padding-left:15px;font-size:16px;color:#174268;float:left; }
+.sort_c{ width:100%;text-align: right;color: #999;padding-bottom: 5px; }
+.content_rely { float:left;width:100%;padding-right:10px;}
+/*第一名*/
+.content_rely .num_one{ background:url(/assets_v2/img/special/2016_08_25/num_one.png)no-repeat; width:100%;height:226px;margin-top:40px; }
+.content_rely .num_one p{ padding:5px 0 0 210px;font-size:37px;font-weight:bold;color:#f00;width:100%; }
+.content_rely .num_one p span{ font-size:20px;font-weight:normal;padding-left:10px; }
+.content_rely .num_one .ranking_cont{ padding:20px 0 0 210px;width:60%; }
+.content_rely .num_one .ranking_cont img{ float:left;border-radius:50%; }
+.content_rely .num_one .ranking_info .ranking_name { width:50%;float:left;margin-left:20px;font-size:24px;padding-bottom:5px;color:#1f557f; }
+.content_rely .num_one .ranking_info .ranking_school{ width:50%;float:left;margin-left:20px;font-size:22px;padding-bottom:8px;color:#1f557f;  }
+.content_rely .num_one .ranking_info a.cur_sor{ padding:5px 20px;;background:#f7f7f7; color:#5e8ca8;font-size:20px;border-radius:10px;margin-left:20px; }
+.content_rely .num_one .ranking_info .piao{ padding-left:10px;line-height:40px;font-size:16px;color:#999; }
+/*第二名*/
+.content_rely .num_two{ background:url(/assets_v2/img/special/2016_08_25/num_two.png)no-repeat; width:100%;height:500px;margin-top:40px; }
+.content_rely .num_two .ranking_cont{ width:18%;text-align:center;margin-left:60px; }
+.content_rely .num_two .ranking_cont img{ float:left;margin-top:80px;margin-left:55px;border-radius:50%; }
+.content_rely .num_two p{ padding:30px 0 0 210px;font-size:37px;font-weight:bold;color:#f9aa0c;width:100%; }
+.content_rely .num_two p span{ font-size:20px;font-weight:normal;padding-left:10px; }
+.content_rely .num_two .ranking_info{ float:left;}
+.content_rely .num_two .ranking_info .ranking_name { width:100%;float:left;margin-left:20px;font-size:24px;padding-bottom:10px;color:#1f557f;padding-top:10px; }
+.content_rely .num_two .ranking_info .ranking_school{ width:100%;float:left;margin-left:20px;font-size:18px;padding-bottom:10px;color:#1f557f;  }
+.content_rely .num_two .ranking_info span.cur_sor{ padding:5px 20px;;background:#f7f7f7; color:#5e8ca8;font-size:20px;border-radius:10px;margin-left:57px; }
+.content_rely .num_two .ranking_info .piao{ padding-left:76px;line-height:40px;font-size:16px;color:#999; }
+/*第三名*/
+.content_rely .num_three{ background:url(/assets_v2/img/special/2016_08_25/num_three.png)no-repeat; width:100%;height:522px;margin-top:40px; }
+.content_rely .num_three .ranking_cont{ width:16%;text-align:center;margin-left:35px; }
+.content_rely .num_three .ranking_cont img{ float:left;margin-top:80px;margin-left:40px;border-radius:50%; }
+.content_rely .num_three p{ padding:30px 0 0 210px;font-size:37px;font-weight:bold;color:#0077bf;width:100%; }
+.content_rely .num_three p span{ font-size:20px;font-weight:normal;padding-left:10px; }
+.content_rely .num_three .ranking_info{ float:left; }
+.content_rely .num_three .ranking_info .ranking_name { width:100%;float:left;margin-left:20px;font-size:24px;padding-bottom:10px;color:#1f557f;padding-top:10px; }
+.content_rely .num_three .ranking_info .ranking_school{ width:100%;float:left;margin-left:20px;font-size:18px;padding-bottom:10px;color:#1f557f;  }
+.content_rely .num_three .ranking_info span.cur_sor{ padding:5px 20px;;background:#f7f7f7; color:#5e8ca8;font-size:20px;border-radius:10px;margin-left:45px; }
+.content_rely .num_three .ranking_info .piao{ padding-left:65px;line-height:40px;font-size:16px;color:#999; }
+/*获奖名单*/
+.content_rely .winners{ background:url(/assets_v2/img/special/2016_08_25/number_iphone.png)no-repeat; width:100%;height:378px;margin-top:40px;margin-left:55px; }
+.content_rely .winners p{ padding:30px 0 0 30px;font-size:30px;font-weight:bold;color:#0077bf;width:100%; }
+.content_rely .winners .overflow{ padding:40px 0 0 0;overflow:auto;width:94%;height:250px; }
+.content_rely .winners .overflow span{ display:inline-block;width:19%;padding-left:25px; font-size:14px;font-weight:normal;box-sizing:border-box;  }
+/*隐藏*/
+.content_rely_payphone{ display:none; }
+
+
+@media screen and (min-width:320px) and (max-width:760px){
+.content_rely { display:none; } 
+.title{ display:none; } 
+.content_rely_payphone{ display:block; }
+footer{ float:left;width:100%;position:relative }
+footer img{ float:left;width:100%;max-width:1920px;height:105px; }
+footer { padding:0;background:url(/assets_v2/img/special/2016_08_25/footer-m.png)no-repeat;height:109px;}
+footer p{ float:left;line-height:180%;z-index:333;width:100%;bottom:10px;text-align:center;color:#333;position:absolute;padding-bottom:0 }
+footer a{ color:#333;text-decoration: none }
+.head p.start_btn{ display:none; }
+.phone_cy img{ width:100%; }
+.content_rely_payphone .winners { width:100%;background:#dbf5fd;height:300px;float:left;margin-top:20px;border-radius:20px;color:#0077bf; }
+.winners p:first-child{ font-size:18px;padding:20px 0 20px 15px; }
+.winners p.overflow { width:100%;overflow:auto;height:230px;padding-left:15px; }
+.winners p.overflow span{ width:50%;float:left;padding-top:5px;}
+.bijib img,.yuedu img{ border-radius:none; }
+/*第一名*/
+.content_rely_payphone { padding:10px;float:left;width:100%; }
+.num_phone_one{ margin-top:15px;position:relative;background:url(/assets_v2/img/special/2016_08_25/jin.png)no-repeat #dbf5fd 10px 0;width:100%;border-radius:20px; padding-bottom:20px; }
+.num_phone_one .bijib{ margin-left:5px;float:left; }
+.num_phone_one .num_one { float:left;padding:10px 0 0 65px;font-size:16px;font-weight:bold;color:#f00;width:100%; }
+.num_phone_one .num_one p span{ font-size:12px;font-weight:normal;padding-left:10px; }
+.num_phone_one .num_one .ranking_cont{  margin-top:15px;padding-bottom:15px; }
+.num_phone_one .num_one .ranking_cont img{ float:left;width:30%;border-radius:50%; }
+.num_phone_one .num_one .ranking_info .ranking_name { width:45%;float:left;margin-left:20px;font-size:16px;padding-bottom:5px;color:#1f557f; }
+.num_phone_one .num_one .ranking_info .ranking_school{ width:50%;float:left;margin-left:20px;font-size:14px;font-weight:normal;padding-bottom:5px;color:#1f557f;  }
+.num_phone_one .num_one .ranking_info a.cur_sor{ padding:5px 10px;;background:#f7f7f7; color:#5e8ca8;font-size:14px;border-radius:10px;font-weight:normal;margin-left:10px; }
+.num_phone_one .num_one .ranking_info .piao{ line-height:30px;font-size:12px;color:#999;padding-left:5px;font-weight:normal; }
+.num_phone_one .num_one .bijib{ position:absolute;top:10px;right:3px;; }
+.num_phone_one .num_one .bijib img{ width:100%; }
+
+/*第二名*/
+.num_phone_two{ margin-top:15px;position:relative;background:url(/assets_v2/img/special/2016_08_25/yin.png)no-repeat #dbf5fd 10px 0;width:100%;border-radius:20px;padding-bottom:20px; }
+.num_phone_two .bijib{ margin-left:5px;float:left; }
+.num_phone_two .num_one { float:left;padding:10px 0 0 65px;font-size:16px;font-weight:bold;color:#f00;width:100%; }
+.num_phone_two .num_one p{ color: #f9aa0c; }
+.num_phone_two .num_one p span{ font-size:12px;font-weight:normal;padding-left:10px; }
+.num_phone_two .num_one .ranking_cont{  margin-top:15px;padding-bottom:15px; }
+.num_phone_two .num_one .ranking_cont:last-child{ border:none; }
+.num_phone_two .num_one .ranking_cont img{ float:left;width:30%;border-radius:50%; }
+.num_phone_two .num_one .ranking_info .ranking_name { width:45%;float:left;margin-left:20px;font-size:16px;padding-bottom:5px;color:#1f557f; }
+.num_phone_two .num_one .ranking_info .ranking_school{ width:50%;float:left;margin-left:20px;font-size:14px;font-weight:normal;padding-bottom:5px;color:#1f557f;  }
+.num_phone_two .num_one .ranking_info a.cur_sor{ padding:5px 10px;;background:#f7f7f7; color:#5e8ca8;font-size:14px;border-radius:10px;font-weight:normal;margin-left:10px; }
+.num_phone_two .num_one .ranking_info .piao{ line-height:30px;font-size:12px;color:#999;padding-left:5px;font-weight:normal; }
+.num_phone_two .num_one .yuedu{ position:absolute;top:10px;right:3px;; }
+.num_phone_two .num_one .yuedu img{ width:100%; }
+
+/*第三名*/
+.num_phone_three{ margin-top:15px;position:relative;background:url(/assets_v2/img/special/2016_08_25/tong.png)no-repeat #dbf5fd 10px 0;width:100%;border-radius:20px;padding-bottom:20px; }
+.num_phone_three .bijib{ margin-left:5px;float:left; }
+.num_phone_three .num_one { float:left;padding:10px 0 0 65px;font-size:16px;font-weight:bold;color:#f00; }
+.num_phone_three .num_one p{ color: #0077bf; }
+.num_phone_three .num_one p span{ font-size:12px;font-weight:normal;padding-left:10px; }
+.num_phone_three .num_one .ranking_cont{ margin-top:15px;padding-bottom:15px; }
+.num_phone_three .num_one .ranking_cont img{ float:left;width:30%;border-radius:50%; }
+.num_phone_three .num_one .ranking_info .ranking_name { width:45%;float:left;margin-left:20px;font-size:16px;padding-bottom:5px;color:#1f557f; }
+.num_phone_three .num_one .ranking_info .ranking_school{ width:50%;float:left;margin-left:20px;font-size:14px;font-weight:normal;padding-bottom:5px;color:#1f557f;  }
+.num_phone_three .num_one .ranking_info a.cur_sor{ padding:5px 10px;;background:#f7f7f7; color:#5e8ca8;font-size:14px;border-radius:10px;font-weight:normal;margin-left:10px; }
+.num_phone_three .num_one .ranking_info .piao{ line-height:30px;font-size:12px;color:#999;padding-left:5px;font-weight:normal; }
+.num_phone_three .num_one .yuedu{ position:absolute;top:10px;right:-1px;; }
+.num_phone_three .num_one .yuedu img{ width:100%; }
+.num_phone_three .num_one .ranking_cont:last-child{ border:none; }
+
+
+
+
+}
+@media screen and (max-width:1024px) and (min-width:768px){
+}
+</style>
+ <body>
+ <section class="mobile_pc">
+	<!-- 头部 -->
+		<div class="head">
+			<p class="banner"><img src="/assets_v2/img/special/2016_08_25/winning_banner.jpg" alt="" class="hidden-xs"><img src="/assets_v2/img/special/2016_08_25/winning_banner_phone.jpg" alt="" class="visible-xs"></p>
+			<p class="start_btn">
+				<a href="/index.special.teacherRankList"><img src="/assets_v2/img/special/2016_08_25/canyu_start.png" alt=""></a>
+			</p>
+		</div>
+	<!-- 头部end -->
+ 	<div class="container">
+ 		<div class="row">
+		<!-- content -->
+	 		<section class="content">
+	 			<div class="title">
+	 				<span class="cRed fs14">亲爱的老师们:</span>
+	 				<p>"三尺讲台,是您施展才华的天地:教学新法,发挥点石成金的魔力."在第32个教师节来临之际,为充分展示教师风采.云课（yunke.com）特面向全国各级各类学校、机构及个人,发起"感念师恩,最亮教师"——2016年云课教师节微课评选活动,旨在通过活动选拔出网络时代最受学生欢迎的教师代表、展示当代教师在教学上多元的风格和风采。获奖名单如下:</p>
+				</div>
+	 			<div class="content_rely">
+					<div class="num_one">
+						<p class="c-fl">明星教师<span>第1名+奖品(笔记本电脑)</span></p>
+						<div class="ranking_cont c-fl">
+							<img src="/assets_v2/img/special/2016_08_25/xiangzhuo.png" alt="">
+							<div class="ranking_info">
+								<span class="ranking_name">向卓</span>
+								<span class="ranking_school">数学 <span>户县东关小学</span></span>
+								<a href="https://hxdgxx.yunke.com/course.plan.play/32120" target="_blank" class="cRed c-fl cur_sor">获奖视频</a>
+								<span class="c-fl piao">共234310票</span>
+							</div>
+						</div>
+					</div>
+					<div class="num_two">
+						<p class="c-fl">人气教师<span>第2-5名+奖品(电子书阅读器)</span></p>
+						<div class="ranking_cont c-fl">
+							<img src="/assets_v2/img/special/2016_08_25/zhangxianhua.png" alt="">
+							<div class="ranking_info">
+								<span class="ranking_name">张鲜花</span>
+								<span class="ranking_school">数学 <span>户县东关小学</span></span>
+								<span class="c-fl cur_sor"><a href="https://hxdgxx.yunke.com/course.plan.play/32169" target="_blank">获奖视频</a></span>
+								<span class="c-fl piao">共223037票</span>
+							</div>
+						</div>
+						<div class="ranking_cont c-fl">
+							<img src="/assets_v2/img/special/2016_08_25/lvjing.png" alt="">
+							<div class="ranking_info">
+								<span class="ranking_name">吕晶</span>
+								<span class="ranking_school">数学 <span>户县东关小学</span></span>
+								<span class="c-fl cur_sor"><a href="https://hxdgxx.yunke.com/course.plan.play/32117" target="_blank">获奖视频</a></span>
+								<span class="c-fl piao">共172250票</span>
+							</div>
+						</div>
+						<div class="ranking_cont c-fl">
+							<img src="/assets_v2/img/special/2016_08_25/liyang.png" alt="">
+							<div class="ranking_info">
+								<span class="ranking_name">李阳</span>
+								<span class="ranking_school">数学 <span>一中岳麓中学</span></span>
+								<span class="c-fl cur_sor"><a href="https://csyzylzx.yunke.com/course.plan.play/31934" target="_blank">获奖视频</a></span>
+								<span class="c-fl piao">共96659票</span>
+							</div>
+						</div>
+						<div class="ranking_cont c-fl">
+							<img src="/assets_v2/img/special/2016_08_25/chenbing.png" alt="">
+							<div class="ranking_info">
+								<span class="ranking_name">陈兵</span>
+								<span class="ranking_school">数学 <span>一中岳麓中学</span></span>
+								<span class="c-fl cur_sor"><a href="https://csyzylzx.yunke.com/course.plan.play/31935" target="_blank">获奖视频</a></span>
+								<span class="c-fl piao">共95035票</span>
+							</div>
+						</div>
+					</div>
+					<div class="num_three">
+						<p class="c-fl">风采教师<span>第6-10名+奖品(移动硬盘)</span></p>
+						<div class="ranking_cont c-fl">
+							<img src="/assets_v2/img/special/2016_08_25/jiangrui.png" alt="">
+							<div class="ranking_info">
+								<span class="ranking_name">姜蕊</span>
+								<span class="ranking_school">数学 <span>户县东关小学</span></span>
+								<span class="c-fl cur_sor"><a href="https://hxdgxx.yunke.com/course.plan.play/32123" target="_blank">获奖视频</a></span>
+								<span class="c-fl piao">共41186票</span>
+							</div>
+						</div>
+						<div class="ranking_cont c-fl">
+							<img src="/assets_v2/img/special/2016_08_25/hewenjuan.png" alt="">
+							<div class="ranking_info">
+								<span class="ranking_name">何文娟</span>
+								<span class="ranking_school">数学 <span>一中岳麓中学</span></span>
+								<span class="c-fl cur_sor"><a href="https://csyzylzx.yunke.com/course.plan.play/31928" target="_blank">获奖视频</a></span>
+								<span class="c-fl piao">共36758票</span>
+							</div>
+						</div>
+						<div class="ranking_cont c-fl">
+							<img src="/assets_v2/img/special/2016_08_25/daihuimei.png" alt="">
+							<div class="ranking_info">
+								<span class="ranking_name">戴慧梅</span>
+								<span class="ranking_school">数学 <span>教师评选</span></span>
+								<span class="c-fl cur_sor"><a href="https://yunkejspx.yunke.com/course.plan.play/32578" target="_blank">获奖视频</a></span>
+								<span class="c-fl piao">共26669票</span>
+							</div>
+						</div>
+						<div class="ranking_cont c-fl">
+							<img src="/assets_v2/img/special/2016_08_25/yangyang.png" alt="">
+							<div class="ranking_info">
+								<span class="ranking_name">杨洋</span>
+								<span class="ranking_school">数学 <span>夏湾中学</span></span>
+								<span class="c-fl cur_sor"><a href="https://zhxwzx.yunke.com/course.plan.play/31116" target="_blank">获奖视频</a></span>
+								<span class="c-fl piao">共21094票</span>
+							</div>
+						</div>
+						<div class="ranking_cont c-fl">
+							<img src="/assets_v2/img/special/2016_08_25/niemeiqian.png" alt="">
+							<div class="ranking_info">
+								<span class="ranking_name">聂美婧</span>
+								<span class="ranking_school">数学 <span>户县东关小学</span></span>
+								<span class="c-fl cur_sor"><a href="https://hxdgxx.yunke.com/course.plan.play/32119" target="_blank">获奖视频</a></span>
+								<span class="c-fl piao">共13645票</span>
+							</div>
+						</div>
+					</div>
+					<div class="winners">
+						<p class="c-fl">参与奖获奖名单</p>
+						<p class="c-fl overflow">
+								<span>田&nbsp;&nbsp;&nbsp;娜&nbsp;&nbsp;&nbsp;&nbsp;131****6238</span>
+								<span>刘贝贝&nbsp;&nbsp;&nbsp;&nbsp;132****7091</span>
+								<span>李郁权&nbsp;&nbsp;&nbsp;&nbsp;133****6078</span>
+								<span>李娟芝&nbsp;&nbsp;&nbsp;&nbsp;133****3421</span>
+								<span>陈&nbsp;&nbsp;&nbsp;艳&nbsp;&nbsp;&nbsp;&nbsp;133****8045</span>
+								<span>孙&nbsp;&nbsp;&nbsp;玥&nbsp;&nbsp;&nbsp;&nbsp;133****4286</span>
+								<span>李&nbsp;&nbsp;&nbsp;娟&nbsp;&nbsp;&nbsp;&nbsp;134****9579</span>
+								<span>刘伟铭&nbsp;&nbsp;&nbsp;&nbsp;134****1640</span>
+								<span>李&nbsp;&nbsp;&nbsp;艳&nbsp;&nbsp;&nbsp;&nbsp;134****8121</span>
+								<span>梁淑妍&nbsp;&nbsp;&nbsp;&nbsp;134****8088</span>
+								<span>李婷婷&nbsp;&nbsp;&nbsp;&nbsp;134****0630</span>
+								<span>谢志云&nbsp;&nbsp;&nbsp;&nbsp;134****5646</span>
+								<span>高冬雷&nbsp;&nbsp;&nbsp;&nbsp;134****2771</span>
+								<span>姜&nbsp;&nbsp;&nbsp;蕊&nbsp;&nbsp;&nbsp;&nbsp;134****8061</span>
+								<span>刘春苗&nbsp;&nbsp;&nbsp;&nbsp;134****1889</span>
+								<span>吴海菊&nbsp;&nbsp;&nbsp;&nbsp;134****5415</span>
+								<span>黄炎明&nbsp;&nbsp;&nbsp;&nbsp;135****3884</span>
+								<span>林&nbsp;&nbsp;&nbsp;挺&nbsp;&nbsp;&nbsp;&nbsp;135****1395</span>
+								<span>叶&nbsp;&nbsp;&nbsp;庆&nbsp;&nbsp;&nbsp;&nbsp;135****4415</span>
+								<span>房宝三&nbsp;&nbsp;&nbsp;&nbsp;135****7210</span>
+								<span>赵冬梅&nbsp;&nbsp;&nbsp;&nbsp;135****2261</span>
+								<span>李&nbsp;&nbsp;&nbsp;帆&nbsp;&nbsp;&nbsp;&nbsp;135****7756</span>
+								<span>陈小静&nbsp;&nbsp;&nbsp;&nbsp;135****2662</span>
+								<span>龙丽菊&nbsp;&nbsp;&nbsp;&nbsp;135****3328</span>
+								<span>卢兰花&nbsp;&nbsp;&nbsp;&nbsp;135****1364</span>
+								<span>王&nbsp;&nbsp;&nbsp;璐&nbsp;&nbsp;&nbsp;&nbsp;135****2083</span>
+								<span>梁丹青&nbsp;&nbsp;&nbsp;&nbsp;135****1049</span>
+								<span>袁远辉&nbsp;&nbsp;&nbsp;&nbsp;135****9191</span>
+								<span>黄崴钰&nbsp;&nbsp;&nbsp;&nbsp;135****3621</span>
+								<span>林秀明&nbsp;&nbsp;&nbsp;&nbsp;135****8019</span>
+								<span>庄小燕&nbsp;&nbsp;&nbsp;&nbsp;135****5261</span>
+								<span>肖炜玲&nbsp;&nbsp;&nbsp;&nbsp;135****4211</span>
+								<span>谢&nbsp;&nbsp;&nbsp;美&nbsp;&nbsp;&nbsp;&nbsp;135****9067</span>
+								<span>聂美婧&nbsp;&nbsp;&nbsp;&nbsp;135****1658</span>
+								<span>陈璐璐&nbsp;&nbsp;&nbsp;&nbsp;135****5436</span>
+								<span>黄尚波&nbsp;&nbsp;&nbsp;&nbsp;136****6769</span>
+								<span>林贵富&nbsp;&nbsp;&nbsp;&nbsp;136****9654</span>
+								<span>李有林&nbsp;&nbsp;&nbsp;&nbsp;136****6204</span>
+								<span>曾&nbsp;&nbsp;&nbsp;琳&nbsp;&nbsp;&nbsp;&nbsp;136****4627</span>
+								<span>曾&nbsp;&nbsp;&nbsp;辉&nbsp;&nbsp;&nbsp;&nbsp;136****9733</span>
+								<span>陈玲梅&nbsp;&nbsp;&nbsp;&nbsp;136****3658</span>
+								<span>陈群静&nbsp;&nbsp;&nbsp;&nbsp;136****8299</span>
+								<span>陈晓颖&nbsp;&nbsp;&nbsp;&nbsp;136****9243</span>
+								<span>刘&nbsp;&nbsp;&nbsp;威&nbsp;&nbsp;&nbsp;&nbsp;136****2380</span>
+								<span>王燕燕&nbsp;&nbsp;&nbsp;&nbsp;136****7590</span>
+								<span>胡全顺&nbsp;&nbsp;&nbsp;&nbsp;136****2879</span>
+								<span>颜海肖&nbsp;&nbsp;&nbsp;&nbsp;136****1903</span>
+								<span>王朝阳&nbsp;&nbsp;&nbsp;&nbsp;136****2404</span>
+								<span>张丽虹&nbsp;&nbsp;&nbsp;&nbsp;136****0269</span>
+								<span>李胜云&nbsp;&nbsp;&nbsp;&nbsp;136****0499</span>
+								<span>赵刚喜&nbsp;&nbsp;&nbsp;&nbsp;136****8619</span>
+								<span>罗翠萍&nbsp;&nbsp;&nbsp;&nbsp;136****0600</span>
+								<span>王&nbsp;&nbsp;&nbsp;鑫&nbsp;&nbsp;&nbsp;&nbsp;137****3200</span>
+								<span>李密蓉&nbsp;&nbsp;&nbsp;&nbsp;137****1331</span>
+								<span>梁玉笑&nbsp;&nbsp;&nbsp;&nbsp;137****7330</span>
+								<span>姜东海&nbsp;&nbsp;&nbsp;&nbsp;137****3358</span>
+								<span>邓小丹&nbsp;&nbsp;&nbsp;&nbsp;137****5868</span>
+								<span>吴荣波&nbsp;&nbsp;&nbsp;&nbsp;137****2306</span>
+								<span>邓&nbsp;&nbsp;&nbsp;妍&nbsp;&nbsp;&nbsp;&nbsp;137****5520</span>
+								<span>陈&nbsp;&nbsp;&nbsp;颖&nbsp;&nbsp;&nbsp;&nbsp;137****6385</span>
+								<span>杨&nbsp;&nbsp;&nbsp;洋&nbsp;&nbsp;&nbsp;&nbsp;137****6563</span>
+								<span>李婉桃&nbsp;&nbsp;&nbsp;&nbsp;137****3550</span>
+								<span>谢兀武&nbsp;&nbsp;&nbsp;&nbsp;137****9935</span>
+								<span>向&nbsp;&nbsp;&nbsp;峰&nbsp;&nbsp;&nbsp;&nbsp;137****4653</span>
+								<span>雷志峰&nbsp;&nbsp;&nbsp;&nbsp;137****2834</span>
+								<span>李学军&nbsp;&nbsp;&nbsp;&nbsp;137****4118</span>
+								<span>陈&nbsp;&nbsp;&nbsp;卫&nbsp;&nbsp;&nbsp;&nbsp;137****9180</span>
+								<span>李华秀&nbsp;&nbsp;&nbsp;&nbsp;137****9446</span>
+								<span>彭映红&nbsp;&nbsp;&nbsp;&nbsp;137****5268</span>
+								<span>谢&nbsp;&nbsp;&nbsp;瑜&nbsp;&nbsp;&nbsp;&nbsp;137****2042</span>
+								<span>杨艺颖&nbsp;&nbsp;&nbsp;&nbsp;137****0423</span>
+								<span>肖红梅&nbsp;&nbsp;&nbsp;&nbsp;137****4658</span>
+								<span>颜周华&nbsp;&nbsp;&nbsp;&nbsp;137****1687</span>
+								<span>甄阿林&nbsp;&nbsp;&nbsp;&nbsp;137****8467</span>
+								<span>郭良洁&nbsp;&nbsp;&nbsp;&nbsp;137****4706</span>
+								<span>黄雅静&nbsp;&nbsp;&nbsp;&nbsp;137****1046</span>
+								<span>张&nbsp;&nbsp;&nbsp;蔚&nbsp;&nbsp;&nbsp;&nbsp;137****9019</span>
+								<span>曹远志&nbsp;&nbsp;&nbsp;&nbsp;138****6212</span>
+								<span>陈&nbsp;&nbsp;&nbsp;晓&nbsp;&nbsp;&nbsp;&nbsp;138****4303</span>
+								<span>梁瑞敏&nbsp;&nbsp;&nbsp;&nbsp;138****0242</span>
+								<span>魏海彦&nbsp;&nbsp;&nbsp;&nbsp;138****9630</span>
+								<span>禹传军&nbsp;&nbsp;&nbsp;&nbsp;138****5680</span>
+								<span>张&nbsp;&nbsp;&nbsp;昕&nbsp;&nbsp;&nbsp;&nbsp;138****6060</span>
+								<span>廖秋香&nbsp;&nbsp;&nbsp;&nbsp;138****9652</span>
+								<span>郭樱滨&nbsp;&nbsp;&nbsp;&nbsp;138****0606</span>
+								<span>肖丽芳&nbsp;&nbsp;&nbsp;&nbsp;138****0052</span>
+								<span>陈爱莲&nbsp;&nbsp;&nbsp;&nbsp;138****2485</span>
+								<span>郭&nbsp;&nbsp;&nbsp;佳&nbsp;&nbsp;&nbsp;&nbsp;138****4679</span>
+								<span>许&nbsp;&nbsp;&nbsp;敏&nbsp;&nbsp;&nbsp;&nbsp;138****7521</span>
+								<span>戴青青&nbsp;&nbsp;&nbsp;&nbsp;138****1716</span>
+								<span>李&nbsp;&nbsp;&nbsp;季&nbsp;&nbsp;&nbsp;&nbsp;138****4871</span>
+								<span>文媛媛&nbsp;&nbsp;&nbsp;&nbsp;138****6590</span>
+								<span>刘红慧&nbsp;&nbsp;&nbsp;&nbsp;138****9776</span>
+								<span>何&nbsp;&nbsp;&nbsp;&nbsp;丹&nbsp;&nbsp;&nbsp;&nbsp;138****5568</span>
+								<span>陈&nbsp;&nbsp;&nbsp;兵&nbsp;&nbsp;&nbsp;&nbsp;138****5520</span>
+								<span>陈&nbsp;&nbsp;&nbsp;慧&nbsp;&nbsp;&nbsp;&nbsp;138****5577</span>
+								<span>吕&nbsp;&nbsp;&nbsp;晶&nbsp;&nbsp;&nbsp;&nbsp;138****1114</span>
+								<span>陈惠璇&nbsp;&nbsp;&nbsp;&nbsp;139****4600</span>
+								<span>梁&nbsp;&nbsp;&nbsp;勤&nbsp;&nbsp;&nbsp;&nbsp;139****3316</span>
+								<span>黄&nbsp;&nbsp;&nbsp;欣&nbsp;&nbsp;&nbsp;&nbsp;139****8470</span>
+								<span>季天姝&nbsp;&nbsp;&nbsp;&nbsp;139****9977</span>
+								<span>戴慧梅&nbsp;&nbsp;&nbsp;&nbsp;139****5436</span>
+								<span>刘祥玲&nbsp;&nbsp;&nbsp;&nbsp;139****4060</span>
+								<span>付元庆&nbsp;&nbsp;&nbsp;&nbsp;139****0595</span>
+								<span>陈丽珠&nbsp;&nbsp;&nbsp;&nbsp;139****4479</span>
+								<span>林长春&nbsp;&nbsp;&nbsp;&nbsp;139****1387</span>
+								<span>黄细金&nbsp;&nbsp;&nbsp;&nbsp;139****0910</span>
+								<span>李元杰&nbsp;&nbsp;&nbsp;&nbsp;139****1440</span>
+								<span>聂红娇&nbsp;&nbsp;&nbsp;&nbsp;139****0093</span>
+								<span>李文梅&nbsp;&nbsp;&nbsp;&nbsp;139****9433</span>
+								<span>刘琼香&nbsp;&nbsp;&nbsp;&nbsp;139****6990</span>
+								<span>伍姣梅&nbsp;&nbsp;&nbsp;&nbsp;139****0109</span>
+								<span>李炜国&nbsp;&nbsp;&nbsp;&nbsp;139****5661</span>
+								<span>刘佳佳&nbsp;&nbsp;&nbsp;&nbsp;147****8331</span>
+								<span>连丽清&nbsp;&nbsp;&nbsp;&nbsp;150****0048</span>
+								<span>王晓丽&nbsp;&nbsp;&nbsp;&nbsp;150****7118</span>
+								<span>李晓静&nbsp;&nbsp;&nbsp;&nbsp;150****5696</span>
+								<span>甘&nbsp;&nbsp;&nbsp;飞&nbsp;&nbsp;&nbsp;&nbsp;150****3818</span>
+								<span>龙萍莲&nbsp;&nbsp;&nbsp;&nbsp;150****1520</span>
+								<span>谭艳娟&nbsp;&nbsp;&nbsp;&nbsp;150****6009</span>
+								<span>周小红&nbsp;&nbsp;&nbsp;&nbsp;150****3118</span>
+								<span>李菊芳&nbsp;&nbsp;&nbsp;&nbsp;150****2590</span>
+								<span>刘拥军&nbsp;&nbsp;&nbsp;&nbsp;150****0971</span>
+								<span>安&nbsp;&nbsp;&nbsp;然&nbsp;&nbsp;&nbsp;&nbsp;151****8040</span>
+								<span>周海燕&nbsp;&nbsp;&nbsp;&nbsp;151****4945</span>
+								<span>余彬彬&nbsp;&nbsp;&nbsp;&nbsp;151****5035</span>
+								<span>王直慧&nbsp;&nbsp;&nbsp;&nbsp;151****9459</span>
+								<span>陈&nbsp;&nbsp;&nbsp;萍&nbsp;&nbsp;&nbsp;&nbsp;151****5757</span>
+								<span>刘&nbsp;&nbsp;&nbsp;欣&nbsp;&nbsp;&nbsp;&nbsp;151****0599</span>
+								<span>刘洪汇&nbsp;&nbsp;&nbsp;&nbsp;151****1834</span>
+								<span>邱佚名&nbsp;&nbsp;&nbsp;&nbsp;151****9726</span>
+								<span>郭志成&nbsp;&nbsp;&nbsp;&nbsp;152****4389</span>
+								<span>周友谊&nbsp;&nbsp;&nbsp;&nbsp;152****8716</span>
+								<span>汤重琼&nbsp;&nbsp;&nbsp;&nbsp;152****6880</span>
+								<span>韩&nbsp;&nbsp;&nbsp;旭&nbsp;&nbsp;&nbsp;&nbsp;152****3948</span>
+								<span>叶海莲&nbsp;&nbsp;&nbsp;&nbsp;152****4408</span>
+								<span>徐建亚&nbsp;&nbsp;&nbsp;&nbsp;152****4996</span>
+								<span>向&nbsp;&nbsp;&nbsp;卓&nbsp;&nbsp;&nbsp;&nbsp;153****0068</span>
+								<span>沈琼英&nbsp;&nbsp;&nbsp;&nbsp;155****5656</span>
+								<span>黄思琴&nbsp;&nbsp;&nbsp;&nbsp;157****2661</span>
+								<span>乔胜余&nbsp;&nbsp;&nbsp;&nbsp;157****0982</span>
+								<span>刘国钰&nbsp;&nbsp;&nbsp;&nbsp;158****1759</span>
+								<span>莫&nbsp;&nbsp;&nbsp;格&nbsp;&nbsp;&nbsp;&nbsp;158****5745</span>
+								<span>詹务本&nbsp;&nbsp;&nbsp;&nbsp;158****8108</span>
+								<span>张鲜花&nbsp;&nbsp;&nbsp;&nbsp;158****8097</span>
+								<span>郑奇榕&nbsp;&nbsp;&nbsp;&nbsp;158****9630</span>
+								<span>陈&nbsp;&nbsp;&nbsp;辉&nbsp;&nbsp;&nbsp;&nbsp;158****6887</span>
+								<span>兰陈旺&nbsp;&nbsp;&nbsp;&nbsp;158****0757</span>
+								<span>邓&nbsp;&nbsp;&nbsp;慧&nbsp;&nbsp;&nbsp;&nbsp;158****6278</span>
+								<span>龙谷吾&nbsp;&nbsp;&nbsp;&nbsp;158****6004</span>
+								<span>李&nbsp;&nbsp;&nbsp;欢&nbsp;&nbsp;&nbsp;&nbsp;158****9891</span>
+								<span>罗惠英&nbsp;&nbsp;&nbsp;&nbsp;158****9649</span>
+								<span>谭理元&nbsp;&nbsp;&nbsp;&nbsp;158****2571</span>
+								<span>李敏敏&nbsp;&nbsp;&nbsp;&nbsp;158****1402</span>
+								<span>徐&nbsp;&nbsp;&nbsp;慧&nbsp;&nbsp;&nbsp;&nbsp;158****0519</span>
+								<span>谭&nbsp;&nbsp;&nbsp;薇&nbsp;&nbsp;&nbsp;&nbsp;158****9556</span>
+								<span>李江辉&nbsp;&nbsp;&nbsp;&nbsp;158****7387</span>
+								<span>张红娟&nbsp;&nbsp;&nbsp;&nbsp;159****9792</span>
+								<span>罗嘉敏&nbsp;&nbsp;&nbsp;&nbsp;159****9559</span>
+								<span>庞映桐&nbsp;&nbsp;&nbsp;&nbsp;159****0113</span>
+								<span>蔡婷婷&nbsp;&nbsp;&nbsp;&nbsp;159****0427</span>
+								<span>纪荣利&nbsp;&nbsp;&nbsp;&nbsp;159****0781</span>
+								<span>陈沛健&nbsp;&nbsp;&nbsp;&nbsp;159****0811</span>
+								<span>汤礼华&nbsp;&nbsp;&nbsp;&nbsp;159****2143</span>
+								<span>高春礼&nbsp;&nbsp;&nbsp;&nbsp;159****5601</span>
+								<span>林丽红&nbsp;&nbsp;&nbsp;&nbsp;159****6713</span>
+								<span>杨&nbsp;&nbsp;&nbsp;丽&nbsp;&nbsp;&nbsp;&nbsp;159****7495</span>
+								<span>陈嘉仲&nbsp;&nbsp;&nbsp;&nbsp;159****8289</span>
+								<span>陈雅珍&nbsp;&nbsp;&nbsp;&nbsp;159****3784</span>
+								<span>董营桃&nbsp;&nbsp;&nbsp;&nbsp;159****8029</span>
+								<span>许雪辉&nbsp;&nbsp;&nbsp;&nbsp;159****0001</span>
+								<span>李远一&nbsp;&nbsp;&nbsp;&nbsp;159****5948</span>
+								<span>聂元庆&nbsp;&nbsp;&nbsp;&nbsp;159****2088</span>
+								<span>古雄飞&nbsp;&nbsp;&nbsp;&nbsp;159****5393</span>
+								<span>黄颖欣&nbsp;&nbsp;&nbsp;&nbsp;159****6652</span>
+								<span>段有强&nbsp;&nbsp;&nbsp;&nbsp;180****6468</span>
+								<span>叶&nbsp;&nbsp;&nbsp;芳&nbsp;&nbsp;&nbsp;&nbsp;180****8299</span>
+								<span>黄&nbsp;&nbsp;&nbsp;琼&nbsp;&nbsp;&nbsp;&nbsp;180****5658</span>
+								<span>罗湘芝&nbsp;&nbsp;&nbsp;&nbsp;180****8419</span>
+								<span>李娜丽&nbsp;&nbsp;&nbsp;&nbsp;180****9664</span>
+								<span>张洪璋&nbsp;&nbsp;&nbsp;&nbsp;181****5807</span>
+								<span>杨&nbsp;&nbsp;&nbsp;星&nbsp;&nbsp;&nbsp;&nbsp;181****9807</span>
+								<span>杨&nbsp;&nbsp;&nbsp;勇&nbsp;&nbsp;&nbsp;&nbsp;182****4545</span>
+								<span>曾艳芳&nbsp;&nbsp;&nbsp;&nbsp;182****1667</span>
+								<span>谢&nbsp;&nbsp;&nbsp;松&nbsp;&nbsp;&nbsp;&nbsp;182****9893</span>
+								<span>林&nbsp;&nbsp;&nbsp;旭&nbsp;&nbsp;&nbsp;&nbsp;183****3206</span>
+								<span>何文娟&nbsp;&nbsp;&nbsp;&nbsp;185****1022</span>
+								<span>李&nbsp;&nbsp;&nbsp;阳&nbsp;&nbsp;&nbsp;&nbsp;185****5282</span>
+								<span>龚力里&nbsp;&nbsp;&nbsp;&nbsp;185****7048</span>
+								<span>孙艳艳&nbsp;&nbsp;&nbsp;&nbsp;185****6005</span>
+								<span>杨绪竹&nbsp;&nbsp;&nbsp;&nbsp;186****7925</span>
+								<span>郑灵敏&nbsp;&nbsp;&nbsp;&nbsp;186****0933</span>
+								<span>徐柯桢&nbsp;&nbsp;&nbsp;&nbsp;187****0823</span>
+								<span>郑运畅&nbsp;&nbsp;&nbsp;&nbsp;187****9817</span>
+								<span>左佳瑶&nbsp;&nbsp;&nbsp;&nbsp;187****7857</span>
+								<span>邱雪娇&nbsp;&nbsp;&nbsp;&nbsp;187****1800</span>
+								<span>洪缩湘&nbsp;&nbsp;&nbsp;&nbsp;187****8788</span>
+								<span>王湘宏&nbsp;&nbsp;&nbsp;&nbsp;187****4996</span>
+								<span>李&nbsp;&nbsp;&nbsp;斌&nbsp;&nbsp;&nbsp;&nbsp;187****5607</span>
+								<span>夏珊珊&nbsp;&nbsp;&nbsp;&nbsp;188****5568</span>
+								<span>罗颂曲&nbsp;&nbsp;&nbsp;&nbsp;188****6615</span>
+								<span>罗晓芬&nbsp;&nbsp;&nbsp;&nbsp;188****0319</span>
+								<span>柯秋珍&nbsp;&nbsp;&nbsp;&nbsp;189****6204</span>
+								<span>刘艳平&nbsp;&nbsp;&nbsp;&nbsp;189****9017</span>
+								<span>曹跃华&nbsp;&nbsp;&nbsp;&nbsp;189****9495</span>
+								<span>王瑰荣&nbsp;&nbsp;&nbsp;&nbsp;189****0133</span>
+								<span>赵&nbsp;&nbsp;&nbsp;蓉&nbsp;&nbsp;&nbsp;&nbsp;189****3039</span>
+								<span>何&nbsp;&nbsp;&nbsp;琳&nbsp;&nbsp;&nbsp;&nbsp;151****1986  </span>
+								<span>姚&nbsp;&nbsp;&nbsp;琴&nbsp;&nbsp;&nbsp;&nbsp;181****3930</span>
+								<span>刘付岸朋&nbsp;&nbsp;&nbsp;&nbsp;159****5620</span>
+								<span>欧阳良敏&nbsp;&nbsp;&nbsp;&nbsp;139****1095</span>
+						</p>
+					</div>
+				</div>
+					<div class="mt20 c-fl tec visible-lg" style="width:100%;">
+						<a href="/index/special/teacherActivity"><img src="/assets_v2/img/special/2016_08_25/phone_btn.png"></a>
+					</div>
+			</section>
+ 		<!-- content_end -->
+				<div class="content_rely_payphone">
+					<div class="tit_phone c-fl">
+						<span class="cRed fs14">亲爱的老师们:</span>
+						<p>"三尺讲台,是您施展才华的天地:教学新法,发挥点石成金的魔力."在第32个教师节来临之际,为充分展示教师风采.云课（yunke.com）特面向全国各级各类学校、机构及个人,发起"感念师恩,最亮教师"——2016年云课教师节微课评选活动,旨在通过活动选拔出网络时代最受学生欢迎的教师代表、展示当代教师在教学上多元的风格和风采</p>
+						<a class="cRed fs14 c-fr" href="/index/special/teacherOfResult">查看排行榜</a>
+					</div>
+				<div class="num_phone_one c-fl">
+						<div class="num_one">
+							<p class="c-fl">明星教师<span>第1名&nbsp;(笔记本电脑)</span></p>
+						<div class="ranking_cont c-fl">
+								<img src="/assets_v2/img/special/2016_08_25/xiangzhuo.png" alt="">
+								<div class="ranking_info">
+									<span class="ranking_name">向卓</span>
+									<span class="ranking_school">数学 <span>户县东关小学</span></span>
+									<a href="#" target="_blank" class="cRed c-fl cur_sor">获奖视频</a>
+									<span class="c-fl piao">共234310票</span>
+								</div>
+						</div>
+						<div class="bijib">
+							<img src="/assets_v2/img/special/2016_08_25/bijiben.png">
+						</div>
+					</div>
+				</div>
+				<div class="num_phone_two c-fl">
+						<div class="num_one">
+							<p class="c-fl">人气教师<span>第2-5名&nbsp;(阅读器)</span></p>
+						<div class="ranking_cont c-fl">
+								<img src="/assets_v2/img/special/2016_08_25/zhangxianhua.png" alt="">
+								<div class="ranking_info">
+									<span class="ranking_name">张鲜花</span>
+									<span class="ranking_school">数学 <span>户县东关小学</span></span>
+									<a href="#" target="_blank" class="cRed c-fl cur_sor">获奖视频</a>
+									<span class="c-fl piao">共223037票</span>
+								</div>
+						</div>
+						<div class="ranking_cont c-fl">
+								<img src="/assets_v2/img/special/2016_08_25/lvjing.png" alt="">
+								<div class="ranking_info">
+									<span class="ranking_name">吕晶</span>
+									<span class="ranking_school">数学 <span>户县东关小学</span></span>
+									<a href="#" target="_blank" class="cRed c-fl cur_sor">获奖视频</a>
+									<span class="c-fl piao">共172250票</span>
+								</div>
+						</div>
+						<div class="ranking_cont c-fl">
+								<img src="/assets_v2/img/special/2016_08_25/liyang.png" alt="">
+								<div class="ranking_info">
+									<span class="ranking_name">李阳</span>
+									<span class="ranking_school">数学 <span>一中岳麓中学</span></span>
+									<a href="#" target="_blank" class="cRed c-fl cur_sor">获奖视频</a>
+									<span class="c-fl piao">共96659票</span>
+								</div>
+						</div>
+						<div class="ranking_cont c-fl">
+								<img src="/assets_v2/img/special/2016_08_25/chenbing.png" alt="">
+								<div class="ranking_info">
+									<span class="ranking_name">陈兵</span>
+									<span class="ranking_school">数学 <span>一中岳麓中学</span></span>
+									<a href="#" target="_blank" class="cRed c-fl cur_sor">获奖视频</a>
+									<span class="c-fl piao">共95035票</span>
+								</div>
+						</div>
+							<div class="yuedu">
+								<img src="/assets_v2/img/special/2016_08_25/yuedu.png">
+							</div>
+					</div>
+				</div>
+				<div class="num_phone_three c-fl">
+						<div class="num_one">
+							<p class="c-fl">风采教师<span>第6-10名&nbsp;(移动硬盘)</span></p>
+						<div class="ranking_cont c-fl">
+								<img src="/assets_v2/img/special/2016_08_25/jiangrui.png" alt="">
+								<div class="ranking_info">
+									<span class="ranking_name">姜蕊</span>
+									<span class="ranking_school">数学 <span>户县东关小学</span></span>
+									<a href="#" target="_blank" class="cRed c-fl cur_sor">获奖视频</a>
+									<span class="c-fl piao">共41186票</span>
+								</div>
+						</div>
+						<div class="ranking_cont c-fl">
+								<img src="/assets_v2/img/special/2016_08_25/hewenjuan.png" alt="">
+								<div class="ranking_info">
+									<span class="ranking_name">何文娟</span>
+									<span class="ranking_school">数学 <span>一中岳麓中学</span></span>
+									<a href="#" target="_blank" class="cRed c-fl cur_sor">获奖视频</a>
+									<span class="c-fl piao">共36758票</span>
+								</div>
+						</div>
+						<div class="ranking_cont c-fl">
+								<img src="/assets_v2/img/special/2016_08_25/daihuimei.png" alt="">
+								<div class="ranking_info">
+									<span class="ranking_name">戴慧梅</span>
+									<span class="ranking_school">数学 <span>教师评选</span></span>
+									<a href="#" target="_blank" class="cRed c-fl cur_sor">获奖视频</a>
+									<span class="c-fl piao">共26669票</span>
+								</div>
+						</div>
+						<div class="ranking_cont c-fl">
+								<img src="/assets_v2/img/special/2016_08_25/yangyang.png" alt="">
+								<div class="ranking_info">
+									<span class="ranking_name">杨洋</span>
+									<span class="ranking_school">数学 <span>夏湾中学</span></span>
+									<a href="#" target="_blank" class="cRed c-fl cur_sor">获奖视频</a>
+									<span class="c-fl piao">共21094票</span>
+								</div>
+						</div>
+						<div class="ranking_cont c-fl">
+								<img src="/assets_v2/img/special/2016_08_25/niemeiqian.png" alt="">
+								<div class="ranking_info">
+									<span class="ranking_name">聂美婧</span>
+									<span class="ranking_school">数学 <span>户县东关小学</span></span>
+									<a href="#" target="_blank" class="cRed c-fl cur_sor">获奖视频</a>
+									<span class="c-fl piao">共13645票</span>
+								</div>
+						</div>
+							<div class="yuedu">
+								<img src="/assets_v2/img/special/2016_08_25/yidongyp.png">
+							</div>
+					</div>
+				</div>
+				<div class="winners">
+						<p class="c-fl">参与奖获奖名单</p>
+						<p class="c-fl overflow">
+								<span>田&nbsp;&nbsp;&nbsp;娜&nbsp;&nbsp;131****6238</span>
+								<span>刘贝贝&nbsp;&nbsp;132****7091</span>
+								<span>李郁权&nbsp;&nbsp;133****6078</span>
+								<span>李娟芝&nbsp;&nbsp;133****3421</span>
+								<span>陈&nbsp;&nbsp;&nbsp;艳&nbsp;&nbsp;133****8045</span>
+								<span>孙&nbsp;&nbsp;&nbsp;玥&nbsp;&nbsp;133****4286</span>
+								<span>李&nbsp;&nbsp;&nbsp;娟&nbsp;&nbsp;134****9579</span>
+								<span>刘伟铭&nbsp;&nbsp;134****1640</span>
+								<span>李&nbsp;&nbsp;&nbsp;艳&nbsp;&nbsp;134****8121</span>
+								<span>梁淑妍&nbsp;&nbsp;134****8088</span>
+								<span>李婷婷&nbsp;&nbsp;134****0630</span>
+								<span>谢志云&nbsp;&nbsp;134****5646</span>
+								<span>高冬雷&nbsp;&nbsp;134****2771</span>
+								<span>姜&nbsp;&nbsp;&nbsp;蕊&nbsp;&nbsp;134****8061</span>
+								<span>刘春苗&nbsp;&nbsp;134****1889</span>
+								<span>吴海菊&nbsp;&nbsp;134****5415</span>
+								<span>黄炎明&nbsp;&nbsp;135****3884</span>
+								<span>林&nbsp;&nbsp;&nbsp;挺&nbsp;&nbsp;135****1395</span>
+								<span>叶&nbsp;&nbsp;&nbsp;庆&nbsp;&nbsp;135****4415</span>
+								<span>房宝三&nbsp;&nbsp;135****7210</span>
+								<span>赵冬梅&nbsp;&nbsp;135****2261</span>
+								<span>李&nbsp;&nbsp;&nbsp;帆&nbsp;&nbsp;135****7756</span>
+								<span>陈小静&nbsp;&nbsp;135****2662</span>
+								<span>龙丽菊&nbsp;&nbsp;135****3328</span>
+								<span>卢兰花&nbsp;&nbsp;135****1364</span>
+								<span>王&nbsp;&nbsp;&nbsp;璐&nbsp;&nbsp;135****2083</span>
+								<span>梁丹青&nbsp;&nbsp;135****1049</span>
+								<span>袁远辉&nbsp;&nbsp;135****9191</span>
+								<span>黄崴钰&nbsp;&nbsp;135****3621</span>
+								<span>林秀明&nbsp;&nbsp;135****8019</span>
+								<span>庄小燕&nbsp;&nbsp;135****5261</span>
+								<span>肖炜玲&nbsp;&nbsp;135****4211</span>
+								<span>谢&nbsp;&nbsp;&nbsp;美&nbsp;&nbsp;135****9067</span>
+								<span>聂美婧&nbsp;&nbsp;135****1658</span>
+								<span>陈璐璐&nbsp;&nbsp;135****5436</span>
+								<span>黄尚波&nbsp;&nbsp;136****6769</span>
+								<span>林贵富&nbsp;&nbsp;136****9654</span>
+								<span>李有林&nbsp;&nbsp;136****6204</span>
+								<span>曾&nbsp;&nbsp;&nbsp;琳&nbsp;&nbsp;136****4627</span>
+								<span>曾&nbsp;&nbsp;&nbsp;辉&nbsp;&nbsp;136****9733</span>
+								<span>陈玲梅&nbsp;&nbsp;136****3658</span>
+								<span>陈群静&nbsp;&nbsp;136****8299</span>
+								<span>陈晓颖&nbsp;&nbsp;136****9243</span>
+								<span>刘&nbsp;&nbsp;&nbsp;威&nbsp;&nbsp;136****2380</span>
+								<span>王燕燕&nbsp;&nbsp;136****7590</span>
+								<span>胡全顺&nbsp;&nbsp;136****2879</span>
+								<span>颜海肖&nbsp;&nbsp;136****1903</span>
+								<span>王朝阳&nbsp;&nbsp;136****2404</span>
+								<span>张丽虹&nbsp;&nbsp;136****0269</span>
+								<span>李胜云&nbsp;&nbsp;136****0499</span>
+								<span>赵刚喜&nbsp;&nbsp;136****8619</span>
+								<span>罗翠萍&nbsp;&nbsp;136****0600</span>
+								<span>王&nbsp;&nbsp;&nbsp;鑫&nbsp;&nbsp;137****3200</span>
+								<span>李密蓉&nbsp;&nbsp;137****1331</span>
+								<span>梁玉笑&nbsp;&nbsp;137****7330</span>
+								<span>姜东海&nbsp;&nbsp;137****3358</span>
+								<span>邓小丹&nbsp;&nbsp;137****5868</span>
+								<span>吴荣波&nbsp;&nbsp;137****2306</span>
+								<span>邓&nbsp;&nbsp;&nbsp;妍&nbsp;&nbsp;137****5520</span>
+								<span>陈&nbsp;&nbsp;&nbsp;颖&nbsp;&nbsp;137****6385</span>
+								<span>杨&nbsp;&nbsp;&nbsp;洋&nbsp;&nbsp;137****6563</span>
+								<span>李婉桃&nbsp;&nbsp;137****3550</span>
+								<span>谢兀武&nbsp;&nbsp;137****9935</span>
+								<span>向&nbsp;&nbsp;&nbsp;峰&nbsp;&nbsp;137****4653</span>
+								<span>雷志峰&nbsp;&nbsp;137****2834</span>
+								<span>李学军&nbsp;&nbsp;137****4118</span>
+								<span>陈&nbsp;&nbsp;&nbsp;卫&nbsp;&nbsp;137****9180</span>
+								<span>李华秀&nbsp;&nbsp;137****9446</span>
+								<span>彭映红&nbsp;&nbsp;137****5268</span>
+								<span>谢&nbsp;&nbsp;&nbsp;瑜&nbsp;&nbsp;137****2042</span>
+								<span>杨艺颖&nbsp;&nbsp;137****0423</span>
+								<span>肖红梅&nbsp;&nbsp;137****4658</span>
+								<span>颜周华&nbsp;&nbsp;137****1687</span>
+								<span>甄阿林&nbsp;&nbsp;137****8467</span>
+								<span>郭良洁&nbsp;&nbsp;137****4706</span>
+								<span>黄雅静&nbsp;&nbsp;137****1046</span>
+								<span>张&nbsp;&nbsp;&nbsp;蔚&nbsp;&nbsp;137****9019</span>
+								<span>曹远志&nbsp;&nbsp;138****6212</span>
+								<span>陈&nbsp;&nbsp;&nbsp;晓&nbsp;&nbsp;138****4303</span>
+								<span>梁瑞敏&nbsp;&nbsp;138****0242</span>
+								<span>魏海彦&nbsp;&nbsp;138****9630</span>
+								<span>禹传军&nbsp;&nbsp;138****5680</span>
+								<span>张&nbsp;&nbsp;&nbsp;昕&nbsp;&nbsp;138****6060</span>
+								<span>廖秋香&nbsp;&nbsp;138****9652</span>
+								<span>郭樱滨&nbsp;&nbsp;138****0606</span>
+								<span>肖丽芳&nbsp;&nbsp;138****0052</span>
+								<span>陈爱莲&nbsp;&nbsp;138****2485</span>
+								<span>郭&nbsp;&nbsp;&nbsp;佳&nbsp;&nbsp;138****4679</span>
+								<span>许&nbsp;&nbsp;&nbsp;敏&nbsp;&nbsp;138****7521</span>
+								<span>戴青青&nbsp;&nbsp;138****1716</span>
+								<span>李&nbsp;&nbsp;&nbsp;季&nbsp;&nbsp;138****4871</span>
+								<span>文媛媛&nbsp;&nbsp;138****6590</span>
+								<span>刘红慧&nbsp;&nbsp;138****9776</span>
+								<span>何&nbsp;&nbsp;丹&nbsp;&nbsp;138****5568</span>
+								<span>陈&nbsp;&nbsp;&nbsp;兵&nbsp;&nbsp;138****5520</span>
+								<span>陈&nbsp;&nbsp;&nbsp;慧&nbsp;&nbsp;138****5577</span>
+								<span>吕&nbsp;&nbsp;&nbsp;晶&nbsp;&nbsp;138****1114</span>
+								<span>陈惠璇&nbsp;&nbsp;139****4600</span>
+								<span>梁&nbsp;&nbsp;&nbsp;勤&nbsp;&nbsp;139****3316</span>
+								<span>黄&nbsp;&nbsp;&nbsp;欣&nbsp;&nbsp;139****8470</span>
+								<span>季天姝&nbsp;&nbsp;139****9977</span>
+								<span>戴慧梅&nbsp;&nbsp;139****5436</span>
+								<span>刘祥玲&nbsp;&nbsp;139****4060</span>
+								<span>付元庆&nbsp;&nbsp;139****0595</span>
+								<span>陈丽珠&nbsp;&nbsp;139****4479</span>
+								<span>林长春&nbsp;&nbsp;139****1387</span>
+								<span>黄细金&nbsp;&nbsp;139****0910</span>
+								<span>李元杰&nbsp;&nbsp;139****1440</span>
+								<span>聂红娇&nbsp;&nbsp;139****0093</span>
+								<span>李文梅&nbsp;&nbsp;139****9433</span>
+								<span>刘琼香&nbsp;&nbsp;139****6990</span>
+								<span>伍姣梅&nbsp;&nbsp;139****0109</span>
+								<span>李炜国&nbsp;&nbsp;139****5661</span>
+								<span>刘佳佳&nbsp;&nbsp;147****8331</span>
+								<span>连丽清&nbsp;&nbsp;150****0048</span>
+								<span>王晓丽&nbsp;&nbsp;150****7118</span>
+								<span>李晓静&nbsp;&nbsp;150****5696</span>
+								<span>甘&nbsp;&nbsp;&nbsp;飞&nbsp;&nbsp;150****3818</span>
+								<span>龙萍莲&nbsp;&nbsp;150****1520</span>
+								<span>谭艳娟&nbsp;&nbsp;150****6009</span>
+								<span>周小红&nbsp;&nbsp;150****3118</span>
+								<span>李菊芳&nbsp;&nbsp;150****2590</span>
+								<span>刘拥军&nbsp;&nbsp;150****0971</span>
+								<span>安&nbsp;&nbsp;&nbsp;然&nbsp;&nbsp;151****8040</span>
+								<span>周海燕&nbsp;&nbsp;151****4945</span>
+								<span>余彬彬&nbsp;&nbsp;151****5035</span>
+								<span>王直慧&nbsp;&nbsp;151****9459</span>
+								<span>陈&nbsp;&nbsp;&nbsp;萍&nbsp;&nbsp;151****5757</span>
+								<span>刘&nbsp;&nbsp;&nbsp;欣&nbsp;&nbsp;151****0599</span>
+								<span>刘洪汇&nbsp;&nbsp;151****1834</span>
+								<span>邱佚名&nbsp;&nbsp;151****9726</span>
+								<span>郭志成&nbsp;&nbsp;152****4389</span>
+								<span>周友谊&nbsp;&nbsp;152****8716</span>
+								<span>汤重琼&nbsp;&nbsp;152****6880</span>
+								<span>韩&nbsp;&nbsp;&nbsp;旭&nbsp;&nbsp;152****3948</span>
+								<span>叶海莲&nbsp;&nbsp;152****4408</span>
+								<span>徐建亚&nbsp;&nbsp;152****4996</span>
+								<span>向&nbsp;&nbsp;&nbsp;卓&nbsp;&nbsp;153****0068</span>
+								<span>沈琼英&nbsp;&nbsp;155****5656</span>
+								<span>黄思琴&nbsp;&nbsp;157****2661</span>
+								<span>乔胜余&nbsp;&nbsp;157****0982</span>
+								<span>刘国钰&nbsp;&nbsp;158****1759</span>
+								<span>莫&nbsp;&nbsp;&nbsp;格&nbsp;&nbsp;158****5745</span>
+								<span>詹务本&nbsp;&nbsp;158****8108</span>
+								<span>张鲜花&nbsp;&nbsp;158****8097</span>
+								<span>郑奇榕&nbsp;&nbsp;158****9630</span>
+								<span>陈&nbsp;&nbsp;&nbsp;辉&nbsp;&nbsp;158****6887</span>
+								<span>兰陈旺&nbsp;&nbsp;158****0757</span>
+								<span>邓&nbsp;&nbsp;&nbsp;慧&nbsp;&nbsp;158****6278</span>
+								<span>龙谷吾&nbsp;&nbsp;158****6004</span>
+								<span>李&nbsp;&nbsp;&nbsp;欢&nbsp;&nbsp;158****9891</span>
+								<span>罗惠英&nbsp;&nbsp;158****9649</span>
+								<span>谭理元&nbsp;&nbsp;158****2571</span>
+								<span>李敏敏&nbsp;&nbsp;158****1402</span>
+								<span>徐&nbsp;&nbsp;&nbsp;慧&nbsp;&nbsp;158****0519</span>
+								<span>谭&nbsp;&nbsp;&nbsp;薇&nbsp;&nbsp;158****9556</span>
+								<span>李江辉&nbsp;&nbsp;158****7387</span>
+								<span>张红娟&nbsp;&nbsp;159****9792</span>
+								<span>罗嘉敏&nbsp;&nbsp;159****9559</span>
+								<span>庞映桐&nbsp;&nbsp;159****0113</span>
+								<span>蔡婷婷&nbsp;&nbsp;159****0427</span>
+								<span>纪荣利&nbsp;&nbsp;159****0781</span>
+								<span>陈沛健&nbsp;&nbsp;159****0811</span>
+								<span>汤礼华&nbsp;&nbsp;159****2143</span>
+								<span>高春礼&nbsp;&nbsp;159****5601</span>
+								<span>林丽红&nbsp;&nbsp;159****6713</span>
+								<span>杨&nbsp;&nbsp;&nbsp;丽&nbsp;&nbsp;159****7495</span>
+								<span>陈嘉仲&nbsp;&nbsp;159****8289</span>
+								<span>陈雅珍&nbsp;&nbsp;159****3784</span>
+								<span>董营桃&nbsp;&nbsp;159****8029</span>
+								<span>许雪辉&nbsp;&nbsp;159****0001</span>
+								<span>李远一&nbsp;&nbsp;159****5948</span>
+								<span>聂元庆&nbsp;&nbsp;159****2088</span>
+								<span>古雄飞&nbsp;&nbsp;159****5393</span>
+								<span>黄颖欣&nbsp;&nbsp;159****6652</span>
+								<span>段有强&nbsp;&nbsp;180****6468</span>
+								<span>叶&nbsp;&nbsp;&nbsp;芳&nbsp;&nbsp;180****8299</span>
+								<span>黄&nbsp;&nbsp;&nbsp;琼&nbsp;&nbsp;180****5658</span>
+								<span>罗湘芝&nbsp;&nbsp;180****8419</span>
+								<span>李娜丽&nbsp;&nbsp;180****9664</span>
+								<span>张洪璋&nbsp;&nbsp;181****5807</span>
+								<span>杨&nbsp;&nbsp;&nbsp;星&nbsp;&nbsp;181****9807</span>
+								<span>杨&nbsp;&nbsp;&nbsp;勇&nbsp;&nbsp;182****4545</span>
+								<span>曾艳芳&nbsp;&nbsp;182****1667</span>
+								<span>谢&nbsp;&nbsp;&nbsp;松&nbsp;&nbsp;182****9893</span>
+								<span>林&nbsp;&nbsp;&nbsp;旭&nbsp;&nbsp;183****3206</span>
+								<span>何文娟&nbsp;&nbsp;185****1022</span>
+								<span>李&nbsp;&nbsp;&nbsp;阳&nbsp;&nbsp;185****5282</span>
+								<span>龚力里&nbsp;&nbsp;185****7048</span>
+								<span>孙艳艳&nbsp;&nbsp;185****6005</span>
+								<span>杨绪竹&nbsp;&nbsp;186****7925</span>
+								<span>郑灵敏&nbsp;&nbsp;186****0933</span>
+								<span>徐柯桢&nbsp;&nbsp;187****0823</span>
+								<span>郑运畅&nbsp;&nbsp;187****9817</span>
+								<span>左佳瑶&nbsp;&nbsp;187****7857</span>
+								<span>邱雪娇&nbsp;&nbsp;187****1800</span>
+								<span>洪缩湘&nbsp;&nbsp;187****8788</span>
+								<span>王湘宏&nbsp;&nbsp;187****4996</span>
+								<span>李&nbsp;&nbsp;&nbsp;斌&nbsp;&nbsp;187****5607</span>
+								<span>夏珊珊&nbsp;&nbsp;188****5568</span>
+								<span>罗颂曲&nbsp;&nbsp;188****6615</span>
+								<span>罗晓芬&nbsp;&nbsp;188****0319</span>
+								<span>柯秋珍&nbsp;&nbsp;189****6204</span>
+								<span>刘艳平&nbsp;&nbsp;189****9017</span>
+								<span>曹跃华&nbsp;&nbsp;189****9495</span>
+								<span>王瑰荣&nbsp;&nbsp;189****0133</span>
+								<span>赵&nbsp;&nbsp;&nbsp;蓉&nbsp;&nbsp;189****3039</span>
+								<span>何&nbsp;&nbsp;&nbsp;琳&nbsp;&nbsp;151****1986  </span>
+								<span>姚&nbsp;&nbsp;&nbsp;琴&nbsp;&nbsp;181****3930</span>
+								<span>刘付岸朋&nbsp;&nbsp;159****5620</span>
+								<span>欧阳良敏&nbsp;&nbsp;139****1095</span>
+						</p>
+					</div>
+				<div class="mt20 c-fl visible-xs phone_cy" style="width:100%;">
+					<a href="/index/special/teacherActivity"><img src="/assets_v2/img/special/2016_08_25/phone_btn.png"></a>
+				</div>
+ 		</div>
+		
+		    <div class="page-list fs16" id="pagepage">
+               
+			</div>
+		    <script>
+			    page("pagepage","{$path_page}",{$pm['size']},{$pm['page']},{$pm['total']});
+			</script>
+ 	</div>
+ </section>
+	 		<!-- 底部 -->
+ 		<footer>
+ 		    <img src="/assets_v2/img/special/2016_08_25/footer.png" class="hidden-xs">
+ 		    <p>
+ 		        <a href="/index.about" target="_blank">关于我们</a> |
+ 		        <a href="/index.feedback" target="_blank">意见反馈</a> |
+ 		        <a href="/index.help" target="_blank">在线帮助</a> |
+ 		        <a href="/index.main.client" target="_blank">客户端下载</a> <br>
+ 		        Copyright c  2015  北京高能壹佰教育科技有限公司版权所有<br>
+ 		        京ICP备14053191号  云课--拓维旗下在线教育平台</p>
+
+ 		</footer>
+ 		<!-- 底部 -->
+ </body>
+ </html>
+ <script>
+ 	$(function(){
+ 		if($("input[name='realname']").val() != ''){
+ 			$('#search_form_clear').show();
+ 		}else{
+			
+ 			$('#search_form_clear').hide();
+ 		}
+
+ 		/*$("#search").click(function(){
+ 			searchSubmit();
+ 		});*/
+
+ 		$("#search_form_clear").click(function() {
+ 			$(this).hide();
+ 			$("input[name='realname']").val("");
+ 			location.href="/index.special.teacherRankList?realname";
+ 		})
+
+ 		$("#search").click(function(){
+			var realname = $("input[name='realname']").val();
+ 	        location.href="/index.special.teacherRankList?realname="+realname;
+ 	    });
+ 	});
+ </script>

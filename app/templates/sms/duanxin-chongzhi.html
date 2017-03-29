@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="title" content="{part '/site.main.orgname'} - 首页 - 云课 - 专业的在线学习平台">
+    <meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+    <meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+	<title>选择短信充值</title>
+	{part "/site.main.header"}
+</head>
+
+<body>
+
+	{part "/site.main.nav.home"}
+	<!-- ct -->
+	<section>
+		<div class="container mb20 mt20">
+			<div class="row">
+				<div class="bgf sms-recharge p20 fs14">
+					<h1 class="mb15">
+						<a href="javascript:history.go(-1);" title="">返回</a>
+					</h1>		
+					<p class="mb15">
+						<span class="col-md-2 p0">短信余额：</span>
+						<span class="cYellow older-sms-balance" data-price="{if(!empty($data->org_fee->total_fee))} {$data->org_fee->total_fee/100} {else}0{/if}">{if(!empty($data->org_fee->total_fee))} {$data->org_fee->total_fee/100} {else}0{/if}</span>元
+					</p>
+					<div class="col-md-20 p0 mb15">
+						<div class="col-md-2 p0">充值金额：</div>
+						<ul class="col-md-18 mb10 p0 select-sms-price">
+							<li class="col-md-3 tac" data-price="100">100元</li>
+							<li class="col-md-3 tac" data-price="200">200元</li>
+							<li class="col-md-3 tac curr" data-price="500">500元</li>
+							<li class="col-md-3 tac" data-price="1000">1000元</li>
+						</ul>
+						<div class="col-md-20 p0">
+							<span class="col-md-2"></span>
+							<a href="javascript:;" onclick="addSmsBalance()" class="cBlue">其他金额</a>
+						</div>
+						<div class="col-md-20 p0">
+							<span class="col-md-2"></span>
+							<div class="add-other-balance" style="display:none;">
+								<input type="text" id="other_money" maxlength="7" placeholder="最小金额为10元" onkeyup="clearNum(this)" class="add-sms-price mr5" />元
+							</div>
+						</div>
+					</div>
+					<p id="Estimate">预计发送：<span class="cYellow">{if(empty($data->org_fee->total_fee))} 0 {else}{floor($data->org_fee->total_fee/4>0 ?  $data->org_fee->total_fee/4 : 0)}{/if}</span>条</p>
+					<div class="tac mb30 mt15">
+						<button class="yellow-btn">下一步</button>
+					</div>
+				</div>	
+			</div>
+		</div>	
+	</section>
+	<!-- /ct -->
+{part "/site.main.footer"}
+</body>
+</html>
+<script type="text/javascript">
+	var org_id = {$org_id};
+$(function() {
+	$('#Estimate').find('span').text(Math.floor(((Number($('.older-sms-balance').attr('data-price')) + Number($('.select-sms-price li.curr').attr('data-price')))*100) / 4));
+	$('.select-sms-price').on('click', 'li', function() {
+		if($(this).hasClass('curr')) {
+			$(this).removeClass('curr');
+			$('.add-other-balance').show();
+			$("#other_money").val('');
+			$('#Estimate').find('span').text('');
+		}else{
+			$(this).addClass('curr').siblings().removeClass('curr');
+			$('.add-other-balance').hide();
+			$("#other_money").val('');
+			$('#Estimate').find('span').text(Math.floor((Number($('.older-sms-balance').attr('data-price')) + Number($(this).attr('data-price')))*100 / 4));
+		}
+	})
+	$('#other_money').keyup(function() {
+		$('#Estimate').find('span').text(Math.floor(((Number($('.older-sms-balance').attr('data-price')) + Number($(this).val())))*100 / 4));
+	});
+	$('#other_money').blur(function() {
+		if($(this).val() > 9999.99) {
+			$(this).val('');
+			layer.msg('超过最大金额');
+			$('#Estimate').find('span').text('');
+		}
+	});
+})
+
+	function clearNum(obj) {
+		obj.value = obj.value.replace(/[^\d.]/g,"");
+        obj.value = obj.value.replace(/^\./g,""); 
+        obj.value = obj.value.replace(/\.{ 2, }/g,".");
+        obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); 
+	}
+
+	function addSmsBalance() {
+		$('.select-sms-price').find('li').removeClass('curr');
+		$('.add-other-balance').show();
+		$('#Estimate').find('span').text('');
+	}
+
+
+	$(".yellow-btn").click(function(){
+		if($('.select-sms-price li').hasClass('curr')) {
+			window.location.href= "/order.main.buy/sms/"+org_id+'/'+parseInt(Number($('.select-sms-price li.curr').attr('data-price'))*100);
+		}else if($('#other_money').val() != '') {
+			if($('#other_money').val() < 10) {
+				layer.msg('充入最小金额为10元');
+			}else{
+				window.location.href= "/order.main.buy/sms/"+org_id+'/'+parseInt(Number($('#other_money').val())*100);
+			}
+		}else{
+			layer.msg('请选择充入金额');
+		}
+	})
+</script>

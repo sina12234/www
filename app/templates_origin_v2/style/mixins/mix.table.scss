@@ -1,0 +1,32 @@
+//table li common  background-color*/
+@mixin list-background() {
+    &:nth-of-type(odd) {
+        background: $main-white-color;
+    };
+    &:nth-of-type(even) {
+        background: $tbody-background-color;
+    };
+}
+// table common style extend
+
+%table {
+    width: 100%;
+    max-width: 100%;
+    > tbody > tr {
+        border: 1px solid $table-border-color;
+        border-top: none;
+        @include list-background();
+        td {
+            color: $text-color;
+        }
+    }
+    > thead > tr {
+        background-color: $thead-background-color;
+        border: 1px solid $table-border-color;
+        font-size: 14px;
+        td {
+            font-weight: normal;
+            color: $text-strong-color;
+        }
+    }
+}

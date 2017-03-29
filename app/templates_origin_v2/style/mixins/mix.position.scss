@@ -1,0 +1,26 @@
+//绝对居中
+@mixin center($width,$height) {
+    width: $width;
+    height: $height;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -($height) / 2;
+    margin-left: -($width) / 2;
+}
+//适配屏幕
+@mixin screen($res:320px,$mes:640px) {
+     @media screen and (min-width:$res) and (max-width:$mes){
+        @content;
+    }
+}
+//清楚浮动
+@mixin clearFix() {
+    &:after,&:before {
+        display: block;
+        content: '';
+    }
+    &:after {
+        clear: both;
+    }
+}

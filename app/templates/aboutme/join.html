@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 专业的K12在线教育平台 - 加入我们</title>
+		{part "/index.main.header"}
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/aboutme.css')}">
+		<script type="text/javascript" src="{utility_cdn::js('/assets/js/jquery/jquery-1.11.1.min.js')}" ></script>
+
+	</head>
+
+	<body>
+		<!--top-->
+
+		{part "/index.main.nav.live"}
+
+		<div class='big-box'>
+			<div class='tittle'>
+				<p><b>关于我们></b>加入我们</p>
+			</div>
+
+			<div class='count row'>
+				{part "/about.main.left"}
+				<div class='col-xs-9 count-r'>
+					<div class='count-b' style=" margin-top:-1px;margin-top:2px;">
+						<div class='tp' style="width:120px;">
+							<p><img src="{utility_cdn::img('/assets/images/i_dot_3.png')}">加入我们</p>
+						</div>
+						<div class='tp1'>
+							<p class='p1' style="color:#FFA81E; margin-left:28px;"><img style=" margin-right:10px;" src="{utility_cdn::img('/assets/images/xiaodd.png')}">技术</p>  
+						</div>
+					</div>
+					<div class='count-b' style="margin-left:40px;">
+						<div class='tp1'>  
+							<p class='p2' style="">
+							<b style="font-weight: bold; font-size:14px;">WEB前端工程师</b>	
+							</p>
+							{*
+							<p class='p1' style="">职责:</p>
+							<p class='p2' style="">
+							1、负责产品手机网页和电脑网页的前端开发。</br>
+							2、参与公司产品的设计和讨论。
+							</p>
+							*}
+							<p class='p1' style="">要求:</p>
+							<p class='p2' style="line-height:25px;">
+							1、两年以上web前端开发经验；</br>
+							2、熟悉Js面向对象DOM编程，了解主流前端技术，熟悉html5、Css3；</br>
+							3、熟悉Javascript框架，有Js组件开发、Js性能优化经验者优先；</br>
+							4、对移动设备端Web开发、跨终端开发有经验者优先；</br>
+							5、为人诚信，思维严谨，工作积极主动，能承受一定的工作压力；</br>
+							6、具有较强的沟通能力，强烈的学习欲望，对前端技术及用户体验追求极致；</br>
+							</p>
+						</div>
+						<div class='tp1'>  
+							<p class='p2' style="">
+							<b style="font-weight: bold; font-size:14px;">PHP开发工程师</b>	
+							</p>
+							<p class='p1' style="">要求:</p>
+							<p class='p2' style="line-height:25px;">
+							1、熟悉PHP，两年以上web项目开发经验；<br/>
+							2、熟悉至少一种主流PHP框架和模板；<br/>
+							3、熟悉前端技术JS,HTML,CSS；<br/>
+							4、对数据库架构有一定研究，具有较大数据处理经验；<br/>
+							5、对web开发相关技能有一定掌握或了解优先，例如运维知识、web安全、数据库知识；<br/>
+							6、有良好的编程思想、编程规范和文档编写能力；<br/>
+							7、责任心强，开拓能力强，有独立解决问题的能力；<br/>
+							</p>
+						</div>
+						<div class='tp1'>  
+							<p class='p2' style="">
+							<b style="font-weight: bold; font-size:14px;">测试工程师</b>	
+							</p>
+							<p class='p1' style="">岗位职责:</p>
+							<p class='p2' style="line-height:25px;">
+							1、负责公司业务线系列产品功能测试；<br/>
+							2、负责公司API接口和性能自动化测试；<br/>
+							3、根据项目计划和需求编写测试计划和用例，执行测试用并跟踪bug；<br/>
+							4、协助开发、测试、网络等不断改进系统，提升用户体验；<br/>
+							</p>
+
+							<p class='p1' style="">要求:</p>
+							<p class='p2' style="line-height:25px;">
+							1、计算机相关学历，一年以上系统测试及运维经验；<br/>
+							2、熟悉网站测试的方法和流程，有产品思路；<br/>
+							3、熟悉PHP/CSS/JS/HTML/MySQL等相关网站技术；<br/>
+							4、熟悉Linux相关操作和服务器配置方法；<br/>
+							5、具有较强的逻辑分析能力和学习能力，良好的沟通能力和良好的团队合作精神；<br/>
+							6、有大型网站或者自动化测试经验者优先考虑；<br/>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>	
+
+
+
+
+		</div>
+
+		<script>
+			$(document).ready(function(){
+				/*	var href = window.location.href;
+				var ss = href.split("/");
+				check = ss[3];
+				*/
+				var path= document.location.pathname;
+				$(".nco ul li a").each(function(i,item){
+					li = $(this).parent("li");	
+					if(path == $(this).attr("href")){
+						li.addClass("oo");
+						//	alert("123");
+					}
+				})
+
+
+			});
+			//alert(ss[3]);
+		</script>
+		{part "/index.main.footer"}
+
+	</body>
+
+
+
+</html>

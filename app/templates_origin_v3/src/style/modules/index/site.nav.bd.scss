@@ -1,0 +1,25 @@
+.site-nav-bd{
+	height: 35px;
+	background:$strong-bg-color;
+	border-bottom:1px solid $border-color;
+	@at-root .site-nav-bd-l{
+		float:left;
+		line-height:35px;
+		height:35px;
+	}
+	@at-root .site-nav-bd-r{
+		float:right;
+		li{
+			float:left;
+			line-height:35px;
+			position:relative;
+			text-align:center;
+			a,a:visited{
+				display:block;
+				float:left;
+				text-decoration:none;
+				color:$link-color;
+			}
+		}
+	}
+}

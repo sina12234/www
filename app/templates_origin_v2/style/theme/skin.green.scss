@@ -1,0 +1,7 @@
+//主题颜色
+$main-theme-color: #26b76b !default;
+$main-strong-theme-color: #1aad51 !default;
+$main-subsidiary-theme-color: rgba($main-strong-theme-color,0.82) !default;
+$main-strong-theme-color-ie: #1aad51\9 !default;
+//主题文本颜色
+$main-theme-text-color :$main-theme-color;

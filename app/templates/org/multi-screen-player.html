@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{part '/site.main.orgname'} 课程检查 - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<meta name="renderer" content="webkit">
+<link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets_v2/img/platform/yunke.ico')}"/>
+<script type="text/javascript" src="//www.yunke.com/crossdomain.php"></script>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/bootstrap/bootstrap.min.css')}">
+<!--[if lt IE 9]>
+<link rel="stylesheet" type="text/css" href="/assets_v2/css/bootstrap/bootstrap.min.css">
+<script src="{utility_cdn::js('/assets_v2/bootstrap-3.3.0/js/html5shiv.min.js')}"></script>
+<script src="{utility_cdn::js('/assets_v2/bootstrap-3.3.0/js/respond.min.js')}"></script>
+<![endif]-->
+<!--[if lt IE 8]>
+<script type="text/javascript"src="{utility_cdn::js('/assets_v2/js/ie8.js')}"></script>
+<![endif]-->
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+<script src="{utility_cdn::js('/assets_v2/js/swfobject.js')}"></script>
+<link rel="stylesheet" type="text/css" id="cssSkin" href="{utility_cdn::css('/assets_v2/css/multi-screen-player.css')}">
+<style>
+body{
+background: #2a2a2a;
+}
+.course-video{
+	background: #000;
+}
+.course-title{
+	position: absolute;
+	bottom: 10px;
+	right: 0px;
+	text-align: center;
+	width: 100%;
+	font-weight: bold;
+}
+</style>
+</head>
+<body>
+	<header class="header hidden-xs hidden-sm">
+	<a class="g-logo fs14" href="/" target="_blank"><span class="index-icon"></span>{part '/site.main.orgname'}</a>
+	<div class="g-title">
+		{*<a href="#"target="_blank">课程名称 班&nbsp;&nbsp; &nbsp; 章节 章节名</a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="#"target="_blank">
+			讲课老师</a>*}
+	</div>
+	<div class="g-navright fs12">
+		<!--用户信息-->
+		<ul class="user-menu hidden-xs">
+			{*
+			<li class="user-menu-info">
+			<a href="#"><span class="face"><img src="{utility_cdn::img('/assets_v2/img/logo.png')}"></span><span>xxxxxx</span></a><span class="c-fr">|</span>
+			<ul>
+				<i class="arrow-up"></i>
+				<li class="hidden-sm hidden-xs"><a href="#"target="_blank"><span class="t-set-icon"></span>教学管理</a></li>
+				<li><a href="/student.main.growth"target="_blank"><span class="School-icon"></span>学习中心</a></li>
+				<li><a href="/student.main.infobase"target="_blank"><span class="compose-icon"></span><span>基础资料</span></a></li>
+				<li><a href="/student.order.myorder"target="_blank"><span class="order-icon"></span>我的订单</a></li>
+				<li><a href="/student.security.password"target="_blank"><span class="card-icon"></span>安全设置</a></li>
+				<li class="visible-sm"><a href="/user.message"target="_blank"><span class="mess-icon"></span>我的消息</a></li>
+				<li><a href="/site.main.logout"><span class="close-icon"></span>退出</a></li>
+			</ul>
+			</li>
+			<li class="hidden-xs hidden-sm">
+			<a href="/org"target="_blank">机构管理</a><span class="c-fr">|</span>
+			</li>
+			<li class="hidden-xs hidden-sm">
+			<a href="/user.message"target="_blank"><span class="msg-icon"></span></a>
+			</li>
+			*}
+		</ul>
+	</div>
+	</header>
+	<div class="c" id="content">
+		<div id="coursebox" class="coursebox" style="height:598px; width: 981px;">
+			<div class="multi-screen" id="multi_screen">
+				<!--四屏-->
+				<ul class="four-screen">
+					<li class="course-video"><div class="course-pic"></div><div class="course-title"></div></li>
+					<li class="course-video"><div class="course-pic"></div><div class="course-title"></div></li>
+					<li class="course-video"><div class="course-pic"></div><div class="course-title"></div></li>
+					<li class="course-video"><div class="course-pic"></div><div class="course-title"></div></li>
+					<li class="course-video" style="display:none"><div class="course-pic"></div><div class="course-title"></div></li>
+					<li class="course-video" style="display:none"><div class="course-pic"></div><div class="course-title"></div></li>
+					<li class="course-video" style="display:none"><div class="course-pic"></div><div class="course-title"></div></li>
+					<li class="course-video" style="display:none"><div class="course-pic"></div><div class="course-title"></div></li>
+					<li class="course-video" style="display:none"><div class="course-pic"></div><div class="course-title"></div></li>
+				</ul>
+				{*
+				<ul class="six-screen">
+				</ul>
+				<ul class="nine-screen">
+				</ul>
+				*}
+			</div>
+			<!--分屏操作区-->
+			<div class="handle-area">
+				<b class="left">分屏：</b>
+				<div class="handlearea">
+					<span ct="4" title="四屏"></span><span ct="6" title="六屏"></span><span ct="9" title="九屏"></span>
+				</div>
+			</div>
+		</div>
+		<div id="tool" class="tool" style="height:598px;width:385px;">
+			<div class="title-bar"><a id="day_perv" class="cWhite" href="javascript:void(0)"> < </a><span id="date">{$date}</span><a id="day_next" class="cWhite" href="javascript:void(0)"> > </a></div>
+			<div class="section" id="section">
+				{foreach $plans->data as $data}
+				<a plan_id="{$data->plan_id}" style="cursor:pointer" href="/course.plan.play/{$data->plan_id}" target="_blank">
+					<span plan_id="{$data->plan_id}" class="add-icon"></span>
+					<span plan_id="{$data->plan_id}" class="del-icon" style="display:none"></span>
+					<p>
+					<strong class="fs14 cLightgray">{$data->section_name} {$data->section_desc}</strong>
+					<span class="cYellow">{substr($data->start_time,0,16)} <i style="display:none">直播中</i> </span>
+					</p>
+				</a>
+				{/foreach}
+				{*
+				<a href="#">
+					<span class="add-icon"></span>
+					<p>
+					<strong class="fs14 cLightgray">1. 初中语文系列课程 病句小结</strong>
+					<span class="cYellow">03月11日 18:00</span>
+					</p>
+				</a>
+				<a href="#">
+					<span class="add-icon"></span>
+					<p>
+					<strong class="fs14 cLightgray">12222. 初中语文系列课程 病句小结</strong>
+					<span class="cYellow">03月11日 18:00</span>
+					</p>
+				</a>
+				<a href="#">
+					<span class="add-icon"></span>
+					<p>
+					<strong class="fs14 cLightgray">13344. 初中语文系列课程 病句小结</strong>
+					<span class="cYellow">03月11日 18:00</span>
+					</p>
+				</a>
+				<a href="#">
+					<span class="add-icon"></span>
+					<p>
+					<strong class="fs14 cLightgray">1444. 初中语文系列课程 病句小结</strong>
+					<span class="cYellow">03月11日 18:00</span>
+					</p>
+				</a>
+				<a href="#">
+					<span class="add-icon"></span>
+					<p>
+					<strong class="fs14 cLightgray">14444. 初中语文系列课程 病句小结</strong>
+					<span class="cYellow">03月11日 18:00</span>
+					</p>
+				</a>
+				<a href="#">
+					<span class="add-icon"></span>
+					<p>
+					<strong class="fs14 cLightgray">1. 初中语文系列课程 病句小结</strong>
+					<span class="cYellow">03月11日 18:00</span>
+					</p>
+				</a>
+				<a href="#">
+					<span class="add-icon"></span>
+					<p>
+					<strong class="fs14 cLightgray">1. 初中语文系列课程 病句小结</strong>
+					<span class="cYellow">03月11日 18:00</span>
+					</p>
+				</a>
+				<a href="#">
+					<span class="add-icon"></span>
+					<p>
+					<strong class="fs14 cLightgray">1. 初中语文系列课程 病句小结</strong>
+					<span class="cYellow">03月11日 18:00</span>
+					</p>
+				</a>
+				<a href="#">
+					<span class="add-icon"></span>
+					<p>
+					<strong class="fs14 cLightgray">1. 初中语文系列课程 病句小结</strong>
+					<span class="cYellow">03月11日 18:00</span>
+					</p>
+				</a>
+				*}
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script>
+	$(function(){
+		leftrightclick();
+		$('#multi_screen ul:first').show();
+		$('.handlearea span:first').addClass('on');
+		$('.handlearea span').click(function(){
+			$(this).addClass('on').siblings().removeClass('on');
+			var ct = parseInt($(this).attr("ct"));
+			if(ct==4){ $("#multi_screen ul").removeClass("four-screen six-screen nine-screen").addClass("four-screen"); }
+			if(ct==6){ $("#multi_screen ul").removeClass("four-screen six-screen nine-screen").addClass("six-screen"); }
+			if(ct==9){ $("#multi_screen ul").removeClass("four-screen six-screen nine-screen").addClass("nine-screen"); }
+			$("#multi_screen li").each(function(i,item){
+				if(i < ct){
+				$(this).show().attr("show",1);
+				}else{
+				$(this).hide().removeAttr("show");
+				}
+			});
+		});
+
+		$('.course-video').hover(function(){
+			if($(this).attr("plan_id")){
+				$(this).append('<span class="course-del"></span>');
+			}
+			},function(){
+			$(this).find('.course-del').remove();
+		});
+
+		$('.course-video').on('click','.course-del',function(){
+			if($(this).parent("li").attr("plan_id")){
+				removePlan($(this).parent("li").attr("plan_id"));
+				$(this).remove();
+			}
+			//$(this).parents('li').append('<div class="course-pic"></div>');
+			//$(this).parent().remove();
+		});
+
+		$("#section .add-icon").click(function(){
+			if($(this).attr("plan_id")){
+			var title = $(this).parent().find("strong").html();
+				pendingPlan($(this).attr("plan_id") , title);
+			}
+			return false;
+		});
+		$("#section .del-icon").click(function(){
+			if($(this).attr("plan_id")){
+				removePlan($(this).attr("plan_id"));
+			}
+			return false;
+		});
+		//定时刷新plan状态
+		var plan_ids=[];
+		$("#section span").each(function(){
+			if($(this).attr("plan_id")){
+				plan_ids.push($(this).attr("plan_id"));
+			}
+		});
+		setInterval(function(){
+			$.getJSON("/org.course.planstatus",{ plan_ids:plan_ids },function(data){
+				for(var plan_id in data){
+					var player_id = "player_"+plan_id;
+					if(data[plan_id].plan_status=="living"){
+						$("#section a[plan_id="+plan_id+"] i").show();
+						$("#section a[plan_id="+plan_id+"]").prependTo("#section");
+						//如果在显示中的话，直播播放或者停止
+						if($("#multi_screen li[plan_id="+plan_id+"]").attr("show")){
+							init(player_id);
+						}
+					}else{
+						$("#section a[plan_id="+plan_id+"] i").hide();
+						//如果在显示中的话，直播播放或者停止
+						if($("#multi_screen li[plan_id="+plan_id+"]").attr("show")){
+							stop(player_id);
+						}
+					}
+				}
+			});
+		},10000);
+
+	});
+	function stop(id){
+		_player(id).stopVideo();
+	}
+	function init(id){
+		_player(id).reInit();
+	}
+	function _player(id){
+		if (navigator.appName.indexOf("Microsoft") != -1) {
+			return window[id];
+			} else {
+			return document[id];
+		}
+	}
+	//给左右的a添加事件
+	function leftrightclick(){
+		var lefta=$("#day_perv");
+		var righta=$("#day_next");
+		righta.click(function(){
+			var t=Date.parse($("#date").html())+3600*24*1000;
+			var d=new Date();
+			d.setTime(t);
+			var s=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()
+			location.replace(location.pathname+"?date="+s);
+		});
+		lefta.click(function(){
+			var t=Date.parse($("#date").html())-3600*24*1000;
+			var d=new Date();
+			d.setTime(t);
+			var s=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()
+			location.replace(location.pathname+"?date="+s);
+		});
+
+	}
+	function pendingPlan(plan_id,title){
+		var flashvars = {
+			auto_play: true,
+			stream_type: "高清",
+			//fullscreen_func: "FullScreen.toggle",
+			//chat_publisher_func: "message.flash_callback",
+			//microphone_func: "message.microphone_callback",
+			//player_fullscreen_func: "message.flash_fullscreen_callback",
+			//buy_box_func: "message.flash_buy_box_callback",
+			//error_func: "Player.error",
+			//video_end: "message.flash_end_callback",
+			//camera_handle: "message.flash_camera_handle",
+			plan_id: plan_id,
+			//showPlayerMessage: "showPlayerMessage",
+			//hidePlayerMessage: "hidePlayerMessage"
+		};
+
+		var params = {
+			menu: "false",
+			scale: "noScale",
+			allowFullscreen: "true",
+			allowScriptAccess: "always",
+			bgcolor: "",
+			wmode: "opaque"
+		};
+		$("#multi_screen li").each(function(){
+			if(!$(this).attr("plan_id")){
+				var player_id = "player_"+plan_id;
+				$(this).empty();
+				console.log($(this));
+				$(this).append('<div id="'+player_id+'" class="course-pic"></div>');
+				$(this).append('<span class="course-title">'+title+'</span>');
+
+				var attributes = {
+					id: player_id,
+					name: player_id
+				};
+				$("#"+player_id).parent("li").attr("plan_id",plan_id).attr("show",1);
+
+				swfobject.embedSWF(
+				"{utility_cdn::swf('/assets/swf/Player.swf')}",
+				player_id, "100%", "100%", "13.0.0",
+				"{utility_cdn::img('/assets/swf/expressInstall.swf')}",
+				flashvars, params, attributes, function (r) {
+				}
+				);
+
+				//恢复右边的按钮状态
+				$("#section .add-icon").each(function(){
+					if($(this).attr("plan_id") == plan_id){
+						$(this).hide();
+						$(this).next().show();
+					}
+				});
+
+				return false;
+			}
+
+		});
+	}
+	function removePlan(plan_id){
+		$("#multi_screen li").each(function(){
+			if($(this).attr("plan_id") && $(this).attr("plan_id") == plan_id){
+				var player_id = "player_"+plan_id;
+				$(this).empty();
+				$(this).removeAttr("plan_id").removeAttr("show");
+				$(this).append('<div class="course-pic"></div>');
+
+				//恢复右边的按钮状态
+				$("#section .del-icon").each(function(){
+					if($(this).attr("plan_id") == plan_id){
+						$(this).hide();
+						$(this).prev().show();
+					}
+				});
+
+				return false;
+			}
+		});
+	}
+    $(function(){
+        var win_w=$(window).width();
+        var win_h=$(window).height();
+        $('#coursebox').css({ 'width':win_w-385,'height':win_h-45 });
+        $('#tool').css({ 'height':win_h-45 });
+    })
+    $(window).resize(function (){
+        var win_w=$(window).width();
+        var win_h=$(window).height();
+        $('#coursebox').css({ 'width':win_w-385,'height':win_h-45 });
+        $('#tool').css({ 'height':win_h-45 });
+    })
+</script>

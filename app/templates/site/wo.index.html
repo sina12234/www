@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>{part '/site.main.orgname'} - 首页  - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 首页  - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 首页 - K12 在线学习 直播 小沃学堂 在线教育">
+<meta name="description" content="{part '/site.main.orgname'}  -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+<style type="text/css">
+.slide_imglist{ left:0;margin-left: 0;}
+.course-list-item .i-course-status{ padding: 0 5px;line-height: 15px;}
+.tab-tit, .tab-tit-bg{ position: relative;}
+</style>
+<body>
+<header class="index-head">
+    <div class="container">
+        <div class="row">
+            <div class="logo col-lg-5 col-md-5 col-sm-3 col-xs-4 pd0">
+                <a href="/site" id="logo">
+                    <img src="{$pro_logo}" alt="">
+                </a>
+            </div>
+			<div class="col-xs-3 visible-xs visible-sm">
+                <div class="site-nav-menu" id="site-menu">
+					<i class="menu-icon"></i>
+				</div>
+			</div>
+            <div id="login" class="login col-lg-15 col-md-15 col-sm-4 col-xs-4 pd0 right" >
+				<div class="m-sub-seach" id="m-sub-seach">
+					<i class="m-sub-seach-icon m-sub-sec"></i>
+				</div>
+				<div class="no-login right hidden">
+					<span class="hidden-xs">
+						<a class="right" href="/site.main.register">
+							<span class="tag">注册</span>
+						</a>
+							<span class="right">
+								|
+							</span>
+						<a class="right" href="/site.main.login">
+							<span class="tag m-login-img">登录</span>
+						</a>
+					</span>
+					<a class="right visible-xs" href="/site.main.login">
+						<span class="m-login-img"></span>
+					</a>
+                </div>
+                <a href="/user.message" id="msg" class="msg right hidden-xs hidden-sm">
+                  <i class="message-icon"></i>
+                  <i class="msg-num"></i>
+                </a>
+                <div class="i-user-menu right" >
+                    <div class="user-menu-info">
+                        <script type="text/html" id="user-menu-info">
+                            <span class="face left">
+                                <img src="<%= user.small%>" alt="">
+                            </span>
+                            <span class="i-user-name left hidden-xs">
+                                <%= user.name%>
+                            </span>
+                                <span class="menu-icon hidden-xs hidden-sm">
+                            </span>
+                            <div class="clear"></div>
+                            <ul class="user-menu-list">
+                                <% if(user.types.organization){ %>
+                                <li class="menu-tag hidden-xs hidden-sm">
+                                    <a href="/org">{'机构管理'|tr:'site.header'}</a>
+                                </li>
+                                <li class="menu-tag hidden-lg hidden-md">
+                                    <a href="/org.discount.listnew">{'机构管理'|tr:'site.header'}</a>
+                                </li>
+                                <% } %>
+                                <% if(user.types.organization && user.types.teacher){ %>
+                                <li class="menu-tag hidden-sm">
+                                    <a href="/teacher.course.teacherOfCourseList">{'教学管理'|tr:'site.header'}</a>
+                                </li>
+                                <% } %>
+								<li class="menu-tag">
+                                    <a href="/student.course.mycourse">学习中心</a>
+                                </li>
+								<li class="menu-tag visible-xs">
+                                    <a href="/student.order.myorder">我的订单</a>
+                                </li>
+                                <li class="menu-tag">
+                                    <a href="/student.main.infobase">基础设置</a>
+                                </li>
+								<li class="menu-tag hidden-lg">
+                                    <a href="/user.message">消息中心</a>
+                                </li>
+                                <li class="menu-tag">
+                                    <a href="/site.main.logout">退出</a>
+                                </li>
+                            </ul>
+                        </script>
+                    </div>
+                </div>
+				<form id="search_form" class="left">
+                <div class="wi-search-box hidden-xs hidden-sm ">
+                    <input type="text" class="c-fl wi-search-input fs14" id="search_form" autocomplete="off"  name="search_field" maxlength="15" placeholder="课程名称，科目"  />
+                    <span class="wi-search-icon fs16"  id="search">搜索</span>
+                </div>
+				</form>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="seach-input col-xs-20" id="search_form_wo" style="display:none;">
+    <input type="text" class="c-fl fs14 col-xs-17" autocomplete="off"  name="search_field" maxlength="15" placeholder="课程名称，科目"  />
+    <span id="search_id">搜索</span>
+</div>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ejs.min.js')}"></script>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ie8/ejs.ie8.js')}"></script>
+<![endif]-->
+<!--  mobileNav  -->
+<section class="mobile-nav" style="display:none;">
+	<div class="container">
+		<div class="row">
+			<ul class="clearfix" id="m-index-nav">
+				<li class="col-xs-5 pd0"><a href="/course.list">全部课程</a></li>
+				{part "/site/main/WoNav"}
+				{if isset($wonav) && !empty($wonav) }
+					{foreach $wonav as $v}
+					<li class="col-xs-5 pd0"><a href="{$v->url}">{$v->title}</a></li>
+				{/foreach}
+				{/if}
+                <!--<li class="col-xs-5 pd0"><a href="/site.main.WoDownload" target="_blank">APP下载</a></li>-->
+				<li class="col-xs-5 pd0"><a href="/student.main.growth">我的学习</a></li>
+			</ul>
+		</div>
+	</div>
+</section>
+<script type="template" id="categorys-menu" >
+    <% if(status == "1"){ for(var i = 0;i < leftMenu.length; i++ ){
+        for(var x = 0;x < leftMenu[i]["children"].length; x++){
+            var item=  leftMenu[i]["children"][x];
+    %>
+        <ul class="categorys-menu pos-rel">
+            <li class="parent-menu fs16">
+            	<a class="parent-menu-title" href="<%=item.second_url%>"><%=item.name%></a>
+            </li>
+            <li class="parent-menu fs14">
+            <% for(var cl = 0;cl < item["children"].length; cl++){ var childitem=item["children"][cl]; %>
+                <a href="<%=childitem.third_url%>"><%=childitem.name%></a>
+            <% };%>
+            </li>
+        </ul>
+    <% }; }; }; %>
+</script>
+<!-- nav -->
+<section id="nav">
+    <div class="container">
+        <div class="row">
+            <div class="hidden-sm hidden-xs categorys cWhite">
+                <p>
+                    <span class="fs16">
+                        <a class="menu-title" href="/course.list">全部课程</a>
+                    </span>
+                </p>
+                <div class="categorys-list" id="categorys-list">
+                </div>
+            </div>
+            <div class="nav left">
+                <div id="index-nav" class="col-lg-20 col-md-20 col-sm-20 col-xs-20 pd0">
+                <ul class="swiper-wrapper clearfix">
+                    {part "/site/main/WoNav"}
+                    {if isset($wonav) && !empty($wonav) }
+                        {foreach $wonav as $v}
+                        <li class="swiper-slide"><a href="{$v->url}">{$v->title}</a></li>
+                        {/foreach}
+                    {/if}
+					{if($orgInfo->oid ==842)}
+                    <!--<li class="swiper-slide"><a href="/site.main.WoDownload" target="_blank">APP下载</a></a></li>-->
+					{/if}
+                    <li class="swiper-slide"><a href="/student.main.growth">我的学习</a></li>
+                </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- banner -->
+<section id="banner">
+    <script type="text/html" id="banner-html">
+        <div id="slide" class="slide_wrap">
+            <ul class="slide_imglist conbox">
+                <% if (banner && banner.length>0 ) { for(var i =0;i< banner.length;i++) { %>
+                <li class="i<%= i+1%>" style="background-color:<%= banner[i].rgb%>;">
+                    <a href="<%= banner[i].slide_link%>" target="_blank">
+                        <div class="img-content container" >
+                            <div class=" pd0 col-lg-4 col-md-4 hidden-sm hidden-xs placeholder-ui"></div>
+                            <div class="img-box col-lg-16 col-md-16 col-sm-20 col-xs-20 pd0" >
+                                <img alt="" class="banner-img"   src="<%= banner[i].slide_url%>">
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </a>
+                </li>
+                <% } } else{ %>
+                <li class="i0" style="background-color:#9ff1ff;">
+                    <a href="/site" target="_blank">
+                        <div class="img-content container" >
+                            <div class=" pd0 col-lg-4 col-md-4 hidden-sm hidden-xs placeholder-ui" ></div>
+                            <div class="img-box col-lg-16 col-md-16 col-sm-20 col-xs-20 pd0" >
+                                <img alt="" class="banner-img"   src="{utility_cdn::img('/assets_v2/img/banner-wo.png')}">
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </a>
+                </li>
+                <% } %>
+            </ul>
+            <div class="switcher">
+            <% if (banner && banner.length>1 ) { for(var i =0;i< banner.length;i++) { %>
+              <a href="#" <%if (i == 0) { %>class="cur"<% } %>></a>
+            <% } }  %>
+            </div>
+        </div>
+    </script>
+</section>
+<script src="{utility_cdn::js('/assets_v2/js/jquery/jquery.xslider.js')}"></script>
+<script>
+    //search 搜索
+$(function () {
+    function searchSubmit(search_field) {
+        var url = '';
+        var search_field = $("input[name='search_field']").val();
+        url = '/course.list?';
+        if(search_field){
+            url = url+'search_field='+escape(search_field);
+        }
+        window.location.href=url;
+    }
+    $("#search_form").keydown(function(e){
+        var e = e || event,
+            keycode = e.which || e.keyCode;
+        if (keycode==13) {
+			var search_field = $("#search_form").find("input[name='search_field']").val();
+            searchSubmit(search_field);
+        }
+    })
+    $('#search').click(function () {
+        searchSubmit();
+    })
+	//手机端搜索
+	$('#search_id').click(function () {
+		var search_field = $("#search_form_wo input[name='search_field']").val();
+		searchSubmitId(search_field);
+	})
+    //login 登录
+    $.ajax('/site.main.wotop',{
+        type:'get',
+        dataType:'json',
+        success:function (data) {
+            var login = $('#login');
+            if(data.user.name!=''){
+                    login.find('.no-login').addClass('hidden');
+                }else{
+                    login.find('.no-login').removeClass('hidden');
+                }
+                if(!data.user.types.student){
+                    login.find('.i-user-menu,#msg').addClass('hidden');
+                    return false;
+                }else{
+                    if(data.user.retMessagesNum == 0){
+                      login.find('.msg-num').addClass('hidden');
+                    }
+                    var userHtml = $('#user-menu-info').html();
+                    login.find('.user-menu-info').html(ejs.render(userHtml,{ user:data.user}));
+                }
+            },
+            error:function (data) {
+                var login = $('#login');
+                login.find('.no-login').removeClass('hidden');
+            }
+        })
+
+		$('.user-menu-info').click(function(){
+				var menulist_hide = $(this).children('.user-menu-list');
+				menulist_hide.toggle();
+		})
+		$('#site-menu').click(function(){
+				var mobileNav = $('.mobile-nav');
+                mobileNav.toggle();
+		})
+		$('.m-sub-seach').click(function(){
+				var menulist_hide = $('.seach-input');
+				menulist_hide.toggle();
+		})
+})
+</script>
+<!--课程信息-->
+<!--[if lt IE 9]>
+<script>
+   /* if IE 8*/
+    if ( !Array.prototype.forEach ) {
+        Array.prototype.forEach = function forEach( callback, thisArg ) {
+            var T, k;
+            if ( this == null ) {
+                throw new TypeError( "this is null or not defined" );
+            }
+            var O = Object(this);
+            var len = O.length >>> 0;
+            if ( typeof callback !== "function" ) {
+                throw new TypeError( callback + " is not a function" );
+            }
+            if ( arguments.length > 1 ) {
+                T = thisArg;
+            }
+            k = 0;
+            while( k < len ) {
+                var kValue;
+                if ( k in O ) {
+                    kValue = O[ k ];
+                    callback.call( T, kValue, k, O );
+                }
+                k++;
+            }
+        };
+    }
+    if(!String.prototype.trim){
+        String.prototype.trim = function() {
+            return Trim(this);
+        }
+        function Trim(str){
+            str = str.replace(/^(\s|\u00A0)+/,'');
+            for(var i=str.length-1; i>=0; i--){
+                if(/\S/.test(str.charAt(i))){
+                    str = str.substring(0, i+1);
+                    break;
+                }
+            }
+            return str;
+        }
+    }
+</script>
+<![endif]-->
+<section class="floor" id="live" class="live" style="display:none">
+    <div class="container">
+        <div class="row">
+            <div class="floor-head tab-main">
+                <div class="floor-title left">最近直播
+                    <ul class="fs14 right">
+                        <li class="curr" id="liveUnstartedBtn"><a href="javascript:;">即将开始</a></li>
+                        <li class="" id="liveFinishBtn"><a href="javascript:;">精彩回放</a></li>
+                    </ul>
+                </div>
+                <div class="info-more right"><a href="/live.list" class="theme-link">更多 &gt;</a></div>
+                <div class="clear"></div>
+            </div>
+            <div class="floor-content">
+                <ul class="live-list left col-lg-20 col-md-20 col-sm-20 col-xs-20" id="liveFinish" style="display:none">
+
+                </ul>
+                <ul class="live-list left col-lg-20 col-md-20 col-sm-20 col-xs-20" id="liveUnstarted" style="display:none">
+
+                </ul>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="floor">
+</section>
+<script type="template" id="live-html">
+    <% data.forEach(function(item,i){ if(i>=5){ return false;} %>
+    <li class="col-lg-4 col-md-5 col-sm-6 col-xs-10 pd10 pl10 pr10">
+        <div class="border bgf">
+            <a class="live-c fs14 course-item-box" href="/course.plan.play/<%= item.plan_id %>" target="_blank" title="<%= item.class_name %>">
+                <div class="pic">
+                    <p><img src="/live.live.thumb/<%= item.plan_id %>"></p>
+                    <div class="live-s-bg"></div>
+                    <div class="live-title">
+                        <span class="c-fl"><%= item.course_name %></span>
+                        <span class="c-fr hidden-sm hidden-xs"><%= item.section_name %></span>
+                    </div>
+                    <% if(item.status == 2){ %>
+                        <div class="liveing-icon">正在上课</div>
+                    <% } %>
+                </div>
+                <div class="tab-tit">
+                    <div class="tab-title">
+                        <div class="live-state fs12">
+                        <% if(item.register == 1){ %>
+							<% if(item.price_resell){ %>
+								<% if(item.price_resell == 0){ %>
+									<span class="c-fl cGreen">免费课</span>
+								<% }else{ %>
+									<span class="c-fl cYellow">收费课</span>
+								<% } %>
+							<% }else{ %>
+								 <% if(item.fee_type == 0){ %>
+                                <span class="c-fl cGreen">免费课<% if(item.try == 1){ %>,可试看<% }else{ %> 需报名 <% } %></span>
+								<% }else{ %>
+									<span class="c-fl cYellow">收费课<% if(item.try == 1){ %>,可试看<% }else{ %>,需报名<% } %></span>
+								<% } %>
+							<% } %>
+
+                        <% }else{ %>
+							<% if(item.price_resell){ %>
+								<% if(item.price_resell == 0){ %>
+									<span class="c-fl cGreen">免费课</span>
+								<% }else{ %>
+									<span class="c-fl cYellow">收费课</span>
+								<% } %>
+							<% }else{ %>
+								<% if(item.fee_type == 0){ %>
+                                <span class="c-fl cGreen">免费课<% if(item.try == 1){ %>,可试看<% }else{ %> 需报名 <% } %></span>
+								<% }else{ %>
+									<span class="c-fl cYellow">收费课<% if(item.try == 1){ %>,可试看<% }else{ %>,需报名<% } %></span>
+								<% } %>
+
+							<% } %>
+
+                        <% } %>
+                        <span class="c-fr hidden-sm hidden-xs">讲师:
+                        <% if(item.admin_real_name){ %>
+                            <%= item.admin_real_name %>
+                        <% }else{ %>
+                            <%= item.admin_name %>
+                        <% } %>
+                        </span>
+                    </div>
+                <% if(item.status == 1){ %>
+                    <div class="live-state-btn"><%= item.start_time %>开始</div>
+                    <% }else{ %>
+                        <% if(item.register == 1){ %>
+                            <div class="live-state-btn"><button>进入课堂</button></div>
+                        <% }else{ %>
+                            <% if(item.try == 1){ %>
+                                <div class="live-state-btn"><button>立即试看</button></div>
+                             <% }else if(item.is_full == 1){ %>
+                                <div class="live-state-btn">报名已满></div>
+                            <% }else{ %>
+                                <div class="live-state-btn">
+                                    <button class="btn-gray register" data-classid="<%= item.class_id %>" data-courseid="<%= item.course_id %>" data-type="<%= item.fee_type %>" data-domain="<%= item.domain %>" data-planid=<%= item.plan_id %>>报名学习</button>
+                                </div>
+                            <% }%>
+                        <% }%>
+                    <% } %>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </li>
+<% }) %>
+</script>
+<script type="template" id="floor-section">
+    <% if( courses.length == 0 || !courses) { %>
+    <section class="floor no-data">
+        <div class="container">
+            <div class="row">
+                <div class="floor-head tab-main">
+                    <div class="floor-title left">
+                        全部课程
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="floor-content">
+                    <ul class="course-list">
+                        <% for(var i=0;i<5;i++) { %>
+                        <li class="course-list-item no-data col-md-4 col-xs-10">
+                            <div class="tab-li-img">
+                                暂无课程
+                            </div>
+                        </li>
+                        <% } %>
+                        <div class="clear"></div>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <% } else { %>
+    <% for(var p = 0 ; p < courses.length ; p++ ) { var courseTmp = courses[p]; %>
+    <section class="floor">
+        <div class="container">
+            <div class="row">
+                <div class="floor-head tab-main">
+                    <div class="floor-title left">
+                        <%= courseTmp.title%>
+                    </div>
+                    <!--<div class="floor-tab left tab-hd">-->
+                        <!--<a href="" class="curr tab-hd-opt">热门</a>-->
+                        <!--<a href="" class="tab-hd-opt">四年级</a>-->
+                        <!--<a href="" class="tab-hd-opt">五年级</a>-->
+                        <!--<a href="" class="tab-hd-opt">六年级</a>-->
+                    <!--</div>-->
+                    <div class="info-more right">
+                        <% if(courseTmp.recommend=='1') { %>
+                        <a href="<%= courseTmp.query%>" class="theme-link">
+                            更多 >
+                        </a>
+                        <% } else if(courseTmp.recommend=='2' && courseTmp.set_url) { %>
+                        <a href="<%= courseTmp.set_url%>" class="theme-link">
+                            更多 >
+                        </a>
+                        <% } %>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="floor-content">
+                    <% if (courseTmp.type==1){ %>
+                    <div class="left-thumb left col-lg-4 col-md-4 hidden-xs hidden-sm">
+                       <% if (courseTmp.thumb_left_url==""){ %>
+                        <a href="javascript:void(0);">
+                        <% }else{ %>
+                        <a href="<%= courseTmp.thumb_left_url%>">
+                        <% }%>
+                        <% if (courseTmp.thumb_left==""){ %>
+                            <img src="/assets_v2/img/no-banner.png" alt="">
+                        <% }else{ %>
+                            <img src="<%= courseTmp.thumb_left%>" alt="">
+                        <% }%>
+                        </a>
+                    </div>
+                    <% } %>
+                    <% if (courseTmp.type==0){ %>
+                    <ul class="course-list left col-lg-20 col-md-20 col-sm-20 col-xs-20">
+                    <% } else{ %>
+                    <ul class="course-list left col-lg-16 col-md-16 col-sm-20 col-xs-20 ">
+                    <% } %>
+                        <%  if(courseTmp['courses']){ if(toType(courseTmp.courses)=='object'){ courseTmp.courses = transformArr(courseTmp.courses);}; for(var m = 0 ; m < courseTmp.courses.length ; m++){ var course = courseTmp.courses[m]; %>
+                        <% if (courseTmp.type==0){ %>
+                        <li class="course-list-item col-lg-4 col-md-5  col-sm-5  col-xs-10">
+                        <% } else{ %>
+                        <li class="course-list-item col-lg-5 col-md-5  col-sm-5  col-xs-10">
+                        <% } %>
+                            <a  class="course-item-box" href="<%= course.url%>" target="_blank">
+                                <div class="tab-li-img">
+                                    <img  src="<%= course.thumb_med%>" alt="">
+                                    <% if (course.resellTips== 1){ %>
+                                        <i class="tuiguang-icon"></i>
+                                    <% }%>
+                                </div>
+                                <div class="tab-tit">
+                                    <div class="tab-title">
+                                        <%= course.title%>
+                                    </div>
+                                    <div class="tab-li-info">
+                                        <div class="info-left left">
+                                            <% if(course.price == 0 || course.fee_type==0){ %>
+                                              <span class="wo-course-price cGreen">免费</span>
+                                            <% } else {   %>
+                                            <span class="wo-course-price cRed">
+                                                <span class="fs12 mt2 ">￥</span>
+                                                <%= course.price%>
+                                            </span>
+                                            <% } %>
+                                            <% if(course['try'] && course['try'] == '1' ){ %>
+                                            <span class="i-course-status">可试看</span>
+                                            <% } %>
+                                        </div>
+                                        <% var userCount = parseInt(course.max_user)- parseInt(course.user_total);if(hotType == 1){ %>
+                                        <div class="info-right right">
+                                            <span class="icon count-icon"></span>
+                                            <span class="person-count"><%= course.user_total%></span>
+                                        </div>
+                                        <% } else if(hotType == 3) {   %>
+                                        <div class="info-right right">
+                                            <span class="icon live-icon"></span>
+                                            <span class="person-count"><%= course.vv%></span>
+                                        </div>
+                                        <% } else if(hotType == 2) {   %>
+                                        <div class="info-right right">
+                                            <% if(userCount>5){ %>
+                                            <span class="icon hot-icon"></span>
+                                            <span class="person-count">热报中</span>
+                                            <% } else if(userCount>0 && userCount<5){ %>
+                                            <span class="person-count">剩余<%= userCount%></span>
+                                            <% } else if(userCount<=0){ %>
+                                            <span class="person-count">已报满</span>
+                                            <% }%>
+                                        </div>
+                                        <% } %>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <% }} %>
+                        <div class="clear"></div>
+                    </ul>
+                    <% if (courseTmp.type==2){ %>
+                    <div class="right-thumb right col-lg-4 col-md-4 hidden-xs hidden-sm" >
+                        <% if (courseTmp.thumb_right_url==""){ %>
+                        <a href="javascript:void(0);">
+                        <% }else{ %>
+                        <a href="<%= courseTmp.thumb_right_url%>">
+                        <% }%>
+                        <% if (courseTmp.thumb_right==""){ %>
+                        <img src="/assets_v2/img/no-banner.png" alt="">
+                        <% }else{ %>
+                        <img src="<%= courseTmp.thumb_right%>" alt="">
+                        <% }%>
+                        </a>
+                    </div>
+                    <% } %>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <% }; }%>
+</script>
+<!--没有数据显示-->
+<!-- teacherlist -->
+<section id="teacherlist" class="floor">
+
+</section>
+<script type="template" id="teacher-html">
+    <% if (teacher.length > 0) { %>
+    <div class="container">
+        <div class="row">
+            <div class="floor-head tab-main">
+                <div class="floor-title left">推荐老师</div>
+                <div class="info-more right">
+                    <a href="/teacher.list" class="theme-link">更多 &gt;</a>
+                </div>
+            </div>
+            <div class="teacher-list">
+                <%for(var i = 0,nums = teacher.length;i < nums;i++){ var item = teacher[i]; %>
+                <div class="col-md-4 col-xs-10 teacher-item">
+                    <div class="teacher-info">
+                        <div class="teacher-face hidden-xs hidden-sm">
+                        <% if (item.planid) { %>
+						<a href="javascript:void(0);" data-planid="<%=item.planid%>" class="video-info">
+                            <img src="<%=item.thumb_big%>" alt="<%=item.real_name%>">
+                            <span class="t-video-info" data-planid="<%=item.planid%>">视频简介</span>
+                            <span class="t-video-icon"></span>
+						</a>
+                        <% }else { %>
+                        <a href="/teacher/detail/entry/<%=item.user_id%>" target="_blank">
+                            <img src="<%=item.thumb_big%>" alt="<%=item.real_name%>">
+    					</a>
+                        <% }; %>
+						</div>
+						<a href="/teacher/detail/entry/<%=item.user_id%>" target="_blank">
+							<div class="teacher-name fs16">
+								<%=item.real_name%>
+							</div>
+						</a>
+                    </div>
+					<a href="/teacher/detail/entry/<%=item.user_id%>" target="_blank">
+						<div class="teacher-intro">
+							<p class="fs14"><%=item.title%></p>
+							<p class="cGray"><%=item.desc%></p>
+						</div>
+					</a>
+                </div>
+                <% };%>
+            </div>
+        </div>
+    </div>
+    <% }; %>
+</script>
+<script type="template" id="studyNewsList">
+<!--资讯-->
+<section class="index-section hidden-sm floor">
+    <div class="container">
+        <div class="row">
+            <div class="floor-head tab-main">
+                <div class="floor-title left">{'学习资讯'|tr:'site.index'}</div>
+                <% if(data.size > 7){ %>
+                    <div class="info-more right"><a href="/activity.main.list" class="theme-link">更多 &gt;</a></div>
+                <% } %>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="row mt10">
+            <ul class="newslist-img pdl0 <% if(data.size > 4){ %> col-md-10 <% }else{ %> col-md-20 <% } %> col-xs-20">
+                <% if(data.size <= 4){ %>
+                    <% data.data.forEach(function(v,i) { %>
+                        <li class="<% if(data.size == 1){ %>
+                                        col-md-20 col-xs-20
+                                    <% }else{ %>
+                                        col-md-10
+                                    <% } %>">
+                            <a href="<% if(!v.notice_link){ %>
+                                        /activity.main.info/<%= v.pk_notice_id %>
+                                    <% }else{ %>
+                                        <%= v.notice_link%>
+                                    <% } %>" target="_blank">
+                                <div class="<% if(!v.thumb){ %>
+                                                col-md-20 col-xs-13
+                                            <% }else{ %>
+                                                col-md-14 col-xs-13
+                                            <% } %>">
+                                    <span class="news-title fs16"><i class="dott-icon"><%= i+1 %></i> <span><%= v.notice_title %></span></span>
+                                    <div class="news-intro"><%= v.sub_content %></div>
+                                    <span class="news-date"><%= v.update_time %></span>
+                                </div>
+                                <% if(v.thumb){ %>
+                                    <p class="news-img col-md-6 col-xs-7"><img src="<%= v.thumb %>"></p>
+                                <% } %>
+                            </a>
+                        </li>
+                    <% }); %>
+                <% }else{ %>
+                    <% data.data.forEach(function(v,i){  if(i>1){ return false;} %>
+                        <li class="col-md-20 col-xs-20">
+                            <a href="<% if(!v.notice_link){ %>
+                                        /activity.main.info/<%= v.pk_notice_id %>
+                                    <% }else{ %>
+                                        <%= v.notice_link%>
+                                    <% } %>" target="_blank">
+                                <div class="<% if(!v.thumb){ %>
+                                                col-md-20 col-xs-13
+                                            <% }else{ %>
+                                                col-md-14 col-xs-13
+                                            <% } %>">
+                                    <span class="news-title fs16"><i class="dott-icon"><%= i+1 %></i> <span><%= v.notice_title %></span></span>
+                                    <div class="news-intro"><%= v.sub_content %></div>
+                                    <span class="news-date"><%= v.update_time %></span>
+                                </div>
+                                <% if(v.thumb){ %>
+                                    <p class="news-img col-md-6 col-xs-7"><img src="<%= v.thumb %>"></p>
+                                <% } %>
+                            </a>
+                        </li>
+                    <% }); %>
+                <% } %>
+            </ul>
+            <% if(data.size > 4){ %>
+            <div class="newslist-txt col-md-10 fs14 hidden-xs">
+                <% data.data.forEach(function(v,i){ if(i>1){ %>
+                <a href="<% if(!v.notice_link){ %>
+                             /activity.main.info/<%= v.pk_notice_id %>
+                         <% }else{ %>
+                             <%= v.notice_link%>
+                         <% } %>">
+                    <i class="c-fl"><%= i+1 %></i><p class="col-md-12 length_sl"><%= v.notice_title %></p>
+                    <span class="c-fr cGray"><%= v.update_time %></span>
+                </a>
+                <% }}); %>
+            </div>
+            <% } %>
+        </div>
+        <% console.log(data.size) %>
+    </div>
+</section>
+</script>
+<!-- /teacherlist -->
+{part "/site.main.footer"}
+{part "/site.main.usernav.home"}
+<script>
+    $('header.usernav').attr('id','usernav');
+</script>
+<div id="rightWindow"></div>
+<script>$("#rightWindow").load("/org.rightWindow.rightWindow");</script>
+<script>
+$(function () {
+    var tList = $('#teacherlist');
+    tList.on('click','.video-info',function(){
+        var planId=$(this).attr('data-planid');
+		layer.open({
+			  type: 2,
+			  title:false,
+			  shadeClose: true,
+			  area: ['710px', '399px'],
+			  content:'/user.teacher.TeacherVideoPreview#'+planId  //iframe的url
+		});
+    })
+    var win_width = $(window).width();
+    if (win_width < 768) {
+        var mySwiper = new Swiper('#index-nav',{
+            slidesPerView : 4,});
+        var li_width = 0;
+            li_width=$("#index-nav li").outerWidth();
+        var li_index=$("#index-nav li").length;
+        $("#index-nav").css('width',li_width*li_index);
+    }
+    $.ajax('/site.main.woContent',{
+        type:'get',
+        dataType:'json',
+        success:function (data) {
+            if(data.code == 100){
+                if(data.logo != ''){
+                    $('#logo img').attr('src',data.logo);
+                }
+                initData(data);
+            }else{
+                var data = failData();
+                initData(data);
+            }
+        },
+        error:function () {
+            var data = failData();
+            initData(data);
+        }
+    });
+    $(window).scroll(function() {
+        if ($(document).scrollTop() > 200) {
+            $("#usernav").addClass('show');
+        } else {
+            $("#usernav").removeClass('show');
+        }
+		var document_width = $(window).width();
+		if(document_width<=640){
+			$("#usernav").removeClass('show');
+		}
+	});
+    $('#live').on('mouseenter', '#liveFinishBtn', function(event) {
+        event.preventDefault();
+        $('#liveFinishBtn').addClass('curr').siblings('li').removeClass('curr');
+        $('#liveFinish').show().siblings('ul').hide();
+    }).on('mouseenter', '#liveUnstartedBtn', function(event) {
+        event.preventDefault();
+        $('#liveUnstartedBtn').addClass('curr').siblings('li').removeClass('curr');
+        $('#liveUnstarted').show().siblings('ul').hide();
+    });
+    function initLiveData (data) {
+        if(data.living && data.living.status && data.living.status == 1 && data.living.data){
+            var d = data.living.data;
+            var liveHtml = $('#live-html').html();
+            if(d.finished&&d.finished.length>0){
+                $('#liveFinish').html(ejs.render(liveHtml,{ data: d.finished})).show();
+            }else{
+                $('#liveFinishBtn').hide();
+            }
+            if(d.unstarted&&d.unstarted.length>0){
+                $('#liveUnstarted').html(ejs.render(liveHtml,{ data: d.unstarted}));
+            }else{
+                $('#liveUnstartedBtn').hide();
+            }
+            if(!d.unstarted && !d.finished){
+                $('#live').hide();
+            }else if(!d.unstarted && d.finished){
+                $('#liveFinish').show();
+                $('#liveUnstarted').hide();
+                $('#liveFinishBtn').addClass('curr');
+                $('#live').show();
+            }else{
+                $('#liveUnstarted').show();
+                $('#liveFinish').hide();
+                $('#liveUnstartedBtn').addClass('curr');
+                $('#live').show();
+            }
+        }
+    }
+    function  initData(data) {
+        var teacherList = $('#teacherlist');
+        var teacherHtml = $('#teacher-html').html();
+        var bannerHtml = $('#banner-html').html();
+        $('#banner').html(ejs.render(bannerHtml,{ banner: data.banner}));
+        var categorysHtml = $('#categorys-menu').html() ;
+        $('#categorys-list').html(ejs.render(categorysHtml,{ leftMenu:data.leftMenu.data,status:data.leftMenu.status}));
+        var floorHtml = $('#floor-section').html();
+        $('#floor').html(ejs.render(floorHtml,{ courses: data.courses,hotType:data.HotType}));
+        if(data.noticeList && data.noticeList.data.length > 0){
+            $('#floor').append(ejs.render($('#studyNewsList').html(),{ data: data.noticeList} ));
+        }
+        teacherList.html(ejs.render(teacherHtml,{ teacher:data.teachers}));
+        initLiveData(data);
+        $('.person-count').each(function() {
+            var num = parseInt($(this).text());
+            if(num == 0) {
+                $(this).parent('.info-right').hide();
+            }
+        });
+        // 焦点图片淡隐淡现
+        $("#slide").Xslider({
+            affect: 'fade',
+            ctag: 'li', //内容标签 默认为<a>
+            speed: 800, //动画速度
+            space: 3000, //时间间隔
+            auto: true, //自动滚动
+            trigger: 'mouseover', //触发事件 注意用mouseover代替hover
+            conbox: '.conbox', //内容容器id或class
+            switcher: '.switcher', //切换触发器id或class
+            stag: 'a', //切换器标签 默认为a
+            current: 'cur', //当前切换器样式名称
+            rand: false //是否随机指定默认幻灯图片
+        });
+    }
+    function failData() {
+        var data={ };
+        data['banner'] = [];
+        data['leftMenu'] = [];
+        data['courses'] = [];
+        return data;
+    }
+})
+</script>
+</body>
+</html>

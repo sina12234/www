@@ -1,0 +1,552 @@
+/*header*/
+header {
+    background: $main-white-color;
+    -webkit-box-shadow: 0 0 5px rgba(0,0,0,.3);
+    -moz-box-shadow: 0 0 5px rgba(0,0,0,.3);
+    box-shadow: 0 0 5px rgba(0,0,0,.3);
+    -o-box-shadow: 0 0 5px rgba(0,0,0,.3);
+    -ms-box-shadow: 0 0 5px rgba(0,0,0,.3);
+    margin-bottom:5px;
+}
+.g-logo {
+    height:70px;
+    padding: 6px 0 5px 0;
+    line-height:55px;
+    img{
+        max-height:100%;
+        max-width:100%;
+    }
+}
+.g-nav {
+    height:70px;
+    line-height: 26px;
+    zoom: 1;
+    ul {
+        z-index: 10;
+        float:left;
+        margin: 0;
+        padding: 0;
+        li {
+            zoom: 1;
+            float:left;
+            position: relative;
+        }
+    }
+    a {
+        float:left;
+        margin: 0 5px;
+        padding: 0 15px;
+        outline-style: none;
+        font-size: 18px;
+        line-height:67px;
+        height:57px;
+        color:#333;
+        &.selected,&:hover {
+            color:$text-orange-color;
+            text-decoration: none;
+            border-bottom:4px solid $text-orange-color;
+        }
+    }
+}
+.navmore{
+    a {
+        float:left;
+        width: 20px;
+        height: 60px;
+        background: url(/assets_v2/img/link-dott.png) -42px 30px no-repeat;
+    }
+    &:hover{
+        border-bottom:none;
+    }
+    .nav-list{
+        position: absolute;
+        top: 50px;
+        left: -35px;
+        display: none;
+        padding: 5px;
+        width: 110px;
+        border:1px solid #ccc;
+        background: #fff;
+        a{
+            float: left;
+            padding: 0;
+            font-size: 16px;
+            margin: 0;
+            line-height:normal;
+            height:30px;
+            text-align: center;
+            line-height: 30px;
+            background:none;
+            width: 100%;
+            color: #333;
+            &:hover{
+                border-bottom:none;
+            }
+        }
+    }
+    &:hover .nav-list{
+        display:block;
+    }
+}
+/*顶部搜索*/
+.g-so {
+    float:right;
+    padding:0;
+    height:30px;
+    width:160px;
+    position:relative;
+    border:1px solid #ddd;
+    overflow:hidden;
+    border-radius:20px;
+    input{
+        padding-left:15px;
+        height: 30px;
+        font-size: 12px;
+        line-height: 30px;
+        width:125px
+    }
+}
+.btn-clear{
+    position:absolute;
+    top:5px;
+    right: 34px;
+    cursor: pointer;
+    @include sprite($btn-clear);
+    display: none;
+}
+.btn-search{
+    float:right;
+    margin:6px 10px 0 0;
+    cursor:pointer;
+    @include sprite($btn-search);
+}
+/*顶部用户登录*/
+.g-login{
+    float:right;
+    padding:0;
+}
+.g-unlogin{
+    float:right;
+    padding-top:10px;
+    line-height: 35px;
+}
+.user-menu{
+    position: relative;
+    float:right;
+    padding: 0;
+    color: #e3e3e3;
+    list-style-type: none;
+    li{
+        float:left;
+        line-height: 35px;
+        padding-top:15px;
+        height:50px;
+        a{
+            float: left;
+            display: block;
+            height: 35px;
+            color: #666;
+            text-align: center;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+        .down-menu{
+            position: absolute;
+            top:50px;
+            left: 0px;
+            z-index: 999;
+            display: none;
+            padding: 0;
+            width:100px;
+            background: #fff;
+            border:1px solid #ccc;
+            color: #333;
+            @include b-shadow($opacity:30);
+            a{
+                float:left;
+                width:100%;
+                margin:0;
+                text-align:left;
+                &:hover{
+                    background:$common-background-color;
+                }
+            }
+
+        }
+        &:hover .down-menu{
+            display: block;
+        }
+    }
+    .user-name{
+        float: left;
+        display: block;
+        max-width: 46px;
+        height: 35px;
+        text-align: left;
+        @extend %ellipsis;
+    }
+    .gn-user-name{
+        display:inline-block;
+        max-width: 70px;
+        @extend %ellipsis;
+    }
+}
+.user-menu-info{
+    .down-menu{
+        span{
+            float:left;
+            margin:10px 5px 0 8px;
+            display: block
+        }
+    }
+}
+.org-mechanism{
+    @include sprite($org-mechanism);
+}
+.compose-icon{
+    @include sprite($compose-icon);
+}
+.order-icon{
+    @include sprite($order-icon);
+}
+.card-icon{
+    @include sprite($card-icon);
+}
+.edu-icon{
+    @include sprite($edu-icon);
+}
+.study-icon{
+    @include sprite($study-icon);
+}
+.close-icon{
+    @include sprite($close-icon);
+}
+.msg-icon{
+    @include sprite($msg-icon);
+}
+.sign-sudio-icon{
+    @include sprite($sign-sudio-icon);
+}
+/*用户头像*/
+.face{
+    float: left;
+    display: block;
+    overflow: hidden;
+    margin-top: 3px;
+    margin-right: 5px;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    @include b-radius($corners:50%);
+    img{
+        width:30px;
+        height: 30px;
+        float:left;
+    }
+}
+.mail-icon{
+    position: relative;
+    margin-top: 10px;
+    @include sprite($mail-icon);
+}
+.msg-num {
+    position: absolute;
+    top:16px;
+    right:3px;
+    overflow: hidden;
+    padding: 0;
+    width:8px;
+    height:8px;
+    background: red;
+    font-size: 10px;
+    @include b-radius(50%);
+}
+/*banner*/
+.slide_wrap {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0;
+    width: 100%;
+    height: 360px
+}
+.slide_imglist {
+    position: absolute;
+    left: 50%;
+    margin-left: -960px;
+    width: 1920px;
+    height: 360px
+}
+.slide_imglist{
+    li{
+        position: absolute;
+        display: inline;
+        width: 100%;
+        height: 360px;
+        @include opacity(0);
+        .title {
+            position: absolute;
+            bottom: 0;
+            z-index: 333;
+            z-index: 10;
+            width: 100%;
+            text-align: left
+        }
+        .title-bg {
+            position: relative;
+            height: 40px
+        }
+        p {
+            position: absolute;
+            bottom: 0;
+            z-index: 34;
+            width: 100%;
+            height: 40px;
+            background:$main-black-color;
+            @include opacity(60);
+        }
+        .title-t {
+            position: relative;
+            z-index: 55;
+            display: block;
+            height: 40px;
+            color:$main-white-color;
+            font-size: 16px;
+            line-height: 40px;
+            @include opacity(100);
+        }
+    }
+    a {
+        position: relative;
+        float: left;
+        overflow: hidden;
+        width: 100%;
+        height: 360px;
+        //text-align: center
+    }
+    img {
+        height: 360px
+    }
+    .i1 {
+        z-index: 9;
+        @include opacity(100);
+    }
+    .i2 {
+        z-index: 1;
+        background:$main-white-color;
+    }
+    .i3{
+        z-index: 1;
+        background:$main-white-color;
+    }
+    .i4{
+        z-index: 1;
+        background:$main-white-color;
+    }
+}
+.switcher {
+    position: absolute;
+    bottom: 5%;
+    left: 45%;
+    z-index: 333;
+    overflow: hidden;
+    margin: 0 auto;
+    a{
+        float: left;
+        display: inline;
+        overflow: hidden;
+        margin-right: 10px;
+        width: 12px;
+        height: 12px;
+        border-radius: 100%;
+        background-color:$main-black-color;
+        text-align: center;
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 12px;
+        cursor: pointer;
+        @include opacity(60);
+    }
+    .cur {
+        background-color:$text-orange-color;
+        @include opacity(100);
+    }
+}
+@include screen(320px,768px) {
+    #search_id{
+        padding: 0 5px 0 5px;
+        height: 38px;
+        float: left;
+        background:$main-theme-color;
+        text-align: center;
+        font-size: 14px;
+        color: #fff;
+        line-height:38px;
+        border-bottom-right-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+    .seach-input{
+        display: none;
+        margin-bottom:7px;
+        input{
+            border: 1px solid $main-theme-color;
+            height: 38px;
+            line-height:38px;
+            font-size:14px;
+        }
+       .btn-clear{
+            top: 10px;
+            right: 75px;
+       }
+    }
+   .btn-clear{
+        top: 10px;
+        right: 75px;
+   }
+    .g-so{
+        padding: 0 15px 0 15px;
+        height: 38px;
+        position: relative;
+        background-color: #ffffff;
+        border:none;
+        overflow: hidden;
+        width:100%;
+        margin-bottom:7px;
+        input{
+            padding-left: 15px;
+            height: 38px;
+            font-size: 14px;
+            line-height: 38px;
+            border:1px solid $main-theme-color;
+            width:84%;
+        }
+        .btn-search{
+            cursor: pointer;
+            background-image: none;
+            background-color:$main-theme-color;
+            width: 50px;
+            height: 38px;
+            line-height:38px;
+            float:left;
+            margin:0;
+            text-align:center;
+            font-size:14px;
+            color:#fff;
+        }
+    }
+    .g-logo{
+        height:48px;
+        line-height:23px;
+        padding:10px 0 5px 0;
+        margin-left:10px;
+        img {
+            width:100%;
+        }
+    }
+    .g-unlogin{
+        float:right;
+        padding-top:0;
+        line-height: 30px;
+        color:#666;
+        a{
+          color:#666;
+          padding:10px 5px;
+          height: 35px;
+        }
+        .m-login-img{
+            @include sprite($m-login-img);
+            margin-top:4px 5px 0;
+        }
+    }
+    .g-nav{
+        background: #f1f1f1;
+        padding:0px;
+        overflow:hidden;
+        height:40px;
+        a{
+            width:100%;
+            text-align:center;
+            line-height:40px;
+            font-size: 16px;
+        }
+    }
+    .m-user-menu{
+        float:right;
+        padding:10px 5px 0 0;
+        position:relative;
+    }
+    .m-user-menu-info{
+        float:left;
+        line-height:30px
+    }
+    .m-user-show-menu{
+        position:absolute;
+        top:50px;
+        right:5px;
+        background: #fff;
+        border:1px solid #ccc;
+        color: #333;
+        width:100px;
+        z-index:100;
+        line-height:30px;
+        @include b-shadow($opacity:30);
+        a{
+            float:left;
+            width:100%;
+        }
+        span{
+            float:left;
+            margin: 5px 5px 0 5px;
+        }
+    }
+    .slide_imglist{
+        img{
+            height:150px;
+        }
+    }
+    .face{
+        float: left;
+        display: block;
+        overflow: hidden;
+        margin-top:-1px;
+        margin-right:0;
+        padding: 0;
+        width: 25px;
+        height: 25px;
+        @include b-radius($corners:50%);
+        img{
+            width:25px;
+            height: 25px;
+            float:left;
+        }
+    }
+    .g-login{
+         .m-sub-seach{
+            float:left;
+            height:34px;
+            .m-sub-seach-icon{
+                @include sprite($m-seach);
+                margin-top:12px;
+            }
+        }
+    }
+    .m-sub-seach{
+        float:left;
+        .m-sub-seach-icon{
+            @include sprite($m-seach);
+            margin-top:12px;
+        }
+    }
+    .mobile-nav{
+        position: absolute;
+        top:45px;
+        z-index:100;
+        background:#f7f7f7;
+        box-shadow:#666 0 2px 5px;
+        li{
+            height:48px;
+            font-size:14px;
+            line-height:48px;
+            text-align:center;
+        }
+    }
+}

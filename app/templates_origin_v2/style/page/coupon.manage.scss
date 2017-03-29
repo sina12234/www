@@ -1,0 +1,227 @@
+// 优惠劵管理
+.couponlist{
+	@at-root .coupon-type{
+		background:#ff7979;
+		height:135px;
+		position: relative;
+		overflow: hidden;
+		color:#fff;
+		&:after{
+			content: "";
+		    position: absolute;
+		    display: block;
+		    width: 100%;
+		    height:3px;
+		    bottom:0px;
+		    background-color: #ff7979;
+		    background-position:-5px -3px;
+			background-size:10px 6px;
+		    background-repeat:repeat-x;
+		    background-image:linear-gradient(-45deg, #fff 25%, transparent 25%, transparent),
+		                     linear-gradient(-135deg, #fff 25%, transparent 25%, transparent),
+		                     linear-gradient(-45deg, transparent 75%, #fff 75%),
+		                     linear-gradient(-135deg, transparent 75%, #fff 75%);
+		}
+
+	}
+	@at-root .coupon-type-discount{
+		background:#00c9b9;
+		&:after{
+			background-color:#00c9b9;
+		}
+	}
+	@at-root .coupon-type-invalid{
+		background:#ccc;
+		&:after{
+			background-color:#ccc;
+		}
+	}
+	@at-root .coupon-msg{
+		float:left;
+		width:100%;
+		display: block;
+		height:135px;
+		border:1px solid $border-color;
+		border-top:0;
+		padding:18px 20px 10px 20px;
+	}
+	.coupon-item{
+		padding:6px 6px 7px 7px;
+		a{
+			position: relative;
+			z-index: 5;
+		}
+		.c-del{
+			position:absolute;
+			width:0;
+			vertical-align:middle;
+			text-align:center;
+			padding:22px 0;
+			height:50px;
+			right:-25px;
+			right:0\9;
+			top:-25px;
+			background:rgba(0,0,0,.3);
+			background:#666\9;
+			color:#fff;
+			font-size:20px;
+			overflow:hidden;
+			z-index: 5;
+			cursor:pointer;
+			-webkit-transition:all .3s ease;
+			-moz-transition:all .3s ease;
+			transition:all .3s ease;
+			-webkit-transform: rotate(45deg);
+				-ms-transform: rotate(45deg);
+				 -o-transform: rotate(45deg);
+					transform: rotate(45deg);
+		}
+		.coupon-main{
+			float:left;
+			display:block;
+			width:100%;
+			vertical-align:middle;
+			text-transform:capitalize;
+			position: relative;
+			overflow:hidden;
+			&:after,&:before{
+				content: '';
+				position: absolute;
+				border:1px solid transparent;
+				width: 0;
+				height: 0;
+				z-index:2;
+			}
+			&:before{
+				top:0;
+				left:0;
+			}
+			&:after{
+				bottom:0;
+				right:0;
+			}
+		}
+		.gray-btn{
+			width:90%;
+		}
+		.used-type{
+			position: absolute;
+			@include sprite($used-type-used);
+			right:10px;
+			bottom:10px;
+		}
+		.used-type-invalid{
+			position: absolute;
+			@include sprite($used-type-invalid);
+			right:10px;
+			bottom:10px;
+		}
+		.used-type-timelimit{
+			position: absolute;
+			@include sprite($used-type-timelimit);
+			right:10px;
+			bottom:10px;
+		}
+		&:hover{
+			.c-del{
+				width:50px;
+				background:rgba(0,0,0,.9);
+				background:#999\9;
+			}
+			.coupon-main{
+				&:after,&:before{
+					width:100%;
+					height:100%;
+				}
+				&:before{
+					border-top-color: #b0b0b0;
+					border-right-color: #b0b0b0;
+					-webkit-transition: width 0.1s ease-out, height 0.1s ease-out 0.1s;
+							transition: width 0.1s ease-out, height 0.1s ease-out 0.1s;
+				}
+				&:after{
+					border-bottom-color: #b0b0b0;
+					border-left-color: #b0b0b0;
+					-webkit-transition: border-color 0s ease-out 0.2s, width 0.1s ease-out 0.2s, height 0.1s ease-out 0.3s;
+							transition: border-color 0s ease-out 0.2s, width 0.1s ease-out 0.2s, height 0.1s ease-out 0.3s;
+				}
+			}
+			.coupon-type{
+				background:#dd6868;
+				&:after{
+					background-color:#dd6868;
+				}
+			}
+			.coupon-type-discount{
+				background-color:#01aa9d;
+				&:after{
+					background-color:#01aa9d;
+				}
+			}
+			.coupon-type-invalid{
+				background-color:#999;
+				&:after{
+					background-color:#999;
+				}
+			}
+			.coupon-msg{
+				border:1px solid $common-border-color;
+				border-top:0;
+			}
+			.gray-btn{
+				background:#fe8135;
+				border:#fe8135;
+				color:#fff;
+			}
+		}
+
+	}
+}
+.choices-icon{
+	@include sprite($edit-noborder);
+}
+i,var{ font-style:normal;}
+.table-grid-code{ 
+	width: 100%;
+	overflow: hidden;
+	text-align: center;
+	dl{ 
+		border-left: 1px solid #e3e3e3;
+		border-right: 1px solid #e3e3e3;
+		&:nth-child(even){ 
+			background: #f7f7f7;
+			border: 1px solid #e3e3e3;
+		}
+		&:last-child{ 
+			border-bottom: 1px solid #e3e3e3;
+		}
+	}
+	dd{ 
+		line-height: 36px;
+		overflow: hidden;
+    	text-overflow: ellipsis;
+    	white-space: nowrap;
+    }
+    .hd-title{ 
+    	background: #f1f1f1; 
+    	border: 1px solid #e3e3e3;
+    	font-size: 14px;
+    }
+}
+@include screen(320px,768px) {
+	.search-frame{ 
+		width: 50%;
+		.search-input{ 
+			width: 79%;
+		}
+	}
+	.form-horizontal{
+		.timing{
+			margin-right: 0;
+			margin-bottom: 10px;
+		}
+		input[name="create_code"]{
+			width: 50px;
+		}
+	}
+}

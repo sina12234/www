@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>明星教师 - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="云课 - 明星教师 - 专业的在线学习平台">
+<meta name="keywords" content="云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content=" 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/index.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/common.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+</head>
+<body>
+<!-- header -->
+{part "/index.main.top/teacher"}
+{part "/index.main.nav/teacher"}
+<section class="mt20">
+    <div class="container">
+        <div class="filter-section fs14">
+            <dl class="col-sm-20 col-md-20 col-lg-20 col-xs-20" >
+                <dd>
+                    <a data="-1" href="{utility_tool::getUrl($path,'grade','-1')}" {if($pm['grade'] == -1)}class="curr"{/if}>全阶段</a>
+					<a data="4000" href="{utility_tool::getUrl($path,'grade',4000)}" {if($pm['grade'] == 4000)}class="curr"{/if}>学前</a>
+                    <a data="1000" href="{utility_tool::getUrl($path,'grade',1000)}" {if($pm['grade'] == 1000)}class="curr"{/if}>小学</a>
+                    <a data="2000" href="{utility_tool::getUrl($path,'grade',2000)}" {if($pm['grade'] == 2000)}class="curr"{/if}>初中</a>
+                    <a data="3000" href="{utility_tool::getUrl($path,'grade',3000)}" {if($pm['grade'] == 3000)}class="curr"{/if}>高中</a>
+                </dd>
+            </dl>
+            <dl class="mt10 col-sm-20 col-md-20 col-lg-20 col-xs-20">
+                <dd>
+                <a href="{utility_tool::getUrl($path,'cate','-1')}"  {if($pm['cate'] == -1)}class="curr"{/if}>全科目</a>
+                {foreach($categorys as $ck=>$co)}
+                <a href="{utility_tool::getUrl($path,'cate',$ck)}"  {if($pm['cate'] == $ck)}class="curr"{/if}>{$co}</a>
+                {/foreach}
+                </dd>
+            </dl>
+            {* <dl class="col-sm-6 col-md-20 col-lg-20 col-xs-6">
+                <dd><a href="#" class="curr">全类型</a><a href="#">在线课</a><a href="#">线下课</a><a href="#">1对1</a></dd>
+            </dl>*}
+        </div></div>
+    </section>
+<!-- 列表 -->
+<section class="">
+    <div class="container">
+        <div class="sort-row fs14 hidden-xs">
+            <ul class="sort">
+                <li {if($pm['sort'] == 'weight:desc')}class="curr"{/if}>
+					<a href="{utility_tool::getUrl($path,'sort','weight:desc')}">综合排序</a>
+				</li>
+                <li {if($pm['sort'] == 'student_count:desc')}class="curr"{/if}>
+               		<a href="{utility_tool::getUrl($path,'sort','student_count:desc')}">人气</a>
+			   </li>
+               <li {if($pm['sort'] == 'avg_score:desc')}class="curr"{/if}>
+                 	<a href="{utility_tool::getUrl($path,'sort','avg_score:desc')}">评分</a>
+               </li>
+             <!--li><a href="#">价格<span class="triangle"><span class="triangle-up c-fr"></span><span class="triangle-down c-fr"></span></span></a></li-->
+            </ul>
+					{*<div class="area col-sm-2 fs14">
+                        <cite>城市</cite>
+						<dl>
+                            <dt class="interval-solid">猜你们在：<span>北京</span></dt>
+                            <dd class="dashed-solid"><span class="c-fl">A</span>
+							<p class="c-fl">
+							<a href="#">安宁</a><a href="#">安庆</a><a href="#">安康</a>
+							<a href="#">安康</a><a href="#">安康</a><a href="#">安康</a>
+							</p>
+							</dd>
+                            <dd class="dashed-solid"><span class="c-fl">B</span><p class="c-fl"><a href="#">北京</a></p></dd>
+                            <dd class="dashed-solid"><span class="c-fl">C</span><p class="c-fl"><a href="#">沧州</a><a href="#">长春</a></p></dd>
+						</dl>
+                    </div>*}
+                </div>
+
+				{if(!empty($teacherList))}
+                <ul class="teacher-list" id="teacherList">
+				{foreach($teacherList as $to)}
+                    <li class="fs12">
+                        <div class="col-sm-6 col-xs-6 col-lg-4 col-md-6">
+							<div class="user-avatar">
+								<a href="{$to->show_url}" target="_blank">
+                                <img src="{utility_cdn::file($to->thumb_big)}" alt="{$to->name}">
+								</a>
+							</div>
+                            {if(!empty($to->planid))}
+                           <span class="video-box visible-lg" data-planid="{$to->planid}">
+								<span class="index-teac-vio pos-rel"></span>
+								<span class="video-j pos-abs">视频简介</span>
+                                <span class="video-img"></span>
+                          </span>
+                          {/if}
+
+						  {*  <a href="#" class="video-icon icon"></a>*}
+						</div>
+                        <div class="col-sm-8 col-xs-14 fs14 col-lg-7 col-md-9">
+                            <p class="item fs20 col-xs-20">
+							<a href="{$to->show_url}" target="_blank">
+							{if(!empty($to->real_name))}{$to->real_name}{else}{$to->name}{/if}
+							</a>
+							{if(!empty($to->org_subname))}<span class="b-blue fs12">{$to->org_subname}</span>{/if}</p>
+						   <p class="item cGray2  col-xs-20"><span class="icon"></span>{$to->city} {if(!empty($to->years))}{$to->years}年教龄{/if}</p>
+                           {if(!empty($to->subject_name))} <p class="item cGray2 col-sm-20 hidden-xs">科目：{$to->subject_name}</p>{/if}
+                           {if(!empty($to->college))} <p class="item cGray2 col-sm-20 hidden-xs">毕业于 {$to->college}</p>{/if}
+                        </div>
+                        <div class="col-sm-6 fs14 col-lg-5 col-md-6 mobile-phone">
+                            <p class="item cGray2 cg_fl col-xs-6 col-lg-20 col-sm-20 col-md-20">
+                            <span class="fs26 cYellow  col-lg-10 col-sm-20 col-md-10">
+							{if(!empty($to->avg_score))}
+                            {round($to->avg_score,1) < 0 ? 0 : round($to->avg_score,1)}分
+                            {else}
+                            &nbsp;
+                            {/if}
+                            </span>
+
+                            <p class="item cGray2 col-xs-6 col-lg-20 col-sm-20 col-md-20">
+                            {if(!empty($to->score_user_count))}<span class="cYellow  col-lg-10 col-sm-20 col-md-20">{$to->score_user_count}<b class="cGray" style="font-weight:none;">人评价</b></span></p>{/if}
+
+                            <p class="col-xs-12 col-lg-20 col-sm-20 col-md-20">{if(!empty($to->course_count))}{$to->course_count}个课程&nbsp;{/if}
+							{if(!empty($to->student_count))}{$to->student_count}个学生{/if}</p>
+                        </div>
+                      {*  <div class="col-sm-4 fs14">
+                            <p class="item cGray2"><span class="b-gray cGray c-fl"><span class="id-icon icon"></span><span class="c-fl hidden-xs">身份认证</span></span></p>
+                            <p class="item cGray2"><span class="b-gray cGray c-fl"><span class="degrees-icon icon"></span><span class="hidden-xs">学历认证</span></p>
+                            <p class="item cGray2 hidden-xs"><span class="bg-blue fs12">1对1</span> <span class="cYellow">￥26</span><span class="fs12">起</span></p>
+                        </div>*}
+                    </li>
+					{/foreach}
+                </ul>
+				{else}
+                <div class="pos-rel no-result">
+                	<div class="pos-abs no-result-tips cGray2">
+                        <p><img src="{utility_cdn::img('/assets_v2/img/platform/pet3.png')}" alt=""></p>
+                        <p class="fs16">没有找到符合您要求的明星教师，请调整一下条件再试试~</p>
+                    	<p>你也可以点<a href="/index.teacher.list" class="cBlue">这里</a>返回默认条件！</p>
+                    </div>
+                </div>
+
+				{/if}
+				{if(!empty($teacherList))}
+                <div class="page-list fs14" id="teacher_page">
+				</div>
+				<script>
+					page("teacher_page","{utility_tool::getUrl($path)}",{$pm['size']},{$pm['page']},{$pm['total']});
+				</script>
+				{/if}
+			</div>
+        </section>
+    <!-- footer -->
+	{part '/index.main.footer'}
+</body>
+
+<script>
+var top_nav_img="{utility_cdn::img('/assets_v2/img/qrcode.jpg')}";
+</script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/top_nav.js')}"></script>
+
+</html>
+
+<script>
+$(function() {
+    var teacherList=$('#teacherList');
+    var planId;
+    $(".so-input input[name='search_field']").attr("placeholder","搜老师名称，科目试试吧");
+	teacherList.on('click','.video-box',function(){
+        planId=$(this).attr('data-planid');
+		layer.open({
+			  type: 2,
+			  title:false,
+			  shadeClose: true,
+			  area: ['710px', '399px'],
+			  content:'/index.teacher.TeacherVideoPreview#'+planId  //iframe的url
+		});
+	})
+})
+</script>

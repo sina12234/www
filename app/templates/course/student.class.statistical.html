@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="title" content="{part '/site.main.orgname'} - 章节统计 - 云课 - 专业的在线学习平台">
+    <meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+    <meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+    <title class="head-title">学生统计</title>
+    {part "/site.main.header"}
+</head>
+<body>
+{part "/site.main.nav3"}
+<section>
+    <div class="container mt10 mb30 ed-student-count border-main-content">
+        <div class="ed-title ">
+            <div class="tab-button col-xs-6 col-lg-2">
+                学生统计
+            </div>
+            <div class="title col-lg-15 col-md-15 col-sm-15 col-xs-14 " id="head-title">
+            </div>
+        </div>
+        <div class="ed-student-info">
+            <div class="info-head">
+                <div class="student-name">
+                    学生: <span class="name" id="student-name"></span>
+                </div>
+                <div class="update-time ">
+                    更新时间: <span class="time" id="update-time"></span>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <table class="table-grid" id="userStatTotal">
+                <thead>
+                <tr>
+                    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-4">到课率</td>
+                    <td class="col-lg-1 col-md-1 col-sm-2 col-xs-3">准时</td>
+                    <td class="col-lg-1 col-md-1 col-sm-2 hidden-xs">迟到</td>
+                    <td class="col-lg-1 col-md-1 col-sm-2 hidden-xs">未到</td>
+                    <td class="col-lg-1 col-md-1 col-sm-2 col-xs-3">点赞</td>
+                    <td class="col-lg-1 col-md-1 col-sm-2 hidden-xs">发言</td>
+                    <td class="col-lg-1 col-md-1 hidden-sm hidden-xs">举手</td>
+                    <td class="col-lg-2 col-md-2 hidden-sm col-xs-3">聊天</td>
+                    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-3">答题</td>
+                    <td class="col-lg-2 col-md-2 hidden-sm hidden-xs">询问回答率</td>
+                    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-4">观看直播</td>
+                    <td class="col-lg-2 col-md-2 col-sm-2 hidden-xs">观看录播</td>
+                    <td class="col-lg-2 col-md-2 col-sm-2 hidden-xs">下载资料</td>
+                </tr>
+                </thead>
+                <tbody class="fs12">
+                <tr>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="ed-student-info">
+            <div class="info-head">
+                <div class="more-info">
+                    详细:
+                </div>
+            </div>
+            <table class="table-grid" id="userStatMore">
+                <thead>
+                <tr>
+                    <td class="col-lg-1 col-md-1 col-sm-2 col-xs-4">课时</td>
+                    <td class="col-lg-1 col-md-1 col-sm-2 hidden-xs">排名</td>
+                    <td class="col-lg-2 col-md-2 col-sm-3 col-xs-3">到课</td>
+                    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-3">赞数</td>
+                    <td class="col-lg-2 col-md-2 col-sm-2 hidden-xs">发言</td>
+                    <td class="col-lg-2 col-md-2 hidden-sm hidden-xs">举手</td>
+                    <td class="col-lg-2 col-md-2 hidden-sm col-xs-3">聊天</td>
+                    <td class="col-lg-2 col-md-2 col-sm-3 col-xs-3">答题</td>
+                    <td class="col-lg-2 col-md-2 hidden-sm hidden-xs">询问</td>
+                    <td class="col-lg-2 col-md-2 col-sm-3 col-xs-4">观看直播</td>
+                    <td class="col-lg-2 col-md-2 col-sm-3 hidden-xs">观看录播</td>
+                </tr>
+                </thead>
+                <tbody class="fs12">
+
+                </tbody>
+            </table>
+        </div>
+</section>
+{part "/site.main.footer"}
+</body>
+</html>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ejs.min.js')}"></script>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ie8/ejs.ie8.js')}"></script>
+<![endif]-->
+<script id="userStatTpl" type='template'>
+    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-4">
+        <%= UserTotal.attendance %>%
+    </td>
+    <td class="col-lg-1 col-md-1 col-sm-2 col-xs-3">
+        <%= UserTotal.onTime %>次
+    </td>
+    <td class="col-lg-1 col-md-1 col-sm-2 hidden-xs">
+        <%= UserTotal.late %>次
+    </td>
+    <td class="col-lg-1 col-md-1 col-sm-2 hidden-xs">
+        <%= UserTotal.noTo %>次
+    </td>
+    <td class="col-lg-1 col-md-1 col-sm-2 col-xs-3">
+        <%= UserTotal.zan %>次
+    </td>
+    <td class="col-lg-1 col-md-1 col-sm-2 hidden-xs">
+        <%= UserTotal.call %>次
+    </td>
+    <td class="col-lg-1 col-md-1 hidden-sm hidden-xs">
+        <%= UserTotal.handup %>次
+    </td>
+    <td class="col-lg-2 col-md-2 hidden-sm col-xs-3">
+        <%= UserTotal.discuss %>条
+    </td>
+    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-3">
+        <%= UserTotal.correct %>%
+    </td>
+    <td class="col-lg-2 col-md-2 hidden-sm hidden-xs">
+        <%= UserTotal.answerRate %>%
+    </td>
+    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-4">
+        <%= UserTotal.vvRecord %>分钟
+    </td>
+    <td class="col-lg-2 col-md-2 col-sm-2 hidden-xs">
+		<%= UserTotal.vtRecord%>分钟
+        <%= UserTotal.vtLive %>次
+    </td>
+    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-3 hidden-xs">-</td>
+</script>
+<script id="userMoreStatTpl" type="template">
+    <% for(var i in UserList) { var listDate = UserList[i]; %>
+    <tr>
+        <td class="col-lg-1 col-md-1 col-sm-2 col-xs-4">
+            <%= listDate.planName%>
+        </td>
+        <td class="col-lg-1 col-md-1 col-sm-2 hidden-xs">
+            <%= listDate.orderNum%>
+        </td>
+        <td class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+            <% if(listDate.status == 1){ %>准时
+            <% } else if( listDate.status == 2 ){ %>迟到
+            <% } else if( listDate.status == 3 ){ %>未到
+            <% }%>
+        </td>
+        <td class="col-lg-2 col-md-2 col-sm-2 col-xs-3">
+            <%= listDate.zan%>次
+        </td>
+        <td class="col-lg-2 col-md-2 col-sm-2 hidden-xs">
+            <%= listDate.call%>次
+        </td>
+        <td class="col-lg-2 col-md-2 hidden-sm hidden-xs">
+            <%= listDate.handup%>次
+        </td>
+        <td class="col-lg-2 col-md-2 hidden-sm col-xs-3">
+            <%= listDate.discuss%>条
+        </td>
+        <td class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+            <a class="blue-link" href="/course.stat.GetStudentQuestion/<%= i%>/<%= userId%>" ><%= listDate.inClassTest%></a>
+        </td>
+        <td class="col-lg-2 col-md-2 hidden-sm hidden-xs">
+            <%= listDate.ask%>
+        </td>
+        <td class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
+            <%= listDate.vvRecord%>分钟
+        </td>
+        <td class="col-lg-2 col-md-2 col-sm-3 hidden-xs">
+            <%= listDate.vtRecord%>分钟
+            <%= listDate.vtLive%>次
+        </td>
+    </tr>
+    <% };%>
+</script>
+<script>
+$(function () {
+    var userStatMore=$('#userStatMore');
+    var userStatTotal=$('#userStatTotal');
+    var userId = '{$userId}';
+    var classId = '{$classId}';
+    var html = '<div class="no-data">暂时没有数据</div>';
+    $.ajax({
+        url: '/course.stat.GetStudentPlanStatByPidAjax/' + classId + '/' + userId,
+        type: 'post',
+        dataType: 'json',
+        success: function (data) {
+            if (data.code == 0) {
+                var userStatHtml = $('#userStatTpl').html();
+                var userMoreStatHtml = $('#userMoreStatTpl').html();
+                var UserTotal = data.data.userStatTotal;
+                (data.data.userStat=='') ? UserList=0 : UserList=data.data.userStat;
+                $('#head-title').text(data.data.courseName+' '+data.data.className);
+                $('#student-name').text(data.data.studentName);
+                if(data.data.userStatTotal.lastUpdated == '0'){
+                    $('#update-time').text('----');
+                }else{
+                    $('#update-time').text(data.data.userStatTotal.lastUpdated);
+                }
+                if(UserTotal == 0) {
+                    userStatTotal.find('tbody').html(html)
+                }else{
+                    userStatTotal.find('tbody tr').html(ejs.render(userStatHtml, { "UserTotal":UserTotal }));
+                }
+                if(UserList == 0) {
+                    userStatMore.find('tbody').html(html);
+                }else{
+                    userStatMore.find('tbody').html(ejs.render(userMoreStatHtml, { "UserList":UserList,"userId":userId }));
+                }
+            } else if (data.code == -1) {
+                $('#userStatTotal tbody').html(html);
+            } else if (data.code == -3) {
+                location.href = '/course.stat.Error';
+            }
+        },
+        error: function () {
+            layer.open({
+                title: '提示',
+                content: '网络开小差了！'
+            });
+        }
+    });
+
+});
+</script>

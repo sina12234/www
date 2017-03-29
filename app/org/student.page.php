@@ -1,0 +1,185 @@
+<?php
+class org_student extends STpl{
+    public  function __construct(){
+        //如果没有登陆到登陆界面
+        $this->user = user_api::loginedUser();
+        if(empty($this->user)){
+            $this->redirect("/site.main.login");
+        }   
+        $domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","domain");
+        $this->domain = $domain_conf->domain;
+        $org=user_organization::subdomain();
+        if(!empty($org)){
+            $this->orgOwner=$org->userId; //机构所有者id 以后会根据域名而列取
+        }else{
+            header('Location: https://www.'.$this->domain);
+        }   
+        $this->orgInfo=user_organization::getOrgByOwner($this->orgOwner);
+        //判断管理员和机构拥有者
+        $special = user_api::getTeacherSpecial($this->orgInfo->oid,$this->user['uid']);
+        if((empty($special) || empty($special->user_role&0x04)) && ($this->user["uid"]!=$this->orgOwner)){
+            header('Location: //'.$org->subdomain);
+        }    
+    }
+
+    public function pageDetail($inPath)
+    {
+
+        if (!isset($inPath[3]) || empty($inPath[3])) {
+            $this->redirect('/org/student/list');
+        }
+
+        $sid = (int)($inPath[3]);
+        $geo = $grade = '';
+
+        //$info = user_api::getStudentProfile($sid);
+        $info=user_api::getUser($sid);
+        if (empty($info)) {
+            $this->redirect('/org/student/list');
+        }
+
+        if (!empty(region_geo::$region[$info->student->region_level0])) {
+            $geo .= region_geo::$region[$info->student->region_level0];
+        }
+
+        if (!empty(region_geo::$region[$info->student->region_level1])) {
+            $geo .= region_geo::$region[$info->student->region_level1];
+        }
+
+        if (!empty(region_geo::$region[$info->student->region_level2])) {
+            $geo .= region_geo::$region[$info->student->region_level2];
+        }
+
+        if (!empty($info->student->grade)) {
+             $grade = course_grade::$subname[$info->student->grade];
+        }
+        $list = $this->_getStudentCourse($sid);
+        $this->assign('list', $list);
+        $this->assign('geo', $geo);
+        $this->assign('grade',SLanguage::tr($grade,"org"));
+        $this->assign('uid',$sid);
+        $this->assign('info', $info);
+        $this->render('/org/s-info.html');
+    }
+
+    private function _getStudentCourse($sid)
+    {
+        $queryArr = array(
+            'dbName' => 'db_course',
+            'table' => 't_course_user',
+            'condition' => " fk_user_owner={$this->orgOwner} AND status=1 AND fk_user={$sid}"
+        );
+
+        $res = common_api::getIdStr($queryArr);
+        if (empty($res->result->items)){
+            return array();
+        }
+        $idArr = $classArr = [];
+        foreach ($res->result->items as $v) {
+            $idArr[] = $v->fk_course;
+            $classArr[$v->fk_course] = $v->fk_class;
+        }
+        $idStr = implode(',', $idArr);
+
+
+        $courseArr = array(
+            'q' => array(
+                'course_id' => $idStr,
+                'status' => '1,2,3',
+                //'admin_status' => 1
+            ),
+            'f' => array(
+                'course_id',
+                'title',
+                'price',
+                'start_time',
+                'end_time',
+                //'section_count',
+                'user_total',
+                'max_user',
+                'min_user'
+            ),
+            'pl' => 500
+        );
+        $courseList = seek_api::seekCourse($courseArr);
+
+        $data = [];
+        if (!empty($courseList->data)) {
+            foreach ($courseList->data as $v) {
+                $data[] = array(
+                    'course_id' => $v->course_id,
+                    'title' => $v->title,
+                    'section_count' => !empty($v->section_count)?$v->section_count:0,
+                    'start_time' => date('m', strtotime($v->start_time)).SLanguage::tr("月","LearningCenter").date('d', strtotime($v->start_time)),
+                    'end_time' => date('m', strtotime($v->end_time)).SLanguage::tr("月","LearningCenter").date('d', strtotime($v->end_time)),
+                    'max_user' => $v->max_user,
+                    'user_total' => $v->user_total,
+                    'min_user' => $v->min_user,
+                    'price' => $v->price,
+                    'class_id' => $classArr[$v->course_id]
+                );
+            }
+        }
+
+        return $data;
+    }
+
+    public function pageList(){
+        $params = array(
+            'condition' => "fk_user_owner={$this->orgOwner} AND status=1 ",
+            'page'      => !empty($_REQUEST['page']) && (int)($_REQUEST['page']) ? (int)($_REQUEST['page']) : 1,
+            'length'    => 20,
+            'item'      => array('fk_user', 'count(*) as courseNum'),
+            'groupBy'   => array('fk_user'),
+            'orgOwner'  => $this->orgOwner
+        );
+
+        $keyword = '';
+       if (isset($_REQUEST['keyword']) && $_REQUEST['keyword']) {
+            $keyword = mb_strtolower(trim($_REQUEST['keyword']));
+            if (is_numeric($keyword)) {
+                $params['condition'] = "(mobile LIKE '%{$keyword}%')";
+            } else {
+                $params['condition'] = "(real_name LIKE '%{$keyword}%' OR name LIKE '%{$keyword}%')";
+            }
+            $params['orgOwner'] = $this->orgOwner;
+            $list = course_api::searchUserData($params);
+        } else {
+            $list = course_api::getOrgStudentList($params);
+        }
+        $path = '/org/student/list';
+        $data = array();
+        if (!empty($list->data->list)) {
+            foreach ($list->data->list as $v) {
+                $data[] = array(
+                    'id' => !empty($v->fk_user) ? $v->fk_user : '',
+                    'real_name' => !empty($v->real_name) && trim($v->real_name) ? $v->real_name:'',
+                    'name'=>!empty($v->name) ? $v->name : '',
+                    'gender' => !empty($v->gender) ? ($v->gender==1 ? '男' : '女') : '',
+                    'age' => !empty($v->birthday) ? utility_tool::getAge($v->birthday) : '',
+                    'school' => !empty($v->school_name) ? $v->school_name : '',
+                    'mobile' => !empty($v->mobile) ? $v->mobile : '',
+                    'courseNum' => !empty($v->courseNum) ? $v->courseNum : 0,
+                    'thumb' => !empty($v->thumb_small) ? $v->thumb_small : ''
+                );
+            }
+        }
+
+        $totalPage = $total = 0;
+        if (!empty($list->data->total[0]->totalNum)) {
+             $total = $list->data->total[0]->totalNum;
+             $totalPage = ceil($total/$params['length']);
+        }
+
+        $this->assign('keyword', $keyword);
+        $this->assign('searchCount', count($data));
+        $this->assign('length', $params['length']);
+        $this->assign('totalPage', $totalPage);
+        $this->assign('total',$total);
+        $this->assign('page', $params['page']);
+        $this->assign('path', $path);
+        $this->assign('list', $data);
+        $this->render('/org/s-list.html');
+    }
+}
+

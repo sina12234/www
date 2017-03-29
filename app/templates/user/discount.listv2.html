@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>优惠管理 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 优惠管理 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}" ></script>
+<script type="text/javascript">
+$(function(){
+    {if $discounts->total>0}
+        page("page_list", "/org.discount.listv2", {$limit}, {$page}, Math.ceil({$discounts->total}/{$limit}));
+	{/if}
+    $("#submit").on("click", function(e){
+        var discount_name = $("#discount_name").val().trim();
+		var discount_value = $("#discount_value").val()
+		var discount_type=$("input[name='discount_type']:checked").val();
+		if(!discount_name){
+			alert("规则名称 不能为空");
+			return false;
+		}
+		if(discount_type==1){
+			//减额
+			ck_patener={$ck_patener2};
+			ck_patener_msg="优惠金额必须大于0，并且最多只能保留两位小数";
+		}else{
+			//减折扣
+			ck_patener={$ck_patener1};
+			ck_patener_msg="减折扣必须大于0，并且最多只能保留一位小数";
+		}
+		if(!ck_patener.test(discount_value) || discount_value<=0){
+			alert(ck_patener_msg);
+			return false;
+		}
+		return true;
+    });
+    $("#discount").on("click", "[data-status]", function(e){
+        if(0 == $(this).attr("data-status")){
+			$.post("/org.discount.forbidv2/"+$(this).attr("data-id"));
+            $(this).text("{'重新启动'|tr:'org'}");
+			$(this).attr("data-status", -1);
+        }else{
+			$.post("/org.discount.recoverv2/"+$(this).attr("data-id"));
+            $(this).text("{'暂停使用'|tr:'org'}");
+			$(this).attr("data-status", 0);
+        }
+	});
+});
+</script>
+</head>
+<body>
+{part "/site.main.nav"}
+<section class="pd30">
+<div class="container">
+	<div class="row">
+		{part "/org.main.menu.discount"}
+		{if $discounts->total==0}
+			<div class="right-main col-md-16" id="discount_no">
+					<div class="col-md-20 tac">
+						<img src="{utility_cdn::img('/assets_v2/img/pet3.png')}">
+					</div>
+					<div class="col-md-20 tac">
+						<p class="fs16">没有发现任何优惠，快猛戳下面的按钮 给学生发福利</p>
+					</div>
+					<div class="col-md-20 tac pd10">
+						<button class="add-button" onclick="$('#discount_no').hide();$('#discount_new').show();"><i class="add-icon c-fl"></i>创建新优惠</button>
+					</div>
+			</div>
+			{/if}
+			{if $discounts->total==0}
+			<div class="right-main col-sm-16" style="display:none;" id="discount_new">
+			{else}
+			<div class="right-main col-sm-16 col-md-16">
+			{/if}
+				<div class="content">
+                    <div class="tab-main">
+                        <div class="tab-hd fs14">
+                            <p class="tab-hd-opt">优惠管理</a>
+                        </div>
+                        <p id="faq" class="c-fr add-button"><i class="add-icon c-fl"></i>{'创建新优惠'|tr:'org'}</p>
+                    </div>
+					{if $discounts->total>0}
+					<div class='col-sm-20 col-xs-20 col-md-20' style="margin-bottom:20px;padding:0" id="discount">
+						<div class='color-plan hidden-xs hidden-md hidden-lg hidden-sm'>
+							<div class='nav-color col-sm-12 col-xs-12'>
+								<li></li>
+								<p>优惠管理</p>
+							</div>
+						</div>
+                        <table class="table-grid">
+                            <thead class="fs14">
+                                <tr>
+                                    <td class="col-sm-3 col-md-4 tec">{'优惠名称'|tr:'org'}</td>
+                                    <td class="hidden-sm hidden-lg hidden-md">{'类型'|tr:'org'}</td>
+                                    <!--
+                                    <td class="hidden-sm visible-lg col-lg-2">{'单张券限制'|tr:'org'}</td>
+                                    <td class="hidden-sm visible-lg col-lg-2">{'单个用户限制'|tr:'org'}</td>
+                                    -->
+                                    <td class="col-sm-3 col-md-4">规则</td>
+                                    <td class="col-sm-3 col-md-4">有效期</td>
+                                    <td class="hidden-sm col-md-4">状态</td>
+                                    <td class="col-sm-3 col-md-4">{'操作'|tr:'org'}</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+						    {foreach $discounts->data as $discount}
+                                <tr>
+                                    <td class="col-sm-3 col-md-4"><a href="/org.discount.listcodev2/{$discount->discount_id}">{$discount->name}</a></td>
+								{if 1==$discount->discount_type}
+                                    <td class="hidden-sm hidden-lg col-md-3">满额减</td>
+                                    <td class="col-sm-3 col-md-4">{'满'|tr:'org'}{$discount->min_fee/100}{'减'|tr:'org'}{$discount->discount_value/100}</td>
+                                {else}
+                                    <td class="hidden-sm col-md-4">{'满'|tr:'org'}{$discount->min_fee/100}{'打'|tr:'org'}{$discount->discount_value/10}{'折'|tr:'org'}</td>
+                                {/if}
+								<!--
+								<td class="hidden-sm visible-lg col-lg-2">{if 0==$discount->total_num}{'不限制'|tr:'org'}{else}{'使用'|tr:'org'}{$discount->total_num}{'次'|tr:'org'}{/if}</td>
+								<td class="hidden-sm visible-lg col-lg-2">{if 0==$discount->user_limit}{'不限制'|tr:'org'}{else}{'使用'|tr:'org'}{$discount->user_limit}{'次'|tr:'org'}{/if}</td>
+								-->
+                                    <td class="col-sm-3 col-md-4">{if 0==$discount->duration}{'永久'|tr:'org'}{else}{$discount->duration/86400}{'天'|tr:'org'}{/if}</td>
+                                    <td class="col-sm-3 col-md-4" data-id="{$discount->discount_id}" data-status="{$discount->status}">{if 0==$discount->status}{'暂停使用'|tr:'org'}{else}{'重新启动'|tr:'org'}{/if}</td>
+                                    <td class="col-sm-3 col-md-4">{if 0==$discount->course_id}{$discount->course_name|tr:'org'}{else}<a href="/course.info.show/{$discount->course_id}">{$discount->course_name}</a>{/if}</td>
+                                </tr>
+						    {/foreach}
+                            </tbody>
+                        </table>
+						<div class="page-list" id="page_list">
+						</div>
+                        <div class="col-md-4 col-sm-1"></div>
+					</div>
+					<div class='clear'></div>
+					{/if}
+					{if $discounts->total==0}
+					<form method="POST" action="/org.discount.createv2">
+					{else}
+					<form method="POST" id="discount_create" class="col-md-20" style="display:none;" action="/org.discount.createv2">
+					{/if}
+					<p id="faq_flase">返回</p>
+					<div class="form fs16">
+						<div class="form-group coupon-form col-md-20 mb20">
+							<label class="col-md-4 ter">
+								<span class="red">*</span>
+								{'规则名称'|tr:'org'}:
+							</label>
+							<input type="text" id="discount_name" name="discount_name" class="form-cto bor1px col-md-10" id="exampleInputName2" placeholder='{"请填写名称"|tr:"org"}'>
+						</div>
+						<div class='form-group coupon-form col-md-20 mb20'>
+							<label class='col-md-4 fs16 ter'>
+								<span class="red">*</span>
+								{'优惠类型'|tr:'org'}:
+							</label>
+							<div class='col-md-10 fs16 lh22 pd0'>
+								<label>
+									<input type="radio" name="discount_type" value="1" checked onclick="$('#id_1').show();$('#id_2').hide();$('#id_3').hide();"/>{'满额减'|tr:'org'}
+								</label>
+								<label>
+									<input type="radio" name="discount_type" value="2" onclick="$('#id_1').hide();$('#id_2').show();$('#id_3').show();"/>{'打折'|tr:'org'}
+								</label>
+								<div class='cou-big col-xs-12 col-md-20'>
+									<label class="c-fl col-md-20 pd0">
+										<div class='cou-l'>
+											<div class='cou-l-1 c-fl'><p>{'满'|tr:'org'}</p></div>
+											<div class='cou-l-1 c-fl'>
+												<input type='text' name="min_fee" value='1999'>
+											</div>
+										</div>
+										<div class='cou-l'>
+											<div class='cou-l-1 c-fl'>
+												<p id="id_1">{'减'|tr:'org'}</p>
+											</div>
+											<div class='cou-l-2 c-fl'>
+												<p id="id_2" style="display:none;">{'打'|tr:'org'}</p>
+											</div>
+											<div class='cou-l-1 c-fl'>
+												<input id="discount_value" type='text' name="discount_value" value='9'>
+											</div>
+											<div class='cou-l-2 c-fl'>
+												<p id="id_3" style="display:none;">{'折'|tr:'org'}</p>
+											</div>
+										</div>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class='clear'></div>
+						<div class="form-group coupon-form col-md-20 mb20">
+							<label class="col-md-20">
+								<span class="col-md-4 ter">{'使用限制'|tr:'org'}:</span>
+								<span class="left tec mr10" style="color:#c3c3c3;padding:0;">{'单张券'|tr:'org'}</span>
+								<select class="col-md-5" name="total_num">
+									<option value="0">{'重复使用'|tr:'org'}</option>
+									<option value="30">{'最多30次'|tr:'org'}</option>
+									<option value="10">{'最多10次'|tr:'org'}</option>
+									<option value="5">{'最多5次'|tr:'org'}</option>
+									<option value="1">{'最多1次'|tr:'org'}</option>
+								</select>
+								<span class="left tec mr10" style="color:#c3c3c3;">{'单用户'|tr:'org'}</span>
+								<select class="col-md-5" name="user_limit">
+									<option value="1">{'限用1次'|tr:'org'}</option>
+									<option value="5">{'限用5次'|tr:'org'}</option>
+									<option value="10">{'限用10次'|tr:'org'}</option>
+									<option value="0">{'不限使用'|tr:'org'}</option>
+								</select>
+							</label>
+						</div>
+						<div class='clear'></div>
+						<div class="form-group coupon-form col-md-20 mb20">
+							<label class="col-md-20">
+								<span class="col-md-4 ter">{'有效时长'|tr:'org'}:</span>
+								<select class="col-md-5" name="duration">
+									<option value="0">{'永久'|tr:'org'}</option>
+									<option value="365">{'一年'|tr:'org'}</option>
+									<option value="183">{'半年'|tr:'org'}</option>
+									<option value="90">{'90天'|tr:'org'}</option>
+									<option value="30">{'30天'|tr:'org'}</option>
+									<option value="7">{'7天'|tr:'org'}</option>
+								</select>
+							</label>
+						</div>
+						<div class='clear'></div>
+						<div class="form-group coupon-form col-md-20 mb20">
+							<label class="col-md-20 mb20">
+								<span class="col-md-4 ter">{'范围'|tr:'org'}:</span>
+								<select class="col-md-5" name="course_id">
+									<option value="0">{'全部课程'|tr:'org'}</option>
+									{if $courses!=false}
+										{foreach $courses as $course}
+										<option value="{$course->course_id}">{$course->title} {'价格'|tr:'org'}:{$course->price}{'元'|tr:'org'}</option>
+										{/foreach}
+									{/if}
+								</select>
+							</label>
+							<div class='clear'></div>
+							<div class='cou-group col-md-20'>
+								<div class="col-md-17">
+									<input type="checkbox" name="create_code" checked>
+									<span class="mt10">{'立即创建50张优惠券'|tr:'org'}</span>
+								</div>
+							</div>
+							<div class='cou-but'>
+								<button id="submit" class="">{'创建'|tr:'org'}</button>
+								<p id="return" class="col-md-offset-2">取消</p>
+							</div>
+						</div>
+					</div>
+					</form>
+					<div class="col-md-16 tac mt10" style="display:none;padding-top:60px;">
+                        <img src="{utility_cdn::img('/assets_v2/img/pet3.png')}">
+                        <p class="fs14" style="font-weight: bold; color:#666;">{'您还没有创建优惠哦'|tr:'org'}</p>
+                    </div>
+                </div>
+			</div>
+		</div>
+		</div>
+        <div class='clear'></div>
+    </section>
+{part "/site.main.footer"}
+</body>
+<script>
+$("#faq").click(function(){
+		$("#discount_create").show();
+		$("#discount").hide();
+		$(".coopen-T").hide();
+		$(this).hide();
+})
+$("#faq_flase").click(function(){
+		$("#discount_create").hide();
+		$("#discount").show();
+		$(".coopen-T").show();
+		$("#faq").show();
+})
+$("#return").click(function(){
+		$("#discount_create").hide();
+		$("#discount").show();
+		$(".coopen-T").show();
+		$("#faq").show();
+})
+</script>
+</html>

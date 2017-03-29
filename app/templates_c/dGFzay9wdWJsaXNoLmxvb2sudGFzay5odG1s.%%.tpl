@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="title" content="<?php echo tpl_function_part('/site.main.orgname'); ?> - 布置作业 - 云课 - 专业的在线学习平台">
+    <meta name="keywords" content="<?php echo tpl_function_part('/site.main.orgname'); ?> - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+    <meta name="description" content="<?php echo tpl_function_part('/site.main.orgname'); ?> - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+    <title class="head-title">查看作业</title>
+    <?php echo tpl_function_part("/site.main.header"); ?>
+    <!-- /link -->
+</head>
+<body>
+<?php echo tpl_function_part("/site.main.nav3"); ?>
+<script type="text/javascript" src="<?php echo utility_cdn::js('/assets_v2/js/ejs.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo utility_cdn::js('/assets_v2/js/jquery/jquery.zclip.js'); ?>"></script>
+<link rel="stylesheet" href="<?php echo utility_cdn::css('/assets_v2/js/viewer/viewer.min.css'); ?>" type="text/css" />
+<script type="text/javascript" src="<?php echo utility_cdn::js('/assets_v2/js/viewer/viewer.js'); ?>" ></script>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="/assets_v2/js/ie8/ejs.ie8.js"></script>
+<![endif]-->
+<section class="org-section">
+	<div class="container main-center">
+			<div class="ed-title task-title mb20">
+				<div class="tab-button hidden-xs ">作业</div>
+				<div id="head-title" class="title col-lg-15 col-md-15 col-sm-15 col-xs-20">
+				</div>
+			</div>
+			<!-- tp -->
+			<section id="pt-work-detail" class="mb20 pt-work-detail">
+			</section>
+            <script type="template" id="work-detail">
+                <table class="table-grid">
+                    <thead>
+                    <tr>
+                        <td class="col-md-5 col-xs-10 tal"><%= taskInfo.create_time%>&nbsp;&nbsp;作业</td>
+                        <td class="col-md-4 col-xs-10">讲师：<%= taskInfo.teacherName%></td>
+                        <td class="col-md-5 col-xs-10">截止时间：<%= taskInfo.end_time%></td>
+                        <td class="col-md-3 copy-link col-xs-8">
+                            <div class="link" data-url="/task.commitTask.studentCommitTask?taskId=<%=taskId%>">
+                                <div class="link-icon left"></div>
+                                <span class="left">复制作业链接</span>
+                                <div class="clear"></div>
+                            </div>
+                        </td>
+                        <td class="col-md-3 delete-icon-box col-xs-2">
+                            <div class="pt-delete-icon" id="delet-task-btn"></div>
+                        </td>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="look-task-content">
+                    <div class="text-box">
+                        <%= taskData.desc%>
+                    </div>
+                    <!--图片-->
+                    <div id="task-result" class="task-result">
+                        <% if(thumb.length>0){ thumb.forEach(function(item){ %>
+                            <div class="img-box">
+                                <img class="viewer-img" src="<%= item.src_big%>" data-original="<%= item.src_big%>" alt="">
+                            </div>
+                        <% }) }  %>
+                    </div>
+                    <!-- 附件 -->
+                    <div class="file-tag-box">
+                        <% if(attach.length > 0){  %>
+                        <p class="c-fl">附件</p>
+                        <% for(var i = 0 ; i < attach.length ; i++){ if(attach[i].file!=''){ var fileType=attach[i].type.split('.')[1]; %>
+                        <div class="file-tag">
+                            <div class="file-info-box">
+                                <div class="info-img  col-sm-5 col-xs-5">
+                                    <img src="<%= swappic[fileType]%>" alt="">
+                                </div>
+                                <div class="file-info col-sm-15 col-xs-15">
+                                    <p><span class="file-info-name"><%= attach[i].name%><%= attach[i].type%></span></p>
+                                    <p class="cGray"></p>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <a href="<%= attach[i].src_attach%>" download="<%= attach[i].name%><%= attach[i].type%>" target="_blank">
+                                <div class="file-clear">
+                                    <div class="download-icon">
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <% } } } %>
+                        <div class="clear"></div>
+                    </div>
+                    <!-- /附件 -->
+                    <!-- 展开收起 -->
+                    <div class="look-task-unfolded tac">
+                        <div class="title cGray">
+                           <span>展开作业</span>
+                            <div class="display-icon"></div>
+                        </div>
+                    </div>
+                    <!-- /展开收起 -->
+                </div>
+            </script>
+			<!-- /tp -->
+			<!-- list -->
+			<section id="pt-work-table">
+
+			</section>
+            <script type="template" id="student-info" >
+                <% if(data.noCommit || data.commit ) { %>
+                <ul class="tab-main mb20 clearfix">
+                    <% if(data.commit) { %>
+                    <li class="tab-hd-opt curr">已交</li>
+                    <% } %>
+                    <% if(data.noCommit && !data.commit){ %>
+                    <li class="tab-hd-opt curr">未交</li>
+                    <% }else if(data.noCommit && data.commit) {  %>
+                    <li class="tab-hd-opt ">未交</li>
+                    <% }%>
+                </ul>
+                <% if(data.commit) { var commitItems =  data.commitData.items; %>
+                <table class="table-grid submit" data-page="<%= data.commitData.totalPage%>">
+                    <thead clss="fs14">
+                    <tr>
+                        <td>学生姓名</td>
+                        <td>提交时间</td>
+                        <td>评级</td>
+                        <td>状态</td>
+                    </tr>
+                    </thead>
+                    <tbody class="fs12">
+                    <% for(var i = 0 ; i < commitItems.length ; i++ ) { %>
+                        <tr>
+                            <td class="cBlue">
+                                <% if(commitItems[i].status==2) { %>
+                                <a class="blue-link" href="/task.publishTask.taskCorrectShow?taskId=<%= commitItems[i].fk_task%>&type=correct&studentId=<%= commitItems[i].pk_task_student%>">
+                                    <%= commitItems[i].student_name%>
+                                </a>
+                                <% }else{ %>
+                                <a class="blue-link" href="/task.replyTask.replyTask?taskId=<%= commitItems[i].fk_task%>&studentId=<%= commitItems[i].fk_user_student%>">
+                                    <%= commitItems[i].student_name%>
+                                </a>
+                                <% } %>
+                            </td>
+                            <td><%= commitItems[i].create_time%></td>
+                            <td><%= judgeLevel(commitItems[i].level)%></td>
+                            <% if(commitItems[i].status==2) { %>
+                            <td>已批改</td>
+                            <% }else{ %>
+                            <td class="vRed">待批改</td>
+                            <% } %>
+                        </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+                <% } %>
+                <% if(data.noCommit) { var noCommitPage = data.noCommitData.page ; var noCommitItems = data.noCommitData.data.items;console.log(noCommitItems); if( !data.commit  )  { %>
+                <table class="table-grid no-submit ">
+                <% }else { %>
+                <table class="table-grid no-submit hidden" data-page="<%= noCommitPage.totalPage%>">
+                <% } %>
+                    <thead clss="fs14">
+                    <tr>
+                        <td>学生姓名</td>
+                        <td>提交时间</td>
+                        <td>评级</td>
+                        <td>状态</td>
+                    </tr>
+                    </thead>
+                    <tbody class="fs12">
+                    <% for(var i = 0 ; i < noCommitItems.length ; i++ ) { %>
+                    <tr>
+                        <td ><%= noCommitItems[i].teacherName%></td>
+                        <td>————</td>
+                        <td>————</td>
+                        <td class="blue-link">
+                            <a href="javascript:;" class="blue-link task-message" data-uid="<%= noCommitItems[i].fk_user_student%>">催交</a>
+                        </td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+                <% } %>
+                <div class="col-md-20 tac mt20">
+                    <a href="javascript:;" title="" id="more-button" class="more-button ">
+                        点击查看更多
+                    </a>
+                </div>
+                <% } %>
+            </script>
+			<!-- /list -->
+
+	</div>
+</section>
+<script type="text/javascript">
+function judgeLevel(str) {
+    switch (str){
+        case '1':
+            return '差';
+        case '2':
+            return '较差';
+        case '3':
+            return '中';
+        case '4':
+            return '良';
+        case '5':
+            return '优';
+        default:
+            return '————';
+    }
+}
+$(function() {
+    var taskId = $.getUrlParam('taskId');
+    var swappic = {
+        txt : "/assets_v2/img/lesson-txt.png",
+        pdf : "/assets_v2/img/lesson-pdf.png",
+        doc : "/assets_v2/img/lesson-doc.png",
+        docx: "/assets_v2/img/lesson-doc.png",
+        ppt : "/assets_v2/img/lesson-ppt.png",
+        pptx: "/assets_v2/img/lesson-ppt.png",
+        jpg : "/assets_v2/img/lesson-jpg.png",
+        xls : "/assets_v2/img/lesson-xls.png",
+        xlsx: "/assets_v2/img/lesson-xls.png",
+    };
+    //获取数据渲染页面
+   /*
+   * 页面接口需优化
+   * 表格数据需要提取出来
+   *
+   * */
+    showDeatil();
+    function showDeatil(page) {
+        var page = page ? page : 1 ;
+        $.ajax('/task/publishTask/taskDetail',{
+            dataType:'json',
+            type:'get',
+            data:{
+                pk_task:taskId,
+                page:page
+            },
+            success:function (data) {
+                var result = data.result;
+                if(result.code==200){
+                    var data = result.data;
+                    var taskInfo = data.taskInfo;
+                    var taskData = data.data;
+                    var attach = data.attach;
+                    var thumb = data.thumb;
+                    var judgeCommitData = { };
+                    judgeCommitData['commit'] = false;
+                    judgeCommitData['noCommit'] = false;
+                    if(data['commitList'] && data['commitList']['data']['items'].length>0){
+                        judgeCommitData['commit'] = true;
+                        judgeCommitData['commitData'] = data['commitList'].data;
+                    }
+
+                    if(data['noCommitList'] && data['noCommitList']['data']['items'].length>0){
+                        judgeCommitData['noCommit'] = true;
+                        judgeCommitData['noCommitData'] = data['noCommitList'];
+                    }
+
+                    $('#head-title').text(taskInfo.title+' '+taskInfo.className);
+                    document.title='查看作业'+taskInfo.title+taskInfo.className;
+                    var detailHtml = $('#work-detail').html();
+                    $('#pt-work-detail').html(ejs.render(detailHtml,{ taskInfo:taskInfo,taskData:taskData,attach:attach,thumb:thumb,swappic:swappic,taskId:taskId}));
+                    //渲染学生信息列表
+                    var studentHtml = $('#student-info').html();
+                    $('#pt-work-table').html(ejs.render(studentHtml,{ data:judgeCommitData}));
+
+                    // 复制链接
+                    var hostname = location.hostname;
+                    var dataUrl  = $("#pt-work-detail").find('.link').attr('data-url');
+                    $("#pt-work-detail").find('.link').attr('data-url',hostname+dataUrl);
+                    $("#pt-work-detail").clipData({
+                        ele: '.link',
+                        copyurl:'data-url',
+                    });
+
+                    //点击图片放大
+                    $('#task-result').viewer({
+                        url: 'data-original',
+                        selector: '.viewer-img'
+                    });
+                    //显示更多加载
+                    var activeTab = $('#pt-work-table').find('.tab-main .curr');
+                    var totalPage ;
+                    if(activeTab.text() == '已交'){
+                        totalPage = $('#pt-work-table').find('table.submit').attr('data-page');
+                    }else if(activeTab.text() == '未交'){
+                        totalPage = $('#pt-work-table').find('table.no-submit').attr('data-page');
+                    }
+                    if(totalPage > 1 ){
+                        $('#more-button').addClass('show');
+                    }
+                    var lookTaskHeight = $('#pt-work-detail').find('.look-task-content').outerHeight();
+                    if(lookTaskHeight > 264) {
+                        $('#pt-work-detail').find('.look-task-content').addClass('flow');
+                        $('#pt-work-detail').find('.look-task-unfolded').show();
+                    }else {
+                        $('#pt-work-detail').find('.look-task-content').addClass('show');
+                        $('#pt-work-detail').find('.look-task-unfolded').hide();
+                    }
+                }else if(result.code == -101){
+                    location.href = '/task/publishTask/NotFound';
+                }else if(result.code == -102){
+                    location.href = '/task/publishTask/Delete';
+                }
+            },
+            error:function () {
+                layer.msg('网络君开小差了!');
+            }
+        })
+    }
+    var nowPage = 1;
+    //加载更多
+    $('#pt-work-table').on('click','#more-button',function () {
+        var text = $('#pt-work-table').find('.tab-main .curr').text(),totalPage;
+        if(text == '已交'){
+            totalPage = $('#pt-work-table').find('table.submit').attr('data-page');
+        }else if(text == '未交'){
+            totalPage = $('#pt-work-table').find('table.no-submit').attr('data-page');
+        }
+        if( nowPage== totalPage){
+            return false;
+        }
+        nowPage++;
+        showDeatil(nowPage);
+    })
+
+    //已交 未交切换显示学生信息
+    $('#pt-work-table').on('click','.tab-hd-opt',function () {
+        var tab = $(this).parent().find('.tab-hd-opt');
+        if(tab.size()!=2){
+            return false;
+        }
+        var text = $(this).text();
+        var parent = $(this).parent().parent();
+        tab.removeClass('curr');
+        $(this).addClass('curr');
+        if(text == '未交'){
+            parent.find('table.submit').addClass('hidden');
+            parent.find('table.no-submit').removeClass('hidden');
+        }else{
+            parent.find('table.no-submit').addClass('hidden');
+            parent.find('table.submit').removeClass('hidden');
+        }
+    })
+    //删除作业
+    $('#pt-work-detail').on('click','#delet-task-btn',function () {
+        layer.confirm('<p>删除后，此份作业的相关数据都将消失</p><p>是否删除？</p>', {
+            btn: ['确定','取消'],
+            title:['删除作业', 'background:#ffa81d;color:#fff;'],
+        }, function(){
+            $.ajax('/task/publishTask/deleteTask',{
+                dataType:'json',
+                type:'post',
+                data:{
+                    pk_task:taskId
+                },
+                success:function (data) {
+                    var result = data.result;
+                    if(result.code == 200){
+                        layer.msg('删除成功', { icon: 1});
+                        location.href='/task/publishTask/teacherTaskList';
+                    }else{
+                        layer.msg('删除失败', { icon: 1});
+                    }
+                }
+            })
+        }, function(){
+            layer.msg('取消成功', { icon: 1});
+        });
+    })
+    //展开收起
+    $('#pt-work-detail').on('click','.look-task-unfolded',function () {
+        var unfolded = $(this).find('.title');
+        if(unfolded.find('.display-icon').hasClass('down')) {
+            unfolded.find('.display-icon').removeClass('down');
+            unfolded.find('span').text('展开作业');
+            $('#pt-work-detail').find('.look-task-content').removeClass('show');
+        }else {
+            unfolded.find('.display-icon').addClass('down');
+            unfolded.find('span').text('收起作业');
+            $('#pt-work-detail').find('.look-task-content').addClass('show');
+        }
+    })
+    //催交作业
+    $('#pt-work-table').on('click','table.no-submit .task-message',function () {
+        $.ajax('/task/publishTask/taskMessage',{
+            dataType:'json',
+            type:'post',
+            data:{
+                pk_task:taskId,
+                studentId:$(this).attr('data-uid')
+            },
+            success:function (data) {
+                if(data.result.code== 200){
+                    layer.msg('催交成功!');
+                }else{
+                    layer.msg('催交失败!');
+                }
+            },
+            error:function () {
+                layer.msg('网络故障!');
+            }
+        })
+    });
+})
+</script>
+
+<?php echo tpl_function_part("/site.main.footer"); ?>
+</body>
+</html>

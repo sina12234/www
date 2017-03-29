@@ -1,0 +1,85 @@
+//button
+.gray-button{
+  @include button($text-color,$gray-button-color,$gray-button-border-color);
+}
+.yellow-btn{
+  @include button($main-white-color,$yellow-button-color);
+}
+.green-button{
+  @include button($main-white-color $main-white-color,$green-button-color);
+}
+.btn{
+  @include button($main-white-color $main-white-color,$theme-button-color,$theme-button-color);
+}
+.gray-btn{
+  @include button($text-color $main-theme-color,$default-button-color,$default-button-border-color);
+}
+//add button style extend
+.add-button{
+  @include button-set(30px,12px);
+  background: nth($green-button-color,1);
+  color:$main-white-color;
+  font-size: 14px;
+  border-radius: 3px;
+  &:hover{
+    color:$main-white-color;
+    background: nth($green-button-color,2);
+  }
+  .add-icon{
+    @include sprite($common-add);
+    margin: 8px 8px 0 5px;
+  }
+}
+//show more button 加载更多
+.more-button{
+  border:1px solid nth($gray-button-border-color,1);
+  padding:0 10px;
+  height: 30px;
+  width: 108px;
+  line-height: 28px;
+  cursor: pointer;
+  border-radius: 3px;
+  margin:0 auto;
+  display: none;
+  &.show{
+    display: block;
+  }
+  &:hover{
+    border:1px solid $main-yellow-color;
+    color: $text-orange-color;
+  }
+}
+//编辑-白底-灰框
+.edit-button{
+  border:1px solid nth($gray-button-border-color,1);
+  padding:0 10px;
+  height:30px;
+  width:90px;
+  line-height:30px;
+  cursor:pointer;
+  border-radius: 4px;
+  text-align: center;
+  &:hover{
+    border:1px solid $main-yellow-color;
+    color: $text-orange-color;
+    span{
+      @include sprite($edit_hover);
+    }
+  }
+  span{
+    vertical-align: middle;
+    margin-right:3px;
+  }
+}
+.load-btn{
+  background:url(/assets_v2/img/loading-btn.gif) #f5f5f5 95% no-repeat;
+  color:#ccc;
+  border:1px dashed #dcdcdc;
+  cursor: default;
+  &:hover{
+    background:url(/assets_v2/img/loading-btn.gif) #f5f5f5 95% no-repeat;
+    color:#ccc;
+    border:1px dashed #dcdcdc;
+    cursor: default;
+  }
+}

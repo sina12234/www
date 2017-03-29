@@ -1,0 +1,74 @@
+/*reset*/
+blockquote,body,dd,div,dl,dt,fieldset,form,h1,h2,h3,h4,h5,h6,input,li,ol,p,pre,td,textarea,th,ul{margin:0;padding:0}
+body,fieldset,html,iframe,img{border:0}
+body,input,select,textarea{outline:0;border:0;font-family:$font-stack}
+li{list-style:none}
+textarea{resize:none}
+body,html{height:100%}
+body{font-size:$main-font-size;}
+h1,h2,h3,h4,h5,h6,strong{font-weight:400;font-size:inherit}
+input{margin:0;vertical-align:middle}
+input::-ms-clear{display:none}
+a,button{outline:0;border:none;}
+em,var{font-style:normal}
+body,input,select,textarea{color:$text-color;}
+body{background:$body-background;min-width:320px;}
+a{
+    text-decoration:none;
+    color:$text-color;
+    outline:none;
+    blr:expression(this.onFocus=this.blur());
+    &:link{
+      text-decoration:none;
+    }
+    &:visited{
+      text-decoration:none;
+    }
+    &:hover{
+      color:$text-strong-color;
+      text-decoration:none;
+    }
+    &:active{
+      color:$text-strong-color;
+      text-decoration:none;
+    }
+}
+// all placeholder text color
+::-webkit-input-placeholder { color:$text-holder-color; }
+::-moz-placeholder { color:$text-holder-color; } /* firefox 19+ */
+:-ms-input-placeholder { color:$text-holder-color; } /* ie */
+input:-moz-placeholder { color:$text-holder-color; }
+/*font*/
+$font-size:30;
+@while $font-size >= 12 {
+  .fs#{$font-size} {font-size: 1px * $font-size; }
+  $font-size: $font-size - 2;
+}
+.clear{clear:both;overflow:hidden;zoom:1}
+.clearfix{zoom:1}
+.fb{font-weight:700}
+.fi{font-style:italic}
+.fn{font-style:normal}
+.tac{text-align:center !important}
+.tar{text-align:right !important}
+.tal{text-align:left !important}
+.c-fl,.left{float:left}
+.c-fr,.right{float:right}
+.pos-rel{position:relative}
+.pos-abs{position:absolute}
+/*padding*/
+$padding:40;
+@while $padding >= 0 {
+  .p#{$padding} {padding:1px * $padding;}
+  .pd#{$padding} {padding:(1px * $padding) 0;}
+  .pt#{$padding}{padding-top:1px * $padding;}
+  .pr#{$padding}{padding-right:1px * $padding ;}
+  .pl#{$padding}{padding-left:1px * $padding;}
+  .pb#{$padding}{padding-bottom:1px * $padding ;}
+  .mt#{$padding}{margin-top:1px * $padding !important;}
+  .mr#{$padding}{margin-right:1px * $padding !important;}
+  .ml#{$padding}{margin-left:1px * $padding !important;}
+  .mb#{$padding}{margin-bottom:1px * $padding !important;}
+  $padding: $padding - 5;
+};
+footer,header,section{width:100%;}

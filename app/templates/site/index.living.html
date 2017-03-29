@@ -1,0 +1,212 @@
+{if !empty($planList)}
+<div class="container">
+	<div class="row">
+		<div class="box-title">
+			<div class="box-title-left hidden-xs"></div>
+			<div class="box-title-name fs24">{'最近直播'|tr:'site.index'}</div>
+			<div class="box-title-right hidden-xs"></div>
+			<p class="clearfix"></p>
+			<p class="square-red"><i></i></p>
+		</div>
+		<ul class="tab-live col-lg-20 col-md-20 col-sm-20 col-xs-20 fs14" id="tab-live">
+			{if !empty($planList['unstarted'])}
+			<li class="curr c-fl">
+				<a href="javascript:void(0);">{'即将开始'|tr:'site.index'}</a>
+				{if !empty($planList['finished'])}
+					<span class="ml10">|</span>
+				{/if}
+			</li>
+			{/if}
+			{if !empty($planList['finished'])}
+			<li class="c-fl">
+				<a href="javascript:void(0);">{'精彩回放'|tr:'site.index'}</a>
+			</li>
+			{/if}
+			{if (!empty($planList['unstarted']) or !empty($planList['finished']))}
+				<a href="/live.list" class="c-fr">{'更多'|tr:'site.index'}></a>
+			{/if}
+		</ul>
+		<div id="tab-list">
+			{if !empty($planList['unstarted'])}
+			<ul class="tab-list">
+			{foreach $planList['unstarted'] as $uplv}
+				<li class="col-lg-5 col-md-5 col-sm-10 col-xs-10">
+				<a href="{if(isset($uplv->price_resell))}/course.plan.play/{$uplv->plan_id}/{$uplv->oid}{else}/course.plan.play/{$uplv->plan_id}{/if}" target="_blank">
+					<div class="tab-li-img fs14">
+						<img src="/live.live.thumb/{$uplv->plan_id}" alt="">
+						<p class="tab-tit-bg"></p>
+						<p class="tab-tit">
+						<em class="tab-title">{$uplv->course_name}</em>
+						<em class="tab-chapter ter">{$uplv->section_name|tr:'site.index'}</em>
+						</p>
+						{if $uplv->status==2}
+						<span class="living-icon fs12">{'正在上课'|tr:'LearningCenter'}</span>
+						{/if}
+					</div>
+					<div class="tab-li-info fs12">
+						{if(isset($uplv->price_resell))}
+								{if(!empty($uplv->price_resell))}
+										<span class="c-fl cYellow">
+										{'收费课'|tr:'LearningCenter'}
+										{if $uplv->try==1}
+										，{'可试看'|tr:'LearningCenter'}
+										{else}
+										，{'需报名'|tr:'LearningCenter'}
+										{/if}
+										</span>
+								{else}
+										<span class="c-fl cGreen">
+										{'免费课'|tr:'LearningCenter'}
+										{if $uplv->try==1}
+										，{'可试看'|tr:'LearningCenter'}
+										{else}
+										，{'需报名'|tr:'LearningCenter'}
+										{/if}
+										</span>
+								{/if}
+						{else}
+								{if $uplv->fee_type==0}
+								<span class="c-fl cGreen">
+									{'免费课'|tr:'LearningCenter'}
+									{if $uplv->try==1}
+									，{'可试看'|tr:'LearningCenter'}
+									{else}
+									，{'需报名'|tr:'LearningCenter'}
+									{/if}
+								</span>
+								{else}
+								<span class="c-fl cYellow">
+									{'收费课'|tr:'LearningCenter'}
+									{if $uplv->try==1}
+									，{'可试看'|tr:'LearningCenter'}
+									{else}
+									，{'需报名'|tr:'LearningCenter'}
+									{/if}
+								</span>
+								{/if}
+						{/if}
+						
+						<span class="c-fr hidden-xs">{'讲师'|tr:'LearningCenter'}:{$uplv->admin_real_name}</span>
+					</div>
+					{if $uplv->status==1}
+					<div class="tab-li-btn fs12">
+						<span >{$uplv->start_time} </span>
+					</div>
+					{elseif $uplv->register==1}
+					<div class="tab-li-btn fs12">
+						<button>{'进入课堂'|tr:'LearningCenter'}</button>
+					</div>
+					{elseif $uplv->try==1}
+					<div class="tab-li-btn fs12">
+						<button>{'立即试看'|tr:'LearningCenter'}</button>
+					</div>
+					{else}
+					<div class="tab-li-btn fs12">
+						<button class="btn-gray">{'报名学习'|tr:'LearningCenter'}</button>
+					</div>
+					{/if}
+				</a>
+				</li>
+				{/foreach}
+			</ul>
+			{/if}
+			{if !empty($planList['finished'])}
+			<ul class="tab-list" {if !empty($planList['unstarted'])}style="display:none"{/if}>
+				{foreach $planList['finished'] as $fplv}
+				<li class="col-lg-5 col-md-5 col-sm-10 col-xs-10">
+				<a href="{if(isset($fplv->price_resell))}/course.plan.play/{$fplv->plan_id}/{$fplv->oid}{else}/course.plan.play/{$fplv->plan_id}{/if}" target="_blank">
+					<div class="tab-li-img fs14">
+						<img src="/live.live.thumb/{$fplv->plan_id}" alt="">
+						<p class="tab-tit-bg"></p>
+						<p class="tab-tit">
+						<em class="tab-title">{$fplv->course_name}</em>
+						<em class="tab-chapter">{$fplv->section_name|tr:'site.index'}</em>
+						</p>
+					</div>
+					<div class="tab-li-info fs12">
+						{if(isset($fplv->price_resell))}
+							{if(!empty($fplv->price_resell))}
+								<span class="c-fl cYellow">
+								{'收费课'|tr:'LearningCenter'}
+								{if $fplv->try==1}
+								，{'可试看'|tr:'LearningCenter'}
+								{else}
+								，{'需报名'|tr:'LearningCenter'}
+								{/if}
+								</span>
+							{else}
+								<span class="c-fl cGreen">
+									{'免费课'|tr:'LearningCenter'}
+									{if $fplv->try==1}
+									，{'可试看'|tr:'LearningCenter'}
+									{else}
+									，{'需报名'|tr:'LearningCenter'}
+									{/if}
+								</span>
+							{/if}
+						
+						{else}
+							{if $fplv->fee_type==0}
+							<span class="c-fl cGreen">
+								{'免费课'|tr:'LearningCenter'}
+								{if $fplv->try==1}
+								，{'可试看'|tr:'LearningCenter'}
+								{else}
+								，{'需报名'|tr:'LearningCenter'}
+								{/if}
+							</span>
+							{else}
+							<span class="c-fl cYellow">
+								{'收费课'|tr:'LearningCenter'}
+								{if $fplv->try==1}
+								，{'可试看'|tr:'LearningCenter'}
+								{else}
+								，{'需报名'|tr:'LearningCenter'}
+								{/if}
+							</span>
+							{/if}
+						
+						{/if}
+						
+						<span class="c-fr hidden-xs">{'讲师'|tr:'LearningCenter'}:{$fplv->admin_real_name}</span>
+					</div>
+					{if $fplv->status==1}
+					<div class="tab-li-btn fs12">
+						{if(strtotime($fplv->start_time)-strtotime(date("Y-m-d"))<86400 && strtotime($fplv->start_time)-strtotime(date("Y-m-d"))>0)}
+						<span>{'今日'|tr:'LearningCenter'}{date("H:i",strtotime($fplv->start_time))}{'上课'|tr:'LearningCenter'}</span>
+						{else}
+						<span >{date("n-j H:i",strtotime($fplv->start_time))}</span>
+						{/if}
+					</div>
+					{elseif $fplv->register==1}
+					<div class="tab-li-btn fs12">
+						<button>{'进入课堂'|tr:'LearningCenter'}</button>
+					</div>
+					{elseif $fplv->try==1}
+					<div class="tab-li-btn fs12">
+						<button>{'立即试看'|tr:'LearningCenter'}</button>
+					</div>
+					{else}
+					<div class="tab-li-btn fs12">
+						<button class="btn-gray">{'报名学习'|tr:'LearningCenter'}</button>
+					</div>
+					{/if}
+				</a>
+				</li>
+				{/foreach}
+			</ul>
+			{/if}
+		</div>
+	</div>
+</div>
+</section>
+<script>
+$(function(){
+    $(".tab-live li").hover(function(){
+        $(this).addClass("curr");
+        $(this).siblings().removeClass("curr");
+        $("#tab-list").find("ul:eq("+$(this).index()+")").show().siblings().hide()
+    },function(){ })
+})
+</script>
+{/if}

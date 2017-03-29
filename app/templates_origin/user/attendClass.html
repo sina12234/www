@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 注册</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="../assets/css/common.css">
+		<link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+		<script src="../assets/js/jquery/jquery-1.8.2.min.js"></script>
+		<script src="../assets/js/user.js"></script>
+		<script src="../assets/js/part.js"></script>
+	</head>
+
+	<body>
+		<!--top-->
+		    <div class="part" url="/part.top.html"></div>
+		    <!-- nav -->
+		    <div class="part" url="/part.nav.html"></div>
+		    <div class="part" url="/user/part.nav.user.html"></div>
+
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='col-md-3 user_menu hidden-xs'>
+						<div class="part" url="/user/part.user.menu.html"></div>
+					</div>
+
+					<div class='col-md-9 nonepdh user_content'>
+						<div class='container-fluid'>
+							<div class='row'>
+                              <!--如何上课 start-->
+                              <h1 class="rtit">如何上课</h1>
+                              <div class="articleinfo">
+                                <h2 class="aitit mt25">一. 下载OBS</h2>
+                                <p class="col-xs-6 mt15 fltnone clear"><input class="btn_fp1" type="submit" value="点击下载OBS" /></p>
+                               
+                                <h2 class="aitit mt25 clear">二. 配置OBS（主推）</h2>
+                                <p>1.安装OBS</p>
+                                <p>2.双击桌面OBS图标<img src="../assets/images/attendClass_5.jpg" width="19" height="19"  alt=""/>打开</p>
+                                <p>3.点击“设定”（如图1）</p>
+                                <p><img src="../assets/images/attendClass_1.jpg" width="649" height="187"  alt=""/></p>
+                                <p>4.在弹出的菜单-左边栏选择“广播设定”（如图2）</p>
+                                <p><img src="../assets/images/attendClass_2.jpg" width="237" height="156"  alt=""/></p>
+                                <p>5.将提供的{上课参数}复制到对应的“FMS URL”和“播放路径”中（如图3）</p>
+                                <p><img src="../assets/images/attendClass_3.jpg" width="660" height="162"  alt=""/></p>
+                                <p>6.设置上课视频带宽</p>
+                                <p>打开OBS,点击“设定”，在弹框的左边栏选择“编码”    设置最大比特率（kb/s) 。建议设置参数为(200—300kb/s之间，
+保证学生上课流畅度。如图：4</p>
+                                <p><img src="../assets/images/attendClass_4.jpg" width="660" height="187"  alt=""/></p>
+                                <h2 class="aitit mt25 clear">三. 上课参数</h2>
+                                <p>1.FMS URL：rtmp://121.42.56.177/publish/</p>
+                                <p>2.播放路径：xxx？token=bbbbbbbbbb&planid=3</p>
+                              </div>
+                              <!--如何上课 end-->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>  
+
+		<div class="footer"> 
+			<div class="ftcon">
+				<!-- <div class="fter_1">
+					<a href="">关于我们</a> | <a href="">加入我们</a> | <a href="">校园代理招募</a> | <a href="">O2O体验店招商</a> | <a href="">企业培训</a> | <a href="">网站地图</a> | <a href="">友情链接</a> 
+				</div> -->
+				<p class="fter_2 mt10">© 2014 北京高能壹佰教育科技有限公司 版权所有</p>
+			</div>
+		</div>
+	</body>
+    <script>
+	// 提交验证代码
+	$("#x_submit_form").submit(function(){
+		if($("#x_user_name").val()=='' || $("#x_user_name").val()=="邮箱/手机号"){
+			$(".x_error").html("请输入邮箱/手机号");
+			return false;
+		}else if($("#x_pass").val()=='' || $("#x_pass").val()=="密码"){
+			$(".x_error").html("请输入密码");
+			return false;
+		}else{
+			return true;
+		}
+	})
+	
+	$(document).ready(function(){
+		$("input[type=text],input[type=password],textarea").each(function(){
+			var label=$(this).prev("label");
+			var label_txt=label.text();
+			if(("placeholder" in document.createElement("input"))){
+				$(this).attr("placeholder",label_txt);
+				label.remove();
+			}else{
+				$(this).data("placeholder",label_txt);
+				psuedoPlaceholder($(this));
+				label.remove();
+			}
+		});
+		function psuedoPlaceholder(input){
+			if(input.attr("type")=="password"){
+				var opassword=$("<input type='text' class='"+input.attr("class")+"' value='"+input.data("placeholder")+"' name='addinput' />");
+				input.hide();
+				input.before(opassword);
+				opassword.focus(function(){
+					$(this).hide();
+					input.show().focus();
+				});
+				input.blur(function(){
+					if($(this).val()==""){
+						$(this).hide();
+						opassword.show();
+					}
+				});
+			}else{
+				input.focus(function(){
+					if($(this).val()==$(this).data("placeholder")){
+						$(this).val("");
+					}
+				}).blur(function(){
+					if($(this).val()==""){
+						$(this).val($(this).data("placeholder"));
+					}
+				}).blur();
+			}
+		}
+	})
+</script>

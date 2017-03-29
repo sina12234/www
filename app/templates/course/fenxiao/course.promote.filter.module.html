@@ -1,0 +1,119 @@
+			<style>
+				.wrap-category-courses{ height:20px;float:left; }
+				.wrap-category-courses .category-label-title{ border:none; }
+				.wrap-category-courses .category-label-title:hover{ border:none;}
+			</style>
+            <div class="col-md-20 p0 mt10">
+                <a href="/course.promote.center" class="c-fl">
+                {'全部课程'|tr:'course.list'} >
+                {if($pm['firstCate'] != -1)}
+                    <a href="/course.promote.center?fc={$pm['firstCate']}" class="c-fl ml10">{$firstCateInfo->name_display}<span class=" ml5 delMt8">></span></a>
+                {/if}
+                {if($pm['secondCate'] != -1)}
+                    <a href="/course.promote.center?fc={$pm['firstCate']}&sc={$pm['secondCate']}" class="c-fl ml10">{$secondCateInfo->name_display}</a>
+                {/if}
+                </a>
+                <a href="//{$platform}/index.help.extension" class="c-fr mark-ask">推广规则</a>
+            </div>
+                <div class="cate-list hidden-sm hidden-xs fs14 c-fl col-lg-20 p0">
+                    <dl class="clearfix col-md-20 tac cate-items">
+                        <div class="cate-hd cGray">{'分类'|tr:'course.list'} :</div>
+                        <div class="cate-bd fc tal">
+						{if($showLevel == 1)}
+                        <a href="{utility_tool::getUrl($path,'fc','-1')}" {if($pm['firstCate'] == -1)}class="curr"{/if}>{'全部'|tr:'course.list'}</a>
+                            {if(!empty($firstCateList))}
+                            {foreach($firstCateList as $fk=>$fo)}
+                                    <a href="{utility_tool::getUrl($path,'fc',$fk)}" {if($pm['firstCate'] == $fk)}class="curr"{/if}>{$fo|tr:'course.list'}</a>
+							{/foreach}
+                            {/if}
+                        {elseif($showLevel == 2)}
+						<a href="{utility_tool::getUrl($path,'fc','-1')}" {if($pm['secondCate'] == -1)}class="curr"{/if}>{'全部'|tr:'course.list'}</a>
+                            {if(!empty($secondCateList))}
+                            {foreach($secondCateList as $sk=>$so)}
+									<a href="{utility_tool::getUrl($path,'sc',$sk)}" {if($pm['secondCate'] == $sk)}class="curr"{/if}>{$so|tr:'course.list'}</a>
+							{/foreach}
+                            {/if}
+                        {elseif($showLevel == 3)}
+                        <a href="{if($pm['thirdCate'] == -1)}{utility_tool::getUrl($path,'sc','-1')}{else}{utility_tool::getUrl($path,'tc','-1')}{/if}" {if($pm['thirdCate'] == -1)}class="curr"{/if}>{'全部'|tr:'course.list'}</a>
+                                {if(!empty($thirdCateList))}
+                                {foreach($thirdCateList as $tk=>$to)}
+                                        <a href="{utility_tool::getUrl($path,'tc',$tk)}" {if($pm['thirdCate'] == $tk)}class="curr"{/if}>{$to|tr:'course.list'}</a>
+                                {/foreach}
+                                {/if}
+                        {/if}
+						</div>
+                        <div class="col-xs-5 hidden-lg hidden-md mb10 pd0  col-sm-9 col-sm-offset-2 col-sm-offset-lg-0">
+                            <button class="course-scrool-btn pos-rel col-sm-4 mt5 c-fr">综合<i class="pos-abs"></i></button>
+                        </div>
+                    </dl>
+                    {if(!empty($attrValueList))}
+                    {foreach($attrValueList as $attr)}
+                    {if(!empty($attr->attr_value))}
+                    <dl class="cate-items col-lg-20">
+                        <div class="cate-hd cGray">{$attr->name_display|tr:'course.list'} :</div>
+                        <div class="cate-bd fc tal">
+                            <a href="{utility_tool::getUrl($path,'vid',$attr->attr_id.'|-1')}" {if($attr->flag == 0)}class="curr"{/if}>{'全部'|tr:'course.list'}</a>
+                        {foreach($attr->attr_value as $value)}
+                            <a href="{utility_tool::getUrl($path,'vid',$attr->attr_id.'|'.$value->attr_value_id)}" {if($value->checked == 1)}class="curr"{/if}>{$value->value_name|tr:'course.list'}</a>
+                        {/foreach}
+						</div>
+                    </dl>
+                    {/if}
+                    {/foreach}
+                    {/if}
+                    <dl class="clearfix col-md-20 tac cate-items">
+                        <div class="cate-hd cGray">{'类型'|tr:'course.list'} :</div>
+                        <div class="cate-bd fc tal">
+                            <a href="{utility_tool::getUrl($path,'course_type','')}" {if($pm['course_type'] == 0)}class="curr"{/if}>{'全部'|tr:'course.list'}</a>
+                            <a href="{utility_tool::getUrl($path,'course_type','1')}" {if($pm['course_type'] == 1)}class="curr"{/if}>{'直播课'|tr:'course.list'}</a>
+                            <a href="{utility_tool::getUrl($path,'course_type','2')}" {if($pm['course_type'] == 2)}class="curr"{/if}>{'录播课'|tr:'course.list'}</a>
+                        </div>
+                        <!--<dd>
+                            <a href="{utility_tool::getUrl($path,'course_type','3')}" {if($pm['course_type'] == 3)}class="c-active"{/if}>{'线下课'|tr:'course.list'}</a>
+                        </dd>-->
+                    </dl>
+                </div>
+ <!--
+                <div class="list-scrool col-md-20 mb20 fs14 distri-list-scrool bor1px">
+                    <span class="distriprice ml10 c-fl mr20 {if ($pm['sort']=='price_promote:asc' or  $pm['sort']=='price_promote:desc')}cYellow{/if}">
+                        {if $pm['sort']=='price_promote:asc'}
+                            <a href="{utility_tool::getUrl($path,'sort','price_promote:desc')}">{'价格'|tr:'course.list'}
+                                    <img src="{utility_cdn::img('/assets_v2/img/list-x.png')}">
+                            </a>
+                        {elseif $pm['sort']=='price_promote:desc'}
+                            <a href="{utility_tool::getUrl($path,'sort','price_promote:asc')}">{'价格'|tr:'course.list'}
+                                    <img src="{utility_cdn::img('/assets_v2/img/list-down.png')}">
+                            </a>
+                        {else}
+                            <a href="{utility_tool::getUrl($path,'sort','price_promote:desc')}">{'价格'|tr:'course.list'}
+                                    <img src="{utility_cdn::img('/assets_v2/img/list-up.png')}">
+                            </a>
+                        {/if}
+                    </span>
+                    <form id="full_search_pcourse_form" method="get" action="">
+                    <div class="bor1px priceTxt mt4 c-fl bgf">
+                        <span class="c-fl">&yen;</span>
+                        <input type="text" class="inputpd c-fr" name="minprice" value="{if $pm['minprice']}{$pm['minprice']}{/if}" />
+                    </div>
+                    <span class="c-fl ml5 mr5">—</span>
+                    <div class="bor1px priceTxt mt4 c-fl bgf">
+                        <span class="c-fl">&yen;</span>
+                        <input type="text" class="inputpd c-fr" name="maxprice" value="{if $pm['maxprice']}{$pm['maxprice']}{/if}" />
+                    </div>
+                    <button class="c-fl ml10 btn mt4" id="fullsearch">确定</button>
+                    </form>
+                </div>
+-->
+<script>
+    function fullSearchPcourseSubmit() {
+	var url = '';
+	var search_name = $(".divselect cite").text();
+	url = '/course.promote.center';
+	$('#full_search_pcourse_form').attr('action', url);
+	$('#full_search_pcourse_form').submit();
+    }
+
+    $("#fullsearch").click(function(){
+            fullSearchPcourseSubmit();
+    });
+</script>

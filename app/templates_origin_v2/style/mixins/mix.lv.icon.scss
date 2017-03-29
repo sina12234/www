@@ -1,0 +1,548 @@
+/*
+SCSS variables are information about icon's compiled state, stored under its original file name
+
+.icon-home {
+  width: $icon-home-width;
+}
+
+The large array-like variables contain all information about a single icon
+$icon-home: x y offset_x offset_y width height total_width total_height image_path;
+
+At the bottom of this section, we provide information about the spritesheet itself
+$spritesheet: width height image $spritesheet-sprites;
+*/
+$bangyan1-1-name: 'bangyan1-1';
+$bangyan1-1-x: 74px;
+$bangyan1-1-y: 68px;
+$bangyan1-1-offset-x: -74px;
+$bangyan1-1-offset-y: -68px;
+$bangyan1-1-width: 16px;
+$bangyan1-1-height: 16px;
+$bangyan1-1-total-width: 200px;
+$bangyan1-1-total-height: 168px;
+$bangyan1-1-image: '../image/lv.icon.png';
+$bangyan1-1: (74px, 68px, -74px, -68px, 16px, 16px, 200px, 168px, '../image/lv.icon.png', 'bangyan1-1', );
+$bangyan1-name: 'bangyan1';
+$bangyan1-x: 0px;
+$bangyan1-y: 131px;
+$bangyan1-offset-x: 0px;
+$bangyan1-offset-y: -131px;
+$bangyan1-width: 46px;
+$bangyan1-height: 16px;
+$bangyan1-total-width: 200px;
+$bangyan1-total-height: 168px;
+$bangyan1-image: '../image/lv.icon.png';
+$bangyan1: (0px, 131px, 0px, -131px, 46px, 16px, 200px, 168px, '../image/lv.icon.png', 'bangyan1', );
+$bangyan2-1-name: 'bangyan2-1';
+$bangyan2-1-x: 42px;
+$bangyan2-1-y: 152px;
+$bangyan2-1-offset-x: -42px;
+$bangyan2-1-offset-y: -152px;
+$bangyan2-1-width: 16px;
+$bangyan2-1-height: 16px;
+$bangyan2-1-total-width: 200px;
+$bangyan2-1-total-height: 168px;
+$bangyan2-1-image: '../image/lv.icon.png';
+$bangyan2-1: (42px, 152px, -42px, -152px, 16px, 16px, 200px, 168px, '../image/lv.icon.png', 'bangyan2-1', );
+$bangyan2-name: 'bangyan2';
+$bangyan2-x: 104px;
+$bangyan2-y: 89px;
+$bangyan2-offset-x: -104px;
+$bangyan2-offset-y: -89px;
+$bangyan2-width: 46px;
+$bangyan2-height: 16px;
+$bangyan2-total-width: 200px;
+$bangyan2-total-height: 168px;
+$bangyan2-image: '../image/lv.icon.png';
+$bangyan2: (104px, 89px, -104px, -89px, 46px, 16px, 200px, 168px, '../image/lv.icon.png', 'bangyan2', );
+$bangyan3-1-name: 'bangyan3-1';
+$bangyan3-1-x: 0px;
+$bangyan3-1-y: 152px;
+$bangyan3-1-offset-x: 0px;
+$bangyan3-1-offset-y: -152px;
+$bangyan3-1-width: 16px;
+$bangyan3-1-height: 16px;
+$bangyan3-1-total-width: 200px;
+$bangyan3-1-total-height: 168px;
+$bangyan3-1-image: '../image/lv.icon.png';
+$bangyan3-1: (0px, 152px, 0px, -152px, 16px, 16px, 200px, 168px, '../image/lv.icon.png', 'bangyan3-1', );
+$bangyan3-name: 'bangyan3';
+$bangyan3-x: 51px;
+$bangyan3-y: 110px;
+$bangyan3-offset-x: -51px;
+$bangyan3-offset-y: -110px;
+$bangyan3-width: 46px;
+$bangyan3-height: 16px;
+$bangyan3-total-width: 200px;
+$bangyan3-total-height: 168px;
+$bangyan3-image: '../image/lv.icon.png';
+$bangyan3: (51px, 110px, -51px, -110px, 46px, 16px, 200px, 168px, '../image/lv.icon.png', 'bangyan3', );
+$jinshi1-1-name: 'jinshi1-1';
+$jinshi1-1-x: 21px;
+$jinshi1-1-y: 152px;
+$jinshi1-1-offset-x: -21px;
+$jinshi1-1-offset-y: -152px;
+$jinshi1-1-width: 16px;
+$jinshi1-1-height: 16px;
+$jinshi1-1-total-width: 200px;
+$jinshi1-1-total-height: 168px;
+$jinshi1-1-image: '../image/lv.icon.png';
+$jinshi1-1: (21px, 152px, -21px, -152px, 16px, 16px, 200px, 168px, '../image/lv.icon.png', 'jinshi1-1', );
+$jinshi1-name: 'jinshi1';
+$jinshi1-x: 155px;
+$jinshi1-y: 0px;
+$jinshi1-offset-x: -155px;
+$jinshi1-offset-y: 0px;
+$jinshi1-width: 45px;
+$jinshi1-height: 16px;
+$jinshi1-total-width: 200px;
+$jinshi1-total-height: 168px;
+$jinshi1-image: '../image/lv.icon.png';
+$jinshi1: (155px, 0px, -155px, 0px, 45px, 16px, 200px, 168px, '../image/lv.icon.png', 'jinshi1', );
+$jinshi2-1-name: 'jinshi2-1';
+$jinshi2-1-x: 63px;
+$jinshi2-1-y: 152px;
+$jinshi2-1-offset-x: -63px;
+$jinshi2-1-offset-y: -152px;
+$jinshi2-1-width: 16px;
+$jinshi2-1-height: 16px;
+$jinshi2-1-total-width: 200px;
+$jinshi2-1-total-height: 168px;
+$jinshi2-1-image: '../image/lv.icon.png';
+$jinshi2-1: (63px, 152px, -63px, -152px, 16px, 16px, 200px, 168px, '../image/lv.icon.png', 'jinshi2-1', );
+$jinshi2-name: 'jinshi2';
+$jinshi2-x: 51px;
+$jinshi2-y: 131px;
+$jinshi2-offset-x: -51px;
+$jinshi2-offset-y: -131px;
+$jinshi2-width: 46px;
+$jinshi2-height: 16px;
+$jinshi2-total-width: 200px;
+$jinshi2-total-height: 168px;
+$jinshi2-image: '../image/lv.icon.png';
+$jinshi2: (51px, 131px, -51px, -131px, 46px, 16px, 200px, 168px, '../image/lv.icon.png', 'jinshi2', );
+$jinshi3-1-name: 'jinshi3-1';
+$jinshi3-1-x: 53px;
+$jinshi3-1-y: 68px;
+$jinshi3-1-offset-x: -53px;
+$jinshi3-1-offset-y: -68px;
+$jinshi3-1-width: 16px;
+$jinshi3-1-height: 16px;
+$jinshi3-1-total-width: 200px;
+$jinshi3-1-total-height: 168px;
+$jinshi3-1-image: '../image/lv.icon.png';
+$jinshi3-1: (53px, 68px, -53px, -68px, 16px, 16px, 200px, 168px, '../image/lv.icon.png', 'jinshi3-1', );
+$jinshi3-name: 'jinshi3';
+$jinshi3-x: 102px;
+$jinshi3-y: 110px;
+$jinshi3-offset-x: -102px;
+$jinshi3-offset-y: -110px;
+$jinshi3-width: 46px;
+$jinshi3-height: 16px;
+$jinshi3-total-width: 200px;
+$jinshi3-total-height: 168px;
+$jinshi3-image: '../image/lv.icon.png';
+$jinshi3: (102px, 110px, -102px, -110px, 46px, 16px, 200px, 168px, '../image/lv.icon.png', 'jinshi3', );
+$juren1-1-name: 'juren1-1';
+$juren1-1-x: 177px;
+$juren1-1-y: 129px;
+$juren1-1-offset-x: -177px;
+$juren1-1-offset-y: -129px;
+$juren1-1-width: 17px;
+$juren1-1-height: 16px;
+$juren1-1-total-width: 200px;
+$juren1-1-total-height: 168px;
+$juren1-1-image: '../image/lv.icon.png';
+$juren1-1: (177px, 129px, -177px, -129px, 17px, 16px, 200px, 168px, '../image/lv.icon.png', 'juren1-1', );
+$juren1-name: 'juren1';
+$juren1-x: 102px;
+$juren1-y: 21px;
+$juren1-offset-x: -102px;
+$juren1-offset-y: -21px;
+$juren1-width: 48px;
+$juren1-height: 16px;
+$juren1-total-width: 200px;
+$juren1-total-height: 168px;
+$juren1-image: '../image/lv.icon.png';
+$juren1: (102px, 21px, -102px, -21px, 48px, 16px, 200px, 168px, '../image/lv.icon.png', 'juren1', );
+$juren2-1-name: 'juren2-1';
+$juren2-1-x: 155px;
+$juren2-1-y: 87px;
+$juren2-1-offset-x: -155px;
+$juren2-1-offset-y: -87px;
+$juren2-1-width: 17px;
+$juren2-1-height: 16px;
+$juren2-1-total-width: 200px;
+$juren2-1-total-height: 168px;
+$juren2-1-image: '../image/lv.icon.png';
+$juren2-1: (155px, 87px, -155px, -87px, 17px, 16px, 200px, 168px, '../image/lv.icon.png', 'juren2-1', );
+$juren2-name: 'juren2';
+$juren2-x: 102px;
+$juren2-y: 131px;
+$juren2-offset-x: -102px;
+$juren2-offset-y: -131px;
+$juren2-width: 45px;
+$juren2-height: 16px;
+$juren2-total-width: 200px;
+$juren2-total-height: 168px;
+$juren2-image: '../image/lv.icon.png';
+$juren2: (102px, 131px, -102px, -131px, 45px, 16px, 200px, 168px, '../image/lv.icon.png', 'juren2', );
+$juren3-1-name: 'juren3-1';
+$juren3-1-x: 177px;
+$juren3-1-y: 108px;
+$juren3-1-offset-x: -177px;
+$juren3-1-offset-y: -108px;
+$juren3-1-width: 17px;
+$juren3-1-height: 16px;
+$juren3-1-total-width: 200px;
+$juren3-1-total-height: 168px;
+$juren3-1-image: '../image/lv.icon.png';
+$juren3-1: (177px, 108px, -177px, -108px, 17px, 16px, 200px, 168px, '../image/lv.icon.png', 'juren3-1', );
+$juren3-name: 'juren3';
+$juren3-x: 0px;
+$juren3-y: 110px;
+$juren3-offset-x: 0px;
+$juren3-offset-y: -110px;
+$juren3-width: 46px;
+$juren3-height: 16px;
+$juren3-total-width: 200px;
+$juren3-total-height: 168px;
+$juren3-image: '../image/lv.icon.png';
+$juren3: (0px, 110px, 0px, -110px, 46px, 16px, 200px, 168px, '../image/lv.icon.png', 'juren3', );
+$shusheng1-1-name: 'shusheng1-1';
+$shusheng1-1-x: 128px;
+$shusheng1-1-y: 152px;
+$shusheng1-1-offset-x: -128px;
+$shusheng1-1-offset-y: -152px;
+$shusheng1-1-width: 17px;
+$shusheng1-1-height: 13px;
+$shusheng1-1-total-width: 200px;
+$shusheng1-1-total-height: 168px;
+$shusheng1-1-image: '../image/lv.icon.png';
+$shusheng1-1: (128px, 152px, -128px, -152px, 17px, 13px, 200px, 168px, '../image/lv.icon.png', 'shusheng1-1', );
+$shusheng1-name: 'shusheng1';
+$shusheng1-x: 102px;
+$shusheng1-y: 0px;
+$shusheng1-offset-x: -102px;
+$shusheng1-offset-y: 0px;
+$shusheng1-width: 48px;
+$shusheng1-height: 16px;
+$shusheng1-total-width: 200px;
+$shusheng1-total-height: 168px;
+$shusheng1-image: '../image/lv.icon.png';
+$shusheng1: (102px, 0px, -102px, 0px, 48px, 16px, 200px, 168px, '../image/lv.icon.png', 'shusheng1', );
+$shusheng2-1-name: 'shusheng2-1';
+$shusheng2-1-x: 106px;
+$shusheng2-1-y: 152px;
+$shusheng2-1-offset-x: -106px;
+$shusheng2-1-offset-y: -152px;
+$shusheng2-1-width: 17px;
+$shusheng2-1-height: 13px;
+$shusheng2-1-total-width: 200px;
+$shusheng2-1-total-height: 168px;
+$shusheng2-1-image: '../image/lv.icon.png';
+$shusheng2-1: (106px, 152px, -106px, -152px, 17px, 13px, 200px, 168px, '../image/lv.icon.png', 'shusheng2-1', );
+$shusheng2-name: 'shusheng2';
+$shusheng2-x: 0px;
+$shusheng2-y: 68px;
+$shusheng2-offset-x: 0px;
+$shusheng2-offset-y: -68px;
+$shusheng2-width: 48px;
+$shusheng2-height: 16px;
+$shusheng2-total-width: 200px;
+$shusheng2-total-height: 168px;
+$shusheng2-image: '../image/lv.icon.png';
+$shusheng2: (0px, 68px, 0px, -68px, 48px, 16px, 200px, 168px, '../image/lv.icon.png', 'shusheng2', );
+$shusheng3-1-name: 'shusheng3-1';
+$shusheng3-1-x: 84px;
+$shusheng3-1-y: 152px;
+$shusheng3-1-offset-x: -84px;
+$shusheng3-1-offset-y: -152px;
+$shusheng3-1-width: 17px;
+$shusheng3-1-height: 13px;
+$shusheng3-1-total-width: 200px;
+$shusheng3-1-total-height: 168px;
+$shusheng3-1-image: '../image/lv.icon.png';
+$shusheng3-1: (84px, 152px, -84px, -152px, 17px, 13px, 200px, 168px, '../image/lv.icon.png', 'shusheng3-1', );
+$shusheng3-name: 'shusheng3';
+$shusheng3-x: 102px;
+$shusheng3-y: 63px;
+$shusheng3-offset-x: -102px;
+$shusheng3-offset-y: -63px;
+$shusheng3-width: 47px;
+$shusheng3-height: 16px;
+$shusheng3-total-width: 200px;
+$shusheng3-total-height: 168px;
+$shusheng3-image: '../image/lv.icon.png';
+$shusheng3: (102px, 63px, -102px, -63px, 47px, 16px, 200px, 168px, '../image/lv.icon.png', 'shusheng3', );
+$tanhua1-1-name: 'tanhua1-1';
+$tanhua1-1-x: 155px;
+$tanhua1-1-y: 21px;
+$tanhua1-1-offset-x: -155px;
+$tanhua1-1-offset-y: -21px;
+$tanhua1-1-width: 18px;
+$tanhua1-1-height: 17px;
+$tanhua1-1-total-width: 200px;
+$tanhua1-1-total-height: 168px;
+$tanhua1-1-image: '../image/lv.icon.png';
+$tanhua1-1: (155px, 21px, -155px, -21px, 18px, 17px, 200px, 168px, '../image/lv.icon.png', 'tanhua1-1', );
+$tanhua1-name: 'tanhua1';
+$tanhua1-x: 51px;
+$tanhua1-y: 46px;
+$tanhua1-offset-x: -51px;
+$tanhua1-offset-y: -46px;
+$tanhua1-width: 46px;
+$tanhua1-height: 17px;
+$tanhua1-total-width: 200px;
+$tanhua1-total-height: 168px;
+$tanhua1-image: '../image/lv.icon.png';
+$tanhua1: (51px, 46px, -51px, -46px, 46px, 17px, 200px, 168px, '../image/lv.icon.png', 'tanhua1', );
+$tanhua2-1-name: 'tanhua2-1';
+$tanhua2-1-x: 178px;
+$tanhua2-1-y: 21px;
+$tanhua2-1-offset-x: -178px;
+$tanhua2-1-offset-y: -21px;
+$tanhua2-1-width: 18px;
+$tanhua2-1-height: 17px;
+$tanhua2-1-total-width: 200px;
+$tanhua2-1-total-height: 168px;
+$tanhua2-1-image: '../image/lv.icon.png';
+$tanhua2-1: (178px, 21px, -178px, -21px, 18px, 17px, 200px, 168px, '../image/lv.icon.png', 'tanhua2-1', );
+$tanhua2-name: 'tanhua2';
+$tanhua2-x: 0px;
+$tanhua2-y: 46px;
+$tanhua2-offset-x: 0px;
+$tanhua2-offset-y: -46px;
+$tanhua2-width: 46px;
+$tanhua2-height: 17px;
+$tanhua2-total-width: 200px;
+$tanhua2-total-height: 168px;
+$tanhua2-image: '../image/lv.icon.png';
+$tanhua2: (0px, 46px, 0px, -46px, 46px, 17px, 200px, 168px, '../image/lv.icon.png', 'tanhua2', );
+$tanhua3-1-name: 'tanhua3-1';
+$tanhua3-1-x: 155px;
+$tanhua3-1-y: 65px;
+$tanhua3-1-offset-x: -155px;
+$tanhua3-1-offset-y: -65px;
+$tanhua3-1-width: 18px;
+$tanhua3-1-height: 17px;
+$tanhua3-1-total-width: 200px;
+$tanhua3-1-total-height: 168px;
+$tanhua3-1-image: '../image/lv.icon.png';
+$tanhua3-1: (155px, 65px, -155px, -65px, 18px, 17px, 200px, 168px, '../image/lv.icon.png', 'tanhua3-1', );
+$tanhua3-name: 'tanhua3';
+$tanhua3-x: 51px;
+$tanhua3-y: 23px;
+$tanhua3-offset-x: -51px;
+$tanhua3-offset-y: -23px;
+$tanhua3-width: 46px;
+$tanhua3-height: 17px;
+$tanhua3-total-width: 200px;
+$tanhua3-total-height: 168px;
+$tanhua3-image: '../image/lv.icon.png';
+$tanhua3: (51px, 23px, -51px, -23px, 46px, 17px, 200px, 168px, '../image/lv.icon.png', 'tanhua3', );
+$xiucai1-1-name: 'xiucai1-1';
+$xiucai1-1-x: 178px;
+$xiucai1-1-y: 43px;
+$xiucai1-1-offset-x: -178px;
+$xiucai1-1-offset-y: -43px;
+$xiucai1-1-width: 18px;
+$xiucai1-1-height: 17px;
+$xiucai1-1-total-width: 200px;
+$xiucai1-1-total-height: 168px;
+$xiucai1-1-image: '../image/lv.icon.png';
+$xiucai1-1: (178px, 43px, -178px, -43px, 18px, 17px, 200px, 168px, '../image/lv.icon.png', 'xiucai1-1', );
+$xiucai1-name: 'xiucai1';
+$xiucai1-x: 51px;
+$xiucai1-y: 0px;
+$xiucai1-offset-x: -51px;
+$xiucai1-offset-y: 0px;
+$xiucai1-width: 46px;
+$xiucai1-height: 18px;
+$xiucai1-total-width: 200px;
+$xiucai1-total-height: 168px;
+$xiucai1-image: '../image/lv.icon.png';
+$xiucai1: (51px, 0px, -51px, 0px, 46px, 18px, 200px, 168px, '../image/lv.icon.png', 'xiucai1', );
+$xiucai2-1-name: 'xiucai2-1';
+$xiucai2-1-x: 178px;
+$xiucai2-1-y: 65px;
+$xiucai2-1-offset-x: -178px;
+$xiucai2-1-offset-y: -65px;
+$xiucai2-1-width: 18px;
+$xiucai2-1-height: 17px;
+$xiucai2-1-total-width: 200px;
+$xiucai2-1-total-height: 168px;
+$xiucai2-1-image: '../image/lv.icon.png';
+$xiucai2-1: (178px, 65px, -178px, -65px, 18px, 17px, 200px, 168px, '../image/lv.icon.png', 'xiucai2-1', );
+$xiucai2-name: 'xiucai2';
+$xiucai2-x: 0px;
+$xiucai2-y: 23px;
+$xiucai2-offset-x: 0px;
+$xiucai2-offset-y: -23px;
+$xiucai2-width: 46px;
+$xiucai2-height: 18px;
+$xiucai2-total-width: 200px;
+$xiucai2-total-height: 168px;
+$xiucai2-image: '../image/lv.icon.png';
+$xiucai2: (0px, 23px, 0px, -23px, 46px, 18px, 200px, 168px, '../image/lv.icon.png', 'xiucai2', );
+$xiucai3-1-name: 'xiucai3-1';
+$xiucai3-1-x: 155px;
+$xiucai3-1-y: 43px;
+$xiucai3-1-offset-x: -155px;
+$xiucai3-1-offset-y: -43px;
+$xiucai3-1-width: 18px;
+$xiucai3-1-height: 17px;
+$xiucai3-1-total-width: 200px;
+$xiucai3-1-total-height: 168px;
+$xiucai3-1-image: '../image/lv.icon.png';
+$xiucai3-1: (155px, 43px, -155px, -43px, 18px, 17px, 200px, 168px, '../image/lv.icon.png', 'xiucai3-1', );
+$xiucai3-name: 'xiucai3';
+$xiucai3-x: 0px;
+$xiucai3-y: 0px;
+$xiucai3-offset-x: 0px;
+$xiucai3-offset-y: 0px;
+$xiucai3-width: 46px;
+$xiucai3-height: 18px;
+$xiucai3-total-width: 200px;
+$xiucai3-total-height: 168px;
+$xiucai3-image: '../image/lv.icon.png';
+$xiucai3: (0px, 0px, 0px, 0px, 46px, 18px, 200px, 168px, '../image/lv.icon.png', 'xiucai3', );
+$zhuangyuan1-1-name: 'zhuangyuan1-1';
+$zhuangyuan1-1-x: 155px;
+$zhuangyuan1-1-y: 129px;
+$zhuangyuan1-1-offset-x: -155px;
+$zhuangyuan1-1-offset-y: -129px;
+$zhuangyuan1-1-width: 17px;
+$zhuangyuan1-1-height: 16px;
+$zhuangyuan1-1-total-width: 200px;
+$zhuangyuan1-1-total-height: 168px;
+$zhuangyuan1-1-image: '../image/lv.icon.png';
+$zhuangyuan1-1: (155px, 129px, -155px, -129px, 17px, 16px, 200px, 168px, '../image/lv.icon.png', 'zhuangyuan1-1', );
+$zhuangyuan1-name: 'zhuangyuan1';
+$zhuangyuan1-x: 102px;
+$zhuangyuan1-y: 42px;
+$zhuangyuan1-offset-x: -102px;
+$zhuangyuan1-offset-y: -42px;
+$zhuangyuan1-width: 47px;
+$zhuangyuan1-height: 16px;
+$zhuangyuan1-total-width: 200px;
+$zhuangyuan1-total-height: 168px;
+$zhuangyuan1-image: '../image/lv.icon.png';
+$zhuangyuan1: (102px, 42px, -102px, -42px, 47px, 16px, 200px, 168px, '../image/lv.icon.png', 'zhuangyuan1', );
+$zhuangyuan2-1-name: 'zhuangyuan2-1';
+$zhuangyuan2-1-x: 177px;
+$zhuangyuan2-1-y: 87px;
+$zhuangyuan2-1-offset-x: -177px;
+$zhuangyuan2-1-offset-y: -87px;
+$zhuangyuan2-1-width: 17px;
+$zhuangyuan2-1-height: 16px;
+$zhuangyuan2-1-total-width: 200px;
+$zhuangyuan2-1-total-height: 168px;
+$zhuangyuan2-1-image: '../image/lv.icon.png';
+$zhuangyuan2-1: (177px, 87px, -177px, -87px, 17px, 16px, 200px, 168px, '../image/lv.icon.png', 'zhuangyuan2-1', );
+$zhuangyuan2-name: 'zhuangyuan2';
+$zhuangyuan2-x: 52px;
+$zhuangyuan2-y: 89px;
+$zhuangyuan2-offset-x: -52px;
+$zhuangyuan2-offset-y: -89px;
+$zhuangyuan2-width: 47px;
+$zhuangyuan2-height: 16px;
+$zhuangyuan2-total-width: 200px;
+$zhuangyuan2-total-height: 168px;
+$zhuangyuan2-image: '../image/lv.icon.png';
+$zhuangyuan2: (52px, 89px, -52px, -89px, 47px, 16px, 200px, 168px, '../image/lv.icon.png', 'zhuangyuan2', );
+$zhuangyuan3-1-name: 'zhuangyuan3-1';
+$zhuangyuan3-1-x: 155px;
+$zhuangyuan3-1-y: 108px;
+$zhuangyuan3-1-offset-x: -155px;
+$zhuangyuan3-1-offset-y: -108px;
+$zhuangyuan3-1-width: 17px;
+$zhuangyuan3-1-height: 16px;
+$zhuangyuan3-1-total-width: 200px;
+$zhuangyuan3-1-total-height: 168px;
+$zhuangyuan3-1-image: '../image/lv.icon.png';
+$zhuangyuan3-1: (155px, 108px, -155px, -108px, 17px, 16px, 200px, 168px, '../image/lv.icon.png', 'zhuangyuan3-1', );
+$zhuangyuan3-name: 'zhuangyuan3';
+$zhuangyuan3-x: 0px;
+$zhuangyuan3-y: 89px;
+$zhuangyuan3-offset-x: 0px;
+$zhuangyuan3-offset-y: -89px;
+$zhuangyuan3-width: 47px;
+$zhuangyuan3-height: 16px;
+$zhuangyuan3-total-width: 200px;
+$zhuangyuan3-total-height: 168px;
+$zhuangyuan3-image: '../image/lv.icon.png';
+$zhuangyuan3: (0px, 89px, 0px, -89px, 47px, 16px, 200px, 168px, '../image/lv.icon.png', 'zhuangyuan3', );
+$spritesheet-width: 200px;
+$spritesheet-height: 168px;
+$spritesheet-image: '../image/lv.icon.png';
+$spritesheet-sprites: ($bangyan1-1, $bangyan1, $bangyan2-1, $bangyan2, $bangyan3-1, $bangyan3, $jinshi1-1, $jinshi1, $jinshi2-1, $jinshi2, $jinshi3-1, $jinshi3, $juren1-1, $juren1, $juren2-1, $juren2, $juren3-1, $juren3, $shusheng1-1, $shusheng1, $shusheng2-1, $shusheng2, $shusheng3-1, $shusheng3, $tanhua1-1, $tanhua1, $tanhua2-1, $tanhua2, $tanhua3-1, $tanhua3, $xiucai1-1, $xiucai1, $xiucai2-1, $xiucai2, $xiucai3-1, $xiucai3, $zhuangyuan1-1, $zhuangyuan1, $zhuangyuan2-1, $zhuangyuan2, $zhuangyuan3-1, $zhuangyuan3, );
+$spritesheet: (200px, 168px, '../image/lv.icon.png', $spritesheet-sprites, );
+
+/*
+The provided mixins are intended to be used with the array-like variables
+
+.icon-home {
+  @include sprite-width($icon-home);
+}
+
+.icon-email {
+  @include sprite($icon-email);
+}
+
+Example usage in HTML:
+
+`display: block` sprite:
+<div class="icon-home"></div>
+
+To change `display` (e.g. `display: inline-block;`), we suggest using a common CSS class:
+
+// CSS
+.icon {
+  display: inline-block;
+}
+
+// HTML
+<i class="icon icon-home"></i>
+*/
+@mixin sprite-width($sprite) {
+	display:inline-block;
+  width: nth($sprite, 5);
+}
+
+@mixin sprite-height($sprite) {
+  height: nth($sprite, 6);
+}
+
+@mixin sprite-position($sprite) {
+  $sprite-offset-x: nth($sprite, 3);
+  $sprite-offset-y: nth($sprite, 4);
+  background-position: $sprite-offset-x  $sprite-offset-y;
+}
+
+@mixin sprite-image($sprite) {
+  $sprite-image: nth($sprite, 9);
+  background-image: url(#{$sprite-image});
+}
+
+@mixin sprite($sprite) {
+  @include sprite-image($sprite);
+  @include sprite-position($sprite);
+  @include sprite-width($sprite);
+  @include sprite-height($sprite);
+}
+
+/*
+The `sprites` mixin generates identical output to the CSS template
+  but can be overridden inside of SCSS
+
+@include sprites($spritesheet-sprites);
+*/
+@mixin sprites($sprites) {
+  @each $sprite in $sprites {
+    $sprite-name: nth($sprite, 10);
+    .#{$sprite-name} {
+      @include sprite($sprite);
+    }
+  }
+}

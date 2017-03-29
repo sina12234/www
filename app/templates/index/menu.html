@@ -1,0 +1,85 @@
+        <div class="user-left-menu col-lg-4 col-md-4 hidden-xs hidden-sm">
+            {if $type!='default'}
+            <input type="hidden" value="{$isTeacher}" name="IsTeacher"/>
+            <input type="hidden" value="{$type}" name="Type"/>
+            <div class="user-info">
+                <p class="face face-post-icon">
+                    <a href="/index.user.uploadPic/1" class="face-fixed fs14"><em>点击修改头像</em></a>
+                    <img src="{if !empty($userInfo->avatar->large)}{$userInfo->avatar->large}{else}{utility_cdn::img(' /assets_v2/img/1.png')}{/if}" alt="" />
+                    {if !empty($isTeacher) and ($type=='teacher') }
+                    <span class="t-users-icon"><i>教师</i></span> 
+                    {elseif !empty($isTeacher) and $type=='student'}
+                    <span class="s-users-icon"><i>学生</i></span>
+                    {/if}
+                    <a href="/index.rank.rule" target="_blank" class="level-icon{$userLevel}" id="levelIconLeft"></a>
+                </p>
+                {if !empty($isTeacher) and ($type=='teacher') }
+                <p class="tac pt5 gift-flower">
+                    <img src="{utility_cdn::img('/assets_v2/img/gift-flower.png')}"></img>共<em id="gift-total-num">0</em>朵
+                </p>
+                {/if}
+                <p class="name fs18">
+				<!--
+                    span class="growth-user-name col-sm-15">{$userInfo->name}</span
+                	span class="growth-schr-icon xiucai-icon1"></span
+                -->
+                        {$userInfo->name}
+                <!--
+                   <span class="col-lg-8 col-md-10 fs12">
+                   {if $type=='student'}
+                        <em class="s-student-tip-infos col-lg-20">学生</em>
+                    {else}
+                        <em class="t-teacher-tip-infos col-lg-20">教师</em>
+                    {/if}
+                    </span>
+                -->
+				</p>
+                {if !empty($province)}
+                <p class="other col-sm-20">
+                    <span class="col-lg-13 col-md-20 local-icon icon">{$province} {$city}</span>
+                    <a href="/index.user.info" class="col-lg-7 hidden-md c-fr" target="_blank" style="padding:0">
+                        <span class="set-icon icon c-fl"></span>
+                        <span class="c-fl">基础设置</span>
+                    </a>
+                </p>
+                {else}
+                <p class="other cBlue hidden-xs hidden-sm col-lg-20 col-md-20">
+                    <a href="/index.user.info">资料完善10%快去完善</a>
+                </p>
+                {/if}
+            </div>
+            {/if}
+            
+            <ul class="col-lg-20 fs16">
+                {$menu}
+            </ul>
+            {if !empty($isTeacher)&&$type=='student'}
+            <a href="/index.teacher.timetable" class="c-fr" style="margin-top:10px"><span class="switch-icon icon"></span>切换教学中心</a>
+            {elseif !empty($isTeacher)&&$type=='teacher'}
+            <a href="/index.student.course" class="c-fr" style="margin-top:10px"><span class="switch-icon icon"></span>切换学习中心</a>
+            {/if}
+        </div>
+<script>
+    function FlawerSumNum(element,type){
+        $.ajax({
+            type:'post',
+            url:'/user/gift/getStudentOrTeacherGiftSum',
+            data:{ type:type},
+            dataType:'json',
+            success:function(data){
+                if(data.code=='0'){
+                    element.html(data.gift_count);
+                }
+            }
+
+        })
+    }
+    $(function(){
+        var giftTotalNum=$("#gift-total-num");
+        var ISteacher=$("input[name='IsTeacher']").val();
+        var Type=$("input[name='Type']").val();
+        if ((ISteacher!='') && (Type=='teacher' || Type=='default')){
+            FlawerSumNum(giftTotalNum,2);
+        }
+    })
+</script>

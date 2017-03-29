@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<meta name="renderer" content="webkit">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="title" content="云课 - 寒假报名">
+<meta name="keywords" content="云课 - 云课堂 - 寒假报名">
+<meta name="description" content="寒假课程报名">
+<link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets_v2/img/platform/yunke.ico')}" />
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/bootstrap/bootstrap.min.css')}">
+<title>枣庄教师微课大赛 - 云课网 </title>
+<style type="text/css">
+body{ background:#3697e0;padding:0;margin:0;color:#fff }
+header,section,footer{ float:left;width:100%; }
+a:link{ color:#333; }
+a:hover,a:visited{ text-decoration:none;color:#333; }
+.c-fr{ float:right; margin-top:15px;}
+.banner{ background:url(/assets_v2/img/special/2016_04_18/banner.jpg) no-repeat center top;background-color:#3697e0;height:600px;background-size:100%; }
+.bg2{ background:url(/assets_v2/img/special/2016_04_18/bg_02.jpg) no-repeat center;background-color:#3697e0;background-size:100% }
+footer{ background:#2f83c2;padding:30px 0;color:#ffffff;margin-top: 50px;line-height:28px; }
+footer a:link,footer a:visited{ color:#ffffff; }
+.main{ margin:80px auto 10px auto;width:1000px;border:3px solid #b5d9f4 }
+.main2{ margin:80px auto 10px auto;width:1000px }
+.ta-c{ text-align:center }
+.main-info1{ padding:30px 30px 30px 30px;color:#fff;line-height:180% }
+.main-info1 p{ padding:0;margin:0 }
+.pins{ margin:-210px auto 0 auto;width:715px }
+.num1{ margin-top:-80px;margin-left:30px}
+.num2{ margin-top:-50px;margin-left:30px}
+.txt1{ margin-left:110px;color:#fff }
+.org-list{ float:left;width:100%;overflow:hidden;margin:0;padding:0 }
+.org-list a{ color:#fff }
+.org-list li{ padding:0 10px;list-style:none;text-align:center;overflow:hidden }
+.org-list li img{ width:100% }
+.org-list .org-img{ background:#fff }
+.ad-time{ position:absolute;top:80%;left:50%;margin:-35px 0 0 -300px;font-size:2em;color:#000;-webkit-transform: rotate(-8deg);-moz-transform: rotate(-8deg);font-weight:bold;text-shadow:1px 0px 0px #fff}
+.main-times{ float:left;width:100%;padding:0;margin:20px 0 40px 40px }
+.main-times dd,.main-times dt{ margin:0;padding:0 }
+.main-times p{ width:initial;margin:0;padding:0 }
+.main-times dd img{ float:left;width:25px }
+.cyellow{ color:#fef701 }
+.banner-img{ display:none }
+.chuzhong { margin-top:30px;width:100%;float:left; }
+@media screen and (max-width:800px) and (min-width:320px){
+    .banner-img{ display:block }
+    .banner{  background:none;height:initial;position:relative;z-index:1 }
+    .banner-img img{ width:100% }
+    .ad-time{ font-size:1em;margin:-35px 0 0 -30% }
+    .pins{ width:80%;overflow:hidden }
+    .pins img{ width:100%; }
+    .num1,.num2,.num3 { width:15%;float:left;margin:-10% 0 0 5% }
+    .txt1{ width:35%; padding-top:20px;font-size:12px;}
+    .txt1 img{ width:100% }
+    .num1 img,.num2 img,.num3 img{ width:100% }
+    .main-info1{ width:100% }
+    .main,.main2{ width:100%;margin: 40px auto 10px auto; }
+    .main2{ margin-top:30px }
+    .xiaoxue{ width:100% }
+    .xiaoxue img{ width:90% }
+    .chuzhong{ width:100%;float:left;margin-top:30px }
+    .main-times dd{ margin-bottom:10px }
+	.banner-img-xianjin img{ position:absolute;bottom:3px;left:70px; }
+    .main-times{ margin:20px 0 40px 0;  }
+}
+</style>
+</head>
+<body>
+<section class="banner">
+    <div class="banner-img">
+		<img src="/assets_v2/img/special/2016_04_18/m-banner.jpg">
+		<div class="visible-xs col-xs-4 banner-img-xianjin">
+			<img src="/assets_v2/img/special/2016_04_18/xianjin.png">
+		</div>
+	</div>
+</section>
+<section>
+    <div class="main">
+        <div class="pins hidden-sm hidden-xs"><img src="/assets_v2/img/special/2016_04_18/pins.png"></div>
+        <div class="num1"><img src="/assets_v2/img/special/2016_04_18/n1.png"></div>
+        <div class="txt1"><img src="/assets_v2/img/special/2016_04_18/t1.png"></div>
+        <div class="main-info1">
+        <p>为重点推动“网络学习空间人人通”，深化普及“一师一优课、一课一名师”活动，山东省多所学校决定携手云课平台，联合举办教师微课大赛。</p>
+        <p>老师们在报名参赛后，录制并上传创意性微课视频。举办方将根据最终的投票结果，选出获奖教师并颁发奖品。 各位家长和学生可登录学校云课平台，为自己心目中的最佳课程投票。凡参与投票皆可获得线上体验课程，并有机会获得幸运投票奖哦！ 参与微课大赛，心动不如行动！</p></div>
+    </div>
+</section>
+<section>
+    <div class="main">
+        <div class="num2"><img src="/assets_v2/img/special/2016_04_18/n2.png"></div>
+        <div class="txt1"><img src="/assets_v2/img/special/2016_04_18/t2.png"></div>
+        <div class="col-md-5 hidden-xs hidden-sm"><img src="/assets_v2/img/special/2016_04_18/xianjin.png" class="c-fr"></div>
+        <div class="col-md-15 col-xs-20 col-sm-20">
+            <p><img src="/assets_v2/img/special/2016_04_18/num.png"> 学生投票</p>
+            <p>
+            (1) 参与对象：学校学生及家长<br>
+            (2) 参与方式：登陆云课账号投票（或通过qq、微信等方式进行投票）<br>
+            (2) 每人限投四票。
+            </p>
+            <p><img src="/assets_v2/img/special/2016_04_18/num2.png"> 专家评选：由云课平台专家团队进行评比打分。</p>
+            <div class="col-md-20 col-xs-20" style="padding-left:0;"> 
+               <span style="float:left;"> 计分办法:学生投票率(</span><p style="float:left;margin:-10px 10px 5px 10px;text-align:center;"><span style="border-bottom:1px solid #fff;padding-bottom:2px;">学生平均投票数</span><br><span>数学生总人数</span></p>)和专家评审打分各占50分
+            </div>
+            <p><img src="/assets_v2/img/special/2016_04_18/num3.png"> 奖项设置</p>
+            <div class="col-md-20" style="padding-left:0;padding-bottom:5px;">小学组和初中组分设 特等奖5名，一等奖：10名，二等奖：30名，三等奖：60名</div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</section>
+<section class="bg2">
+    <div class="main">
+        <div class="num2"><img src="/assets_v2/img/special/2016_04_18/n3.png"></div>
+        <div class="txt1"><img src="/assets_v2/img/special/2016_04_18/t3.png"></div>
+        <dl class="main-times">
+            <dd class="col-md-3 col-xs-20"><img src="/assets_v2/img/special/2016_04_18/nn1.png"><p class="c-fl">&nbsp;&nbsp; 4月15日到5月1日</br><span class="cyellow">&nbsp;&nbsp;报名筹备</span></p></dd>
+            <dt class="col-md-2 hidden-xs"><img src="/assets_v2/img/special/2016_04_18/line.png"></dt>
+            <dd class="col-md-3 col-xs-20"><img src="/assets_v2/img/special/2016_04_18/nn2.png"><p class="c-fl">&nbsp;&nbsp;5月1日到6月19日</br><span class="cyellow">&nbsp;&nbsp;上传视频</span></p></dd>
+            <dt class="col-md-2 hidden-xs"><img src="/assets_v2/img/special/2016_04_18/line.png"></dt>
+            <dd class="col-md-3 col-xs-20"><img src="/assets_v2/img/special/2016_04_18/nn3.png"><p class="c-fl">&nbsp;&nbsp;6月22日到7月1日</br><span class="cyellow">&nbsp;&nbsp;投票</span></p></dd>
+            <dt class="col-md-2 hidden-xs"><img src="/assets_v2/img/special/2016_04_18/line.png"></dt>
+            <dd class="col-md-3 col-xs-20"><img src="/assets_v2/img/special/2016_04_18/nn4.png"><p class="c-fl">&nbsp;&nbsp;7月1日到 7月3日</br><span class="cyellow">&nbsp;&nbsp;大赛颁奖</span></p></dd>
+        </dl>
+        <div class="clearfix"></div>
+    </div>
+    <div class="main2" style="text-align:center;font-size:30px;font-weight:bold;">
+        <p>点击下方学校进入投票页↓</p>
+    </div>
+    <div class="main2">
+        <div class="xiaoxue"><img src="/assets_v2/img/special/2016_04_18/xiaoxue.png"></div>
+        <ul class="org-list">
+            <li class="col-md-5 col-xs-10">
+                <a href="https://bzzzxxx.yunke.com/org/poll/info/86">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/primary-school/beizhuang-school.jpg"></p>
+                    <p class="org-name">北庄镇中心小学</p>
+                </a>
+            </li>
+            <li class="col-md-5 col-xs-10">
+                <a href="https://ctzxxx.yunke.com/org/poll/info/87">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/primary-school/chengtou-school.jpg"></p>
+                    <p class="org-name">山亭区城头镇中心小学</p>
+                </a>
+            </li>
+            <li class="col-md-5 col-xs-10">
+                <a href="https://dzzxxx.yunke.com/org/poll/info/88">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/primary-school/dianzi-school.jpg"></p>
+                    <p class="org-name">店子中心小学</p>
+                </a>
+            </li>
+            <li class="col-md-5 col-xs-10">
+                <a href="https://stqfmz.yunke.com/org/poll/info/89">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/primary-school/fengmao-school.jpg"></p>
+                    <p class="org-name">冯卯镇中心小学</p>
+                </a>
+            </li>
+            <li class="col-md-5 col-xs-10">
+                <a href="https://fczxxx.yunke.com/org/poll/info/92">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/primary-school/fucheng-school.jpg"></p>
+                    <p class="org-name">山亭区凫城中心小学</p>
+                </a>
+            </li>
+            <li class="col-md-5 col-xs-10">
+                <a href="https://gqxw.yunke.com/org/poll/info/101">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/primary-school/gnogqing-school.jpg"></p>
+                    <p class="org-name">共青希望学校</p>
+                </a>
+            </li>
+			<li class="col-md-5 col-xs-10">
+                <a href="https://sdstsy2.yunke.com/org/poll/info/94">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/primary-school/shanting-school.jpg"></p>
+                    <p class="org-name">山亭区第二实验小学</p>
+                </a>
+            </li>
+            <li class="col-md-5 col-xs-10">
+                <a href="https://sdstsy4.yunke.com/org/poll/info/95">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/primary-school/shantingsi-school.jpg"></p>
+                    <p class="org-name">山亭第四实验小学</p>
+                </a>
+            </li>
+            <li class="col-md-5 col-xs-10">
+                <a href="https://sdstsy1.yunke.com/org/poll/info/93">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/primary-school/shantingyi-school.jpg"></p>
+                    <p class="org-name">山亭区第一实验小学</p>
+                </a>
+            </li>
+            <li class="col-md-5 col-xs-10">
+                <a href="https://xjzxx.yunke.com/org/poll/info/90">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/primary-school/xiji-school.jpg"></p>
+                    <p class="org-name">山亭区西集镇中心小学</p>
+                </a>
+            </li>
+             <li class="col-md-5 col-xs-10">
+                <a href="https://sczzxxx.yunke.com/org/poll/info/91">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/primary-school/sangcun-school.jpg"></p>
+                    <p class="org-name">桑村中心小学</p>
+                </a>
+             </li>
+            <li class="col-md-5 col-xs-10">
+                 <a href="https://xzzxx.yunke.com/org/poll/info/105">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/primary-school/xuzhuangxiao.jpg"></p>
+                    <p class="org-name">徐庄中心小学</p>
+                 </a>
+            </li>
+        </ul>
+        <div class="ta-c chuzhong"><img src="/assets_v2/img/special/2016_04_18/chuzhong.png"></div>
+        <ul class="org-list">
+            <li class="col-md-5 col-xs-10">
+                <a href="https://zz31z.yunke.com/org/poll/info/96">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/middle-school/zaizhaung31-school.jpg"></p>
+                    <p class="org-name">枣庄市第三十一中</p>
+                </a>
+            </li>
+            <li class="col-md-5 col-xs-10">
+                <a href="https://zzqz.yunke.com/org/poll/info/98">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/middle-school/zaozhuang7-school.jpg"></p>
+                    <p class="org-name">枣庄市第七中学</p>
+                </a>
+            </li>
+            <li class="col-md-5 col-xs-10">
+                <a href="https://zzsys.yunke.com/org/poll/info/99">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/middle-school/zaozhuang11-school.jpg"></p>
+                    <p class="org-name">枣庄十一中</p>
+                </a>
+            </li>
+            <li class="col-md-5 col-xs-10">
+                <a href="https://zz24z.yunke.com/org/poll/info/104">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/middle-school/zaozhuang24-school.jpg"></p>
+                    <p class="org-name">枣庄二十四中</p>
+                </a>
+            </li>
+			<li class="col-md-5 col-xs-10">
+                <a href="https://zzsss.yunke.com/org/poll/info/100">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/middle-school/zaozhuang33-school.jpg"></p>
+                    <p class="org-name">枣庄市第三十三中学</p>
+                </a>
+            </li>
+			<li class="col-md-5 col-xs-10">
+                <a href="https://zz35z.yunke.com/org/poll/info/102">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/middle-school/zaozhuang35-school.jpg"></p>
+                    <p class="org-name">枣庄三十五中学</p>
+                </a>
+            </li>
+			<li class="col-md-5 col-xs-10">
+                <a href="https://zzsd36zx.yunke.com/org/poll/info/106">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/middle-school/zaozhuang36-school.jpg"></p>
+                    <p class="org-name">枣庄市第三十六中学</p>
+                </a>
+            </li>
+			<li class="col-md-5 col-xs-10">
+                <a href="https://zz37z.yunke.com/org/poll/info/103">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/middle-school/zaozhuang37-school.jpg"></p>
+                    <p class="org-name">枣庄三十七中</p>
+                </a>
+            </li>
+			<li class="col-md-5 col-xs-10">
+                <a href="https://zzssz.yunke.com/org/poll/info/97">
+                    <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/middle-school/zoazhuang44-school.jpg"></p>
+                    <p class="org-name">枣庄四十中</p>
+                </a>
+            </li>
+            <li class="col-md-5 col-xs-10">
+                   <a href="https://zz34zx.yunke.com">
+                        <p class="org-img"><img src="/assets_v2/img/special/2016_06_06/middle-school/zaozhuangzhong.jpg"></p>
+                        <p class="org-name">枣庄三十四中</p>
+                   </a>
+            </li>
+        </ul>
+    </div>
+</section>
+<footer>
+    <p class="ta-c">
+            <a href="/index.about" target="_blank">关于我们</a> |
+            <a href="/index.feedback" target="_blank">意见反馈</a> |
+            <a href="/index.help" target="_blank">在线帮助</a> |
+            <a href="/index.main.client" target="_blank">客户端下载</a> <br>
+            Copyright c  2015  北京高能壹佰教育科技有限公司版权所有<br>
+京ICP备14053191号  云课--拓维旗下在线教育平台</p>
+</footer>
+</body>
+</html>

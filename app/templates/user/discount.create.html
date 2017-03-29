@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 创建优惠规则</title>
+		{part "/index.main.headeruser"}
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/style.css')}">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets/images/favicon.ico')}" />
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/bootstrap-custom/bootstrap.min.css')}">
+		<!--[if lt IE 9]>
+		<link rel="stylesheet" type="text/css" href="/assets/bootstrap-custom/bootstrap.min.css">
+		<script src="{utility_cdn::js('/assets/bootstrap-3.3.0/js/html5shiv.min.js')}"></script>
+		<script src="{utility_cdn::js('/assets/bootstrap-3.3.0/js/respond.min.js')}"></script>
+		<![endif]-->
+		<!--[if lt IE 8]>
+		<script type="text/javascript" src="{utility_cdn::js('/assets/js/ie8.js')}" ></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/teacherplay.css')}">
+		<script type="text/javascript" src="{utility_cdn::js('/assets/js/jquery/jquery-1.11.1.min.js')}" ></script>
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/common.css')}">
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/teacherplay.css')}">
+		<script type="text/javascript">
+			$(document).ready(function(e){
+				$( "#starttime" ).datetimepicker({  format:'Y-m-d H:i',step:15});
+				$( "#endtime" ).datetimepicker({ format:'Y-m-d H:i',step:15});
+				$("#discount_type").on("change", function(e){
+					var v = $(this).val();
+					$("#value_desc").find("[desc]").each(function(i, elem){
+						if(v == $(this).attr("desc")){
+							$(this).show();
+						}else{
+							$(this).hide();
+						}
+					});
+				});
+				$("#submit").on("click", function(e){
+					var start = $("#starttime").val();
+					var end = $("#endtime").val();
+					if(start.startsWith("0")){
+						alert("请输入优惠开始时间");
+						return false;
+					}
+					if(end.startsWith("0")){
+						alert("请输入优惠结束时间");
+						return false;
+					}
+					if(start >= end){
+						alert("优惠开始时间大于等于结束时间");
+						return false;
+					}
+					if(1 == $("#discount_type").val()){
+						var v = parseFloat($("#discount_value").val());
+						if(!v || v <= 0){
+							alert("优惠金额不能小于等于0");
+							return false;
+						}
+					}else{
+						var v = parseInt($("#discount_value").val());
+						if(!v || v < 0 || v >=100){
+							alert("打折必须在0到99之间");
+							return false;
+						}
+					}
+					var v = parseFloat($("#min_fee").val());
+					if(!v || v <= 0){
+						alert("最低消费不能小于等于0");
+						return false;
+					}
+					return true;
+				});
+			});
+		</script>
+		<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}" ></script>
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+	</head>
+
+	<body>
+		<!--top-->
+		{part "/index.main.nav.user"}
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='col-sm-3 user_menu hidden-xs'>
+						<div id=''>
+							<div id='menu'>
+								{part "/user.home.menu.user"}
+							</div>
+						</div>
+					</div>
+
+					<div class='col-sm-9 user_content' style="background:none;">
+
+						<form method="POST" action="/org.discount.createok">
+							<table width="100%">
+								<tr>
+									<td>优惠规则名：</td><td><input type="text" name="name" id="name" required /></td>
+								</tr>
+								<tr>
+									<td>简介</td><td><input type="text" name="introduction" id="introduction" required /></td>
+								</tr>
+								<tr>
+									<td>课程</td>
+									<td>
+										<select name="course_id">
+											<option value="0" selected>所有课程</option>
+											{if $courses!=false}
+												{foreach $courses as $course}
+												<option value="{$course->course_id}">{$course->title} 价格:{$course->price}元</option>
+												{/foreach}
+											{/if}
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>优惠类型</td>
+									<td>
+										<select name="discount_type" id="discount_type">
+											<option value="1" selected>减额优惠</option>
+											<option value="2" >打折优惠</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td id="value_desc"><span desc="1">优惠额度（元，优惠的）</span><span desc="2" style="display:none;">折扣额度（%，用户交的）</span></td><td><input type="text" min="0" name="discount_value" id="discount_value" required /></td>
+								</tr>
+								<tr>
+									<td>最低消费(元)</td><td><input type="text" name="min_fee" id="min_fee" required /></td>
+								</tr>
+								<tr>
+									<td>优惠开始时间</td>
+									<td>
+										<input class="col-xs-5 x_input_tx2 xitx2cal" type="text" id="starttime" name="starttime" placeholder="开始时间" value="{date('Y-m-d H:i:s')}" required />
+									</td>
+								</tr>
+								<tr>
+									<td>优惠结束时间</td>
+									<td>
+										<input class="col-xs-5 x_input_tx2 xitx2cal" type="text" id="endtime" name="endtime" placeholder="开始时间" value="0000-00-00 00:00:00" required />
+									</td>
+								</tr>
+								<tr>
+									<td cols="2"><input type="submit", id="submit"></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		{part "/index.main.footer"}
+	</body>
+</html>

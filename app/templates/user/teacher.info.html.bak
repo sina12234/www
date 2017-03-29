@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 注册</title>
+		{part "/index.main.headeruser"}
+		<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}" ></script>
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+	</head>
+	<body>
+		<!--top-->
+		{part "/index.main.nav.user"}
+		<div class="hidden-lg hidden-md">
+			<a id="menu_xs"><img src="{utility_cdn::img('/assets/images/menu.png')}"style="margin-top:-30px;margin-left:10px;"></a>
+		</div>
+
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='col-md-3 user_menu hidden-xs'>
+						<div id=''>
+							<div id='menu'>
+								{part "/user.home.menu.user"}
+
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class='col-md-9 user_content'>
+						<div class='container-fluid'>
+							<div class='row'>
+								<div>
+									<h1 class="title">教师信息</h1>
+								</div>
+							</div>  
+							<form class="form-horizontal" role="form" method="post">
+								{if (!empty($error))}
+								<div class="form-group red">
+									<label class="col-sm-2 control-label"></label>
+									<h3>{$error}</h3>
+								</div>
+								{/if}
+								<div class="form-group">
+									<label class="col-sm-2 control-label">我的头衔:</label>
+									<div class="col-sm-4">
+										<input type="text" name="title" class="form-control" value="{if !empty($teacher->title)}{$teacher->title}{/if}">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">文凭:</label>
+									<div class="col-sm-4">
+										<input type="text" name="diploma" class="form-control" value="{if !empty($teacher->diploma)}{$teacher->diploma}{/if}">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">毕业院校:</label>
+									<div class="col-sm-4">
+										<input type="text" name="college" class="form-control" value="{if !empty($teacher->college)}{$teacher->college}{/if}">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">教龄:</label>
+									<div class="col-sm-4">
+										<input type="text" name="years" class="form-control" value="{if !empty($teacher->years)}{$teacher->years}{/if}">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="" class="col-sm-2 control-label">个人简介:</label>
+									<div class="col-sm-9">
+										<script src="{utility_cdn::js('/assets/libs/ckeditor/ckeditor.js')}"></script>
+										<script src="{utility_cdn::js('/assets/libs/ckeditor/adapters/jquery.js')}"></script>
+										<textarea id="desc" class="form-control" name="desc" rows="3">{if !empty($teacher->desc)}{$teacher->desc}{/if}</textarea>
+										<script>
+											$(document).ready(function(){
+												if(localStorage){
+												}
+												$( '#desc' ).ckeditor( { customConfig: '/assets/libs/ckeditor.config.js' } );
+											});
+										</script>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-offset-2 col-sm-10">
+										<button type="submit" class="btn btn-primary">保存</button>
+									</div>
+								</div>
+							</form>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+		</div>              
+
+		{part "/index.main.footer"}
+
+	</body>
+</html>

@@ -1,0 +1,27 @@
+//tab切换
+.tab-main{
+  width:100%;
+  border-bottom:1px solid $horizontal-border-color;
+  @include clearFix();
+  font-size:14px;
+  .tab-hd{
+    float:left;
+  }
+  .tab-hd-opt{
+      float:left;
+      cursor: pointer;
+      padding:0 18px 8px 18px;
+      line-height:25px;
+    }
+  .curr{
+      border-bottom:2px solid $main-theme-color;
+      color:$main-theme-color;
+  }
+  @include screen (320px,720px){
+    .tab-hd-opt{
+        float:left;
+        cursor: pointer;
+        padding:0 10px 10px 7px;
+      }
+  }
+}

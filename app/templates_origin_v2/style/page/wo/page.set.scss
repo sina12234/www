@@ -1,0 +1,212 @@
+/*org.main.channelSet*/
+//页面保存取消按钮
+.save-action{
+  padding-top: 10px;
+  padding-left: 75px;
+  &.show{
+    display: block;
+  }
+  .save-button{
+    margin-right: 20px;
+  }
+}
+//频道设置
+.ps-channel-name{
+  @include line-height(32px);
+  padding-left: 0px;
+  .channel-tag{
+    text-align: right;
+    padding-right: 10px;
+  }
+  .channel-input{
+    padding: 5px 0 5px 10px;
+    height: 32px;
+  }
+}
+.ps-banner-set{
+  width:100%;
+  padding-right: 15px;
+  .add-banner{
+    cursor: pointer;
+    color: $main-theme-text-color;
+  }
+  .set-banner{
+    display: none;
+    padding: 20px 0 10px 10px;
+    &.show{
+      display: block;
+    }
+  }
+  .banner-box{
+    padding-bottom: 10px;
+    border-bottom: 1px solid $horizontal-border-color;
+  }
+  .banner-show{
+    height: 166px;
+    text-align: center;
+    overflow: hidden;
+    .null-img{
+      height: 166px;
+      width: 100%;
+      background-color: $background-color;
+      border: 1px solid $common-border-color;
+      text-align: center;
+      vertical-align:text-bottom;
+      padding-top: 100px;
+      position: relative;
+      display: none;
+      color: $text-subsidiary-color;
+      &.show{
+        display: block;
+      }
+    }
+    .null-img-icon{
+      position: absolute;
+      top:35px;
+      left:50%;
+      @include sprite($pic);
+      margin-left: -34px;
+    }
+    .img-mask{
+      line-height:20px;
+      border-radius:5px;
+      padding-top:7px;
+      @include center(150px,50px);
+    }
+    img{
+      &.hidden{
+        display: none;
+      }
+      height: 166px;
+    }
+  }
+  .banner-action{
+    width: 100%;
+    font-size: 14px;
+    padding-top: 10px;
+  }
+  .edit-icon{
+    cursor: pointer;
+    margin-right: 15px;
+    vertical-align: middle;
+  }
+  .del-icon{
+    cursor: pointer;
+    vertical-align: middle;
+    &.hidden{
+      display: none;
+    }
+  }
+  .channel-url{
+    @include ellipsis();
+    &.hidden{
+      display: none;
+    }
+  }
+  .input-url{
+    padding: 5px 0 5px 10px;
+    height: 32px;
+    background-color: $background-color;
+    display: none;
+    &.show{
+      display: block;
+    }
+  }
+  .color-select{
+    display: none;
+    &.show{
+      display: block;
+      .icolor-select{
+        display: block;
+      }
+    }
+    .minicolors-swatch-color{
+      z-index: 100;
+      cursor: pointer;
+    }
+  }
+
+  .color-lists{
+    position: relative;
+    line-height: 24px;
+    .default-back{
+      cursor: pointer;
+      display: inline-block;
+      width: 19px;
+      height: 19px;
+      padding: 3px;
+      margin: 0 3px;
+      border: 1px solid $common-border-color;
+      vertical-align: middle;
+    }
+  }
+  .show-url{
+    line-height: 32px;
+    padding-right: 0px;
+    span{
+      text-align: right;
+      padding: 0 10px 0 0;
+    }
+  }
+  .action-show{
+    line-height: 32px;
+    padding-left: 0px;
+    &.hidden{
+      display: none;
+    }
+  }
+  .save-action{
+    display: none;
+  }
+}
+.ps-tmpl-set{
+  .tmpl-set{
+    @include center(580px,140px);
+  }
+}
+//频道设置展现页
+
+.ps-course-list{
+  .ps-course-list-item{
+    .ps-course-item-box{
+      height:152px;
+    }
+  }
+}
+.ps-course-item-box{
+  .tab-li-img{
+    height: 152px;
+    img{
+      height: 152px;
+    }
+  }
+}
+
+/*org.main.channelList*/
+.ps-channel-list{
+  .copyUrl{
+    cursor: pointer;
+    &:hover{
+      color: $main-theme-text-color;;
+    }
+    .linkUrl{
+      width: 100%;
+      @include ellipsis();
+      padding-right: 50px;
+      display: inline-block;
+    }
+    .link-icon{
+      position: absolute;
+      right: 30px;
+      top:12px;
+    }
+  }
+  .channel-edutor-box{
+    .edit-action{
+      display: inline-block;
+    }
+    .edit-icon{
+      margin-top: 9px;
+    }
+  }
+}

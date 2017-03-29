@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>全部课程 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 全部课程 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}"></script>
+<link rel="stylesheet" type="text/css" href="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ejs.min.js')}"></script>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="/assets_v2/js/ie8/ejs.ie8.js"></script>
+<![endif]-->
+<body class="bgf">
+{part "/site.main.nav3.course"}
+<section class="mt20">
+    <div class="container">
+        <div class="row">
+            <div class="cate-nav" id="cateNav"><a href="/course.list">全部课程</a><i class="font-icon"> > </i></div>
+            <div class="cate-list hidden-sm hidden-xs fs14" id="cateList">
+            </div>
+            <div class="m-tags-list hidden-lg hidden-md" id="mCateList">
+                <div class="m-tags col-xs-6 tac c_fenlei">
+                    <p>分类<i class="m-select-arr"></i></p>
+                </div>
+                <div class="m-tags col-xs-6 tac c_kemu">科目<i class="m-select-arr"></i></div>
+                <div class="m-tags col-xs-6 tac c_gengduo">更多<i class="m-select-arr"></i></div>
+                <div class="m-cate-list" id="m-cateList">
+                    <div class="m-cate-left fc" id="m-fc"></div>
+                    <div class="m-cate-right" id="m-sc"><p class="mt15" data-id="all">全部</p></div>
+                </div>
+                <div class="m-cate-more" id="m-subject">
+                </div>
+                <div class="m-cate-more" id="m-all">
+                    <p class="fs14">排序</p>
+                    <div class="m-cate-morec" id="msort">
+                        <a href="javascript:;" class="col-xs-5" data-v="create_time:desc">最新建课</a>
+                        <a href="javascript:;" class="col-xs-5" data-v="comment:desc">评价最高</a>
+                        <a href="javascript:;" class="col-xs-5" data-v="vv:desc">观看最多</a>
+                        <a href="javascript:;" class="col-xs-5" data-v="price:asc">价格从低到高</a>
+                        <a href="javascript:;" class="col-xs-5" data-v="price:desc">价格从高到低</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="pd20 bgf">
+    <div class="container">
+        <div class="items-sort mb10 hidden-xs hidden-sm" id="sort">
+            <div class="sorts" id="sort">
+                <a href="javascript:;" data-v="create_time:desc">最新建课</a>
+                <a href="javascript:;" data-v="comment:desc">评价最高</a>
+                <a href="javascript:;" data-v="vv:desc">观看最多</a>
+                <a href="javascript:;" data-v="price:asc" class="pricesort">价格<i class="price-icon"></i></a>
+            </div>
+            <div class="datepicker"><input type="text" id="datestart" placeholder="开课时间"><i class="data-icon"></i></div>
+            <div class="status" id="status">
+                <label><input type="checkbox" name="checkbox" value="1"> 直播课</label>
+                <label><input type="checkbox" name="checkbox" value="2"> 录播课</label>
+                <label><input type="checkbox" name="checkbox" value="3"> 线下课</label>
+            </div>
+            <div class="member-type mr10" id="member">
+            </div>
+        </div>
+        <ul id="courseList" class="c-itemlist"></ul>
+        <!-- pagelist -->
+        <div id="pager" class="mt10 tac"></div>
+    </div>
+</section>
+<input type="hidden" id="fc">
+<input type="hidden" id="sc">
+<input type="hidden" id="tc">
+<input type="hidden" id="tg">
+<input type="hidden" id="vid">
+<input type="hidden" id="ms">
+<input type="hidden" id="st">
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/laypage/laypage.js')}" ></script>
+<script type="template" id="memberHtml">
+    <p class="member-select"><i class="crown-icon"></i>
+    <% if(c!=''){ %>
+    <%=c%>
+    <% }else{ %>
+    会员课程
+    <% }; %>
+    </p>
+    <p class="member-list">
+        <% for(var x=0;x<m.length;x++){ var i= m[x];%>
+        <% if(i['status']==1){ %>
+        <span data-id="<%=i['pk_member_set']%>"><%=i['title']%></span>
+        <% } %>
+        <% } %>
+        <% if(c!=''){ %>
+        <span data-id="">返回全部课程</span>
+        <% }; %>
+    </p>
+</script>
+<script type="template" id="mmemberHtml">
+    <p class="fs14">会员课程</p>
+    <div class="m-cate-morec mmemberHtml">
+        <% for(var x=0;x<m.length;x++){ var i= m[x];%>
+        <% if(i['status']==1){ %>
+        <a href="javascript:;" class="col-xs-5 mmember" data-id="<%=i['pk_member_set']%>"><%=i['title']%></a>
+        <% } %>
+        <% } %>
+        <a href="javascript:;" class="col-xs-5 mmember" data-id="">返回全部课程</a>
+    </div>
+</script>
+<script type="template" id="mmarkHtml">
+    <% if(mark.length != 0){ var items;%>
+    <p class="fs14">标签</p>
+    <div class="m-cate-morec">
+        <a href="javascript:;" data-id="all" class="col-xs-5 mmark">全部</a>
+        <% for(items in mark){ %>
+        <a href="javascript:;" data-id="<%=mark[items].pk_tag%>" class="col-xs-5 mmark"><%=mark[items].name%></a>
+        <% };%>
+    </div>
+    <% };%>
+</script>
+<script type="template" id="msubjectHtml">
+    <div class="m-cate-morec mt5">
+    <% if(subject.length > 0){ var items;items=subject[0].attr_value;%>
+        <a href="javascript:;" data-id="" class="col-xs-5 all msubject">全部</a>
+        <% for(var i=0;i<items.length;i++){ %>
+        <a href="javascript:;" data-id="<%=items[i].attr_value_id%>" class="col-xs-5 msubject"><%=items[i].value_name%></a>
+        <% };%>
+    <% }else{ %>
+        <a href="javascript:;" data-id="" class="col-xs-5">全部</a>
+    <% };%>
+    </div>
+</script>
+<script type="template" id="cateListHtml">
+    <% if(cate.length != 0){ var items;tc_id=$('#tc').val() || 'all'; %>
+    <div class="cate-items" id="cate">
+        <div class="cate-hd cGray">
+            分类 :
+        </div>
+        <div class="cate-bd <%=cateType%>">
+            <% if(tc_id!='all'){ %>
+            <a href="javascript:;" data-id="all">全部</a>
+            <% }else{ %>
+            <a href="javascript:;" data-id="all" class="curr">全部</a>
+            <% };%>
+            <% for(items in cate){ if(cateType=='tc' && items==tc_id){  %>
+            <a href="javascript:;" data-id="<%=items%>" class="curr"><%=cate[items]%></a>
+            <% }else{ %>
+            <a href="javascript:;" data-id="<%=items%>"><%=cate[items]%></a>
+            <% };};%>
+        </div>
+    </div>
+    <% };%>
+    <% if(subject.length > 0){ var items;items=subject[0].attr_value;vid=$('#vid').val() || 'all';%>
+    <div class="cate-items" id="subject">
+        <div class="cate-hd cGray">
+            科目 :
+        </div>
+        <div class="cate-bd vid">
+            <% if(vid != 'all'){ %>
+            <a href="javascript:;" data-id="all">全部</a>
+            <% }else{ %>
+            <a href="javascript:;" data-id="all" class="curr">全部</a>
+            <% };%>
+            <% for(var i=0;i<items.length;i++){ if(vid == items[i].attr_value_id){ %>
+            <a href="javascript:;" data-id="<%=items[i].attr_value_id%>" class="curr"><%=items[i].value_name%></a>
+            <% }else{ %>
+            <a href="javascript:;" data-id="<%=items[i].attr_value_id%>"><%=items[i].value_name%></a>
+            <% };};%>
+        </div>
+    </div>
+    <% };%>
+    <% if(mark.length != 0){ var items;tg=$('#tg').val() || 'all';%>
+    <div class="cate-items" id="mark">
+        <div class="cate-hd cGray">
+            标签 :
+        </div>
+        <div class="cate-bd tg">
+            <% if(tg != 'all'){ %>
+            <a href="javascript:;" data-id="all">全部</a>
+            <% }else{ %>
+            <a href="javascript:;" data-id="all" class="curr">全部</a>
+            <% };%>
+            <% for(items in mark){ if(tg == mark[items].pk_tag){ %>
+            <a href="javascript:;" data-id="<%=mark[items].pk_tag%>" class="curr"><%=mark[items].name%></a>
+            <% }else{ %>
+            <a href="javascript:;" data-id="<%=mark[items].pk_tag%>"><%=mark[items].name%></a>
+            <% }; };%>
+        </div>
+    </div>
+    <% };%>
+</script>
+<script type="template" id="courseHtml">
+    <% if(course.length > 0){ for(var x = 0;x < course.length; x++){ var item= course[x];%>
+    <li class="col-md-5 col-xs-10">
+        <div class="items col-sm-20">
+            <a href="<%=item.url%>" target="_blank" class="items-img">
+                <img src="<%=item.thumb_sma%>" alt="<%=item.title%>"/>
+                <%if(item["try"] == 1 && item["course_type"] == 2){ %>
+                    <span class="try-icon"></span>
+                <% }; %>
+                <%if(item["status"] == 2 ){ %>
+                    <span class="live-icon">直播</span>
+                <% }; %>
+                <%if(item["course_type"] == 2){ %>
+                    <span class="re-icon">录播</span>
+                <% }; %>
+                <%if(item["course_type"] == 3){ %>
+                    <span class="off-icon">线下</span>
+                <% }; %>
+                <%if(item.is_org_self == 0 &&item["is_promote"] == 1){ %>
+                    <i class="extend-icon"></i>
+                <% }; %>
+            </a>
+            <a href="/course.info.show/<%=item.course_id%>" target="_blank" class="items-tit">
+                <%=item.title%>
+            </a>
+            <p class="items-thumb">
+            <% if(item.is_org_self == 1 && item.is_promote == 1){ %>
+				<% if(item.price && item.fee_type == 1){ %>
+                <span class="cRed">￥<%=item.price%></span>
+				 <% }else{ %>
+				  <span class="cGreen">免费</span>
+				  <% };%>
+            <% }else if(item.is_org_self == 0 && item.is_promote == 1){ %>
+				<% if(item.resell_price){ %>
+				<span class="cRed">￥<%=item.resell_price%></span>
+                <% }else{ %>
+				  <span class="cGreen">免费</span>
+				  <% };%>
+			<% }else if(item.is_org_self == 1 && item.is_promote == 0){ %>
+				<% if(item.fee_type == 1 && item.price){ %>
+				<span class="cRed">￥<%=item.price%></span>
+                <% }else{ %>
+				  <span class="cGreen">免费</span>
+				<% };%>
+			<% }else{ %>
+				  <span class="cGreen">免费</span>
+			<% }; %>
+            </p>
+            <p class="items-thumb cGray">
+            <span><%=item.third_cate_name%></span> |
+            <% if(item.course_attr != ''){ %>
+                <span><%=item.course_attr%></span>
+            <% };%>
+            </p>
+        </div>
+    </li>
+    <% };}else{ %>
+        <div class="list-tu show">
+            <div class="list-img">
+                <img src="/assets_v2/img/pet3.png?ver=197">
+                <div class="list-book">
+                    <span>没找到符合您需求的课程,请调整一下再试~</span>
+                    <p>您可以戳<a href="/course.list"><b>这里</b></a>返回默认条件~</p>
+                </div>
+            </div>
+        </div>
+    <% };%>
+</script>
+<!-- mob -->
+<script type="template" id="fcHtml">
+    <a href="javascript:void(0);" data-id="all" class="selected">全部</a>
+    <% for(items in cate){ %>
+    <a href="javascript:void(0);" data-id="<%=items%>"><%=cate[items]%></a>
+    <% };%>
+</script>
+<script type="template" id="scHtml">
+    <div class="m-cate-items sc">
+        <p data-id="all">全部</p>
+    <% for(items in cate){ %>
+        <p data-id="<%=items%>"><%=cate[items]%>
+            <i class="down-icon"></i>
+        </p>
+    <% };%>
+    </div>
+</script>
+<script type="template" id="tcHtml">
+    <div class="m-cate-item tc" data-id=<%=mid%>>
+    <span data-id="all">全部</span>
+    <% for(items in cate){ %>
+        <span data-id="<%=items%>"><%=cate[items]%></span>
+    <% };%>
+    </div>
+</script>
+<div id="rightWindow"></div>
+<script>$("#rightWindow").load("/org.rightWindow.rightWindownew");</script>
+{part "/site.main.footer"}
+</body>
+</html>
+<script>
+$(document).click(function(event){
+    var doc_target=$(event.target);
+    if(doc_target.parents('div').attr('id')!='member'){
+        $('#member .member-list').hide();
+    }
+    if(doc_target.parents('div').attr('id')!='mCateList'){
+        if(!doc_target.parent('div').hasClass('c_fenlei') && !doc_target.parents('div').hasClass('m-cate-list')){
+            $('#m-cateList').hide();
+        }
+        if(!doc_target.parent('div').hasClass('c_kemu') && !doc_target.parents('div').hasClass('m-cate-more')){
+            $('#m-subject').hide();
+        }
+        if(!doc_target.parent('div').hasClass('c_gengduo') && !doc_target.parents('div').hasClass('m-cate-more')){
+            $('#m-all').hide();
+        }
+    }
+});
+var mflag=1;
+if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+    mflag=0;
+}
+
+function initData(curr){
+    var cateData={ };
+    if($.getUrlParam("search_field")){
+        cateData['search_field']=$.getUrlParam("search_field");
+    }
+    if($('#fc').val()){
+        cateData['fc']=$('#fc').val();
+    }
+    if($('#sc').val()){
+        cateData['sc']=$('#sc').val();
+    }
+    if($('#tc').val()){
+        cateData['tc']=$('#tc').val();
+    }
+    if($('#vid').val()){
+        cateData['vid']=$('#vid').val();
+    }
+    if($('#tg').val()){
+        cateData['tg']=$('#tg').val();
+    }
+    if($('#ms').val()){
+        cateData['ms']=$('#ms').val();
+    }else{
+        $('#ms').val($.getUrlParam("ms"));
+        cateData['ms']=$('#ms').val();
+    }
+    if($('#datestart').val()){
+        cateData['start_time']=$('#datestart').val();
+    }
+    if($('#st').val()){
+        cateData['sort']=$('#st').val()
+    }
+    if($('#status').find("[name='checkbox']:checked")){
+        cateData['course_type']=$('#status').find("[name='checkbox']:checked").val();
+    }
+    cateData['page']= curr || 1;
+    $.ajax('/course.list.CourseList',{
+        type:'post',
+        dataType:'json',
+        data:cateData,
+        success:function (data) {
+            if(data.code == 200){
+                var cate,cateType;
+                var data = data.data;
+
+                if(!$.isEmptyObject(data.firstCateInfo)){
+                    var nav=data.firstCateInfo;
+                    if($('#cateNav').find('#fc-nav').length==0){
+                        var _nav_html = $('<span><a href="#" class="cate-select-item"></a></span>');
+                        _nav_html.find('a').attr({ 'id':'fc-nav','data-id':nav.pk_cate }).html(nav.name+'<i>x</i>');
+                        _nav_html.append('<i class="font-icon"> &gt; </i>');
+                        $('#cateNav').append(_nav_html);
+                    }else{
+                        $('#cateNav').find('#fc-nav').html(nav.name+'<i>x</i>').attr('data-id',1);
+                    }
+                }else{
+                    $('#cateNav').find('#fc-nav').parent().remove();
+                }
+                if(!$.isEmptyObject(data.secondCateInfo)){
+                    var nav=data.secondCateInfo;
+                    if($('#cateNav').find('#sc-nav').length==0){
+                        var _nav_html = $('<span><a href="#" class="cate-select-item"></a></span>');
+                        _nav_html.find('a').attr({ 'id':'sc-nav','data-id':nav.pk_cate }).html(nav.name+'<i>x</i>');
+                        _nav_html.append('<i class="font-icon"> &gt; </i>');
+                        $('#cateNav').append(_nav_html);
+                    }else{
+                        $('#cateNav').find('#sc-nav').html(nav.name+'<i>x</i>').attr('data-id',1);
+                    }
+                }else{
+                    $('#cateNav').find('#sc-nav').parent().remove();
+                }
+                if(data.firstCateList.length!=0){
+                    cate = data.firstCateList;
+                    cateType = "fc";
+                }
+                if(data.secondCateList.length!=0){
+                    cate = data.secondCateList;
+                    cateType = "sc";
+                }
+                if(data.thirdCateList.length!=0){
+                    cate = data.thirdCateList;
+                    cateType = "tc";
+                }
+                var courseList=$('#courseList');
+                var courseHtml=$('#courseHtml').html();
+
+                if(mflag==1){
+                    var m_all=$('#m-all');
+                    var mmemberHtml=$('#mmemberHtml').html();
+                    var mmarkHtml=$('#mmarkHtml').html();
+                    var m_subject=$('#m-subject');
+                    var msubjectHtml=$('#msubjectHtml').html();
+                    if(data.memberSetList.length > 0 && data.memberShow==1){
+                        if(m_all.find('.mmemberHtml').length==0){
+                            m_all.append(ejs.render(mmemberHtml,{ m:data.memberSetList}));
+                        }
+                    }
+                    if(m_all.find('.mmark').length==0){
+                        m_all.append(ejs.render(mmarkHtml,{ mark:data.selected}));
+                    }
+                    // if(m_subject.find('.msubject').length==0){
+                        m_subject.html(ejs.render(msubjectHtml,{ subject:data.attrValueList}));
+                    // }
+                    if(cateType=="fc"){
+                        var m_fc=$('#m-fc');
+                        var fcHtml=$('#fcHtml').html();
+                        m_fc.html(ejs.render(fcHtml,{ cate:cate}));
+                    }else if(cateType=="sc"){
+                        var m_sc=$('#m-sc');
+                        var scHtml=$('#scHtml').html();
+                        m_sc.html(ejs.render(scHtml,{ cate:cate}));
+                    }else if(cateType=="tc"){
+                        var m_sc=$('#m-sc');
+                        var m_p_sc=$('#sc').val();
+                        var tcHtml=$('#tcHtml').html();
+                        if(!$('#tc').val()){
+                            if($('#m-sc').find('.m-cate-item[data-id="'+m_p_sc+'"]').length == 0){
+                                m_sc.find('p[data-id="'+m_p_sc+'"]').after(ejs.render(tcHtml,{ cate:cate,mid:m_p_sc}));
+                            }
+                        }
+                    }
+                }else{
+                    var memberHtml=$('#memberHtml').html();
+                    var pcateList=$('#cateList');
+                    var cateListHtml=$('#cateListHtml').html();
+                    var pmember=$('#member');
+                    if(data.memberSetList.length > 0 && data.memberShow==1){
+                        pmember.html(ejs.render(memberHtml,{ m:data.memberSetList,c:data.checkMember}));
+                    }
+                    if(!$.isEmptyObject(cate)){
+                        pcateList.html(ejs.render(cateListHtml,{ cate:cate,cateType:cateType,subject:data.attrValueList,mark:data.selected}));
+                    }
+                }
+
+                courseList.html(ejs.render(courseHtml,{ course:data.courseList}));
+                laypage({
+                    cont: $("#pager"),
+                    pages: data.pm.total,
+                    curr: curr || 1,
+                    jump: function(obj, first){
+                        if(!first){
+                            initData(obj.curr);
+                        }
+                    }
+                });
+            }else{
+                layer.msg('网络出错了');
+            }
+        },
+        error:function(data){
+            layer.msg('网络出错了');
+        }
+    });
+}
+$(function(){
+    var href_fc=$.getUrlParam("fc"),
+        href_tc=$.getUrlParam("tc"),
+        href_sc=$.getUrlParam("sc");
+
+    href_sc>0 ? $('#sc').val(href_sc):$('#sc').val('');
+    href_fc>0 ? $('#fc').val(href_fc):$('#fc').val('');
+    href_tc>0 ? $('#tc').val(href_tc):$('#tc').val('');
+
+    var sort=$('#sort');
+    var msort=$('#msort');
+    var m=$('#member');
+    var mCateList=$('#mCateList');
+    var m_cateList=$('#m-cateList');
+    var mRight=$('#m-cateList').find('.m-cate-right');
+    var mLeft=$('#m-cateList').find('.m-cate-left');
+    var mSubject=$('#m-subject');
+    var mAll=$('#m-all');
+    var cateList = $('#cateList');
+    var cateNav = $('#cateNav');
+    var fc = $('#fc'),tc = $('#tc'),sc = $('#sc'),tg = $('#tg'),vid = $('#vid');
+
+    mSubject.on('click','.msubject',function(){
+        var _this = $(this);
+        var _this_id = _this.attr('data-id');
+        _this.addClass('curr').siblings().removeClass('curr');
+        $('#vid').val(_this_id);
+        mSubject.hide();
+        initData();
+    })
+    mAll.on('click','.mmember',function(){
+        var _this = $(this);
+        var _this_id = _this.attr('data-id');
+        _this.addClass('curr').siblings().removeClass('curr');
+        $('#ms').val(_this_id);
+        mAll.hide();
+        initData();
+    })
+    mAll.on('click','.mmark',function(){
+        var _this = $(this);
+        var _this_id = _this.attr('data-id');
+        _this.addClass('curr').siblings().removeClass('curr');
+        $('#tg').val(_this_id);
+        mAll.hide();
+        initData();
+    })
+    mCateList.find('.c_fenlei').click(function(){
+        m_cateList.toggle();
+        mAll.hide();
+        mSubject.hide();
+    });
+    mCateList.find('.c_kemu').click(function(){
+        mSubject.toggle();
+        m_cateList.hide();
+        mAll.hide();
+    });
+    mCateList.find('.c_gengduo').click(function(){
+        mAll.toggle();
+        mSubject.hide();
+        m_cateList.hide();
+    });
+    m_cateList.on('click','a',function(){
+        var _this=$(this);
+        var _this_id=$(this).attr('data-id');
+        var _cateTxt=_this.text();
+        var _this_parent = _this.closest('div').attr('class').split(' ')[1];
+        var _nav_html = $('<span><a href="#" class="cate-select-item"></a></span>');
+        if(cateNav.find('#'+_this_parent+'-nav').length==0){
+            _nav_html.find('a').attr({ 'id':''+_this_parent+'-nav','data-id':_this_id }).html(_cateTxt+'<i>x</i>');
+            _nav_html.append('<i class="font-icon"> &gt; </i>');
+            cateNav.append(_nav_html);
+        }else{
+            cateNav.find('#'+_this_parent+'-nav').html(_cateTxt+'<i>x</i>').attr('data-id',_this_id);
+        }
+        cateNav.find('#sc-nav').parent().remove();
+        cateNav.find('#tc-nav').parent().remove();
+        cateNav.find('#vid-nav').parent().remove();
+        _this.addClass('selected').siblings().removeClass('selected');
+        $('#fc').val(_this_id);
+        $('#sc').val('');
+        $('#tc').val('');
+        if(!_this_id){
+            $('#m-sc').html('<p class="mt15 all" data-id="all">全部</p>');
+        }
+        initData();
+    });
+    m_cateList.on('click','p',function(){
+        var _this=$(this);
+        var _this_id=$(this).attr('data-id');
+        var _cateTxt=_this.text();
+        var _this_parent = _this.closest('div').attr('class').split(' ')[1];
+        var _nav_html = $('<span><a href="#" class="cate-select-item"></a></span>');
+
+        if(_this_id != 'all'){
+            if(cateNav.find('#'+_this_parent+'-nav').length==0){
+                _nav_html.find('a').attr({ 'id':''+_this_parent+'-nav','data-id':_this_id }).html(_cateTxt+'<i>x</i>');
+                _nav_html.append('<i class="font-icon"> &gt; </i>');
+                cateNav.append(_nav_html);
+            }else{
+                cateNav.find('#'+_this_parent+'-nav').html(_cateTxt+'<i>x</i>').attr('data-id',_this_id);
+            }
+            cateNav.find('#tc-nav').parent().remove();
+            cateNav.find('#vid-nav').parent().remove();
+            if(_this_id){
+                $('#sc').val(_this_id);
+                $('#tc').val('');
+                _this.find('i').attr('class','up-icon');
+                _this.siblings('p').find('i').attr('class','down-icon');
+                _this.siblings('div').hide();
+                if(_this.siblings('div[data-id="'+_this_id+'"]').length==0){
+                    initData();
+                }else{
+                    _this.siblings('div[data-id="'+_this_id+'"]').show();
+                }
+            }else{
+                $('#sc').val('');
+                $('#tc').val('');
+                initData();
+            }
+        }else{
+            m_cateList.hide();
+            cateNav.find('#fc-nav').parent().remove();
+            cateNav.find('#sc-nav').parent().remove();
+            cateNav.find('#tc-nav').parent().remove();
+            $('#sc').val('');
+            $('#tc').val('');
+            initData();
+        }
+
+    });
+    m_cateList.on('click','span',function(){
+        var _this=$(this);
+        var _this_id=_this.attr('data-id');
+        var _cateTxt=_this.text();
+        var _this_parent = _this.closest('div').attr('class').split(' ')[1];
+        var _nav_html = $('<span><a href="#" class="cate-select-item"></a></span>');
+        if(_this_id != 'all'){
+            if(cateNav.find('#'+_this_parent+'-nav').length==0){
+                _nav_html.find('a').attr({ 'id':''+_this_parent+'-nav','data-id':_this_id }).html(_cateTxt+'<i>x</i>');
+                _nav_html.append('<i class="font-icon"> &gt; </i>');
+                cateNav.append(_nav_html);
+            }else{
+                cateNav.find('#'+_this_parent+'-nav').html(_cateTxt+'<i>x</i>').attr('data-id',_this_id);
+            }
+        }else{
+            cateNav.find('#'+_this_parent+'-nav').parent().remove();
+        }
+        cateNav.find('#vid-nav').parent().remove();
+        _this.addClass('curr').siblings().removeClass('curr');
+        $('#tc').val(_this_id);
+        initData();
+        m_cateList.hide();
+    });
+    msort.on('click','a',function(){
+        var _this = $(this);
+        var _this_v = _this.attr('data-v');
+        _this.addClass('curr').siblings().removeClass('curr');
+        $('#st').val(_this_v);
+        mAll.hide();
+        initData();
+    });
+    // pc
+    sort.on('click','a',function(){
+        var _this = $(this);
+        var _this_v = _this.attr('data-v');
+        if(_this_v=='price:desc'){
+            _this.find('i').attr('class','pricedown-icon');
+            _this.attr('data-v','price:asc');
+        }else if(_this_v=='price:asc'){
+            _this.find('i').attr('class','priceup-icon');
+            _this.attr('data-v','price:desc');
+        }else{
+            sort.find('.pricesort').find('i').attr('class','price-icon');
+        }
+        _this.addClass('curr').siblings().removeClass('curr');
+        $('#st').val(_this_v);
+        initData();
+    });
+    m.on('click','span',function(){
+        var _this = $(this);
+        var _this_id = _this.attr('data-id');
+        var _this_txt= _this.text();
+        m.find('.member-select').html('<i class="crown-icon"></i>'+_this_txt);
+        $('#ms').val(_this_id);
+        m.find('.member-list').hide();
+        m_cateList.hide();
+        initData();
+    });
+    m.on('click','.member-select',function(){
+        m.find('.member-list').show();
+    });
+    var status=$('#status');
+    status.on('click','input',function(){
+        var _this = $(this);
+        var _this_v = _this.val();
+        $("[name='checkbox']").removeAttr("checked");
+        $(this).prop("checked",'true');
+        initData();
+    });
+    $("#datestart").datetimepicker({
+        timepicker:false,
+        autoclose:false,
+        format: 'Y-m-d',
+    });
+    $('#datestart').change(function(){
+        $('.xdsoft_datetimepicker').hide();
+        initData();
+    });
+
+    initData();
+
+    cateNav.on('click','a',function(){
+        var _this = $(this);
+        var _this_class = _this.attr('id').substr(0,_this.attr('id').length-4);
+        var _this_id = _this.attr('data-id');
+        if(_this_class=="fc"){
+            cateNav.find('#tc-nav').parent().remove();
+            cateNav.find('#vid-nav').parent().remove();
+            $('#sc').val('');
+            $('#tc').val('');
+            $('#vid').val('');
+        }else if(_this_class=="sc"){
+            cateNav.find('#tc-nav').parent().remove();
+            cateNav.find('#vid-nav').parent().remove();
+            $('#tc').val('');
+            $('#vid').val('');
+        }else if(_this_class=="tc"){
+            cateNav.find('#vid-nav').parent().remove();
+            $('#vid').val('');
+        }
+        $('#m-sc').html('<p class="mt15 allsc" data-id="all">全部</p>');
+        $('#'+_this_class).val('');
+        _this.parent().remove();
+        initData();
+    });
+    cateList.on('click','a',function(){
+        var _this = $(this);
+        var _cateId= _this.attr('data-id');
+        var _cateTxt= _this.text();
+        var _this_parent = _this.closest('.cate-bd').attr('class').split(' ')[1];
+        var _nav_html = $('<span><a href="#" class="cate-select-item"></a></span>');
+        $('#'+_this_parent).val(_cateId);
+        if(_cateId != 'all'){
+            if(cateNav.find('#'+_this_parent+'-nav').length==0){
+                _nav_html.find('a').attr({ 'id':''+_this_parent+'-nav','data-id':_cateId }).html(_cateTxt+'<i>x</i>');
+                _nav_html.append('<i class="font-icon"> &gt; </i>');
+                cateNav.append(_nav_html);
+            }else{
+                cateNav.find('#'+_this_parent+'-nav').html(_cateTxt+'<i>x</i>').attr('data-id',_cateId);
+            }
+        }else{
+            cateNav.find('#'+_this_parent+'-nav').parent().remove();
+        }
+        initData();
+    });
+});
+</script>

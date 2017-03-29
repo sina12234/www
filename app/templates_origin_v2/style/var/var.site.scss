@@ -1,0 +1,65 @@
+//text color
+$text-blue-color:#066cb8 !default;//可点击有链接的文字,hover时候有下划线
+$text-red-color:#ff4401 !default;//成交金额/价格的数字颜色值
+$text-verify-red-color:#f01400 !default;//验证提示的红色字体颜色
+$text-green-color:#009900 !default;//课程里面的"免费"文字的颜色值
+$text-orange-color:#fe8135 !default;//机构文字主色调,LOGO的相近颜色值
+$text-white-color:#fff !default; //白色字体
+// link color
+$link-blue-color:$text-blue-color;//蓝色链接
+$hover-blue-color:#04518a;//蓝色滑过
+//button color
+//规范新增  button color list   nth(list,1)为button背景色 nth(list,2)为 button hover 背景色
+$green-button-color:#67b53d #61a93a !default;
+$yellow-button-color:$main-yellow-color #f6a21d !default;
+$blue-button-color:#198fee #1786e0 !default;
+$gray-button-color:#f5f5f5 #ededed !default;
+//(gray button border color) 灰色 button 边框色值(特殊,与其他都不同)
+$gray-button-border-color:#dcdcdc #d0d0d0 !default;
+//search button
+$search-button-color:#c8c8c8 #bbbbbb !default;
+$theme-button-color:$main-theme-color $main-subsidiary-theme-color !default;
+$default-button-color:#fff #fff !default;
+$default-button-border-color:#dcdcdc $main-theme-color !default;
+
+//border  background color
+$border-color:#e8e8e8 !default;//常用描边值 content 内容边框值 左侧菜单边框值等
+$border-theme-color: $main-theme-color;
+$gray-background-color:#f7f7f7 !default;//页面统一灰色背景
+$common-border-color:#e3e3e3 !default; // 列表栏常用边框值
+$common-background-color:#f1f1f1 !default; // 列表栏常用背景色值
+$white-background-color:#fff !default; //白色背景色
+$background-theme-color:$main-theme-color;//主题背景色
+
+//search  搜索框、提示框等的border
+$frame-border-color:#dbdbdb !default;//高度为28px的边框线和其它的统一色值
+
+// input  color
+$input-border-color:#ccc !default; //默认描边
+$input-true-border-color:#198fee !default; //选中描边
+$input-error-border-color:#f01400 !default;//错误描边
+
+//table color
+$table-border-color:$common-border-color !default;
+$thead-background-color:$common-background-color !default;
+$tbody-background-color:#f7f7f7 !default;
+
+//tab color  选项卡选中灰色背景以及边框颜色
+$tab-background-color:#eee;
+$tab-border-color:#e7e7e7;
+
+//select color 下拉框相关色值
+$select-border-color:$common-border-color !default; //select 下拉框 边框
+$option-background-color:$common-background-color !default; // select option 下拉框option 背景
+
+//下拉展示标签 show label
+$label-border-color:#dddddd !default;
+$label-background-color:#f9f9f9 !default;
+
+//尖角颜色
+$jianjiao-border-color:#ccc !default;
+
+//input
+$input-border : #dddddd !default; //搜索框默认边框色
+$input-focus-border : $main-theme-color !default; //搜索框获得焦点边框色
+$input-text-color :  $text-subsidiary-color ; //搜索框输入文本色

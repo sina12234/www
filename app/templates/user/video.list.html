@@ -1,0 +1,257 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>上传视频</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+	<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+	<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+	{part "/site.main.header"}
+	<script src="{utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js')}"></script>
+</head>
+<body style="background:#f7f7f7;">
+<!--header-->
+{part "/site.main.nav.home"}
+    <section class="mt40">
+        <div class='container'>
+            <div class="row">
+                <div class="video-path col-lg-10 fs20">视频管理</div>
+                <div class="video-main col-lg-10">
+                    <div class="video-classname col-lg-12 col-md-12 fs16">
+						{$plan_info->title} {$plan_info->class_name} {$plan_info->section_name}
+						{if !empty($uploadFiles)}
+                        {if empty($uploadTask)}
+						<a class="video-add-more" id="video_add">添加更多视频</a>
+						{/if}
+                        {/if}
+					</div>
+                    <!--无视频-->
+					{if empty($uploadFiles)}
+
+					<div class="col-sm-20" id='novideo'>
+						<div class="video-add col-lg-8 col-md-8">
+						  <div class="video-addbtn">
+							 <span class="video-upload"></span>
+							 <button class="fs16" id="video_add">上传视频</button>
+						  </div>
+						</div>
+                        <div class="video-tips col-lg-4 col-md-4 fs14">
+                    <p class="fs16">温馨提示</p>
+                    <p class="cGray">1.文件大小不能超过10G</p>
+                    <p class="cGray">2.文件支持mp3，mp4，flv，avi，mkv，wmv，vob，mpg、rmvb，mpeg,mov格式</p>
+                    <p class="cGray">3.请勿上传色情或反动视频</p>
+                    <p class="cGray">4.一次最多上传3个视频</p>
+                </div>
+					</div>
+					<!--
+                    <div class="col-sm-20 no-video" id='novideo'>
+                        <p class="fs18"><img src="{utility_cdn::img('/assets_v2/img/pet3.png')}" alt=""><br/>暂无视频，点击上传</p>
+                    </div>
+					-->
+
+
+					<!--上传列表-->
+					{/if}
+                    <ul class="video-list">
+						{if !empty($uploadFiles)}
+					    {foreach $uploadFiles as $file}
+						<li>
+                            <p class="video-pic col-lg-2"><img src='/assets_v2/img/video-img.png'></p>
+                            <div class="video-txt col-lg-7">
+                                <p class="video-tit">{$file->filename_org} <span class="cRed">上传成功！</span></p>
+                                <div class="video-progress">
+                                    <div class="video-bar" style="width:100%">100%</div>
+                                </div>
+                                <p class="video-status cGray">文件大小:{floor($file->filesize/1024/1024*100)/100}M</p>
+                            </div>
+                            <div class="video-edit col-lg-3">
+								{if empty($uploadTask)}
+                                <a href="javascript:;" onclick="delVideo({$file->file_id},{$planUserId});" class="video-edit1-btn">删除</a>
+								{elseif ($uploadTask->status==0 || $uploadTask->status==1)}
+
+								{/if}
+							</div>
+                        </li>
+						{/foreach}
+						{/if}
+                    </ul>
+
+                    <div class="trans-btn">
+						{if empty($uploadTask)}
+							{if !empty($uploadFiles)}
+								{if 0==$uploadFiles[count($uploadFiles)-1]->encoding_status}
+									<button class="trans-code fs16" id="addtask">开始转码</button>
+								{else}
+									<a href="/user.teacher.OrgPart/{$plan_id}">
+										<button class="trans-code fs16">去剪辑</button>
+									</a>
+								{/if}
+							{/if}
+						{elseif $uploadTask->status==-1}
+						<button class="trans-code fs16" id="addtask">失败,重新转码</button>
+						{elseif $uploadTask->status==0}
+						<button class="trans-code fs16">等待中</button>
+						{elseif $uploadTask->status==1}
+						<button class="trans-code fs16">转码中...</button>
+						{/if}
+                    </div>
+<div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {part "/site.main.footer"}
+</body>
+<script type="text/javascript">
+var uploader = new plupload.Uploader({
+	//runtimes : 'html5,flash,silverlight,html4',
+	browse_button : 'video_add',
+	url: '{$upload_video}?token={$token}&planid={$plan_id}',
+	flash_swf_url:"{utility_cdn::img('/assets/js/plupload/js/Moxie.swf')}",
+	chunk_size: '2000kb',
+	max_retries: 100,
+	filters: {
+		mime_types : [
+			{ title : "Video Files", extensions : "mp3,mp4,flv,avi,mkv,wmv,vob,mpg,rmvb,mpeg,mov" }
+		],
+		prevent_duplicates:false,
+		max_file_size:"10G"
+	},
+	multi_selection:false,
+	file_data_name:'video'
+});
+
+var QueueProgress = uploader.total;
+var f = '';
+
+
+uploader.bind('PostInit',function(){
+    $(".video-list").on('click','.video-edit-btn',function(){
+		var offFid = $(this).attr('fid');
+		offVideo(offFid);
+	});
+    $(".video-list").on('click','.video-del-btn',function(){
+        var delFid = $(this).attr('fid');
+        delVideo(delFid);
+    });
+});
+
+uploader.bind('FilesAdded',function(up, files){
+	$("#novideo").css("display","none");
+	$("#video_add").css("display","none");
+    for(var i in files){
+        myAppend(files[i].id,files[i].name);
+    }
+    uploader.start();
+});
+
+uploader.bind('UploadProgress',function(up, file){
+	var speed = parseInt(QueueProgress.bytesPerSec/1024)+"KB/s";
+	f = parseInt( (QueueProgress.loaded/1024)/1024 )+"M";
+    var p = file.percent;
+	var h ="<div id='bar_"+file.id+"' class='video-bar' style='width:"+p+"%'>"+p+"%</div>";
+	var m = "<span id='msg_"+file.id+"'>速度："+speed+" | 已上传："+f+" </span>";
+	$('#jd_'+file.id).html(h);
+	$('#msg_'+file.id).html(m);
+});
+
+uploader.bind('FileUploaded',function(up, file, info){
+    if(info.response){
+		if(info.response==1){
+			$("#fid_"+file.id).html(file.name+':<span class="cRed">上传成功！</span>');
+			location.reload();
+		}else if(info.response==-21){
+			$("#msg_"+file.id).text("不是有效的视频文件:"+info.response);
+		}else if(info.response==-1){
+			$("#msg_"+file.id).text("上传失败,错误码:"+info.response);
+		}else{
+			$("#msg_"+file.id).text("上传失败,错误码:"+info.response);
+		}
+	}
+});
+
+uploader.bind('Error',function(up, err){
+    if(err.code == -600){
+        alert('文件太大');
+		return false;
+    }else{
+        console.log("\nError #" + err.code + ": "+ err.message);
+		return false;
+    }
+});
+
+uploader.init();
+
+
+//追加
+function myAppend(fileId, fileName){
+    var html='';
+    html+="<li id="+fileId+">";
+	html+="<p class='video-pic col-lg-2'><img src='{utility_cdn::img('/assets_v2/img/video-img.png')}'></p>";
+	html+="<div class='video-txt col-lg-7'>";
+	html+="<p id='fid_"+fileId+"' class='video-tit'>正在上传:"+fileName+"</p>";
+	html+="<div id='jd_"+fileId+"' class='video-progress'>";
+	html+="</div>";
+	html+="<p class='video-status cGray'>";
+	html+="<span id='msg_"+fileId+"'></span>";
+	html+="</p>";
+	html+="</div>";
+	html+="<div class='video-edit col-lg-3'>";
+	html+="<a id='off_"+fileId+"' fid="+fileId+" class='video-edit-btn'>取消上传</a>";
+	html+="</div>";
+	html+="</li>";
+    $('.video-list').append(html);
+}
+
+//取消上传
+function offVideo(fid)
+{
+	var off = '';
+	for(var i in uploader.files){
+		if(fid == uploader.files[i].id){
+			off = i;
+		}
+	}
+	uploader.splice(off, 1);
+	$("#video_add").css("display","block");
+	location.reload();
+}
+//删除视频
+function delVideo(fileId,planUid)
+{
+    if(confirm("你确定要删除此视频吗?")){
+        $.post("/user.teacher.delorguploadfile",{ fileId:fileId,planUid:planUid  },function(r){
+
+            if(r && r>0){
+				layer.msg('删除成功！',{ time:2000 },function(){
+					location.reload();
+				});
+            }else{
+                layer.msg('删除失败！',{ time:2000 },function(){
+					//location.reload();
+				});
+            }
+        },"json");
+    }
+    return false;
+}
+//视频转码
+$("#addtask").click(function(){
+	var plan_id = {$plan_id};
+	$.post("/user.teacher.addorguploadtask/",{ plan_id:plan_id, type:"UPLOAD" },function(r){
+		if(r.code==1){
+            layer.msg('玩命转码中,您可以离开',{ time:2000 },function(){
+				location.reload();
+            });
+		}else{
+			layer.msg("失败，请稍后再试，错误代码:"+r,{ time:2000 },function(){
+				location.reload();
+            });
+			return false;
+		}
+	},"json");
+});
+</script>
+</html>

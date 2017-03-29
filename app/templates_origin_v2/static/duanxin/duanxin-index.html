@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>短信推送-首页</title>
+	<link rel="stylesheet" href="/assets_v2/css/index.css">
+	<script type="text/javascript" src="/assets_v2/js/jquery/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="/assets_v2/layer/layer.js"></script>
+</head>
+
+<body>
+	<!-- rt -->
+	<div class="right-main col-md-16">
+		<section class="grobal-recharge-info">
+			<div class="tab-main">
+	            <div class="tab-hd fs14">
+	                <a class="tab-hd-opt curr" href="#">首页</a>
+	                <a class="tab-hd-opt" href="#">发送明细</a>
+	                <a class="tab-hd-opt" href="#">充值记录</a>
+	            </div>
+	        </div>
+	        <div class="org-profile col-md-7 mt15">
+				<div class="org-profile-content">
+					<p class="fs14">短信余额</p>
+					<p class="org-income-amount provide-money col-md-20 clearfix fs22">
+						<span class="c-fl mr20"><em class="fs14">￥</em>0.01</span>
+						<a href="#" class="recharge-btn tac fs14 c-fl">充值</a>
+					</p>
+					<a href="#" class="record-btn">预计可发送200条</a>
+				</div>
+	        </div>
+	        <div class="org-profile col-md-13 mt15">
+				<div class="org-profile-content fs14">
+					<div class="clearfix mb10">
+						<div class="c-fl">
+							今日数据 <span class="cGray">已发送<em class="cYellow">12</em>条</span>
+						</div>
+						<a href="#" class="c-fr cBlue">查看发送记录</a>
+					</div>
+					<div class="clearfix mb10">
+						<span class="c-fl">报名成功：20条</span>
+						<span class="c-fr">开课提醒：20条</span>
+					</div>
+					<div class="clearfix">
+						<span class="c-fl">修改排课：20条</span>
+						<span class="c-fr">课堂统计：20条</span>
+					</div>
+				</div>
+	        </div>
+	        <h1 class="fs14 mt15 col-md-20 p0 mb15">短信推送服务</h1>
+	        <table class="table-grid tac">
+	        	<thead>
+	        		<tr>
+	        			<td class="col-md-5">服务名称</td>
+	        			<td class="col-md-5">推送课程类型</td>
+	        			<td class="col-md-5">状态</td>
+	        			<td class="col-md-5">操作</td>
+	        		</tr>
+	        	</thead>
+	        	<tbody>
+	        		<tr>
+	        			<td class="col-md-5">报名成功</td>
+	        			<td class="col-md-5">付费课</td>
+	        			<td class="col-md-5">开启</td>
+	        			<td class="col-md-5 cBlue" onclick="updateRecharge()">修改</td>
+	        		</tr>
+	        		<tr>
+	        			<td class="col-md-5">开课提醒</td>
+	        			<td class="col-md-5">-</td>
+	        			<td class="col-md-5">关闭</td>
+	        			<td class="col-md-5 cBlue" onclick="updateRecharge()">修改</td>
+	        		</tr>
+	        		<tr>
+	        			<td class="col-md-5">修改排课</td>
+	        			<td class="col-md-5">付费课</td>
+	        			<td class="col-md-5">关闭</td>
+	        			<td class="col-md-5 cBlue" onclick="updateRecharge()">修改</td>
+	        		</tr>
+	        		<tr>
+	        			<td class="col-md-5">课堂统计</td>
+	        			<td class="col-md-5">付费课</td>
+	        			<td class="col-md-5">开启</td>
+	        			<td class="col-md-5 cBlue" onclick="updateRecharge()">修改</td>
+	        		</tr>
+	        	</tbody>
+	        </table>
+		</section>
+		<!-- 短信服务 -->
+		<section id="layer-recharge-box" style="display:none;">
+			<ul class="mt15 fs14">
+				<li class="mb5">
+					<span class="col-xs-7 cGray tar">短信服务:</span>
+					报名成功
+				</li>
+				<li class="mb5">
+					<span class="col-xs-7 cGray tar">发送规则:</span>
+					学生成功报名课程后发送
+				</li>
+				<li class="mb5">
+					<span class="col-xs-7 cGray tar">短信内容:</span>
+					恭喜你报名成功【课程名-班级名】
+				</li>
+				<li class="mb5">
+					<span class="col-xs-7 cGray tar">服务状态:</span>
+					<label class="mr10">
+						<input type="radio" /> 开启
+					</label>
+					<label>
+						<input type="radio" /> 关闭
+					</label>
+				</li>
+				<li class="mb5">
+					<span class="col-xs-7 cGray tar">推送课程类型:</span>
+					<label class="mr10">
+						<input type="checkbox" /> 收费课
+					</label>
+					<label>
+						<input type="checkbox" /> 免费课
+					</label>
+				</li>
+				<li class="tac col-xs-20 mt20">
+					<button class="yellow-btn mr10">确认</button>
+					<button class="gray-button" onclick="layerRechargeCancle()">取消</button>
+				</li>
+			</ul>
+		</section>
+		<!-- /短信服务 -->
+	</div>
+	<!-- /rt -->
+</body>
+</html>
+<script type="text/javascript">
+function updateRecharge() {
+	layer.open({
+		type: 1,
+		title: ['短信服务'],
+        shadeClose: true,
+		area: ['440px', '280px'],
+		content: $('#layer-recharge-box')
+	});
+}
+function layerRechargeCancle() {
+	layer.closeAll();
+}
+</script>

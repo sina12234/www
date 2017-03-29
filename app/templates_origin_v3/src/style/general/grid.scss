@@ -1,0 +1,45 @@
+// Grid system
+// --------------------------------------------------
+@import "mixins/_grid";
+// Container widths
+.container {
+  @include container-fixed;
+  @media (min-width: $screen-sm) {
+    width: $container-sm;
+  }
+  @media (min-width: $screen-md) {
+    width: $container-md;
+  }
+  @media (min-width: $screen-lg) {
+    width: $container-lg;
+  }
+}
+
+// Fluid container
+.container-fluid {
+  @include container-fixed;
+}
+// Rows contain and clear the floats of your columns.
+.row {
+  @include make-row;
+}
+
+// Columns
+@include make-grid-columns;
+
+// Extra small grid
+@include make-grid(xs);
+
+// Small grid
+@media (min-width: $screen-sm) {
+  @include make-grid(sm);
+}
+
+// Medium grid
+@media (min-width: $screen-md) {
+  @include make-grid(md);
+}
+// Large grid
+@media (min-width: $screen-lg) {
+  @include make-grid(lg);
+}

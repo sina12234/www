@@ -1,0 +1,228 @@
+<!doctype html>
+<html>
+	<head>
+		<title>高能100 - 找回密码</title>
+		{part "/index.main.header"}
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/user.css')}">
+	</head>
+
+	<body>
+
+		<!--top-->
+		{part "/index.main.nav"}
+
+		<!--login-->
+		<div class="fpCon">
+			<div class="fpstep fps_2"></div>
+
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12 mt60">
+						<form action="" method="post" autocomplete="off" id="x_submit_form">
+							<input type="hidden" id="voice" name="voice" value="0" />
+							
+							<div class="row x_field2">
+								<span class="col-sm-3 col-xs-3">&nbsp;</span>
+								<span class="col-sm-8 col-xs-8"><div id="error" class="x_error"></div></span>
+							</div>
+							<div class="row x_field2 ">
+								<span class="col-xs-4 xftit">手机号：</span>
+								<label>输入手机号</label>
+								<input class="col-xs-2 x_input_tx2" readonly style="padding:2px 10px" type="text" name="mobile" placeholder="" id="mobile" value="{$uname}"/>
+							</div>
+							{*
+							*}
+
+							<div class="row x_field2">
+								<span class="col-xs-4 xftit">手机验证码：</span>
+								<label>手机验证码</label>
+								<input class="col-xs-2 x_input_tx2" style="padding:2px 10px" type="text" name="code" placeholder="" id="code" />
+								<input id="x_btn_yanzhengma" type="button" href="javascript:;" class="x_btn_yanzhengma fl" disabled value="" />
+							</div>
+							<style>
+							.x_btn_yanzhengma{
+							width:auto;padding:2px 10px;
+							}
+								.x_btn_yanzhengma_v {
+									margin: 0px 10px;
+									line-height: 30px;
+									color: #3366cc;
+								}
+								.x_btn_yanzhengma:hover{
+								width:auto;
+								}
+							</style>
+							<div id="voice_panel" style="display:none">
+							<div class="row x_field2">
+								<span class="col-xs-4 xftit">图片验证码：</span>
+								<label>图片验证码</label>
+								<input class="col-xs-2 x_input_tx2" style="padding:2px 10px" type="text" name="verify_code_img" placeholder="" id="code" />     
+								<span class="fl ml10"><img id="cap" src="/captcha.gen" width="110" height="44"  alt=""/></span>
+							</div>
+							<div class="row x_field2">
+								<span class="col-xs-3 xftit"></span>
+								<span class="col-xs-8 col-sm-8 col-xs-r">
+									没有收到手机短信验证码?，请点击<a href="javascript:;" id="get_verify_code_v" class="x_btn_yanzhengma_v">语音获取验证码</a>
+								</span>
+							</div>
+							</div>
+							<div class="row x_field2">
+								<span class="col-xs-4 xftit fl"></span>
+								<div class="col-xs-6"><input class="col-xs-12 btn_fp1" type="submit" value="下一步" /></div>
+							</div>
+						</form>
+						<div class='x_ts' style="font-size:14px;margin:40px 0px 0px 180px;">
+							<p>温馨提示:<b style="padding-left:15px;font-weight:normal;">如果出现异常，请联系我们  QQ群<b style="color:blue;">320405839</b></b></p>
+					    </div>
+<script>
+			$("#cap").click(function(){
+				$("#cap").attr("src","/captcha.gen?"+Math.random());
+			});
+var i =20;
+var it = setInterval(function(){
+	i--
+	//if(i==0){ 
+	//	clearInterval(it);
+	//	$("#x_btn_yanzhengma").val("再次获取验证码");
+	//	$("#x_btn_yanzhengma").removeAttr("disabled" );
+	//	return;
+	//}
+	$("#x_btn_yanzhengma").val(i+"秒后，请尝试语音验证码")
+	if(i==0){
+		clearInterval(it);
+		$("#x_btn_yanzhengma").val("请尝试语音验证码")
+		$("#voice_panel").show();
+	}
+
+},1000);
+/*
+$("#x_btn_yanzhengma").click(function(){
+	$(this).attr("disabled",true);
+	$("#voice").val(0);
+	$("#error").html("");
+	$.post("/user.main.VerifyCodePwd",$("#x_submit_form").serialize(),function(r){
+		if(r.error){
+			$("#error").html(r.error).show();
+			$("[name="+r.field+"]").focus();
+		}
+		if(!r.ok){
+			return false;
+			}else{
+
+			$("#x_btn_yanzhengma").html("验证码已经发送");
+		}
+	},"json");
+
+});
+*/
+var i2=0;
+var timer2;
+$("#get_verify_code_v").click(function(){
+	$("#voice").val(1);
+	$("#error").html("");
+	if(i2>0)return false;
+	$.post("/user.main.VerifyCodePwd",$("#x_submit_form").serialize(),function(r){
+		if(r.error){
+			$("#error").html(r.error).show();
+			$("[name="+r.field+"]").focus();
+		}
+		if(!r.ok){
+			i2=0;
+			return false;
+			}else{
+			$("#get_verify_code_v").html("请等候("+i2+")秒");
+			i2=60;
+			$("#get_verify_code_v").html("请等候("+i2+")秒");
+			timer2 = setInterval(function(){
+				i2--;
+				$("#get_verify_code_v").html("请等候("+i2+")秒");
+				if(i2==0){
+					clearInterval(timer2);
+					$("#get_verify_code_v").html("语音获取验证码");
+				}
+			},1000);
+		}
+	},"json");
+});
+</script>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+
+		<!--footer-->
+
+		<div class="footer">
+			<div class="ftcon">
+				<p class="fter_2 mt15">© 2014 北京高能壹佰教育科技有限公司 版权所有</p>
+				<p class="fter_2 mt15">京ICP备14053191号</p>
+			</div>
+		</div>
+
+	</body>
+</html>
+<script>
+	// 提交验证代码
+	$("#x_submit_form").submit(function(){
+		//if($("#code").val()=='' || $("#code").val()=="输入手机验证码"){
+		//	$(".x_error").html("请输入手机验证码");
+		//	$("#code").focus();
+		//	return false;
+		//}
+		$.post("/user.main.findpwd2Ajax",$("#x_submit_form").serialize(),function(r){
+			if(r.error){
+				$(".x_error").html(r.error);
+				$("[name="+r.field+"]").focus();
+				return false;
+				}else{
+				location="/user.main.findpwd3"
+			}
+				return false;
+		},"json");
+		return false;
+	})
+
+	$(document).ready(function(){
+		$("input[type=text],input[type=password],textarea").each(function(){
+			var label=$(this).prev("label");
+			var label_txt=label.text();
+			if(("placeholder" in document.createElement("input"))){
+				$(this).attr("placeholder",label_txt);
+				label.remove();
+				}else{
+				$(this).data("placeholder",label_txt);
+				psuedoPlaceholder($(this));
+				label.remove();
+			}
+		});
+		function psuedoPlaceholder(input){
+			if(input.attr("type")=="password"){
+				var opassword=$("<input type='text' class='"+input.attr("class")+"' value='"+input.data("placeholder")+"' name='addinput' />");
+				input.hide();
+				input.before(opassword);
+				opassword.focus(function(){
+					$(this).hide();
+					input.show().focus();
+				});
+				input.blur(function(){
+					if($(this).val()==""){
+						$(this).hide();
+						opassword.show();
+					}
+				});
+				}else{
+				input.focus(function(){
+					if($(this).val()==$(this).data("placeholder")){
+						$(this).val("");
+					}
+					}).blur(function(){
+					if($(this).val()==""){
+						$(this).val($(this).data("placeholder"));
+					}
+				}).blur();
+			}
+		}
+	})
+</script>

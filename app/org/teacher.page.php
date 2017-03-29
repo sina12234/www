@@ -1,0 +1,1051 @@
+<?php
+class org_teacher extends STpl{
+    private $majors=array(
+                    "0"  =>  "不设置",
+                    "1"  =>  "数学",
+                    "2"  =>  "英语",
+                    "3"  =>  "语文",
+                    "4"  =>  "物理",
+                    "5"  =>  "化学",
+                    "6"  =>  "生物",
+                    "7"  =>  "历史",
+                    "8"  =>  "地理",
+                    "9"  =>  "政治",
+                );
+    private $roles=array(
+                    "general"  =>  "普通老师",
+                    "assistant"  =>  "助教",
+                    "admin"  =>  "管理员",
+                );
+	function __construct(){
+        //如果没有登陆到登陆界面
+        $this->user = user_api::loginedUser();
+        if(empty($this->user)){
+            $this->redirect("/site.main.login");
+        }   
+        $domain_conf = SConfig::getConfig(ROOT_CONFIG."/const.conf","domain");
+        $this->domain = $domain_conf->domain;
+        $org=user_organization::subdomain();
+        if(!empty($org)){
+            $this->orgOwner=$org->userId; //机构所有者id 以后会根据域名而列取
+        }else{
+            header('Location: https://www.'.$this->domain);
+        }   
+        $this->orgInfo=user_organization::getOrgByOwner($this->orgOwner);
+        //判断管理员和机构拥有者
+        $special = user_api::getTeacherSpecial($this->orgInfo->oid,$this->user['uid']);
+        if((empty($special) || empty($special->user_role&0x04)) && ($this->user["uid"]!=$this->orgOwner)){
+            header('Location: //'.$org->subdomain);
+        }
+		
+	}
+    public function pageAdd($inPath){
+        $this->assign('roles',$this->roles);
+		$group = SConfig::getConfig(ROOT_CONFIG."/group.conf","group");
+		$setArr = user_api::getsubjectTag($group->subject);
+        $this->assign("setArr",$setArr);
+		return $this->render("org/teacher.add.html");
+    }
+	public function pageorgErrorMobileInfo($inPath){
+        $this->assign('roles',$this->roles);
+		$faild = utility_session::get()['failedData'];
+		$num = count($faild);
+		$this->assign('num',$num);
+		$this->assign('mobileInfo',$faild);
+		return $this->render("org/teacher.mobileInfo.html");
+    }
+    public function pageAddTeacherAjax($inPath){
+        $result=new stdclass;
+        $real_name=!empty($_REQUEST['name'])?trim($_REQUEST['name']):'';
+        $gender=!empty($_REQUEST['gender'])?trim($_REQUEST['gender']):'';
+		
+        if(empty($real_name)){
+            $result->error="教师名称不能为空";
+            $result->field="real_name";
+            return $result;
+        }
+		if(preg_match("/[\x7f-\xff]/", $real_name)){
+			$length = utility_tool::check_string($real_name, 10,1);
+			if(!$length){
+				$result->code 		= -100;
+                $result->error   	= '真实姓名不能超过10个汉字';			
+				return $result;
+			}
+		}
+		if(preg_match("/[a-zA-Z\s]+$/", str_replace(' ','',$real_name))){
+        	$info = utility_tool::check_string($real_name, 50,1);
+			if(!$info){
+                $result->code   = -100;
+                $result->error  = '真实姓名不能超过50个英文字符';
+                return json_encode($ret);
+            }else{
+				$flag = 1;
+			}
+        }
+        if(!preg_match("/^[\x{4e00}-\x{9fa5}A-Za-z]+$/u",$real_name)){
+            $result->error="教师名称不能为数字或特殊字符";
+            $result->field="real_name";
+            return $result;
+        }
+        $mobile=!empty($_REQUEST['mobile'])?trim($_REQUEST['mobile']):'';
+        if(empty($mobile)){
+            $result->error="手机号码不能为空";
+            $result->field="mobile";
+            return $result;
+        }
+        if(utility_valid::mobile(trim($mobile)==false)){
+            $result->error="手机号码格式不正确";
+            $result->field="mobile";
+            return $result;
+        }
+        $role=!empty($_REQUEST['role'])?$_REQUEST['role']:'';
+        //角色处理
+        if(is_array($role)&&in_array('admin',$role)){
+            $countRole=user_organization::countOrgRole($this->orgInfo->oid);
+            if(!empty($countRole->sum)&&$countRole->sum>=6){
+                $result->error="机构下管理员数量不能超过6个";  
+                $result->field="role";
+                return $result;
+            }
+        }
+        $roleArr=array(
+                'general'=>0x01,
+                'assistant'=>0x02,
+                'admin'=>0x04,
+            );
+        $user_role=0;
+        $old_role=1;
+        if(is_array($role)){
+            foreach($role as $v){
+                if(isset($roleArr[$v])){
+                    $user_role+=$roleArr[$v];
+                }
+            }
+            //如果勾选管理员   role＝2
+            if(in_array('admin',$role)){
+                $old_role=2;
+            }
+        }
+        $good_subject=!empty($_REQUEST['good_subject'])?$_REQUEST['good_subject']:'';
+		$condition 			 = array();
+		$condition['gender'] = $gender;
+		$userType 	 		 = array("1"=>3,"4"=>5,"5"=>7);
+		$condition['type']   = !empty($userType[$user_role]) ? $userType[$user_role] : 3;
+        //判断手机是不是已经注册
+        $uid = user_api::isRegister($mobile);
+        if(!empty($uid)){
+            //添加组织关系
+            $data = array(
+                    "user_role"=>$user_role,
+                    "role"=>$old_role,
+                );
+            $res1=user_organization::setOrgUser($this->orgInfo->oid,$uid,$data);
+            //设置身份为教师身份
+            $res2=user_api::setTeacher($uid);
+            //更新昵称、真实姓名
+			//$res3=user_api::singleTeacherInfoHave($uid,$real_name,$gender);
+			 $res3=user_api::updateBase($uid,'',$condition,'',$real_name,'','','',$ret);
+            //更新t_user表中的last_updated字段
+            $res4=user_api::updateUser($uid,array('last_updated'=>date('Y-m-d H:i:s',time())));
+            $tag = user_api::updateTagMapUser($uid,$good_subject);
+            if(!empty($res1)&&!empty($res2)&&!empty($res3)&&!empty($res4)){
+                $r= verify_api::sendMobileAddTeacherOk($mobile,$this->orgInfo->subname,$_SERVER["HTTP_HOST"],$ret);
+            }
+            $result->uid=$uid;
+        }else{
+            $password = substr($mobile,5,6);
+            $uid = user_api::registerByMobile($real_name,$mobile,$password);
+			$res3=user_api::updateBase($uid,'',$condition,'','','','','',$ret);
+            if($uid){
+                //添加组织关系
+                $data=array(
+                            "user_role"=>$user_role,
+                            "role"=>$old_role,
+                        );
+                $res1=user_organization::setOrgUser($this->orgInfo->oid,$uid,$data);
+                //设置身份为教师身份
+                $res2=user_api::setTeacher($uid);
+                $tag = user_api::updateTagMapUser($uid,$good_subject);
+                if($res1&&$res2){
+                    $r = verify_api::sendMobileAddTeacherOkv2($mobile,$password,$this->orgInfo->subname,$_SERVER["HTTP_HOST"],$ret);
+                }
+                $result->uid=$uid;
+            }else{
+                $result->error="添加失败";
+                $result->field="mobile";
+            }
+        } 
+        return $result;
+    }
+    public function pageAddTeacherAllAjax($inPath){
+        $result=new stdclass;
+        $allMobiles = !empty($_REQUEST["mobile"])?$_REQUEST["mobile"]:'';
+        if(empty($allMobiles)){
+            $result->error="数据不能为空";
+            return $result;
+        }
+        //换行符分割数据
+        $mobileArr = explode("\n",$allMobiles);
+        $arr = array();
+        foreach($mobileArr as $k=>$v){
+            //替换中文逗号
+            $v=str_replace('，',',',$v);
+            //逗号分隔手机号、姓名
+            $tmp=explode(',',$v);
+            if(empty($tmp[0])||empty($tmp[1])){
+                $result->error="数据格式不正确";
+                return $result;
+            }
+            
+			if(preg_match("/[\x7f-\xff]/", trim($tmp[1]))){
+				$length = utility_tool::check_string(trim($tmp[1]), 10,1);
+				if(!$length){
+					$result->code 		= -100;
+					$result->error   	= '真实姓名不能超过10个汉字';			
+					return $result;
+				}
+			}
+			if(preg_match("/[a-zA-Z\s]+$/", str_replace(' ','',trim($tmp[1])))){
+				$info = utility_tool::check_string(trim($tmp[1]), 50,1);
+				if(!$info){
+					$result->code   = -100;
+					$result->error  = '真实姓名不能超过50个英文字符';
+					return json_encode($ret);
+				}else{
+					$flag = 1;
+				}
+			}
+			
+            if(!preg_match("/^[\x{4e00}-\x{9fa5}A-Za-z]+$/u",trim($tmp[1]))){
+                $result->error='教师名称['.trim($tmp[1]).']不能为数字或特殊字符';
+                return $result;
+            }
+            if(utility_valid::mobile(trim($tmp[0]))===false){
+                $result->error='手机号码['.trim($tmp[0]).']格式不正确';
+                return $result;
+            }
+            $arr[$k] = array(
+                    'mobile'=>trim($tmp[0]),
+                    'name'=>trim($tmp[1]),
+                    );  
+        }
+        $role=!empty($_REQUEST["role"])?$_REQUEST["role"]:'';
+        //批量添加只能添加助教和普通老师
+        $roleArr=array(
+                'general'=>0x01,
+                'assistant'=>0x02,
+            );
+        $user_role=0;
+        $old_role=1;
+        if(is_array($role)){
+            foreach($role as $v){
+                if(isset($roleArr[$v])){
+                    $user_role+=$roleArr[$v];
+                }
+            }
+            //选管理员   role＝2
+            if(in_array('admin',$role)){
+                $old_role=2;
+            }
+
+        }
+        $arrerror =array();
+        if(!empty($this->orgInfo->oid)){
+            foreach($arr as $allk=>$allv){
+                $mobile=$allv['mobile'];
+                $name=$allv['name'];
+                //判断手机是不是已经注册
+                $uid = user_api::isRegister($mobile);
+                if(!empty($uid)){
+                    //添加组织关系
+                    $data = array(
+                            "user_role"=>$user_role,
+                            "role"=>$old_role,
+                        );
+                    $res1 = user_organization::setOrgUser($this->orgInfo->oid,$uid,$data);
+                    //设置身份为教师身份
+                    $res2=user_api::setTeacher($uid);
+                    //更新昵称、真实姓名
+                    $res3=user_api::updateBase($uid,$name,'','',$name,'','','',$ret);
+                    //更新t_user表中的last_updated字段
+                    $res4=user_api::updateUser($uid,array('last_updated'=>date('Y-m-d H:i:s',time())));
+                    if($res1&&$res2&&$res3&&!empty($res4)){
+                        $r = verify_api::sendMobileAddTeacherOk($mobile,$this->orgInfo->subname,$_SERVER["HTTP_HOST"],$ret);
+                    }
+                }else{
+                    $pass = substr($mobile,5,6);
+                    $uid = user_api::registerByMobile($name,$mobile,$pass,$from=0,$ret);
+                    if($uid){
+                        //添加组织关系
+                        $data=array(
+                                "user_role"=>$user_role,
+                                "role"=>$old_role,
+                            );
+                        $res1=user_organization::setOrgUser($this->orgInfo->oid,$uid,$data);
+                        //设置身份为教师身份
+                        $res2=user_api::setTeacher($uid);
+                        if($res1&&$res2){
+                            $r=verify_api::sendMobileAddTeacherOkv2($mobile,$pass,$this->orgInfo->subname,$_SERVER["HTTP_HOST"],$ret);
+                        }
+                    }else{
+                        $arrerror[]= $mobile;
+                        continue;
+                    }
+                }
+            }
+            if(!empty($arrerror)){
+                $retmobile = implode(",",$arrerror);
+                $result->error="添加失败".$retmobile;
+            }else{
+                $result->success="添加成功";
+            }
+            return $result;
+        }
+    }
+	public function pageDelTeacherAjax($inPath){
+		$org_info = user_organization::getOrgByUid($this->orgOwner);
+		$allId = !empty($_POST['teacher_id']) ? $_POST['teacher_id'] : '';
+		$tid = !empty($_REQUEST['uid']) ? $_REQUEST['uid'] : '';
+		$idData = array();
+		if(!empty($allId)){
+			$idData['teacher_id'] = $allId;
+		}
+		if(!empty($tid)){
+			$idData['teacher_id'] = $tid;
+		}
+		if(!empty($org_info->oid)){
+			if(!empty($idData)){
+				return user_organization::delUser($org_info->oid,$idData);
+			}
+		}
+		return false;
+	}
+	//设置多个展现
+	public function pagesetDisplay(){
+		$data = array();
+		$org_info = user_organization::getOrgByUid($this->orgOwner);
+		$data['teacher_id'] = !empty($_POST['teacher_id']) ? $_POST['teacher_id'] : '';
+		$data['visiable'] = isset($_POST['visiable']) ? $_POST['visiable'] : 0;
+		if(!empty($org_info->oid)){
+			if(!empty($data)){
+				return user_organization::setteacherDisplay($org_info->oid,$data);
+			}
+		}
+	}
+    public function pageEdit($inPath){
+        //教师基本信息
+		if(empty($inPath[3])){
+			return $this->redirect("/org.teacher.list");
+		}
+	    //判断是否是该机构下的老师	
+        $special = user_api::getTeacherSpecial($this->orgInfo->oid,$inPath[3]);
+        if(empty($special)){
+			return $this->redirect("/org.teacher.list");
+        }
+		$group = SConfig::getConfig(ROOT_CONFIG."/group.conf","group");
+        $teacher = user_api::getTeacherInfo($inPath[3]);
+        $tagRet=teacher_api::getTagUserInUids(array('ids'=>$inPath[3],'groupId'=>$group->subject));
+		if(!empty($teacher->good_subject)){
+			$good_subject = explode(",",$teacher->good_subject);
+		}else{
+			$good_subject = !empty($teacher->major) ? (array)$teacher->major : '';
+		}
+        $userinfo = user_api::getUser($inPath[3]);
+		$birthArr = explode('-',$userinfo->birthday);
+		$birthday = new stdclass;
+		$birthday->year  = $birthArr[0];
+		$birthday->month = $birthArr[1];
+		$birthday->day   = $birthArr[2];
+		$userinfo->birthday = $birthday;
+		$level0  = region_api::listRegion(0);
+
+		if(empty($userinfo->student->region_level0) && !empty($userinfo->student->province)){
+			foreach($level0 as $le){
+				similar_text($userinfo->student->province,$le->name,$percent);
+				if($percent >= 70){
+					$userinfo->student->region_level0 = $le->region_id;
+					break;
+				}
+			}
+			$level1  = region_api::listRegion(1);
+			foreach($level1 as $le1){
+				similar_text($userinfo->student->city,$le1->name,$percent);
+				if($percent >= 70){
+					$userinfo->student->region_level1 = $le1->region_id;
+					break;
+				}
+			}
+			$params = array();
+			$params['region_level0'] = $userinfo->student->region_level0;
+			$params['region_level1'] = $userinfo->student->region_level1;
+			user_api::setStudentProfile2($this->user['uid'],$params);
+		}
+
+		$this->assign("grades",course_grade::$data);
+		$this->assign("level0",$level0);
+		$this->assign("userinfo",$userinfo);
+		//从t_tag表获取科目标签
+        $setArr = user_api::getsubjectTag($group->subject);
+        $subject_arr= array();
+        if(!empty($setArr)){
+            foreach($setArr as $k=>$v){
+                $subject_arr[$v->pk_tag]=isset($v->name) ? $v->name : ''; 
+            }
+        }
+        $tagArr= array();
+		if(!empty($tagRet->data)){
+			foreach($tagRet->data as $v){
+				$tagArr[] = !empty($v->fk_tag) ? $v->fk_tag : '';
+			} 
+		}
+        $this->assign("teacher",$teacher);
+        $this->assign("good_subject",$tagRet);
+        $this->assign('special',$special);
+        $this->assign('setArr',$setArr);
+        $this->assign('tagArr',$tagArr);
+        $this->assign('roles',$this->roles);
+		
+        //用户基本信息
+        $userInfo = user_api::getUser($inPath[3]);
+		$this->assign('userInfo',$userInfo);
+		return $this->render("org/teacher.edit.html");
+    }
+    public function pageUpdateTeacherAjax($inPath){
+		
+        $result=new stdclass;
+        $tid=!empty($_POST['tid'])?(int)$_POST['tid']:0;
+        if($tid<0){
+            $result->error="参数错误";
+            return $result;
+        }
+        $birthday = '';
+		$gender = isset($_POST['gender'])?$_POST['gender']:0;
+        $real_name=!empty($_POST['real_name'])?trim($_POST['real_name']):'';
+		$_POST['student_name'] = '';
+		$checkNickName =  user_api::checkNickName($tid,$_POST['name']);
+		if(!empty($checkNickName)){
+				if($checkNickName->code == -1){
+					$result->error="昵称已被使用，换一个试试吧";
+					$result->field="name";
+					return $result;
+				}
+		}
+        if(empty($real_name)){
+            $result->error="教师名称不能为空";
+            $result->field="real_name";
+            return $result;
+        }
+		if(preg_match("/[a-zA-Z\s]+$/", str_replace(' ','',$real_name))){
+        	$res = utility_tool::check_string($real_name, 50,1);
+			if(!$res){
+                $result->error  = -2;
+                $result->field  = '真实姓名不能超过50个英文字符';
+                return $result;
+            }else{
+				$flag = 1;
+			}
+        }
+        if(!preg_match("/^[\x{4e00}-\x{9fa5}A-Za-z]+$/u",$real_name)){
+            $result->error="教师名称不能为数字或特殊字符";
+            $result->field="real_name";
+            return $result;
+        }
+        $years=!empty($_POST['years'])?(int)$_POST['years']:0;
+        if($years<0){
+            $result->error="教龄只允许输入正数字";
+            $result->field="years";
+            return $result;
+        }
+        $good_subject=!empty($_POST['good_subject'])? $_POST['good_subject']:0;
+		$brief_desc=!empty($_POST['brief_desc'])? $_POST['brief_desc']:0;
+        if(empty($good_subject)){
+            $result->error="请选择擅长学科";
+            $result->field="good_subject";
+            return $result;
+        }
+        $scope=!empty($_POST['scopes'])?$_POST['scopes']:'';
+        if(empty($scope)){
+            $result->error="请选择教学领域";
+            $result->field="scopes";
+            return $result;
+        }
+        $scopeArr=array(
+                'preschool'=>0x01,
+                'primary'=>0x02,
+                'junior'=>0x04,
+                'senior'=>0x08,
+            );
+        $scopes=0;
+        if(is_array($scope)){
+            foreach($scope as $v){
+                if(isset($scopeArr[$v])){
+                    $scopes+=$scopeArr[$v];
+                }
+            }
+        }
+        $role=!empty($_REQUEST['role'])?$_REQUEST['role']:'';
+		if(empty($_REQUEST['role'])){
+            $result->error="请勾选角色";
+            $result->field="role";
+            return $result;
+        }
+        //角色处理
+        if(is_array($role)&&in_array('admin',$role)){
+            $countRole=user_organization::countOrgRole($this->orgInfo->oid);
+			$roleInfo = $special = user_api::getTeacherSpecial($this->orgInfo->oid,$tid);
+			if(!empty($roleInfo->roles) && !in_array("admin",$roleInfo->roles)){
+				if(!empty($countRole->sum)&&$countRole->sum>=6){
+					$result->error="机构下管理员数量不能超过6个";  
+					$result->field="role";
+					return $result;
+				}
+			}
+            
+        }
+		
+        $roleArr=array(
+                'general'=>0x01,
+                'assistant'=>0x02,
+                'admin'=>0x04,
+            );
+        $user_role=0;
+        $old_role=1;
+        if(is_array($role)){
+            foreach($role as $v){
+                if(isset($roleArr[$v])){
+                    $user_role+=$roleArr[$v];
+                }
+            }
+            //如果勾选管理员   role＝2
+            if(in_array('admin',$role)){
+                $old_role=2;
+            }
+        }
+		
+        $visiable=!empty($_POST['visiable'])?1:0;
+        $title=!empty($_POST['title'])?trim($_POST['title']):'';
+        if(empty(trim($title))){
+            $result->error="教师头衔不能为空";
+            $result->field="title";
+            return $result;
+        }
+        $desc=!empty($_POST['desc'])?$_POST['desc']:'';
+		$personalDesc = !empty($_POST['personal_desc'])?$_POST['personal_desc']:'';
+        if(empty(trim($_POST['desc']))){
+            $result->error="个人介绍不能为空";
+            $result->field="desc";
+            return $result;
+        }
+        $diploma=!empty($_POST['diploma'])?trim($_POST['diploma']):'';
+        $data=array(
+                'college'=>!empty($_POST['college'])?$_POST['college']:'',
+                'title'=>$title,
+                'years'=>$years,
+                'scopes'=>$scopes,
+                'diploma'=>$diploma,
+                'good_subject'=>$good_subject,
+                'desc'=>$desc,
+				'brief_desc'=>$brief_desc,
+
+            );
+			
+	    //判断是否是该机构下的老师	
+        $special = user_api::getTeacherSpecial($this->orgInfo->oid,$tid);
+        if(empty($special)){
+            $result->status="无法修改此用户";
+            return $result;
+        }
+		$specialData['role']		=	$old_role;
+        $specialData['user_role']	=	$user_role;
+        $specialData['visiable']	=	$visiable;
+        //教师设置为不展现时 is_star字段设为0
+        if(!empty($visiable)){
+            $specialData['is_star']=0;
+        }
+        $res3				 = user_api::setTeacherSpecial($this->orgInfo->oid,$tid,$specialData);
+		$condition 			 = array();
+		$condition['gender'] = $gender;
+		$userType 	 		 = array("1"=>3,"4"=>5,"5"=>7);
+		$condition['type']   = !empty($userType[$user_role]) ? $userType[$user_role] : 3;
+		$baseRet = user_api::updateBase($tid,
+				$_POST['name'],
+				$condition,
+				$birthday,
+				$_POST['real_name'],
+				$_POST['address']='',
+				$_POST['desc'],
+				$_POST['zip_code']=''
+				);
+		$params = $_POST;
+		$profileRet = user_api::setStudentProfile($tid,$params);
+        $res1=user_api::updateUserProfile($tid,array('real_name'=>$real_name,'desc'=>$personalDesc));
+        $res2=user_api::setTeacherInfo($tid,$data);
+        //更新t_user表中的last_updated字段
+        $res4=user_api::updateUser($tid,array('last_updated'=>date('Y-m-d H:i:s',time())));
+        if(!empty($res1)&&!empty($res2)&&!empty($res3)){
+            $result->status="Success!";
+            return $result;
+        }else{
+            $result->error="修改失败!";
+            return $result;
+        }
+
+    }
+	public function pageCheckNickName($inPath){
+		$nick_name = !empty($_POST['nickname'])?$_POST['nickname']:'';
+		$uid = !empty($_POST['tid'])?(int)$_POST['tid']:0;
+		$result = array('code'=>-2,'msg' =>'请填写昵称' );
+		if(!empty($nick_name)){
+			$ret = user_api::checkNickName($uid,$nick_name);
+			if($ret->code == -1 ){
+				$result = array('code'=>-1,'msg' =>'昵称已被使用，换一个试试吧' );
+			}elseif($ret->code == 0){
+				$result = array('code'=>0,'msg' =>'可以使用' );
+			}
+		}
+		return json_encode($result);
+	}
+    public function pageInfo($inPath){
+	    //判断是否是该机构下的老师	
+        $special = user_api::getTeacherSpecial($this->orgInfo->oid,(int)$inPath[3]);
+        if(empty($special)){
+			return $this->redirect("/org.teacher.list");
+        }
+
+        $page=!empty($_REQUEST['page'])?$_REQUEST['page']:1;
+        $length=10;
+        //教师基本信息
+        $teacherInfo = teacher_api::getTeacherInfo($inPath[3]);
+        $this->assign('teacherInfo',$teacherInfo);
+        //用户基本信息
+        $userInfo = user_api::getUser($inPath[3]);
+        $this->assign('userInfo',$userInfo);
+        // 上课列表
+        $planArr=array(
+            "f"=>array(
+                    'course_id',
+                    'course_type',
+                    'plan_id',
+                    'course_name',
+                    'class_name',
+                    'section_name',
+                    'class_id',
+                    'start_time',
+                    'max_user',
+                    'user_total',
+                    'status',
+                ),
+            "q"=>array(
+                    'teacher_id'=>$inPath[3],
+                    'owner_id'=>$this->orgOwner,
+                    'status'=>'1,2,3',
+                ),
+            "ob"=>array(
+                    'start_time'=>'desc',
+               ),
+            "p"=>$page,
+            "pl"=>$length,
+        );
+        $seekPlan=seek_api::seekPlan($planArr);
+        $planList=$seekPlan->data;
+        $total=$seekPlan->total;
+        $totalPage=ceil($seekPlan->total/$length);
+        $path='/org.teacher.info.'.$inPath[3];
+        $this->assign('planList',$planList);
+        $this->assign('total',$total);
+        $this->assign('path',$path);
+        $this->assign('page',$page);
+        $this->assign('length',$length);
+        $this->assign('totalPage',$totalPage);
+        $this->assign('majors',$this->majors);
+
+        $courseArr=array();
+        $classArr=array();
+        $normalPlan=array();
+        $finishPlan=array();
+        $allClassPlan=array();
+        $nowClassPlan=array();
+        if(!empty($planList)){
+            foreach($planList as $v){
+                $courseArr[$v->course_id]=$v->course_id;
+                $classArr[$v->class_id]=$v->class_id;
+                $allClassPlan[$v->class_id][]=$v->plan_id;
+                if($v->status==1){
+                    $nowClassPlan[$v->class_id][]=$v->plan_id;
+                    $normalPlan[]=$v->plan_id;
+                }
+                if($v->status==2){
+                    $finishPlan[]=$v->plan_id;
+                }
+            }
+        }
+        $this->assign('normalPlan',$normalPlan);
+        $this->assign('finishPlan',$finishPlan);
+        $this->assign('allClassPlan',$allClassPlan);
+        $this->assign('nowClassPlan',$nowClassPlan);
+        $courses=array();
+        if(!empty($courseArr)){
+            $courseRet=course_api::getCourseByCids($courseArr);
+            foreach($courseRet as $cv){
+                $courses[$cv->course_id]=$cv;
+            }
+        }
+        $this->assign('courses',$courses);
+        if(!empty($classArr)){
+            $countStudent=course_api::countStudentByClassIds($classArr);
+            $this->assign('countStudent',$countStudent);
+        }
+		return $this->render("org/teacher.info.html");
+    }
+    public function pageList($inPath){
+        //机构下所有老师列表
+		$num = 20;
+		$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+		$keyword = isset($_POST['keyword']) ? $_POST['keyword'] : '';
+		if(!empty($keyword)){
+			$data['keyword'] = $keyword;
+			$teachers = user_api::searchOrgTeacherNameOrMobileInfo($this->orgInfo->oid,$data);
+			$searchInfo = !empty($teachers) ? count($teachers) : 0;
+			$this->assign("searchInfo",$searchInfo);
+		}else{
+			 $teachers = user_organization::listOrgUser($this->orgInfo->oid,$all=1,$star=-1,$page,$num);
+		}
+       
+		$dataCount = user_organization::dataOrgTeacherCount($this->orgInfo->oid);
+        /*if(empty($teachers)){
+		    return $this->render("org/teacher.404.html");
+        }*/
+        //获取所有老师id
+        $tidArr=array();
+		$mt = array();
+        if(!empty($teachers)){
+			foreach($teachers as $tv){
+				$mt[$tv->user_id] = $tv;
+				$tidArr[$tv->user_id]=$tv->user_id;
+			}
+		}
+        if(!empty($tidArr)){
+            //获取老师tags
+            $tidStr=implode(',',$tidArr);
+            $tagRet=teacher_api::getTagUserInUids(array('ids'=>$tidStr,'groupId'=>1)); 
+            if(!empty($tagRet->data)){
+                $tagArr=$tagRet->data;
+                $tags=array();
+                foreach($tagArr as $tv){
+                    $tags[$tv->fk_user][]=SLanguage::tr($tv->name,"course.list");
+                }
+                $this->assign('tags',$tags);
+            }
+            //根据老师id从中间层获取排课
+            $planArr=array(
+                "f"=>array(
+                        'teacher_id',
+                        'plan_id',
+                        'class_name',
+                        'section_name',
+                        'teacher_name',
+                        'start_time',
+                        'max_user',
+                        'user_total',
+                        'status',
+                    ),
+                "q"=>array(
+                        'teacher_id'=>implode(',',$tidArr),
+                        'status'=>1,
+                    ),
+                "ob"=>array(
+                        'start_time'=>'desc',
+                   ),
+                "p"=>1,
+                "pl"=>1000,
+            );
+            $seekPlan=seek_api::seekPlan($planArr);
+            $retPlan=$seekPlan->data;
+            $plan=array();
+            foreach($retPlan as $rp){
+                $plan[$rp->teacher_id][]=$rp;
+            }
+            $this->assign("plan",$plan);
+        }
+		$id_arr = implode(",",$tidArr);
+		$nameInfo = user_organization::getTeacherRealName($id_arr);
+		$arr = array();
+		if(!empty($nameInfo)){
+			foreach($nameInfo as $k=>$v){
+				$arr[$v->fk_user]=$v->fk_user;
+                //真实姓名超过10个汉字显示省略号
+                if(mb_strlen($v->real_name,'utf-8')>10){
+				    $arr[$v->fk_user]=mb_substr($v->real_name,0,10,'utf-8').'...';
+                }else{
+				    $arr[$v->fk_user]=$v->real_name;
+                }
+			}
+		}
+		if(!empty($arr)){
+			foreach($arr as $k=>$v){
+				if(!empty($mt[$k])){
+					$mt[$k]->real_name = $v;
+				}else{
+					$mt[$k]->real_name = '';
+				}	
+			}	
+		}
+        $group = SConfig::getConfig(ROOT_CONFIG."/group.conf","group");
+        $set_arr = user_api::getsubjectTag($group->subject);
+        if(!empty($mt)){
+            foreach($mt as $k=>$v){
+                if(!empty($v->good_subject)){
+                    $result = explode(",",$v->good_subject);
+                    $s_suject= array();
+                    foreach($result as $v){
+                        $s_suject[]= isset($set_arr[$v]) ? $set_arr[$v]->name : '';
+                    }
+                    $str =implode("\n",$s_suject);
+                    $mt[$k]->good_subject=str_replace("\n","<br/>",$str);   
+                }
+            }
+        }
+		$totalPage = 0;
+		$path = "";
+        $totalPage = ceil($dataCount->pageSize/$num);
+        $this->assign('teacherCount',!empty($dataCount->totalSize) ? $dataCount->totalSize : '');
+        $this->assign('keyword', $keyword);
+        $this->assign('length', $num);
+        $this->assign('totalPage', $totalPage);
+        $this->assign('page', $page);
+        $this->assign('path', $path);
+		$this->roles['general'] =  SLanguage::tr("普通老师","org");
+		$this->roles['assistant'] =  SLanguage::tr("助教","org");
+		$this->roles['admin'] =  SLanguage::tr("管理员","org");
+        $this->assign('teachers',$mt);
+        $this->assign('majors',$this->majors);
+        $this->assign('roles',$this->roles);
+		return $this->render("org/teacher.list.html");
+    }
+	/**
+	*机构-教学管理-老师批量添加导入excel
+	*@return  array $result
+	**/
+	public function pageImportTeacherInfo($inPath){
+		set_time_limit(0);
+        $org=user_organization::subdomain();
+        if(empty($org)){return false;}
+        $orgInfo=user_organization::getOrgByOwner($org->userId);
+        if(empty($orgInfo)){return false;}
+        require_once(ROOT_LIBS."/phpexcel/PHPExcel.class.php");
+        require_once(ROOT_LIBS."/phpexcel/PHPExcel/Reader/IReader.php");
+        require_once(ROOT_LIBS."/phpexcel/PHPExcel/IOFactory.php");
+		$path = ROOT_WWW."/upload/tmp";
+		if(!is_dir($path)){
+			mkdir($path,0777,true);
+        }
+		//从t_tag表获取科目标签
+		$group = SConfig::getConfig(ROOT_CONFIG."/group.conf","group");
+        $setArr = user_api::getsubjectTag($group->subject);
+        $subjectArr= array();
+        if(!empty($setArr)){
+            foreach($setArr as $k=>$v){
+                $subjectArr[$v->pk_tag]=isset($v->name) ? $v->name : ''; 
+            }
+        }
+		$allSubjetct = array_flip($subjectArr);
+		$filename = $this->user['uid'].date('Ymdhis').".xls";
+		if(!empty($_FILES['file']['tmp_name'])){
+			$ret = move_uploaded_file($_FILES['file']['tmp_name'],$path."/".$filename);
+			if($ret){
+         $objPHPExcel = new PHPExcel();
+        //$filename = ROOT_WWW."/upload/tmp/29320151214104455.xls";
+        $filename = $path."/".$filename;
+        $PHPReader = new PHPExcel_Reader_Excel2007(); 
+        $fileType = PHPExcel_IOFactory::identify($filename); //文件名自动判断文件类型
+        $objReader = PHPExcel_IOFactory::createReader($fileType);
+        $objPHPExcel = $objReader->load($filename);
+        $sheet = $objPHPExcel->getSheet(0); // 读取第1个工作表
+        $highestRow = $sheet->getHighestRow(); // 取得总行数
+        $highestColumm = $sheet->getHighestColumn(); // 取得总列数
+        $teachData = array();
+        $NameValue = $sheet->getCell("A4")->getValue();
+        $n = '';
+        if($NameValue=='李老师（示例）'){
+            $n = 5;
+        }else{
+            $n = 4;
+        }
+        for ($row = $n; $row <= $highestRow; $row++){//行数是以第1行开始
+            for ($column = 'A'; $column <= $highestColumm; $column++) {//列数是以A列开始
+               $teachData[$row][] = $sheet->getCell($column.$row)->getValue();  
+            }
+        }
+        $teachInfo = array();
+        $success = array();
+        $failed = array();
+        $standard = array();
+		$repeat = array();
+		$wantStandard = array();
+        foreach($teachData as $k=>$v){
+            if(empty(trim($v[0])) || empty(trim($v[1])) || empty(trim($v[2])) || empty(trim($v[3])) || (utility_valid::mobile(trim($v[1]))==false)){
+                if(empty(trim($v[0])) && empty(trim($v[1])) && empty(trim($v[2])) && empty(trim($v[3]))){
+                    continue;
+                }
+                $failed[]= $v[1];
+            }
+            if(!empty(trim($v[0])) && !empty(trim($v[1])) && !empty(trim($v[2])) && !empty(trim($v[3]))){
+                if(utility_valid::mobile(trim($v[1]))!=false){
+                    //$success[]= $v[0]." ".$v[1]." ".$v[2];
+					$str = str_replace("，",",",trim($v[3]));
+					$subjectArr = explode(",",$str);
+					if(count($subjectArr)>3){
+						$failed[]=$v[1];
+					}
+					if(mb_strlen(trim($v[0],'utf-8')) > 15){
+						$failed[]=$v[1];
+						continue;
+						}
+					$subjectTagId= array();
+					if(count($subjectArr)<=3){
+						$standard[$k]['name']= $v[0];
+						$standard[$k]['mobile']= $v[1];
+						if(trim($v[2])=='男'){
+							$standard[$k]['gender']= 'male';
+						}elseif(trim($v[2])=='女'){
+							$standard[$k]['gender']= 'female';
+						}
+						$singleFailed = array();
+						
+						foreach($subjectArr as $m){
+							$coum = str_replace(" ","",trim($m));
+							if(!empty($allSubjetct[$coum])){
+								$subjectTagId[] = $allSubjetct[$coum];
+							}else{
+								$singleFailed[]=$v[1];break;
+							}
+						$standard[$k]['subject'] = $subjectTagId;							
+						}
+						if(empty($singleFailed)){
+							foreach($standard as $m=>$n){
+									$wantStandard[$k]['name']= $n['name'];
+									$wantStandard[$k]['mobile']= $n['mobile'];
+									$wantStandard[$k]['gender']= $n['gender'];
+									$wantStandard[$k]['subject']= !empty($n['subject']) ? $n['subject'] : '';
+							}
+						}else{
+							$failed[]=$v[1];
+						}
+					}	
+                }  
+            }	
+        }
+		utility_session::get()['failedData']= $failed;
+        $failedNum =0;
+        $successNum = 0;
+		$repeatNum =0;
+		$arrerror = array();
+        if(!empty($failed)){
+            $failedNum = count($failed);
+        }
+        if(!empty($wantStandard)){
+            foreach($wantStandard as $k=>$v){
+                $mobile=$v['mobile'];
+                $realName=$v['name'];
+                $gender= $v['gender'];
+                $good_subject= (array)$v['subject'];
+                //判断手机是不是已经注册
+                $uid = user_api::isRegister($mobile);
+                if(!empty($uid)){
+                    //添加组织关系
+                    $data = array(
+                            "user_role"=>1,
+                        );
+                    $res1 = user_organization::setOrgUser($orgInfo->oid,$uid,$data);
+                    //设置身份为教师身份
+                    $res2=user_api::setTeacher($uid);
+                    //更新昵称、真实姓名
+                    $res3=user_api::updateBase($uid,'',$gender,'',$realName,'','','',$ret);
+                    //更新t_user表中的last_updated字段
+                    $res4=user_api::updateUser($uid,array('last_updated'=>date('Y-m-d H:i:s',time())));
+					$tag = user_api::updateTagMapUser($uid,$good_subject);
+					
+                    /*if($res1&&$res2&&$res3&&!empty($res4)){
+                        $r = verify_api::sendMobileAddTeacherOk($mobile,$orgInfo->subname,$_SERVER["HTTP_HOST"],$ret);
+                    }*/
+                    $repeat[]= $v['name']." ".$v['mobile']." ".$v['gender'];
+                }else{
+                    $pass = substr($mobile,5,6);
+                    $uid = user_api::registerByMobile($realName,$mobile,$pass,$from=0,$ret);
+					$res3=user_api::updateBase($uid,'',$gender,'','','','','',$ret);
+                    if($uid){
+                        //添加组织关系
+                        $data=array(
+                                "user_role"=>1,
+                            );
+                        $res1=user_organization::setOrgUser($orgInfo->oid,$uid,$data);
+                        //设置身份为教师身份
+                        $res2=user_api::setTeacher($uid);
+						$tag = user_api::updateTagMapUser($uid,$good_subject);
+                        /*if($res1&&$res2){
+                            //$r=verify_api::sendMobileAddTeacherOkv2($mobile,$pass,$orgInfo->subname,$_SERVER["HTTP_HOST"],$ret);
+                        }*/
+						$success[]= $v['name']." ".$v['mobile']." ".$v['gender'];
+                    }else{
+                        $arrerror[]= $mobile;
+                        continue;
+                    }
+                }
+            }
+            if(!empty($success)){
+                $successNum = count($success);
+            }
+			if(!empty($repeat)){
+                $repeatNum = count($repeat);
+            }
+        }
+			$result = array("code"=>100,"success"=>$successNum,"repeatNum"=>$repeatNum,"failed"=>$failedNum,"info"=>$failed);
+			echo json_encode($result);
+			}
+		}else{
+           return false;
+        }
+	}
+	/*
+	 *临时用导入数据表
+	 */
+	public function pagetest($inPath){
+        $org=user_organization::subdomain();
+        if(empty($org)){return false;}
+        $orgInfo=user_organization::getOrgByOwner($org->userId);
+        if(empty($orgInfo)){return false;}
+        require_once(ROOT_LIBS."/phpexcel/PHPExcel.class.php");
+        require_once(ROOT_LIBS."/phpexcel/PHPExcel/Reader/IReader.php");
+        require_once(ROOT_LIBS."/phpexcel/PHPExcel/IOFactory.php");
+        $objPHPExcel = new PHPExcel();
+        $filename = ROOT_WWW."/upload/tmp/name.xls";
+        $PHPReader = new PHPExcel_Reader_Excel2007(); 
+        $fileType = PHPExcel_IOFactory::identify($filename); //文件名自动判断文件类型
+        $objReader = PHPExcel_IOFactory::createReader($fileType);
+        $objPHPExcel = $objReader->load($filename);
+        $sheet = $objPHPExcel->getSheet(0); // 读取第1个工作表
+        $highestRow = $sheet->getHighestRow(); // 取得总行数
+        $highestColumm = $sheet->getHighestColumn(); // 取得总列数
+        $teachData = array();
+        $NameValue = $sheet->getCell("B2")->getValue();
+        $n = 2;
+        for ($row = $n; $row <= $highestRow; $row++){//行数是以第1行开始
+            for ($column = 'A'; $column <= $highestColumm; $column++) {//列数是以A列开始
+               $teachData[$row][] = $sheet->getCell($column.$row)->getValue();  
+            }
+        }
+        foreach($teachData as $k=>$v){
+			$data = array("country_cn"=>$v[0],
+						  "country_en"=>$v[1],
+						  "code"=>$v[2],
+						  "short_code"=>$v[3],
+						  "letter"=>$v[4],
+						  "type"=>$v[5],
+						  "create_time"=>date("Y-m-d H:i:s",time())
+					);
+            $info = user_api::addInternationalSomeInfo($data);
+        }
+		return $info;
+	}
+}
+

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>{$courseInfo['title']}-{part '/site.main.orgname'}-云课-专业的在线学习平台</title>
+	<meta name="title" content="{part '/site.main.orgname'} - 课程详情 - 云课 - 专业的在线学习平台">
+	<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+	<meta name="description" content="{trim(strip_tags($courseInfo['descript']))}">
+	{part "/site.main.header"}
+	{part "/site.main.weixin"}
+	{*<meta name="weixin" title="" link="" imgurl="" desc=""/>*}
+	<meta name="weixin" imgurl="{utility_cdn::http($courseInfo['thumb_med'])}" desc="{trim(strip_tags($courseInfo['title']))}"/>
+	<script type="text/javascript">
+		var COOKIE_UID_NAME="{if !empty(COOKIE_UID_NAME)}{COOKIE_UID_NAME}{else}{/if}";
+	</script>
+	<script src="{utility_cdn::js('/assets_v2/js/user.js')}"></script>
+</head>
+<style type="text/css">
+.shenhe-course{ margin-top: 20px;}
+@media screen and (min-width: 320px) and (max-width: 640px) {
+	.shenhe-course{ margin-top: 10px;}
+}
+</style>
+<body>
+{part "/site.main.nav"}
+<section class="shenhe-course">
+	<div class="container">
+		<div class="row mb20" id="course-info-show">
+		<!-- 详情上 -->
+			<section class="bgf clearfix mb10">
+				<div class="course-info-top clearfix">
+					<div class="col-md-8 col-xs-20 p0">
+
+						<img class="course-info-img" src="{utility_cdn::file($courseInfo['thumb_med'])}" alt="" />
+					</div>
+					<div class="col-md-9 p0 bort1px">
+						<h1 class="fs20 mb15">{$courseInfo['title']}</h1>
+						<ul class="course-info-tp-price mb15 clearfix">
+							<li class="mr20">
+								{if $courseInfo['fee_type']}
+								<span class="cRed fs20">{$courseInfo['fee']->price}</span>
+								{/if}
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+		<!-- /详情上 -->
+		<!-- 详情下 -->
+			<section class="clearfix">
+				<!-- lt -->
+				<div class="col-md-20 p0">
+					<div class="bgf bor1px">
+						<!-- content -->
+						<div id="wrap-course-ft">
+							<div class="course-info-content course-introduce"  style="display:block;">
+								<p class="tac mt10">
+								<div class="course-no-data" style="width:300px;line-height: 36px;">
+									<span class="course-blank-search c-fl mr10"></span>
+									<div class="mt5 fs16 cGray fs14">
+										课程正在审核中，稍后再来查看吧~
+									</div>
+								</div>
+								</p>
+							</div>
+						</div>
+						<!-- /content -->
+					</div>
+				</div>
+				<!-- /lt -->
+				<!-- rt -->
+				<div class="col-md-6 pr0 hidden-xs"></div>
+				<!-- /rt -->
+			</section>
+		<!-- /详情下 -->
+		</div>
+	</div>
+</section>
+{part "/site.main.footer"}
+</body>
+</html>
+<script type="text/javascript" src="/assets_v2/js/jquery.course.info.js"></script>

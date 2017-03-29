@@ -1,0 +1,511 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>{$course->title} - {part '/site.main.orgname'} - 支付订单 - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/play.css')}">
+</head>
+<body style="background:#f5f5f5;">
+{part "/site.main.nav.home"}
+<style>
+.content .d-but{ margin:40px auto;}
+.auto{ margin: 0 auto;position: relative;border:2px solid #FFA81E !important; }
+.auto .dui{ position: absolute;top:-5px;right:0; display:block !important;}
+.disa .x_btn_reg2{ background: #ffa81e;}
+</style>
+	{*	<div class='count' style="background: #fff;">*}
+		<div class='container'>
+		{*	<div class='container-fluid'> *}
+			<div class='row'>
+				<div class="bor1px pdr30 pdl30 pdt30 pdb30 clearfix mt20 mb20 bgf">
+					<div class="gpath col-sm-20 lh22 pd0">
+						<div class="fs16 col-sm-8 tel pd0 cDarkgray col-xs-9">确认课程信息</div>
+						<div class="fs14 col-sm-12 ter pd0 cDarkgray col-xs-11 payment" id="payment"><span class="hidden-xs">请于60分钟内完成课程支付，否则课程订单将会取消.</span>付款剩余时间：
+							<span class="colored" id="timer"></span>
+						</div>
+					</div>
+				<!-- 课程详情—1 start -->
+					<div class="col-md-20 course-pay-info pd0">
+						<div class="col-sm-20 bor1px bg1 lh22 fs14 pd10 mb20 hidden-xs">
+							<div class="col-sm-17">课程信息</div>
+							<div class="col-sm-3 ter">价格</div>
+						</div>
+					{*	<div class="bor1px pd15 bgf clear"> *}
+						<div class="clear">
+						<!--
+							<div class='jjg'><p class='cRed fs16 pd10'>即将购买</p></div>
+						-->
+							<div class="col-sm-3 pdl0 col-xs-20">
+								<img src="{utility_cdn::file($course->thumb_big)}" alt="" width="100%" />
+							</div>
+
+						{*	<div class="fl ml30"> *}
+							<div class="col-sm-14 pdl0 col-xs-20">
+							{*	<h1 class="fs16">
+									即将购买：<a target="_blank" href="/course.info.show/{$course->course_id}">{$course->title}</a>
+								</h1> *}
+								<h1 class="fs16 new-pay-title">
+									<a target="_blank" href="/course.info.show/{$course->course_id}">{$course->title}</a>
+								</h1>
+								<div class="fcg7 fs14">
+									{if !empty($class)}
+									<p class="cDarkgray">所报班级：{$class->name}</p>
+									{/if}
+									{if($sy_course_user>5)}
+								{*	<span style="color:red; font-weight:bold;">热报中……</span> *}
+									{/if}
+									{if($sy_course_user>=0&&$sy_course_user<=5)}
+									<!--<span class="ml10">剩余名额：<em class="fcorange">-->
+									{/if}
+									</em></span>
+							{*		<p>剩余名额：{$course->max_user-$course->user_total}</p> *}
+									{if !empty($class)}
+                                    <p class="mt20 cDarkgray info-buy-teac">主讲老师：{if !empty($class->teacher->real_name)}{$class->teacher->real_name}{/if}</p>
+								{*	<p class="mt5">班级说明：{$class->descript}</p> *}
+									{/if}
+
+								</div>
+								<div class="fl">
+								{if(empty($user))}
+								<a  type="button" href="/site.main.login?url=/course.info.show/{$course->course_id}">
+									<div class="x_btn_reg2">登录报名</div>
+								</a>
+								{else}
+									{if ($course->fee_type==1)}
+										{if($status=="ok")}
+											{if ($course->status=="living")}
+											<a href="/course.plan.playByCid/{$course->course_id}" >
+												<div class="x_btn_reg2">进入课堂</div>
+											</a>
+											{elseif ($course->status=="finished")}
+											<a href="/course.info.show/{$course->course_id}"><div class="x_btn_reg2">观看录播</div></a>
+											{else}
+											<a href="/course.info.show/{$course->course_id}"><button class="x_btn_reg2" type="button" >查看课程详情</button></a>
+											{/if}
+										{/if}
+									{/if}
+								{/if}
+								</div>
+
+							</div>
+							<div class="fs16 col-sm-3 tec mt30 ter">
+								<strong class="fwn fs18 colored lh22">¥{$order_info->price}</strong>
+							</div>
+						</div>
+					</div>
+
+					{if !empty($aliPayUrl)}
+					<div class="col-md-20 pd0 mt20">
+						<div class="coursum">
+						<!--
+							<div class="cstit_2">支付方式</div>
+						-->
+							<div class="tac clear">
+							<!-- 优惠码 -->
+								<div class='row'>
+									<div class="col-xs-20 col-sm-20 bgf7  pdt15 pdb10">
+										{if $discount_code_used}
+											<div use_code="1" class=" user_content_xm">
+												<span class="col-xs-8 fs12 tar mt10" style="margin-left:-40px;">当前兑换码：</span> 
+											</div>
+											<input use_code="1" class="col-xs-5 x_input_tx3" type="text" value="{$discount_code_used->discount_code}" disabled />
+											{if 0 == $discount_code_used->status}
+												<form use_code="1" method="POST" action="/course.info.Pay/{$order_id}">
+													<input style="display:none;" name="confirm" value="1"/>
+													<input class="col-xs-5 btn_green new-use-btn ml10 lhh36 fs14 nonepdr" type="submit" value="确定使用" />
+												</form>
+												<p use_code="1" class="new-pay-tit"><a href="javascript:;" class="lkblue new-update-btn" onclick="$('#discount_code').toggle();$('[use_code=1]').toggle();">修改优惠码</a></p>
+												<div id="discount_code" style="display:none;">
+													<form method="POST" action="/course.info.Pay/{$order_id}">
+														<div class=" user_content_xm"><span class="col-xs-8 fs12 tar mt10" style="margin-left:-40px;">输入码：</span> </div>
+														<input onkeyup="this.value=this.value.replace(/[%&'#￥%……^）)>》‘;'：《<(*（,;=?$\x22]/g,'')" maxlength="6" class="col-xs-3 x_input_tx3" type="text" required name="discount_code" />
+														<input class="col-xs-4 btn_green ml10 lhh36 fs14 nonepdr" type="submit" value="更换" />
+													</form>
+													<p class="new-pay-tit"><a href="javascript:;" class="lkblue" onclick="$('#discount_code').toggle();$('[use_code=1]').toggle();">取消</a></p>
+													{*
+													<form method="POST" action="/course.info.Pay/{$order_id}">
+														<input type="hidden" name="cancel" value="1"/>
+														<input class="col-xs-4 btn_green ml10 lhh36 fs14 nonepdr" type="submit" value="取消" />
+													</form>
+													*}
+												</div>
+												<div class="clear"></div>
+											{/if}
+											{if false!==$ret_code}
+												{if (0 != $ret_code->result->code)}
+													<div class="pdl30 bort1dc fs14 fcred clear"><i class="ti_1"></i>使用优惠码[{$discount_code}]错误：{$ret_code->result->msg}</div>
+													<div class="clear"></div>
+												{/if}
+											{/if}
+
+											<div class="mt25 pdt15 pdl30 tdlt bort1dc fs16 fcg7 tal clear" style="line-height:15px;">原价:¥<strong class="original-price fwn fs22 fcred" style="font-weight: bold;">{$order_info->price_old/100}</strong>
+											</div>
+											<div class="mt10 pdl30 clear fs16 fcg7 tal">优惠金额：¥<strong class="favorable-price fwn fs22 fcred">{$order_info->price_discount/100}</strong>
+											</div>
+
+										{else}
+										<!--
+											<div class="mt15">
+												<span class="fcg7">有优惠券兑换码？
+													<a style="cursor:pointer" class="lkblue" onclick="$('#discount_code').toggle();">[点击输入兑换码]</a>
+												</span>
+											</div>
+										-->
+											<div class="col-sm-20 fs14">
+												<div class="col-sm-3 cDarkgray tel">
+													<label>
+														<input type="checkbox" onclick="$('#discount_code').toggle();" />
+														使用优惠码
+													</label>
+												</div>
+												<div class="col-sm-17"></div>
+											</div>	
+											<form id="discount_code" style="display:none;" class="lhh36" method="POST" action="/course.info.Pay/{$order_id}">
+												<span class="col-xs-8 col-sm-3 fs14 cDarkgray ter pdr0">请输入优惠码：</span> 
+												<input onkeyup="this.value=this.value.replace(/[%&'#￥%……^）)>》‘;'：《<(*（,;=?$\x22]/g,'')" class="col-xs-5 new-code-paynum bor1px" type="text" autocomplete="off" maxlength="6" name="discount_code" />
+												<input class="col-xs-5 col-sm-2 tec cDarkgray ml10 fs14 new-pay-use-btn" type="submit" value="使用" />
+											<!--
+												<input class="col-xs-5 col-sm-2 tec cDarkgray ml10 fs14 new-pay-use-btn" type="submit" onclick="NewPayUseBtn();" value="使用" />
+											-->
+											</form>
+											{if false!==$ret_code}
+												{if (0 != $ret_code->result->code)}
+													<div class="col-sm-20 fs14 colored  tel clear">
+														<i class="ti_1"></i>
+														<div class="col-sm-3"></div>
+														使用优惠码[{$discount_code}]错误：{$ret_code->result->msg}
+													</div>
+													<div class="clear"></div>
+												{/if}
+											{/if}
+										{/if}
+									</div>
+								</div>
+								<!-- /优惠码-->
+								<div class="col-sm-20">
+									<div class="col-sm-16"></div>
+									<div class="col-sm-4 ter fs16">
+										应付金额：<strong class="fs22 colored total-price">¥{$order_info->price}</strong>
+									</div>
+								</div>	
+								<div class="col-sm-20 pd0">
+									<div class="col-sm-2 fs16 cDarkgray pd0 tel">选择支付方式</div>
+									<div class="col-sm-18 course-pay-ft-bortp"></div>
+								</div>
+								<div class="col-sm-20">
+									<div class="col-sm-2 cDarkgray fs16 pd0 tel">支付方式：</div>
+									<div class="col-sm-18 tel col-xs-20 pd0">
+									{if (0 != $order_info->price && $show_pay)}
+										<div tip="用支付宝支付" method="url" payurl="{$aliPayUrl}" class="paymethod new-pay-btn auto">
+											<img style="display: block;" class="mauto" src="{utility_cdn::img('/assets_v2/img/pay_zfb.jpg')}" alt="" />
+											<div class='dui' style="display:none;">
+												<img src="{utility_cdn::img('/assets/images/duihao.png')}">
+											</div>
+										</div>
+										<div tip="用微信支付" {if !empty($qrcode)}method="qrcode"{else}method="app"{/if} payurl="" class="paymethod new-pay-btn weixin">
+
+											<div class="bag" style="line-height: 0px;">
+												<img style="display: block;" class="mauto" src="{utility_cdn::img('assets_v2/img/pay_weixin.jpg')}" alt=""/>
+											</div>
+											<div class='dui' style="display:none;">
+												<img src="{utility_cdn::img('/assets/images/duihao.png')}">
+											</div>
+										</div>
+									{/if}
+									</div>
+								</div>
+								<!--{if false!==$ret_code}
+									{if (0 != $ret_code->result->code)}
+										<div class="mt25 pdt15 pdl30 bort1dc fs14 fcred clear"><i class="ti_1"></i>使用优惠码[{$discount_code}]错误：{$ret_code->result->msg}</div>
+									{/if}
+								{/if}
+								{if $discount_code_used}
+									<div>已使用优惠码:{$discount_code_used->discount_code}</div>
+									{if 0 == $discount_code_used->status}
+										<div>
+											<div class="mt15"><span class="fcg7">要替换优惠券兑换码？<a class="lkblue" onclick="$('#discount_code').toggle();">[点击输入兑换码]</a></span></div>
+											<form id="discount_code" style="display:none;" method="POST" action="/course.info.Pay/{$order_id}">
+												<div class=" user_content_xm">
+													<span class="col-xs-5 fs12 tar mt10">请输入您手中的兑换码：</span>
+												</div>
+													<input class="col-xs-4 x_input_tx3" type="text" name="discount_code" />
+													<input class="col-xs-2 btn_green ml10 lhh36 fs14 nonepdr" type="submit" value="使用" />
+											</form>
+										</div>
+									{/if}
+										<div class="mt25 pdt15 pdl30 tdlt bort1dc fs16 fcg7 clear">原价：<strong class="fwn fs22 fcred">¥{$order_info->price_old/100}</strong></div>
+										<div class="mt10 pdl30 clear fs16 fcg7">优惠金额：<strong class="fwn fs22 fcred">¥{$order_info->price_discount/100}</strong></div>
+									{if 0 == $discount_code_used->status}
+										<form method="POST" action="/course.info.Pay/{$order_id}">
+											<input style="display:none;" name="confirm" value="1"/>
+											<input type="submit" value="确认优惠码（不再修改）" />
+										</form>
+									{/if}
+								{else}
+									<div>
+                       					<div class="mt15"><span class="fcg7">有优惠券兑换码？<a class="lkblue" onclick="$('#discount_code').toggle();">[点击输入兑换码]</a></span></div>
+										<form id="discount_code2" style="display:none;" method="POST" action="/course.info.Pay/{$order_id}">
+											<div class=" user_content_xm">
+												<span class="col-xs-5 fs12 tar mt10">请输入您手中的兑换码：</span>
+											</div>
+												<input class="col-xs-4 x_input_tx3" type="text" name="discount_code" />
+												<input class="col-xs-2 btn_green ml10 lhh36 fs14 nonepdr" type="submit" value="使用" />
+										</form>
+									</div>
+                         			<div class="clear"></div>
+								{/if}-->
+								{if $show_pay}
+								{if (0 == $order_info->price)}
+								<a href="/course.buy.freeorder/{$order_id}">
+									<input class="x_btn_reg2 col-lg-5 fltnone" type="button" value="确认订单" />
+								</a>
+								{else}
+								<!--<div class="mt15"><label for="ty"><input type="checkbox" checked readonly id="ty" /> <span class="fcg7">我已阅读并同意<a>《收费课程服务协议》</a></span></label></div>-->
+								<div class="col-sm-7 col-xs-14 fltnone mauto mt40 clear">
+									<div class="disa">
+										<a id="buybt" method="" target="_blank" class="col-xs-20 col-sm-8 fs16 x_btn_reg2 nonepdr new-select-btn" type="submit" value="去支付" />请选择支付方式</a>
+									</div>
+								</div>
+								{/if}
+								{/if}
+								<div class="col-md-12 fltnone mauto mt25"><b style="display: inline-block;" class="ti_2 mt2"></b><span class="ml5 fcg7">下单后，请在1小时内完成支付。超出1小时再支付可能导致购买失败，需重新下单购买。</span></div>
+							</div>
+						</div>
+					</div>
+					{/if}
+					<div class="col-md-20 tec orderTimeout" style="display:none;">
+						<p class="fs14 mt30 lh22">该订单已超时，请返回重新下单</p>
+						<p class="fs14 lh22">您可以选择：<a href="/course.info.show/{$course->course_id}" class="colored">课程详情页</a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	<!--box1-->
+	<div class='dialog' id="fail">
+		<div class="bg"></div>
+		<div class='box1'>
+			<div class="content diaw_1">
+				<div class='d-tittle'><div class="cstit_1 fl mt15">未支付成功</div><span class="bg_close" >×</span></div>
+				<div style="padding:0 20px" class='col-lg-15 fltnone mauto mt40 clear'><b class="iwarning fl"></b><p class="fl ml10 mt5 fs16">订单未支付成功请重新支付</p></div>
+				<div style="text-align:center" class='d-but col-lg-10 nonepdh fltnone clear'><input class="bg_close col-lg-20 mauto nonepdh btn_yellow_5" style="width:100px" type="button" value="确定"></div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+
+	<!--box1-->
+	{if !empty($qrcode)}
+	<div class='dialog' id="weixinqrcode">
+		<div class="bg"></div>
+		<div class='box1'>
+			<div class="content diaw_1">
+				<div class='d-tittle'><div class="cstit_1 fl mt15">请用微信扫一扫</div><span class="bg_close" >×</span></div>
+				<div style="padding:0 20px;text-align:center" class='col-lg-15 fltnone mauto mt40 clear'>
+					<img src="{$qrcode}">
+				</div>
+				<div style="text-align:center" class='d-but col-lg-10 nonepdh fltnone clear'>
+					<a href="/course.info.Pay/{$order_id}" class="col-lg-10 nonepdh btn_gray_2" type="button" value="支付遇到问题">支付遇到问题</a>
+					<a href="/course.info.Pay/{$order_id}" class="col-lg-8 ml15 nonepdh btn_yellow_5" type="button" value="支付完成">支付完成</a>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+	{/if}
+
+	<!--box1-->
+	<div class='dialog' id="ok">
+		<div class="bg2"></div>
+		<div class='box2'>
+			<div class="content diaw_1">
+				<div class='d-tittle'><div class="cstit_1 fl mt15">网上支付提示</div><span class="bg_close">×</span></div>
+				<div style="padding:0 0px" class='col-lg-12 fltnone mauto nonepdh mt40 clear'><b class="iok fl"></b><p class="fl ml10 mt5 fs16">您已成功支付：<em class="fs22 fcred">{$order_info->price}元</em></p></div>
+				<div style="text-align:center; margin-left:160px;" class='d-but col-lg-10 nonepdh fltnone clear'><a href="/course.info.show/{$course->course_id}" class="bg_close col-lg-20 mauto nonepdh btn_yellow_5" style="width:100px;" type="button" value="确定">确定</a></div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+
+	<!--box1-->
+	<div class='dialog' id="prom">
+		<div class="bg2"></div>
+		<div class='box2'>
+			<div class="content diaw_1">
+				<div class='d-tittle'><div class="cstit_1 fl mt15">网上支付提示</div><span class="bg_close">×</span></div>
+				<div class='col-lg-20 fltnone mauto nonepdh'>
+					<p class="fs16 tac">支付完成前，请不要关闭此支付验证窗口。</p>
+					<p class="mt10 fs16" style="text-align:center;line-height:20px;">支付完成后，请根据您支付的情况点击下面按钮。</p>
+				</div>
+				<div style="text-align:center" class='d-but col-lg-14 nonepdh fltnone clear'>
+					<a style="padding:0 15px" href="/course.info.Pay/{$order_id}" class="col-lg-8 ml15 nonepdh btn_gray_2" type="button" value="支付遇到问题">支付遇到问题</a>
+					<a style="padding:0 15px" href="/course.info.Pay/{$order_id}" class="col-lg-8 ml15 nonepdh btn_yellow_5" type="button" value="支付完成">支付完成</a>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+	{if !empty($error)}
+	<div id="error" class='dialog'>
+		<div class="bg"></div>
+		<div class='box1'>
+			<div class="content diaw_1">
+				<div class='d-tittle'><div class="cstit_1 fl mt15">{$error['title']}</div><span class="bg_close">×</span></div>
+				<div class='col-lg-12 fltnone mauto mt40 clear'><b class="iwarning fl"></b><p class="fl ml10 mt5 fs16">{$error['msg']}</p></div>
+				<div class='d-but col-lg-10 nonepdh fltnone clear'><input class="bg_close col-lg-20 mauto nonepdh btn_yellow_5" type="button" value="确定"></div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+	{/if}
+<!-- 购买成功 
+<div class="dialog" id="wrap-buy-success">
+	<h1 class="fs16 tel"><span class="success-icon c-fl mr5"></span>恭喜你，购买成功</h1>
+	<h2 class="fs14 mt20 mb10">已付款：￥<span class="colored">200</span></h2>
+	<div class="col-sm-20 pd0 mb20">
+		<div class="col-sm-2 pd0">
+			<img src="//devf.gn100.com/3,2452bd0fd377" width="100%" height="76" alt="">
+		</div>
+		<div class="col-sm-18">
+			<p class="fs16">五年级数学尖子班数学理科</p>
+			<p class="fs14 cDarkgray">班级：火箭班</p>
+			<p class="fs14 cDarkgray mt15">讲师：杨老师</p>
+		</div>
+	</div>
+	<div class="col-sm-20 pd0 lh22 mb20">
+		<div class="col-sm-2 pd0 fs14 lhh36 tec">猜你想去</div>
+		<div class="col-sm-18 fs14">
+			<a href="#" class="study-btn tec col-sm-2 pd0 mr10">学习中心</a>
+			<a href="#" class="order-btn tec col-sm-2 pd0">我的订单</a>
+		</div>	
+	</div>
+</div>
+ /购买成功 -->
+ <!-- 购买失败 
+ <div class="dialog11" id="wrap-buy-error">
+ 	<h1 class="fs16 tel mb20"><span class="error-icon colored c-fl mr5"></span>很抱歉，您没能购买成功！</h1>
+ 	<p class="fs16">可能是由于网络原因或者其它原因导致，您可尝试重新</p>
+ 	<p class="fs16">支付或拨打客服电话。</p>
+ 	<p class="fs16">客服电话：400-1188-683</p>
+	<div class="col-sm-20 pd0 lh22 mt20 mb20">
+		<div class="col-sm-2 pd0 fs14 lhh36 tec">猜你想去</div>
+		<div class="col-sm-18 fs14">
+			<a href="#" class="study-btn tec col-sm-2 pd0 mr10">学习中心</a>
+			<a href="#" class="order-btn tec col-sm-2 pd0">我的订单</a>
+		</div>	
+	</div>
+ </div>
+ /购买失败 -->
+<script>
+$(function() {
+	$(".paymethod").on('click',function(){
+		$(".paymethod").removeClass("auto");
+		$(this).toggleClass("auto");
+		$("#buybt").html($(this).attr("tip"));
+		$("#buybt").attr("href",$(this).attr("payurl"));
+		$("#buybt").attr("method",$(this).attr("method"));
+		$("#buybt").parent().removeClass("disa");
+	});
+	{if empty($weixin)}
+    $(".paymethod.auto").trigger("click");
+	{else}
+    $(".paymethod.weixin").trigger("click");
+	{/if}
+	//修改兑换码
+	$(".new-use-btn").on('click',function() {
+		$(".new-select-btn").css({
+			"cursor" : "pointer" ,
+			"background" : "#ffa81e" ,
+			"color" : "#fff"
+		});
+	});
+	$(".new-pay-use-btn").on('click',function() {
+		if($(".new-code-paynum").val() == "" || $(".new-code-paynum").val() == null) {
+			layer.msg("请输入优惠码");
+			return false;
+		}
+		$(".new-select-btn").css({
+			"background" : "#ffa81e" ,
+			"color" : "#fff"
+		});
+	})
+
+});
+
+	function showDialog(id){
+		$("#"+id).show();
+		$("#"+id).find("DIV").show();
+	}
+
+	function error(){
+		showDialog("error");
+	}
+
+	{if !empty($error)}
+		showDialog("error");
+	{/if}
+
+	$("#buybt").click(function(){
+		if($(this).attr("method")=="qrcode"){
+			showDialog("weixinqrcode");
+			return false;
+		}else if($(this).attr("method")=="app"){
+			callpay();
+			return false;
+		}
+		if($(this).attr("href") && $(this).attr("href").length>0) showDialog("prom");
+		else{
+			alert("请选择支付方式");
+		}
+	});
+
+	$(".bg_close").click(function(){
+		$(this).parents(".dialog").hide();
+	});
+
+	{if $status=="ok"}
+		showDialog("ok");
+	{elseif $status=="fail"}
+		showDialog("fail");
+	{/if}
+
+	function callpay(){
+		location.replace('{$weixinPayUrl}');
+	}
+	//倒计时
+	var orderTime='{$order_info->create_time}';
+	var maxtime = 60*60;
+	function CountDown(){  
+	    var starTime=new Date(orderTime.replace(/-/g,"/"));
+	    var nowTime  = new Date();
+	    var t=nowTime.getTime()-starTime.getTime();
+		var m=59-Math.floor(t/1000/60%60);
+		var s=59-Math.floor(t/1000%60);
+		var msg = m+"分"+s+"秒";
+
+	    if (t > 0 && m > 0 && m < 60) {
+			document.all["timer"].innerHTML=msg;
+	        --maxtime;  
+	    }else if(m == 0 && s == 0) {
+	        document.all["timer"].innerHTML="订单已经过时";
+	        layer.open({
+	            type: 1,
+	            title:['{'订单超时'|tr:'course.info'}','color:#fff;background:#ffa81d'],
+	            area: ['400px','220px'],
+	            shadeClose: true,
+	            content: $('.orderTimeout')
+	        });
+	        clearInterval(timer);
+	    }else {
+	    	return false;
+	    }
+
+	}  
+	timer = setInterval("CountDown()",1000);
+</script>
+{part "/site.main.footer"}
+</body>
+</html>

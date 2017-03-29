@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>高能100 - 专业的K12在线教育平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+</head>
+<body>
+{part "/site.main.nav3"}
+<section>
+    <div class="container p20" style="min-height:450px;">
+        <div class="row bgf mb30">
+            <div class="col-sm-14 col-xs-20 clearfix" style="margin:0 auto; float:none;">
+                <div class="step">
+                    <ul>
+                        <li class="col-sm-5 col-xs-20">
+                            <p class="bg2"></p>
+                            <p class="n2">
+                            1
+                            </p>
+                            <p class="text2">填写账户名</p>
+                        </li>
+                        <li class="col-sm-5 hidden-xs">
+                            <p class="bg1"></p>
+                            <p class="n">
+                            2
+                            </p>
+                            <p class="text">验证身份</p>
+                        </li>
+                        <li class="col-sm-5 hidden-xs">
+                            <p class="bg1"></p>
+                            <p class="n">
+                            3
+                            </p>
+                            <p class="text">设置新密码</p>
+                        </li>
+                        <li class="col-sm-5 hidden-xs">
+                            <p class="bg1"></p>
+                            <p class="n">
+                            4
+                            </p>
+                            <p class="text" style="padding-left:15px;">完成</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="fs14 col-xs-20 col-md-20 p0 clearfix">
+                    <form novalidate action="" method="post" autocomplete="off" name="forms" id="rcri-form">
+                        <input type="password" style="display:none;">
+                        <div class="rcri-box col-xs-20 col-md-20 p0 clearfix">
+                            <div class="x_field2 Emessage">
+								<span>
+									<div id="error" class="x_error"></div>
+								</span>
+                            </div>
+                            <div class="col-xs-20 forget-1 col-md-20 p0">
+                                <div class='col-xs-7 tar col-sm-3 p0 mt20'>手机号：</div>
+                                <div class='col-xs-13 col-sm-10 pr0'>
+                                    <input type="tel" id="uname" placeholder="输入手机号" name="uname" />
+                                </div>
+                            </div>
+                            <div class='col-xs-20 forget-1 col-md-20 p0'>
+                                <div class='col-xs-7 tar col-sm-3 p0 mt20'> 图片验证码： </div>
+                                <div class='col-xs-13 col-sm-10 pr0'>
+                                    <input type="email" name="code" placeholder="输入验证码" class="col-sm-12 col-xs-12" id="code"/>
+                                </div>
+                                <div class='col-xs-20 col-sm-6 forget2'>
+                                    <span class='col-xs-6 col-sm-2'></span>
+                                    <img id="cap" src="/captcha.gen" class='d-img col-xs-15 col-sm-14 p0 mt10' height="44">
+                                </div>
+                            </div>
+                            <div class="col-xs-20 forget-1 mt5 mb20">
+                                <div class="col-xs-5 col-sm-3"></div>
+                                <div class="col-xs-14 col-sm-8">
+                                    <button class="forget-but col-sm-12 col-xs-12">获取验证码</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{part "/site.main.footer"}
+</body>
+<script type="text/javascript">
+$(function  () {
+    $("#rcri-form input").focus(function() {
+        $(this).css("border","1px solid #ffa81e");
+    });
+   $("#rcri-form input").blur(function() {
+        $(this).css("border","1px solid #ddd");
+   });
+
+   $("#cap").click(function(){
+        $('input[name="code"]').val('');
+        $("#cap").attr("src","/captcha.gen?"+Math.random());
+    });
+    $("#rcri-form").submit(function(){
+        var userName = $.trim($("#uname").val());
+        var codeVal = $.trim($("#code").val());
+        if(userName == '' || userName == "输入手机号"){
+            $(".x_error").show().html("请输入手机号");
+            $("#uname").focus();
+            return false;
+        }else if(codeVal  == '' || codeVal == "验证码"){
+            $(".x_error").show().html("请输入验证码");
+            $("#code").focus();
+            return false;
+        }else{
+            $.post("/site.main.forget1Ajax",$("#rcri-form").serialize(),function(r){
+                if(r.error){
+                    $(".x_error").show().html(r.error);
+                    $("#cap").attr("src","/captcha.gen?"+Math.random());
+                    $("[name="+r.field+"]").focus();
+                    return false;
+                }else{
+                    location="/site.main.forget2"
+                }
+            },"json");
+            return false;
+        }
+    })
+})
+</script>
+</html>

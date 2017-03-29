@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>课程详情 - {part '/site.main.orgname'} - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 我的课表 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+</head>
+<body>
+<!--header-->
+{part "/site.main.nav.home"}
+<!-- /header -->
+<!-- content -->
+<section id="wrap-course-details" class="pd40">
+	<div class="container bgf">
+	<!-- 课程信息 -->
+		<div class="my-course-info col-sm-20">
+			<div class="col-sm-5 col-xs-10 course-img col-lg-5">
+			{if(!empty($courseInfo->data[0]->thumb_big))}
+			<img src="{utility_cdn::file($courseInfo->data[0]->thumb_big)}" alt="" />
+
+			{if $courseInfo->data[0]->course_type==3}
+			<div class="taped-icon">{'线下'|tr:'LearningCenter'}</div>
+			{elseif($courseInfo->data[0]->course_type == 2)}
+			<div class="g-icon3">{'录播'|tr:'LearningCenter'}</div>
+			{/if}
+			<!--  录播课与线下课
+            <div class="g-icon3" style="display:none;">录播课</div>
+            <div class="taped-icon">线下课</div>
+            -->
+            {else}
+			<img src="{utility_cdn::img('/assets_v2/img/about-img.png')}" alt="" />
+			{/if}
+			</div>
+			<div class="col-sm-10 col-xs-10">
+				<h1 class="fs16">
+					<a href="#" title="">
+						{if(!empty($courseInfo->data[0]->thumb_big))}
+						{$courseInfo->data[0]->title}
+						{else}
+						请设置
+						{/if}
+					</a>
+				</h1>
+				<p class="fs14">{$classInfo->name}
+			{*	<span class="ml30">助教：旺旺</span> *}
+				</p>
+			{*
+				<div class="s-course-pf fs14">
+					<dl>
+						<dd></dd>
+						<dd></dd>
+						<dd></dd>
+						<dd></dd>
+						<dd></dd>
+					</dl>
+					（5分）
+				</div>
+				*}
+				{if !empty($courseInfo->data[0]->course_type)&&$courseInfo->data[0]->course_type!=2}
+				<p class="fs14">{'学生'|tr:'site.teacher'}（{$classInfo->user_total}/{$classInfo->max_user}）{'人'|tr:'site.teacher'}
+				{/if}
+				{*<span class="ml30">高能100</span> *}
+				</p>
+				<p class="my-progress-subtip">{if !empty($t_chart)}{$t_chart}{else}{'第'|tr:'site.teacher'}0{'章'|tr:'site.teacher'}{/if}</p>
+				<div class="my-progress">
+				   <div class="my-progress-bar" role="progressbar" aria-valuenow="{$percent}"
+				      aria-valuemin="0" aria-valuemax="100" style="width: {$percent}%;">
+				      <span>{$percent}%</span>
+				   </div>
+				</div>
+				<p>
+					<span class="c-fl fs14">{'课程进度'|tr:'site.teacher'}</span>
+					<span class="c-fr fs14">{'共'|tr:'site.teacher'}{if !empty($listPlans->data)}{count($listPlans->data)}{else}0{/if}{'章'|tr:'site.teacher'}</span>
+				</p>
+			</div>
+		</div>
+	<!-- /课程信息 -->
+	</div>
+	<div class="container ptb35 bgf mt15">
+	<!-- 课程统计与下载资料 -->
+		<!-- btn -->
+		<div class="col-sm-20 col-xs-20">
+			<ul class="clearfix fs18 s-list-tab-btn">
+				{if !empty($classPlanStat["lastUpdated"])}
+				<li class="col-sm-2 col-xs-10 z-active pd0" style="display:block">
+					<a href="javascript:;">课程统计</a>
+					<i></i>
+				</li>
+				{/if}
+				<li class="col-sm-3 col-xs-10 pd0">
+					<a href="javascript:void(0);">{'上传资料'|tr:'site.teacher'}({$countAtt})</a>
+					<i></i>
+				</li>
+			</ul>
+		</div>
+		<!-- /btn -->
+		<!-- tab-content -->
+		<div class="s-tab-content-box col-md-20 col-xs-20">
+			{if !empty($classPlanStat["lastUpdated"])}
+			<div class="s-tab-content pb20" style="display:block;">
+				<h1 class="fs12 ter lh22 fcg9">
+					数据更新时间：{$classPlanStat["lastUpdated"]}
+				</h1>
+				<dl class="clearfix n-article-static">
+					<dd class="bgf7 clearfix tac col-md-20 pd0">
+						<div class="col-lg-2 col-md-2 col-sm-4 col-xs-3 pd0">到课率</div>
+						<div class="col-lg-2 col-md-2 col-sm-4 col-xs-3 pd0">点赞</div>
+						<div class="col-lg-2 col-md-2 col-sm-4 col-xs-3 pd0">发言</div>
+						<div class="col-lg-2 col-md-2 hidden-sm col-xs-2 pd0 hidden-xs">举手</div>
+						<div class="col-lg-3 col-md-3 hidden-sm col-xs-3 pd0 hidden-xs">讨论区</div>
+						<div class="col-lg-3 col-md-3 col-sm-4 col-xs-8 pd0">随堂测试正确率</div>
+						<div class="col-lg-3 col-md-3 hidden-sm hidden-xs">咨询回答率</div>
+						<div class="col-lg-3 col-md-3 col-sm-4 col-xs-3 pd0">时长</div>
+					</dd>
+					<dd class="clearfix tac col-md-20 pd0">
+						<div class="col-lg-2 col-md-2 col-sm-4 col-xs-3 pd0">{if !empty($classPlanStat["attendance"])}{$classPlanStat["attendance"]}%{else}-{/if}</div>
+						<div class="col-lg-2 col-md-2 col-sm-4 col-xs-3 pd0">{if !empty($classPlanStat["zan"])}{$classPlanStat["zan"]}次{else}-{/if}</div>
+						<div class="col-lg-2 col-md-2 col-sm-4 col-xs-3 pd0">{if !empty($classPlanStat["call"])}{$classPlanStat["call"]}次{else}-{/if}</div>
+						<div class="col-lg-2 col-md-2 hidden-sm col-xs-2 pd0 hidden-xs">{if !empty($classPlanStat["handup"])}{$classPlanStat["handup"]}次{else}-{/if}</div>
+						<div class="col-lg-3 col-md-3 hidden-sm col-xs-3 pd0 hidden-xs">{if !empty($classPlanStat["discuss"])}{$classPlanStat["discuss"]}条{else}-{/if}</div>
+						<div class="col-lg-3 col-md-3 col-sm-4 col-xs-8 pd0">{if !empty($classPlanStat["correct"])}{$classPlanStat["correct"]}%{else}-{/if}</div>
+						<div class="col-lg-3 col-md-3 hidden-sm hidden-xs">{if !empty($classPlanStat["answerRate"])}{$classPlanStat["answerRate"]}%{else}-{/if}</div>
+						<div class="col-lg-3 col-md-3 col-sm-4 col-xs-3 pd0">{if !empty($classPlanStat["vvRecord"])}{$classPlanStat["vvRecord"]}分钟{else}-{/if}</div>
+					</dd>
+				</dl>
+			</div>
+			{/if}
+			<div class="s-tab-content"  style="display:none;">
+					<div class="s-tab-contnet-tp col-sm-20 col-xs-20">
+						<label class="fs14">
+							<input type="checkbox" name="chks[]" /> {'全选'|tr:'site.teacher'}
+						</label>
+						<button id="upload_data">{'上传资料'|tr:'site.teacher'}</button>
+						<button class="c-fr" id="delplanatt">{'删除资料'|tr:'site.teacher'}</button>
+					</div>
+				<ul class="course-file-load teacher-course-file-load clearfix">
+					{if(!empty($listAtt))}
+					{foreach($listAtt as $k=>$v)}
+					<li class="col-md-5 col-xs-20" style="margin-bottom: 30px;">
+						<label>
+							<input type="checkbox" name="chk[]" class="c-fl mt10 planAtt"  planAttid = "{$v->planattid}"/>
+							<span class="c-fl" style="margin-right: 20px;">
+								<img src="{if(!empty($v->thumb))}{$v->thumb}{else}{utility_cdn::img('/assets_v2/img/lesson-jpg.png')}{/if}" style="width:30px;">
+							</span>
+							<span class="c-fl brief-word-icon"></span>
+							<div class="brief-introduction c-fl">
+								<p class="fs14">{$v->title}
+								{if $v->type == 1} .txt{elseif $v->type==2} .pdf{elseif $v->type==3}.doc
+								{elseif $v->type==4}.docx{elseif $v->type==5}.ppt{elseif $v->type==6}.pptx
+								{elseif $v->type==7}.jpg{elseif $v->type==8}.xls{elseif $v->type==9}.xlsx{/if}
+								</p>
+								{*<p class="fs12">2015-09-11 1.8M</p>*}
+							</div>
+						</label>
+					</li>
+					{/foreach}
+					{/if}
+				</ul>
+			</div>
+		</div>
+		<!-- /tab-content -->
+<!-- /课程统计与下载资料 -->
+<!-- 章节目录 -->
+	<div class="col-sm-20 col-xs-20 course-article">
+		<!-- btn -->
+			<ul class="clearfix fs18 course-tab-btn">
+				<li class="col-sm-2 col-xs-10 z-tab-active pd0">
+					<a href="javascript:;">{'章节目录'|tr:'site.teacher'}</a>
+					<i></i>
+				</li>
+				<li class="col-sm-2 col-xs-10 pd0">
+					<a href="javascript:;">{'学生列表'|tr:'site.teacher'}</a>
+					<i></i>
+				</li>
+			</ul>
+		<!-- /btn -->
+		<div class="wrap-detail-list">
+			<div class="c-article-content" style="display:block;">
+				<ul class="course-article-content col-sm-20 col-xs-20 clearfix fs14">
+					{if(!empty($listPlans->data))}
+					{foreach($listPlans->data as $k=>$v)}
+					<li>
+						<dl class="clearfix">
+							<dt class="col-sm-3 col-xs-6">{$v->section_name}<i></i></dt>
+							<dd class="col-sm-5 col-xs-6">
+
+							{if($v->status==3)}
+							{*已完结加在这里*}
+							{/if}
+
+							{$v->section_descipt} &nbsp;
+								{if($v->fk_user_class !=$v->fk_user_plan)}
+									({'代课'|tr:'site.teacher'} :
+									{if(!empty($v->user_plan->real_name))}
+									{$v->user_plan->real_name} )
+									{else}
+									{$v->user_plan->name})
+									{/if}
+								{else}
+								{/if}
+							{if($v->type_id==1)}
+							<dd class="col-sm-4 col-xs-8 pd0 hidden-xs">
+							{if(date("Y",strtotime($v->start_time))==date("Y",time()))}
+							{date("m-d H:i",strtotime($v->start_time))}
+							{else}
+							{date("Y-m-d H:i",strtotime($v->start_time))}
+							{/if}
+							<i></i></dd>
+							{elseif($v->type_id==2)}
+							<dd class="col-sm-4 col-lg-2 col-xs-5 pd0">
+							{if(!empty($v->video_total_time))}
+							{$v->video_total_time}
+							{else}
+							{/if}
+							<i></i></dd>
+							{else}
+							<dd class="col-sm-4 col-xs-8 pd0">
+							{if(date("Y",strtotime($v->start_time))==date("Y",time()))}
+							{date("m-d H:i",strtotime($v->start_time))}
+							{else}
+							{date("Y-m-d H:i",strtotime($v->start_time))}
+							{/if}
+							{*<dd class="col-sm-4 col-lg-2">*}
+							{*	<button class="now-study-tip">录播课<span></span></button> *}
+								<i></i>
+							</dd>
+							{/if}
+
+							{if($v->status==2)}
+							<dd class="col-sm-4">
+							<a href="/course.plan.play/{$v->plan_id}" title="" target="_blank">
+								<button class="now-study-tip">
+									<span class="c-fl"></span>{'正在上课'|tr:'LearningCenter'}
+								</button>
+							</a>
+							<i></i></dd>
+							{else}
+							<dd class="col-sm-4 hidden-xs">
+								<i></i>
+								{if($v->status==3)}
+									{if($v->type_id==1)}
+								<a href="/course.plan.play/{$v->plan_id}" title="" target="_blank">
+									<button class="end-study-tip tel">
+										<span class="c-fl"></span>
+										{'观看视频'|tr:'LearningCenter'}
+									</button>
+								</a>
+									{elseif($v->type_id==2&&$v->status=='3')}
+								<a href="/course.plan.play/{$v->plan_id}" title="" target="_blank">
+									<button class="end-study-tip tel">
+										<span class="c-fl"></span>
+										{'可回看'|tr:'LearningCenter'}
+									</button>
+								</a>
+								{*
+								<button class="now-study-tip">
+									<span class="c-fl"></span>
+									{'正在学习'|tr:'LearningCenter'}
+								</button>
+								暂无视频
+								{'暂无视频'|tr:'LearningCenter'}
+								*}
+									{/if}
+								{else}
+
+								{if($v->type_id==2)}
+								{'暂无视频'|tr:'LearningCenter'}
+								{/if}
+
+								{/if}
+							</dd>
+							{/if}
+
+							{if($v->fk_user_class ==$v->fk_user_plan)}
+							{if($v->type_id!=3)}
+							<dd class="col-sm-4 details-btn">
+					{*		{'详情'|tr:'site.teacher'} *}
+								{*	<a href="new-classroom-statistics.html" title="">课堂统计</a> *}
+									{if($v->status==3)}
+									<a href="/video.point.videoPart/{$v->plan_id}/2" target="_blank" class="view-stats-btn hidden-xs hidden-sm">{'视频管理'|tr:'site.teacher'}｜</a>
+									{else}
+									<a href="/video.point.videoUpload/{$v->plan_id}/2" target="_blank" class="view-stats-btn hidden-xs hidden-sm">{'上传视频'|tr:'site.teacher'}｜</a>
+									{/if}
+
+									{if($v->type_id!=2)}
+											{if($v->fk_user_class ==$v->fk_user_plan)}
+												{if($v->status==3)}
+									<!--<a href="/course.plan.start/{$v->plan_id}" title="" class="hidden-xs hidden-sm">{'继续上课'|tr:'site.teacher'}|</a>-->
+								<a href="javascript:void(0);" onclick=checks_st({$v->plan_id},{$v->class_id},{$v->course_id}) title="" >{'继续上课'|tr:'site.teacher'}|</a>
+									<a href="/course.stat.getPlanStatByPid/{$v->plan_id}" target="_blank" title="">课堂统计</a>
+												{else}
+													{if(date("Ymd",strtotime($v->start_time))<=date("Ymd",time()))}
+													 <a href="javascript:void(0);" onclick=checks_st({$v->plan_id},{$v->class_id},{$v->course_id}) title="">{'开始上课'|tr:'site.teacher'}｜</a>
+									<!--<a href="/course.plan.start/{$v->plan_id}" title="">{'开始上课'|tr:'site.teacher'}｜</a>-->
+                                {/if}
+                            {if($v->type_id!=2)}
+                            <a href="/teacher.manage.plan/{$v->plan_id}" title="">{'备课'|tr:'site.teacher'}</a>
+                            {/if}
+                            {/if}
+                        {/if}
+                {else}
+                        {if($v->status!=3)}
+                            {if($v->fk_user_class ==$v->fk_user_plan)}
+                            {if($v->type_id!=2)}
+                <a href="/teacher.manage.plan/{$v->plan_id}" title="">{'备课'|tr:'site.teacher'}</a>
+                            {/if}
+                            {/if}
+                        {/if}
+                {/if}
+
+
+            <div class="details-content-tip col-sm-5">
+                <span class="z-article-jianjiao"></span>
+            {*	<a href="new-classroom-statistics.html" title="">课堂统计</a>
+                *}
+            </div>
+        </dd>
+        {else}
+        <dd class="col-sm-4 details-btn visible-lg">
+        </dd>
+        {/if}
+        {else}
+        {if($v->type_id!=3)}
+        <dd class="col-sm-4 details-btn visible-lg">
+{*		{'详情'|tr:'site.teacher'} *}
+            {*	<a href="new-classroom-statistics.html" title="">课堂统计</a> *}
+                {if($v->status==3)}
+                <a href="/video.point.videoPart/{$v->plan_id}/2" target="_blank" class="view-stats-btn">{'视频管理'|tr:'site.teacher'}</a>
+                {else}
+                <a href="/video.point.videoUpload/{$v->plan_id}/2" target="_blank" class="view-stats-btn">{'上传视频'|tr:'site.teacher'}</a>
+                {/if}
+            <div class="details-content-tip col-sm-5">
+                <span class="z-article-jianjiao"></span>
+            {*	<a href="new-classroom-statistics.html" title="">课堂统计</a>
+                *}
+            </div>
+        </dd>
+        {else}
+        <dd class="col-sm-4 details-btn visible-lg">
+        </dd>
+        {/if}
+        {/if}
+    </dl>
+</li>
+{/foreach}
+{/if}
+{*
+<li>
+    <dl>
+        <dt class="col-sm-2">第一章<i></i></dt>
+        <dd class="col-sm-4">小升初模拟题库<i></i></dd>
+        <dd class="col-sm-2">09月17日   19：00<i></i></dd>
+        <dd class="col-sm-2">代课：喵喵老师<i></i></dd>
+        <dd class="col-sm-2">未开课</dd>
+    </dl>
+</li>
+<li>
+    <dl>
+        <dt class="col-sm-2">第一章<i></i></dt>
+        <dd class="col-sm-4">小升初模拟题库<i></i></dd>
+        <dd class="col-sm-2">
+            <button class="now-study-tip">正在学习<span></span></button>
+            <i></i>
+        </dd>
+        <dd class="col-sm-2"><i></i></dd>
+        <dd class="col-sm-2">进入课堂</dd>
+    </dl>
+</li>
+<li>
+    <dl>
+        <dt class="col-sm-2">第一章<i></i></dt>
+        <dd class="col-sm-4">小升初模拟题库<i></i></dd>
+        <dd class="col-sm-2">
+            <button class="end-study-tip tel">已学习<span></span></button>
+            <i></i>
+        </dd>
+        <dd class="col-sm-2"><i></i></dd>
+        <dd class="col-sm-2 details-btn">详情
+            <div class="details-content-tip col-sm-5">
+                <span class="z-article-jianjiao"></span>
+                <a href="new-classroom-statistics.html" title="">课堂统计</a>
+                <a href="javascript:;" class="view-stats-btn">视频管理</a>
+                <a href="#" title="">继续上课</a>
+            </div>
+        </dd>
+    </dl>
+</li>
+<li>
+    <dl>
+        <dt class="col-sm-2">第一章<i></i></dt>
+        <dd class="col-sm-4">小升初模拟题库<i></i></dd>
+        <dd class="col-sm-2">09月17日   19：00<i></i></dd>
+        <dd class="col-sm-2">代课：喵喵老师<i></i></dd>
+        <dd class="col-sm-2">未开课</dd>
+    </dl>
+</li>
+<li>
+    <dl>
+        <dt class="col-sm-2">第一章<i></i></dt>
+        <dd class="col-sm-4">小升初模拟题库<i></i></dd>
+        <dd class="col-sm-2">
+            <button class="now-study-tip">正在学习<span></span></button>
+            <i></i>
+        </dd>
+        <dd class="col-sm-2"><i></i></dd>
+        <dd class="col-sm-2">进入课堂</dd>
+    </dl>
+</li>
+*}
+</ul>
+</div>
+<div class="c-article-content">
+<div class="stuent-list-cont-tp fs14 mb10">
+<div class="lt">
+    <span>共{$totalStudent}人</span>
+    {if(empty($sedata))}
+    <a href="/phpexcel/coursedetailstudent?course_id={$courseId}&class_id={$classId}">导出Excel</a>
+    {else}
+    <a href="/phpexcel/coursedetailstudent?course_id={$courseId}&class_id={$classId}&sedata={$sedata}">导出Excel</a>
+    {/if}
+</div>
+<div class="rt search-students col-sm-5 col-xs-10">
+    <input class="lt col-sm-16 col-xs-16" placeholder="{'输入学生姓名'|tr:'site.teacher'}" name="stud[]" type="text" id="searchdata"
+    value="{if(!empty($sedata))}{$sedata}{/if}"
+    />
+    <button class="rt col-sm-4 col-xs-4"></button>
+    <a class="close-btn" href="javascript:void(0)"></a>
+</div>
+</div>
+<table class="stuent-list-content col-sm-20 col-xs-20" id="student_list">
+{if (!empty($ret->data))}
+<thead>
+    <tr class="col-xs-20 col-sm-20 pd0">
+        <th class="col-sm-3 col-xs-7 pd0">{'姓名'|tr:'site.teacher'}</th>
+        <th class="col-sm-3 hidden-xs">{'性别'|tr:'site.teacher'}</th>
+        <th class="col-sm-3 hidden-xs">{'地区'|tr:'site.teacher'}</th>
+        <th class="col-sm-4 col-xs-7 pd0">{'手机号'|tr:'site.teacher'}</th>
+        <th class="col-sm-5 pd0 hidden-xs">{'报名时间'|tr:'site.teacher'}</th>
+        <th class="col-sm-2 col-xs-6 pd0">操作</th>
+    </tr>
+</thead>
+<tbody id="studentList">
+    {foreach($ret->data as $k=>$v)}
+    <tr>
+        <td class="col-sm-3 col-xs-7 pd0">
+            {if(!empty($v->user_info->thumb_med))}
+            <img src="{utility_cdn::file($v->user_info->thumb_med)}" alt="" />
+            {else}
+            <img src="{utility_cdn::img('/assets_v2/img/defaultPhoto.gif')}" alt="" />
+            {/if}
+            {if(!empty($v->user_info->real_name))}
+            {$v->user_info->real_name}
+            {elseif(!empty($v->user_info->name))}
+            {$v->user_info->name}
+            {else}
+            {'未设置'|tr:'site.teacher'}
+            {/if}
+        </td>
+        <td class="col-sm-3 hidden-xs">
+            {if(!empty($v->user_info->gender))}
+                {if($v->user_info->gender==1)}
+                {'男'|tr:'site.teacher'}
+                {else}
+                {'女'|tr:'site.teacher'}
+                {/if}
+            {else}
+            {'未设置'|tr:'site.teacher'}
+            {/if}
+        </td>
+        <td class="col-sm-3 hidden-xs">
+        {if (!empty($v->user_info->province))}
+            {if(!empty($v->user_info->province==$v->user_info->city))}
+            {$v->user_info->province}
+            {else}
+            {$v->user_info->province}
+            {$v->user_info->city}
+            {/if}
+        {else}
+            {'未设置'|tr:'site.teacher'}
+        {/if}
+        </td>
+        <td class="col-sm-4 col-xs-7 pd0">
+        {if(!empty($v->user_info->mobile))}
+        {$v->user_info->mobile}
+        {else}
+        {'未获取到'|tr:'site.teacher'}
+        {/if}
+        </td>
+        <td class="col-sm-5 col-xs-6 hidden-xs">
+            {date("Y-m-d",strtotime($v->create_time))}
+        </td>
+        <td class="col-sm-2 col-xs-6 pd0" >
+            <a href="/course.stat.GetStudentPlanStatByPid/{$classId}/{if(!empty($v->user_info->user_id))}{$v->user_info->user_id}{/if}" target="_blank" title="">课堂统计</a>
+        </td>
+    </tr>
+    {/foreach}
+{else}
+    <div class="col-sm-20 col-xs-20 tac fs14 cGray">
+        <p><img src="{utility_cdn::img('/assets_v2/img/tanhao.png')}">&nbsp;&nbsp;
+        {if($showTag == 1)}
+        没有要找的学生哦
+        {else}
+        您还没有学生报名哦！
+        {/if}
+        </p>
+    </div>
+{/if}
+</tbody>
+
+</table>
+<!-- page -->
+				<div class="col-sm-20 col-xs-20 mt15 page-list" id="pagepage">
+
+				</div>
+	<script>
+		pageAjax("pagepage","/teacher.course.detail/{$courseId}/{$classId}",{$length},{$page},{$totalPage},"studentList");
+	</script>
+			<!-- /page -->
+			</div>
+		</div>
+	</div>
+<!-- /章节目录 -->
+	</div>
+</section>
+<!-- /content -->
+	<div id="rightWindow"></div>
+	<script>$("#rightWindow").load("/org.rightWindow.rightWindow");</script>
+   {part "/site.main.footer"}
+   </div>
+</body>
+</html>
+<script src="{utility_cdn::js('/assets_v2/js/jquery.raphael.js')}" type="text/javascript"></script>
+<script src="{utility_cdn::js('/assets_v2/js/jquery.cirls.js')}" type="text/javascript"></script>
+<div class="update-box-index">
+	<div class="index-teac-update" id="index-teac-update">
+		<div class="index-marcen">
+			<p><img src="/assets_v2/img/duochangjing.png"><span>多场景上课模式</span></p>
+			<p><img src="/assets_v2/img/suitang.png"><span>随堂测验</span></p>
+			<p><img src="/assets_v2/img/zhibohudong.png"><span>直播互动</span></p>
+	   </div>
+	   <div class="index-marbut">
+		<!--    <input type="button" onclick="down()" value="立即下载"> -->
+		   <a type="button" href='{$host}' onclick="down()" target="_blank">立即下载</a>
+
+	   </div>
+	</div>
+   <div class="index-teac-bg" id="index-teac-bg" style="display:none;">
+	<div class="title">
+		<p>是否安装</p>
+	</div>
+	<div class="teac-content">
+		<p>手动安装"云课教师助手"</p>
+		<span>提示:下载后,找到下载包文件,双击进行手动安装</span>
+		<div class="content-but">
+			<input type="button" onclick="window.location.reload(true)" value="安装完成">
+			<input type="button" value="遇到问题">
+		</div>
+	</div>
+</div>
+
+<style>
+	.update-box-index{ display:none;}
+    .layui-layer-setwin .layui-layer-close2{ top:2px;right:0;background:url(/assets_v2/img/mr-end.png)no-repeat;  }
+    .layui-layer-setwin .layui-layer-close2:hover{ background:url(/assets_v2/img/mr-end.png)no-repeat;  }
+    .index-teac-update{ background:url(/assets_v2/img/tcbg.png)no-repeat;width:489px;height:368px;}
+    .index-teac-update{ background:url(/assets_v2/img/tcbg.png)no-repeat;width:489px;height:368px;}
+    .index-teac-update p{ float:left;width:100px;margin-left:50px;text-align:center; }
+    .index-teac-update p span{ float:left;padding-top:5px;font-size:14px;color:gray; }
+    .index-teac-update p:nth-child(2) span{ padding-left:22px;}
+    .index-teac-update p:nth-child(3) span{ padding-left:22px;}
+    .index-marbut{ text-align:center;margin-top:30px;float:left;width:100%; }
+    .index-marbut a{ width:100px;height:35px;line-height:35px;text-align:-webkit-center;background:#ffa81d;border-radius:3px;color:#fff;font-size:14px;display: -webkit-inline-box; }
+    .index-marbut a:hover{ background:#ffa81d;opacity:0.8}
+    .index-marcen{ margin-top:40%;float:left;  }
+	.teac-content{ background:#fff;text-align:center;float:left;width:100% }
+	.teac-content p{ padding-top:40px;color:#000;font-size:16px; }
+	.teac-content span{ padding-top:20px;float:left;width:100%;color:gray; }
+	.content-but{ margin-top:45px;float:left;width:100%; }
+	.content-but input{ width:100px;height:30px;border-radius:3px;background:#f7f7f7;color:#333;border:1px solid #ccc; }
+	.content-but input:nth-child(1){ background:#ffa81e;color:#fff;margin-right:20px;border:none; }
+	.index-teac-bg{ float:left;width:100%;height:250px; }
+	.index-teac-bg .title{ background:#f7f7f7;width:100%;height:35px; }
+	.index-teac-bg .title p{ color:gray;font-size:14px;line-height:35px;padding-left:10px; }
+</style>
+<script>
+    var flag = 0;
+    function checkCallback(data){
+        if(data["code"]==0){
+          flag = 1;
+//            jQuery.getScript("http://127.0.0.1:58891/teacher_client/?command=launch&user_name={$mobile}&user_token={$token}&course_id=&class_id=&plan_id=");
+        }else {
+
+        }
+    }
+    function launchCallback(data){
+        console.log(data['code']);
+    }
+	function down(){
+		$('#index-teac-update').hide();
+		//$('#index-teac-bg').show();
+	}
+	//关闭弹窗
+	function close(){
+
+	}
+    function checks_st(plan,cla,course){
+		check();
+        if(flag==1){
+            jQuery.getScript("http://127.0.0.1:58891/teacher_client/?command=launch&user_name={$mobile}&user_token={$token}&course_id="+course+"&class_id="+cla+"&plan_id="+plan);
+        }
+		if(flag==0){
+				layer.open({
+				type:1,
+				title:false,
+				area: ['489px',''],
+				content: $('.update-box-index')
+		});
+		}
+    }
+    function check(){
+        jQuery.getScript("http://127.0.0.1:58891/teacher_client/?command=check");
+    }
+    $(document).ready(function(){
+        check();
+    });
+	function down(){
+		 window.location.reload();
+	}
+</script>
+
+
+<script type="text/javascript">
+$(function() {
+	var getUrl = null;
+	{if(!empty($sedata))}
+	getUrl="{$sedata}";
+	{/if}
+
+	var studentSelected = {$studentSelected};
+	if(getUrl != null || studentSelected == 1){
+	    $(".course-tab-btn li:last").addClass("z-tab-active").siblings().removeClass("z-tab-active");
+	    $(".wrap-detail-list>div:last").show().siblings().hide();
+	    $(".search-students input").val(getUrl)
+		if(studentSelected == 1){
+			$(".search-students button").show();
+			$(".search-students .close-btn").hide();
+		}else{
+			$(".search-students button").hide();
+			$(".search-students .close-btn").show();
+		}
+	}else{
+	    $(".course-tab-btn li:first").addClass("z-tab-active").siblings().removeClass("z-tab-active");
+	    $(".wrap-detail-list>div:first").show().siblings().hide();
+	}
+
+    $(".search-students .close-btn").click(function(){
+        $(".search-students input").val('');
+        $(".search-students .close-btn").hide();
+        $(".search-students button").show();
+		window.location.href="/teacher.course.detail/{$courseId}/{$classId}/1";//页面跳转并传参
+    });
+//学习进度章数
+	$(".my-progress-subtip").css("width",$(".my-progress-bar span").html());
+
+   $('.s-list-tab-btn li').click(function() {
+      var index=$(this).index();
+      $(this).addClass('z-active').siblings().removeClass('z-active')
+      $('.s-tab-content-box .s-tab-content').eq(index).show().siblings().hide()
+   });
+   $('.course-tab-btn li').click(function() {
+      var index=$(this).index();
+      $(this).addClass('z-tab-active').siblings().removeClass('z-tab-active')
+      $('.wrap-detail-list .c-article-content').eq(index).show().siblings().hide()
+   });
+   //AllCheck
+	$(".s-tab-contnet-tp input[name='chks[]']").click(function(){
+	    if(this.checked){
+	        $(".course-file-load input[name='chk[]']").each(function(){
+	            this.checked = true;
+	        });
+	    }else{
+	        $(".course-file-load input[name='chk[]']").each(function(){
+	            this.checked = false;
+	        });
+	    }
+	});
+
+	if($(window).width() < 760) {
+		$(".my-progress-subtip").css("marginTop","0");
+	}
+
+	  $("#upload_data").click(function(){
+	    layer.open({
+	        type: 2,
+	        title:["{'上传资料'|tr:'site.teacher'}"],
+	        area: ['480px', '380px'],
+	        shadeClose: true,
+			content: '/teacher.manage.batchupload.{$planId}.{$classId}'
+	    });
+	  });
+
+	$("#searchdata").keydown(function(e){
+		var curKey = e.which;
+		if(curKey == 13){
+			var sedata = $("#searchdata").val();
+			window.location.href="/teacher.course.detail/{$courseId}/{$classId}?sedata="+sedata;//页面跳转并传参
+		}
+	});
+    $(".search-students button").click(function(){
+		var sedata = $("#searchdata").val();
+		window.location.href="/teacher.course.detail/{$courseId}/{$classId}?sedata="+sedata;//页面跳转并传参
+    });
+
+	$("#delplanatt").click(function(){
+		var planid;
+		var ids = [];
+		var id ;
+		$(".planAtt:checked").each(function(i,item){
+			id = $(this).attr("planAttid");
+			ids.push(id);
+		});
+		if(0==ids.length){
+			layer.msg("{'请选择要删除的课件'|tr:'site.teacher'}");
+			return false;
+		}
+		planid = "1";
+		classid = "{$classId}";
+		console.log("planatt"+ids);
+		if(confirm("{'您确定要删除这个课件吗'|tr:'site.teacher'}")){
+			$.post("/teacher.manage.DelPlanAttAjax",{ planattid:ids,planid:planid,classid:classid },function(r){
+				if(r.error){
+					alert(r.error);
+					return false;
+				}
+				if(r){
+					location.reload();
+					return false;
+				}
+			},"json");
+		}
+		return false;
+	});
+
+});
+function GetUrl(name){
+	var reg=new RegExp("(^|&)"+name+"=([^&]*)(&|$)");
+	var r=window.location.search.substr(1).match(reg);
+	if(r!=null){
+		return unescape(r[2]);
+	}
+	return null;
+}
+</script>
+<script>
+	var totalPage={$totalPage};
+	function studentList(_path,_page,_num){
+		$.post(""+_path+"",{ page:_page,num:_num,act:'ajaxStudent' },function(r){
+			var _html = '';
+			if(r.code==1){
+				for (var i = 0; i < r.data["data"].length; i++) {
+					_html += '<tr>';
+					_html += '<td class="col-sm-3 col-xs-7 pd0">';
+					if(r.data["data"][i]["user_info"]["thumb_med"]!="") {
+						_html += '<img src = "'+r.data["data"][i]["user_info"]["thumb_med"]+'" alt = "" / >';
+					}else {
+					_html += '<img src = "{utility_cdn::img("/assets_v2/img/defaultPhoto.gif")}" alt = "" / >';
+					}
+					if(r.data["data"][i]["user_info"]["real_name"]!="") {
+						_html += r.data["data"][i]["user_info"]["real_name"];
+					}else if(r.data["data"][i]["user_info"]["name"]!=""){
+						_html += r.data["data"][i]["user_info"]["name"];
+					}else {
+						_html += '未设置';
+					}
+					_html += '</td>';
+					_html += '<td class="col-sm-3 hidden-xs">';
+					if(r.data["data"][i]["user_info"]["gender"]>0){
+						if(r.data["data"][i]["user_info"]["gender"]=="1"){
+							_html += '男';
+						}else{
+							_html += '女';
+						}
+					}else{
+						_html += '未设置';
+					}
+					_html += '</td>';
+					_html += '<td class="col-sm-3 hidden-xs">';
+					if (r.data["data"][i]["user_info"]["province"]!=""){
+						if(r.data["data"][i]["user_info"]["city"] !="" && r.data["data"][i]["user_info"]["province"]==r.data["data"][i]["user_info"]["city"]){
+							_html += r.data["data"][i]["user_info"]["province"];
+						}else{
+							_html += r.data["data"][i]["user_info"]["province"];
+							_html += r.data["data"][i]["user_info"]["city"];
+						}
+					}else{
+						_html += '未设置';
+					}
+					_html += '</td>';
+					_html += '<td class="col-sm-4 col-xs-7 pd0">';
+					if(r.data["data"][i]["user_info"]["mobile"]!=""){
+						_html += r.data["data"][i]["user_info"]["mobile"];
+					}else{
+						_html += '未获取到';
+					}
+					_html += '</td>';
+					_html += '<td class="col-sm-5 col-xs-6 hidden-xs">';
+					_html += r.data["data"][i]["create_time"];
+					_html += '</td>';
+					_html += '<td class="col-sm-2 col-xs-6 pd0" >';
+					_html += '<a href="/course.stat.GetStudentPlanStatByPid/{$classId}/';
+					if(r.data["data"][i]["user_info"]["user_id"]!=""){
+						_html += r.data["data"][i]["user_info"]["user_id"]
+					}
+					_html += '" target="_blank" title="">课堂统计</a>';
+					_html += '</td>';
+					_html += '</tr>';
+				}
+				totalPage= r.data["total"];
+			}else{
+				_html += '<div class="col-sm-20 col-xs-20 tac fs14 cGray">';
+				_html += '<p><img src="{utility_cdn::img('/assets_v2/img/tanhao.png')}">&nbsp;&nbsp;';
+				var showTag = {$showTag};
+				if(showTag == 1) {
+					_html += '没有要找的学生哦';
+				}else{
+					_html += '您还没有学生报名哦';
+				}
+			_html += '</p>';
+			_html += '</div>';
+			}
+			$("#studentList").html(_html);
+		},'json');
+		$("#pagepage").html('');
+		pageAjax("pagepage","/teacher.course.detail/{$courseId}/{$classId}",20,_page,totalPage,"studentList");
+	}
+</script>

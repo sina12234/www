@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 优惠码使用情况</title>
+		{part "/index.main.headeruser"}
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/style.css')}">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets/images/favicon.ico')}" />
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/bootstrap-custom/bootstrap.min.css')}">
+		<!--[if lt IE 9]>
+		<link rel="stylesheet" type="text/css" href="/assets/bootstrap-custom/bootstrap.min.css">
+		<script src="{utility_cdn::js('/assets/bootstrap-3.3.0/js/html5shiv.min.js')}"></script>
+		<script src="{utility_cdn::js('/assets/bootstrap-3.3.0/js/respond.min.js')}"></script>
+		<![endif]-->
+		<!--[if lt IE 8]>
+		<script type="text/javascript" src="{utility_cdn::js('/assets/js/ie8.js')}" ></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/teacherplay.css')}">
+		<script type="text/javascript" src="{utility_cdn::js('/assets/js/jquery/jquery-1.11.1.min.js')}" ></script>
+		<script type="text/javascript" src="{utility_cdn::js('/assets/js/page_limit.js')}" ></script>
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/common.css')}">
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/teacherplay.css')}">
+		<script type="text/javascript">
+			$(document).ready(function(){
+				if({$discounts->total} > 0){
+					var ul = page_limit({$page}, {$limit}, {$discounts->total}, 1, { });
+					$("#page_pilot").append(ul);
+				}
+			});
+		</script>
+		<style>
+			[forbid] { background-color: #ddd;}
+			[order_status="0"] { background-color: #bbb;}
+			[order_status="2"] { background-color: #999;}
+			[order_status="3"] { background-color: #ddd;}
+			.Page{ margin-top: 150px;}
+			.Page ul li{ float: left; display:inline-block; margin-left: 10px;font-size: 14px;}
+			.Page ul .big{ width:30px;height:25px;background:#FFA81E; text-align: center;padding-top: 3px;}
+			.Page ul .sam{ padding-top: 3px;}
+			.Page ul .ban{ padding-top: 3px;width:30px;height:25px;background:#ccc;text-align: center;}
+			.Page ul li a{ width: 30px;height: 30px; color: #fff;}
+		</style>
+	</head>
+
+	<body>
+		<!--top-->
+		{part "/index.main.nav.user"}
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='col-sm-3 user_menu hidden-xs'>
+						<div id=''>
+							<div id='menu'>
+								{part "/user.home.menu.user"}
+							</div>
+						</div>
+					</div>
+
+					<div class='col-sm-9 user_content' style="background:none;">
+
+						<table border="1" width="100%">
+							<caption>优惠码</caption>
+							<tr>
+								<th> 简介 </th><th> 优惠码 </th><th> 总优惠数量 </th><th> 已用优惠数量 </th><th>每用户最多使用次数</th><th> 开始时间 </th><th> 结束时间 </th><th>禁用</th>
+							</tr>
+							{$d=$discounts->discount}
+							<tr>
+								<td>{$d->introduction}</td><td>{$d->discount_code}</td><td>{$d->total_num}</td><td>{$d->used_num}</td><td>{$d->user_limit}</td><td>{$d->starttime}</td><td>{$d->endtime}</td><td>
+								{if 0 == $d->status}
+									<a href="/org.discount.forbidcode/{$d->discount_code_id}/{$d->discount_id}">点击禁用</a>
+								{else}
+								已禁用
+								{/if}
+								</td>
+							</tr>
+						</table>
+						{if $discounts->total > 0}
+						<table border="1" width="100%">
+							<caption>优惠码使用情况</caption>
+							<tr>
+								<th>用户名</th><th>用户电话</th><th>订单课程名</th><th>原价</th><th>付款价格</th><th>付款类型</th><th>订单状态</th><th>优惠码使用时间</th>
+							</tr>
+							{foreach $discounts->data as $d}
+							<tr order_status="{$d->status}">
+								<td><span title="{$d->user_id}">{$d->name}</span></td>
+								<td>{$d->mobile}</td>
+								<td><span title="{$d->order_id}">{$d->title}</span></td>
+								<td>{$d->price_old/100}元</td>
+								<td>{$d->price/100}元</td>
+								<td>{if 0==$d->pay_type}未付款{elseif 1==$d->pay_type}支付宝{elseif 2==$d->pay_type}微信{elseif 3==$d->pay_type}免费{else}未知{/if}</td>
+								<td>{if 0==$d->status}订单未完成{else}{if 1==$d->status}订单完成{else}{if 2==$d->status}订单取消{else}订单确定{/if}{/if}{/if}</td><td>{$d->createtime}</td>
+							</tr>
+							{/foreach}
+						</table>
+						<div class="Page" id="page_pilot">
+						</div>
+						{/if}
+					</div>
+				</div>
+			</div>
+		</div>
+		{part "/index.main.footer"}
+	</body>
+</html>

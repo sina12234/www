@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{part '/site.main.orgname'} - 频道设置 - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 首页维护 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery.dragsort-0.5.2.min.js')}"></script>
+    <script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery.minicolors.js')}"></script>
+    <link rel="stylesheet" type="text/css" href="{utility_cdn::js('/assets_v2/css/jquery.minicolors.css')}">
+    <link rel="stylesheet" type="text/css" href="{utility_cdn::js('/assets_v2/js/webuploader/webuploader.css')}">
+	<script src="{utility_cdn::js('/assets_v2/js/webuploader/webuploader.js')}"></script>
+</head>
+<body>
+{part "/site.main.nav"}
+<section class="pd30">
+	<div class="container">
+		<div class="row">
+			{part "/org.main.menu.channelSet"}
+			<div class="right-main col-sm-9 col-md-16  pos-rel" id="template-course-data">
+				<div class="content">
+					<div class="crumb">
+						<a href="/org.channel.channelList"> &lt;返回频道设置 </a>
+					</div>
+					<form>
+						<div class="mt20 fs14">
+                            <div class="ps-channel-name col-md-12 col-sm-10 col-xs-20">
+                                <span class="channel-tag left">
+                                    频道页名称:
+                                </span>
+                                <input class="common-border col-md-10 channel-input" type="text" name="channel-name" value="{if(!empty($dataInfo->name))}{$dataInfo->name}{/if}" />
+                            </div>
+                            <div class="channel-action right  col-md-8 col-sm-10 col-xs-20 ">
+                                <button type="submit" class="btn right" id="index-release">频道发布</button>
+                                <a class="gray-btn right  mr10" id="set-class-add" data-add="addchannel" data-channel="{$channel_id}">+添加模块</a>
+                                <div class="clear"></div>
+                            </div>
+							<div class="clear"></div>
+						</div>
+                        <div class="ps-banner-set mt20" >
+                            <div class="add-banner right" id="add-banner" data-cid={$channel_id}>
+                                +新建幻灯片
+                            </div>
+                            <div class="tab-main" id="tab-main">
+                                <div class="tab-hd">
+									{if(!empty($bannerList))}
+									{foreach($bannerList as $k=>$v)}
+                                    <div class="tab-hd-opt {if($k==0)}curr{/if}" >幻灯片{$k+1}</div>
+									{/foreach}
+                                    {else}
+                                    <div class="tab-hd-opt curr" >幻灯片1</div>
+									{/if}
+                                </div>
+                            </div>
+                            <ul class="banner-box" id="banner-box">
+								{if(!empty($bannerList))}
+								{foreach($bannerList as $k=>$v)}
+                               <li class="set-banner {if($k==0)}show{/if}">
+                                   <div class="banner-show img-set" style="background-color:{$v->rgb};">
+                                        <div class="img-mask">
+                                            更改图片<br/>
+											图片尺寸:890*360
+                                        </div>
+                                       <div class="null-img {if(!$v->thumb)}show{/if}" data-thumb="{$v->thumb}" >
+                                           <div class="null-img-icon"></div>
+                                       </div>
+                                       <img class="banner-img {if(!$v->thumb)}hidden{/if}" src="{utility_cdn::file($v->thumb)}" alt="" id="upload_channel_banner">
+                                   </div>
+                                   <div class="banner-action">
+                                       <div class="show-url col-md-7 col-xs-7">
+                                           <span class=" col-md-4 col-xs-10">地址:</span>
+                                            <a href="" class="channel-url col-md-16 col-xs-10">{$v->url}</a>
+                                           <input type="text" name="channel-url"   class="input-url common-border col-md-16 col-xs-10" >
+                                       </div>
+                                       <div class="action-show col-md-13 col-xs-13">
+                                            <div class="edit-icon" data-pid="{$v->pk_banner}" data-cid="{$channel_id}"></div>
+                                            <div class="del-icon" data-pid="{$v->pk_banner}" data-cid="{$channel_id}"></div>
+                                       </div>
+                                       <div class="color-select right col-md-6 col-xs-6 pd0">
+                                            <div class="now-color">
+                                                <div class=" icolor-select">
+                                                    当前颜色:
+                                                    <input class="icolor"  data-control="hue" value="">
+                                                    <input type="hidden" class="icolor-input" name="color_rgb" value="" >
+                                                </div>
+                                            </div>
+                                           <div class="color-lists minicolors-theme-default">
+                                               <span>模板颜色:</span>
+                                               <span class="default-back" style="background-color:#f2e121;" data-backColor="#f2e121"></span>
+                                               <span class="default-back" style="background-color:#c50e25;" data-backColor="#c50e25"></span>
+                                               <span class="default-back" style="background-color:#2fbcf4;" data-backColor="#2fbcf4"></span>
+                                               <span class="default-back" style="background-color:#7be4dd;" data-backColor="#7be4dd"></span>
+                                               <span class="default-back" style="background-color:#d9d9d9;" data-backColor="#d9d9d9"></span>
+                                               <span class="default-back" style="background-color:#0a0a0a;" data-backColor="#0a0a0a"></span>
+                                           </div>
+                                       </div>
+                                       <div class="clear"></div>
+                                   </div>
+                                   <div class="save-action">
+                                       <input type="hidden" name="channelId" value="{$channel_id}"/>
+                                       <div class="save-button btn">
+                                           保存
+                                       </div>
+                                       <div class="cancel-button gray-button">
+                                           取消
+                                       </div>
+                                   </div>
+                               </li>
+							   {/foreach}
+                                {else}
+                                <li class="set-banner show">
+                                    <div class="banner-show img-set">
+                                        <div class="img-mask">
+                                            更改图片</br>
+											图片尺寸:890*360
+                                        </div>
+                                        <div class="null-img show">
+                                            <div class="null-img-icon"></div>
+                                        </div>
+                                        <img class="banner-img"  src="" alt="">
+                                    </div>
+                                    <div class="banner-action">
+                                        <div class="show-url col-md-7 col-xs-7">
+                                            <span class=" col-md-4 col-xs-10">地址:</span>
+                                            <a href="" class="channel-url col-md-16 col-xs-10"></a>
+                                            <input type="text" name="channel-url" class="input-url common-border col-md-16 col-xs-10" >
+                                        </div>
+                                        <div class="action-show col-md-13 col-xs-13">
+                                            <div class="edit-icon" data-id=""></div>
+                                            <div class="del-icon hidden" data-id=""></div>
+                                        </div>
+                                        <div class="color-select col-md-6 col-xs-6 right pd0">
+                                            <div class="now-color">
+                                                <div class=" icolor-select">
+                                                    当前颜色:
+                                                    <input class="icolor"  data-control="hue" value="">
+                                                    <input type="hidden" class="icolor-input" name="color_rgb" value="" >
+                                                </div>
+                                            </div>
+                                            <div class="color-lists minicolors-theme-default">
+                                                <span>模板颜色:</span>
+                                                <span class="default-back" style="background-color:#f2e121;" data-backColor="#f2e121"></span>
+                                                <span class="default-back" style="background-color:#c50e25;" data-backColor="#c50e25"></span>
+                                                <span class="default-back" style="background-color:#2fbcf4;" data-backColor="#2fbcf4"></span>
+                                                <span class="default-back" style="background-color:#7be4dd;" data-backColor="#7be4dd"></span>
+                                                <span class="default-back" style="background-color:#d9d9d9;" data-backColor="#d9d9d9"></span>
+                                                <span class="default-back" style="background-color:#0a0a0a;" data-backColor="#0a0a0a"></span>
+                                            </div>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>
+                                    <div class="save-action">
+                                        <input type="hidden" name="channelId" value="{$channel_id}"/>
+                                        <div class="save-button btn">
+                                            保存
+                                        </div>
+                                        <div class="cancel-button gray-button">
+                                            取消
+                                        </div>
+                                    </div>
+                                </li>
+							   {/if}
+                            </ul>
+                            <textarea id="set-banner-html" style="display: none;">
+                                    <li class="set-banner show check">
+                                       <div class="banner-show img-set">
+                                            <div class="img-mask mask-show">
+                                                更改图片</br>
+												图片尺寸:890*360
+                                            </div>
+                                            <div class="null-img show">
+                                                <div class="null-img-icon"></div>
+                                            </div>
+                                           <img  class="hidden banner-img" src="" alt="">
+                                       </div>
+                                       <div class="banner-action">
+                                           <div class="show-url col-md-7 col-xs-7">
+                                               <span class=" col-md-4 col-xs-10">地址:</span>
+                                                <a href="" class="channel-url hidden col-md-16 col-xs-10">https://www.yunke.com/</a>
+                                               <input type="text" name="channel-url" class="show input-url common-border col-md-16 col-xs-10" >
+                                           </div>
+                                           <div class="action-show hidden col-md-13 col-xs-13">
+                                                <div class="edit-icon"></div>
+                                                <div class="del-icon"></div>
+                                           </div>
+                                           <div class="color-select show col-md-6 col-xs-6 pd0 right">
+                                                <div class="now-color">
+                                                    <div class="icolor-select ">
+                                                        当前颜色:
+                                                        <input class="icolor"  value="">
+                                                        <input type="hidden" class="icolor-input" name="color_rgb" value="" >
+                                                    </div>
+                                                </div>
+                                               <div class="color-lists minicolors-theme-default">
+                                                <span>模板颜色:</span>
+                                                <span class="default-back" style="background-color:#f2e121;" data-backColor="#f2e121"></span>
+                                                <span class="default-back" style="background-color:#c50e25;" data-backColor="#c50e25"></span>
+                                                <span class="default-back" style="background-color:#2fbcf4;" data-backColor="#2fbcf4"></span>
+                                                <span class="default-back" style="background-color:#7be4dd;" data-backColor="#7be4dd"></span>
+                                                <span class="default-back" style="background-color:#d9d9d9;" data-backColor="#d9d9d9"></span>
+                                                <span class="default-back" style="background-color:#0a0a0a;" data-backColor="#0a0a0a"></span>
+                                            </div>
+                                           </div>
+                                           <div class="clear"></div>
+                                       </div>
+                                       <div class="save-action show">
+											<input type="hidden" name="channelId" value="{$channel_id}"/>
+                                           <div class="save-button btn add_channel_banner">
+                                               保存
+                                           </div>
+                                           <div class="cancel-button gray-button">
+                                               取消
+                                           </div>
+                                       </div>
+                                   </li>
+                                </textarea>
+                        </div>
+						<script>
+                            //定义 set-banner 可编辑状态 和不可编辑状态
+                            jQuery.fn.extend({
+                                tabCheck:function () {
+                                    var parent;
+                                    if($(this).hasClass('set-banner')){
+                                        parent = $(this);
+                                    }else{
+                                        parent = $(this).parents('.set-banner');
+                                    }
+                                    parent.addClass('check');
+                                    parent.find('.img-mask').addClass('mask-show');
+                                    parent.find('.save-action').addClass('show');
+                                    parent.find('.color-select').addClass('show');
+                                    parent.find('.channel-url').addClass('hidden');
+                                    parent.find('.action-show').addClass('hidden');
+                                    parent.find('.input-url').addClass('show').val(parent.find('.channel-url').text());
+                                    return this;
+                                },
+                                tabUnCheck:function () {
+                                    var parent;
+                                    if($(this).hasClass('set-banner')){
+                                        parent = $(this);
+                                    }else{
+                                        parent = $(this).parents('.set-banner');
+                                    }
+                                    parent.removeClass('check');
+                                    parent.find('.img-mask').removeClass('mask-show');
+                                    parent.find('.save-action').removeClass('show');
+                                    parent.find('.color-select').removeClass('show');
+                                    parent.find('.action-show').removeClass('hidden');
+                                    parent.find('.channel-url').removeClass('hidden');
+                                    parent.find('.input-url').removeClass('show');
+                                    return this;
+                                }
+                            })
+                            //定义变量
+                            var size = $('#tab-main').find('.tab-hd-opt').size();
+                            var bannerCount = size;
+                            var minicolorOption = {
+                                control: 'hue',
+                                defaultValue:  '#ffffff',
+                                inline: false,
+                                letterCase: 'lowercase',
+                                opacity: false,
+                                position: 'bottom left',
+                                change: function(hex, opacity) {
+                                    var log;
+                                    try {
+                                        log = hex ? hex : 'transparent';
+                                        if( opacity ) log += ', ' + opacity;
+                                        //console.log(log);
+                                        $(this).parents('.set-banner').find('.banner-show').css('background-color',log);
+                                        $(this).parents('.set-banner').find('.icolor-input').val(log);
+                                    } catch(e) { }
+                                },
+                                theme: 'default'
+                            };
+                            //切换幻灯片
+                            $('#tab-main').on('click','.tab-hd-opt',function () {
+                                var prevTab = $(this).parent().find('.curr');
+                                var prevIndex = $(this).parent().find('.curr').index();
+                                if($('#banner-box').find('.set-banner').eq(prevIndex).hasClass('check')){
+                                    layer.msg('请点击保存或者取消结束编辑状态');
+                                    return false;
+                                }
+                                var index = $(this).index();
+                                if(index == prevIndex){
+                                    return false;
+                                }
+                                var setBanner = $(this).parents('.ps-banner-set').find('.set-banner');
+                                prevTab.removeClass('curr');
+                                $(this).addClass('curr');
+                                setBanner.removeClass('show').tabUnCheck().eq(index).addClass('show');
+                            })
+                            //删除幻灯片后 初始化选项卡
+                            function initBanner(id) {
+                                if(id == 0){
+                                    $('#banner-box').find('.set-banner').removeClass('show').eq(id+1).addClass('show');
+                                    $('#tab-main').find('.tab-hd-opt').eq(id).remove();
+//                                    $('#tab-main').find('.tab-hd-opt').removeClass('curr').eq(id+1).addClass('curr');
+                                }else{
+                                    $('#banner-box').find('.set-banner').removeClass('show').eq(id-1).addClass('show');
+                                    $('#tab-main').find('.tab-hd-opt').eq(id).remove();
+//                                    $('#tab-main').find('.tab-hd-opt').removeClass('curr').eq(id-1).addClass('curr');
+                                }
+                                $('#tab-main').find('.tab-hd-opt').each(function(index) {
+                                    $(this).text('幻灯片'+parseInt(index+1));
+                                })
+                            }
+                            //幻灯片保存
+                            $('#banner-box').on('click','.save-button',function () {
+                                var _this = this;
+                                var parent = $(this).parents('.set-banner');
+                                var thumb = parent.find(".null-img").attr("data-thumb");
+                                var url = parent.find("input[name=channel-url]").val();
+                                var channelId = parent.find("input[name='channelId']").val();
+                                var color_rgb = parent.find("input[name=color_rgb]").val();
+                                var banner_id = parent.find(".action-show .edit-icon").attr('data-pid');
+                                banner_id = banner_id ? banner_id : '';
+                                $.post("/org.channel.addChannelBanner/",{ banner_id:banner_id,channelId:channelId,url:url,thumb:thumb,color_rgb:color_rgb,type:1},function(r){
+                                    var code = r.result.code;
+                                    if(code==200){
+                                        var bannerId = r.result.data == '0' ? banner_id : r.result.data;
+                                        $(_this).tabUnCheck();
+                                        $(_this).parents('.set-banner').find('.action-show div').attr('data-pid',bannerId);
+                                        $('#add-banner').removeClass('forbidden');
+                                        parent.find('.channel-url').text(parent.find('.input-url').val());
+										$('.mask-show2').hide();
+                                    }else{
+                                        layer.msg('添加失败!');
+                                    }
+                                },"json");
+								
+                            })
+                            //幻灯片 编辑取消
+                            $('#banner-box').on('click','.cancel-button',function () {
+//                                var parent = $(this).parents('.set-banner');
+//                                $(this).tabUnCheck();
+//                                parent.find('.input-url').val('');
+                                $('#add-banner').removeClass('forbidden');
+								$(this).find('.mask-show2').hide();
+                                location.reload();
+                            })
+                            //幻灯片编辑
+                            //上传banner
+                            var imageUploader = WebUploader.create({
+                                auto:true,
+                                swf:"{utility_cdn::js('/assets_v2/js/webuploader/Uploader.swf')}",
+                                server:'/file.main.UploadOrgChannelBanner.',
+                                pick:'.img-mask',
+                                resize:false,
+                                duplicate:true,
+                                accept:{
+                                    title:'Images',
+                                    extensions:'jpg,jpeg,png'
+                                },
+                                fileSingleSizeLimit:819200,
+                            })
+                            imageUploader.on('error',function (type) {
+                                if(type == 'Q_TYPE_DENIED'){
+                                    layer.msg('请选择正确的文件类型');
+                                }else if(type == 'F_EXCEED_SIZE'){
+                                    layer.msg('上传图片最大为800k');
+                                }
+                            })
+                            imageUploader.on('uploadAccept',function (object,ret) {
+                                if(ret['error']){
+                                    layer.msg(ret['error']);
+                                }
+                            })
+                            imageUploader.on('uploadSuccess',function (file,response) {
+                                if(response){
+                                    var uid = file.source.ruid;
+                                    $('#rt_'+uid).parents('.img-set').find('.null-img').removeClass('show').end().find('.banner-img').removeClass('hidden').attr('src',response.src);
+									$('#rt_'+uid).parents('.img-set').find('.null-img').attr('data-thumb',response.fid);
+                                }
+                            })
+                            $('#banner-box').on('click','.edit-icon',function () {
+                                $(this).tabCheck();
+                                imageUploader.addButton({
+                                    id:'.img-mask'
+                                });
+                            })
+                            //幻灯片删除
+                            $('#banner-box').on('click','.del-icon',function () {
+								var channelId 	= $(this).attr("data-cid");
+								var bannerId 	= $(this).attr("data-pid");
+                                var parent = $(this).parents('.set-banner');
+                                $.post("/org.channel.delBanner/",{ channelId:channelId,bannerId:bannerId },function(r){
+                                    if(r.result.code==200){
+                                        if(bannerCount == 1){
+                                            parent.find('.banner-img').addClass('hidden').attr('src','');
+                                            parent.find('.null-img').addClass('show');
+                                            parent.find('.del-icon').addClass('hidden');
+                                            return false;
+                                        }
+                                        bannerCount--;
+                                        var index = parent.index();
+                                        parent.remove();
+                                        initBanner(index);
+                                        location.reload();
+                                    }else{
+                                        layer.msg("删除失败");
+                                        return false;
+                                    }
+                                },"json");
+                            })
+                            //幻灯片增加
+                            $('#add-banner').on('click',function () {
+                                if($(this).hasClass('forbidden')){
+                                    layer.msg('请点击保存或者取消结束编辑状态');
+                                    return false;
+                                }
+                                if(bannerCount > 5){
+                                    layer.msg('最多添加6张幻灯片');
+                                    return false;
+                                }
+//                                var size = $(this).parent().find('.set-banner').size();
+//                                $(this).parent().find('.set-banner').eq(size-1).find('.save-button').trigger('click');
+                                bannerCount++;
+                                var tabHtml = ' <div class="tab-hd-opt curr">幻灯片'+bannerCount+'</div>';
+                                $('#tab-main').find('.tab-hd-opt').removeClass('curr');
+                                $('#tab-main').find('.tab-hd').append(tabHtml);
+                                var bannerHtml = $('#set-banner-html').val();
+                                $('#banner-box').find('.set-banner').removeClass('show');
+                                $('#banner-box').append(bannerHtml);
+                                $('#banner-box').find('.set-banner').eq(bannerCount-1).find('.icolor').minicolors(minicolorOption);
+                                $('#banner-box').find('.set-banner').eq(0).find('.del-icon').removeClass('hidden');
+                                $(this).addClass('forbidden');
+                                imageUploader.addButton({
+                                    id:'.img-mask',
+                                    innerHTML:''
+                                });
+                            })
+							//判断为空
+							$('#add-banner').click(function(){
+								if($('.banner-show').find('.banner-img').attr('src') == '' || $('.banner-show').find('.banner-img').attr('src') !=''){
+									$('.banner-show .mask-show').removeClass('mask-show');
+									$('<div>').addClass('mask-show2').css({
+										width:'100%',
+										height:'100%',
+										position: 'absolute',
+										top:0,
+										left:0
+									}).appendTo($('.banner-show'));
+									imageUploader.addButton({
+										id:'.mask-show2',
+										innerHTML:''
+									});
+								}
+							})
+								
+							
+                            //初始化颜色选择器
+                            $('.icolor').each( function() {
+                                $(this).minicolors(minicolorOption);
+                            });
+                            //点击默认颜色切换banner背景色
+                            $('#banner-box').on('click','.set-banner .default-back',function () {
+                                var backColor = $(this).attr('data-backColor');
+                                $(this).parents('.set-banner').find('.banner-show').css('background-color',backColor);
+                                $(this).parents('.set-banner').find('.minicolors-swatch-color').css('background-color',backColor);
+                                $(this).parents('.set-banner').find('.icolor-input').val(backColor);
+                                $(this).parents('.set-banner').find('.minicolors-input').val(backColor);
+                            })
+							
+						</script>
+						{if !empty($blockInfo)&&$is_pro==0}
+						{foreach $blockInfo as $tk=>$tv}
+						<div class="set-class-li" tid="{$tv->block_id}">
+							<div class="set-title col-sm-12 col-xs-12 col-md-20">
+								<span class="set-title-icon"></span>
+								<p class="c-fl">{$tv->title}
+									<input type="hidden" name="title[]" value="{$tv->title}"/>
+                                    <input type="hidden" name="channel_id[]" value="{$tv->fk_channel}"/>
+									<input type="hidden" name="block_id[]" value="{$tv->block_id}"/>
+									<input type="hidden" name="owner_id[]" value="{$tv->owner_id}"/>
+									<input type="hidden" name="row_count[]" value="{$tv->row_count}"/>
+									<input type="hidden" name="recommend[]" value="{$tv->recommend}"/>
+									<input type="hidden" name="query_str[]" value="{$tv->query_str}"/>
+									<input type="hidden" name="order_by[]" value="{$tv->order_by}"/>
+									<input type="hidden" name="course_ids[]" value="{$tv->course_ids}"/>
+									<input type="hidden" name="sort[]" value="{$tv->sort}"/>
+									<input type="hidden" name="create_time[]" value="{$tv->create_time}"/>
+									<input type="hidden" name="last_updated[]" value="{$tv->last_updated}"/>
+									<input type="hidden" name="set_url[]" value="{$tv->set_url}"/>
+									<input type="hidden" name="type[]" value="{$tv->type}"/>
+									<input type="hidden" name="thumb_left[]" value="{$tv->thumb_left}"/>
+									<input type="hidden" name="thumb_right[]" value="{$tv->thumb_right}"/>
+									{if $tv->recommend==2}
+									(<span class="fs12">{'手动推荐'|tr:'org'}</span>)
+									{else}
+									(<span class="fs12">{'自动推荐'|tr:'org'} {'内容展示'|tr:'org'}:
+                      {if !empty($tv->query_arr->first_cate) and $cateList[$tv->query_arr->first_cate]}{$cateList[$tv->query_arr->first_cate]|tr:'course.list'}{else}{'全年级'|tr:'org'}{/if}
+                                {if !empty($tv->query_arr->second_cate) and $cateList[$tv->query_arr->second_cate]}{$cateList[$tv->query_arr->second_cate]|tr:'course.list'}{/if}
+								{if !empty($tv->query_arr->third_cate) and $cateList[$tv->query_arr->third_cate]}{$cateList[$tv->query_arr->third_cate]|tr:'course.list'}{/if}
+								{if !empty($tv->query_arr->attr_value_id) and $valueNameStr[$tv->block_id]}{$valueNameStr[$tv->block_id]}{else}{'全科目'|tr:'org'}{/if}
+								{if isset($tv->query_arr->course_type)&&$tv->query_arr->course_type=="1,2,3"}{'全部'|tr:'org'}
+                                {elseif(!empty($tv->query_arr->course_type) and $tv->query_arr->course_type==1)}{'直播'|tr:'org'}
+                                {elseif(!empty($tv->query_arr->course_type) and $tv->query_arr->course_type==2)}{'录播'|tr:'org'}
+                                {elseif(!empty($tv->query_arr->course_type) and $tv->query_arr->course_type==3)}{'线下课'|tr:'org'}
+								{/if}
+                                {if !empty($tv->query_arr->fee_type) and $tv->query_arr->fee_type=="0,1"}{'全部'|tr:'org'}
+								{elseif(!empty($tv->query_arr->fee_type) and $tv->query_arr->fee_type==1)}{'收费'|tr:'org'}
+								{else}{'免费'|tr:'org'}
+								{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='create_time:desc'}{'最新创建'|tr:'site.course'}{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='create_time:asc'}{'最早创建'|tr:'site.course'}{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='register:desc'}{'报名人数多'|tr:'site.course'}{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='register:asc'}{'报名人数少'|tr:'site.course'}{/if}
+                                </span>)
+									{/if}
+								</p>
+								{if (count($blockInfo)>1)}
+								<a href="javascript:void(0)" class="c-fr remove" tid="{$tv->block_id}"></a>
+								{/if}
+								<p class="maunal-div">
+									<i class="maunal"></i>
+									<span>
+										<i class="arrow-up"></i>
+										<a href="javascript:void(0)" class="maunal-edit" tid="{$tv->block_id}">{'设置模板'|tr:'org'}</a>
+										{if $tv->recommend==2&&$is_pro==0}
+										<a href="javascript:void(0)" class="maunal-order" tid="{$tv->block_id}">{'编辑排序'|tr:'org'}</a>
+										{/if}
+									</span>
+								</p>
+								{if $tk<count($blockInfo)-1}
+								<a class="arrow-down fs12" href="javascript:void(0)" tid="{$tv->block_id}" sort="{$tk}">{'下移'|tr:'org'}<span></span></a>
+								{/if}
+								{if $tk>0}
+								<a class="arrow-up fs12" href="javascript:void(0)" tid="{$tv->block_id}" sort="{$tk}">{'上移'|tr:'org'}<span></span></a>
+								{/if}
+							</div>
+							<dl class="set-class col-xs-20 p0">
+								{if !empty($tv->courses)}
+								{foreach $tv->courses as $ck=>$cv}
+								<dd cid="{$cv->course_id}" class="col-xs-5">
+									<div class="set-class-img">
+										<img src="{if !empty($cv->thumb_big)}{utility_cdn::file($cv->thumb_big)}{else}/assets_v2/img/1.png{/if}">
+										{if !empty($cv->admin_status)&&$cv->admin_status==-2}
+										<div class="course-status">该课程已下架(首页不显示)</div>
+										{/if}
+										{if !empty($cv->resell_status)&&$cv->resell_status<0}
+										<div class="course-status">该课程已失效(首页不显示)</div>
+										{/if}
+										{if !empty($cv->restatus)&&$cv->restatus==-1}
+										<div class="course-status">该课程在推广中已删除(首页不显示)</div>
+										{/if}
+										{if $tv->recommend==2}
+										<p class="edit-classbg"></p>
+										<a href="javascript:;" class="edit-classbtn top-course edit_course" data-channel="{$channel_id}" tid="{$tv->block_id}" data-cid="{$cv->course_id}">
+											{'点击修改'|tr:'org'}
+										</a>
+										<span class="remove pos-abs remove-thisTemplate" data-tid="{$tv->block_id}" data-cid="{$cv->course_id}"></span>
+										{/if}
+
+									</div>
+									<a href="{if !empty($cv->surl)}{$cv->surl}{/if}" target="_blank">{$cv->title}</a>
+								</dd>
+								{/foreach}
+								{/if}
+								{if $tv->recommend==2 and count($tv->courses)<16}
+								<dd cid="1" class="col-xs-4 add-course">
+									<div class="set-class-img top-course no-class-img add_course" style="cursor:pointer;" data-channel="{$channel_id}" tid="{$tv->block_id}">+ {'添加推荐课程'|tr:'org'}
+									</div>
+								</dd>
+								{/if}
+							</dl>
+							<input type="hidden" name="listSort" value=""/>
+							{if $tv->recommend==1 and $tv->row_count<4 and count($tv->courses)%4==0}
+							<span class="c-fr add-class-id" style="cursor:pointer;" tid="{$tv->block_id}">{'添加一行'|tr:'org'}</span>
+							{/if}
+						</div>
+						{/foreach}
+						{elseif(!empty($blockInfo)&&$is_pro==1)}
+						{foreach $blockInfo as $tk=>$tv}
+						<div class="set-class-li" tid="{$tv->block_id}">
+							<div class="set-title col-sm-12 col-xs-12 col-md-20">
+								<span class="set-title-icon"></span>
+								<p class="c-fl">{$tv->title}
+									<input type="hidden" name="title[]" value="{$tv->title}"/>
+									<input type="hidden" name="block_id[]" value="{$tv->block_id}"/>
+                                    <input type="hidden" name="channel_id[]" value="{$tv->fk_channel}"/>
+									<input type="hidden" name="owner_id[]" value="{$tv->owner_id}"/>
+									<input type="hidden" name="row_count[]" value="{$tv->row_count}"/>
+									<input type="hidden" name="recommend[]" value="{$tv->recommend}"/>
+									<input type="hidden" name="query_str[]" value="{$tv->query_str}"/>
+									<input type="hidden" name="order_by[]" value="{$tv->order_by}"/>
+									<input type="hidden" name="course_ids[]" value="{$tv->course_ids}"/>
+									<input type="hidden" name="sort[]" value="{$tv->sort}"/>
+									<input type="hidden" name="create_time[]" value="{$tv->create_time}"/>
+									<input type="hidden" name="last_updated[]" value="{$tv->last_updated}"/>
+									<input type="hidden" name="set_url[]" value="{$tv->set_url}"/>
+									<input type="hidden" name="type[]" value="{$tv->type}"/>
+									<input type="hidden" name="thumb_left[]" value="{$tv->thumb_left}"/>
+									<input type="hidden" name="thumb_right[]" value="{$tv->thumb_right}"/>
+									<input type="hidden" name="thumb_left_url[]" value="{$tv->thumb_left_url}"/>
+									<input type="hidden" name="thumb_right_url[]" value="{$tv->thumb_right_url}"/>
+
+									{if $tv->recommend==2}
+									(<span class="fs12">{'手动推荐'|tr:'org'}</span>)
+									{else}
+									(<span class="fs12">{'自动推荐'|tr:'org'} {'内容展示'|tr:'org'}:
+                                {if !empty($tv->query_arr->first_cate) and $cateList[$tv->query_arr->first_cate]}{$cateList[$tv->query_arr->first_cate]|tr:'course.list'}{else}{'全年级'|tr:'org'}{/if}
+                                {if !empty($tv->query_arr->second_cate) and $cateList[$tv->query_arr->second_cate]}{$cateList[$tv->query_arr->second_cate]|tr:'course.list'}{/if}
+								{if !empty($tv->query_arr->third_cate) and $cateList[$tv->query_arr->third_cate]}{$cateList[$tv->query_arr->third_cate]|tr:'course.list'}{/if}
+								{if !empty($tv->query_arr->attr_value_id) and $valueNameStr[$tv->block_id]}{$valueNameStr[$tv->block_id]}{else}{'全科目'|tr:'org'}{/if}
+								{if isset($tv->query_arr->course_type)&&$tv->query_arr->course_type=="1,2,3"}{'全部'|tr:'org'}
+                                {elseif (!empty($tv->query_arr->course_type) and $tv->query_arr->course_type==1)}{'直播'|tr:'org'}
+                                {elseif (!empty($tv->query_arr->course_type) and $tv->query_arr->course_type==2)}{'录播'|tr:'org'}
+                                {elseif (!empty($tv->query_arr->course_type) and $tv->query_arr->course_type==3)}{'线下课'|tr:'org'}
+								{/if}
+
+                                {if !empty($tv->query_arr->fee_type) and $tv->query_arr->fee_type==1}{'收费'|tr:'org'}
+								{elseif(!empty($tv->query_arr->fee_type) and $tv->query_arr->fee_type=="0,1")}{'全部'|tr:'org'}{else}{'免费'|tr:'org'}{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='create_time:desc'}{'最新创建'|tr:'site.course'}{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='create_time:asc'}{'最早创建'|tr:'site.course'}{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='register:desc'}{'报名人数多'|tr:'site.course'}{/if}
+                                {if !empty($tv->order_by) and $tv->order_by=='register:asc'}{'报名人数少'|tr:'site.course'}{/if}
+                                </span>)
+									{/if}
+								</p>
+								{if (count($blockInfo)>1)}
+								<a href="javascript:void(0)" class="c-fr remove delblock" data-type="{$tv->type}" data-channel-id="{$channel_id}" tid="{$tv->block_id}"></a>
+								{/if}
+								<p class="maunal-div">
+										<a href="javascript:void(0)" class="maunal-edit"  data-edit="editchannel" data-channel="{$channel_id}" tid="{$tv->block_id}"><i class="maunal"></i></a>
+									{if $tv->recommend==2&&$is_pro==0}
+										<a href="javascript:void(0)" class="maunal-order" tid="{$tv->block_id}">{'编辑排序'|tr:'org'}</a>
+									{/if}
+									{*<span class="maunal_span">
+										<i class="arrow-up"></i>
+										{'设置模板'|tr:'org'}
+									</span>*}
+								</p>
+								<!--
+								{if $tk<count($blockInfo)-1}
+								<a class="arrow-down fs12" href="javascript:void(0)" tid="{$tv->block_id}" sort="{$tk}">{'下移'|tr:'org'}<span></span></a>
+								{/if}
+								{if $tk>0}
+								<a class="arrow-up fs12" href="javascript:void(0)" tid="{$tv->block_id}" sort="{$tk}">{'上移'|tr:'org'}<span></span></a>
+								{/if}
+								-->
+							</div>
+							{if ($tv->type==0)}
+							<dl class="set-class col-xs-20 p0">
+								{if !empty($tv->courses)}
+								{foreach $tv->courses as $ck=>$cv}
+								<dd cid="{$cv->course_id}" class="col-xs-4">
+									<div class="set-class-img">
+										<img src="{if !empty($cv->thumb_big)}{utility_cdn::file($cv->thumb_big)}{else}/assets_v2/img/1.png{/if}">
+										{if !empty($cv->admin_status)&&$cv->admin_status==-2}
+										<div class="course-status">该课程已下架(首页不显示)</div>
+										{/if}
+										{if !empty($cv->resell_status)&&$cv->resell_status<0}
+										<div class="course-status">该课程已失效(首页不显示)</div>
+										{/if}
+										{if !empty($cv->restatus)&&$cv->restatus==-1}
+										<div class="course-status">该课程在推广中已删除(首页不显示)</div>
+										{/if}
+										{if $tv->recommend==2}
+										<p class="edit-classbg"></p>
+										<a href="javascript:;" class="edit-classbtn top-course edit_course" data-channel="{$channel_id}" tid="{$tv->block_id}" data-cid="{$cv->course_id}">{'点击修改'|tr:'org'}
+										</a>
+										<span class="remove pos-abs remove-thisTemplate" data-tid="{$tv->block_id}" data-cid="{$cv->course_id}"></span>
+										{/if}
+									</div>
+									<a href="{if !empty($cv->surl)}{$cv->surl}{/if}" target="_blank">{$cv->title}</a>
+								</dd>
+								{/foreach}
+								{/if}
+								{if $tv->recommend==2}
+								<dd cid="1" class="col-xs-4 add-course">
+									<div class="set-class-img top-course no-class-img add_course" style="cursor:pointer;" data-channel="{$channel_id}" tid="{$tv->block_id}">+ {'添加推荐课程'|tr:'org'}</div>
+								</dd>
+
+								{/if}
+							</dl>
+							<input type="hidden" name="listSort" value=""/>
+							<!--
+							{if $tv->recommend==1 and $tv->row_count<4 and count($tv->courses)%4==0}
+							<p class="col-xs-20"><span class="c-fr add-class-id" style="cursor:pointer;" tid="{$tv->block_id}">{'添加一行'|tr:'org'}</span></p>
+							{/if}
+							-->
+							{elseif($tv->type==1)}
+							<dl class="set-class col-xs-4 pd0 edit-upload-cover">
+								<dt class="ad-img" id="imgid{$tv->block_id}" data-channel="{$channel_id}">
+									{if !empty($tv->thumb_left)}
+									<img src="{utility_cdn::file($tv->thumb_left)}"/>
+									{else}
+								<div class="no-course-img">
+									<p>+添加图片</p>
+									<p>上传尺寸：230*390</br>支持jpg、png</p>
+								</div>
+								{/if}
+								</dt>
+							</dl>
+							<input type="hidden" name="local_thumb" value="{$tv->type}"/>
+							<dl class="set-class col-xs-16 pd0">
+								{if !empty($tv->courses)}
+								{foreach $tv->courses as $ck=>$cv}
+								<dd cid="{$cv->course_id}" class="col-xs-5">
+									<div class="set-class-img">
+										<img src="{if !empty($cv->thumb_big)}{utility_cdn::file($cv->thumb_big)}{else}/assets_v2/img/1.png{/if}">
+										{if !empty($cv->admin_status)&&$cv->admin_status==-2}
+										<div class="course-status">该课程已下架(首页不显示)</div>
+										{/if}
+										{if !empty($cv->resell_status)&&$cv->resell_status<0}
+										<div class="course-status">该课程已失效(首页不显示)</div>
+										{/if}
+										{if !empty($cv->restatus)&&$cv->restatus==-1}
+										<div class="course-status">该课程在推广中已删除(首页不显示)</div>
+										{/if}
+										{if $tv->recommend==2}
+										<p class="edit-classbg"></p>
+										<a href="javascript:;" class="edit-classbtn top-course edit_course" data-channel="{$channel_id}" tid="{$tv->block_id}" data-cid="{$cv->course_id}">{'点击修改'|tr:'org'}</a>
+										<span class="remove pos-abs remove-thisTemplate" data-tid="{$tv->block_id}" data-cid="{$cv->course_id}"></span>
+										{/if}
+									</div>
+									<a href="{if !empty($cv->surl)}{$cv->surl}{/if}" target="_blank">{$cv->title}</a>
+								</dd>
+								{/foreach}
+								{/if}
+								{if $tv->recommend==2}
+								<dd cid="1" class="col-xs-4 add-course">
+									<div class="set-class-img top-course no-class-img add_course" style="cursor:pointer;" data-channel="{$channel_id}" tid="{$tv->block_id}">+ {'添加推荐课程'|tr:'org'}</div>
+								</dd>
+								{/if}
+							</dl>
+							{elseif($tv->type==2)}
+							<dl class="set-class col-xs-16 pd0">
+								{if !empty($tv->courses)}
+								{foreach $tv->courses as $ck=>$cv}
+								<dd cid="{$cv->course_id}" class="col-xs-5">
+									<div class="set-class-img">
+										<img src="{if !empty($cv->thumb_big)}{utility_cdn::file($cv->thumb_big)}{else}/assets_v2/img/1.png{/if}">
+										{if !empty($cv->admin_status)&&$cv->admin_status==-2}<div class="course-status">该课程已下架(首页不显示)</div>
+										{/if}
+										{if !empty($cv->resell_status)&&$cv->resell_status<0}
+										<div class="course-status">该课程已失效(首页不显示)</div>
+										{/if}
+										{if !empty($cv->restatus)&&$cv->restatus==-1}
+										<div class="course-status">该课程在推广中已删除(首页不显示)</div>
+										{/if}
+										{if $tv->recommend==2}
+										<p class="edit-classbg"></p>
+										<a href="javascript:;" class="edit-classbtn top-course edit_course" data-channel="{$channel_id}" tid="{$tv->block_id}" data-cid="{$cv->course_id}">
+											{'点击修改'|tr:'org'}
+										</a>
+										<span class="remove pos-abs remove-thisTemplate" data-tid="{$tv->block_id}" data-cid="{$cv->course_id}"></span>
+										{/if}
+									</div>
+									<a href="{if !empty($cv->surl)}{$cv->surl}{/if}" target="_blank">{$cv->title}</a>
+								</dd>
+								{/foreach}
+								{/if}
+								{if $tv->recommend==2}
+								<dd cid="1" class="col-xs-4 add-course">
+									<div class="set-class-img top-course no-class-img add_course" style="cursor:pointer;" data-channel="{$channel_id}" tid="{$tv->block_id}">+ {'添加推荐课程'|tr:'org'}</div>
+								</dd>
+								{/if}
+							</dl>
+							<dl class="set-class col-xs-4 pd0 edit-upload-cover">
+								<dt class="ad-img" id="imgid{$tv->block_id}" data-channel="{$channel_id}">
+									{if !empty($tv->thumb_right)}
+									<img src="{utility_cdn::file($tv->thumb_right)}"/>
+									{else}
+								<div class="no-course-img">
+									<p>+添加图片</p>
+									<p>上传尺寸：230*390</br>支持jpg、png</p>
+								</div>
+									{/if}
+								</dt>
+							</dl>
+							<input type="hidden" name="local_thumb" value="{$tv->type}"/>
+							{elseif($tv->type==3)}
+							<dl class="set-class col-xs-16 pd0">
+								{if !empty($tv->thumb_arr)}
+								{foreach $tv->thumb_arr as $m=>$n}
+								<dd cid="{if(isset($cv->course_id))}{$cv->course_id}{/if}" class="col-xs-5">
+									<div class="set-class-img">
+										<img src="{if !empty($n->thumb)}{utility_cdn::file($n->thumb)}{else}/assets_v2/img/1.png{/if}" style="width:170px;height:100px;">
+										
+										{if $tv->recommend==2}
+										<p class="edit-classbg"></p>
+										<a href="javascript:;" class="edit-classbtn top-course edit_recommend_thumb" data-channel="{$channel_id}" tid="{$tv->block_id}" data-bid="{$n->pk_banner}">
+											{'点击修改'|tr:'org'}
+										</a>
+										<span class="remove pos-abs remove-thisTemplate" data-type="2" data-tid="{$tv->block_id}" data-cid="{$n->pk_banner}"></span>
+										{/if}
+									</div>
+									<a href="{if !empty($n->url)}{$n->url}{/if}" target="_blank">{$n->title}</a>
+								</dd>
+								{/foreach}
+								{/if}
+								{if $tv->recommend==2&&count($tv->thumb_arr)<4}
+								<dd cid="1" class="col-xs-4 add-course">
+									<div class="set-class-img top-course no-class-img add_course" style="cursor:pointer;" data-channel="{$channel_id}" tid="{$tv->block_id}" data-type="{$tv->type}">+ {'添加推荐图'|tr:'org'}</div>
+								</dd>
+								{/if}
+							</dl>
+							{/if}
+						</div>
+						{/foreach}
+						{else}
+						<div class="col-md-20  no-template mt60" style="display:none;">
+							<div class="template-info ">
+								<div class="no-template-icon"></div>
+								<p>还没有课程不能进行首页模块设置哦！</p>
+								<div class="btn" id="tmpl-add">新建课程</div>
+							</div>
+						</div>
+						{/if}
+                        
+					</form>
+					<!-- 引导弹窗
+                    <div class="setDistriBoxBg"></div>
+                    <div class="setTemplateBox pos-abs">
+                        <a href="javascript:;" title="" id="setTemplateBox-closeBtn"></a>
+                    </div>
+                    /引导弹窗 -->
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<style type="text/css">
+  /*上传图片hover*/
+                .edit-upload-cover:hover .ad-img:after{
+                    position: absolute;top: 0;left: 0;width: 100%;height: 100%;line-height:230px;text-align: center;background-color: rgba(0,0,0,0.5);content:'修改推荐图';display: block;color:#fff;transition: .6s;
+                }
+</style>
+<script type="text/javascript">
+	$(".maunal-edit,#set-class-add").click(function(){
+        var addchannel = $(this).attr("data-add");
+        var editchannel = $(this).attr("data-edit");
+        var con='';
+        if(addchannel){
+            con='add';
+        }else if(editchannel){
+            con='edit';
+        }
+        var channel_id = $(this).attr("data-channel");
+        if($(this).attr('tid')){
+            var tid='/'+$(this).attr('tid');
+        }else{
+            var tid='';
+        }
+        layer.open({
+            type: 2,
+            title: ['{'频道课程模版设置'|tr:'org'}'],
+            shadeClose: true,
+            shade: 0.8,
+            area: ['700px', '500px'],
+            content: '{"/org.channel.iframeBlockChannel/"}'+con+'/'+tid+'/'+channel_id,
+            closeBtn:2
+        });
+        console.log(con)
+    });
+	//删除模块
+	$(".set-class-li").on("click",".delblock",function(r){
+		var tid = $(this).attr("tid");
+		var type= $(this).attr("data-type");
+		var channel_id = $(this).attr("data-channel-id");
+		layer.confirm('确认删除该模块吗？', {
+          btn: ['确定','取消']
+        }, function(){
+			 $.post("/org.channel.DeleteBlock."+channel_id,{ tid:tid,type:type },function(r){
+					if(r){
+						location.reload();
+						return false;
+					}
+                },"json");
+        }, function(){
+        });
+	});
+	//添加广告
+	var tmpl=$('#template-course-data');
+	tmpl.find(".ad-img").click(function(){
+	    var channel_id = $(this).attr("data-channel");
+		if($(this).attr('id')){
+				var tid=''+$(this).attr('id');
+		}else{
+				var tid='';
+		}
+		if($(this).parents('.set-class-li').find('input[name="local_thumb"]').val()){
+			var local_id = $(this).parents('.set-class-li').find('input[name="local_thumb"]').val();
+		}else{
+			var local_id = '';
+		}
+
+		layer.open({
+			type: 2,
+			title: ['{'图片设置'|tr:'org'}'],
+			shadeClose: true,
+			shade: 0.8,
+			area: ['500px', '460px'],
+			content: '{"/org.channel.iframeChannelAddImg."}'+tid+'/'+local_id+'/'+channel_id,
+			closeBtn:2
+		});
+		console.log(tid);
+	});
+	$('#template-course-data').each(function(){
+        var tid=$(this).find('.set-class-li').attr('tid');
+        var this_nums=$(this).find('.set-class-li').length;
+		if(this_nums<=1){
+			$('.maunal-div').css({ 'margin-right':'30px'})
+		}else{
+			$('.maunal-div').css({ 'margin-right':'0'})
+		}
+	})
+	//添加推荐图
+	$('.add_course').each(function(i){
+		var type 	 = $(this).attr('data-type');
+        var top		 =$(this).attr('data-channel');
+        var tid		 =$(this).attr('tid');
+		var flag     = $(this).attr("class");
+		var flagArr  = flag.split(" ");
+		var subType  = flagArr[3];
+		if(type==3){
+			$(this).click(function(){
+				layer.open({
+					type: 2,
+					title: ['{'添加推荐图'|tr:'org'}'],
+					shadeClose: true,
+					shade: 0.8,
+					area: ['500px', '460px'],
+					content: '{"/org.channel.iframeChannelAddRecommend."}'+top+'/'+tid+'/'+subType,
+					closeBtn:2
+				});
+			});
+		}else{
+			$(this).click(function(){
+				layer.open({
+					type: 2,
+					title: ['{'添加推荐课程'|tr:'org'}'],
+					shadeClose: true,
+					shade: 0.8,
+					area: ['800px', '600px'],
+					content: '{"/org.channel.IframeChannelBlockCourse."}'+top+'/'+tid+'/'+subType,
+					closeBtn:2
+				});
+			});
+			//console.log(tid);
+		} 
+    });
+    $("form").submit(function(){
+            $.post("/org.channel.setChannel",$(this).serialize(),function(r){
+                if(r.code=="100"){
+                    layer.msg("{'发布成功'|tr:'org'}",{ icon: 1 },function(){ });
+                }else if(r.code=='-100'){
+                    layer.msg(r.msg);
+                    return false;
+                }else{
+                    layer.msg("{'发布失败'|tr:'org'}",{ icon: 1 },function(){ });
+                }
+            },"json");
+            return false;
+    });
+	$('.edit_course').each(function(i){
+        var top=$(this).attr('data-channel');
+        var cid=$(this).attr('data-cid');
+		var tid=$(this).attr('tid');
+		var flag = $(this).attr("class");
+		var flagArr  = flag.split(" ");
+		var subType  = flagArr[2];
+        $(this).click(function(){
+            layer.open({
+                type: 2,
+                title: ['{'课程推荐修改'|tr:'org'}'],
+                shadeClose: true,
+                shade: 0.8,
+                area: ['800px', '600px'],
+                content: '{"/org.channel.IframeChannelBlockCourseEdit/"}'+top+'/'+cid+'/'+subType+'/'+tid,
+                closeBtn:2
+            });
+        });
+    });
+	//修改推荐图
+	$('.edit_recommend_thumb').each(function(i){
+        var top=$(this).attr('data-channel');
+        var bid=$(this).attr('data-bid');
+		var tid=$(this).attr('tid');
+		var flag = $(this).attr("class");
+		var flagArr  = flag.split(" ");
+		var subType  = flagArr[2];
+		
+        $(this).click(function(){
+            layer.open({
+                type: 2,
+                title: ['{'课程推荐修改'|tr:'org'}'],
+                shadeClose: true,
+                shade: 0.8,
+                area: ['500px', '460px'],
+                content: '{"/org.channel.iframeChannelAddRecommend/"}'+top+'/'+tid+'/'+subType+'/'+bid,
+                closeBtn:2
+            });
+        });
+    });
+	//删除推荐课
+	$('.set-class-img .remove-thisTemplate').click(function() {
+		var type 	 = $(this).attr('data-type');
+		var cid		 = $(this).attr('data-cid');
+		var bid		 = $(this).attr('data-tid');
+		var flag 	 = $(this).attr("class");
+		var flagArr  = flag.split(" ");
+		var subType  = flagArr[2];
+		var subType  = subType.substring(0,6);
+		if(type==2){
+			layer.confirm('确认删除该推荐图吗？', {
+			  btn: ['确定','取消']
+			}, function(){
+				 $.post("/org.channel.delBanner/{$channel_id}/"+bid,{ type:type,bannerId:cid},function(r){
+						if(r){
+							location.reload();
+							return false;
+						}
+					},"json");
+				}, function(){
+			});
+		}else{
+			layer.confirm('确认删除该推荐的课程吗？', {
+			  btn: ['确定','取消']
+			}, function(){
+				 $.post("/org.channel.AddChannelCourse/{$channel_id}/"+subType+"/"+bid,{ cid:cid,bid:bid },function(r){
+						if(r){
+							location.reload();
+							return false;
+						}
+					},"json");
+				}, function(){
+			});
+		
+		
+		}
+		
+       
+    })
+	//增加频道名称
+	$("input[name='channel-name']").blur(function(){
+		var channelName = $("input[name='channel-name']").val();
+		var channel_id  = "{$channel_id}";
+	    $.post("/org.channel.addChannelName/"+channel_id,{ channelName:channelName },function(r){
+		
+		});
+	});
+	
+</script>
+{part "/site.main.footer"}
+</body>
+</html>

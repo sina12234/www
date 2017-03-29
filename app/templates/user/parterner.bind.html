@@ -1,0 +1,257 @@
+<!doctype html>
+<html>
+<head>
+<title>云课网 - 绑定第3方账号</title>
+<meta name="title" content="{part '/site.main.orgname'} - 全部课程 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/user.css')}">
+</head>
+<body>
+{part "/site.main.nav"}
+<style>
+/*.x_field2 span{ padding:0px; }*/
+/*.x_field2 .x_input_tx2,.x_btn_reg2{ width:100%; }*/
+/*.regCon { clear:both;margin:10px;overflow: hidden;margin: 70px auto 70px auto; max-width: 754px;border: 1px solid #e2e2e2;zoom: 1;}*/
+.x_reg_inner_1{ margin:40px auto;}
+.x_reg_inner_1 h1{ height:40px;text-align:center;font-size:22px;color:#999; }
+.x_reg_inner_1 .x_error{ top:60px;left:125px;padding-left:20px; }
+.x_field2 .x_input_tx2{ width:100%;margin-bottom:15px; }
+.regCon{ margin:70px auto 70px auto;max-width:754px;border:1px solid #e2e2e2;clear:both;overflow:hidden;zoom:1;}
+.regCon .rcle{ height:513px;border-right:1px solid #e2e2e2;}
+.regCon .rcri{ position:relative;float:left;padding:25px;}
+.x_field2 .x_input_tx2{ width:100%;margin-bottom:15px;}
+.x_field2 span.xftit_1,.x_field2 span.xftit{ float:left;text-align:right;height:44px;line-height:44px;font-size:14px;display:inline-block;}
+.x_field2 span.xftxt{ float:left;height:44px;line-height:44px;font-size:16px;display:inline-block;}
+.xfcon{ float:left;margin-left:20px;}
+.fpCon .x_field2 .col-xs-12{ width:50%;}
+.x_field2 label{ vertical-align:top;display:inline-block;line-height:40px;height:40px;font-size:14px;padding-left:15px;}
+.x_field2 label.allvert{ margin-top:3px;}
+.x_field2 label.allvert_1{ margin-top:12px;width:368px;height:20px;line-height:20px;font-size:12px;}
+.x_input_tx1,.x_input_tx2,.x_input_tx3,.x_input_txar{ font-size:14px;display:inline-block;padding-left:10px;border:1px solid #ddd;}
+.x_input_tx1{ border-top:0;border-left:0;border-right:0;border-bottom:1px solid #ddd;}
+.x_input_tx2{ height:44px;}
+.x_input_tx3{ line-height:24px;margin-top:20px;}
+.x_input_top{ margin-top:-20px;}
+.x_btn_reg2,.btn_fp1{  height:48px;line-height:48px;cursor:pointer;border-radius:5px;text-align:center;font-size:18px;color:#fff;border:none;}
+.x_btn_reg2{  background:#ffa81e;}
+.x_btn_yanzhengma,.btn_gray,.btn_gray_1,.btn_gray_2,.btn_gray_3,.btn_gray_3_1,.btn_yellow_5, .btn_yellow_2_1,.btn_yellow_3,.btn_red{ height:44px;line-height:44px;text-align:center;font-size:14px;display:inline-block;text-decoration:none;border:0;border-radius:4px;}
+.btn_yellow_5{ color:#fff;height:30px;line-height:30px;background:#ffa81e;}
+.btn_yellow_2_1{ color:#fff;height:30px;line-height:30px;background:#ffa81e;}
+.btn_yellow_3{ color:#ffa81e;border:1px solid #ffa81e;background:#fff;}
+.btn_gray_1{ color:#ffa81e;background:#f7f7f7;}
+.btn_gray_2{ color:#fff;background:#999;}
+.btn_gray_3,.btn_gray_3_1{ width:100%;color:#333;border:1px solid #c1c1c1;background:#efefef;}
+.btn_gray_3_1{ height:32px;line-height:32px;}
+.btn_gray,.btn_gray:visited,.btn_gray:hover{ width:148px;font-size:24px;color:#ff6600;background:#e4e4e4;text-decoration:none;}
+.x_btn_yanzhengma{ padding:0 10px;color:#ff6600;background:#ffebcc;}
+.x_btn_yanzhengma:hover{ color:#ff6600;background:#ffeed4;}
+.btn_red{ line-height:34px;height:34px;font-size:12px;color:#fff;background:#f85353;}
+.x_error{ padding-left:20px;font-size:14px;background:url(/assets/img/i_error.png) no-repeat left;display:none;color:red;}
+.x_field2 span{ padding:0px; }
+.x_field2 .x_input_tx2,.x_btn_reg2{ width:100%; }
+.regCon .rcri{ padding:25px 0;width: 80%;margin: 0 auto;float: none;}
+</style>
+<div class="regCon">
+	<div class="container-fluid">
+    	<div class="row bgf">
+			<!--
+			<div class="rcle col-sm-7 hidden-xs">
+			    <div class="snsicons_v clearfix">
+			        <h1>使用社交账号直接登录</h1>
+			        <ul class="siv">
+			            <li><a href=""><b class="snsi si_weixin"></b><em>微信</em></a></li>
+			            <li><a href=""><b class="snsi si_weibo"></b><em>微博</em></a></li>
+			            <li><a href=""><b class="snsi si_qq"></b><em>QQ</em></a></li>
+			            <li><a href=""><b class="snsi si_taobao"></b><em>淘宝</em></a></li>
+			        </ul>
+			    </div>
+			</div>
+			-->
+			<div class="col-sm-3 hidden-xs"></div>
+			<div class="rcri col-sm-20 col-xs-20 bgf">
+				<div class="x_reg_inner_1 fs14 tac mg40" id="reg_ok" style="display:none">
+					<p>
+						<img src="{utility_cdn::img('/assets_v2/img/choice.png')}" class="mr10" alt="" />绑定成功，系统3秒后自动登录
+					</p>
+					<p>可将其作为帐号登陆</p>
+					<p>
+						默认密码为手机号后6位，可以在<a href="/student.security.password" class="cBlue" title="">安全设置</a>中修改密码。
+					</p>
+			    </div>
+				<form action="" method="get" autocomplete="off" id="form">
+					<input type="hidden" id="voice" name="voice" value="0" />
+		            <div class="x_reg_inner_1">
+						<h1>{if !empty($parter_info->thumb_url)}<img src="{$parter_info->thumb_url}" width="30"/>{/if}{if !empty($parter_info->nickname)}{$parter_info->nickname}{/if}，您好</h1>
+						<div class="row x_field2">
+							<div style="font-size:14px;text-align:center">
+							{if !empty($tips)}{$tips}{else}认证手机号后，您可以用手机号作为账户登录{/if}
+							</div>
+						</div>
+						<div class="row x_field2">
+							<div class="col-xs-5 col-sm-5">&nbsp;</div>
+							<div class="col-xs-13 col-sm-13"><div id="error" class="x_error"></div></div>
+						</div>    
+						<div class="row x_field2">
+							<span class="col-sm-5 hidden-xs xftit fr">手机号：</span>
+							<span class="col-sm-13 col-xs-20">
+								<input class="x_input_tx2" type="tel" placeholder="输入手机号" name="mobile" id="mobile" value="{if(!empty($mobile))}{$mobile}{/if}">
+							</span>
+						</div>
+						<div class="row x_field2">
+							<span class="col-sm-5 hidden-xs xftit fl">图片验证码：</span>
+							<span class="col-sm-10 col-xs-13">
+								<input type="text" placeholder="图片验证码" class="x_input_tx2 fl" name="verify_code_img">
+							</span>
+							<span class="col-xs-7 col-sm-3 col-xs-r">
+								<img id="cap" src="/captcha.gen" width="110" height="44"  alt="" />
+							</span>
+						</div>
+						<div class="row x_field2">
+							<span class="col-sm-5 hidden-xs xftit fl">手机动态码：</span>
+							<span class="col-sm-10 col-xs-13">
+								<input type="tel" placeholder="手机动态码" class="fl x_input_tx2" name="verify_code" />
+							</span>
+							<span class="col-xs-7 col-sm-3 col-xs-r">
+								<a href="javascript:;" id="get_verify_code" class="x_btn_yanzhengma fl" style="width:96px;height:44px;line-height:44px;padding:0;">免费获取</a>
+							</span>
+						</div>
+						<div class="row x_field2" id="voice_panel" style="display:none">
+							<span class="hidden-xs xftit"></span>
+							<span class="col-xs-20 col-sm-13 col-xs-r">
+								没有收到手机短信验证码?，请点击<a href="javascript:;" id="get_verify_code_v" class="x_btn_yanzhengma_v" >语音获取验证码</a>
+							</span>
+						</div>
+						<div class="row x_field2 mb10 mt10">
+							<span class="col-xs-5 col-sm-5"></span>
+							<span class="col-xs-8 col-sm-4">
+								<input class="col-xs-12 x_btn_reg2" type="submit" value="完成验证" />
+							</span>
+						</div>
+						<div class="row x_field2">
+							<div class="col-xs-5 col-sm-5"></div>
+							<div class="col-xs-20 col-sm-13 p0">
+								<p class="allvert_1 tal">
+									<input checked type="checkbox"> 
+									<span>我同意相关服务条款和隐私政策</span>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-3 hidden-xs"></div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!--footer-->
+{part "/site.main.footer"}
+<script>
+$(document).ready(function(){
+    $("#form input").focus(function() {
+        $(this).css("border","1px solid #ffa81e");
+    });
+   $("#form input").blur(function() {
+        $(this).css("border","1px solid #ddd");
+   });
+
+    $("#cap").click(function(){
+    	$('input[name="verify_code_img"]').val('');
+        $("#cap").attr("src","/captcha.gen?"+Math.random());
+	});
+    $("#form").submit(function(){
+        $.post("/user.parterner.loginajax",$("#form").serialize(),function(r){
+            if(r.error){
+				$("#error").html(r.error).show();
+                $("[name="+r.field+"]").focus();
+				if(r.field == "verify_code_img"){
+                    $("#cap").trigger("click");
+				}
+                return false;
+			}
+            $("#form").hide();
+						$("#reg_ok").show();
+						setTimeout(function(){ location="{if !empty($url)}{$url}{/if}"; },10000);
+					},"json");
+					return false;
+				});
+
+				var i=0;
+				var timer;
+			$("#get_verify_code").click(function(){
+				$("#voice").val(0);
+				$("#error").html("");
+				$mo = parseInt($("[name=mobile]").val());
+				if($mo<13000000000 || $mo>19999999999){
+					$("#error").html("手机号格式错误").show();
+					$("[name=mobile]").focus();return;
+					}else{
+					$("#error").html("");
+				}
+				if(i>0)return false;
+				i=60;
+				$.post("/user.main.VerifyCodeBind",$("#form").serialize(),function(r){
+					if(r.code=="-8"){
+						$("#error").html(r.error).show();
+						$("[name="+r.field+"]").focus();
+						$("#cap").attr("src","/captcha.gen?"+Math.random());
+					}
+					if(!r.ok){
+						i=0;
+						return false;
+						}else{
+						$("#get_verify_code").html("请等候("+i+")秒");
+						//$('#voice_panel').show();
+						i=60;
+						$("#get_verify_code").html("请等候("+i+")秒");
+						timer = setInterval(function(){
+							i--;
+							$("#get_verify_code").html("请等候("+i+")秒");
+							if(i==0){
+								clearInterval(timer);
+								$("#get_verify_code").html("免费获取");
+							}
+						},1000);
+					}
+				},"json");
+			});
+			var i2=0;
+			var timer2;
+			$("#get_verify_code_v").click(function(){
+				$("#voice").val(1);
+				$("#error").html("");
+				$mo = parseInt($("[name=mobile]").val());
+				if($mo<13000000000 || $mo>19999999999){
+					$("#error").html("手机号格式错误").show();
+					$("[name=mobile]").focus();return;
+					}else{
+					$("#error").html("");
+				}
+				if(i2>0)return false;
+				$.post("/user.main.VerifyCodeBind",$("#form").serialize(),function(r){
+					if(r.error){
+						$("#error").html(r.error).show();
+						$("[name="+r.field+"]").focus();
+					}
+					if(!r.ok){
+						i=0;
+						return false;
+						}else{
+						i2=60;
+						$("#get_verify_code_v").html("请等候("+i2+")秒");
+						timer2 = setInterval(function(){
+							i2--;
+							$("#get_verify_code_v").html("请等候("+i2+")秒");
+							if(i2==0){
+								clearInterval(timer2);
+								$("#get_verify_code_v").html("语音获取验证码");
+							}
+                },1000);
+			}
+		},"json");
+    });
+});
+</script>
+</body>
+</html>

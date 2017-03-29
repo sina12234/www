@@ -1,0 +1,19 @@
+@charset "UTF-8";
+/**
+ *
+ * @authors Your Name (you@example.org)
+ * @date    2016-06-12 16:02:24
+ * @version $1.0
+ */
+// 变量、共用样式
+@import "mixins/mixins";
+@import "var/var.platform";
+
+// Reset
+@import "common/normalize";
+
+// Core CSS
+@import "common/left-menu";
+// Components
+@import "page/_sprite-icon";
+@import "page/header";

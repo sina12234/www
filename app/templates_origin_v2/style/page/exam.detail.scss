@@ -1,0 +1,265 @@
+/*exam structure details*/
+//无数据样式
+.no-data{
+  padding-top: 30px;
+  text-align: center;
+}
+
+
+.border-main-content{
+  border: 1px solid $border-color;
+}
+.ed-exercise-content{
+  padding: 42px 65px;
+  background-color: $main-white-color;
+  @at-root .ed-exercise-info{
+    width: 100%;
+    padding: 35px 0 30px;
+    table{
+      thead{
+        td{
+          font-size: 14px;
+        }
+      }
+      tbody{
+        td{
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  @at-root .ed-question{
+    width: 100%;
+    ul.question{
+      width: 100%;
+      font-size: 14px;
+      &>li{
+        padding-left:15px;
+        padding-top: 10px;
+        position: relative;
+        border-bottom: 1px solid $horizontal-border-color;
+        .question-img{
+            max-width:750px;
+            display:block;
+            img{
+              max-width: 750px;
+              max-height: 300px;
+            }
+          }
+        .question-index{
+          position: absolute;
+          left: -15px;
+          top: 10px;
+
+        }
+        .question-item{
+          width: 100%;
+        }
+        @at-root div.ed-answer-analysis{
+          padding-top: 10px;
+          div{
+            float: left;
+            padding: 0px;
+          }
+          span.percent,span.person-count{
+            color: $text-red-color;
+          }
+          div.answer-info-link{
+            position: relative;
+            padding-right: 15px;
+            span.show-icon{
+              position: absolute;
+              left:35px;
+              top:8px;
+              @include sprite($light-arrow);
+              transition: transform  0.3s linear;
+              &.active{
+                transform: rotate(180deg);
+              }
+            }
+            span.active-show-icon{
+              display: none;
+              position: absolute;
+              left:35px;
+              top:20px;
+              @include sprite($gray-up-arrow);
+              &.active{
+                display: block;
+              }
+            }
+            a{
+              &:hover{
+                span.show-icon{
+                  @include sprite($light-arrow-active);
+                }
+              }
+            }
+
+          }
+          div.true-answer-box,div.my-answer-box{
+            &.show{
+              display: block;
+            }
+            &.hidden{
+              display: none;
+            }
+            position: relative;
+            display: none;
+            span.answer-icon{
+              position: absolute;
+              top:3px;
+              left: -18px;
+            }
+          }
+        }
+        @at-root div.ed-exercise-result{
+          padding-top: 15px;
+          width: 100%;
+          ul.result-analysis{
+            height: 0px;
+            display: none;
+            background-color: $gray-background-color;
+            border-radius: 3px;
+            transition: all 0.3s linear;
+            &.active{
+              display: block;
+              height: auto;
+            }
+          }
+          li{
+            font-size: 12px;
+            padding: 8px 0 8px 10px;
+          }
+          ul.result-student{
+            height: auto;
+            li{
+              padding: 8px 0 8px 0;
+            }
+            span.student-name{
+              margin-right: 10px;
+            }
+          }
+        }
+        @at-root div.ed-question-create-time{
+          padding: 10px 0;
+          span{
+            float: left;
+            font-size: 12px;
+            color: $text-subsidiary-color;
+          }
+        }
+        &.true-question{
+          span.answer-icon{
+            @include sprite($true-answer);
+          }
+        }
+        &.wrong-question{
+          span.answer-icon{
+            @include sprite($wrong-answer);
+          }
+        }
+        &.no-answer{
+          span.answer-icon{
+            @include sprite($undefined-answer);
+          }
+        }
+      }
+
+      @at-root .ed-option-info{
+        width: 100%;
+        height: auto;
+        position: relative;
+        &>ul{
+          float: left;
+          padding: 10px 0 0;
+          li{
+            padding: 10px 0;
+          }
+        }
+        @at-root ul.ed-option{
+          li.ed-true-answer{
+            color: $text-green-color;
+          }
+        }
+        @at-root ul.ed-option-analysis{
+          span{
+            margin-right: 20px;
+            float: left;
+          }
+          span.count-bar{
+            width: 100px;
+            height: 12px;
+            margin-top: 4px;
+            background-color: rgba($main-yellow-color,0.35);
+          }
+          li.ed-true-answer{
+            span.count-bar{
+              background-color: nth($green-button-color,1);
+            }
+          }
+        }
+      }
+
+    }
+  }
+}
+/*student course info count*/
+.blue-text-color{
+  color: $text-blue-color !important;
+}
+.ed-student-count{
+  padding: 25px 20px;
+  background-color: $main-white-color;
+  @at-root .ed-student-info{
+    padding-top: 30px;
+    .info-head{
+      padding-bottom: 5px;
+      .more-info{
+        font-size: 14px;
+      }
+    }
+    .student-name{
+      font-size: 14px;
+      float: left;
+    }
+    .update-time{
+      font-size: 12px;
+      color: $text-subsidiary-color;
+      float: right;
+    }
+  }
+}
+//章节统计
+#article-static{
+  border:1px solid $border-color;
+  padding: 20px;
+  .ed-title{
+    .title{
+      padding-left:20px;
+    }
+  }
+  section{
+    padding-top: 30px;
+    .title{
+      padding-bottom: 5px;
+    }
+  }
+  .table-grid{
+    td{
+      padding: 0 5px;
+    }
+  }
+  .show-more-box{
+    height: 30px;
+    margin:40px 0;
+    position: relative;
+  }
+  #more-data-tips{
+    padding-top: 10px;
+    font-size: 12px;
+    display: none;
+  }
+  #execl{
+    display: none;
+  }
+}

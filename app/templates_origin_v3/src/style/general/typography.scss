@@ -1,0 +1,77 @@
+/*Font, line-height, and color for body text, and more.*/
+@import "mixins/typography";
+/*font*/
+@while $font-size-num >= 12 {
+  .fs#{$font-size-num} {font-size: 1px * $font-size-num; }
+  $font-size-num: $font-size-num - 2;
+}
+.fb{font-weight:700 !important}
+.fi{font-style:italic !important}
+.fn{font-style:normal !important}
+
+.tac{text-align:center !important}
+.tar{text-align:right !important}
+.tal{text-align:left !important}
+.left{float:left !important}
+.right{float:right !important}
+.clearfix {
+  @include clearfix;
+}
+.center-block {
+  @include center-block;
+}
+
+.hide{display:none !important }
+.show{display:block !important }
+.invisible{visibility:hidden }
+
+.affix{position:fixed }
+.rel{position:relative }
+.abs{position:absolute }
+@include make-margin($margin-nums);
+/*padding margin*/
+// @while $margin-num >= 0 {
+//   .p#{$margin-num} {padding:1px * $margin-num;}
+//   .pd#{$margin-num} {padding:(1px * $margin-num) 0;}
+//   .pt#{$margin-num}{padding-top:1px * $margin-num;}
+//   .pr#{$margin-num}{padding-right:1px * $margin-num ;}
+//   .pl#{$margin-num}{padding-left:1px * $margin-num;}
+//   .pb#{$margin-num}{padding-bottom:1px * $margin-num ;}
+//   .mt#{$margin-num}{margin-top:1px * $margin-num !important;}
+//   .mr#{$margin-num}{margin-right:1px * $margin-num !important;}
+//   .ml#{$margin-num}{margin-left:1px * $margin-num !important;}
+//   .mb#{$margin-num}{margin-bottom:1px * $margin-num !important;}
+//   $margin-num: $margin-num - 5;
+// };
+// Visibility utilities
+@include responsive-invisibility('.visible-xs');
+@include responsive-invisibility('.visible-sm');
+@include responsive-invisibility('.visible-md');
+@include responsive-invisibility('.visible-lg');
+@media (max-width: $screen-xs-max) {
+  @include responsive-visibility('.visible-xs');
+}
+@media (min-width: $screen-sm) and (max-width: $screen-sm-max) {
+  @include responsive-visibility('.visible-sm');
+}
+@media (min-width: $screen-md) and (max-width: $screen-md-max) {
+  @include responsive-visibility('.visible-md');
+}
+@media (min-width: $screen-lg) {
+  @include responsive-visibility('.visible-lg');
+}
+@media (max-width: $screen-xs-max) {
+  @include responsive-invisibility('.hidden-xs');
+}
+
+@media (min-width: $screen-sm) and (max-width: $screen-sm-max) {
+  @include responsive-invisibility('.hidden-sm');
+}
+
+@media (min-width: $screen-md) and (max-width: $screen-md-max) {
+  @include responsive-invisibility('.hidden-md');
+}
+
+@media (min-width: $screen-lg) {
+  @include responsive-invisibility('.hidden-lg');
+}

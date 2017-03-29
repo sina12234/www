@@ -1,0 +1,44 @@
+//border
+@mixin width-border($width:100%,$border-color:#d5d5d5) {
+    width: $width;
+    border: 1px solid $border-color;
+}
+@mixin border($border-color:#d5d5d5) {
+    border: 1px solid $border-color;
+}
+//头部或者底部无边框
+@mixin borderDeleteDirection($direction:'none',$border-color:#e8e8e8) {
+    border: 1px solid $border-color;
+    @if unquote($direction)=='top' {
+        border: 1px solid $border-color;
+        border-top: none;
+    }
+    @else if unquote($direction)=='bottom' {
+        border: 1px solid $border-color;
+        border-bottom: none;
+    }
+}
+//border radius
+@mixin b-radius($corners:3px) {
+    //圆角
+    -moz-border-radius: $corners;
+    -webkit-border-radius: $corners;
+    border-radius: $corners;
+}
+// Single side border-radius
+@mixin border-top-radius($radius) {
+    border-top-right-radius: $radius;
+    border-top-left-radius: $radius;
+}
+@mixin border-right-radius($radius) {
+    border-bottom-right-radius: $radius;
+    border-top-right-radius: $radius;
+}
+@mixin border-bottom-radius($radius) {
+    border-bottom-right-radius: $radius;
+    border-bottom-left-radius: $radius;
+}
+@mixin border-left-radius($radius) {
+    border-bottom-left-radius: $radius;
+    border-top-left-radius: $radius;
+}

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+<head>
+{if !empty($courseInfo)}
+<title>{part '/site.main.orgname'} - 购买课程</title>
+{elseif !empty($memberInfo)}
+<title>{part '/site.main.orgname'} - 开通会员</title>
+{elseif !empty($smsInfo)}
+<title>{part '/site.main.orgname'} - 短信充值</title>
+{/if}
+<meta name="title" content="{part '/site.main.orgname'} - 课程详情 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} -  云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+<style>
+.bgf7{ background: #f7f7f7;}
+.bor1px { border:1px solid #ddd;}
+.coupon-type{ height:90px;}
+.preferent-code-info .select-code-info .c-price{ line-height: 90px;}
+</style>
+<body>
+{part "/site.main.nav3"}
+<section class="pd40 bgf" id="open-vip">
+	<div class="container">
+		<div class="row">
+            <div id="orderBuy_width" style="width:80%;margin:0 auto;">
+                <div class="col-sm-14 pd0 tel mb10">
+					{if !empty($memberInfo)}
+                    <a href="/order.main.memberInfo/{$objectId}" class="member-payBtn-stepTwo fs12" title="">&lt;&lt;{'返回'|tr:'course.info'}</a>
+					{elseif !empty($courseInfo)}
+					<a href="/course.info.show/{$objectId}" class="member-payBtn-stepTwo fs12" title="">{'<返回'|tr:'course.info'}</a>
+                    {elseif !empty($smsInfo)}
+                    <a href="/org/message/smscharge" class="member-payBtn-stepTwo fs12" title="">&lt;&lt;{'返回'|tr:'course.info'}</a>
+					{/if}
+				</div>
+                <div class="col-sm-20 fs14 bor1px bgf7 pd10 mb20 hidden-xs">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-14">{'订单信息'|tr:'course.info'}</div>
+                    <div class="col-sm-3 tec">{'价格'|tr:'course.info'}</div>
+                </div>
+                <div class="clearfix col-sm-20">
+					{if !empty($memberInfo)}
+                    <div class="col-sm-3 pdl0 col-xs-20">
+						<img src="{utility_cdn::img('/assets_v2/img/member-order.png')}" alt="" width="100%" height="100%">
+					</div>
+                    <div class="col-sm-14 pdl0 col-xs-20">
+                        <h1 class="fs16 new-pay-title">{$memberInfo['title']}</h1>
+                        <p class="mt20 cDarkgray info-buy-teac">有效期：{$memberInfo['time']}</p>
+                        <div class="fl"></div>
+                    </div>
+                    <div class="fs16 col-sm-3 tec mt30">
+                        <strong class="fwn fs18 cRed lh22">
+                            ¥<span>{$memberInfo['price']}</span>
+                        </strong>
+                    </div>
+					{elseif !empty($courseInfo)}
+					<div class="col-sm-3 pdl0 col-xs-20 hidden-xs">
+						<img src="{$courseInfo['thumbMed']}" alt="" width="100%" height="auto">
+					</div>
+                    <div class="col-sm-14 pdl0 col-xs-20">
+                        <h1 class="fs16 new-pay-title">{$courseInfo['title']}</h1>
+                        <p class="mt20">班级：{$courseInfo['className']}</p>
+                        <div class="fl"></div>
+                    </div>
+                    <div class="fs16 col-sm-3 tec mt30">
+                        <strong class="fwn fs18 cRed lh22">
+                            ¥<span>{$courseInfo['price']}</span>
+                        </strong>
+                    </div>
+                    {elseif !empty($smsInfo)}
+                    <div class="col-sm-3 pdl0 col-xs-20">
+                        <img src="{utility_cdn::img('/assets_v2/img/details-img.png')}" alt="" width="100%" height="100%">
+                    </div>
+                    <div class="col-sm-14 pdl0 col-xs-20">
+                        <h1 class="fs16 new-pay-title">{$smsInfo['title']}</h1>
+                        <p class="mt20 cDarkgray info-buy-teac"></p>
+                        <div class="fl"></div>
+                    </div>
+                    <div class="fs16 col-sm-3 tec mt30">
+                        <strong class="fwn fs18 cRed lh22">
+                            ¥<span>{$smsInfo['price']}</span>
+                        </strong>
+                    </div>
+					{/if}
+                </div>
+                <!-- 优惠码 -->
+                <div class="col-md-20 p0 mt40" id="preferent-code-info">
+                    <h1 class="fs14 mb10">
+                        <label>
+                            <input type="checkbox" class="code-ischecked-btn" />
+                            使用优惠券/优惠码
+                        </label>
+                    </h1>
+                    <div class="preferent-code-info clearfix" style="display:none;">
+                        <ul class="click-code-btn clearfix">
+                            <li onclick="clickCodeBtn(this)" data-status="0" class="active col-xs-10 col-md-2">优惠券</li>
+                            <li onclick="clickCodeBtn(this)" data-status="1" class="col-md-2 col-xs-10">优惠码</li>
+                        </ul>
+                        <div class="fill-code-infos">
+                            <li class="select-code-info couponlist col-md-20 col-xs-20 p10 clearfix" id="select-code-info"></li>
+                            <li class="fill-code-info" style="height:90px;">
+                                <div class="col-md-20 p15 mt10 clearfix">
+                                    <span class="col-md-3 col-xs-10 p0 tar mt5 fs14">请输入优惠码：</span>
+                                    <input class="fill-code-input col-md-4 col-xs-10" onkeyup="this.value=this.value.replace(/[%&'#￥%……^）)>》‘;'：《<(*（,;=?$\x22]/g,'')" maxlength="6" type="text" />
+                                    <button id="use-code-ipt" class="gray-button c-fl" onclick="ajaxCheckCode();">使用</button>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+                <!-- /优惠码 -->
+                <div class="col-md-20 p0 tac fs14 mt40" id="preferent-code-info-no" style="display: none;">
+                    <p>本次支付不支持优惠！</p>
+                </div>
+                <div class="col-md-20 ter fs18 lh22 order-priceInfo" style="display:none;">
+                    <p class="tar fs16 mt20">
+                        原价：<span class="cRed order-priceOld mr35 tdlt"></span>
+                    </p>
+                    <p class="tar fs16 mt20">
+                        优惠金额：<span class="cRed order-disPrice mr35"></span>
+                    </p>
+                    <p class="tar fs16 mt20">
+                        应付金额：<span class="cRed order-totalPrice mr35"></span>
+                    </p>
+                </div>
+               <!--  收件信息 -->
+               {if (!empty($userAddress))}
+                {foreach($userAddress as $value)} 
+                <div class="col-ms-20 mt20 col-xs-20 clearfix">
+                    <p class="fs16 mb10">收件信息</p>
+                    <ul class="fs14">
+                        <li class="mb10 clearfix">
+                            <strong class="fs16 col-md-2 tar p0">寄送至：</strong>
+                            {$province.$city.$country.$value->address}
+                        </li>
+                        <li class="mb10 clearfix">
+                            <strong class="fs16 col-md-2 tar p0">收件人：</strong>
+                            {$value->receiver}
+                        </li>
+                        <li class="mb10 clearfix">
+                            <strong class="fs16 col-md-2 tar p0">电话：</strong>
+                            {$value->phone}
+                        </li>
+                        <li class="mb10 clearfix">
+                            <strong class="fs16 col-md-2 tar p0">备注：</strong>
+                            {$value->desc}
+                        </li>
+                        <li>
+                            <button class="gray-button ml30" id="editBtn" data="{$value->pk_address}">修改</button>
+                        </li>
+                    </ul>
+                </div>
+                 {/foreach}
+                {/if}
+                <!--  /收件信息 -->
+
+                <!-- 收件信息弹窗 -->
+            <section id="received-course-info" style="display:none;">
+                <div class="pt15 fs12 tac mb10">
+                    <p>授课机构将通过此联系方式将课程学习资料寄送到您的手中，请务必填写准确信息。</p>
+                    <p>本地址将同步到个人中心</p>
+                </div>
+                <ul class="fs12">
+                    <li class="mb20 clearfix">
+                        <span class="col-md-5 col-xs-7 tar">
+                            <em class="cRed ">*</em>
+                            收件人：
+                        </span>
+                        <div class="col-md-14 col-xs-13 pl0">
+                            <input type="text" placeholder="长度不超过20个字符" maxlength="20" name="name"/>
+                        </div>
+                    </li>
+                    <li class="mb20 clearfix">
+                        <span class="col-md-5 col-xs-7 tar">
+                            <em class="cRed ">*</em>
+                            收件人电话：
+                        </span>
+                        <div class="col-md-14 col-xs-13 pl0">
+                            <input type="text" placeholder="请填写正确的手机号" maxlength="11" name="tel"/>
+                        </div>
+                    </li>
+                    <li class="mb20 clearfix">
+                        <span class="col-md-5 col-xs-7 tar">
+                            <em class="cRed ">*</em>
+                            收件地址：
+                        </span>
+                        <div class="col-md-14 col-xs-13 mb10 pl0">
+                            <select id="level0">
+                                <option value="0">请选择</option>                              
+                            </select>
+                            <select id="level1">
+                                    <option value='0'>请选择</option>                                
+                            </select>
+                            <select id="level2">
+                                    <option value='0'>请选择</option>                                
+                            </select>
+                        </div>
+                        <span class="col-md-5 col-xs-7"></span>
+                        <div class="col-md-14 col-xs-13 pl0">
+                            <input type="text" placeholder="详细地址" name="add" />
+                        </div>
+                    </li>
+                    <li class="mb20 clearfix">
+                        <span class="col-md-5 col-xs-7 tar">
+                            备注：
+                        </span>
+                        <div class="col-md-14 col-xs-13 pl0">
+                            <input type="text" placeholder="长度不超过50个字符" maxlength="50" name="remark"/>
+                        </div>
+                    </li>
+                    <input name="addressId" value="" type="hidden">
+                    <li class="tac mb20 clearfix">
+                        <button class="yellow-btn mr10" id="saveBtn">保存</button>
+                        <button class="gray-button" onclick="closeReceivedInfo()">取消</button>
+                    </li>
+                </ul>
+            </section>
+            <!-- /收件信息弹窗 -->
+				<div class="tac col-xs-20 mt30 mb30 pd0">
+                    <button class="btn fs16 mt30 col-md-offset-9 request-pay-stepTwo" onclick="orderPay()">
+                        {'提交订单'|tr:'course.info'}
+                    </button>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+		</div>
+	</div>
+</section>
+{part "/site.main.footer"}
+</body>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/mustache.js')}"></script>
+<script type="text/template" id="DiscountTicketTpl">
+    <<#codeList>>
+        <div class="coupon-item col-xs-10 col-md-4" onclick="selectCheckCode(this);" data-code="<<code>>" data-discountCodeId="<<discountCodeId>>" data-discount_value="<<discount_value>>" data-min_fee="<<min_fee>>" data-price="<<price>>" data-priceOld="<<priceOld>>" data-type="<<type>>" data-disPrice="<<disPrice>>">
+            <i class="icon"></i>
+            <div class="coupon-main">
+                <div class="coupon-type tac">
+                    <p class="c-price fb fs30"></p>
+                </div>
+                <p class="tac c-limit fs18"></p>
+            </div>
+        </div>
+    <</codeList>>
+</script>
+<script>
+var objectId  = {$objectId};
+var flag = 0;
+var memberInfo = {json_encode($memberInfo)};
+var resellRes = {json_encode($resellRes)};
+var qudaoUserCode = {json_encode($qudaoUserCode)};
+var smsInfo = {json_encode($smsInfo)};
+$(function(){
+    if (resellRes!=""||memberInfo!=""||qudaoUserCode!=""||smsInfo!="") {
+        $("#preferent-code-info").hide();
+        $("#preferent-code-info-no").show();
+    }else {
+        DiscountTicket();
+    }
+    if($(window).width() > 768) {
+        $('#orderBuy_width').css('height', '420px');
+    }else{
+        $('.fill-code-input').css('width', '100px');
+    }
+
+    $('.code-ischecked-btn').click(function () {
+        if($(this).is(':checked')) {
+            $('.preferent-code-info').show();
+        }else{
+            $('.preferent-code-info').hide();
+        }
+    })
+
+});
+
+function clickCodeBtn(obj) {
+    $(obj).addClass('active').siblings().removeClass('active');
+    $('.fill-code-infos li:eq('+$(obj).index()+')').show().siblings().hide();
+    $('.fill-code-input').val('');
+    if($(obj).attr('data-status') == 0) {
+        if($('#select-code-info').attr('data-code') == 0) {
+            $('#select-code-info').find('.coupon-item:eq(0)').addClass('active');
+            $('.order-priceInfo').show();
+            var obj = $('#select-code-info').find('.coupon-item:eq(0)');
+            selectCheckCode(obj);
+        }else{
+            $('.order-priceOld').html('');
+            $('.order-disPrice').html('');
+            $('.order-totalPrice').html('');
+            $('.order-priceInfo').hide();
+        }
+    }else{
+        $('.order-priceOld').html('');
+        $('.order-disPrice').html('');
+        $('.order-totalPrice').html('');
+        $('.order-priceInfo').hide();
+    }
+}
+
+function orderPay() { //支付
+    var objectType= '{$objectType}';
+    var ext       = {$ext};
+    var code;
+    if(flag){
+        code = $.trim($('.fill-code-input').val());
+    }else{
+        if($('#select-code-info').find('.coupon-item').hasClass('active')) {
+            code = $('#select-code-info').find('.active').attr('data-code');
+        }else{
+            code = '';
+        }
+    }
+    var orgId = {if !empty($resellRes['resellOrgId'])} {$resellRes['resellOrgId']} {else} 0 {/if};
+    var qudaoCode = '{$qudaoCode}';
+    $.post('/order.ajax.payNew',{ objectId:objectId,objectType:objectType,ext:ext,code:code,orgId:orgId,qudaoCode:qudaoCode },function(r){
+        if(r.code == 0){
+            if(r.result.back == 1){
+                if(r.result.blackUrl!=''){
+                    window.location.href = r.result.blackUrl;
+                }else{
+                    window.location.href = "/student.course.detail/"+r.result.objectId+"/"+r.result.ext;
+                }
+            }else{
+                window.location.href = "/order/main/pay/{$objectType}/"+r.result.uniqueOrderId;
+            }
+        }else{
+            layer.msg(r.errMsg);
+        }
+    },'json');
+}
+
+function ajaxCheckCode() { //优惠码
+    var code = $.trim($('.fill-code-input').val());
+    if(code == ''){
+        layer.msg('请输入优惠码');
+        return false;
+    }else{
+        $.post('/order.ajax.checkCodeNew', { code:code, objectId:objectId }, function(r) {
+            if(r.code == 0){
+                $('.order-priceOld').html('￥'+r.result.priceOld);
+                $('.order-disPrice').html('￥'+r.result.disPrice);
+                $('.order-totalPrice').html('￥'+r.result.price);
+                $('.order-priceInfo').show();
+                flag = 1;
+            }else{
+                $('.order-priceOld').html('');
+                $('.order-disPrice').html('');
+                $('.order-totalPrice').html('');
+                $('.order-priceInfo').hide();
+                layer.msg(r.errMsg);
+            }
+        },'json');
+    }
+}
+
+function selectCheckCode(obj) { //优惠券
+    $('#select-code-info').find('.coupon-item:eq(0)').addClass('active');
+    $(obj).addClass('active').siblings().removeClass('active');
+    $('.order-priceInfo').show();
+    $('.order-priceOld').html('￥'+$(obj).attr('data-priceold'));
+    $('.order-disPrice').html('￥'+$(obj).attr('data-disPrice'));
+    $('.order-totalPrice').html('￥'+$(obj).attr('data-price'));
+    $('.preferent-code-info').show();
+    $('.code-ischecked-btn').attr('checked', true);
+}
+
+function DiscountTicket() { //优惠券列表
+    var DiscountTicketTpl = $('#DiscountTicketTpl').html();
+    $.post('/order/ajax/DiscountTicket', { objectId:objectId }, function(r) {
+        if(r.code == 0) {
+            $('#select-code-info').html(Mustache.render(DiscountTicketTpl, r.result));
+            $('#select-code-info').attr('data-code', r.code);
+            var obj = $('#select-code-info').find('.coupon-item:eq(0)');
+            selectCheckCode(obj);
+            $('#select-code-info').find('.coupon-item').each(function() {
+                var type = $(this).attr('data-type');
+                if(type == 1) {
+                    $(this).find('.c-limit').text('满'+$(this).attr('data-min_fee'));
+                    $(this).find('.c-price').text('减'+$(this).attr('data-discount_value')+'元');
+                }else if(type == 2){
+                    $(this).find('.c-limit').text('满'+$(this).attr('data-min_fee'));
+                    $(this).find('.c-price').text($(this).attr('data-discount_value')*10+'折');
+                }else{
+                    return false;
+                }
+            })
+        }else{
+            var html = '<div style="width:100%;min-height:40px;" class="my-collect-no-class p20"><div class="fs14">暂时还没有可用优惠券哦！</div></div>';
+            $('#select-code-info').attr('data-code', r.code);
+            $('#select-code-info').html(html);
+            $('.click-code-btn li').removeClass('active');
+            $('.click-code-btn li:eq(1)').addClass('active');
+            $('.preferent-code-info .select-code-info').hide();
+            $('.preferent-code-info .fill-code-info').show();
+        }
+    }, 'json');
+}
+$('.fill-code-input').keyup(function() {
+    if($(this).val().length >= 5) {
+        $('#use-code-ipt').removeClass('gray-button').addClass('yellow-btn');
+    }else{
+        $('#use-code-ipt').addClass('gray-button').removeClass('yellow-btn');
+    }
+});
+
+$('#editBtn').click(function(){
+    if($(window).width() > 780) {
+                w='480px';
+                h='480px';
+            }else {
+                w='90%';
+                h='480px';
+            }
+            layer.open({
+              type: 1,
+              shadeClose: true,
+              area: [w, h],
+              title:['收件信息'], 
+              content: $('#received-course-info')
+            });
+
+        $.get('/student.main.getUserAddressByAddressId/'+$(this).attr('data'),function(data){        
+            $('input[name=name]').val(data[0].receiver);
+            $('input[name=tel]').val(data[0].phone);
+            $('input[name=add]').val(data[0].address);
+            $('input[name=remark]').val(data[0].desc);
+            getLevel(0,data[0].province,0);    
+            getLevel(data[0].province,data[0].city,1);     
+            getLevel(data[0].city,data[0].country,2);                 
+        },'json');
+        $('input[name=addressId]').val($(this).attr('data'));             
+})
+$('#saveBtn').click(function(){
+    if($('input[name=name]').val() == '') {
+        layer.msg('请输入收件人');
+    }else if($('input[name=tel]').val() == '') {
+        layer.msg('请输入手机号');
+    }else if($('input[name=tel]').val() < 13000000000 || $('input[name=tel]').val() > 19999999999) {
+        layer.msg('请输入有效手机号');
+    }else if($('select[id=level0]').val() == 0 || $('select[id=level1]').val() == 0) {
+            layer.msg('请选择省市');
+    }else if($('input[name=add]').val() == '') {
+        layer.msg('请输入详细地址');
+    }else{
+        var addressId = $('input[name=addressId]').val();
+        var params = {
+        'receiver': $('input[name=name]').val(),
+        'phone': $('input[name=tel]').val(),
+        'level0':$('select[id=level0]').val(),
+        'level1':$('select[id=level1]').val(),
+        'level2':$('select[id=level2]').val(),
+        'address':$('input[name=add]').val(),
+        'desc':$('input[name=remark]').val()        
+        }
+        $.ajax({
+            type:'POST',
+            url :'/student.main.updateUserAddress/'+addressId,
+            data: params,
+            dataType: 'json',
+            success:function(data){                
+               if (data.code==0) {                    
+                    location.reload();
+               }else{
+                    layer.msg(data.msg);
+               }                
+            } 
+
+        }); 
+    }  
+});
+
+
+$('.mb10').on('change','#level0',function(event){
+    var lel = this.value;
+    $.get('/student.main.getleve/'+lel, function(data){
+        if (data) {            
+          var html = '';
+          $(data).each(function(i,item){
+            html += '<option value="'+item.region_id+'"';
+            html += '>'+item.name+'</option>';
+          })
+          $('#level1').show().html('<option>请选择</option>'+html);  
+        };
+        },'json');
+})
+
+$('.mb10').on('change','#level1',function(event){
+    var lel = this.value;    
+    $.get('/student.main.getleve/'+lel, function(data){
+        if (data) {            
+          var html = '';
+          $(data).each(function(i,item){
+            html += '<option value="'+item.region_id+'"';
+            html += '>'+item.name+'</option>';
+          })
+          $('#level2').show().html('<option>请选择</option>'+html);  
+        }else{
+            $('#level2').hide();
+            $('select[id=level2]').val('0');
+        }
+        },'json');
+})
+
+function getLevel(region_id,area,level_id){
+    if (!region_id || region_id != 0) {return false;}
+    $.get('/student.main.getleve/'+region_id, function(data){            
+        if (data) {            
+          var html = '';
+          $(data).each(function(i,item){            
+            html += '<option value="'+item.region_id+'"';                       
+            if(area == item.region_id){
+                html += ' selected="selected" >'+item.name+'</option>';
+            }else{
+                html += '>'+item.name+'</option>';
+            }
+          })
+          $('#level'+level_id).show().html(html);  
+        };
+        },'json'); 
+}
+
+function closeReceivedInfo() {
+    layer.closeAll();
+}
+</script>
+</html>

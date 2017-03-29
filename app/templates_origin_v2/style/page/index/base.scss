@@ -1,0 +1,77 @@
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{padding:0;margin:0}
+fieldset,img,html,body,iframe{border:0}
+body,textarea,select,input{font-family:\5fae\8f6f\96c5\9ed1,"Arial","Hiragino Sans GB","Helvetica", "sans-serif";color:#333;outline:none;border:0}
+body a{outline:none;blr:expression(this.onFocus=this.blur());}
+li{list-style:none}
+textarea{resize:none}
+body{background-color:#fff;font-size:12px}
+h1,h2,h3,h4,h5,h6,strong{font-size:inherit;font-weight:normal}
+input{vertical-align:middle;margin:0px}
+::-webkit-input-placeholder{color:#ccc}
+:-moz-placeholder{color:#ccc}
+::-moz-placeholder{color:#ccc}
+:-ms-input-placeholder{color:#ccc}
+input::-ms-clear{display:none}
+a,button{cursor:pointer}
+a{text-decoration:none;color:#333333}
+a:hover{color:#0378c0;text-decoration:none}
+a:link,a:visited,a:hover,a:active{text-decoration:none;}
+.none{display:none;}
+em{font-style:normal}
+.bor1px{border:1px solid #ddd;}
+.clearfix{display:inline-block}
+.c-fl{float:left}
+.c-fr{float:right}
+.clear{clear:both;}
+.tc{text-align:center}
+.gray-bg{background:#f4f4f4}
+.p40{padding:40px 0}
+.pd45{padding:45px 0}
+.p20{padding:20px 0}
+.p10{padding:10px 0}
+.pd-b40{padding-bottom:40px}
+.pt40{padding-top:40px}
+.pd-t30{padding-top:30px}
+.pd-t5{padding-top:5px}
+.pd-b20{padding-bottom:20px}
+.pd-b30{padding-bottom:30px}
+.pos-rel{position:relative}
+.pos-abs{position:absolute}
+.text-left{text-align:left}
+.text-right{text-align:right}
+.mt40{margin-top:40px}
+.mb40{margin-bottom:40px}
+.mb10{margin-bottom:10px}
+.lh30{line-height:30px}
+.mt10{margin-top:10px}
+.mt15{margin-top:15px}
+.mt20{margin-top:20px}
+.mb20{margin-bottom:20px}
+.mt30{margin-top:30px}
+.mt38{margin-top:38px}
+.ml20{margin-left:20px}
+.ml10{margin-left:10px}
+.mr15{margin-right: 15px;}
+.mb20{margin-bottom:20px}
+.tec{text-align:center}
+.mr5{margin-right: 5px;}
+.mr20{margin-right: 20px;}
+.mr10{margin-right: 10px;}
+.fob{font-weight:bold;}
+.pd0{padding:0;}
+.pdl0{padding-left:0;}
+.pdr0{padding-right:0;}
+.ml25{margin-left: 25px;}
+img:after{content:'';
+    background-image:url(/assets_v2/img/video-img.png);
+    background-size:90% 90%;
+  display: block;
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align:center;
+  background-color:#ebebeb;
+}

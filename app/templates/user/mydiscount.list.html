@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 优惠码</title>
+		{part "/index.main.headeruser"}
+		<style>
+			.hei30{ height:30px; }
+			.blo { display:block; background:rgb(247, 247, 247); }
+			.lieb ul li { display:block;line-height:30px; font-size:13px; text-align:center;} 
+			.stepbar_1 li{ width:80px; } 
+			.cen{ text-align:center; }
+			.fc999{ color:#999999;}
+			.fc333{ color:#333;}
+			.fwb{ font-weight:bold;}
+			.bddb{ border: 1px dashed #ccc;border-bottom: none;}
+			.tbcen ul{ text-align:center; line-height:100px;  overflow:hidden;  } 
+			.line60 {  line-height:60px;  } 
+			.tbcen ul li img{ text-align:center;vertical-align:middle;display:block; } 
+			.tbcen:hover{ box-shadow: 3px 3px 5px #ccc;}
+		</style>
+		<script>
+			function discount_status(status){
+				if(0 == status){
+					return "可修改";
+				}else if(1 == status){
+					return "付款成功";
+				}else if(2 == status){
+					return "失效";
+				}else if(3 == status){
+					return "确认";
+				}else{
+					return "有问题";
+				}
+			}
+		</script>
+	</head>
+
+	<body>
+		{part "/index.main.nav.user"}
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='col-sm-3 user_menu hidden-xs'>
+						<div>
+							<div id='menu'>
+								{part "/user.home.menu.user"}
+							</div>
+						</div>
+					</div>
+					<div class='col-sm-9 user_content nonepdr'>
+						<div class="col-md-11 fltnone nonepdh mauto pdb30 clear">
+							<div class="stepbar_1 mt25 adcl col-xs-12 col-sm-12">
+								<ul>
+									<a href="/user.mydiscount.list"><li class="col-xs-6"><b></b><span class="all">优惠码查询</span></li></a>
+									<a href="/user.mydiscount.list.nofee"><li class="col-xs-6"><b></b><span class="cal">未付款</span></li></a>
+									<a href="/user.mydiscount.list.used"><li class="col-xs-6"><b></b><span class="suc">已使用</span></li></a>
+									<a href="/user.mydiscount.list.unused"><li class="col-xs-6"><b></b><span class="exp">未使用</span></li></a>
+								</ul>
+							</div>
+							{if false===$cmd}
+								<form method="POST" action="/user.mydiscount.list">
+									<label for="code">优惠码：<input type="text" required id="code" name="code" /></label>
+									<input type="submit" value="提交" />
+								</form>
+								{if false!==$code}
+									<div>优惠码:{$code}</div>
+									{if $used->result->code < 0}
+									<div>{$used->result->msg}</div>
+									{else}
+										{if 0 == $used->total}
+										<div>没有使用过这个优惠码</div>
+										{else}
+											<div class="col-sm-12 lieb blo hidden-xs">
+												<ul class="col-sm-12">
+													<li scope="col" class="col-sm-6 col-xs-6  hei30">课程</li>
+													<li scope="col" class="col-sm-1 col-xs-6  hei30">订单</li>
+													<li scope="col" class="col-sm-1 col-xs-6  hei30">状态</li>
+													<li scope="col" class="col-sm-4 col-xs-6  hei30">使用时间</li>
+												</ul>
+												{foreach $used->data as $v}
+												<ul class="col-sm-12">
+													<li scope="col" class="col-sm-6 col-xs-6  hei30"><a href="/course.info.show/{$v->course->pk_course}">{$v->course->title}</a></li>
+													<li scope="col" class="col-sm-1 col-xs-6  hei30"><a href="/course.info.Pay/{$v->unique_order_id}">{$v->order_id}</a></li>
+													<li scope="col" class="col-sm-1 col-xs-6  hei30">{$v->status_v}</li>
+													<li scope="col" class="col-sm-4 col-xs-6  hei30">{$v->createtime}</li>
+												</ul>
+												{/foreach}
+											</div>
+										{/if}
+									{/if}
+								{/if}
+							{else}
+								{if in_array($cmd, array("nofee", "used"))}
+									<div class="col-sm-12 lieb blo hidden-xs">
+										<ul class="col-sm-12">
+											<li scope="col" class="col-sm-1 col-xs-6  hei30">优惠码</li>
+											<li scope="col" class="col-sm-5 col-xs-6  hei30">课程</li>
+											<li scope="col" class="col-sm-1 col-xs-6  hei30">订单</li>
+											<li scope="col" class="col-sm-1 col-xs-6  hei30">状态</li>
+											<li scope="col" class="col-sm-4 col-xs-6  hei30">使用时间</li>
+										</ul>
+										{foreach $used->data as $v}
+										<ul class="col-sm-12">
+											<li scope="col" class="col-sm-1 col-xs-6  hei30">{$v->discount_code->discount_code}</li>
+											<li scope="col" class="col-sm-5 col-xs-6  hei30"><a href="/course.info.show/{$v->course->pk_course}">{$v->course->title}</a></li>
+											<li scope="col" class="col-sm-1 col-xs-6  hei30"><a href="/course.info.Pay/{$v->unique_order_id}">{$v->order_id}</a></li>
+											<li scope="col" class="col-sm-1 col-xs-6  hei30">{$v->status_v}</li>
+											<li scope="col" class="col-sm-4 col-xs-6  hei30">{$v->createtime}</li>
+										</ul>
+										{/foreach}
+									</div>
+								{else}
+									<div>您还没有优惠券哦</div>
+								{/if}
+							{/if}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{part "/index.main.footer"}
+	</body>
+</html>

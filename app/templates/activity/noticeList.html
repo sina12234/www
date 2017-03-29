@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>学习资讯 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+{part "/site.main.header"}
+</head>
+<body style="background:#f7f7f7;">
+{part "/site.main.nav.activity"}
+
+<section class="pd20">
+    <div class="container">
+          <div class="row">
+              <div class="activity-box col-lg-16 col-lg-offset-2 col-xs-20">
+                    <div class="tab-but-switch col-lg-20 col-xs-20 swiper-container pd0">
+						<ul class="swiper-wrapper" id="tab">
+                          <li class="swiper-slide"><a href="/activity.main.list" {if($c==0)}class="curr"{/if}>全部资讯</a></li>
+						  {if(!empty($cateList))}
+						  {foreach($cateList as $k=>$v)}
+                          <li class="swiper-slide"><a href="activity.main.list?c={$v->pk_cate}" {if($c==$v->pk_cate)}class="curr"{/if}>{$v->name}</a></li>
+						  {/foreach}
+                          {/if}
+						</ul>
+						 {if($cateNum >5 )}
+                          <p class="pos-abs table-hv">
+                              <b>三</b>
+							  <span class="pos-abs table-show">
+								{if(!empty($cateResult))}
+								{foreach($cateResult as $k=>$v)}
+								<a href="/activity.main.list?c={$v->pk_cate}">{$v->name}</a>
+								{/foreach}
+								{/if}	
+							  </span>
+                          </p>
+						 {/if}
+                    </div>
+                    <div class="activity-cont-list fl col-lg-20 col-xs-20" id="content">
+                          <ul style="display:block">
+							{if(!empty($list->data))}
+							{foreach($list->data as $k=>$v)}
+                            <div class="activity-cont col-lg-20 col-xs-20">
+                                <h1>
+									{if(!empty($v->sort))}<b>[ 置顶 ]</b>{/if}
+                                    <a href="/activity.main.info/{$v->pk_notice_id}" target="_blank">
+                                    {$v->notice_title}</a>
+                                </h1>
+                                <span class="notice-icon"><a href="/activity.main.info/{$v->pk_notice_id}" target="_blank"><img src="{$v->thumb}" alt=""></a></span>
+                                <a class="mt10 notice-content notice-content-text" target="_blank" href="/activity.main.info/{$v->pk_notice_id}">
+                                  <span class="notice-bt">{$v->sub_content}</span>
+                                </a>
+                                <span class="p0 mt10 fl notice-time col-lg-15">{$v->create_time}</span>
+                            </div>
+							{/foreach}
+                            {/if}
+                          </ul>
+                    </div>
+					  {if(empty($list->data))}
+						  <div class="col-lg-20 col-xs-20 col-lg-offset-2 bgf activity-empty-cont">
+								<p class="cont-empty"><img src="/assets_v2/img/pet3.png"></p>
+								<p>暂无资讯</p>
+						  </div>
+					  {/if}
+              </div>
+			  <div class="page-list" id="pagepage"></div>
+          </div>
+    </div>
+</section>
+{part "/site.main.footer"}
+</body>
+<script>
+page("pagepage","{$path}",{$num},{$list->page},{$list->total});
+</script>
+</html>
+<script type="text/javascript">
+$(function() {
+    if($(window).width() > 768 ) {
+        if($('.wrap-scrollHeight').height() < 500) {
+            $('.notice-menu').css('height','700px');
+            $('.content').css('height','700px');
+        }else {
+            return false;
+        }
+    }
+})
+$(function(){
+	$('.notice-icon').each(function() {
+		if($(this).find('img').attr('src') == '') {
+			$(this).hide();
+			$(this).parents('.activity-cont').find('.notice-content').css('width', '100%');
+		}
+	})
+});
+;(function() {
+    if ($(window).width() < 768) {
+        var mySwiper = new Swiper('.swiper-container',{
+        slidesPerView : 3,});
+        var li_width = 0;
+        li_width=$("#tab li").outerWidth();
+        var li_index=$("#tab li").length;
+        $("#tab").css('width',li_width*li_index + 10);
+    }
+})()
+</script>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>修改密码 帮助中心—云课网</title>
+{part "/index.main.header"}
+</head>
+<body>
+    <!-- header -->
+    {part "/index.main.top"}
+{part "/index.main.nav.help"}
+<!-- 列表 -->
+<section class="p20">
+    <div class="container">
+            {part "/index.help.menu"}
+            <div class="col-sm-16">
+                <div class="help-c">
+                    <p class="help-bar fs16 cGray"><span class="icon guide-icon"></span>课程管理</p>
+                    <ul class="fs14 cGray2">
+                        <li class="col-sm-10"><a href="#1">1、怎样开设一个新课程？</a></li>
+                        <li class="col-sm-10"><a href="#2">2、怎样开设一个班级？</a></li>
+                        <li class="col-sm-10"><a href="#3">3、如何设置免费试看？</a></li>
+                        <li class="col-sm-10"><a href="#4">4、如何设置老师代课？</a></li>
+ 
+                    </ul>
+                </div>
+                <div class="help-item">
+                    <ul>
+                        <li>
+                            <p class="help-bar fs14 cGray"><a name="1">1、怎样开设一个新课程？</a></p>
+                            <div class="help-item-c">
+                                <p>（1）进入机构管理-课程管理页面，点击”创建新课程“。</p>
+                                <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/cjkc1.png')}">
+                                <p></br>（2）在新建课程页面按要求填写课程信息后，点击”下一步“，进入设置章节页面。</p>
+				<img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/cjkc2.png')}">
+                                <p></br>   (3) 点击“添加章节”按钮，在输入框中输入章节名称（多行输入可批量添加），点击“添加”按钮，生成章节目录，点击下一步，进入创建班级页面。</p>
+				<img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/cjkc3.png')}">
+                                <p></br>（4）点击“新建班级“，填写班级信息后点”添加“完成一个班级的建立，点击“添加”可继续创建新班级，点击”完成“课程创建成功。</p>
+				<img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/cjkc4.png')}">
+                        </li>
+                        <li>
+                            <p class="help-bar fs14 cGray"><a name="2">2、怎样开设一个班级？</p>
+                            <div class="help-item-c">
+				<p>在课程管理页面，点击下图“开设新班”按钮，进入创建课程时的“创建班级”页面，点击“新建班级”填入对应信息，点击完成即可</p>
+                                <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/cjbj1.png')}">
+                        </li>
+                        <li>
+                            <p class="help-bar fs14 cGray"><a name="3">3、如何设置免费试看？</p>
+                            <div class="help-item-c">
+                              （1）进入机构管理-课程管理-开设新班。
+                               <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/mfsk1.png')}">
+                                <p></br>（2）选择要设置试看的班级，点击排课列下的“查看/修改”，进入修改排课页面。</p>
+                                <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/mfsk2.png')}">
+                                <p></br>（2） （3）在安排试看的班级章节右侧的”单节录制”中选择试看时间后，点击”修改”即可。</p>
+                                <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/mfsk3.png')}">
+                            </div>
+                        </li>
+                        <li>
+                            <p class="help-bar fs14 cGray"><a name="4" >4、如何设置老师代课？</a></p>
+                            <div class="help-item-c">
+                                 <p>（1）进入机构管理-课程管理-开设新班。</p>
+                                 <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/lsdk1.png')}">
+                                 <p></br>（2）选择需要设置代课老师的班级，点击排课列下的“查看/修改”，进入修改排课页面。</p>
+                                  <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/lsdk2.png')}">
+                                 <p></br>（3）选择需要设置代课老师的章节，在“讲师”中选择代课老师后，点击“修改”即可。</p>
+                                 <img  width=866 src="{utility_cdn::img('/assets_v2/img/platform/lsdk3.png')}">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    </div>
+</section>
+<!-- footer -->
+{part "/index.main.footer"}
+</body>
+</html>
+<script type="text/javascript">
+        $(document).ready(function() {
+            $('.help-menu>ul>li').click(function() {
+                $(this).addClass('curr').siblings().removeClass('curr');
+                $('ul',this).show();
+                $(this).siblings().find('ul').hide();
+            })
+        })
+</script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery.divselect.js')}"></script>
+<script>
+    $(function() {
+        $.divselect(".divselect cite");
+    });
+</script>

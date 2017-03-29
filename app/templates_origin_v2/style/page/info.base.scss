@@ -1,0 +1,35 @@
+/*
+student.main.infobase*/
+.s-new-info-base{
+  li.desc{
+    .tips{
+      padding-left: 20px;
+    }
+    &.error{
+      .tips-icon{
+        visibility: visible;
+      }
+    }
+  }
+  #class-status .tips,#region1,#grades1{
+    display: none;
+    padding-left: 20px;
+  }
+  .t-subjects-but{
+    .tips{
+      padding-left: 20px;
+    }
+  }
+  #school,#school_grade,#level1,#level2{
+    display: block;
+    &.hidden{
+      display: none;
+    }
+  }
+  @include screen(320px,768px) {
+    .dropdown-wrap{
+      padding:0px;
+    }
+  }
+
+}

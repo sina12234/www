@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>高能100 - 专业的K12在线教育平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+</head>
+<script src="{utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js')}"></script>
+<script type="text/javascript">
+$(function() {
+	var selectCourse = parent.$('#selectArea ul') || 0;
+	var mRight = $('#multiple-right')
+	if(selectCourse != 0 ){
+		mRight.html(selectCourse.html());
+	}
+	$("#keyword").keyup(function(){
+        var _This = $(this);
+        var keyword=$(this).val();
+        $.post("/org.main.SearchCourseAjax",{ keyword:keyword },function(r){
+			if(r.data !=''){
+				var _html='';
+				$(r.data).each(function(i,item){
+					var selected = 0;
+					$('#multiple-right li').each(function(){
+						if($(this).attr('data-id') == item.course_id){
+							selected = 1;
+						}
+					});
+					if(selected == 1){
+						_html += '<li data-id='+item.course_id+' class="selected">'+item.title+'</li>'
+					}else{
+						_html += '<li data-id='+item.course_id+'>'+item.title+'</li>'
+					}
+				});
+				$('#org_course').html(_html);
+			}else{
+				$('#org_course').html('');
+			}
+        },'json');
+    });
+    $('.layer-course-list').on('click','li',function(){
+        var cid=$(this).attr('cid');
+        var top=$('form').find('input[name=top]').val();
+    });
+
+	/*选择课程*/
+    $('#multiple-right,#multiple-left').on('click','li:not(.selected)',function(){
+        if($(this).hasClass('select')){
+            $(this).removeClass('select');
+        }else{
+            $(this).addClass('select');
+        }
+        if($('#multiple-right li.select').length>0){
+            $('#del-btn').addClass('allow');
+        }else{
+            $('#del-btn').removeClass('allow');
+        }
+        if($('#multiple-left li.select').length>0){
+            $('#add-btn').addClass('allow');
+        }else{
+            $('#add-btn').removeClass('allow');
+        }
+    });
+	//添加课程
+	$('#add-btn').click(function(){
+        if($(this).hasClass('allow')){
+            var cHtml='';
+            $('#multiple-left li.select').each(function() {
+                cHtml += '<li data-id="'+$(this).attr('data-id')+'">'+$(this).html()+'</li>';
+				$(this).removeClass('select');
+				$(this).addClass('selected');
+            });
+
+            $('#multiple-right').append(cHtml);
+            $('#multiple-right .defalut').remove();
+            if($('#multiple-left li').length==0){
+                $(this).removeClass('allow');
+            }
+        }else{
+            $('#multiple-left').css('border','1px solid #ffa91e');
+        }
+    });
+	$('#del-btn').click(function(){
+        if($(this).hasClass('allow')){
+            var cHtml='';
+            $('#multiple-right li.select').each(function() {
+				var id = $(this).attr('data-id');
+                cHtml += '<li data-id="'+id+'">'+$(this).html()+'</li>';
+                $(this).remove();
+				$('#multiple-left').find('.selected').each(function(){
+					if($(this).attr('data-id') == id){
+						$(this).removeClass('selected');
+					}
+				})
+            });
+            if($('#multiple-right li').length==0){
+                $(this).removeClass('allow');
+                $('#multiple-right').append('<li class="defalut">还没有课程</li>');
+            }
+        }else{
+            $('#multiple-right').css('border','1px solid #ffa91e');
+        }
+    });
+	$('#course_add').click(function(){
+		var select_text = '';
+		var id_list = [];
+		$('#multiple-right li').each(function(){
+			var id = $(this).attr('data-id');
+			id_list.push(id);
+		});
+		if($('#multiple-right .defalut').length==0){
+			var _num=$('#multiple-right li').length;
+			if(parent.$('#CourseEdit').length==0){
+				parent.$('#CourseRange').hide();
+				parent.$('#selectArea').append('<a id="CourseEdit">已经选择'+_num+'个课程 <i class="choices-icon"></i></a>');
+			}else{
+				parent.$('#CourseEdit').html('已经选择'+_num+'个课程 <i class="choices-icon"></i>');
+			}
+			parent.$('#couponList').find('.choices-date').text('优惠范围：'+_num+'个课程');
+			if(parent.$('.multiple-select').length==0){
+				var _ul=$('<ul class="multiple-select" style="width:60%;height:200px"></ul>');
+				_ul.append($('#multiple-right').html());
+				parent.$('#selectArea').append(_ul);
+			}else{
+				parent.$('#selectArea ul').html($('#multiple-right').html());
+			}
+			parent.$('#selectArea').find('input[name="object_id"]').val(id_list);
+		}
+
+        parent.layer.closeAll();
+    })
+	$('#course_cel').click(function(){
+        var index = parent.layer.getFrameIndex(window.name);
+		parent.layer.close(index);
+    });
+	var page = 1;
+	cList();
+	function cList(){
+		var title = $('#search_course').val();
+		$.ajax({
+			type:"post",
+			url: '/org/discount/CourseListInfo',
+			data:{ page:page,title:title },
+			dataType:'json',
+			success:function(r){
+				var data = r.data;
+				if(data.length > 0 ){
+					var _html='';
+					$(data).each(function(i,item){
+						var selected = 0;
+						$('#multiple-right li').each(function(){
+							if($(this).attr('data-id') == item.course_id){
+								selected = 1;
+							}
+						});
+						if(selected == 1){
+							_html += '<li data-id='+item.course_id+' class="selected">'+item.title+'</li>'
+						}else{
+							_html += '<li data-id='+item.course_id+'>'+item.title+'</li>'
+						}
+					});
+					$('#multiple-left ul').append(_html);
+				}else{
+					$('#multiple-left').unbind('scroll');
+				}
+			},
+			complete:function(){
+			},
+			error: function(r){
+				page--;
+			}
+		});
+	}
+
+	$('#multiple-left>ul').scroll(function(){
+		var scrollTop = $(this).scrollTop();
+	　　var scrollHeight = $(this)[0].scrollHeight;
+	　　var offetHeight  = $('#multiple-left').height();
+	　　if(scrollTop + offetHeight >= scrollHeight){
+			page++;
+			cList();
+		}
+	});
+});
+</script>
+<body style="background:#fff">
+<div class="layer-courselist">
+    <div class="lc-so-name mt10" id="course-so"><form action=""><input type="text" id="keyword" name="course_name" placeholder="搜索课程名称" class="col-xs-10"></form></div>
+    <div class="lc-list mt15">
+		<p class="fs14">全部课程</p>
+        <div id="multiple-left">
+        <ul class="multiple-select mt10" id="org_course">
+        </ul>
+        </div>
+    </div>
+    <div class="co-option mt15" id="co-option"><a href="#" id="add-btn">添加 》</a><a href="#" id="del-btn">《 删除</a></div>
+    <div class="lc-list mt15">
+        <p class="fs14">已选课程</p>
+        <ul class="multiple-select mt10" id="multiple-right">
+			<li class="defalut">还没有课程</li>
+        </ul>
+    </div>
+    <div class="col-xs-20 tac mt10">
+		<button class=" btn mr20" id="course_add">确定</button>
+		<a href="javascript:;" class="btn-default" id="course_cel">取消</a>
+    </div>
+</div>
+</body>
+</html>

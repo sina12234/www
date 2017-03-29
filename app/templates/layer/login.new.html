@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>登录</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<meta name="renderer" content="webkit">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/bootstrap/bootstrap.min.css')}">
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/platform/index.css')}">
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+</head>
+<body>
+<div class="container-fuild">
+    <form  id="login_form" method='post' autocomplete="off">
+        <input type="hidden" name="url" value="{if !empty($url)}{$url}{/if}">
+        <input type="password" style="display:none;">
+        <ul class="reg-form form p20 col-xs-18">
+            <h1 style="padding:20px 20px 20px 0;font-size:18px;">登录并开始学习吧</h1>
+            <li>
+                <input type="text" name="uname" class="col-xs-20 lh-35 fs14" placeholder="请输入手机号">
+                <div class="tips cRed col-xs-20">&nbsp;</div>
+            </li>
+            <li>
+                <input type="password" name="pass" class="col-xs-20 lh-35 fs14" placeholder="请输入密码">
+                <div class="tips cRed col-xs-20">&nbsp;</div>
+            </li>
+            <li class="pd-b20">
+                <div class="c-fl"><input type="checkbox" name="forever"><label for="" style="padding:0">下次自动登录</label></div>
+                <a class="c-fr"target="_top"  href="/index.main.forget1">忘记密码？</a>
+            </li>
+            <li>
+                <button class="btn col-xs-20 blue-btn fs14">马上登录</button>
+            </li>
+            <li class="lh-30 pd-t5">
+                <div class="col-xs-20 row">使用社交账号直接登录</div>
+            </li>
+            <li class="lh-30 pd-t5">
+                <a href="/user/parterner/weixin?from=//yunke.com/index.teacherblog.entry/{$teacherId}" class="icon weixinlogin" target="_parent"></a>
+                <a href="/user/parterner/qq" class="icon qqlogin" target="_parent"></a>
+                {*<a href="" class="icon weibologin"></a>*}
+                {*<a href="#" class="icon alipaylogin"></a>*}
+            </li>
+            <li><span class="c-fr fs14">没有账号？<a href="/index.main.register" class="cBlue" target="_blank">立即注册</a></span></li>
+        </ul>
+    </form>
+</div>
+</body>
+<script>
+$(function() {
+    $("#login_form").submit(function(){
+        if($("input[name=uname]").val()=='' || $("input[name=uname]").val()=="邮箱/手机号"){
+            $('input[name=uname]').focus().css("border","solid 1px #fc401b").next().html('请输入手机号');
+            return false;
+        }
+        if($("input[name=pass]").val()=='' || $("input[name=pass]").val()=="密码"){
+            $('input[name=pass]').focus().css("border","solid 1px #fc401b").next().html('请输入密码');
+            return false;
+        }
+
+        $.post("/layer.main.DoLogin/{$source}/{$teacherId}",$("#login_form").serialize(),function(r){
+            if (r.code == 0) {
+                parent.location.reload();
+            } else {
+                layer.msg(r.errMsg, function(){
+                    parent.location.reload();
+                });
+            }
+        },"json");
+        return false;
+    });
+
+    $('input[name=uname],input[name=pass]').change(function(){
+        if($(this).val()!=''){
+            $(this).css("border","solid 1px #dfdfdf").next().html('&nbsp;')
+        }
+    });
+});    
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>云课网- 专业的K12在线教育平台</title>
+{part "/index.main.header"}
+</head>
+<body>
+<ul class="train-list">
+    {if !empty($cate->items)}
+	{foreach($cate->items as $k=>$v)}
+    <li data-id="{$v->pk_cate}"><p>{$v->name_display}</p><span>支持 {$v->name_display} 培训范围！</span></li>
+	{/foreach}
+	{/if}
+</ul>
+<p class="col-xs-20 tec"><button class="btn col-xs-5 blue-btn" id="train-btn">确定</button><span class="cGray">最多选三个</span></p>
+</body>
+</html>
+<script>
+$(function(){
+var train_select=parent.$('#scopes').val().split(",");
+for(var i=0;i < train_select.length;i++){
+    $(".train-list li[data-id='"+train_select[i]+"']").addClass("selected");
+    if($(".train-list li.selected").length >= 3){
+        $(".train-list li:not(.selected)").addClass("no");
+    }
+}
+var train_list=[];
+var train_listid=[];
+var t_index=parent.layer.getFrameIndex(window.name);
+//鼠标滑过选项
+    $(".train-list li").on("mouseover mouseout",function(event){
+        if(event.type == "mouseover"){
+            var w=450;
+            var this_width=$(this).find("span").width();
+            var this_x=$(this).offset().left;
+            if(this_x < this_width){
+                $(this).find("span").css({ "left":"-1px","display":"block" });
+            }else{
+                $(this).find("span").css({ "right":"-1px","display":"block" });
+            }
+        }else if(event.type == "mouseout"){
+            $(this).find("span").removeAttr("style");
+        }
+    });
+//点击选培训范围    
+    $(".train-list li").click(function(){
+        if($(".train-list li.selected").length<=3){
+            if($(this).is(".selected")){
+                $(this).removeAttr("class");
+                //train_listid.splice(jQuery.inArray($(this).attr('data-id'),train_listid),1);
+                //train_list.splice(jQuery.inArray($(this).find("p").html(),train_list),1);
+                if($(".train-list li.selected").length<3){
+                    $(".train-list li.no").removeClass("no");
+                }
+            }else{
+                if(!$(this).is(".no")){
+                    $(this).addClass("selected");
+                }
+                if($(".train-list li.selected").length>=3){
+                    $(".train-list li:not(.selected)").addClass("no");
+                }
+            }
+        };
+    });
+
+    $("#train-btn").click(function(){
+        if($(".train-list li.selected").length > 0){
+            $(".train-list li.selected").each(function(){
+                train_list.push($(this).find("p").html());
+                train_listid.push($(this).attr("data-id"));
+            });
+            parent.$('#scopestxt').val(train_list).show();
+            parent.$('#scopes').val(train_listid);
+            parent.layer.close(t_index);
+        }else{
+            parent.$('#scopestxt').empty().hide();
+            parent.$('#scopes').empty();
+            parent.layer.close(t_index);
+        }
+    })
+})
+</script>

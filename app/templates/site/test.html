@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>高能100 - 专业的K12在线教育平台</title>
+    <meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+    <meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+    <meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+    {part "/index.mainv2.header"}
+</head>
+
+<body>
+    {part "/index.mainv2.nav.home"}
+    <section>
+        <button>测试登录</button>            
+    </section>
+    {part "/index.mainv2.footer"}
+</body>
+<script type="text/javascript">
+$(function  () {
+    $.post("/index.mainv2.CheckLoginAjax", function (r) {
+        if(r=='no'){
+            layer.open({
+                    type: 2,
+                    area: ['520px', '320px'],
+                    shadeClose: true,
+                    content: ['/layer.main.userLogin', 'no']
+                });
+            }
+   }, "html");
+})
+</script>
+</html>

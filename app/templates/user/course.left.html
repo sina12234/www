@@ -1,0 +1,36 @@
+<div class="col-md-4 p0">
+	<nav class="course-menu-nav user-left-menu">
+		<ul class=" set-course-ltmenu fs14 tac">
+			{if $isAdmin==1}
+			<li>
+				<a href="/user.org.editcourse.{$courseId}" class="orange-link {if ($isCheck==1)}active{/if}" title="基本信息">基本信息</a>
+			</li>
+			<li>
+				<a href="/user.org.setcourseimg.{$courseId}" class="orange-link {if ($isCheck==2)}active{/if}" title="课程图片">课程图片</a>
+				{if $isImg==0}<span class="doubt-icon"></span>{/if}
+			</li>
+			<li>
+				<a href="/user.org.setcourseabstract.{$courseId}" class="orange-link {if ($isCheck==3)}active{/if}" title="课程简介">课程简介</a>
+			</li>
+			{/if}
+			<li>
+				<a href="/user.org.plan.{$courseId}" class="orange-link {if ($isCheck==4)}active{/if}" title="班级排课">班级排课</a>
+			</li>
+			<li>
+				<a href="/user.teacher.filelist.{$courseId}" class="orange-link {if ($isCheck==5)}active{/if}" title="文件管理">文件管理</a>
+			</li>
+			<li>
+				<a href="/user.teacher.studentlist.{$courseId}" class="orange-link {if ($isCheck==6)}active{/if}" title="学员管理">学员管理</a>
+			</li>
+			<li>
+				<a href="/user.teacher.Statistics.{$courseId}" class="orange-link {if ($isCheck==7)}active{/if}" title="学习统计">学习统计</a>
+			</li>
+			<li>
+				<a href="/comment.manage.CommentList.{$courseId}" class="orange-link {if ($isCheck==8)}active{/if}" title="评价管理">评价管理</a>
+			</li>
+            <li>
+				<a href="/org.customerTools.courseCustomerList.{$courseId}" class="orange-link {if ($isCheck==9)}active{/if}" title="课程服务">课程服务</a>
+			</li>
+		</ul>
+	</nav>
+</div>

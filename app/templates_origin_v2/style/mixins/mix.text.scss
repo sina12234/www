@@ -1,0 +1,15 @@
+//文本超出 省略
+@mixin ellipsis(){
+    -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+}
+%ellipsis{
+    -webkit-text-overflow:ellipsis;
+       -moz-text-overflow:ellipsis;
+         -o-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+}

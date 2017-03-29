@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>APP下载页面</title>
+<meta charset="UTF-8">
+{part "/site.main.header"}
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/jquery.fullPage.css')}">
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery.fullPage.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-ui.min.js')}"></script>
+</head>
+<style>
+  .client_m1, .client_m2, .client_m3, .client_m4, .client_m5{ overflow: hidden;height: 100%;}
+  .client_m1{ background:url(/assets_v2/img/wo_img/wo_one.png) no-repeat!important; }
+  .client_m2{ background:url(/assets_v2/img/wo_img/wo_two.png) no-repeat!important; }
+  .client_m3{ background:url(/assets_v2/img/wo_img/wo_three.png) no-repeat!important; }
+  .client_m4{ background:url(/assets_v2/img/wo_img/wo_four.png) no-repeat!important; }
+  .m1_cont_l .mer_pic{ width:200px;height:200px; }
+  .client_m1 img,.client_m2 img,.client_m3 img,.client_m4 img{ width:100%; }
+  .iph_and{ position: absolute;top:45%;right:150px; }
+  .download .wo_phone_load{ margin-left:20px; }
+  .download a.ios{ color:#fff;font-size: 20px;width:51%;border: 2px solid #fff;border-radius: 20px;height:55px;float:left;margin-top: 20px; }
+  .download a.ios:hover,.download a.android:hover{ background:#ffa81e; }
+  .download a.ios img{ width:20%;margin:5px 10px 10px 10px;  }
+  .download a.android{ color:#fff;font-size: 20px;width:51%;border: 2px solid #fff;border-radius: 20px;height:55px;float:left;margin-top: 50px; }
+  .download a.android img{ width:20%;margin:5px 10px 10px 10px; }
+</style>
+<body>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ie8/ejs.ie8.js')}"></script>
+<![endif]-->
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ejs.min.js')}"></script>
+  <!-- container -->
+   <div id="fullpage">
+    <div class="section">
+	{part "/site.main.nav.app"}
+        <div class="d_container client_m1">
+            <div class="m1_cont">
+                        <div class="m1_cont_l">
+                            <img class="m1bg_pic" src="/assets_v2/img/wo_img/wo_one_1.png" alt=""/>
+                            <div class="iph_and mt20 fl">
+                                <div class="download">
+                                    <span class="fr wo_phone_load">
+                                        <a href="#" class="ios">
+                                          <img src="/assets_v2/img/wo_img/pingguo.png" alt="">
+                                          <span>Iphone版</span>
+                                        </a>
+                                        <a href="#" class="android">
+                                          <img src="/assets_v2/img/wo_img/anzhuo.png" alt="">
+                                          <span>Android版</span>
+                                        </a>
+                                    </span>
+                                    <span class="fl ml10">
+                                        <img class="mer_pic" class="hidden-xs" src="/assets_v2/img/wo_img/erweima.png" alt="二维码"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+            </div>
+            </div>
+    </div>
+    <!--main2-->
+    <div class="section">
+        <div class="client_m2">
+            <div class="m2_cont">
+                    <div class="col-md-20">
+                        <img src="/assets_v2/img/wo_img/wo_two_2.png" alt=""/>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <!--main3-->
+    <div class="section">
+        <div class="client_m3">
+            <div class="m3_cont">
+                    <div class="col-md-20">
+                        <img src="/assets_v2/img/wo_img/wo_three_3.png" alt=""/>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <!--main3-->
+    <div class="section">
+        <div class="client_m4">
+            <div class="m4_cont">
+                    <div class="col-md-20">
+                        <img src="/assets_v2/img/wo_img/wo_four_4.png" alt=""/>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+<script>
+$(function() {
+    $('#fullpage').fullpage({
+        'verticalCentered': false,
+        'css3': true,
+        'sectionsColor': ['#fff', '#00FF00'],
+        anchors: ['1', '2','3','4','5'],
+        'navigation': true,
+        'navigationPosition': 'right',
+        //'navigationTooltips': ['云课助手', '云课app', '移动在线课堂','在线答题卡','多场景上课模式'],
+      //  'scrollOverflow': true,
+        loopBottom:true,
+        /*afterLoad: function(anchorLink, index){
+            if(index != 3){
+                $('#s_val').blur();
+            }
+        }*/
+    });
+    setInterval(function() {
+        $.fn.fullpage.moveSlideRight();
+    }, 10000);
+    var pic_h=$(window).height();
+    if(pic_h>670){
+        $(".m1_cont .m1bg_pic").css({
+            width : '100%',
+            bottom:  '0'
+        });
+        $(".m1_cont_l .iph_and").css({
+            right:'125px'
+        })
+    }
+});
+</script>

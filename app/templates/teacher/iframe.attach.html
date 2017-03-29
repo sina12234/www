@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>高能100 - 专业的K12在线教育平台</title>
+    <meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+    <meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+    <meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+    {part "/site.main.header"}
+</head>
+<body style="background:#f7f7f7;">
+    <div class='lesson-t' id="showthis">
+		<form action="./teacher.manage.upload.{$plan_id}" enctype="multipart/form-data" method="post"  name="uploadfile">
+		<p attr="{$errorcode}" id="code">{$error}</p>
+        <div class='lesson-but'>
+		<label>
+			<input type="file" name="upfile" value="上传图片"/>
+        </label>
+		</div>
+		<div class='clear'></div>
+        <div class='lesson-name'>
+            <label class='fs14'>名称:</label>
+            <label><input type="text" name="title" placeholder="课件标题"></label>
+        </div>
+		{*    <div class='box-2-i'>
+			<input type="text" name="title" value="" placeholder="课件标题">
+		</div>
+		*}
+        <div class='mt10 lesson-count'>
+            &nbsp;<label class='fs14 cGray clear pdr20'>便于学生识别,请给文件命名,文字少于10字</label>
+            &nbsp;<label class='fs14 cGray'><p class='c-fl'>支持格式：</p> <b class='cGreen'>txt,pdf,jpg,doc,docx,ppt,pptx,xls,xlsx</b></label>
+        </div>
+        </div>
+        <div class='lesson-butwc mt20'>
+		<label>
+            <input type="submit" value="完成" id="submit">
+        </label>
+		</div>
+        </form>
+    </div>
+</body>
+<script>
+	$("#showthis").hide();
+	$(document).ready(function(){
+		var code = $("#code").attr("attr");
+		if(code == 200){
+			$("#showthis").hide();
+			parent.location.reload();
+			parent.layer.close(index);
+		}else{
+			$("#showthis").show();
+		}
+		/*	
+		console.log(code);
+		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+		$("#submit").click(function(){
+			parent.location.reload();
+			parent.layer.close(index);
+
+			return false;
+
+
+		});
+		*/
+	});
+
+</script>
+</html>
+

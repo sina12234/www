@@ -1,0 +1,70 @@
+/*
+* button-set
+* set button height,padding-left and padding-right;
+* height:30px  side-padding:12px
+*/
+@mixin button-set($height:30px,$side-padding:12px,$btn-border-color:false) {
+    height: $height;
+    padding: 0 $side-padding;
+    @if $btn-border-color != false {
+        line-height: $height - 2px;
+    }
+    @else {
+        line-height: $height;
+    }
+}
+/*
+* button style mixin
+* text-color:$text-color
+* main-color:$primary-color default-value:#c8c8c8
+* border-color:$btn-border-color default-value:#c8c8c8
+*/
+@mixin button($text-color,$primary-color,$btn-border-color:'false') {
+    display: inline-block;
+    text-align: center;
+    @include button-set(30px,25px,$btn-border-color);
+    cursor: pointer;
+    border-radius: 3px;
+    @if length($text-color) == 1 {
+        color: $text-color;
+    }
+    @else if length($text-color) == 2 {
+        color: nth($text-color,1);
+
+        &:hover {
+            color: nth($text-color,2);
+        }
+    }
+    @else {
+         @error"$text-color length is wrong , length is #{length($text-color)} ";
+    }
+    @if length($primary-color) == 1 {
+        background: $primary-color;
+    }
+    @else if length($primary-color) == 2 {
+        background: nth($primary-color,1);
+
+        &:hover {
+            background: nth($primary-color,2);
+        }
+    }
+    @else {
+         @error"$primary-color length is wrong , length is #{length($primary-color)} ";
+    }
+
+    @if $btn-border-color != 'false' {
+        @if length($btn-border-color) == 1 {
+            border: 1px solid $btn-border-color;
+        }
+        @else if length($btn-border-color) == 2 {
+            border: 1px solid nth($btn-border-color,1);
+
+            &:hover {
+                border: 1px solid nth($btn-border-color,2);
+            }
+        }
+        @else {
+             @error"$btn-border-color length is wrong , length is #{length($btn-border-color)} ";
+        }
+    }
+}

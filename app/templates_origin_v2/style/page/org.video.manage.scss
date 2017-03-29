@@ -1,0 +1,303 @@
+//视频管理
+.org-video-path{
+    border-bottom: 1px solid $border-color;
+    line-height:200%;
+    padding-bottom:10px;
+}
+.org-video-uploadinfo{
+    line-height: 180%;
+    word-break: break-all;
+}
+.org-video-uploadarea,.org-video-list{
+    min-height: 295px;
+    border-right: 1px solid $border-color;
+    .upload-btn-icon{
+        float: left;
+        margin-top:5px;
+        @include sprite ($upload-btn);
+    }
+    .ov-upload-btn{
+        @include center(260px,70px);
+    }
+}
+.org-video-list{
+    text-align:left;
+    .ov-list-item{
+        float:left;
+        width:100%;
+        height:70px;
+        padding-top:10px;
+        border-bottom:1px solid #efefef;
+        margin-bottom:10px;
+    }
+    .ov-item-name{
+        height:25px
+    }
+    .ov-item-tips{
+        padding-right: 0
+    }
+    .ov-item-progress{
+        background:#ddd;
+        height:15px;
+        position:relative;
+        @include b-radius(2px);
+        overflow: hidden;
+    }
+    .ov-item-bar{
+        background: $main-theme-color;
+        height:15px;
+        position:absolute;
+        top:0;
+        left:0;
+        @include b-radius(2px);
+    }
+}
+.org-video-player{
+    float:left;
+    padding:0
+}
+.org-video-partlist,.org-video-pointlist{
+    float: right;
+    padding-right:0;
+    .ov-tit{
+        height:30px;
+        line-height:25px;
+        border:1px solid $border-color;
+        background: $gray-background-color;
+    }
+    .ov-partlist-content,.ov-pointlist-content{
+        border:1px solid $border-color;
+        border-top:0;
+        position: relative;
+        overflow: auto;
+        .no-part{
+            @include center(140px,100px);
+        }
+    }
+    .ov-pointlist{
+        li{
+            float: left;
+            width: 100%;
+            padding:10px 5px;
+            position:relative;
+            .edit-icon,.del-icon{
+                display: none;
+            }
+            &:nth-child(even){
+                background: $lighter-background-color;
+            }
+            .btn,.gray-btn{
+                line-height:23px;
+                height:25px;
+                padding:0 10px;
+            }
+            &:hover{
+                .edit-icon,.del-icon{
+                    display:block;
+                }
+            }
+        }
+    }
+    .ov-pointlist{
+        .point-time{
+            background:#ccc;
+            color:#fff;
+            @include b-radius(2px);
+            padding:3px;
+        }
+        .point-info{
+            position: absolute;
+            padding:0 10px 0 0;
+            word-wrap:break-word;
+            top:30px;
+            left:10px;
+            right:102px;
+        }
+        .point-img{
+            width:100px;
+            height:56px;
+            overflow: hidden;
+            padding:0;
+        }
+    }
+    .ov-partlist-btn,.ov-pointlist-btn{
+        display: none
+    }
+    .point-input{
+        width:100%;
+        padding:3px;
+        border:1px solid $border-color;
+    }
+    .part-time{
+        width:60px;
+        padding:3px;
+        border:1px solid $border-color;
+    }
+}
+.org-video-timeline{
+    position: relative;
+    height:45px;
+    .ov-timeline-base{
+        background:#dddddd;
+        height:14px;
+        width:100%;
+        position: relative;
+        overflow:hidden;
+    }
+    .ov-timeline-opacity{
+        display: none;
+        background:#000;
+        width:100%;
+        height:100%;
+        position: absolute;
+        z-index:2;
+        top:0;
+        left:0;
+        @include opacity(30);
+    }
+    .ov-timeline-handle{
+        @include sprite($video-handle);
+        position: absolute;
+        z-index:4;
+        display: none;
+    }
+    .ov-timeline-handle-on,.ov-timeline-handle:hover{
+        @include sprite($video-curr-handle);
+        position: absolute;
+        z-index:4;
+        display: none;
+    }
+    .ov-timeline-bar{
+        background:#5aa701;
+        height:14px;
+        position:absolute;
+        text-align: center;
+        font-style: normal;
+        color:#fff;
+    }
+    .ov-timeline-currpoint{
+        background:#fff;
+        height:14px;
+        width:2px;
+        position:absolute;
+        z-index: 2;
+    }
+}
+.ov-timeline-scale{
+    float:left;
+    width:100%;
+    border-right:1px solid #dddddd;
+    li{
+        float:left;
+        border-left:1px solid #dddddd;
+        height:15px;
+        span{
+            float:left;
+            margin-top:15px;
+        }
+    }
+}
+.ov-timeline-point{
+    float:left;
+    width:120%;
+    li{
+        float:left;
+        height:15px;
+    }
+}
+.ov-coverlist{
+    float:left;
+    width:100%;
+    padding:0;
+    li{
+        margin-bottom:15px;
+        padding:0 10px;
+        cursor: pointer;
+        img{
+            width:100%;
+        }
+        i{
+            @include sprite($img-selected);
+            display: none;
+            position: absolute;
+            right:0px;
+            top:-7px;
+        }
+        span{
+            border:2px solid #56b02a;
+            position: absolute;
+            top:0;
+            bottom:0;
+            right:10px;
+            left:10px;
+            display: none;
+        }
+        &:hover span{
+            display:block;
+        }
+        &.on span,&.on i{
+            display:block;
+        }
+    }
+}
+
+//老版本视频管理
+.video-main{margin:0 auto;float:none;border:1px solid #ddd;background:#fff;padding:25px 20px}
+.video-path{margin:0 auto;float:none;padding:0;line-height:45px}
+.video-classname{float:left;height:35px;padding:0}
+.video-add{float:left;padding:0;border:1px dashed #ccc;padding:50px 0;background:#f4f4f4}
+.video-addbtn{width:150px;height:190px;left:40%;cursor:pointer;position:relative;margin-top:50px}
+.video-upload{float:left;background:url(../img/icon-video.png) no-repeat;width:75px;height:85px;margin-left:30px}
+.video-addbtn button{margin-top:15px;float:left;width:100%;background:#fafcff;border:1px solid #dedede;height:45px;-webkit-border-radius:5px;-moz-border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-khtml-border-radius:5px;border-radius:5px}
+.video-addbtn button:hover{background:#198fee;color:#fff;border:1px solid #198fee}
+.video-tips{line-height:30px}
+.none{display:none;width:0;height:0}
+.no-video{float:none;text-align:center;min-height:400px}
+.no-video p{padding-top:150px}
+.video-list{float:left;width:100%}
+.video-txt{float:left;height:85px;padding-left:0}
+.video-list li{float:left;width:100%;padding:20px 0;border-bottom:1px solid #dedede}
+.video-list .video-pic{float:left;padding-left:0}
+.video-list .video-pic img{width:100%}
+.video-list .video-tit{font-size:18px;height:35px;float:left;width:100%;overflow:hidden;-ms-text-overflow:ellipsis;text-overflow:ellipsis;white-space:nowrap}
+.video-progress{float:left;width:100%;position:relative;height:20px;background:#e5e5e5;border:1px dashed #d5d5d5;-webkit-border-radius:5px;-moz-border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-khtml-border-radius:5px;border-radius:5px;overflow:hidden}
+.video-bar,.video-bar-cancel{position:absolute;height:20px;background:#04bb2f;padding-right:10px;text-align:right;color:#fff;line-height:20px}
+.video-bar-cancel{background:#f93919}
+.video-status{position:absolute;bottom:0}
+.video-order-u{float:left;background:url(../img/icon-video.png) no-repeat -27px -100px;width:10px;height:20px}
+.video-order-u:hover{background-position:-27px -130px}
+.video-order-d{float:left;background:url(../img/icon-video.png) no-repeat -5px -100px;width:10px;height:20px}
+.video-order-d:hover{background-position:-5px -130px;color:#198fee}
+.video-order{float:left;width:30px;padding-top:5px}
+.video-edit{float:left;padding-top:35px}
+.video-add-more,.video-edit-btn{float:left;width:95px;height:25px;border:1px solid #dbdbdb;text-align:center;line-height:25px}
+.video-add-more:hover,.video-edit-btn:hover{border:1px solid #198fee;color:#198fee}
+.video-add-more{float:right;font-size:14px}
+.video-add-more:hover{color:#198fee}
+.trans-btn{float:left;width:100%;text-align:center;padding-top:40px}
+.trans-code{width:115px;height:40px;color:#fff;background:#198fee;border:0;-webkit-border-radius:5px;-moz-border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-khtml-border-radius:5px;border-radius:5px}
+.trans-code:hover{background:#347edc}
+.video-add-more2,.video-add-more3{width:95px;height:40px;border:1px solid #dbdbdb;color:#999;display:inline-block;-webkit-border-radius:5px;-moz-border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-khtml-border-radius:5px;border-radius:5px;background:#fff;font-size:14px}
+.video-add-more2 span{width:20px;height:20px;background:url(../img/icon-video.png) no-repeat -48px -100px;float:left}
+.video-add-more3 span{width:20px;height:20px;background:url(../img/bofang.png) no-repeat;float:left}
+.video-add-more2:hover,.video-add-more3:hover{border:1px solid #198fee;color:#198fee}
+.video-add-more2:hover span{background-position:-48px -129px}
+.video-flash{float:left;width:100%;background:#000;height:500px}
+.video-time-set{float:left;width:100%;margin-top:20px}
+.video-time-input{float:left;margin-right:10px;position:relative}
+.time-input{border:1px solid #ddd;margin-left:10px;padding:3px;width:60px;display:inline-table}
+.video-edit-area{float:left;padding:10px 0 0 0}
+.video-edit-cover{float:right;padding:20px 0 0 10px}
+.video-time-btn{border:1px solid #ddd;padding:3px;margin-right:5px;padding:3px 10px;display:inline;background:#e5e5e5}
+.video-edit-cover .video-time-btn{float:left;margin:65px 0 0 10px;cursor:pointer;color:#333}
+.video-edit-cover .video-time-btn:hover{color:#198fee}
+.video-time-add{margin-right:8px;padding:3px 10px;background:url(../img/addvideo.png) no-repeat 0 3px}
+.video-time-del{padding:3px 10px;background:url(../img/delvideo.png) no-repeat 0 5px;margin-left:5px}
+.video-cover{position:relative;float:left;padding:0}
+.video-cover img,.video-coverlist li img{width:100%}
+.video-cover span{position:absolute;cursor:pointer;left:0;right:0;background:rgba(0,0,0,.8);top:0;bottom:0;color:#fff;text-align:center;line-height:100px;overflow:hidden;height:0}
+.video-coverlist{float:left;width:100%;padding-top:10px;display:none}
+.video-coverlist li{position:relative;float:left;padding:0 10px 10px 0;cursor:pointer}
+.video-coverlist li span{position:absolute;top:0;bottom:10px;right:10px;background:rgba(0,0,0,.6);left:0;border:2px solid red;display:none}
+.video-cover:hover span{height:auto}
+.video-coverlist li.on span,.video-coverlist li:hover span{display:block}

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<head>
+<title>资料信息 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 资料信息 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script src="{utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js')}"></script>
+</head>
+<body>
+{part "/site.main.nav"}
+<section class="pd30">
+<div class="container">
+		<div class="row">
+    {part "/org.main.menu.info"}
+{if isset($org->tmp_status)&&empty($act)}
+    <div class="right-main col-md-16 col-sm-16 bgf">
+        <div class='content'>
+            <p class='pdl5 cDarkgray fs16 fob' style="padding-bottom:20px;">{'资料信息'|tr:'org'}</p>
+            <div class='pos-rel status'>
+		{if $org->tmp_status==0}
+			<div class="col-md-20 tac status-tips cGray2">
+			    <p><img src="{utility_cdn::img('/assets_v2/img/pet3.png')}" alt="" width="90"></p>
+				 <p class="fs16">{'您的资料信息已提交，我们将在两个工作日内完成资料审核，并通过站内信进行反馈'|tr:'org'}~</p>
+				<p class="p10">
+				<a href="org.main.info?act=edit" class="c-fr fs16"><span class="data-edit-icon"></span>{'回上一步继续修改'|tr:'org'}</a>
+				  </p>
+			 </div>
+		{/if}
+		{if $org->tmp_status==1}
+			<div class="pos-abs status-tips cGray2">
+			    <p><img src="{utility_cdn::img('/assets_v2/img/pet4.png')}" alt="" width="90"></p>
+				 <p class="fs16">{'您的资料已经通过审核'|tr:'org'}~</p>
+				<p class="p10">
+				<a href="org.main.delCheckInfo?sk=tag" class="btn col-lg-3 col-lg-offset-8">{'点击查看'|tr:'org'}</a>
+				  </p>
+			 </div>
+		{/if}
+		{if $org->tmp_status==-1}
+			<div class="pos-abs status-tips cGray2">
+			    <p><img src="{utility_cdn::img('/assets_v2/img/pet3.png')}" alt="" width="90"></p>
+				 <p class="fs16">{'非常抱歉您提交的资料未通过审核，原因已经通过站内信反馈给您'|tr:'org'}~</p>
+				<p class="p10">
+				<a href="org.main.info?act=edit" class="btn col-lg-3 col-lg-offset-8">{'重新提交资料'|tr:'org'}</a>
+				  </p>
+			 </div>
+		{/if}
+            </div>
+        </div>
+    </div>
+{else}
+    <div class="right-main col-md-16 col-sm-16 bgf">
+        <div class="content">
+            <p class='pdl5 cDarkgray fs16 fob' style="padding-bottom:20px;">{'资料信息'|tr:'org'}</p>
+            <form id="info-form" class="form-horizontal">
+                <div class="form-group col-md-20">
+                    <label class="col-md-3"><span class="cRed"></span>&nbsp;{'机构LOGO'|tr:'org'}:</label>
+					<label class='j-img'>
+						<div id="panel" style="width:180px;height:48px;overflow:hidden;">
+							<a class="institution" id="meg" {if !empty($org->thumb_big)}style='background:#f1f1f1;'{/if}>
+								<p class="pd0">{'点击修改'|tr:'org'}</p>
+								<img id="img_p" class="info-logo-img" src="{if !empty($org->thumb_big)}{utility_cdn::file($org->thumb_big)}{else}/assets/images/upload_org_logo.png{/if}" alt="">
+							</a>
+							 <input type="hidden" name="thumb_big" value="{$org->thumb_big}" />
+							 <input type="hidden" name="thumb_med" value="{$org->thumb_med}" />
+							 <input type="hidden" name="thumb_small" value="{$org->thumb_small}" />
+							 <input type="hidden" size="4" id="x" name="x">
+							 <input type="hidden" size="4" id="y" name="y">
+							 <input type="hidden" size="4" id="x2" name="x2">
+							 <input type="hidden" size="4" id="y2" name="y2">
+							 <input type="hidden" size="4" id="w" name="w">
+							 <input type="hidden" size="4" id="h" name="h">
+						</div>
+					</label>
+                    {*<label class="j-img col-lg-8 col-sm-8 col-md-8 col-xs-8">
+                        <div class='box-tcimg col-lg-4 col-sm-9 col-md-5'>
+                            <img class="col-lg-12 col-sm-12 pd0" src="{if $org->thumb_big}{utility_cdn::file($org->thumb_big)}{else}/assets_v2/img/mty.png{/if}">
+                        <p class="col-lg-10 col-lsm-12 pd0">{'点击修改'|tr:'org'}</p>
+                        </div>
+                        <div class='box-from col-sm-2 col-lg-5 pd0 col-md-4'>
+                            <input type="button" id="logo" value="{'上传图片'|tr:'org'}">
+                            <a class="col-lg-8 hidden-lg hidden-sm hidden-md hidden-xs">{'上传图片'|tr:'org'}</a>
+                        </div>
+                        <div class='form-box'>
+                            <input type="hidden" name="thumb_small" value="{$org->thumb_big}">
+                            <input type="hidden" name="thumb_med" value="{$org->thumb_med}">
+                            <input type="hidden" name="thumb_big" value="{$org->thumb_small}">
+                        </div>
+                    </label>*}
+                    <span class="click-span" style="display:none">{'点击我'|tr:'org'}+</span>
+                    <label class="absolite visible-lg"><p>{'尺寸宽度180px，高度48px,支持jpg、png格式，图片小于3000KB'|tr:'org'}</p></label>
+                </div>
+				<div class="form-group col-md-20">
+                    <label class="col-md-3"><span class="cRed">*</span>&nbsp;{'机构全称'|tr:'org'}:</label>
+					<input type="text" class="form-cto fs14 col-md-8" placeholder="{'汉字少于30个，支持120英文字符'|tr:'org'}" maxlength="30" name="name" value="{$org->name}">
+                </div>
+                <div class="form-group col-md-20">
+                    <label class="col-md-3"><span class="cRed">*</span>&nbsp;{'机构简称'|tr:'org'}:</label>
+                    <input type="text" class="form-cto col-md-8 fs14" name="subname" value="{$org->subname}" placeholder="{'请务必填写真实机构简称'|tr:'org'}">
+                    <div class='clear'></div>
+                    <div class="col-md-3"></div>
+                    <label class="absolite2 cGray visible-lg"><p>{'便于页面展现,最大长度6个字'|tr:'org'}</p></label>
+                </div>
+                {*
+				<div class="form-group col-md-20">
+                    <label class="col-md-3"><span class="cRed">*</span>&nbsp;{'公司名称'|tr:'org'}:</label>
+                    <input type="text" class="form-cto col-md-8 fs14" name="company" value="{$org->company}" placeholder="{'请务必填写真实名称'|tr:'org'}">
+                    <div class='clear'></div>
+                    <label class="absolite1 visible-lg"><p>{'用于正式文档展现,最大长度30个汉字'|tr:'org'}</p</label>
+                </div>
+				*}
+                <div class="form-group col-md-20">
+                    <label class="col-md-3"><span class="cRed">*</span>&nbsp;{'培训范围'|tr:'org'}:</label>
+                   <div class="label-for col-md-17 row" id="train">
+                        <input type="text" class="col-sm-6 fs14 form-cto" name="scopestxt" id="scopestxt" style="{if !empty($org->scopes)}display:block;{else}display:none;{/if}" value="{if !empty($org->scopes)}{$org->scopes}{/if}">
+                        <input type="hidden" name="scopes" id="scopes" value="{if isset($org->idStr)}{$org->idStr}{/if}">
+                        <span class="edit-train mt5 ml10 c-fl" style="display:block;">点击可修改</span>
+                        <span class=" msg fs12 cRed"></span>
+                    </div>
+                </div>
+                <div class="form-group col-md-20">
+                    <label class="col-md-3"><span class="cRed">*</span>&nbsp;{'所在地区'|tr:'org'}:</label>
+                    <select id="province" class="sel-1 col-sm-3 col-md-3 fs14" name="province">
+                        <option value='0'>{'请选择'|tr:'org'}</option>
+                        {if !empty($province_list)}
+                        {foreach $province_list as $province}
+                        <option value='{$province->region_id}' {if $org->province==$province->region_id}selected{/if}>{$province->name}</option>
+                        {/foreach}
+                        {/if}
+                    </select>
+                    <select class="city sel-2 col-sm-3 col-md-3 fs14" name="city" style="display:none;">
+                        <option value='0' class="fs12">{'请选择'|tr:'org'}</option>
+                    </select>
+                    <select class="county col-sm-2 col-md-2 sel-2 fs14" name="county" style="display:none;">
+                        <option value='0' class="fs12">{'请选择'|tr:'org'}</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-20">
+                    <label class="col-md-3"><span class="cRed">*</span>&nbsp;{'联系地址'|tr:'org'}:</label>
+                    <input type="address" class="form-cto col-md-8 fs14" name="address" value="{$org->address}" placeholder="{'请务必填写真实联系地址'|tr:'org'}">
+                </div>
+                <div class="form-group col-md-20">
+                    <label class="col-md-3"><span class="cRed">*</span>&nbsp;{'服务电话'|tr:'org'}:</label>
+                    <input type="text" class="form-cto col-md-8 col-sm-6 fs14" placeholder="{'请务必填写真实服务电话'|tr:'org'}" name="hotline" value="{$org->hotline}">
+                    <div class="col-md-6 fs14 cGray mt5">区号-电话号 例：010-2109822</div>
+                </div>
+                <div class="form-group col-md-20">
+                    <label class="col-md-3"><span class="cRed">*</span>&nbsp;{'电子邮箱'|tr:'org'}:</label>
+                    <input type="email" class="form-cto fs14 col-md-8" placeholder="{'请务必填写真实邮箱地址'|tr:'org'}" name="email" value="{$org->email}">
+                </div>
+                <div class="form-group col-md-20">
+                    <label class="col-md-3"><span class="cRed">*</span>&nbsp;{'关于我们'|tr:'org'}:</label>
+                    <br>
+                    <div class="clear"></div>
+                    <textarea id="desc" name="desc" placeholder="请输入结构简介"  style="width:890px;height:270px;">{if empty($org->desc)}{$org->desc}{else}{$org->desc}{/if}</textarea>
+                </div>
+                <div class="form-group col-md-20 tac">
+                    <button class="btn">{'提交审核'|tr:'org'}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+	{/if }
+	</div>
+	</div>
+</section>
+{part "/site.main.footer"}
+<style type="text/css">
+#uploadIm_o{
+    width: 392px;
+    height: 212px;
+    margin:20px auto;
+    background-color: #ececec;
+    display: none;
+	position: relative;
+}
+.image-box{
+	position: absolute;
+	margin:-25px 0 0 -90px;
+	top:50%;
+	left: 50%;
+}
+</style>
+<!-- 机构logo -->
+<section id="upload-logo" style="display:none;">
+    <div class="upload-img tac mt20 mb20">
+        <img src="/assets_v2/img/org-logo.png" alt="">
+    </div>
+    <div id="uploadIm_o">
+        <img class="image-box" src="{if !empty($org->thumb_big)}{utility_cdn::file($org->thumb_big)}{else}/assets_v2/img/org-logo.png{/if}"/>
+    </div>
+    <p class="tac">
+        <button class="btn" id="uploadImg">上传图片</button>
+        <button class="gray-button" id="saveImg" style="display:none;">保存</button>
+    </p>
+    <input id="progress" type="hidden" />
+</section>
+<!-- /机构logo -->
+</body>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+<script type="text/javascript">
+$(function(){
+    $('#meg').on('click', function(){
+		{if !empty($org->thumb_big)}
+		$('#uploadImg').text('重新上传');
+		$('#saveImg').show();
+		$('#uploadIm_o').show();
+		$('.upload-img').hide();
+		{/if}
+        layer.open({
+            type: 1,
+            title: ['上传图片'],
+            shadeClose: true,
+            shade: 0.8,
+            area: ['500px','400px'],
+            //content: $('#upload-logo')
+            content:$('#upload-logo')
+
+        });
+    });
+
+    $('#megs').on('click', function(){
+        layer.open({
+            type: 2,
+            title: '添加修改',
+            area: ['800px', '600px'],
+            shadeClose: true,
+            content: '{"/org.main.iframeAbout"}'
+        });
+    });
+
+
+var jcrop_api, boundx, boundy;
+var uploader = new plupload.Uploader({
+        runtimes: 'html5,flash,silverlight,html4',
+        browse_button: 'uploadImg',
+        url: '/file.main.uploadLogoPic',
+        filters: {
+            mime_types : [
+            { title : "Image files", extensions : "jpg,jpeg,gif,png" }
+            ],
+            max_file_size:"2048kb"
+        }
+        ,multi_selection:false
+    });
+
+    uploader.init();
+
+    uploader.bind('FilesAdded', function(up, files) {
+        uploader.start();
+    });
+
+    uploader.bind('Error', function(up, error) {
+        if(error.errorcode == -600){
+            layer.msg('文件太大了，请选择小于6M的文件');
+        }else if(error.errorcode == -601){
+            layer.msg('图片格式不正确')
+        }else{
+            layer.msg('出错了，请重新选择文件或者刷新页面再重新选择文件');
+        }
+    });
+
+    uploader.bind('UploadProgress', function(up, file) {
+        if(file.percent == 100) {
+            $('#uploadImg').text('重新上传');
+            $('#saveImg').show();
+            $('#uploadIm_o').show();
+            $('.upload-img').hide();
+        }
+    });
+
+    uploader.bind('FileUploaded', function(up, file, info) {
+        if(info.response){
+			var response = JSON.parse(info.response);
+			if(response.error){
+				layer.msg(response.error);
+				return false;
+			}
+            $('#panel').find('input[name=thumb_big]').attr('value',response.pic);
+            $('#panel').find('input[name=thumb_med]').attr('value',response.pic);
+            $('#panel').find('input[name=thumb_small]').attr('value',response.pic);
+           $("#img_p").attr("src",response.pic+"?"+Math.random());
+			$("#uploadIm_o .image-box").attr("src",response.pic+"?"+Math.random());
+        }
+    });
+
+
+
+    $('#saveImg').click(function() {
+        layer.closeAll();
+    });
+
+})
+</script>
+<script type="text/javascript">
+$(function  () {
+    var logo = new plupload.Uploader({
+        browse_button: 'logo', // this can be an id of a DOM element or the DOM element itself
+        url: '/file.main.uploadOrgLogo',
+        filters: {
+            mime_types : [
+            { title : "Image files", extensions : "jpg,png" }
+            ],
+            max_file_size:"100kb"
+        }
+        ,multi_selection:false
+    });
+    logo.init();
+    logo.bind('FilesAdded', function(up, files) {
+        logo.start();
+    });
+    logo.bind('Error', function(up, err) {
+        if(err.code=='-600'){
+            layer.msg('图片大小不符合标准');
+        }else{
+			layer.msg(err['error']);
+			return false;
+		}
+    });
+    logo.bind('UploadProgress', function(up, file) {
+        $("#logo").val("上传中："+ file.percent +"%");
+    });
+    logo.bind('FileUploaded', function(up, file,info) {
+        $("#logo").val("上传完成");
+        if(info.response){
+            var r = jQuery.parseJSON(info.response);
+            if(r.error){
+                layer.msg(r.error);
+                $("#logo").val("上传图片");
+            }else{
+                $('.j-img').find('.box-tcimg img').attr('src',r.src+"?"+Math.random());
+                $('.j-img').find('input[name=thumb_small]').val(r.thumb_small);
+                $('.j-img').find('input[name=thumb_med]').val(r.thumb_med);
+                $('.j-img').find('input[name=thumb_big]').val(r.thumb_big);
+            }
+        }
+
+    });
+    /*$('.box-tc form').submit(function(){
+        var src=$('#show-big').find('input[name=thumb_small]').val();
+        $.post("/user.org.uploadOrgLogoAjax",$(this).serialize(),function(r){
+            if(r.error){
+                alert(r.error);
+                return false;
+            }else{
+			//parent.layer.closeAll()
+			 window.parent.location.reload();
+			}
+		},"json");
+        return false;
+    });*/
+
+
+});
+</script>
+<link href="{utility_cdn::css('/assets/umeditor/themes/default/css/umeditor.css')}" type="text/css" rel="stylesheet">
+<script type="text/javascript" charset="utf-8" src="{utility_cdn::js('/assets/umeditor/umeditor.config.js')}"></script>
+<script type="text/javascript" charset="utf-8" src="{utility_cdn::js('/assets/umeditor/umeditor.min.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets/umeditor/lang/zh-cn/zh-cn.js')}"></script>
+<script type="text/javascript">
+var um = UM.getEditor('desc');
+$(function  () {
+    $(window).bind('beforeunload',function(){
+        return '您输入的内容尚未保存，确定离开此页面吗？';
+    });
+	//培训范围
+	$("#train").on("click","input,.edit-train",function(){
+		layer.open({
+			type:2,
+			title: ['选择培训范围'],
+			shadeClose: true,
+			shade: 0.8,
+			area: ['450px', '340px'],
+			content: '{"/org.main.orgCourseRange"}'
+		});
+	});
+        //弹层失败成功!
+      {*  layer.open({
+            area:['300px','200px'],
+            title:['温馨提示'],
+            shadeClose: true,
+            btn: ['确定', '离开'],
+            content: '<div style="text-align:center;font-size:16px;color:#333;">您正在编辑状态，需要进行审核</div>'
+        });
+
+        *}
+    $('#province').change(function(){
+        var city={if !empty($org->city)}{$org->city}{else}''{/if};
+        $('.city').html('').hide();
+        $('.county').html('').hide();
+        $.post("/user.org.getRegionAjax",{ rid:$(this).val(),level:1 },function(r){
+            if(r.data){
+                var json=r.data;
+                var option='';
+                $(json).each(function(i){
+                    var s='';
+                    if(json[i].region_id==city){
+                        s='selected';
+                    }
+                    option+=('<option '+s+' value="' +json[i].region_id+ '">' +json[i].name+ '</option>');
+                });
+                $('.city').html(option);
+                $('.city').show().trigger('change');
+            }
+        },"json");
+    }).trigger('change');
+
+    $('.city').change(function(){
+
+        var county={if !empty($org->county)}{$org->county}{else}''{/if};
+       // $('.county').html('').hide();
+        $.post("/user.org.getRegionAjax",{ rid:$(this).val(),level:2 },function(r){
+            if(r.data){
+                var json=r.data;
+                var option='';
+                $(json).each(function(i){
+                    var s='';
+                    if(json[i].region_id==county){
+                        s='selected';
+                    }
+                    option+=('<option '+s+' value="' +json[i].region_id+ '">' +json[i].name+ '</option>');
+                });
+                $('.county').html(option);
+                $('.county').show();
+            }
+        },"json");
+    });
+
+    $("#info-form").submit(function(){
+        if($(this).find('input[name=name]').val() == ''){
+            layer.msg('机构全称不能为空');
+        }else if($(this).find('input[name=subname]').val()==''){
+            layer.msg('机构简称不能为空');
+            $(this).find('input[name=subname]').focus().css("background-color","#FFFFCC");
+        }else if($(this).find('input[name=subname]').val().length>6){
+            layer.msg('机构简称不能超过六个字');
+            $(this).find('input[name=subname]').focus().css("background-color","#FFFFCC");
+        }else{
+		layer.confirm('修改资料信息，需要提交平台进行审核，平台通过后修改生效。', {
+		            title:'提交资料审核',
+                    btn: ['确定','取消'], //按钮
+					shade: false //不显示遮罩
+					}, function(){
+					//layer.msg("提交成功");
+					$.post("/org.main.updateOrgProfileAjax",$("#info-form").serialize(),function(r){
+                if(r.error){
+                    layer.msg(r.error);
+                    if(r.field){
+                        $("[name="+r.field+"]").focus();
+                    }
+                }else{
+                    $(window).unbind('beforeunload');
+                    layer.msg('提交成功',{ icon: 1 },function(){
+                        location.href='org.main.Info';
+                    });
+            }
+            return false;
+            },"json");
+		 }, function(){
+			 //layer.msg('取消成功');
+		});
+		}
+        return false;
+    });
+});
+</script>
+</html>

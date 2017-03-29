@@ -1,0 +1,78 @@
+/*模板*/
+.tmpl-set{
+	    width: auto;
+	    height: 140px;
+	    position: absolute;
+	    top: 50%;
+	    left: 18%;
+	    margin-top: -70px;
+	    text-align: center;
+	.course-tmpl,.course-img-tmpl{
+		display: inline-block;
+		width: 140px;
+		height: 135px;
+        margin-right: 20px;
+		border:2px solid $tab-border-color;
+		text-align:center;
+		cursor:pointer;
+		padding-top:30px;
+		@include b-radius(2px);
+		&:hover{
+			background:$main-theme-color;
+			color:$main-white-color;
+			border-color:$main-theme-color;
+		}
+	}
+	.course-tmpl-icon{
+		display:inline-block;
+		@include sprite($temp);
+	}
+	.course-img-tmpl-icon{
+		display:inline-block;
+		@include sprite($temp-img);
+	}
+	.course-tmpl{
+		&:hover .course-tmpl-icon{
+			@include sprite($temp-hover);
+		}
+	}
+    .recommend-img-tmpl-icon{
+      display: inline-block;
+      @include sprite($recommend-img);
+    }
+
+	.course-img-tmpl{
+		&:hover{
+          .course-img-tmpl-icon{
+            @include sprite($temp-img-hover);
+          }
+          .recommend-img-tmpl-icon{
+            @include sprite($recommend-img-hover);
+          }
+        }
+	}
+
+}
+//空模板样式
+/*org.main.template*/
+// 页面设置
+.no-template{
+  padding-top: 150px;
+  height: 100px;
+  .template-info{
+    width: 300px;
+    height: 100px;
+    margin: 0 auto;
+    padding-left: 60px;
+    position: relative;
+    p{
+      padding-bottom: 15px;
+    }
+  }
+  .no-template-icon{
+    @include sprite($no-template);
+    position: absolute;
+    left: 0;
+    top:22px;
+  }
+}

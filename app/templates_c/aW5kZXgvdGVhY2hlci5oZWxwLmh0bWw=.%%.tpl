@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>如何上课 - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+<?php echo tpl_function_part("/index.main.header"); ?>
+</head>
+<body>
+    <?php echo tpl_function_part("/index.main.usernav.teacher"); ?>
+    <section class="p20">
+        <div class='container'>
+        <div class="row">
+        <!-- leftmenu start-->
+			<?php echo tpl_function_part("/index.main.menu.teacher"); ?>
+        <!-- leftmenu end -->
+                <div class="col-lg-16 col-md-16 col-xs-12 col-sm-20">
+                    <div class="right-content">
+                        <h1 class="fs16 fob">如何上课</h1>
+                        <div class="help-title fs16">第一步：下载“云课教师助手”客户端</div>
+                        <ul class="help-main fs14">
+                            <li>
+                                <div class="help-c ta-c" style="width:70%"><img src="<?php echo utility_cdn::img('/assets_v2/img/platform/help-img5.jpg'); ?>"></div>
+                                <div style="margin-top:20px;width:30%" class="c-fr">
+									<a href="<?php echo SlightPHP\Tpl::$_tpl_vars["download_url"]; ?>" class="help-btn" />点击下载</a>
+                                    <p style="width:80%;text-align:center;float:left">支持win7、win8系统</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="help-title fs16">第二步：安装“客户端”并登录账号</div>
+                        <ul class="help-main fs14">
+                            <li>
+                                <div class="help-c">2-1 双击“安装包”安装客户端--立即安装--完成</div>
+                                <div class="help-c ta-c"><img src="<?php echo utility_cdn::img('/assets_v2/img/platform/help-img4.jpg'); ?>"></div>
+                            </li>
+                            <li>
+                                <div class="help-c">2-2 登录客户端--输入账号，密码</div>
+                                <div class="help-c ta-c"><img src="<?php echo utility_cdn::img('/assets_v2/img/platform/help-img2.png'); ?>"></div>
+                            </li>
+                        </ul>
+                        <div class="help-title fs16">第三步：查看我的课表--点击“开始上课”</div>
+                        <ul class="help-main fs14">
+                            <li>
+                                <div class="help-c ta-c"><img src="<?php echo utility_cdn::img('/assets_v2/img/platform/help-img1.png'); ?>"></div>
+                            </li>
+                        </ul>
+                        <div class="help-title fs16">第四步：进入教室--点击“上课”</div>
+                        <ul class="help-main fs14">
+                            <li>
+                                <div class="help-c ta-c"><img src="<?php echo utility_cdn::img('/assets_v2/img/platform/help-img3.png'); ?>"></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class='clear'></div>
+            </div>
+            <div class='clear'></div>
+        </div>
+    </section>
+    <footer>
+		<?php echo tpl_function_part("/index.main.footer"); ?>
+    </footer>
+</body>
+<script>
+$("#click-but").click(function(){
+    if ($(".right-main").is(":hidden")) {
+        $(".right-main").slideDown(500);
+    }else{
+        $(".right-main").slideUp(500);
+    }
+})
+</script>
+</html>

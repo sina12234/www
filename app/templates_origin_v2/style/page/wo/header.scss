@@ -1,0 +1,414 @@
+//小沃除首页外的头部css
+header {
+    background: $background-white-color;
+    border-bottom: 1px solid $border-theme-color;
+}
+.g-logo {
+    height:70px;
+    padding: 6px 0 5px 0;
+    line-height:55px;
+    img{
+        max-height:100%;
+        max-width:100%;
+    }
+}
+.g-nav {
+    height:70px;
+    line-height:50px;
+    zoom: 1;
+    ul {
+        z-index: 10;
+        float: left;
+        margin: 0;
+        padding: 0;
+        li {
+            zoom: 1;
+            float: left;
+            position: relative;
+            &.curr{
+                a{
+                    color:$main-theme-color;
+                }
+            }
+        }
+    }
+    a {
+        float: left;
+        padding: 0 10px;
+        outline-style: none;
+        font-size: 16px;
+        line-height:70px;
+        color:#333;
+        &.selected,&:hover {
+            color: $main-theme-color;
+            text-decoration: none;
+        }
+    }
+}
+.gn-senior-navmore{ 
+    left:-18px;
+    top: 66px;
+    width:90px;
+    -webkit-box-shadow:0px 2px 2px #ddd;
+    -moz-box-shadow:0px 2px 2px #ddd;
+    -o-box-shadow:0px 2px 2px #ddd;
+    box-shadow:0px 2px 2px #ddd;
+    background: #fff;
+    @extend %ellipsis;
+    a{ 
+        line-height:30px;
+    }
+}
+/*顶部搜索*/
+.g-so {
+    float: right;
+    padding: 0;
+    height: 30px;
+    width: 210px;
+    position: relative;
+    border: 1px solid #ddd;
+    overflow: hidden;
+    border-radius:20px;
+    input {
+        padding-left: 15px;
+        height: 30px;
+        font-size: 12px;
+        line-height: 30px;
+        width: 170px;
+    }
+}
+.btn-clear {
+    position: absolute;
+    top: 5px;
+    right: 34px;
+    cursor: pointer;
+    @include sprite($btn-clear);
+    display: none;
+}
+.btn-search {
+    float: right;
+    margin: 6px 10px 0 0;
+    cursor: pointer;
+    @include sprite($btn-search);
+}
+.white-search-icon {
+    width: 36px;
+    height: 28px;
+    display: block;
+    float: right;
+    cursor: pointer;
+    background: url("/assets_v2/img/search-white.png") #26b3c0 no-repeat center 5px;
+}
+/*顶部用户登录*/
+.g-login {
+    float: right;
+    padding: 0;
+}
+
+.g-unlogin {
+    margin-top:20px;
+    line-height:30px;
+    text-align:right;
+    color: $main-nav-text-color;
+    a {
+        color: $main-nav-text-color;
+        padding: 0 5px;
+    }
+}
+.user-menu {
+    position: relative;
+    float: right;
+    padding: 0;
+    color: $main-nav-text-color;
+    list-style-type: none;
+    li {
+        float: left;
+        padding-top:20px;
+        height: 50px;
+        line-height:30px;
+        a {
+            float: left;
+            display: block;
+            height: 35px;
+            color: $main-nav-text-color;
+            text-align: center;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        .down-menu {
+            position: absolute;
+            top:55px;
+            left: 0;
+            z-index: 999;
+            display: none;
+            padding: 5px 0;
+            width: 80px;
+            background: #fff;
+            border: 1px solid #ddd;
+            @include b-shadow($opacity:30);
+            a {
+                float: left;
+                height: 30px;
+                width: 100%;
+                margin: 0;
+                padding-left: 15px;
+                text-align: left;
+                color: #666666;
+                &:hover {
+                    color: $main-theme-color;
+                }
+            }
+        }
+        &:hover .down-menu {
+            display: block;
+        }
+    }
+    .user-name {
+        float: left;
+        display: block;
+        overflow: hidden;
+        max-width: 46px;
+        height: 35px;
+        text-align: left;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+.user-menu-info{
+    .down-menu span{
+        float:left;
+        margin:10px 5px 0 8px;
+        display: block;
+    }
+    .arrow-down {
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid #999;
+        margin-top: 14px;
+        margin-left: 3px;
+        float: right;
+    }
+}
+.mail-icon {
+    position: relative;
+    display: block;
+    margin-top:8px;
+    @include sprite($mail-icon);
+}
+.msg-num {
+    position: absolute;
+    top:23px;
+    right: -3px;
+    overflow: hidden;
+    padding: 0;
+    width: 8px;
+    height: 8px;
+    background: red;
+    font-size: 10px;
+    @include b-radius(50%);
+}
+.sub-menu {
+    float: left;
+    padding: 16px 10px 10px;
+    position: relative;
+    height: 48px;
+    cursor: pointer;
+    margin: 6px 5px 0;
+    .sub-menu-icon {
+        @include sprite($menu);
+        display: inline-block;
+    }
+    .categorys-list {
+        display: none;
+        position: absolute;
+        top: 48px;
+        left: -183px;
+        width: 222px;
+        height: initial;
+        padding-bottom: 10px;
+        background: $main-strong-theme-color;
+        z-index: 10;
+    }
+    &:hover {
+        .categorys-list {
+            display: block;
+        }
+    }
+}
+@include screen(320px,768px) {
+    .g-logo {
+        height: 48px;
+        line-height:35px;
+    }
+    header {
+        background: #ffffff;
+    }
+    .g-nav {
+        padding: 0;
+        height: 50px;
+        overflow: hidden;
+        background: $main-theme-color;
+        ul {
+        z-index: 10;
+        float: left;
+        margin: 0;
+        padding: 0;
+        li {
+            zoom: 1;
+            float: left;
+            position: relative;
+            &.curr{
+                a{
+                    color:$text-white-color;
+                }
+            }
+        }
+    }
+        a {
+            line-height: 50px;
+            padding: 0 15px;
+            color:#fff;
+            &.selected,&:hover {
+                color: $text-white-color;
+                text-decoration: none;
+            }
+        }
+    }
+    .nav {
+        li {
+            a {
+                color: #fff;
+            &:hover{
+                color:#fff;
+            }
+            }
+        }
+    }
+    .m-user-menu {
+        float: right;
+        padding: 10px 10px 0 0;
+        position: relative;
+    }
+    .m-user-menu-info {
+        float: left;
+        line-height: 30px;
+    }
+    .m-user-show-menu {
+        position: absolute;
+        top: 50px;
+        right: 1px;
+        background: #fff;
+        border: 1px solid #ccc;
+        color: #333;
+        width: 70px;
+        z-index: 100;
+        line-height: 30px;
+        @include b-shadow($opacity:30);
+        a {
+            float: left;
+            width: 100%;
+            padding-left: 10px;
+        }
+    }
+    .m-sub-seach {
+        float: left;
+        .m-sub-seach-icon {
+            @include sprite($m-seach);
+            margin-top: 12px;
+        }
+    }
+    .seach-input {
+        margin-bottom: 7px;
+        display: none;
+        span.btn-clear {
+            position: absolute;
+            top: 10px;
+            right: 80px;
+            cursor: pointer;
+            background: #fff;
+            @include sprite($btn-clear);
+            display: none;
+        }
+        input {
+            border: 1px solid $main-theme-color;
+            height: 38px;
+            line-height: 38px;
+            font-size: 14px;
+        }
+        #search_id {
+            padding: 0 5px;
+            height: 38px;
+            float: left;
+            background: $main-theme-color;
+            text-align: center;
+            font-size: 14px;
+            color: #fff;
+            line-height: 38px;
+            border-bottom-right-radius: 3px;
+            border-top-right-radius: 3px;
+        }
+    }
+    .g-so {
+        padding: 0 15px;
+        height: 38px;
+        position: relative;
+        background-color: #ffffff;
+        border: none;
+        overflow: hidden;
+        width: 100%;
+        margin-bottom: 7px;
+        input {
+            padding-left: 15px;
+            height: 38px;
+            font-size: 14px;
+            line-height: 38px;
+            border: 1px solid $main-theme-color;
+            width: 84%;
+        }
+        .btn-search {
+            cursor: pointer;
+            display: inline-block;
+            background-image: none;
+            background: $main-theme-color;
+            display: inline-block;
+            width: 50px;
+            height: 38px;
+            line-height: 38px;
+            float: left;
+            margin: 0;
+            text-align: center;
+            font-size: 14px;
+            color: #fff;
+        }
+    }
+    .g-unlogin {
+        float: right;
+        padding-top: 10px;
+        line-height: 30px;
+        margin-top:0;
+        color: #666;
+        a {
+            color: #666;
+            padding: 0 5px;
+        }
+        .m-login-img {
+            margin-top:4px 5px 0;
+            @include sprite($m-login-img);
+        }
+    }
+    .mobile-nav{
+        position: absolute;
+        top:45px;
+        z-index:100;
+        background:#f7f7f7;
+        box-shadow:#666 0 2px 5px;
+        li{
+            height:48px;
+            font-size:14px;
+            line-height:48px;
+            text-align:center;
+        }
+    }
+}

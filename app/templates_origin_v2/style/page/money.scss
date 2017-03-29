@@ -1,0 +1,298 @@
+//钱包style
+
+//钱包列表
+#wallet-list{
+	line-height: 26px;
+	.title-btm{
+		padding:10px 15px;
+		border:1px solid #ddd;
+		border-bottom: 0;
+	}
+	.wallet-ft{
+		border:1px solid #ddd;
+		border-top: 0;
+		padding:20px;
+	}
+	.seclect-rechange{
+		border:1px solid #ddd;
+	}
+	.st-price{
+		border:2px solid #ddd;
+		margin:0 15px 20px 0;
+		width: 30%;
+		line-height: 35px;
+		cursor:pointer;
+	}
+	.seclect-price{
+		width: 60%;
+	}
+	.st-img{ 
+		position: absolute;
+		top:0px;
+		right:0;
+		display: none;
+	}
+	.selected{
+		border:2px solid #ffa81d;
+		.st-img{
+			display: block;
+		}
+	}
+	.ipt{
+		border:1px solid #ddd;
+		padding:3px 6px;
+	}
+	.ipt:focus{
+		border:1px solid #fe8135;
+	}
+	.add-button{
+		background: #ffa81d;
+	}
+	.add-button:hover{background: #ffb949;}
+	.list-content{
+		border:1px solid #ddd; 
+		border-top:0;
+	}
+  @media screen and (max-width: 800px) and (min-width: 320px){
+      .seclect-price{width:100%;}
+      .st-price{width:100%;}
+      .tar{text-align:left;}
+  }
+}
+#other-price{cursor:pointer;}
+//添加银行卡
+.m-bc-path{
+  float: left;
+  width: 100%;
+  line-height: 50px;
+  height: 50px;
+  background: $gray-background-color;
+  border: 1px solid $border-color;
+}
+.m-bc-form{
+  float: left;
+  width: 100%;
+  background: $main-white-color;
+  border: 1px solid $border-color;
+  border-top: none;
+  padding: 70px 0;
+  li.verif{
+    .input-box{
+      padding:1px 0px 0px 10px;
+      @include screen(0,768px){
+        padding:7px 0px 7px;
+      }
+    }
+    .verif-tips-a{
+      cursor: pointer;
+      position: relative;
+      padding:7px 0px 0px 10px;
+      @include screen(0,640px){
+        padding:7px 0px 7px 0px;
+      }
+      &:hover{
+        .message-frame{
+          min-width:230px;
+          display: block;
+          top:28px;
+        }
+      }
+    }
+  }
+}
+//申请提现
+.m-get-cash{
+  border: 1px solid $border-color;
+  padding: 24px 27px;
+  .cash-card{
+    padding: 10px;
+    width: 236px;
+    height: 115px;
+    border: 1px solid $border-color;
+    border-radius:3px;
+    font-size: 14px;
+  }
+  .cash-header{
+    width: 100%;
+    .card-head{
+      padding:0 0  10px 0;
+      border-bottom: 1px solid $tab-background-color;
+    }
+  }
+  .card-info{
+    padding-top:30px;
+    .card-name{
+      color: $text-subsidiary-color;
+    }
+  }
+  .cash-message{
+    font-size: 14px;
+    @include screen(0,768px){
+      padding-top: 10px;
+    }
+  }
+  .cash-form{
+    font-size: 14px;
+    .form-header{
+      width: 100%;
+      padding: 10px;
+      background-color: $gray-background-color;
+    }
+  }
+  li.verif{
+    .input-box{
+      padding:1px 0px 0px 10px;
+      @include screen(0,768px){
+        padding:7px 0px 7px;
+      }
+    }
+    .verif-tips-a{
+      cursor: pointer;
+      position: relative;
+      padding:7px 0px 0px 10px;
+      @include screen(0,640px){
+        padding:7px 0px 7px 0px;
+      }
+      &:hover{
+        .message-frame{
+          min-width:230px;
+          display: block;
+          top:28px;
+        }
+      }
+    }
+  }
+}
+//申请成功
+.m-apply-success{
+  padding-top: 155px;
+  padding-bottom: 155px;
+  @include  borderDeleteDirection(top);
+  .head,.prompt,.back-link{
+    width: 100%;
+    text-align: center;
+    padding-bottom: 20px;
+  }
+  .head{
+    font-size: 23px;
+    color: $text-strong-color;
+    .true-result{
+      @include sprite($true-result);
+      position: absolute;
+      top: 6px;
+      left: -25px;
+    }
+    .content{
+      position: relative;
+    }
+  }
+  .prompt{
+    font-size: 12px;
+  }
+  .back-link{
+    font-size: 14px;
+  }
+
+}
+//充值记录
+.recharge-list{
+    float: left;
+    width: 100%;
+    padding: 0;
+    .list-reaha{
+      border: #e8e8e8 1px solid;
+      background: #f7f7f7;
+      height: 40px;
+      line-height: 40px;
+      float: left;
+      width: 100%;
+      padding: 0;
+      text-align:center;
+    }
+    dt{
+      float: left;
+      width: 100%;
+      padding: 0;
+      height: 40px;
+      line-height: 40px;
+      text-align:center;
+      border: #e8e8e8 1px solid;
+      border-top:none;
+    }
+}
+//短信推送
+.grobal-recharge-info{
+  .recharge-btn{ 
+    width:80px;
+    height: 32px;
+    line-height:32px;
+    background: #ff8135;
+    display: block;
+    border-radius: 5px;
+    color:#fff;
+  }
+  .recharge-btn:hover{ 
+    color:#fff;
+    background: #ee7931;
+  }
+}
+//充值2
+.details-list{
+    float:left;
+    width:100%;
+   .list-details{
+      border: #e8e8e8 1px solid;
+      background: #f7f7f7;
+      height: 40px;
+      line-height: 40px;
+      float: left;
+      width: 100%;
+      padding: 0;
+   }
+   dt{
+     float: left;
+      width: 100%;
+      padding: 0;
+      height: 40px;
+      line-height: 40px;
+      border: #e8e8e8 1px solid;
+      border-top: none;
+   }
+   .details-img{
+      img{
+        width:100%;
+     }
+   }
+}
+.sms-recharge{ 
+  width: 80%;
+  margin: 0 auto; 
+  line-height:26px;
+  min-height: 480px;
+  .select-sms-price{
+    li{ 
+      border:1px solid #ddd; 
+      margin-right: 10px;
+      padding:0;
+      line-height:35px;
+      cursor: pointer;
+      &:last-child{ 
+        margin-right: 0;
+      }
+      &.curr{ 
+        border: 1px solid #fe8135;
+      }
+    }
+  }
+  .add-sms-price{ 
+    border:1px solid #ddd;
+    padding: 3px 5px; 
+    line-height:32px;
+    height: 32px;
+  }
+}
+@include screen(320px,768px) {
+  .sms-recharge{
+    min-height: auto;
+  }
+}

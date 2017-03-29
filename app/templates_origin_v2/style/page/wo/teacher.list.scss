@@ -1,0 +1,113 @@
+// 首页教师列表
+.teacher-list{
+	.teacher-item{
+		.cGray{
+			height:35px;
+			overflow: hidden;
+		}
+		.teacher-info{
+			position: relative;
+			z-index: 2;
+			height:70px;
+		}
+		.teacher-face{
+			float:left;
+			width:100px;
+			height:100px;
+			background-color:#fff;
+			margin-left:20px;
+			position: relative;
+			padding:5px;
+			@include b-radius(50%);
+			img{
+				width:100%;
+				height:100%;
+				border:1px solid $border-color;
+				@include b-radius(50%);
+			}
+		}
+		.teacher-name{
+			float: left;
+			line-height:75px;
+			width:80px;
+			padding-left:5px;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+		.teacher-intro{
+			position: relative;
+			z-index: 1;
+			height:100px;
+			padding:35px 10px 10px 10px;
+			background: $gray-background-color;
+			border:1px solid $border-color;
+			@include b-radius(5px);
+		}
+		.t-video-info{
+			display: none;
+			position: absolute;
+			top:5px;
+			left:5px;
+			right:5px;
+			bottom:5px;
+			background:rgba(0,0,0,.6);
+			text-align: center;
+			line-height:90px;
+			color:#ccc;
+			@include b-radius(50%);
+		}
+		.t-video-icon{
+			position: absolute;
+			bottom:0;
+			right:0;
+			@include sprite($video-icon);
+		}
+		&:hover{
+			.teacher-intro{
+				background: $main-strong-theme-color;
+				border:1px solid $main-strong-theme-color;
+				color:#fff;
+			}
+			.cGray{
+				color:#fff;
+			}
+			img{
+				border:2px solid $main-strong-theme-color;
+			}
+			.t-video-info{
+				display:block;
+			}
+			.t-video-icon{
+				@include sprite($video-icon-hover);
+			}
+		}
+	}
+}
+
+@include screen (760px,1024px){
+  .teacher-list {
+      .teacher-item {
+          .teacher-face{
+              float: left;
+              width: 85px;
+              height:85px;
+              background-color: #fff;
+              margin-left:0;
+              position: relative;
+              padding: 5px;
+              border-radius: 50%;
+          }
+          .teacher-name{
+              float: left;
+              line-height: 75px;
+              width: 70px;
+              padding-left: 5px;
+              overflow: hidden;
+              white-space: nowrap;
+              -o-text-overflow: ellipsis;
+              text-overflow: ellipsis;
+          }
+      }
+  }	
+}

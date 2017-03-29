@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{'我的消息'|tr:'interface.client'}</title>
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <script type="text/javascript" src="{utility_cdn::js('/assets_v2/interface/pc_client/js/jquery-1.11.1.min.js')}"></script>
+        <script type="text/javascript" src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+        <link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/interface/pc_client/css/client.css')}">
+    </head>
+    <body>
+        <div id="gn-general-bg">
+            <h1 class="fs24 gn-title">{'我的消息'|tr:'interface.client'}</h1>
+            <!-- 内容 -->
+            <div class="gn-myinfor-ct">
+                <ul class="gn-myinfor-tp clearfix">
+                    <li class="active-tp-list-bg">
+                        <button class="gn-all-read" onclick="MessageUpdate('read')">{'全部置为已读'|tr:'interface.client'}</button>
+                    </li>
+                    <li>
+                        <button class="gn-all-clear" onclick="MessageUpdate('del')">{'清空所有消息'|tr:'interface.client'}</button>
+                    </li>
+                 <!--    
+                    <li>
+                        <input type="text" class="gn-inpt-txt" />
+                        <button style="border:0;">搜索</button>
+                    </li>
+                    <li style="float:right;">
+                        <button class="gn-all-blacklist">黑名单</button>
+                    </li>
+                -->
+                </ul>
+                <!-- 消息列表 -->
+                <ul class="gn-myinfor-list">
+                    {if (!empty($list))}
+                    {foreach ($list as $v)}
+                    <li dataId="{$v['userFromId']}" name="dataId">
+                        <div class="gn-myinfor-list-ct">
+                            <div class="gn-myinfor-userheader">
+                                <img src="{$v['userFromImage']}" alt="">
+                                <a href="#" title="">{$v['num']}</a>
+                            </div>
+                            <div class="gn-myinfor-inforct">
+                                <p{$v['userFromName']}</p>
+                                <p>{$v['content']}</p>
+                            </div>
+                            <div class="gn-myinfor-time">
+                                <span>{$v['time']}</span>
+                                <div class="gn-click-btn">
+                                    <ul class="click-list-ct">
+                                        <li>
+                                            <a href="javascipt:;" class="my-message-close" dataId={$v['id']} title="">{'删除对话'|tr:'interface.client'}</a>
+                                        </li>
+                                    <!--
+                                        <li>
+                                            <a href="javascipt:;" dataId={$v['id']} title="">加入黑名单</a>
+                                        </li>
+                                    -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {/foreach}
+                    {/if}
+                </ul>
+                <!-- /消息列表 -->
+            </div>
+            <!-- /内容 -->
+        </div>
+    </body>
+</html>
+<script type="text/javascript">
+$(function(){
+    $(".gn-myinfor-time .gn-click-btn").hover(function() {
+        $(this).find(".click-list-ct").show();
+    },function() {
+        $(this).find(".click-list-ct").hide();
+    })
+
+//userFromId
+    $(".gn-myinfor-list-ct .my-message-close").click(function() { 
+        var dataArr = [];
+        var _data=$(this).closest("li[name='dataId']").attr("dataId");
+            dataArr[0] = _data;
+        var _uid = {$uid};
+        var ParentLi=$(this).closest("li[name='dataId']");
+
+        if(!dataArr.length) return false;
+        if(!_uid)  return false;
+
+        $.post('/interface/ajax/MessageUpdate',{ data:dataArr, uid:_uid },function(res) {
+            if (res.code) {
+                layer.msg('操作失败');
+            } else {
+                layer.msg('操作成功',{ icon:1  }, function(){
+                    ParentLi.remove();
+                    GNCourseList.WebViewReload();
+                });
+            }
+        },"json")
+        
+    })
+
+});
+//dataId
+function _PostArray() {
+    var _Array = new Array();
+    $(".gn-myinfor-list li[name='dataId']").each(function(i) {
+        var _DataId=$(this).attr("dataId");
+        _Array[i]=_DataId;
+    });
+    return _Array;
+}
+//MessageUpdate
+function MessageUpdate(type) {
+    var uid = {$uid};
+
+    if(!uid) return false;
+    if(!_PostArray.length) return false;
+
+    $.post('/interface/ajax/MessageUpdate',{ data:_PostArray, type:type, uid:uid },function(res) {
+        if (res.code) {
+            layer.msg("{'操作失败'|tr:'interface.client'}");
+        } else {
+            layer.msg("{'操作成功'|tr:'interface.client'}",{ icon:1  }, function(){
+               GNCourseList.WebViewReload();
+            });
+        }
+    },"json")
+}
+</script>

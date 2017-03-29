@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 优惠规则列表</title>
+		{part "/index.main.headeruser"}
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/style.css')}">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets/images/favicon.ico')}" />
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/bootstrap-custom/bootstrap.min.css')}">
+		<!--[if lt IE 9]>
+		<link rel="stylesheet" type="text/css" href="/assets/bootstrap-custom/bootstrap.min.css">
+		<script src="{utility_cdn::js('/assets/bootstrap-3.3.0/js/html5shiv.min.js')}"></script>
+		<script src="{utility_cdn::js('/assets/bootstrap-3.3.0/js/respond.min.js')}"></script>
+		<![endif]-->
+		<!--[if lt IE 8]>
+		<script type="text/javascript" src="{utility_cdn::js('/assets/js/ie8.js')}" ></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/teacherplay.css')}">
+		<script type="text/javascript" src="{utility_cdn::js('/assets/js/jquery/jquery-1.11.1.min.js')}" ></script>
+		<script type="text/javascript" src="{utility_cdn::js('/assets/js/page_limit.js')}" ></script>
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/common.css')}">
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/teacherplay.css')}">
+		<script type="text/javascript">
+			$(document).ready(function(){
+				if({$discounts->total} > 0){
+					var ul = page_limit({$page}, {$limit}, {$discounts->total}, 1, { });
+					$("#page_pilot").append(ul);
+				}
+			});
+		</script>
+<style>
+	[forbid] { background-color: #ddd;}
+	.Page{ margin-top: 150px;}
+	.Page ul li{ float: left; display:inline-block; margin-left: 10px;font-size: 14px;}
+	.Page ul .big{ width:30px;height:25px;background:#FFA81E; text-align: center;padding-top: 3px;}
+	.Page ul .sam{ padding-top: 3px;}
+	.Page ul .ban{ padding-top: 3px;width:30px;height:25px;background:#ccc;text-align: center;}
+	.Page ul li a{ width: 30px;height: 30px; color: #fff;}
+</style>
+</head>
+<body>
+<!--top-->
+{part "/index.main.nav.user"}
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='col-sm-3 user_menu hidden-xs'>
+						<div id=''>
+							<div id='menu'>
+								{part "/user.home.menu.user"}
+							</div>
+						</div>
+					</div>
+
+					<div class='col-sm-9 user_content' style="background:none;">
+
+						{if $discounts->total > 0}
+						<table border="1" width="100%">
+							<caption>优惠规则</caption>
+							<tr>
+								<th> 名字 </th><th> 简介 </th><th> 课程id </th><th> 折扣类型 </th><th> 折扣值 </th><th>最低消费</th><th> 开始时间 </th><th> 结束时间 </th><th>看优惠码</th><th>禁止优惠</th>
+							</tr>
+							{foreach $discounts->data as $d}
+							{if 0 == $d->status}
+							<tr>
+							{else}
+							<tr forbid>
+							{/if}
+								<td>{$d->name}</td>
+								<td>{$d->introduction}</td>
+								<td>{if 0==$d->course_id}{$d->course_name}{else}<a href="/course.info.show/{$d->course_id}" target="_blank">{$d->course_name}</a>{/if}</td>
+								<td>{if 1==$d->discount_type}减值优惠{else}打折优惠{/if}</td>
+								<td>{if 1==$d->discount_type}优惠{$d->discount_value/100}元{else}打{$d->discount_value}折{/if}</td>
+								<td>{$d->min_fee/100}元</td>
+								<td>{$d->starttime}</td>
+								<td>{$d->endtime}</td>
+								<td><a href="/org.discount.listcode/{$d->discount_id}">优惠码</a></td>
+								<td>
+									{if 0 == $d->status}
+									<a href="/org.discount.forbid/{$d->discount_id}">点击禁用</a>
+									{else}
+									已禁用
+									{/if}
+								</td>
+							</tr>
+							{/foreach}
+						</table>
+						<div class="Page" id="page_pilot">
+						</div>
+						{/if}
+					</div>
+				</div>
+			</div>
+		</div>
+		{part "/index.main.footer"}
+	</body>
+</html>

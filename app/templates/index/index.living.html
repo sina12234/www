@@ -1,0 +1,119 @@
+<ul class="list">
+	{if(!empty($planLive))}
+	{foreach($planLive as $po)}
+	<li class="col-sm-5 col-xs-10 col-lg-4 col-md-4">
+	<div class="border">
+		<a class="live-c fs14" href="{$po->plan_url}" target="_blank" title="{$po->course_name}">
+			<div class="pic">
+				{*<p><img src="{utility_cdn::file($plan_course[$po->course_id]->thumb_med)}" alt="{$po->course_name}"></p>*}
+				<p><img src="/live.live.thumb/{$po->plan_id}" alt="{$po->course_name}"></p>
+				<div class="live-s-bg"></div>
+				<div class="live-title">
+					{*<span class="icon time-icon"></span>
+					{$po->start_date}*}
+					<span class="c-fl">{$po->course_name}</span>
+					<span class="c-fr hidden-sm hidden-xs">{$po->section_name}</span>
+				</div>
+				{if($po->status == 2)}
+				<div class="liveing-icon">正在上课</div>
+				{/if}
+			</div>
+			<div class="live-state fs12">
+				{if($po->register == 1)}
+				{if($po->fee_type == 0)}
+				<span class="c-fl cGreen">免费课</span>
+				{else}
+				<span class="c-fl cYellow">收费课</span>
+				{/if}
+				{else}
+				{if($po->fee_type == 0)}
+				<span class="c-fl cGreen">免费课{if($po->try == 1)},可试看{else},需报名{/if}</span>
+				{else}
+				<span class="c-fl cYellow">收费课{if($po->try == 1)},可试看{else},需报名{/if}</span>
+				{/if}
+				{/if}
+				<span class="c-fr hidden-sm hidden-xs">讲师:{if(!empty($po->teacher_real_name))}{$po->teacher_real_name}{else}{$po->teacher_name}{/if}</span>
+			</div>
+			{if($po->status == 1)}
+			<div class="live-state-btn">{$po->start_date}开始</div>
+			{else}
+			{if($po->register == 1)}
+			<div class="live-state-btn"><button>进入课堂</button></div>
+			{else}
+			{if($po->try == 1)}
+			<div class="live-state-btn"><button>立即试看</button></div>
+			{elseif($po->is_full == 1)}
+			<div class="live-state-btn">报名已满></div>	
+			{else}
+			<div class="live-state-btn">
+				<button class="btn-gray register" data-classid="{$po->class_id}" data-courseid="{$po->course_id}" data-type="{$po->fee_type}" data-domain="{$po->domain}" data-planid={$po->plan_id}>报名学习</button>
+			</div>
+			{/if}
+			{/if}								
+			{/if}
+		</a>
+	</div>
+	</li>
+	{/foreach}
+	{/if}
+</ul>
+<!--新增-->
+<ul class="list" style="display:none">
+	{if(!empty($planSplendid))}
+	{foreach($planSplendid as $po)}
+	<li class="col-sm-5 col-xs-10 col-lg-4 col-md-4">
+	<div class="border">
+		<a class="live-c fs14" href="{$po->plan_url}" target="_blank" title="{$po->course_name}">
+			<div class="pic">
+				<!--<em class="state_ing">精彩回放</em>-->
+				{*<p><img src="{utility_cdn::file($plan_course[$po['course_id']]->thumb_med)}" alt="{$po['course_name']}"></p>*}
+				<p><img src="/live.live.thumb/{$po->plan_id}" alt="{$po->course_name}"></p>
+
+				<div class="live-s-bg"></div>
+				<div class="live-title">
+					<span class="c-fl">{$po->course_name}</span>
+					<span class="c-fr">{$po->section_name}</span>
+				</div>
+				<!--div class="liveed-icon">精彩回放</div-->
+			</div>
+			<div class="live-state fs12">
+				{if($po->register == 1)}
+				{if($po->fee_type == 0)}
+				<span class="c-fl cGreen">免费课</span>
+				{else}
+				<span class="c-fl cYellow">收费课</span>
+				{/if}
+				{else}
+				{if($po->fee_type == 0)}
+				<span class="c-fl cGreen">免费课{if($po->try == 1)},可试看{else},需报名{/if}</span>
+				{else}
+				<span class="c-fl cYellow">收费课{if($po->try == 1)},可试看{else},需报名{/if}</span>
+				{/if}
+				{/if}
+				<span class="c-fr">讲师:{if(!empty($po->teacher_real_name))}{$po->teacher_real_name}{else}{$po->teacher_name}{/if}</span>
+			</div>
+		</a>
+		{if($po->register == 1)}
+		<a href="{$po->plan_url}" target="_blank" title="{$po->course_name}">
+			<div class="live-state-btn"><button>进入课堂</button></div>
+		</a>
+		{else}
+		{if($po->try == 1)}
+		<a href="{$po->plan_url}" target="_blank" title="{$po->course_name}">
+			<div class="live-state-btn"><button>立即试看</button></div>
+		</a>
+		{elseif($po->is_full == 1)}
+		<div class="live-state-btn">报名已满></div>	
+		{else}
+		<a href="{$po->plan_url}" target="_blank" title="{$po->course_name}">
+		    <div class="live-state-btn">
+			    <button class="btn-gray register" data-classid="{$po->class_id}" data-courseid="{$po->course_id}" data-type="{$po->fee_type}" data-domain="{$po->domain}" data-planid={$po->plan_id}>报名学习</button>
+		    </div>
+		</a>
+		{/if}
+		{/if}
+	</div>
+	</li>
+	{/foreach}
+	{/if}
+</ul>

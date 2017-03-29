@@ -1,0 +1,98 @@
+$main-font-size:12px;
+$font-stack:\5fae\8f6f\96c5\9ed1,Arial,"Hiragino Sans GB",Helvetica,sans-serif;
+$fs14:14px;
+//main color
+$main-green-color:#67b53d !default;
+$main-blue-color:#3f82a6 !default;
+$main-red-color:#ff4401 !default;
+$main-yellow-color:#ffa81e !default;
+$main-white-color:#ffffff !default;
+$main-black-color:#000000 !default;
+//hover 的透明度变化可以通过sass的rgba(色值,透明度)实现,透明度默认80%
+
+//按钮选中色值
+$active-blue-color:#188fef !default;
+
+//text color
+$text-color:#666 !default;//普通正文文字颜色
+$text-strong-color:#333 !default;//突出、强调使用文字
+$text-subsidiary-color:#999 !default;//辅助、次要文本颜色
+$text-holder-color:#ccc !default;//placeholder文字颜色
+
+//table color
+$border-color:#e7e7e7 !default;//表格中常用描边值
+$background-color:#f7f7f7 !default;//表格中常用的底色
+$lighter-background-color:#f5f5f5 !default;
+$strong-background-color:#f1f1f1 !default;//表格头部底色
+$strong-border-color:#e3e3e3 !default;//表格头部描边值
+
+// float frame color
+$frame-background-color:#c8c8c8 !default ;//搜索等底色
+$frame-strong-background-color:#bbb !default;//搜索等底色hover变化
+$frame-border-color:#dbdbdb !default;//搜索框，输入框等描边值
+$frame-strong-border-color:#dcdcdc !default;//弹出框头部描边值
+
+// input frame color
+$input-border-color:#ccc !default; //默认描边
+$input-true-border-color:#198fee !default; //选中描边
+$input-error-border-color:#f01400 !default;//错误描边
+
+/*
+* button-set
+* set button height,padding-left and padding-right;
+* height:30px  side-padding:12px
+*/
+@mixin button-set($height:30px,$side-padding:12px){
+  height: $height;
+  line-height: $height - 2px;
+  padding: 0 $side-padding;
+}
+/*
+* button style mixin
+* text-color:$color  default-value:#fff
+* main-color:$primary-color default-value:#c8c8c8
+* border-color:$btn-border-color default-value:#c8c8c8
+*/
+@mixin button($color:$main-white-color,$primary-color:$frame-background-color,$btn-border-color:$frame-background-color){
+  @if $btn-border-color == false or $btn-border-color == $frame-background-color {
+      /*@debug "$btn-border-color is #{$btn-border-color}";*/
+      $primary-color:$primary-color;
+      $btn-border-color:$primary-color;
+  }@else if $btn-border-color != $frame-background-color {
+    /*@debug "$btn-border-color is #{$btn-border-color}";*/
+  }@else{
+    @error "$btn-border-color is #{$btn-border-color}";
+  }
+  display:inline-block;
+  @include button-set(35px,25px);
+  background:$primary-color;
+  color:$color;
+  border:1px solid $btn-border-color;
+  @include b-radius(3px);
+  &:hover{
+    background: rgba($primary-color,0.8);
+    border:1px solid  rgba($btn-border-color,0.8);
+  }
+}
+
+// table common style extend
+%table{
+  width: 100%;
+  max-width: 100%;
+  >tbody>tr{
+    border: 1px solid $border-color;
+    border-top:none;
+    @include list-background();
+    td{
+      color: $text-color;
+    }
+  }
+  >thead>tr{
+    background-color: $strong-background-color;
+    border: 1px solid $strong-border-color;
+    td{
+      font-weight:normal;
+      color: $text-strong-color;
+    }
+  }
+}

@@ -1,0 +1,66 @@
+//小沃学堂变量
+$main-nav-text-color: #333 !default;
+//文本 链接 颜色
+$text-color: #666 !default;
+$text-strong-color:#333 !default;//突出、强调使用文字
+$text-subsidiary-color:#999 !default;//辅助、次要文本颜色
+$text-identify-color:#ccc !default; //标识、标注文本颜色
+$text-money-color:#fe3b3b !default;//成交金额/价格的数字颜色值
+$text-orange-color:#fe8135 !default;//机构文字主色调,LOGO的相近颜色值
+$text-white-color:#ffffff !default;//机构文字主色调,LOGO的相近颜色值
+//link
+$link-hover-color: $main-theme-text-color ;//链接hover颜色值
+$background-theme-color:$main-theme-color;//主题背景色
+
+//button color
+//规范新增  button color list   nth(list,1)为button背景色 nth(list,2)为 button hover 背景色
+$theme-button-color:$main-theme-color $main-subsidiary-theme-color !default;
+
+//border
+$border-theme-color:$main-theme-color;
+
+// head nav menu
+$nav-text-color:$main-nav-text-color; //导航、banner文本颜色
+//left menu
+$left-nav-head-background : $main-strong-theme-color; //导航左侧头部背景色
+$left-nav-body-background : $main-subsidiary-theme-color;//导航左侧body背景色
+//right menu
+$right-nav-background: $main-theme-color; //导航右侧背景色
+
+//drop down list
+//下拉列表
+$list-background-color: $background-color ; //下拉列表hover背景色
+$list-text-color : $text-color; //下拉列表默认文本颜色
+$list-text-hover-color:$link-hover-color; //下拉列表hover文本色
+
+//search input
+//搜索框
+$input-border : #dddddd !default; //搜索框默认边框色
+$input-focus-border : $main-theme-color !default; //搜索框获得焦点边框色
+$input-text-color :  $text-subsidiary-color ; //搜索框输入文本色
+
+//course list
+//课程列表
+$courser-list-border : #dbdbdb !default;
+
+//border  background color
+$border-color:#e7e7e7 !default;//常用描边值 content 内容边框值 左侧菜单边框值等
+$border-theme-color: $main-theme-color;
+$gray-background-color:#f7f7f7 !default;//页面统一灰色背景
+$white-background-color:#fff !default; //白色背景色
+$common-border-color:#e3e3e3 !default; // 列表栏常用边框值
+$common-background-color:#f1f1f1 !default; // 列表栏常用背景色值
+$background-theme-color:$main-theme-color;//主题背景色
+//table color
+$table-border-color:$common-border-color !default;
+$thead-background-color:$common-background-color !default;
+$tbody-background-color:#f7f7f7 !default;
+
+//footer
+//页脚
+$foot-background: #444444 !default;//底部背景
+$foot-text-color: #999999 !default; //底部普通文本颜色值
+$foot-text-hover-color: #dddddd !default; //底部文本hover颜色值
+$foot-vertical-border-color:#353535 !default; //底部竖直分割线
+$foot-title-color: #dddddd !default; //底部小标题颜色值 如(常见问题、如何上课、合作共赢)
+$foot-strong-title-color: #eeeeee !default;//底部大标题颜色值 如(底部右侧 小沃学堂 26px 大字)

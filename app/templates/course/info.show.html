@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 课程信息 - {$course_info->title}</title>
+		{part "/index.main.header"}
+		<meta name="title" content="{$course_info->title}"> 
+		<meta name="keywords" content="{$course_info->title}-{$course_info->title} "> 
+		<meta name="description" content="{$course_info->title}-{$course_info->title}"> 
+
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/css/style.css')}">
+
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/bootstrap-3.3.0/css/bootstrap.min.css')}">
+	</head>
+
+	<body>
+		{part "/index.main.nav.live"}
+		<!-- banner -->
+		<div class="banner">
+			单品页
+			课程名:{$course_info->title}
+			<div class="bs-example">
+				<table class="table table-striped">
+					<caption>Optional table caption.</caption>
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>课程名字"{$course_info->title}</th>
+							<th>描述{$course_info->descript}</th>
+							<th><img id="img_o" {if !empty($course_info->thumb_big)}src="{utility_cdn::file($course_info->thumb_big)}"{/if}></th>
+						</tr>
+					</thead>
+					<tbody> {foreach $class_list as $class}
+						<tr>
+							<td class="classid" class_id="{$class->class_id}">班级名称-----{$class->name}</td>
+							<td class="couid" cid="{$class->course_id}">班级描述---{$class->descript}</td>
+							<td>
+							{if($baoming)}
+							<button type="button" class="btn btn-primary" >已报名</button>
+							{else}
+							<button type="button" class="btn btn-success button" id="checked">立即报名</button>
+							{/if}
+							</td>
+						<td><button type="button" class="btn btn-success like" id="checked">喜欢课程</button></td>
+							<td>haha</td>
+						</tr>
+						{/foreach}
+					</tbody>
+					<tbody>
+						{foreach $section_list as $section}
+						<tr>
+							<td>章节名称-----{$section->name}</td>
+							<td>章节描述---{$section->descript}</td>
+							<td>
+							</td>
+							<td>haha</td>
+						</tr>
+						{/foreach}
+					</tbody>
+				</table>
+														<script>
+															$(document).ready(function(){
+																$(".table .button").click(function(){
+																	if(confirm("您确定选择这个班级吗")){
+																		var class_id=$(this).parents("tr").find(".classid").attr("class_id");
+																		var cid=$(this).parents("tr").find(".couid").attr("cid");
+																		//	alert(cid);
+																		$.post("/course.info.checkclassajax",{ classid:class_id,couid:cid },function(r){
+																			if(r.error){
+																				//	$("#error").html(r.error);
+																				alert(r.error);	
+																				//		location.reload();//这里未完善
+																				return false;
+																			}
+																			if(r){
+																				location.reload();
+																				return false;
+																			}
+																		},"json");
+																	}
+																	return false;
+																});
+																$(".table .like").click(function(){
+																	if(confirm("您确定喜欢这个班级吗")){
+																		var cid=$(this).parents("tr").find(".couid").attr("cid");
+																		$.post("/course.info.checkfavajax",{ couid:cid },function(r){
+																			if(r.error){
+																				//	$("#error").html(r.error);
+																				alert(r.error);	
+																				//		location.reload();//这里未完善
+																				return false;
+																			}
+																			if(r){
+																				location.reload();
+																				return false;
+																			}
+																		},"json");
+																	}
+																	return false;
+																});
+															});		
+														</script>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">机构简介</label>
+				<div class="col-sm-10">
+				</div>
+			</div>
+		</div>
+
+		<!-- countEND -->
+		<!--footer-->
+		{part "/index.main.footer"}
+	</body>
+</html>

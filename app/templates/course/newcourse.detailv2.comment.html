@@ -1,0 +1,163 @@
+<!-- 学员评论 -->
+<section>
+    {if (!empty($commentList['data']))}
+    <div class="col-sm-20 fs16 pdb15 pdt15" style="padding:15px 0;text-indent: 15px;border-left:1px solid #eee;border-right:1px solid #eee;"><i class="c-vertical-line mr5"></i>{'学员评论'|tr:'course.info'}({$commentList['totalSize']})</div>
+    <!--
+    <div class="i-comment" id="courserComment" style="padding:0;border-left:1px solid #eee;border-right:1px solid #eee;padding:0;">
+        {if !empty($course_score)}
+        <dl class="percent">
+        <dt>{'综合评分'|tr:'course.info'}：</dt>
+        <dd>
+            {for $i=1; $i<=$course_score; $i++}
+            <span class="sel"></span>
+            {/for}
+            {for $i=1; $i<=5-$course_score; $i++}
+            <span></span>
+            {/for}
+        </dd>
+        </dl>
+        {/if}
+    </div>
+    {else}
+        <div class="col-sm-20 fs16 pdb15 pdt15 col-xs-10" style="padding:15px 0;text-indent:15px;border-left:1px solid #eee;border-right:1px solid #eee;"><i class="c-vertical-line mr5"></i>学员评论</div>
+        <div class="i-comment"  id="courserComment" style="padding:0;border-left:1px solid #eee;border-right:1px solid #eee;">
+            <dl class="percent">
+                <dt>{'综合评分'|tr:'course.info'}：</dt>
+                <dd>
+                    {'暂无评分'|tr:'course.info'}
+                </dd>
+            </dl>
+        </div>
+    {/if}
+    -->
+</section>
+<div class="col-sm-20 course-article-content style-borbottom1px pdt20 col-xs-20">
+    {if (!empty($commentList['data']))}
+    <ol class="comments-list-hd  bor1px clearfix fs14" id="wrap-comments-list" style="border:1px solid #ededed;">
+        <li class="col-sm-11 col-xs-7">{'评价心得'|tr:'course.info'}</li>
+        <li class="col-sm-5 col-xs-7">{'评分'|tr:'course.info'}</li>
+        <li class="col-sm-4 col-xs-6">{'评论者'|tr:'course.info'}</li>
+    </ol>
+    <ul class="comments-list new_comments_list detail-comments-list" id="comments-list">
+        {foreach ($commentList['data'] as $v)}
+        <li>
+            <div class="col-sm-11 col-xs-8 pdr0 pdl0">
+                <p class="fs14 cDarkgray">{$v['comment']}</p>
+                <p class="fs12 mt15">
+                    <span class="hidden-xs">{$v['className']}</span>
+                    <span class="hidden-xs">{$v['sectionName']}</span>
+                    <span>{$v['ymd']}</span>
+                    <span>{$v['his']}</span>
+                    <span class="comments-del hidden" onclick="commentDel(this)" data-uid="{$v['userId']}" data-pid="{$v['planId']}" title="删除评论"></span>
+                </p>
+            </div>
+            <div class="col-sm-5 col-xs-4 i-comment-tp mt10 fs18 c-fl fcorange tec pd0">{$v['studentScore']}分</div>
+            <div class="col-sm-4 col-xs-7 user-infos c-fl pd0">
+                <div class="col-sm-7 col-xs-20 pic hidden-xs">
+                    <img src="{$v['userThumb']}" alt="">
+                </div>
+                <div class="col-sm-13 col-xs-20">
+                    <span class="cours-user-name fs12">{$v['userName']}</span>
+                    <a href="https://{$platformUrl}/index.rank.rule" target="_blank">
+                        <span class="cours-students-lvs hidden-xs level-icon{$v['userLevel']}"></span>
+                    </a>
+                </div>
+            </div>
+            {if !empty($v['replay']->pk_replay)}
+            <div class="cDarkgray col-md-20 col-xs-20 tacher-comment-infos p10" style="text-indent:0;">
+                <i class="border-arrow-up"></i>
+                <span class="cBlue mr10">【{$v['replay']->manage_name}老师回复】</span>{$v['replay']->replay_time}
+                <div class="col-md-20 col-xs-20 mt10 dGray p0">
+                    {$v['replay']->contents}
+                </div>
+            </div>
+            {/if}
+        </li>
+        {/foreach}
+    </ul>
+    {else}
+        <ol class="comments-list-hd  bor1px clearfix fs14" id="wrap-comments-list" style="border:1px solid #ededed;">
+            <li class="col-sm-11 col-xs-7">{'评价心得'|tr:'course.info'}</li>
+            <li class="col-sm-5 col-xs-7">{'评分'|tr:'course.info'}</li>
+            <li class="col-sm-4 col-xs-6">{'评论者'|tr:'course.info'}</li>
+        </ol>
+        <ul class="comments-list new_comments_list detail-comments-list" id="comments-list">
+            <li>
+                <div class="col-sm-20 pd0 tac fs14 mt40 mb40">
+                    <img src="{utility_cdn::img('/assets_v2/img/pet3.png')}" alt="">
+                    <p class="fcg9">{'暂无评分'|tr:'course.info'}</p>
+                </div>
+            </li>
+        </ul>
+    {/if}
+    <!-- page -->
+    <div class="page-list pd0" id="course-comment-list">
+    </div>
+    {if empty($commentList['totalPage'])}{$commentList['totalPage']=0}{/if}
+    <script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+    <script src="{utility_cdn::js('/assets_v2/js/user.js')}"></script>
+    <script>
+        pageAjax("course-comment-list","/course.info.comment/{$courseId}",10,{$page},{$commentList['totalPage']},"commentList");
+    </script>
+    <!-- /page -->
+</div>
+<!-- /学员评论 -->
+<script>
+    var totalPage={$commentList['totalPage']};
+    function commentList(_path,_page,_num){
+        $.post(""+_path+"",{ page:_page,num:_num,act:'ajax' },function(r){
+            var _html = '';
+            if(r.code==1){
+                for (var i = 0; i < r.data.length; i++) {
+                    _html+= '<li>';
+                    _html+= '<div class="col-sm-11 col-xs-8 pdr0 pdl0">';                     
+                    _html+= '<p class="fs14 cDarkgray">'+r.data[i]["comment"]+'</p>';
+                    _html+= '<p class="fs12 mt15">';
+                    _html+= '<span class="hidden-xs">'+r.data[i]["className"]+'</span>';
+                    _html+= '<span class="hidden-xs">'+r.data[i]["sectionName"]+'</span>';
+                    _html+= '<span>'+r.data[i]["ymd"]+'</span>';
+                    _html+= '<span>'+r.data[i]["his"]+'</span>';
+                    if(userApi.getUid()==r.data[i]["userId"]){
+                        _html+= '<span class="comments-del" onclick="commentDel(this)" data-uid="'+r.data[i]["userId"]+'" data-pid="'+r.data[i]["planId"]+'" title="删除评论"></span>';
+                    }else{
+                        _html+= '<span class="comments-del hidden" onclick="commentDel(this)" data-uid="'+r.data[i]["userId"]+'" data-pid="'+r.data[i]["planId"]+'" title="删除评论"></span>';
+                    }
+                    _html+= '</p>';
+                    _html+= '</div>';
+                    _html+= '<div class="col-sm-5 col-xs-4 i-comment-tp mt10 fs18 c-fl fcorange tec pd0">'+r.data[i]["studentScore"]+'分</div>';
+                    _html+= '<div class="col-sm-4 col-xs-7 user-infos c-fl pd0">';
+                    _html+= '<div class="col-sm-7 col-xs-20 pic hidden-xs">';
+                    _html+= '<img src="'+r.data[i]["userThumb"]+'" alt="">';
+                    _html+= '</div>';
+                    _html+= '<div class="col-sm-13 col-xs-20">';
+                    _html+= '<span class="cours-user-name fs12">'+r.data[i]["userName"]+'</span>';
+                    _html+= '<a href="https://'+ r.platformUrl+'/index.rank.rule" target="_blank">';
+                    _html+= '<span class="cours-students-lvs hidden-xs level-icon'+r.data[i]["userLevel"]+'"></span>';
+                    _html+= '</a>';
+                    _html+= '</div>';
+                    _html+= '</div>'; 
+                    if(r.data[i].replay['contents'] != '') {
+                        _html+= '<div class="cDarkgray col-md-20 col-xs-20 tacher-comment-infos p10" style="text-indent:0;">';
+                        _html+= '<i class="border-arrow-up"></i>';
+                        _html+= '<span class="cBlue mr10">【'+r.data[i].replay['manage_name']+'老师回复】</span>'+r.data[i].replay['replay_time'];
+                        _html+= '<div class="col-md-20 mt10 col-xs-20 p0 dGray">'+r.data[i].replay['contents']+'</div>';
+                        _html+= '</div>'; 
+                    }else
+                    _html+= '</li>';
+                };
+                totalPage= r.totalPage;
+            }else{
+                _html+= '<li>';
+                _html+= '<div class="col-sm-20 pd0 tac fs14 mt40 mb40">';
+                _html+= '<img src="{utility_cdn::img('/assets_v2/img/pet3.png')}" alt="">';
+                _html+= '<p class="fcg9">{'暂无评分'|tr:'course.info'}</p>';
+                _html+= '</div>';
+                _html+= '</li>';
+            }
+            $("#comments-list").html(_html);
+        },'json');
+        $("#course-comment-list").html('');
+        pageAjax("course-comment-list","/course.info.comment/{$courseId}",10,_page,totalPage,"commentList");
+    }
+</script>
+

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>我的优惠券 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+	<meta name="title" content="{part '/site.main.orgname'} - 我的收藏 - 云课 - 专业的在线学习平台">
+	<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+	<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+	{part "/site.main.header"}
+	<script type="text/javascript" src="{utility_cdn::js('/assets_v2/laypage/laypage.js')}"></script>
+</head>
+<body>
+{part "/site.main.nav3"}
+<!-- mob nav -->
+<div class="g-nav hidden-lg hidden-md">
+	<ul class="swiper-wrapper" id="mob-nav">
+		<li class="swiper-slide"><a href="/student.main.growth">我的首页</a></li>
+		<li class="swiper-slide"><a href="/student.course.mycourse">我的课程</a></li>
+		<li class="swiper-slide"><a href="/task.commitTask.studentTaskListShow">我的作业</a></li>
+		<li class="swiper-slide"><a href="/student.order.myorder">我的订单</a></li>
+		<li class="swiper-slide"><a href="/student.fav.myfav">我的收藏</a></li>
+		<li class="swiper-slide"><a href="/student.discount.mydiscount" class="selected">我的优惠券</a></li>
+	</ul>
+</div>
+<!--studentPortal-->
+<section class="org-section">
+	<div class="container">
+		<div class="row">
+			<!-- leftmenu -->
+			{part "/user.main.menu.student.mydiscount"}
+			<!-- /leftmenu -->
+			<!-- right -->
+			<div class="right-main col-md-16 col-xs-20">
+				<!-- tabs -->
+				<div class="tab-main" id="tab">
+					<div class="tab-hd fs14">
+						<a class="tab-hd-opt curr" data-id="0" href="#">未使用</a>
+						<a class="tab-hd-opt" data-id="1" href="#">已使用</a>
+						<a class="tab-hd-opt" data-id="-1" href="#">已失效</a>
+					</div>
+				</div>
+				<!-- /tabs -->
+				<p class="tar pd10"><a href="#" class="theme-link" id="Exchange">兑换优惠码</a></p>
+				<!-- Couponlist -->
+				<ul class="couponlist" id="couponList">
+				</ul>
+				<!-- /Couponlist -->
+				<!-- pagelist -->
+				<div id="pager" class="mt10 tac"></div>
+			</div>
+			<!-- /right -->
+		</div>
+	</div>
+</section>
+<!--/studentPortal end-->
+<div id="rightWindow"></div>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ejs.min.js')}"></script>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ie8/ejs.ie8.js')}"></script>
+<![endif]-->
+<div id="ExchangeCoupon" class="fs14 mt30 form-horizontal" style="display:none"></div>
+<script type="template" id="ExchangeHtml">
+	<li class="form-group">
+		<div class="control-label col-xs-8">
+			请输入优惠码：
+		</div>
+		<div class="label-for col-xs-12 pl0">
+			<input type="text" id="code" data-valid="isNonEmpty||between:0-15" data-error="优惠码不能为空||优惠码不能超过15个字符" data-status="0" name="name" class="col-xs-15 required verify-judge" data-tip="最多15个字符" value="">
+		</div>
+	</li>
+	<li class="form-group mt10">
+		<div class="col-xs-20 tac">
+			<button class="btn mr20" id="submit">保存</button>
+			<button class="gray-btn" id="reset">取消</button>
+		</div>
+	</li>
+</script>
+<script type="template" id="couponListHtml">
+	<% var discountType,dstatus;for(var i=0;i<items.length;i++){
+		if (items[i].discount_type ==1) {
+ 			discountType = 'coupon-type-discount';
+ 			discountUnit = '元';
+ 		} else {
+ 			discountType = '';
+ 			discountUnit = '折';
+ 		}
+		switch (items[i].status) {
+			case "0":
+				dstatus="0";
+				break;
+			case "1":
+				dstatus="coupon-type-invalid";
+				break;
+			case "-1":
+				dstatus="coupon-type-invalid";
+				break;
+		}
+	%>
+	<li class="coupon-item col-xs-20 col-md-5" data-code="<%= items[i].fk_discount_code%>">
+		<div class="coupon-main">
+			<div class="coupon-type tac <%=discountType%> <%=dstatus%>">
+				<p class="c-price pt25 fb fs30"><%=items[i].discount_value%><%=discountUnit%></p>
+				<p class="c-limit fs16">满<%=items[i].min_fee%>元可用</p>
+				<p class="c-limit pt5">剩余<%=items[i].left_num%>次</p>
+			</div>
+			<div class="coupon-msg">
+				<p class="pb5">优惠范围：<a href="<%=items[i].url%>" target="_blank"><%=items[i].range_name%></a></p>
+				<p class="pb5 ellipsis">有效期：<%=items[i].time_limit%></p>
+				<p class="pb5 ellipsis">适用机构：<%=items[i].org_name%></p>
+				<p class="opt-btn tac mt10">
+				<% if(dstatus=="0"){ %>
+					<a href="<%=items[i].url%>" target="_blank" class="gray-btn">立即使用</a>
+				<% };%>
+				</p>
+			</div>
+			<% if(items[i].status=="-1"){ %>
+			<div class="used-type-invalid"></div>
+			<a href="#" class="c-del">×</a>
+			<% };%>
+			<% if(items[i].status=="1"){ %>
+			<div class="used-type-timelimit"></div>
+			<a href="#" class="c-del">×</a>
+			<% };%>
+		</div>
+	</li>
+	<% };%>
+</script>
+<script>
+	//右侧浮动
+	$("#rightWindow").load("/org.rightWindow.rightWindow");
+
+	$(function() {
+		var Exchange = $('#Exchange');
+		var ExchangeCoupon = $('#ExchangeCoupon');
+		var ExchangeHtml = $('#ExchangeHtml').html();
+		var couponList = $('#couponList');
+		var tab = $('#tab');
+
+		tab.on('click','a',function(){
+			$(this).addClass('curr').siblings().removeClass('curr');
+			dlist();
+		})
+
+		Exchange.click(function() {
+			layer.open({
+				type: 1,
+				title: ['兑换优惠码'],
+				closeBtn:2,
+				area: ['330px', '210px'],
+				shadeClose: true, //点击遮罩关闭
+				content: ExchangeCoupon,
+				success:function(){
+					ExchangeCoupon.html(ejs.render(ExchangeHtml));
+				}
+			});
+		});
+		ExchangeCoupon.on('click','#submit',function(){
+			var _code = $("#code").val();
+			$.ajax('/student/discount/exchangecode',{
+				dataType:'json',
+				type:'post',
+				data:{ "code":_code },
+				success:function(d){
+					if(d.code == 0){
+						layer.msg('兑换成功');
+						location.reload();
+					}else if(d.code == -1){
+						layer.msg('请输入有效的优惠码');
+					}else{
+						layer.msg('兑换失败');
+					}
+				},
+				error:function(){
+					layer.msg('网络出错了');
+				}
+			})
+		})
+		ExchangeCoupon.on('click','#reset',function(){
+			layer.closeAll();
+		})
+		couponList.on('click', '.c-del', function() {
+			var _code=$(this).closest('li').attr('data-code');
+			layer.confirm('您要删除优惠劵？', {
+					btn: ['确认', '取消'] //按钮
+			}, function() {
+				$.ajax('/student/discount/DeleteCode',{
+					dataType:'json',
+					type:'get',
+					data:{ "code":_code },
+					success:function(d){
+						if(d.code == 0){
+							location.reload();
+						}
+					},
+					error:function(){
+						layer.msg('网络出错了');
+					}
+				})
+			}, function() {
+
+			});
+		});
+		// 优惠劵列表
+		dlist();
+
+		function dlist(curr){
+			var page = curr || 1;
+			var _status = $('#tab .curr').attr('data-id');
+			$.ajax('/student.discount/DiscountCode',{
+				dataType:'json',
+				type:'get',
+				data:{ page:page,status:_status },
+				success:function (data) {
+					if(data.code==0){
+						var page = data.data.page;
+						var pageSize = data.data.pageSize;
+						items=data.data.items;
+						if($.isEmptyObject(items)){
+							var errorHtml='<div class="my-collect-no-class" style="padding-top:45px;"><img src="/assets_v2/img/platform/pet3.png" alt=""><p class="cGray fob">没有优惠劵！</p></div>';
+							couponList.html(errorHtml);
+							$("#pager").empty();
+							return false;
+						}
+						var couponListHtml=$('#couponListHtml').html();
+						couponList.html(ejs.render(couponListHtml, { data:items }));
+						laypage({
+	                        cont: $("#pager"),
+	                        pages: data.data.totalPage,
+	                        curr: curr || 1,
+	                        jump: function(obj, first){
+	                            if(!first){
+	                                dlist(obj.curr);
+	                            }
+	                        }
+	                    });
+					}else{
+						var errorHtml='<div class="my-collect-no-class" style="padding-top:45px;"><img src="/assets_v2/img/platform/pet3.png" alt=""><p class="cGray fob">没有优惠劵！</p></div>';
+						couponList.html(errorHtml);
+						$("#pager").empty();
+						return false;
+					}
+				},
+				error:function () {
+					layer.msg('网络出错了');
+				},
+			});
+		}
+	})
+</script>
+{part "/site.main.footer"}
+</body>
+
+</html>

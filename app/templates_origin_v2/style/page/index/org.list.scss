@@ -1,0 +1,60 @@
+/*
+index.course.list
+机构列表
+ */
+.instit-list {
+    li {
+        float: left;
+        width: 100%;
+        margin: 0;
+        padding: 15px 0;
+        border: none;
+        border-bottom: 1px solid #dedede;
+
+        .instit-pic {
+            line-height: 95px;
+            float: left;
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+            border: 1px solid #ddd;
+            background: #f4f4f4;
+
+            img {
+                width: 80%;
+                height: 80%;
+            }
+
+        }
+
+        .item {
+            display: block;
+            float: left;
+            width: 100%;
+            padding-bottom: 10px;
+
+            &:last-child {
+                padding-bottom: 0;
+            }
+
+        }
+
+        .item-info {
+            line-height: 20px;
+            display: -webkit-box;
+            float: left;
+            width: 100%;
+            height: 38px;
+            margin-bottom: 12px;
+            @extend %ellipsis;
+            -webkit-line-clamp: 2;
+            -o-line-clamp: 2;
+            -moz-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            -o-box-orient: vertical;
+            -moz-box-orient: vertical;
+        }
+
+    }
+
+}

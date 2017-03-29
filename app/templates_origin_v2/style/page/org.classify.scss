@@ -1,0 +1,77 @@
+// 机构管理-课程分类设置
+.classify-group{
+	border:1px solid $border-color;
+	padding:10px;
+	min-height: 480px;
+	li{
+		line-height: 30px;
+		position: relative;
+		padding-left:25px;
+		overflow: hidden;
+		&.parent,&.open{
+			cursor: pointer;
+		}
+		&.parent{
+			ul{
+				display: none;
+			}
+			&:hover{
+				background:#f8f8f8;
+			}
+		}
+	}
+	.block-icon,.check-box{
+		display: inline-block;
+		border:1px solid $border-color;
+		width:12px;
+		height:12px;
+		position:absolute;
+		top:10px;
+	}
+	.block-icon{
+		left:5px;
+		line-height:7px;
+		font-size:16px;
+		text-align: center;
+		font-weight: bold;
+	}
+	.check-box{
+		right:5px;
+	}
+	.checked{
+		position:absolute;
+		top:-2px;
+		@include sprite($check-mark);
+		display: none;
+	}
+	.classify-item{
+		padding:0;
+		height:initial;
+		line-height:initial;
+		background:url(/assets_v2/img/line.png) repeat-x 0px;
+		&:hover{
+			background-color:#f8f8f8;
+			.item,.check{
+				background-color:#f8f8f8;
+			}
+		}
+		.item,.check{
+			height:30px;
+			padding:0 10px 0 25px;
+			background-color:#fff;
+			line-height:30px;
+		}
+		.item{
+			float:left;
+		}
+		.check{
+			float:right;
+			padding:0 10px;
+		}
+	}
+}
+.classify-list{
+	border:1px solid $border-color;
+	padding:10px;
+	min-height:480px;
+}

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>学习统计 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 创建课程 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+</head>
+ <body>
+ {part "/site.main.nav3"}
+    <!-- tpInfo -->
+        {part "/org.course.managetop.".$courseId}
+    <!-- tpInfo -->
+ <section class="pb30">
+    <div class="container">
+        <div class="row">
+        <!-- bdy -->
+        <section>
+            {part "/org.course.managenav.".$courseId}
+            <div class="col-md-16 pr0 col-xs-20 parinfoWidth">
+                <div class="gn-base-ct clearfix">
+                    <section class="col-md-20 fs14 base-content clearfix">
+                        <div class="mb20 c-fl col-xs-12 col-sm-8 col-md-20 pd0">
+							<a href="/phpexcel/classstat?classId=1567" class="c-fr hidden-xs" id="Excel_btn">导出Excel</a>
+                            <ul class="tab-main fs14" id="get-class-list"></ul>
+                        </div>
+                        <!-- ct -->
+                        <div class="col-md-20 p0 clearfix">
+                            <div class="divselect divselect-32 c-fl">
+                                <cite>
+                                    <span class="cite-icon"></span>
+                                    <span class="cite-text">章节统计</span>
+                                </cite>
+                                <dl id="statist-select">
+                                    <dd>
+                                        <a onclick="getClassStatAjax(classId, this)" href="javascript:;">章节统计</a>
+                                    </dd>
+                                    <dd>
+                                        <a onclick="getClassStudentStat(this)" href="javascript:;">班级排名</a>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div id="update-time" class="c-fr fs12"></div>
+                        </div>
+                        <!-- /ct -->
+                        <div class="c-fl col-md-20 pd0 file-more">
+                            <table class="table-grid table-list" id="chapter-list">
+                                <thead class="fs14">
+                                    <tr>
+                                        <td class="col-xs-4 col-lg-10">课时</td>
+                                        <td class="col-xs-4 col-lg-10">到课率</td>
+                                        <td class="hidden-xs">点赞</td>
+                                        <td class="col-xs-4 col-lg-20">发言</td>
+                                        <td class="hidden-xs">举手</td>
+                                        <td class="hidden-xs">讨论区</td>
+                                        <td class="hidden-xs">最高同时在线</td>
+                                        <td class="hidden-xs">随堂统计正确率</td>
+                                        <td class="hidden-xs">询问回答率</td>
+                                        <td class="col-xs-4 col-lg-10">时长</td>
+                                        <td class="col-xs-4 col-lg-10">老师迟到</td>
+                                    </tr>
+                                </thead>
+                                <tbody id="getClassStatAjax" class="getClassStatAjax"></tbody>
+                            </table>
+                            <table class="table-grid tble-class-student-list" id="tble-class-student-list" style="display:none;">
+                                <thead class="fs14">
+                                    <tr>
+                                        <td class="col-xs-4 col-lg-2">排名</td>
+                                        <td class="col-xs-4 col-lg-2">姓名</td>
+                                        <td class="col-xs-4 col-lg-2">到课次数</td>
+                                        <td class="col-xs-4 col-lg-2">赞数</td>
+                                        <td class="hidden-xs col-lg-2">发言</td>
+                                        <td class="hidden-xs col-lg-2">讨论区</td>
+                                        <td class="hidden-xs col-lg-2">举手</td>
+                                        <td class="hidden-xs col-lg-2">随堂测试</td>
+                                        <td class="col-xs-4 col-lg-2">观看直播</td>
+                                        <td class="hidden-xs col-lg-2">观看录播</td>
+                                    </tr>
+                                </thead>
+                                <tbody id="tble-class-student-infos"></tbody>
+                            </table>
+                            <div class="get-load-data" style="display:none"></div>
+                        </div>
+                        <div id="page-num" style="display:none;" class="mt20 col-md-20 tac"></div>
+                    </section>
+                </div>
+            </div>
+        </section>
+    <!-- /bdy -->
+        </div>
+    </div>
+ </section>
+ {part "/site.main.footer"}
+ </body>
+ </html>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery.create.course.js')}"></script>
+<!--<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/mustache.js')}"></script>-->
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ejs.min.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/ie8/ejs.ie8.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/laypage/laypage.js')}"></script>
+<script type="text/template" id="getClassStatAjaxTpl">
+ <% $.each(data.planId,function(i,item){ %>
+     <tr>
+        <td class="col-xs-4 col-lg-10"><a href="/course.stat.getPlanStatByPid/<%= item.planId %>" class="blue-link"><%= item.name %></a></td>
+        <td data="<%= item.attendance %>" class="data_course col-xs-4 col-lg-10"><%= item.attendance %></td>
+        <td data="<%= item.zan %>" class="hidden-xs"><%= item.zan %></td>
+        <td data="<%= item.call %>" class="data_status col-xs-4 col-lg-20"><%= item.call %></td>
+        <td data="<%= item.handup %>" class="data_status hidden-xs"><%= item.handup %></td>
+        <td data="<%= item.discuss %>" class="data_status hidden-xs"><%= item.discuss %></td>
+        <td data="<%= item.maxOnline %>" class="data_status hidden-xs"><%= item.maxOnline %></td>
+        <td data="<%= item.correct %>" class="data_course hidden-xs"><%= item.correct %></td>
+        <td data="<%= item.answerRate %>" class="data_course hidden-xs"><%= item.answerRate %></td>
+        <td data="<%= item.vvRecord %>" class="data_time col-xs-4 col-lg-10"><%= item.vvRecord %></td>
+        <td data="<%= item.status %>" class="teac_data col-xs-4 col-lg-10"><%= item.status %></td>
+    </tr>
+ <% }) %>
+ </script>
+<script type="text/template" id="getClassStudentStatusPlan">
+    <% $.each(data.data,function){ %>
+        <tr>
+            <td data="<%= item.orderNum %>" class="col-xs-4 col-lg-2"><%= item.orderNum %></td>
+            <td data="<%= item.name %>" class="col-xs-4 col-lg-2"><%= item.name %></td>
+            <td data="<%= item.planCount %>" class="col-xs-4 col-lg-2"><%= item.planCount %></td>
+            <td data="<%= item.zan %>" class="col-xs-4 col-lg-2"><%= item.zan %></td>
+            <td data="<%= item.call %>" class="data_hand hidden-xs col-lg-2"><%= item.call %></td>
+            <td data="<%= item.discuss %>" class="data_strip hidden-xs col-lg-2"><%= item.discuss %></td>
+            <td data="<%= item.handup %>" class="data_hand hidden-xs col-lg-2"><%= item.handup %></td>
+            <td data="<%= item.correct %>" class="data_course hidden-xs col-lg-2"><%= item.correct %></td>
+            <td data="<%= item.vtLive %>" class="data_time col-xs-4 col-lg-2"><%= item.vtLive %></td>
+            <td data="<%= item.vtRecord %>" class="data_time hidden-xs col-lg-2"><%= item.vtRecord %></td>
+        </tr>
+    <% }) %>
+</script>
+ <script type="text/template" id="getClassListTpl">
+    <% $.each(data.classList,function(i,item){ %>
+        <li class="tab-hd-opt" onclick="getClassStatAjax(<%= item.classId %>, this)" classId="<%= item.classId %>">
+            <span  class="org-slide-a">
+                <%= item.className %>
+            </span>
+        </li>
+    <% }) %>
+</script>
+ <script>
+ var courseId = {$courseId}, classId;
+window.onload = function() {
+    classList();
+    setTimeout(function() {
+        $('#get-class-list').find('li:eq(0)').addClass('curr');
+        classId = $('.tab-main').find('li:eq(0)').attr('classId');
+        $('#statist-select').find('a').attr('classid', classId);
+        getClassStatAjax(classId);
+    }, 300);
+}
+function getClassStatAjax(classId, obt, curr) {
+    $('#update-time').hide();
+    $('#statist-select').parents('.divselect').find('.cite-text').text('章节统计');
+    $(obt).addClass('curr').siblings().removeClass('curr');
+    $('.file-more .table-list:eq('+$(obt).index()+')').show().siblings().hide();
+    if(typeof($(obt).attr('classId')) != 'undefined'){
+        classId = $(obt).attr('classId');
+        $('#statist-select').find('a').attr('classid', classId);
+    }
+    $('#Excel_btn').attr('href','/phpexcel/classstat?classId='+classId);
+    var url = '/course.stat.GetClassStatAjax/'+classId+'';
+    var getClassStatAjaxTpl = $('#getClassStatAjaxTpl').html();
+    var html;
+    html = '<div style="width:100%;height:300px;" class="my-collect-no-class p40"><img src="/assets_v2/img/platform/pet3.png" alt="" /><div class="fs14">暂时还没有学习统计数据哦！</div></div>';
+        $.ajax({
+            url: url,
+            type: 'post',
+            dataType: 'json',
+            data:'',
+            success:function(r) {
+                if( r.code == 0){
+                    $('#chapter-list').show();
+                    $('#tble-class-student-list').hide();
+                    $("#page-num").hide();
+                    if(r.data.planId == '') {
+                        $('.get-load-data').html(html);
+                        $('.get-load-data').show();
+                    }else{
+                        $('#getClassStatAjax').html(ejs.render(getClassStatAjaxTpl, { data:r.data }));
+                        $('.get-load-data').hide();
+                    }
+				}else {
+                    $('#tble-class-student-list').hide();
+                    $('.get-load-data').show();
+                    $("#page-num").hide();
+                    $('.get-load-data').html(html);
+                }
+                $('.getClassStatAjax').find('tr>td').each(function(){
+                    var type = $(this).attr('data');
+                    if($(this).hasClass('data_course')){
+                        $(this).text(type+'%');
+                    }
+                    if(type == 0) {
+                        $(this).text('-');
+                    }
+                    if($(this).hasClass('data_status') && type != 0){
+                        $(this).text(type+'人');
+                    }
+                    if($(this).hasClass('data_time') && type != 0){
+                        $(this).text(type+'分钟');
+                    }
+                    if($(this).hasClass('teac_data') && type == 1){
+                        $(this).text('否');
+                    }else if($(this).hasClass('teac_data') && type == 2){
+                        $(this).text('是');
+                    }
+                })
+            }
+        });
+}
+function getClassStudentStat(obt, curr) {
+    var classId = $(obt).attr('classid');
+    var getClassStudentStatusPlan = $('#getClassStudentStatusPlan').html();
+    $('.file-more .tble-class-student-list:eq('+$(obt).index()+')').show().siblings().hide();
+    var page = curr || 1;
+    $('#Excel_btn').attr('href','/phpexcel/classstat/num?classId='+classId);
+    $.post('/course.stat.GetClassStudentStatAjax', { classId:classId, page:page }, function(r) {
+        if(r.code == 0) {
+            $('#tble-class-student-infos').html(ejs.render(getClassStudentStatusPlan, { data:r.result }));
+            $('.get-load-data').hide();
+            $('#chapter-list').hide();
+            $('#tble-class-student-list').show();
+            $('#update-time').show();
+            $("#page-num").show();
+            $('#update-time').text(r.result.lastUpdated);
+            laypage({
+                cont: $("#page-num"),
+                pages: r.result.totalPage,
+                curr: curr || 1,
+                jump: function(obj, first){
+                    if(!first){
+                        getClassStudentStat(obt, obj.curr);
+                    }
+                }
+            });
+			$('.tble-class-student-list').find('tr>td').each(function(){
+					var type = $(this).attr('data');
+                    if($(this).hasClass('data_course')){
+                        $(this).text(type+'%');
+                    }
+                    if(type == 0) {
+                        $(this).text('-');
+                    }
+					if($(this).hasClass('data_hand') && type != 0){
+						$(this).text(type+'次')
+					}
+					if($(this).hasClass('data_strip') && type != 0){
+						$(this).text(type+'条')
+					}
+                    if($(this).hasClass('data_time') && type != 0){
+                        $(this).text(type+'分钟');
+                    }
+			})
+        }else{
+            $('.get-load-data').show();
+            $('#chapter-list').hide();
+            $('#tble-class-student-list').hide();
+            $('#update-time').hide();
+            $("#page-num").hide();
+            var html;
+                html = '<table class="table-grid"><thead class="fs14">'
+                html +='<tr><td class="col-xs-4 col-lg-2">排名</td>' +
+                    '<td class="col-xs-4 col-lg-2">姓名</td>' +
+                    '<td class="col-xs-4 col-lg-2">到课次数</td>' +
+                    '<td class="col-xs-4 col-lg-2">赞数</td>' +
+                    '<td class="hidden-xs col-lg-2">发言</td>' +
+                    '<td class="hidden-xs col-lg-2">讨论区</td>' +
+                    '<td class="hidden-xs col-lg-2">举手</td>' +
+                    '<td class="hidden-xs col-lg-2">随堂测试</td>' +
+                    '<td class="col-xs-4 col-lg-2">观看直播</td>' +
+                    '<td class="hidden-xs col-lg-2">观看录播</td></tr></thead></table>'
+                html +='<div style="width:100%;height:300px;" class="my-collect-no-class p40"><img src="/assets_v2/img/platform/pet3.png" alt="" /><div class="fs14">暂时还没有班级统计数据哦！</div></div>';
+            $('.get-load-data').html(html);
+        }
+    }, 'json');
+}
+var Winwidth = $(window).width();
+if( Winwidth <= 760){
+	$('.parinfoWidth').css(
+		'padding-left','0'
+	)
+}
+</script>

@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>课程服务 - <?php echo tpl_function_part('/site.main.orgname'); ?> - 云课 - 专业的在线学习平台</title>
+    <meta name="title" content="<?php echo tpl_function_part('/site.main.orgname'); ?> - 课程服务 - 云课 - 专业的在线学习平台">
+    <meta name="keywords" content="<?php echo tpl_function_part('/site.main.orgname'); ?> - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+    <meta name="description" content="<?php echo tpl_function_part('/site.main.orgname'); ?> - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案"> <?php echo tpl_function_part("/site.main.header"); ?>
+    <link rel="stylesheet" href="<?php echo utility_cdn::css('/assets/js/jcrop/css/jquery.Jcrop.css'); ?>" type="text/css" />
+    <script type="text/javascript" src="<?php echo utility_cdn::js('/assets_v2/layer/layer.js'); ?>"></script>
+    <script src="<?php echo utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js'); ?>"></script>
+    <script src="<?php echo utility_cdn::js('/assets/js/jcrop/js/jquery.Jcrop.min.js'); ?>"></script>
+</head>
+
+<body>
+    <!--header-->
+    <?php echo tpl_function_part("/site.main.nav"); ?>
+    <!-- tpInfo -->
+    <?php echo tpl_function_part("/org.course.managetop.".SlightPHP\Tpl::$_tpl_vars["courseId"]); ?>
+    <!-- tpInfo -->
+<section class="pb30 divSelectFirstVal" id="divSelectFirstVal">
+    <div class="container">
+        <div class="row">
+    <!-- bdy -->
+        <section>
+        <?php echo tpl_function_part("/org.course.managenav.".SlightPHP\Tpl::$_tpl_vars["courseId"]); ?>
+
+    <div class="col-md-16 pr0">
+    <div class="gn-base-ct clearfix">
+        <div class="content" id="customer">
+            <p class="base-title"><?php echo tpl_modifier_tr('课程服务','org'); ?></p>
+            <div class="customer-li" id="qq">
+                <p class="col-md-2"><span class="c-name"><?php echo tpl_modifier_tr('QQ客服','org'); ?></span></p>
+                <p class="col-md-18 c-info fs12">
+                    (从客服库中关联QQ客服，最多可关联4个)
+                </p>
+                <!-- qq客服列表 -->
+                <div class="customer-item" id="qqCsList-aim"></div>
+                <!-- qq客服列表 end -->
+                <div class="customer-main fs14" style="display: block;">
+                    <span class="icon-add"></span>
+                    <a href="javascript:void(0)" class="cYellow " id="qq_add_continue">+<?php echo tpl_modifier_tr('添加','org'); ?></a>
+                </div>
+            </div>
+            <div class="customer-li" id="qqs">
+                <p class="col-md-3"><span class="c-name"><?php echo tpl_modifier_tr('课程咨询群','org'); ?></span></p>
+                <p class="col-md-17 c-info fs12">
+                    (从QQ群库里关联QQ群，最多可关联4个)
+                </p>
+                <!-- qq群客服列表 -->
+                <div class="customer-item"  id="qqsCsList-aim"></div>
+                <!-- qq群客服列表 end -->
+                <div class="customer-main fs14" style="display: block;">
+                    <span class="icon-add"></span>
+                    <a href="javascript:void(0)" class="cYellow" id="qqun_add_continue">+<?php echo tpl_modifier_tr('添加','org'); ?></a>
+                </div>
+            </div>
+            <div class="customer-li fs14" style="min-height: 0">
+                <p><?php echo tpl_modifier_tr('学习资料寄送','org'); ?></div>
+                <div class="mb20">
+                    <div class="customer-main"></div>
+                    <input type="checkbox" id="sendData" <?php if(SlightPHP\Tpl::$_tpl_vars["document"]){; ?> checked <?php }; ?> />
+                    提供学习资料寄送服务，需要报名学生填写收货地址
+                </div>
+                <p class="mb20" style="margin-left:7%;">
+                    可在<a href="/user.teacher.studentlist.<?php echo SlightPHP\Tpl::$_tpl_vars["courseId"]; ?>" class="cBlue">学员管理</a>页面查看、导出收件信息
+                </p>
+            </div>
+        </div>
+            <!--客服-->
+            <section class="layer-teacherlist multiple-select-list" id="multiple-select-list" style="display:none;">
+                <input type="hidden" name="type" value=""/>
+                <div class="lc-so-name mt20">
+                    <div class="search-frame ml40">
+                        <input name="keyword" class="search-input" id="search-teacher-infos" type="text" value="" placeholder="搜索名称" />
+                        <button class="search-box org-t-search-btn" id="subsearch" style="float:left;">
+                            <span class="search-icon" style="margin: 0;"></span>
+                            <div class="t-list-img clear-icon" id="t-delt-btn" style="display:none;">
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                <div class="lc-list mt15 ml40">
+                    <ul class="multiple-select mt10" id="multiple-left" style="overflow:auto;overflow-y: scroll;"></ul>
+                </div>
+                <div class="co-option mt15" id="co-option">
+                    <a href="javascript:;" id="add-btn">添加 》</a>
+                    <a href="javascript:;" class="mt10" id="del-btn">《 删除</a>
+                </div>
+                <div class="lc-list">
+                    <p class="fs14">已选择</p>
+                    <ul class="multiple-select mt10">
+                        <li class="defalut tac multiple-tip">还没有数据</li>
+                        <ul id="multiple-right"></ul>
+                    </ul>
+                </div>
+                <div class="col-xs-20 tac mt10">
+                    <button class="mr20 btn" id="course_add">确定</button>
+                    <button class="gray-button" id="course_cel">取消</button>
+                </div>
+            </section>
+        </section>
+    </div>
+    </div>
+    <!-- /bdy -->
+        </div>
+    </div>
+</section>
+    <?php echo tpl_function_part("/site.main.footer"); ?>
+</body>
+
+</html>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="<?php echo utility_cdn::js('/assets_v2/js/ie8/ejs.ie8.js'); ?>"></script>
+<![endif]-->
+<script type="text/javascript" src="<?php echo utility_cdn::js('/assets_v2/js/ejs.min.js'); ?>"></script>
+<script type="text/template" id="qqCsList">
+    <% if(data){ data.forEach(function(list){   %>
+        <div class="customer-main customer-main2 fs14 customer-list col-md-8" style="display: block;">
+            <div class="col-md-7 c-names fs14">
+                <span class="qq-icon"></span>
+                <%= list.type_name %>
+            </div>
+            <div class="col-md-11">
+                <?php echo tpl_modifier_tr('QQ','org'); ?>：
+                <span class="c-nums"><%= list.type_value %></span>
+            </div>
+            <input type="hidden" name="qq_type" value="3">
+            <a href="javascript:void(0)" class="c-del del-icon" c_type_value="<%= list.type %>" item_id="<%= list.pk_customer %>" item_del_id="<%= list.pk_relation %>"></a>
+        </div>
+        <%});}%>
+</script>
+<script type="text/template" id="qqsCsList">
+    <% if(data){ data.forEach(function(list){  %>
+        <div class="customer-main customer-main2 fs14 customer-list col-md-8" style="display: block;">
+            <div class="col-md-10 c-names fs14">
+                <span class="mans-icon"></span>
+                <%= list.type_name %>
+            </div>
+            <div class="col-md-9">
+                <?php echo tpl_modifier_tr('QQ','org'); ?>：
+                <span class="c-nums"><%= list.type_value %></span>
+            </div>
+            <input type="hidden" name="qq_type" value="3">
+            <a href="javascript:void(0)" class="c-del del-icon" c_type_value="<%= list.type %>" item_id="<%= list.pk_customer %>" item_del_id="<%= list.pk_relation %>"></a>
+        </div>
+        <%});}%>
+</script>
+<script type="text/javascript">
+// 上下架课程
+function locationReload() {
+    setTimeout(function() {
+        location.reload();
+    }, 500);
+}
+function setCourseAdminStatus(obj) {
+    var courseId =  $(obj).attr('courseid');
+    var adminStatus = $(obj).attr('adminStatus');
+    var params = {
+            courseId    : courseId,
+            adminStatus : adminStatus
+        };
+        $.ajax({
+            url: '/user/supCourseAjax/setCourseAdminStatus',
+            type: 'post',
+            dataType: 'json',
+            data: JSON.stringify(params),
+            success: function(r) {
+                if(r.code == 0) {
+                    layer.msg(r.message);
+                    locationReload();
+                }else {
+                    layer.msg(r.message);
+                }
+            }
+        });
+}
+$(function() {
+var courseid = /.courseCustomerList.(\d+)/ig.exec(window.location.href)[1];
+(function($, window, document, undefined) {
+        function CustomerList(opt) {
+            this.dft = {
+                module: '',//渲染模板
+                addBtn: '',//增加关联的按钮
+                list: '',//渲染目标
+                name: '',//qq/qqs  =》qq/qq群
+                count: 0, //当前关联数
+                //textDelQQ:'删除后，将无法继续关联为客服，已关联的不会继续在前台页面显示',
+                //textDelQQS:'删除后，将无法继续关联，已关联的不会继续在前台页面显示'
+                textDelQQ:'确定删除吗？',
+                textDelQQS:'确定删除吗？'
+            }
+            this.op = $.extend({ }, this.dft, opt);
+            var item = this;
+            //删除事件绑定
+            this.op.list.on('click', '.c-del', function(event) {
+                event.preventDefault();
+                item.deleteNode($(this));
+            });
+        }
+        CustomerList.prototype = {
+            renderData: function(d) { //渲染模板数据
+                var data = d[this.op.name];
+                if (data && data.length > 0) {
+                    this.op.list.html(ejs.render(this.op.module, {
+                        data: data
+                    }));
+                }
+                return this;
+            },
+            changeCount: function(data) { //根据当前绑定数量控制【添加】按钮的显隐
+                var d = data&&data[this.op.name];
+                this.count = !d ? this.op.list.find('.customer-main').length : d.length;
+                this.toggleAddBtn();
+                return this;
+            },
+            toggleAddBtn:function(){
+                this.count > 3 ? this.hideAddBtn() : this.showAddBtn();
+                return this;
+            },
+            showAddBtn: function() {
+                this.op.addBtn.parent().show();
+                return this;
+            },
+            hideAddBtn: function() {
+                this.op.addBtn.parent().hide();
+                return this;
+            },
+            deleteNode: function(obj) { //删除事件dom操作
+                var item = this;
+                var type = obj.attr('c_type_value');
+                var text = type == '1'&&item.op.textDelQQ||type == '2'&&item.op.textDelQQS;
+                layer.confirm("<?php echo tpl_modifier_tr('"+text+"','org'); ?>", {
+                    title:"<?php echo tpl_modifier_tr('"+item.op.text+"','org'); ?>",
+                    btn: ["<?php echo tpl_modifier_tr('确定','org'); ?>","<?php echo tpl_modifier_tr('取消','org'); ?>"], //按钮
+                    shade: false //不显示遮罩
+                }, function(){
+                    CSDATA.deteleData(obj.attr('item_del_id'))
+                    .done(function(res){
+                        if(res.code == 0){
+                            layer.msg("删除成功");
+                            obj.parent().remove();
+                            item.changeCount();
+                        }else{
+                            layer.msg("<?php echo tpl_modifier_tr('删除失败','org'); ?>");
+                            return false;
+                        }
+                    });
+                });
+                return this;
+            }
+        };
+        var qq = new CustomerList({ //绑定qq客服实例化
+            module: $('#qqCsList').html(),
+            addBtn: $('#qq_add_continue'),
+            list: $('#qqCsList-aim'),
+            name: 'qq',
+            type: 1,
+            count: 0,
+            text:'QQ客服'
+        });
+        var qqs = new CustomerList({ //绑定qq群实例化
+            module: $('#qqsCsList').html(),
+            addBtn: $('#qqun_add_continue'),
+            list: $('#qqsCsList-aim'),
+            name: 'qqun',
+            type: 2,
+            count: 0,
+            text:'课程咨询群'
+        });
+        var CSDATA = { //数据操作
+            getCusRelationList: {
+                api: '/org/customerTools/getCusRelationListAjax',//获取当前绑定数据API
+                params: {
+                    courseid: courseid
+                },  
+                ajaxType:'post',
+                success: function(res) {
+                    var data = res.data;
+                    CSDATA.allDo('renderData', data);
+                    CSDATA.allDo('changeCount', data);
+                }
+            },
+            unbindCustomerInfoAjax: function(pid) { //取消绑定API
+                return {
+                    api: '/org/customerTools/unbindCustomerInfoAjax',
+                    params: {
+                        pid: pid
+                    },
+                    ajaxType:'post'
+                }
+            },
+            deteleData: function(pid) { //返回删除数据的ajax-defer
+                var opt = this.unbindCustomerInfoAjax(pid);
+                return this.loadData(opt);
+            },
+            loadData: function(opt) { //ajax请求方法
+                return $.ajax({
+                        url: opt.api,
+                        type: opt.ajaxType,
+                        dataType: 'json',
+                        data: opt.params,
+                    })
+                    .done(function(res) {
+                        if (res.code == 0) {
+                            if(typeof opt.success == 'function'){
+                                opt.success(res);
+                            }
+                        }else{
+                            if(typeof opt.fail == 'function'){
+                                opt.fail(res);
+                            };
+                        }
+                    });
+            },
+            allDo: function(func, data) { //对qq客服和qq群都进行操作
+                qq[func](data);
+                qqs[func](data);
+                return this;
+            },
+            init: function() { //初始化
+                this.loadData(this.getCusRelationList);
+                return this;
+            }
+        };
+        CSDATA.init();
+})(jQuery, window, document);
+(function() {
+    var $selectParentId = $('#multiple-select-list');
+    var $selectAddChildren = $('#add-btn');
+    var $selectDelChildren = $('#del-btn');
+    var $selectMultipleRt = $('#multiple-right');
+    var $selectMultipleLt = $('#multiple-left');
+    var $selectCourseAdd = $('#course_add');
+    var $selectCourseCancle = $('#course_cel');
+    var $searchChildren = $("#subsearch");
+    //  点击选择li
+    $selectParentId.on('click', 'li:not(.selected)', function() {
+        if($(this).hasClass('select')){
+            $(this).removeClass('select');
+        }else{
+            $(this).addClass('select');
+        }
+        if($selectMultipleRt.find('li.select').length > 0){
+            $selectDelChildren.addClass('allow');
+        }else{
+            $selectDelChildren.removeClass('allow');
+        }
+        if($selectMultipleLt.find('li.select').length > 0 ){
+            $selectAddChildren.addClass('allow');
+        }else{
+            $selectAddChildren.removeClass('allow');
+        }
+    });
+    //  添加按钮添加到右侧
+    $selectAddChildren.click(function() {
+        if($(this).hasClass('allow')){
+            var cHtml='';
+            $selectMultipleLt.find('li.select').each(function() {
+                cHtml += '<li class="dropdown-cents" pk_customer="'+$(this).attr('pk_customer')+'">'+$(this).html()+'</li>';
+                $(this).removeClass('select');
+                $(this).addClass('selected');
+            });
+            $selectMultipleRt.append(cHtml);
+            $selectMultipleRt.find('.defalut').remove();
+            $('.multiple-tip').hide();
+            if($selectMultipleLt.find('li').length==0){
+                $(this).removeClass('allow');
+            }
+        }else{
+            $selectMultipleLt.css('border','1px solid #ffa91e');
+        }
+        $(this).removeClass('allow');
+    })
+    //  删除按钮从右侧删除
+    $selectDelChildren.click(function() {
+        if($(this).hasClass('allow')){
+            var cHtml='';
+            $selectMultipleRt.find('li.select').each(function() {
+                var id = $(this).attr('pk_customer');
+                cHtml += '<li class="dropdown-cents" pk_customer="'+id+'">'+$(this).html()+'<div class="tab-delete"></div></li>';
+                $(this).remove();
+                $selectMultipleLt.find('.selected').each(function(){
+                    if($(this).attr('pk_customer') == id){
+                        $(this).removeClass('selected');
+                    }
+                })
+            });
+    //  $selectMultipleLt.find('li').removeClass('selected');
+            if($selectMultipleRt.find('li').length==0){
+                $(this).removeClass('allow');
+                $selectMultipleRt.html('');
+                $('.multiple-tip').show();
+            }
+        }else{
+            $selectMultipleRt.css('border','1px solid #ffa91e');
+        }
+        $(this).removeClass('allow');
+    })
+    //  确定按钮--添加数据
+    $selectCourseAdd.click(function() {
+        if($('#multiple-right').find('.dropdown-cents').length >=5) {
+            layer.msg('最多选择四个数据');
+            return false;
+        }else {
+            var type=$('#multiple-select-list').find('input[name="type"]').val();
+            var customerids=[];
+            $("#multiple-right li").each(function(){
+                var customerid=$(this).attr('pk_customer');
+                customerids.push(customerid);
+            });
+            customerids=customerids.join();
+            var params={
+                object_type:2,
+                type:type,
+                customerids:customerids,
+                courseid:courseid
+            }
+            $.ajax({
+                type:'post',
+                url:'/org/customerTools/bindCustomerInfoAjax',
+                data:params,
+                dataTYpe:'json',
+                success:function(xhr){
+                    xhr=JSON.parse(xhr);
+                    if(xhr.code == 0) {
+                        layer.msg(xhr.msg);
+                        window.location.reload();
+                    }else{
+                        layer.msg(xhr.msg);
+                    }
+                }
+            })
+
+        }
+    })
+    //  取消按钮
+    $selectCourseCancle.click(function() {
+        layer.closeAll();
+    })
+    //  搜索匹配
+    $searchChildren.click(function(){
+        var keyWords=$(this).siblings('input[name="keyword"]').val();
+        var type=$(this).parents("#multiple-select-list").find('input[name="type"]').val();
+        $.ajax({
+            type:'post',
+            url:'/org/customerTools/listAjax',
+            data:{ type:type,type_name:keyWords},
+            dataType:'json',
+            success:function(r){
+                if(r.code == 0 ){
+                    if(type == 1){
+                        var data=r.data[0].qq;
+                        var liStr='';
+                        $(data).each(function(i,item){
+                            var selected = 0;
+                            $('#multiple-right li').each(function(){
+                                if($(this).attr('pk_customer') == item.pk_customer){
+                                    selected = 1;
+                                }
+                            });
+                            if(selected == 1){
+                                liStr += '<li pk_customer='+item.pk_customer+' class="dropdown-cents show selected"><div class="tab-delete"></div>'+item.type_name+'</li>'
+                            }else{
+                                liStr += '<li pk_customer='+item.pk_customer+' class="dropdown-cents"><div class="tab-delete"></div>'+item.type_name+'</li>'
+                            }
+                        });
+                        if(liStr == ''){
+                            var errorStr='<p class="fs12 tac">没有数据哦</p>'
+                            $('#multiple-left').html(errorStr);
+                            return false
+                        }else{
+                            $('.multiple-tip').hide();
+                            $('#multiple-left').html('').append(liStr);
+                        }
+
+                    }else if(type == 2){
+                        var data=r.data[0].qqun;
+                        var liStr='';
+                        $(data).each(function(i,item){
+                            var selected = 0;
+                            $('#multiple-right li').each(function(){
+                                if($(this).attr('pk_customer') == item.pk_customer){
+                                    selected = 1;
+                                }
+                            });
+                            if(selected == 1){
+                                liStr += '<li pk_customer='+item.pk_customer+' class="dropdown-cents show selected"><div class="tab-delete"></div>'+item.type_name+'</li>'
+                            }else{
+                                liStr += '<li pk_customer='+item.pk_customer+' class="dropdown-cents"><div class="tab-delete"></div>'+item.type_name+'</li>'
+                            }
+                        });
+                        if(liStr == ''){
+                            var errorStr='<p class="fs12 tac">没有数据哦</p>'
+                            $('#multiple-left').html(errorStr);
+                            return false
+                        }else{
+                            $('.multiple-tip').hide();
+                            $('#multiple-left').html('').append(liStr);
+                        }
+
+                    }
+
+
+                }
+            }
+        })
+    })
+    //  左侧滚动加载
+    var Page1=1,Page2=2;
+    $selectMultipleLt.scroll(function(){
+        var scrollTop = $(this).scrollTop();
+        var scrollHeight = $(this)[0].scrollHeight;
+        var offetHeight  = $('#multiple-left').height();
+        if(scrollTop + offetHeight == scrollHeight){
+            var type=$selectParentId.find('input[name="type"]').val();
+            if(type == 1){
+                Page1++;
+                if(!getTools(1,Page1)){
+                    $('#multiple-left').unbind('scroll');
+                }
+            }else if(type == 2){
+                Page2++;
+                if(!getTools(2,Page2)){
+                    $('#multiple-left').unbind('scroll');
+                }
+            }
+
+        }
+    })
+
+})();
+function getTools(t,curr){
+    var orgQQServiceTpl = $('#orgQQServiceTpl').html();
+    var page = curr || 1;
+    var params={
+        page:page,
+        pageSize:11,
+        type:t
+    }
+    $.ajax({
+        url:'/org/customerTools/listAjax',
+        type:'post',
+        data:params,
+        dataType: 'json',
+        success:function(r){
+            if(curr == 1 || !curr ){
+                $('.multiple-tip').show();
+                $('#multiple-left').html('')
+            }
+            if(r.code == 0) {
+                if(t == 1){
+                    if(r.data[0].qq == ''){
+                        $('.multiple-tip').show();
+                        return false;
+                    }
+                    var data=r.data[0].qq;
+                    var liStr='';
+                    $(data).each(function(i,item){
+                        var selected = 0;
+                        $('#multiple-right li').each(function(){
+                            if($(this).attr('pk_customer') == item.pk_customer){
+                                selected = 1;
+                            }
+                        });
+                        if(selected == 1){
+                            liStr += '<li pk_customer='+item.pk_customer+' class="dropdown-cents show selected"><div class="tab-delete"></div>'+item.type_name+'</li>'
+                        }else{
+                            liStr += '<li pk_customer='+item.pk_customer+' class="dropdown-cents"><div class="tab-delete"></div>'+item.type_name+'</li>'
+                        }
+                    });
+                    $('.multiple-tip').hide();
+                    $('#multiple-left').append(liStr);
+                    return true
+
+                }else {
+                    if(r.data[0].qq == ''){
+                        $('.multiple-tip').show();
+                        return false;
+                    }
+                    var data=r.data[0].qqun;
+                    var liStr='';
+                    $(data).each(function(i,item){
+                        var selected = 0;
+                        $('#multiple-right li').each(function(){
+                            if($(this).attr('pk_customer') == item.pk_customer){
+                                selected = 1;
+                            }
+                        });
+                        if(selected == 1){
+                            liStr += '<li pk_customer='+item.pk_customer+' class="dropdown-cents show selected"><div class="tab-delete"></div>'+item.type_name+'</li>'
+                        }else{
+                            liStr += '<li pk_customer='+item.pk_customer+' class="dropdown-cents"><div class="tab-delete"></div>'+item.type_name+'</li>'
+                        }
+                    });
+                    $('.multiple-tip').hide();
+                    $('#multiple-left').append(liStr);
+                    return true
+                }
+
+            }
+        }
+    })
+}
+    //    QQ客服--添加
+    $(".customer-main").on("click","#qq_add_continue",function(){
+        if($("#qq .customer-main2").length >3){
+            layer.msg("<?php echo tpl_modifier_tr('最多只能增加4个QQ客服','org'); ?>");
+            return false;
+        }
+        layer.open({
+            type: 1,
+            title: ['关联客服'],
+            closeBtn: 1,
+            area: ['765px','510px'],
+            shadeClose: true,
+            content:$('#multiple-select-list')
+        });
+        $('#add-btn').removeClass('allow');//初始化添加按钮
+        $('#del-btn').removeClass('allow');//初始化删除按钮
+        $("#subsearch").siblings('input[name="keyword"]').val('');//初始化--清空--搜索内容
+        $('#multiple-select-list').find('input[name="type"]').val(1);//type 1:QQ客服 2:QQ群课程咨询群
+        // 过滤已添加数据
+        var idStr='';
+        $("#qq .customer-main2").each(function(){
+            var item_id=$(this).find('a').attr('item_id');
+            var c_names=$(this).find('.c-names').text();
+            idStr += '<li class="dropdown-cents" pk_customer="'+item_id+'"><div class="tab-delete"></div>'+c_names+'</li>'
+        });
+        $("#multiple-right").html(idStr);
+        getTools(1);
+    });
+    //    课程咨询群--添加
+    $(".customer-main").on("click","#qqun_add_continue",function(){
+        if($("#qqs .customer-main2").length >3){
+            layer.msg("最多只能增加4个客服群~");
+            return false;
+        }
+        layer.open({
+            type: 1,
+            title: ['关联QQ群'],
+            closeBtn: 1,
+            area: ['765px','510px'],
+            shadeClose: true,
+            content:$('#multiple-select-list')
+        });
+        $('#add-btn').removeClass('allow');//初始化添加按钮
+        $('#del-btn').removeClass('allow');//初始化删除按钮
+        $("#subsearch").siblings('input[name="keyword"]').val('');//初始化--清空--搜索内容
+        $('#multiple-select-list').find('input[name="type"]').val(2);//type 1:QQ客服 2:QQ群课程咨询群
+        // 过滤已添加数据
+        var idStr='';
+        $("#qqs .customer-main2").each(function(){
+            var item_id=$(this).find('a').attr('item_id');
+            var c_names=$(this).find('.c-names').text();
+            idStr += '<li class="dropdown-cents" pk_customer="'+item_id+'"><div class="tab-delete"></div>'+c_names+'</li>'
+        });
+        $("#multiple-right").html(idStr);
+        getTools(2);
+
+    });
+
+    $("#sendData").click(function(){
+        var ccid = <?php echo SlightPHP\Tpl::$_tpl_vars["courseId"]; ?>;
+        var type = ($(this).is(':checked')) ? 1 : 0;
+        $.post('/org/customerTools/sendDocument', { type:type,courseId:ccid }, function(r){
+        });
+    });
+});
+</script>

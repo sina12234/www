@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>高能100 - 专业的K12在线教育平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+</head>
+<script src="{utility_cdn::js('/assets/js/plupload/js/plupload.full.min.js')}"></script>
+<script type="text/javascript">
+$(function(){
+	$("#keyword").keyup(function(){
+        var _This = $(this);
+        var keyword=$(this).val();
+        $.post("/org.main.SearchCourseAjax",{ keyword:keyword },function(r){
+			if(r.data !=''){
+				var _html='';
+				$(r.data).each(function(i,item){
+					var selected = 0;
+					$('#multiple-right li').each(function(){
+						if($(this).attr('data-id') == item.course_id){
+							selected = 1;
+						}
+					});
+					if(selected == 1){
+						_html += '<li data-id='+item.course_id+' class="selected">'+item.title+'</li>'
+					}else{
+						_html += '<li data-id='+item.course_id+'>'+item.title+'</li>'
+					}
+				});
+				$('#org_course').html(_html);
+			}else{
+				$('#org_course').html('');
+			}
+        },'json');
+    });
+	$('#course_cel').click(function(){
+      var index = parent.layer.getFrameIndex(window.name);
+	  parent.layer.close(index);
+    });
+	/*选择课程*/
+    $('#multiple-right,#multiple-left').on('click','li',function(){
+        if($(this).hasClass('select')){
+            $(this).removeClass('select');
+        }else{
+            $(this).parents().find('li').removeClass('select');
+            $(this).addClass('select');
+        }
+        if($('#multiple-right li.select').length>0){
+            $('#del-btn').addClass('allow');
+        }else{
+            $('#del-btn').removeClass('allow');
+        }
+        if($('#multiple-left li.select').length>0){
+            $('#add-btn').addClass('allow');
+        }else{
+            $('#add-btn').removeClass('allow');
+        }
+        if($(this).hasClass('selected')) {
+        	$(this).removeClass('select');
+        }
+    });
+	//添加课程
+	$('#add-btn').click(function(){
+        if($(this).hasClass('allow')){
+            var cHtml='';
+            $('#multiple-left li.select').each(function() {
+                cHtml += '<li data-id="'+$(this).attr('data-id')+'">'+$(this).html()+'</li>';
+				$(this).removeClass('select');
+				$(this).addClass('selected');
+            });
+
+            $('#multiple-right').append(cHtml);
+            $('#multiple-right .defalut').remove();
+            if($('#multiple-left li').length==0){
+                $(this).removeClass('allow');
+            }
+        }else{
+            $('#multiple-left').css('border','1px solid #ffa91e');
+        }
+    });
+	$('#del-btn').click(function(){
+        if($(this).hasClass('allow')){
+            var cHtml='';
+            $('#multiple-right li.select').each(function() {
+				var id = $(this).attr('data-id');
+                cHtml += '<li data-id="'+id+'">'+$(this).html()+'</li>';
+                $(this).remove();
+				$('#multiple-left').find('.selected').each(function(){
+					if($(this).attr('data-id') == id){
+						$(this).removeClass('selected');
+					}
+				})
+            });
+            if($('#multiple-right li').length==0){
+                $(this).removeClass('allow');
+                $('#multiple-right').append('<li class="defalut">还没有课程</li>');
+            }
+        }else{
+            $('#multiple-right').css('border','1px solid #ffa91e');
+        }
+    });
+	$('#course_update').click(function(){
+		var select_text = '';
+		var id_list = [];
+		var oldCourse = $("input[name='oldCourse']").val();
+		$('#multiple-right li').each(function(){
+			var id = $(this).attr('data-id');
+			var name = $(this).text();
+			id_list.push(id);
+			if(name != '还没有课程'){
+				select_text += '<option value="'+id+'">'+name+'</option>';
+			}
+		});
+		var tid = $("input[name='tid']").val();
+		var type= $(this).attr("data-type");
+		var bid = $(this).attr("data-bid");
+        $.post("/org.channel.AddChannelCourse/{$channel_id}/"+type+"/"+bid,{ 'tid':tid,'cid':id_list,'oldCourse':oldCourse },function(r){
+            if(r.error){
+                layer.msg(r.error);
+            }else{
+                parent.location.reload();
+            }
+        },"json");
+        //location.reload();
+    })
+	var page = 1;
+	$('#multiple-left').scroll(function(){
+		var scrollTop = $(this).scrollTop();
+	　　var scrollHeight = $(this)[0].scrollHeight;
+	　　var offetHeight  = $('#multiple-left').height();
+	　　if(scrollTop + offetHeight == scrollHeight){
+			page++;
+			var title = $('#search_course').val();
+			$.ajax({
+				type:"post",
+				url: '/org.main.searchCourse',
+				data:{ page:page,title:title },
+				dataType:'json',
+				success:function(r){
+					var data = r.data;
+					if(data.length > 0 ){
+						var _html='';
+						$(data).each(function(i,item){
+							var selected = 0;
+							$('#multiple-right li').each(function(){
+								if($(this).attr('data-id') == item.course_id){
+									selected = 1;
+								}
+							});
+							if(selected == 1){
+								_html += '<li data-id='+item.course_id+' class="selected">'+item.title+'</li>'
+							}else{
+								_html += '<li data-id='+item.course_id+'>'+item.title+'</li>'
+							}
+						});
+						$('#multiple-left').append(_html);
+					}else{
+						$('#multiple-left').unbind('scroll');
+					}
+				},
+				complete:function(){
+				},
+				error: function(r){
+					page--;
+				}
+			});
+		}
+	});
+});
+</script>
+<body style="background:#fff">
+<!--
+<form method="post" name="searchform" id="searchform">
+    <ul class="layer-course-input">
+        <li>
+            <input type="text" name="keyword" size="24" maxlength="255" value="" id="keyword" class="text" placeholder="{'输入要搜索的课程'|tr:'org'}">
+        </li>
+    </ul>
+    <ul class="layer-course-list" style="display:none;">
+    </ul>
+    <input type="hidden" name="top" value="{$top}">
+    <input type="hidden" name="tid" value="{$tid}">
+</form>
+-->
+<div class="layer-courselist">
+    <div class="tab-main fs14 mb10">
+        <div class="tab-hd">
+        <a href="#" class="tab-hd-opt curr">全部课程</a>
+        <a href="#" class="tab-hd-opt">分销课程</a>
+    </div>
+    </div>
+    <div class="lc-so-name" id="course-so"><form action=""><input type="text" id="keyword" name="course_name" placeholder="搜索课程名称" class="col-xs-10"></form></div>
+    <div class="lc-list mt15">
+    <p>&nbsp;</p>
+        <div id="multiple-left">
+        <ul class="multiple-select mt10" id="org_course">
+			{if(!empty($courseList))}
+			{foreach($courseList as $co)}
+            <li data-id="{$co->course_id}">{$co->title}</li>
+			{/foreach}
+			{/if}
+        </ul>
+		<ul class="multiple-select mt10" style="display:none;">
+		{if(!empty($salseList))}
+		{foreach($salseList as $k=>$v)}
+		<li data-id="{$v->course_id}">{$v->title}</li>
+		{/foreach}
+		{/if}
+		</ul>
+
+
+        </div>
+    </div>
+    <div class="co-option mt15" id="co-option"><a href="#" id="add-btn">添加 》</a><a href="#" class="mt10" id="del-btn">《 删除</a></div>
+    <div class="lc-list mt15">
+        <p class="fs14">已选课程</p>
+        <ul class="multiple-select mt10" id="multiple-right">
+			{if(!empty($selected))}
+			{foreach($selected as $v)}
+			<input type="hidden" name="oldCourse" value="{$v->course_id}"/>
+			{/foreach}
+			<li class="defalut">还没有课程</li>
+			{/if}
+
+        </ul>
+    </div>
+	<input type="hidden" name="tid" value="{$tid}"/>
+    <div class="col-xs-20 tec mt10">
+		<button class="btn mr20" id="course_update" data-bid="{$bid}" data-type="{$subType}">确定</button>
+		<a href="javascript:;" class="btn-default" id="course_cel">取消</a>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    $('.tab-hd a').click(function(){
+        $(this).addClass('curr');
+        $(this).siblings().removeClass("curr");
+        $("#multiple-left").find("ul:eq("+$(this).index()+")").show().siblings().hide();
+        if($(this).index() ==0){
+            $("#course-so").show();
+        }else{
+            $("#course-so").hide();
+        }
+    })
+</script>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+	</head>
+	<body>
+		<script>
+			//window.onerror=function(e){
+				//	alert(e);
+				//}
+		</script>
+
+		<script>
+			//调用微信JS api 支付
+			var backurl="{$backurl}";
+			wx.config({
+				debug: false,
+				appId: "{$jsApiParameters->appId}",
+				timestamp: "{$jsApiParameters->timeStamp}",
+				nonceStr: "{$jsApiParameters->nonceStr}",
+				signature: '{$signature}',
+				jsApiList: ["chooseWXPay"]
+			});
+			wx.error(function(res){
+				alert(res);
+				location.replace(backurl);
+			});
+			try{
+				wx.ready(function(){
+					wx.chooseWXPay({
+						timestamp: "{$jsApiParameters->timeStamp}",
+						nonceStr: "{$jsApiParameters->nonceStr}",
+						package: '{$jsApiParameters->package}',
+						signType: '{$jsApiParameters->signType}',
+						paySign: '{$jsApiParameters->paySign}',
+						success: function (res) {
+							// 支付成功后的回调函数
+							location.replace(backurl);
+							},fail:function(e){
+							alert("支付失败");
+							location.replace(backurl);
+							},complete:function(e){
+							location.replace(backurl);
+							},calcel:function(e){
+							alert("支付取消");
+							location.replace(backurl);
+						}
+					});
+				});
+				}catch(e){
+				alert(e.description);
+			}
+		</script>
+	</body>
+</html>
+
+

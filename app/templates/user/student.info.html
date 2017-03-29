@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 学生信息修改</title>
+		{part "/index.main.headeruser"}
+		<script type="text/javascript" src="{utility_cdn::js('/assets/libs/datetimepicker-master/jquery.datetimepicker.js')}" ></script>
+		<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets/libs/datetimepicker-master/jquery.datetimepicker.css')}">
+	</head>
+	<body>
+		<!--top-->
+		{part "/index.main.nav.user"}
+
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='col-sm-3 user_menu hidden-xs'>
+						<div id=''>
+							<div id='menu'>
+								{part "/user.home.menu.user"}
+
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class='col-sm-9 user_content'>
+						<div class='container-fluid'>
+							<div class='row'>
+								<div>
+									<h1 class="title">学生信息</h1>
+								</div>
+							</div>  
+							<form class="form-horizontal" role="form" method="post">
+								{if (!empty($error))}
+								<div class="form-group red">
+									<label class="col-sm-2 control-label"></label>
+									<h3>{$error}</h3>
+								</div>
+								{/if}
+								<div class="form-group">
+									<label class="col-sm-2 control-label">学生姓名:</label>
+									<div class="col-sm-4">
+										<input type="text" name="student_name" class="form-control" value="{if !empty($student->student_name)}{$student->student_name}{/if}">
+									</div>
+									<div class="col-sm-4">
+									用于上课的时候，显示给老师和同学们的名字
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">年级:</label>
+									<div class="col-sm-4">
+										<select class="form-control" name="grade">
+											<option value="">请选择</option>
+											{if(!empty($grades))}
+											{foreach $grades as $grade_id=>$grade_name}
+											<option {if !empty($student) && $student->grade==$grade_id} selected {/if} value="{$grade_id}">{$grade_name}</option>
+											{/foreach}
+											{/if}
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">设置地区:</label>
+									<div class="col-sm-4">
+										<select class="form-control" name="region_level0" id="level0">
+											<option value="">请选择</option>
+											{if(!empty($level0))}
+											{foreach $level0 as $region}
+											<option {if !empty($student) && $student->region_level0==$region->region_id} selected {/if} value="{$region->region_id}">{$region->name}</option>
+											{/foreach}
+											{/if}
+										</select>
+										<br />
+										<select style="display:none" class="form-control" name="region_level1" id="level1">
+											<option value="">请选择</option>
+										</select>
+										<br />
+										<select style="display:none" class="form-control" name="region_level2" id="level2">
+											<option value="">请选择</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">设置学校:</label>
+									<div class="col-sm-4">
+										<select class="form-control" name="school_type" id="school_type">
+										<option {if !empty($student) && $student->school_type==1}selected{/if} value="1">小学</option>
+										<option {if !empty($student) && $student->school_type==6}selected{/if} value="6">中学</option>
+										</select>
+										<br />
+										<select style="display:none" class="form-control" name="school_id" id="school">
+										</select>
+										<br />
+										如果没有您的学校，请<a href="/about.main.contact" target="_blank" style="color:#428bca;text-decoration:underline;">联系我们</a>添加
+									</div>
+								</div>
+								<script>
+								var region_level0="{if !empty($student)}{$student->region_level0}{/if}";
+								var region_level1="{if !empty($student)}{$student->region_level1}{/if}";
+								var region_level2="{if !empty($student)}{$student->region_level2}{/if}";
+								var school_id=    "{if !empty($student)}{$student->school_id}{/if}";
+								var school_type=  "{if !empty($student)}{$student->school_type}{/if}";
+									$("#level0").change(function(){
+										var pid = $(this).val();
+										if(pid){
+										$.get("/user.course.ListRegion."+pid,{ },function(item){
+											$("#level1").html("");
+											if(item){
+												for(var i in item){
+													var s="";
+													if(item[i].region_id == region_level1){
+														s=" selected ";
+													}
+													$("#level1").append("<option "+s+" value='"+item[i].region_id+"'>"+item[i].name+"</option>");
+												}
+												$("#level1").show().trigger("change");
+												}else{
+												$("#level1").hide();
+											}
+										},"json");
+										}
+									}).trigger("change");
+									$("#level1").change(function(){
+										var pid = $(this).val();
+										$("#level2").empty();
+										if(pid){
+											$.get("/user.course.ListRegion."+pid,{ },function(item){
+									//		console.log("哦饿了");
+												$("#level2").html("");
+												if(item){
+													for(var i in item){
+														var s="";
+														if(item[i].region_id == region_level2){
+															s=" selected ";
+														}
+														$("#level2").append("<option "+s+" value='"+item[i].region_id+"'>"+item[i].name+"</option>");
+													}
+													$("#level2").show();
+													$("#level2").show().trigger("change");
+													}else{
+													$("#level2").hide();
+												}
+											},"json").fail(function(){
+										//	console.log("失败了");
+											$("#level2").append("<option value=''>请选择</option>");
+											$("#level2").hide();
+											});
+										}
+									});
+									$("#level2 ,#level1, #school_type").change(function(){
+										var pid = $("#level2").val() ? $("#level2").val() : $("#level1").val();
+									//	console.log("pid是"+pid);
+
+										$.get("/user.course.ListSchool",{ school_type:$("#school_type").val(),region_id:pid },function(item){
+											$("#school").html("");
+											if(item){
+												for(var i in item){
+													var s="";
+													if(item[i].school_id== school_id){
+														s=" selected ";
+													}
+													$("#school").append("<option "+s+" value='"+item[i].school_id+"'>"+item[i].school_name+"</option>");
+												}
+												$("#school").show();
+											}else{
+												$("#school").hide();
+											}
+											console.log(item);
+										},"json");
+									});
+								</script>
+								<div class="form-group">
+									<div class="col-sm-offset-2 col-sm-10">
+										<button type="submit" class="btn btn-primary">保存</button>
+									</div>
+								</div>
+							</form>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+		</div>              
+
+		{part "/index.main.footer"}
+
+	</body>
+</html>

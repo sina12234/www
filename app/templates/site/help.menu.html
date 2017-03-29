@@ -1,0 +1,147 @@
+<div class="hidden-xs col-sm-3 col-md-4 user-left-menu pd0" id="help-menu">
+    <ul class="left-menu">
+        <li class="nav-menu-box">
+            <a class="nav-menu open {if $subnav=='register' or $subnav=='edit' or $subnav=='unabletospeak'}active{/if}">
+                <span class="nav-icon nav-que"></span>
+                <span class="nav-tag">
+                    {'常见问题'|tr:'org'}
+                </span>
+                <span class="inner-level-icon"></span>
+            </a>
+            <ul class="second-level {if $subnav=='register' or $subnav=='edit' or $subnav=='unabletospeak'}show{/if}">
+                <li class="second-level-menu">
+                    <a href="/site.help.register">
+                        <span class="{if $subnav=='register'}active{/if}">注册和登录</span>
+                    </a>
+                </li>
+                <li class="second-level-menu">
+                    <a href="/site.help.edit">
+                        <span class="{if $subnav=='edit'}active{/if}">修改个人资料</span>
+                    </a>
+                </li>
+                <li class="second-level-menu">
+                    <a href="/site.help.unabletospeak">
+                        <span class="{if $subnav=='unabletospeak'}active{/if}">上课无法语音说话</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-menu-box">
+            <a class="nav-menu open {if $subnav=='howtopay' or $subnav=='howtoclass' or $subnav=='mycourse' or $subnav=='coupon'}active{/if}">
+                <span class="nav-icon nav-student"></span>
+                <span class="nav-tag">
+                    {'我是学生'|tr:'org'}
+                </span>
+                <span class="inner-level-icon"></span>
+            </a>
+            <ul class="second-level {if $subnav=='howtopay' or $subnav=='howtoclass' or $subnav=='mycourse' or $subnav=='coupon'}show{/if}">
+                <li class="second-level-menu">
+                    <a href="/site.help.howtopay">
+                        <span class="{if $subnav=='howtopay'}active{/if}">报名与支付</span>
+                    </a>
+                </li><li class="second-level-menu">
+                    <a href="/site.help.howtoclass">
+                        <span class="{if $subnav=='howtoclass'}active{/if}">如何上课</span>
+                    </a>
+                </li><li class="second-level-menu">
+                    <a href="/site.help.mycourse">
+                        <span class="{if $subnav=='mycourse'}active{/if}">我的课程</span>
+                    </a>
+                </li><li class="second-level-menu">
+                    <a href="/site.help.coupon">
+                        <span class="{if $subnav=='coupon'}active{/if}">优惠券</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-menu-box">
+            <a class="nav-menu open {if $subnav=='howtoteach' or $subnav=='editinfo'}active{/if}" >
+                <span class="nav-icon nav-teacher"></span>
+                <span class="nav-tag">
+                    {'我是老师'|tr:'org'}
+                </span>
+                <span class="inner-level-icon"></span>
+            </a>
+            <ul class="second-level {if $subnav=='howtoteach' or $subnav=='editinfo'}show{/if}">
+                <li class="second-level-menu">
+                    <a href="/site.help.howtoteach">
+                        <span class="{if $subnav=='howtoteach'}active{/if}">如何教课</span>
+                    </a>
+                </li>
+                <li class="second-level-menu">
+                    <a href="/site.help.editinfo">
+                        <span class="{if $subnav=='editinfo'}active{/if}">资料维护</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-menu-box">
+            <a class="nav-menu open {if $subnav=='join' or $subnav=='indexmanage' or $subnav=='coursemanage' or $subnav=='personmanage' or $subnav=='order' or $subnav=='extension' or $subnav=='settle'}active{/if}" >
+                <span class="nav-icon nav-infobase"></span>
+                    <span class="nav-tag">
+                        {'我是管理员'|tr:'org'}
+                    </span>
+                <span class="inner-level-icon"></span>
+            </a>
+            <ul class="second-level {if $subnav=='join' or $subnav=='indexmanage' or $subnav=='coursemanage' or $subnav=='personmanage' or $subnav=='order' or $subnav=='extension' or $subnav=='settle'}show{/if}">
+                <li class="second-level-menu">
+                    <a href="/site.help.join">
+                        <span class="{if $subnav=='join'}active{/if}">入驻</span>
+                    </a>
+                </li>
+                <li class="second-level-menu">
+                    <a href="/site.help.indexmanage">
+                        <span class="{if $subnav=='indexmanage'}active{/if}">首页维护</span>
+                    </a>
+                </li>
+                <li class="second-level-menu">
+                    <a href="/site.help.coursemanage">
+                        <span class="{if $subnav=='coursemanage'}active{/if}">课程管理</span>
+                    </a>
+                </li>
+                <li class="second-level-menu">
+                    <a href="/site.help.personmanage">
+                        <span class="{if $subnav=='personmanage'}active{/if}">老师和学生管理</span>
+                    </a>
+                </li>
+                <li class="second-level-menu">
+                    <a href="/site.help.order">
+                        <span class="{if $subnav=='order'}active{/if}">订单和优惠码</span>
+                    </a>
+                </li>
+                <li class="second-level-menu">
+                    <a href="/site.help.settle">
+                        <span class="{if $subnav=='settle'}active{/if}">结算管理</span>
+                    </a>
+                </li>
+                <li class="second-level-menu">
+                    <a href="/site.help.extension">
+                        <span class="{if $subnav=='extension'}active{/if}">推广规则</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<script type="text/javascript">
+    $('.nav-menu-box').on('click','.nav-menu',function () {
+        var open = $(this).attr('data-open');
+        var initNav = $(this).parent().find('.second-level');
+        if(!$(this).hasClass('active')){
+            var href = initNav.find('.second-level-menu').eq(0).find('a').attr('href');
+            location.href = href;
+        }
+        if(open){
+            if($(this).hasClass('open')){
+                $(this).find('.inner-level-icon').addClass('pull-up');
+                $(this).removeClass('open');
+                initNav.removeClass('show');
+            }else{
+                $(this).find('.inner-level-icon').removeClass('pull-up');
+                $(this).addClass('open');
+                initNav.addClass('show');
+            }
+        }
+    })
+</script>

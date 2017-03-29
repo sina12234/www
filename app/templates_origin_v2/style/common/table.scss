@@ -1,0 +1,24 @@
+// table list  common style extend
+.table-grid {
+    @extend %table;
+    td {
+        text-align: center;
+        vertical-align: middle;
+        @extend %ellipsis;
+        line-height: 36px;
+        min-height: 36px;
+        padding:0;
+    }
+    thead {
+        td {
+            line-height: 40px;
+            height: 40px;
+        }
+    }
+    input {
+        line-height: initial;
+        background: #f9f9f9;
+        padding: 5px 7px;
+        border: 1px solid #ddd;
+    }
+}

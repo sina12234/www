@@ -1,0 +1,23 @@
+// 快速导航
+.fast-nav{
+    background:#00a0ea;
+    height:40px;
+    line-height:40px;
+    color:#fff;
+    .fast-nav-icon{
+        display: inline-block;
+        @include sprite($navigation);
+    }
+    a{
+        margin-left:10px;
+        color:#fff;
+        &:after{
+            content:"|";
+            color:#a3ddf7;
+            padding-left:20px;
+        }
+        :hover{
+            color:#e9f4fc
+        }
+    }
+}

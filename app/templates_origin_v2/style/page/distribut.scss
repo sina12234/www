@@ -1,0 +1,148 @@
+/*fenxiao*/
+.distri-list-scrool{
+	.priceTxt{
+		height: 34px;
+		width:10%;
+		input{
+			width:82%;
+			margin-top: 3px;
+		}
+		span{
+			line-height: 34px;
+		}
+	}
+	.mt4{
+		margin-top: 4px;
+	}
+	.cYellow{
+		line-height:42px;
+	}
+	.distriprice{
+		line-height:42px;
+	}
+}
+.distriSpread-option{
+	li{
+		float: left;
+		padding:3px 6px;
+		line-height:24px;
+		border-right:1px solid #ddd;
+	}
+	li:last-child{
+		border-right: 0;
+	}
+	li.curr{
+		background:#198fee;
+		a{
+			color:#333;
+			&:hover{
+				color: #333;
+			}
+		}
+	}
+}
+.distri-DetailPrice{
+	li{
+		border-bottom: 1px solid #ddd;
+		&:last-child{
+			border-bottom:0;
+		}
+	}
+	div{
+		line-height:40px;
+	}
+}
+.setDistriBoxBg{
+	width: 100%;
+	height: 100%;
+	background: #000;
+	opacity:0.4;
+	filter:alpha(opacity=40);
+	position: fixed;
+	top:0;
+	left:0;
+	z-index:9;
+}
+.setDistriBox{
+	width: 572px;
+	height: 256px;
+	background: url(../img/setDistri-bg.png) no-repeat;
+	top:320px;
+	left:120px;
+	z-index:10;
+	.setDistriBox-urlBtn{
+		width: 112px;
+		height: 38px;
+		display:inline-block;
+		float: left;
+		margin:173px 0px 0 180px;
+	}
+}
+#setDistriBox-closeBtn{
+	margin:180px 0px 0 5px;
+}
+#setDistriBox-closeBtn{
+		width: 65px;
+		height:26px;
+		display: inline-block;
+		float: left;
+}
+#setTemplateBox-closeBtn{
+		width: 65px;
+		height:26px;
+		display: inline-block;
+		float: left;
+}
+#setTemplateBox-closeBtn{
+	margin: 148px 0 0 283px;
+	width: 100px;
+	height: 38px;
+}
+.setTemplateBox{
+	width: 936px;
+	height: 300px;
+	background: url(../img/org-template-layerBg.png) no-repeat;
+	top:114px;
+	left:-18px;
+	z-index:10;
+}
+.mark-ask{
+	padding-left:16px;
+	height:16px;
+	display:inline-block;
+	background:url(../img/mark-ask.png) no-repeat 0px 2px;
+	color:#999;
+}
+ #setDistriCourse{
+ 	li{
+ 		line-height:26px;
+ 		padding:0 6px;
+ 		@extend %ellipsis;
+ 		cursor: pointer;
+ 		&:hover{
+ 			background: $white-background-color;
+ 		}
+ 	}
+ 	li:nth-child(2){
+ 		position: relative;
+ 	}
+	.last{
+		height: 170px;
+		overflow-y: auto;
+		right: 60px;
+		width: 60%;
+		z-index: 10;
+		background: #f7f7f7;
+		border: 1px solid #ddd;
+		border-top: 0;
+	}
+ }
+ #distriInfo{
+ 	p{
+ 		width: 100%;
+ 		overflow: hidden;
+ 	}
+}
+ #selectCourse{
+ 	padding-right: 20px;
+}

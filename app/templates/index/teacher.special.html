@@ -1,0 +1,396 @@
+ <!DOCTYPE html>
+ <html>
+ <head>
+ 	<meta charset="utf-8">
+ 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+ 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+ 	<meta name="title" content="首页 - 云课 - 专业的在线学习平台">
+ 	<meta name="keywords" content="云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+ 	<meta name="description" content="云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+ 	<title>"感念师恩最亮教师"全国微课评选活动进行中</title>
+	<link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets_v2/img/platform/yunke.ico')}" />
+	<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+	<script type="text/javascript" src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+	<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/platform/index.css')}">
+	<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/bootstrap/bootstrap.min.css')}">
+	<!--[if lt IE 9]>
+	<link rel="stylesheet" type="text/css" href="/assets_v2/css/bootstrap/bootstrap.min.css">
+	<script src="//dev.gn100.com/assets_v2/bootstrap-3.3.0/js/html5shiv.min.js?ver=13"></script>
+	<script src="//dev.gn100.com/assets_v2/bootstrap-3.3.0/js/respond.min.js?ver=13"></script>
+	<![endif]-->
+	<!--[if lt IE 8]>
+	<script src="//dev.gn100.com/assets_v2/js/ie8.js?ver=13"></script>
+	<![endif]-->
+ </head>
+<style>
+body,html{ padding:0;margin:0;background:#f9fdfe;font-size:14px;font-family: \5fae\8f6f\96c5\9ed1,Arial,"Hiragino Sans GB",Helvetica,sans-serif; }
+header,footer,section{ float:left;width:100%;position:relative }
+header img,footer img{ float:left;width:100%;max-width:1920px; }
+footer { padding:0;background: none;}
+footer p{ float:left;line-height:180%;z-index:333;width:100%;bottom:10px;text-align:center;color:#333;position:absolute;padding-bottom:0 }
+footer a{ color:#333;text-decoration: none }
+p{ margin:0px; }
+.head { position: relative; }
+.head p.banner img{ width:100%; }
+.head p.start_btn{ position: absolute;right:20%;bottom:0px;cursor:pointer; }
+.end_btn{  position: absolute;right:20%;bottom:0px; }
+.content{ background:#f9fdfe;}
+.content .title{ padding-top: 15px;padding-bottom:40px;line-height: 26px;}
+.content .title a{ padding-right:55px;font-size:16px; }
+.title p{ color:#174268; }
+.set_cont span{ font-size:24px;color:#005aaa;width:100%; }
+.set_cont{ width:100%; float: left; padding-bottom:30px;}
+.jiangpin p img{ float: left;margin-right:35px; }
+.set_cont .wen{ line-height: 26px; }
+.set_cont .wen span{ font-size: 14px;color:red;}
+.set_box{ background: url(/assets_v2/img/special/2016_08_25/bg_yinyan.png)no-repeat;width: 100%;height:170px;margin-top:20px; }
+.set_box_1{ background: url(/assets_v2/img/special/2016_08_25/bg_vote.png)no-repeat;width: 100%;height:270px;margin-top:20px;}
+.set_box p{ font-size: 14px;padding:25px 0 0 30px;}
+.set_box_1 p{ font-size: 14px;line-height: 30px;width:90%;padding:5px 0 0 20px; }
+.set_box_1 p span{ width:100%;float:left;font-size:14px;}
+.set_box_1 p span i{ width:10px;height:10px;background:#f27474;display: inline-block;border-radius: 5px;margin-right:7px;}
+.teac_buton{ text-align: center;margin-top:50px;float: left;width:100%;margin-bottom: 20px; }
+.mobile_iphone{ display: none; }
+.layui-layer-title{ text-align:center;width:100%;padding:0; }
+.layer_type .content_baom{ width:530px;height:270px;border-radius:3px;padding-top:30px; }
+.layer_type .content1{ width:530px;text-align:center;padding-top:30px;border-radius:3px; }
+.layer_type .content2{ width:300px;text-align:center;padding-top:30px;border-radius:3px;height:150px; }
+.layer_type .content2 p{ padding-top:30px;font-size:20px;}
+.layer_type .content1 .head{ font-size:20px;}
+.layer_type .content_baom p:nth-child(1){ color:#f00;font-size:20px;}
+.layer_type .content_baom p button{ width:120px;height:38px;background:#fe5b59;border:none;border-radius:3px;margin:20px 0 20px 0;color:#fff;}
+.layer_type .content_baom p button:hover{ background:#fe5b59;opacity:0.8; }
+.layer_type .content_baom p{ text-align:center;padding-top:20px; }
+.content1 .type_name input,.content1 .type_iphone input{ width:280px;height:38px;border:1px solid #ccc;margin-top:20px; }
+.content1 .type_yanz input{ border:1px solid #ccc;margin-top:20px;width:190px;height:38px;margin-left:24px;padding-left:20px; }
+.name_input { background:url(/assets_v2/img/special/2016_08_25/name.png)no-repeat;background-position: 10px;padding-left: 35px; }
+.name_iphone { background:url(/assets_v2/img/special/2016_08_25/iphone.png)no-repeat;background-position: 10px;padding-left: 35px; }
+.type_buton button{ width:216px;height:38px;background:#fe5b59;border:none;border-radius:3px;margin:20px 0 20px 0;color:#fff;}
+.type_buton button:hover{ background:#fe5b59;opacity:0.8; }
+.layui-layer-setwin .layui-layer-close2{ right:0;top:10px; }
+@media screen and (min-width:320px) and (max-width:760px){
+	body,html{ font-size:12px; }
+	footer{ float:left;width:100%;position:relative }
+	footer img{ float:left;width:100%;max-width:1920px;height:105px; }
+	footer { padding:0;background: none;}
+	footer p{ float:left;line-height:180%;z-index:333;width:100%;bottom:10px;text-align:center;color:#333;position:absolute;padding-bottom:0 }
+	footer a{ color:#333;text-decoration: none }
+	.head p img{ width:100%; }
+	.content{ height:1100px; }
+	.cont1{ padding: 20px 20px 0 20px;}
+	.cont1 a{ padding-right:7px;}
+	.cont1 p:nth-child(2){ line-height:18px; }
+	.cont2 { padding:0 20px 15px 15px;float: left;}
+	.cont2 p{ color: #005aaa;padding-bottom: 20px;padding-left: 10px;padding-top: 20px; }
+	.cont2 span img{ float: left;width:45%;margin-left: 13px;margin-bottom: 5px;}
+	.cont2 .text{ float: left;padding-left: 10px;color:#054267;}
+	.cont3{ padding:0 20px 15px 15px;float: left; }
+	.cont3 p{ color: #054267;padding-bottom:10px;padding-left: 10px;  }
+	.cont3_1{ position: relative; }
+	.cont3_1 img{ width:100%;float: left;height:170px; }
+	.cont3_1_text{ position: absolute;padding:20px 0 0 0 ;}
+	.cont3_1_text p{ font-size: 14px; }
+	.cont4{ padding:0 20px 15px 15px;float: left;position: relative;}
+	.cont4_1{ position: absolute;top:55px; }
+	.cont4_1 span { color:#f27474; }
+	.cont4_1 span i { width:7px;height:7px;border-radius: 5px;display: inline-block;background:#f27474;margin-right: 5px;}
+	.cont4_1 p { font-size: 12px;width:90%; }
+	.cont4 p{ color: #054267;padding-bottom:10px;padding-left: 10px;}
+	.cont4 img{ width:100%;height:320px;}
+	.cont5{ width:100%;text-align: center;position:fixed;bottom:5px;z-index:5; }
+	.cont5 p img{ width:90%;}
+	.mobile_iphone{ display:block; }
+	.mobile_pc{ display: none; }
+	.layui-layer{ margin-left:-20px; }
+	.layui-layer-title{ text-align:center;width:100%;padding:0; }
+	.layer_type .content_baom{ width:430px;height:270px;border-radius:3px;padding-top:30px;left:20px; }
+	.layer_type .content1{ width:100%;text-align:center;padding-top:30px;border-radius:3px; }
+	.layer_type .content2{ width:430px;text-align:center;padding-top:30px;border-radius:3px;height:150px; }
+	.layer_type .content2 p{ padding-top:30px;font-size:20px;}
+	.layer_type .content1 .head{ font-size:20px;}
+	.layer_type .content_baom p:nth-child(1){ color:#f00;font-size:20px;}
+	.layer_type .content_baom p button{ width:120px;height:38px;background:#fe5b59;border:none;border-radius:3px;margin:20px 0 20px 0;color:#fff;}
+	.layer_type .content_baom p button:hover{ background:#fe5b59;opacity:0.8; }
+	.layer_type .content_baom p{ text-align:center;padding-top:20px; }
+	.content1 .type_name input,.content1 .type_iphone input{ width:280px;height:38px;border:1px solid #ccc;margin-top:20px; }
+	.content1 .type_yanz input{ border:1px solid #ccc;margin-top:20px;width:190px;height:38px;margin-left:24px;padding-left:20px; }
+	.name_input { background:url(/assets_v2/img/special/2016_08_25/name.png)no-repeat;background-position: 10px;padding-left: 35px; }
+	.name_iphone { background:url(/assets_v2/img/special/2016_08_25/iphone.png)no-repeat;background-position: 10px;padding-left: 35px; }
+	.type_buton button{ width:216px;height:38px;background:#fe5b59;border:none;border-radius:3px;margin:20px 0 20px 0;color:#fff;}
+	.type_buton button:hover{ background:#fe5b59;opacity:0.8; }
+	.layui-layer-setwin .layui-layer-close2{ right:0;top:10px; }
+}
+
+</style>
+ <body>
+ <section class="mobile_pc">
+	<!-- 头部 -->
+		<div class="head">
+			<p class="banner"><img src="/assets_v2/img/special\2016_08_25/head.jpg" alt=""></p>
+			<p class="start_btn">
+					<a href="/index.special.teacherRankList"><img src="/assets_v2/img/special\2016_08_25/canyu_start.png" alt=""></a>
+			</p>
+
+		</div>
+	<!-- 头部end -->
+ 	<div class="container">
+ 		<div class="row">
+		<!-- content -->
+	 		<section class="content">
+	 			<div class="title">
+	 				<span class="cRed fs14">亲爱的老师们:</span>
+	 				<p>"三尺讲台,是您施展才华的天地:教学新法,发挥点石成金的魔力."在第32个教师节来临之际,为充分展示教师风采.云课（yunke.com）特面向全国各级各类学校、机构及个人,发起"感念师恩,最亮教师"——2016年云课教师节微课评选活动,旨在通过活动选拔出网络时代最受学生欢迎的教师代表、展示当代教师在教学上多元的风格和风采.</p>
+				</div>
+	 			<div class="set_cont">
+	 				<span class="set_cont_font">奖项设置</span>
+	 				<div class="jiangpin">
+	 					<p><img src="/assets_v2/img/special\2016_08_25/computer.png" alt=""></p>
+	 					<p><img src="/assets_v2/img/special\2016_08_25/yuedu_1.png" alt=""></p>
+	 					<p><img src="/assets_v2/img/special\2016_08_25/yingpan.png" alt=""></p>
+	 					<p><img src="/assets_v2/img/special\2016_08_25/huafei.png" alt=""></p>
+	 				</div>
+	 				<div class="wen">
+	 					*“感念师恩，最亮教师”根据观看次数统计排名，奖项设置同上，数据以云课平台提供为准。 </br>
+						*   其他参与活动教师可送<span class="cRed">50元话费</span>（参与活动教师指的视频审核通过，云课最终确定的教师名单，其最终解释权归活动举办方所有）。
+						 </br>
+						*   颁发方式：奖品云课统一采购并配送到各省，学校负责人代为颁发奖品（奖品以实物为准）。话费奖励由云课直接通过支付平台颁发。
+	 				</div>
+	 			</div>
+	 			<div class="set_cont">
+	 				<span class="set_cont_font">审核标准</span>
+					<div class="set_box">
+						<p>1.以现行的课程标准与教材为蓝本，根据需求进行微课程开发。</p>
+						<p>2.时长在5-10分钟内。</p>
+						<p>3.需配套提供教学设计课件（PPT）等辅助材料</p>
+					</div>
+	 			</div>
+	 			<div class="set_cont">
+	 				<span class="mb20">活动流程</span>
+					<div class="set_box_1">
+						<p><span><i></i>教师报名（8月28日—9月10日）</span>1.活动第一阶段为报名，报名分为学校报名和个人报名两种方式。通过组织报名方式参赛的教师通过学校通道参与。通过个人报名方式参赛的教师点击“立即参与”在线注册报名。</p>
+						<p><span><i></i>微课上传 （8月28日—9月30日）</span>2.教师可利用云课客户端、手机、DV等设备录制微课。通过学校报名教师上传微课至本校云课空间；通过个人报名教师将微课发送至邮箱yunke_com@126.com.专家评审团将对内容进行审核，审核通过的选手将会在72小时内收到主办方的通知，并在云课活动专题页进行集中展示。</p>
+						<p><span><i></i>微课评选（9月10日—9月30日）</span>3.排名根据微课观看次数决定，数据在云课平台专题页面进行公示，并实时刷新变动。时间截止9月30日，数据以云课提供为准。</p>
+					</div>
+	 			</div>
+	 		</section>
+ 		<!-- content_end -->
+ 			<div class="teac_buton">
+			<p class="baom_start">
+					<a href="/index.special.teacherRankList"><img src="/assets_v2/img/special\2016_08_25/baoming_start.png" alt=""></a>
+ 			</p>
+ 			</div>
+ 		  		</div>
+ 	</div>
+ 		<!-- 底部 -->
+ 		<footer>
+ 		    <img src="/assets_v2/img/special/2016_08_25/footer.png" class="hidden-xs hidden-sm">
+ 		    <p>
+ 		        <a href="/index.about" target="_blank">关于我们</a> |
+ 		        <a href="/index.feedback" target="_blank">意见反馈</a> |
+ 		        <a href="/index.help" target="_blank">在线帮助</a> |
+ 		        <a href="/index.main.client" target="_blank">客户端下载</a> <br>
+ 		        Copyright c  2015  北京高能壹佰教育科技有限公司版权所有<br>
+ 		        京ICP备14053191号  云课--拓维旗下在线教育平台</p>
+ 		</footer>
+ 		<!-- 底部 -->
+
+ </section>
+ <section class="mobile_iphone">
+ 	<!-- 头部 -->
+ 		<div class="head">
+ 		    <p>
+                <img src="/assets_v2/img/special/2016_08_25/head.png" alt="" class="hidden-sm hidden-xs">
+                <img src="/assets_v2/img/special/2016_08_25/head-m.jpg" alt="" class="visible-sm visible-xs">
+            </p>
+ 		</div>
+ 	<!-- 头部end -->
+	<div class="container">
+		<div class="row">
+			<div class="content">
+				<div class="cont1">
+					<p class="cRed">亲爱的老师们:</p>
+					<p>"三尺讲台，是您施展才华的天地；教学新法，发挥点石成金的魔力。”在第32个教师节来临之际，为充分展示教师风采。云课（yunke.com）特面向全国各级各类学校、机构及个人，发起“感念师恩，最亮教师”—  2016年云课教师微课评选活动，旨在通过活动选拔出网络时代最受学生欢迎的教师代表、展示当代教师在教学上多元的风格和风采。</p>
+					<a href="/index.special.teacherRankList" class="cRed c-fr" target="_blank">查看教师排行榜</a>
+				</div>
+				<div class="cont2">
+					<p class="fs20">奖项设置</p>
+					 <span>
+					 	<img src="/assets_v2/img/special\2016_08_25/cont_1.png" alt="">
+					 </span>
+					 <span>
+					 	<img src="/assets_v2/img/special\2016_08_25/cont_2.png" alt="">
+					 </span>
+					 <span>
+					 	<img src="/assets_v2/img/special\2016_08_25/cont_3.png" alt="">
+					 </span>
+					 <span>
+					 	<img src="/assets_v2/img/special\2016_08_25/cont_4.png" alt="">
+					 </span>
+					 <div class="text">
+					 	*颁发方式：奖品总部统一采购并配送到各省，学校负责人代为颁发奖品（奖品以实物为准）。话费奖励由云课线上直接充值.
+					 </div>
+				</div>
+				<div class="cont3">
+					<p class="fs20">审核标准</p>
+					<div class="cont3_1">
+						<img src="/assets_v2/img/special/2016_08_25/bg_yinyan.png" alt="">
+						<div class="cont3_1_text">
+							<p>1.	以现行的课程标准与教材为蓝本，根据需求进行微课程开发。</p>
+							<p>2.	时长在5-10分钟内。</p>
+							<p>3.	需配套提供教学设计课件（PPT）等辅助材料</p>
+						</div>
+
+					</div>
+				</div>
+				<div class="cont4">
+					<p class="fs20">活动流程</p>
+					<img src="/assets_v2/img/special/2016_08_25/bg_vote.png" alt="">
+					<div class="cont4_1">
+						<p><span><i></i>教师报名（8月28日—9月10日）</span>1.活动第一阶段为报名，报名分为学校报名和个人报名两种方式。通过组织报名方式参赛的教师通过学校通道参与。通过个人报名方式参赛的教师点击“立即参与”在线注册报名。</p>
+						<p><span><i></i>微课上传 （8月28日—9月30日）</span>2.教师可利用云课客户端、手机、DV等设备录制微课。通过学校报名教师上传微课至本校云课空间；通过个人报名教师将微课发送至邮箱yunke_com@126.com.专家评审团将对内容进行审核，审核通过的选手将会在72小时内收到主办方的通知，并在云课活动专题页进行集中展示。</p>
+						<p><span><i></i>微课评选（9月10日—9月30日）</span>3.排名根据微课观看次数决定，数据在云课平台专题页面进行公示，并实时刷新变动。时间截止9月30日，数据以云课提供为准。</p>
+					</div>
+				</div>
+				<div class="cont5">
+					<p class="baom_start">
+							<a href="/index.special.teacherRankList"><img src="/assets_v2/img/special\2016_08_25/baoming_end.png" alt="" class="baom_end"></a>
+
+				</div>
+			</div>
+		</div>
+	</div>
+ 		<!-- 底部 -->
+ 		<footer>
+ 		    <img src="/assets_v2/img/special/2016_08_25/footer-m.png">
+ 		    <p>
+ 		        <a href="/index.about" target="_blank">关于我们</a> |
+ 		        <a href="/index.feedback" target="_blank">意见反馈</a> |
+ 		        <a href="/index.help" target="_blank">在线帮助</a> |
+ 		        <a href="/index.main.client" target="_blank">客户端下载</a> <br>
+ 		        Copyright c  2015  北京高能壹佰教育科技有限公司版权所有<br>
+ 		        京ICP备14053191号  云课--拓维旗下在线教育平台</p>
+ 		</footer>
+ 		<!-- 底部 -->
+ </section>
+ {*<div class="layer_type" id="smsForm">
+	<div class="content_baom" style="display:none;">
+		<p class="cRed">恭喜您报名成功</p>
+		<p>后继相关工作人员会与您联系，请保持电话畅通</p>
+		<p>
+			<button>确定</button>
+		</p>
+	</div>
+	<div class="content1" id="x_submit_form" style="display:none;">
+		<div class="head">
+			<p>参与活动    填写信息</p>
+		</div>
+		<div class="type_name">
+			<input type="text" placeholder="请输入姓名" class="name_input" name="name">
+		</div>
+		<div class="type_iphone">
+			<input type="text" placeholder="请输入手机号" class="name_input name_iphone iptFocusBlur" name="mobile"id="x_uname">
+			<input type="hidden" name="tagCode" value="1"/>
+		</div>
+		<div class="type_yanz">
+			<input type="text" placeholder="请输入图片验证码" class="name_yanze" name="verifyCode">
+			<a class="pd0">
+                <img style="padding:0 10px" id="cap" src="/captcha.gen" width="110" height="35"  alt=""/>
+            </a>
+		</div>
+		<div class="type_buton" id="type_buton">
+			<button>我要报名</button>
+		</div>
+	</div>
+	<div class="content2" style="display:none;">
+		<p>该手机号码已报名</p>
+	</div>
+ </div>*}
+ <script>
+/*var flag = '{$flag}';
+if(flag == 1){
+	$('.start_btn').removeClass();
+	$('.baom_start').removeClass();
+}
+$('.start_btn').click(function(){
+ 		layer.open({
+		  type: 1,
+		  title:false,
+		  area: ['auto', 'auto'], //宽高
+		  content:$('.content1')//内容
+		});
+ })
+
+$('.baom_start').click(function(){
+ 		layer.open({
+		  type: 1,
+		  title:false,
+		  area: ['auto', 'auto'], //宽高
+		  content:$('.content1')//内容
+		});
+ })
+  $('.baom_start_1').click(function(){
+ 		layer.open({
+		  type: 1,
+		  title:false,
+		  area: ['auto', 'auto'], //宽高
+		  content:$('.content1')//内容
+		});
+ })*/)
+    $('.name_input').focus(function(){
+        $(this).css('border','solid 1px #84c6d7');
+    });
+    $('.name_input').blur(function(){
+        $(this).css('border','solid 1px #ddd');
+    });
+    $('.iptFocusBlur').blur(function(){
+		var mobile  = $.trim($("input[name='mobile']").val());
+		$.post("/index/special/teacherActivityIsExist",{ mobile:mobile },function(r){
+					if(r.error){
+						layer.msg(r.error);
+						return false;
+					}
+			},"json");
+
+    });
+    /*$("#type_buton").click(function(){
+		var name 	= $.trim($("input[name='name']").val());
+		var mobile  = $.trim($("input[name='mobile']").val());
+		var verifyCode 	= $.trim($("input[name='verifyCode']").val());
+		if(name==''){
+            layer.msg('{'姓名不能为空'|tr:'site.login'}');
+            return false;
+        }if($.trim($("input[name='mobile']").val())==''){
+            layer.msg('{'手机不能为空'|tr:'site.login'}');
+            return false;
+        }else if($.trim($("input[name='verifyCode']").val())==''){
+			 layer.msg('{'图片验证码不能为空'|tr:'site.login'}');
+            return false;
+		}else{
+			$.post("/index/special/addTeacherActivity",{ name:name,mobile:mobile,verifyCode:verifyCode },function(r){
+					if(r.code=="200"){
+						layer.msg("报名成功");
+						location.reload();
+					}else if(r.code=="-100"){
+						layer.msg(r.error);
+						return false;
+					}
+			},"json");
+
+		}
+	})*/
+
+    $(window).scroll(function() {
+        var scrollHeight = $(document).scrollTop();
+        if (scrollHeight > 630) {
+            $('.cont5>p').css({
+				'bottom':'105px'
+			});
+        } else {
+           $('.cont5>p').css({
+				'bottom':'0'
+			});
+        }
+    });
+ </script>
+ </body>
+ </html>

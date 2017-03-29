@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>课程管理 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="{part '/site.main.orgname'} - 课程管理 - 云课 - 专业的在线学习平台">
+<meta name="keywords" content="{part '/site.main.orgname'} - 云课 - Yunke K12 在线学习 直播 云课网 在线教育">
+<meta name="description" content="{part '/site.main.orgname'} - 云课(Yunke.com) -专业的K12在线学习平台。以直播授课为核心，打破时间与空间的界限，为教师高效教学、学生高效学习、家长高效管控及机构高效管理提供完美解决方案">
+{part "/site.main.header"}
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/page.js')}"></script>
+</head>
+<body >
+{part "/site.main.nav.home"}
+<section class="pd30">
+<div class="container">
+    <div class="row">
+        <!-- left menu -->
+        {part "/org.main.menu.course"}
+        <!-- right main -->
+        <div class="right-main col-sm-9 col-md-16">
+            <div class="tab-main">
+                <div class="tab-hd fs14" id="courseType">
+                    <a href="#" class="tab-hd-opt curr" attr="all">{'全部'|tr:'site.course'}</a>
+                    <a href="#"  class="tab-hd-opt" attr="online">{'直播课'|tr:'site.course'}</a>
+                    <a href="#" class="tab-hd-opt" attr="video">{'录播课'|tr:'site.course'}</a>
+                    <a href="#" class="tab-hd-opt" attr="offline">{'线下课'|tr:'site.course'}</a>
+                </div>
+                <a href="/org.course.type" id="goCreateCourse" class="c-fr add-button fs14" target="_blank">
+                    <i class="add-icon c-fl"></i>{'新建课程'|tr:'site.course'}
+                </a>
+            <!-- 是否开启 -->
+            	<div class="c-fr open-permiss clearfix mr20">
+            		<div class="c-fl cleafix open-permiss-tip">
+            			<span class="tip-icon c-fl mt10 mr5"></span>
+            			<span class="fs14 c-fl">教师建课权限：</span>
+            			<div class="open-permiss-infos fs12 p5">
+            				<i class="permiss-border-arrow-up"></i>
+            				<p>开启教师建课权限后，机构下的所有老师都可以建课，并且拥有与管理员相同的课程管理权限。</p>
+            			</div>
+            		</div>
+            		<a href="javascript:;" onclick="optionCreate(1);" {if $isTeacherCreateCourse==1} class="active c-fl" {else} class="c-fl" {/if}>开启</a>
+            		<a href="javascript:;" onclick="optionCreate(0);" {if $isTeacherCreateCourse==0} class="active c-fl" {else} class="c-fl" {/if}>关闭</a>
+            	</div>
+             <!-- 是否开启 -->
+            </div>
+            <div class="manage-path fs14 col-md-20 mt10">
+				<dl class="order">
+					<dt class="c-fl">
+                        <span>{'上架状态'|tr:'site.course'}：</span>
+                        <select style="width:100px;" id="selshelf" class="divselected">
+                            <option value="all" selected>{'全部'|tr:'site.course'}</option>
+                            <option value="on">{'已上架'|tr:'site.course'}</option>
+                            <option value="off">{'未上架'|tr:'site.course'}</option>
+                        </select>
+                    </dt>
+                    <dt class="c-fr">
+    					<span>{'排序'|tr:'site.course'}：</span>
+						<select style="width:100px;" id="selorder" class="divselected">
+                            <option value="crtdesc" selected>{'最新创建'|tr:'site.course'}</option>
+							<option value="crtasc">{'最早创建'|tr:'site.course'}</option>
+							<option value="regdesc">{'报名人数多'|tr:'site.course'}</option>
+							<option value="regasc">{'报名人数少'|tr:'site.course'}</option>
+						</select>
+					</dt>
+                    <div class="c-fr">
+                        <div class="search-frame org-class-course">
+                           <input name='keyword' class="search-input" id='sc_title' type="text" value="{if(isset($search))}{$search}{/if}"  placeholder="{'搜索课程名称'|tr:'site.course'}">
+                            <button class="search-box org-t-search-btn" id="subsearch">
+                                <span class="search-icon" style="margin: 0;"></span>
+                                <div class='t-list-img clear-icon' id="t-delt-btn" {if empty($keyword)}style="display:none;"{/if}></div>
+                            </button>
+                        </div>
+                    </div>
+                </dl>
+            </div>
+			<ul class="mode1" style="display:block">
+				{if !empty($course_list)}
+				{foreach($course_list as $course)}
+				<li class="mb10">
+				{if $course->admin_status!="normal"}
+				<div class="edit-tip clearfix">
+					{if((count($course->class)) <=0)}
+					<p class="c-fl">
+						<span class="edit-icon5 c-fl mr5"></span>
+						<span class="mr20">{'该课程未完成创建'|tr:'site.course'}</span>
+					</p>
+					{else}
+					<span class="org-user-course-bg-icon2 c-fr">{'未上架'|tr:'site.course'}</span>
+					{/if}
+				</div>
+				{else}
+                <div class="edit-tip clearfix">
+                    <span class="org-user-course-bg-icon1 c-fr">{'已上架'|tr:'site.course'}</span>
+                </div>
+				{/if}
+				<div class="c-pic">
+					<div class="pic">
+						<a href="/course.info.show/{$course->course_id}" target="_blank">
+						    <img class="imgPic" src="{if !empty($course->thumb_med)}{utility_cdn::file($course->thumb_med)}{else}/assets_v2/img/course-load-img.jpg{/if}">
+                            {if $course->type_id==3}
+							<div class="taped-icon">{'线下'|tr:'LearningCenter'}</div>
+							{elseif($course->type_id==2)}
+							<div class="g-icon3">{'录播'|tr:'LearningCenter'}</div>
+							{/if}
+                        </a>
+					</div>
+					{if $course->fee_type == 0}
+					<!--<div class="g-icon1"></div> -->
+					{/if}
+					{if $course->status=="end"}
+					<div class="g-icon3"></div>
+					{/if}
+				</div>
+				<div class="c-info">
+					<p class="item fs16"><a href="/course.info.show/{$course->course_id}" target="_blank" title="{$course->title}">{$course->title}</a></p>
+					<p class="item cDarkgray">
+						{if $course->fee_type == 0}
+						<span class="cGreen fs14">{'免费'|tr:'site.course'}</span>
+						{else}
+						<span class="cRed fs14">&yen;{$course->fee->price}</span>
+						{/if}
+					    {*| {'共'|tr:'site.course'}{if(!empty($course->countsecs))}{$course->countsecs}{else}0{/if}{'章节'|tr:'site.course'}*}
+                    </p>
+					<p class="item cDarkgray">
+						<a href="/org.course.plan.{$course->course_id}" target="_blank">
+							{'开设班级'|tr:'site.course'}
+							({if(empty(end($course->class)->name))}
+								{if((count($course->class)-1) <=0)}
+									0
+								{else}
+								{count($course->class)-1}
+								{/if}
+							{else}{count($course->class)}{/if})
+						</a>
+						|
+								<a href="/user.teacher.studentlist.{$course->course_id}" target="_blank">
+								{if $course->user_total > 0}
+								{'学员'|tr:'site.course'}({$course->user_total})
+								{else}{'学员'|tr:'site.course'}({$course->user_total})
+								{/if}
+								</a>
+								|
+								<a href="/comment.manage.CommentList.{$course->course_id}" target="_blank">
+									{if isset($course->countcomment)}
+									{'评论'|tr:'course.list'}({$course->countcomment})
+									{else}
+									{'评论'|tr:'course.list'} (0)
+									{/if}
+								</a>
+								</p>
+								<p class="item cDarkgray">
+									{if(isset($course->countvv))}
+										{if $course->countvv > 0}
+											<a href="/course.info.show/{$course->course_id}" target="_blank">
+											<span class="g-icon11"></span>
+											({$course->countvv})
+											</a>
+										{else}
+											<span class="g-icon11"></span>
+											({$course->countvv})
+										{/if}
+									{else}
+										<span class="g-icon11"></span>
+										0
+									{/if}
+								</p>
+							</div>
+							<div class="c-class hidden-sm">
+								<p>
+                                    <a class="del" cid="{$course->course_id}">删除</a>
+									{if (!empty($course->class) && isset($course->is_promote)&&$course->is_promote==1 && isset($course->type_id) && $course->type_id !=3) }
+									|<a class="un-popularize cannel_promote" act="orgDelPromote" cid="{$course->course_id}">{'取消线上推广'|tr:'site.course'}</a>
+									{elseif(!empty($course->class) &&isset($course->is_promote)&&$course->is_promote==0&& $course->admin_status =='normal')}
+									|<a class="popularize promote"  cid="{$course->course_id}">{'线上推广'|tr:'site.course'}</a>
+									{/if}
+									{if (!empty($course->class) && isset($course->is_distribute)&&$course->is_distribute==1 && isset($course->type_id) && $course->type_id !=3) }
+									|<a class="delDistribute"  cid="{$course->course_id}">取消渠道分销</a>
+									{elseif(!empty($course->class) &&isset($course->is_distribute)&&$course->is_distribute==0&& $course->admin_status =='normal')}
+                                    |<a class="addDistribute"  cid="{$course->course_id}">渠道分销</a>
+									{/if}
+									{if (!empty($course->class))}
+									{if $course->admin_status!="normal"}
+									|<a class="putaway setadminstatus" adminstatus="normal" cid="{$course->course_id}">{'上架'|tr:'site.course'}</a>
+									{else}
+									|<a class="putaway setadminstatus" adminstatus="offline" cid="{$course->course_id}">{'下架'|tr:'site.course'}</a>
+									{/if}
+									{/if}
+								</p>
+							</div>
+							<div class="c-edit fs14">
+								<p>
+									<a class="org-edit clearfix" target="_blank" href="/org.course.edit.{$course->course_id}">
+										<span class="edit-icon c-fl mr5"></span>
+										<span class="c-fl">{'编辑课程'|tr:'site.course'}</span>
+									</a>
+								</p>
+								<p>
+									<a class="org-edit clearfix" target="_blank" href="/org.course.plan.{$course->course_id}">
+										<span class="edit-icon2 c-fl mr5"></span>
+										<span class="c-fl">{'班级排课'|tr:'site.course'}</span>
+									</a>
+								</p>
+								<p>
+									<a class="org-edit clearfix" target="_blank" href="/user.teacher.Statistics.{$course->course_id}">
+										<span class="edit-icon3 c-fl mr5"></span>
+										<span class="c-fl">{'学习统计'|tr:'site.course'}</span>
+									</a>
+								</p>
+                            </div>
+							</li>
+							{/foreach}
+							{else}
+							<li class="tac">
+								<div class="my-collect-no-class tac" style="padding-top:45px;">
+									 <img src="{utility_cdn::img('/assets_v2/img/platform/pet3.png')}" alt="">
+									 <p class="cGray fob">{$message|tr:'site.course'}</p>
+								</div>
+							</li>
+							{/if}
+						</ul>
+				<!--分页开始-->
+                <div class="page-list" id="pagepage"></div>
+				<!--分页结束-->
+                </div>
+			</div>
+		</div>
+	</div>
+</section>
+<section id="popularize_comment" style="display: none;">
+<div id="popularize_con" class="comment-layer form-horizontal popularize_form">
+	<input type="hidden" name="courseId" value=""/>
+	<input type="hidden" name="price" value="" />
+	<div class="form-group col-md-20">
+        <label class="col-md-5">课程名称:</label>
+        <div class="col-md-13 course-name row course_title"></div>
+    </div>
+	<div id="is_charge">
+		<li class="mt20 col-xs-20" style="padding-left:13%;">
+			<input name="is_charge" id="is_charge1" type="radio" value="0" checked />免费分销
+			<input name="is_charge" id="is_charge2" type="radio" value="1" />付费分销
+		</li>
+	</div>
+    <div class="form-group col-md-20 course_price" style="display: none;">
+        <label class="col-md-5">成本价:</label>
+		<input class="col-md-4" id="costPrice"/>
+		<label class="col-md-1">元</label>
+		<p class="ui-note help-inline pd0" id="errInfo"></p>
+	</div>
+	<div class="course_free1 col-md-20 tac" style="display: none;">
+		该课程还未上架，不能进行推广
+	</div>
+	<div class="col-md-20 tac mt20" id="ensure-btn">
+		<button class="btn mr10 promote_confirm">确认</button>
+	</div>
+</div>
+</section>
+
+<section id="distribute_comment" style="display: none;">
+	<div id="distribute_con" class="comment-layer form-horizontal popularize_form">
+		<input type="hidden" id="distribute_courseId" value=""/>
+		<input type="hidden" id="distribute_price" value="" />
+		<div class="form-group col-md-20">
+			<label class="col-md-5">课程名称:</label>
+			<div class="col-md-13 course-name row course_title"></div>
+		</div>
+		<div class="form-group col-md-20 course_price" style="display: none;">
+			<label class="col-md-5">分成比例:</label>
+			<input class="col-md-4" id="distributePrice"/>
+			<label class="col-md-1">%</label>
+			<p class="ui-note help-inline pd0" id="distributeErrInfo">请输入0-40的整数</p>
+		</div>
+		<div class="course_free1 col-md-20 tac" style="display: none;">
+			该课程还未上架，不能进行推广
+		</div>
+		<div class="col-md-20 tac mt20" id="distributeEnsure-btn">
+			<button class="btn mr10 distribute_confirm">确认</button>
+		</div>
+	</div>
+</section>
+<script>
+    $(document).ready(function() {
+		var errInfo1 = '';
+
+        addTabClass();
+        var path = window.location.href;
+        $(".divselected>option").prop("selected",false);
+        $(".divselected>option").each(function(i,item){
+            if(path.indexOf($(this).val())!==-1){
+                $(this).attr("selected","true");
+            }else{
+                $(".divselected").val("crtasc");
+            }
+        });
+		var title;
+        $(".popularize").click(function(){
+			var title = $(this).parents().parent("li").find("a").eq(1).text();
+			var price = $(this).parents().parent("li").find("span").eq(1).text();
+			var courseId = $(this).attr("cid");
+			$("input[name='courseId']").val(courseId);
+			$("input[name='price']").val(price);
+			$(".course_title").html(title);
+			$.post("/course.promote.GetCoursePromoteById",{ optionVal:courseId },function(r){
+			var str ='';
+			if(r.code==1) {
+				$(".course_free1").hide();
+				$(r.data).each(function (i, item) {
+					str = item.fee_type;
+
+				});
+				if (str == '0') {
+					$("#is_charge1").attr("checked",true);
+					$(".course_price").hide();
+					$("#ensure-btn").show();
+				} else {
+					$("#is_charge2").attr("checked",true);
+					$(".course_price").show();
+					$("#ensure-btn").show();
+					errInfo1 = $("#errInfo").html();
+				}
+			}else{
+				$(".course_price").hide();
+				$(".course_free1").show();
+				$("#ensure-btn").hide();
+			}
+			},"json");
+            layer.open({
+                type: 1,
+                closeBtn: 1,
+                area: ['430px','280px'],
+				title: '推广课程',
+                shadeClose: true,
+                content:$('#popularize_comment')
+            });
+        });
+
+		 $('.promote_confirm').click(function() {
+			var courseId   = $("input[name='courseId']").val();
+			var costPrice  = parseInt($("#costPrice").val()*100);
+			var price = $("input[name='price']").val();
+			 price = parseInt(price.substr(1)*100);
+			 var isCharge = $('#is_charge input[name="is_charge"]:checked ').val();
+			 if(isNaN(price)||price==0) {
+				 if (isCharge == 0){
+					 costPrice=0;
+				 }
+			 }
+			 if(costPrice<1 && isCharge==1){
+				 $("#errInfo").css('color','red');
+				 $("#errInfo").text("付费分销价格应大于1");
+				 return false;
+			 }else if (isNaN(costPrice)) {
+				 $("#errInfo").css('color', 'red');
+				 $("#errInfo").text("价格只能输入数字");
+				 return false;
+			 } else {
+				 $("#errInfo").css('color', '');
+				 $("#errInfo").html('');
+			 }
+			$.post("/course.promote.addPromoteCourse",{ courseId:courseId,costPrice:costPrice },function(r){
+				if(r.result['code']==0){
+					layer.closeAll();
+					layer.msg('推广成功', { icon: 1 });
+					$("#costPrice").val('');
+					$("#price").val('');
+					$("#siteid").val('');
+					$("#selectCourse").val('');
+					$("#chargeState").hide();
+					location.reload(true);
+				}
+				if(r.result['code']==-4){
+					layer.msg(r.result['msg'], { icon: 1 });
+				}
+				if(r.result['code']==-2){
+					layer.msg(r.result['msg'], { icon: 1 });
+				}
+
+			},'json');
+		})
+		//取消推广
+        $(".cannel_promote").click(function(){
+			var cid 	= $(this).attr("cid");
+			var ctitle 	= $(this).parents().parent("li").find("a").eq(1).text();
+			var act = $(this).attr("act");
+            layer.confirm("确定取消推广课程吗?", {
+                btn: ["确定","取消"], //按钮
+            }, function(){
+                $.post("/course.promote.changePromoteCourseAjax/"+act,{ cid:cid,ctitle:ctitle},function(ret){
+                    if (ret.code==0){
+                        window.location.reload();
+                        layer.msg(ctitle+'取消成功', { icon: 1 });
+                    } else {
+                        layer.msg(ctitle+'取消失败', { icon: 1 });
+                    }
+                },"json");
+
+            }, function(){
+                //取消callback
+            });
+        });
+		//线上推广弹窗
+		$(".addDistribute").click(function(){
+			var title = $(this).parents().parent("li").find("a").eq(1).text();
+			var price = $(this).parents().parent("li").find("span").eq(1).text();
+			var courseId = $(this).attr("cid");
+			$("#distribute_courseId").val(courseId);
+			$("#distribute_price").val(price);
+			$(".course_title").html(title);
+			$.post("/course.promote.GetCoursePromoteById",{ optionVal:courseId },function(r){
+				var str ='';
+				if(r.code==1) {
+					$(".course_free1").hide();
+					$(".course_price").show();
+					$("#distributeEnsure-btn").show();
+				}else{
+					$(".course_price").hide();
+					$(".course_free1").show();
+					$("#distributeEnsure-btn").hide();
+				}
+			},"json");
+			layer.open({
+				type: 1,
+				closeBtn: 1,
+				area: ['430px','280px'],
+				title: '推广课程',
+				shadeClose: true,
+				content:$('#distribute_comment')
+			});
+		});
+		$('.distribute_confirm').click(function() {
+			var courseId   = $("#distribute_courseId").val();
+			var costPrice  = parseInt($("#distributePrice").val());
+			var price = $("#distribute_price").val();
+			if (isNaN(costPrice)) {
+				$("#distributeErrInfo").css('color', 'red');
+				$("#distributeErrInfo").text("分成比例只能输入数字");
+				return false;
+			}else if(costPrice<0 || costPrice>40){
+				$("#distributeErrInfo").css('color','red');
+				$("#distributeErrInfo").text("请输入0-40的整数");
+				return false;
+			}else {
+				$("#distributeErrInfo").css('color', '');
+				$("#distributeErrInfo").html('');
+			}
+			$.post("/course.distribute.addDistribute",{ courseId:courseId,costPrice:costPrice },function(r){
+				if(r.code==0){
+					layer.closeAll();
+					layer.msg('推广成功', { icon: 1 });
+					$("#distributePrice").val('');
+					$("#distribute_price").val('');
+					$("#siteid").val('');
+					$("#selectCourse").val('');
+					$("#chargeState").hide();
+					location.reload(true);
+				}
+				if(r.result['code']==-4){
+					layer.msg(r.result['msg'], { icon: 1 });
+				}
+				if(r.result['code']==-2){
+					layer.msg(r.result['msg'], { icon: 1 });
+				}
+
+			},'json');
+		})
+		//取消线下推广
+		$(".delDistribute").click(function(){
+			var cid 	= $(this).attr("cid");
+			var ctitle 	= $(this).parents().parent("li").find("a").eq(1).text();
+			var act = $(this).attr("act");
+			layer.confirm("确定取消线下推广课程吗?", {
+				btn: ["确定","取消"], //按钮
+			}, function(){
+				$.post("/course.distribute.changeDistributeCourseAjax/"+act,{ cid:cid,ctitle:ctitle,status:0},function(ret){
+					if (ret.code==0){
+						window.location.reload();
+						layer.msg(ctitle+'取消成功', { icon: 1 });
+					} else {
+						layer.msg(ctitle+'取消失败', { icon: 1 });
+					}
+				},"json");
+
+			}, function(){
+				//取消callback
+			});
+		});
+		//
+		//删除课程
+		$(".del").click(function(){
+			var courseId = $(this).attr("cid");
+			layer.confirm('确定删除该课程', {
+			  btn: ['确定','取消'],
+			  title: ['删除课程']
+			}, function(){
+				$.post('/org.course.delcourse', { courseId:courseId }, function(r){
+					if(r.code == 0){
+						layer.msg('删除成功！');
+						window.location.reload();
+					}else{
+						layer.msg('删除失败！');
+					}
+				},'json');
+			}, function(){
+				layer.closeAll();
+			});
+		})
+        //找出黄色选项
+        function courseType(){
+            var ddDom = $("#courseType>a");
+            var ddDomlength = ddDom.length-1;
+            for (var i=0;i<=ddDomlength;i++){
+                if(ddDom.eq(i).hasClass("curr")){
+                    coursetype = ddDom.eq(i).attr('attr');
+                    return coursetype;
+                }
+            }
+        }
+        //根据选项描黄
+        function addTabClass(){
+            $("#courseType>a").removeClass("curr");
+            $("#courseType>a").each(function(i,item){
+                if($(this).attr("attr")=="{$courseType}"){
+                     $(this).addClass("curr");
+                }
+            });
+        }
+
+        $("#courseType>a").click(function(){
+            var p1 = $("#selshelf").children('option:selected').val();//这就是selected的值
+            var p2 = $("#selorder").children('option:selected').val();//这就是selected的值
+            var p3 = $(this).attr("attr");
+            var s = $("#sc_title").val();
+            if(s==""){
+                window.location.href="/user.org.course?shelf="+p1+"&orderby="+p2+"&type="+p3;//页面跳转并传参
+                }else{
+                window.location.href="/user.org.course?shelf="+p1+"&orderby="+p2+"&type="+p3+"&s="+s;//页面跳转并传参
+            }
+            return false;
+        })
+
+        $('#selshelf').change(function(){
+            var p1 = $(this).children('option:selected').val();//这就是selected的值
+            var p2 = $("#selorder").children('option:selected').val();//这就是selected的值
+            var p3 = courseType();
+            var s = $("#sc_title").val();
+            if(s==""){
+                window.location.href="/user.org.course?shelf="+p1+"&orderby="+p2+"&type="+p3;//页面跳转并传参
+                }else{
+                window.location.href="/user.org.course?shelf="+p1+"&orderby="+p2+"&type="+p3+"&s="+s;//页面跳转并传参
+            }
+        })
+        $('#selorder').change(function(){
+            var p1 = $("#selshelf").children('option:selected').val();//这就是selected的值
+            var p2 = $(this).children('option:selected').val();//这就是selected的值
+            var p3 = courseType();
+            var s = $("#sc_title").val();
+            if(s==""){
+                window.location.href="/user.org.course?shelf="+p1+"&orderby="+p2+"&type="+p3;//页面跳转并传参
+                }else{
+                window.location.href="/user.org.course?shelf="+p1+"&orderby="+p2+"&type="+p3+"&s="+s;//页面跳转并传参
+            }
+        })
+
+
+        $("#subsearch").click(function() {
+            var p1 = $("#selshelf").children('option:selected').val();//这就是selected的值
+            var p2 = $("#selorder").children('option:selected').val();//这就是selected的值
+            var p3 = courseType();
+            var s = $("#sc_title").val();
+            window.location.href="/user.org.course?shelf="+p1+"&orderby="+p2+"&type="+p3+"&s="+s;//页面跳转并传参
+            $(".t-list-img").show();
+        })
+
+        $(".t-list-img").click(function(){
+            $(this).css("display","none");
+            $("#sc_title").attr("value");
+            $("#sc_title").val("");
+            var p1 = $("#selshelf").children('option:selected').val();//这就是selected的值
+            var p2 = $("#selorder").children('option:selected').val();//这就是selected的值
+            var p3 = courseType();
+            window.location.href="/user.org.course?shelf="+p1+"&orderby="+p2+"&type="+p3;//页面跳转并传参
+        })
+    {if(!empty($list->total))}
+        page("pagepage","{$path}",{$num},{$list->page},{$list->total});
+    {/if}
+    var selorder = $("#selorder");
+    selcheck = "{$selorder}"
+    selorder.val(selcheck);
+
+    var selshelf = $("#selshelf");
+    shelfcheck = "{$shelf}"
+    selshelf.val(shelfcheck);
+	$('#is_charge input[name="is_charge"]').click(function(){
+		var isCharge = $('#is_charge input[name="is_charge"]:checked ').val();
+		if(isCharge==1){
+			$("#costPrice").val('');
+			$(".course_price").show();
+		}else{
+			$("#costPrice").val('');
+			$(".course_price").hide();
+		}
+	});
+		$("#costPrice").keyup(function(){
+			var costPrice = parseInt($(this).val());
+			var price = parseInt($("input[name=price]").val());
+			var isCharge = $('#is_charge input[name="is_charge"]:checked ').val();
+			if (isNaN(costPrice)) {
+				$("#errInfo").css('color', 'red');
+				$("#errInfo").text("价格只能输入数字");
+				return false;
+			}else if(costPrice<=0 && isCharge==1){
+				$("#errInfo").css('color','red');
+				$("#errInfo").text("付费分销价格应大于零");
+				return false;
+			}else {
+				$("#errInfo").css('color', '');
+				$("#errInfo").text('');
+			}
+
+		})
+    });
+    $(document).ready(function(){
+        var s = $("#sc_title").val();
+        if(s!=""){
+            $(".t-list-img").show();
+        }
+        $("#sc_title").blur(function(){
+        var keyin = $("#sc_title").val();
+            if(keyin==""){
+                console.log("s is"+keyin);
+                $(".t-list-img").hide();
+            }
+        })
+
+        $(".setadminstatus").click(function(){
+            var adstatus = $(this).attr("adminstatus");
+            var adcid = $(this).attr("cid");
+            console.log("adcid="+adcid+"\n");
+            console.log("adstatus="+adstatus);
+
+
+            $.post("/user.org.setadminstatusajax."+adcid,{ adminstatus:adstatus },function(r){
+                if(r.code==0){
+                    layer.msg(r.error,{ time:2000 },function(){
+                        location.reload();
+                    }
+                    );
+                    return true;
+                    }else{
+                    layer.msg(r.error);
+                    return false;
+                }
+            },"json");
+            return false;
+        })
+		/*
+        $(".classEdit").click(function(){
+            var classedit = $(this).attr("countsecs");
+            if(classedit==0){
+                layer.msg("{'请设置章节'|tr:'site.course'}");
+                return false;
+            }else{
+                return true;
+            }
+        })
+		*/
+        $(".editVideo").click(function(){
+            var videoedit = $(this).attr("countclass");
+            if(videoedit==0){
+                layer.msg("{'请至少创建一个班级'|tr:'site.course'}");
+                return false;
+            }else{
+                return true;
+            }
+        })
+		$("#goCreateCourse").click(function(){
+			$.post("/user.org.sourceurl",{  },function(r){
+
+			});
+		});
+});
+
+function optionCreate(type){
+	$.post("/user.org.openCreate",{ type:type },function(r){
+		if(r==1){
+			layer.msg("{'操作成功'|tr:'site.course'}");
+		}else{
+			layer.msg("{'操作失败'|tr:'site.course'}");
+		}
+		location.reload();
+	});
+}
+</script>
+{part "/site.main.footer"}
+</body>
+</html>

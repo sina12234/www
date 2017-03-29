@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<meta name="renderer" content="webkit">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="icon" type="image/x-icon" href="{utility_cdn::img('/assets_v2/img/platform/yunke.ico')}" />
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/js/jquery/jquery-1.11.1.min.js')}"></script>
+<script type="text/javascript" src="{utility_cdn::js('/assets_v2/layer/layer.js')}"></script>
+<link rel="stylesheet" type="text/css" href="{utility_cdn::css('/assets_v2/css/bootstrap/bootstrap.min.css')}">
+<title>{$title}</title>
+<style type="text/css">
+body{ color:#333;font:normal 12px/20px "微软雅黑";background:#f2f2f2 }
+header,section{ float:left;width:100%; }
+a:link{ color:#333; }
+a:hover,a:visited{ text-decoration:none;color:#333; }
+header img{ width:100% }
+.mt10{ margin-top:10px }
+.mt20{ margin-top:20px }
+.mt40{ margin-top:40px }
+.mt80{ margin-top:80px }
+.mb80{ margin-bottom:80px }
+.red{ color:red; }
+.select-form{ float:left;width:100%;position:relative;padding:0;margin:20px 0 80px 0 ; }
+.select-form li{ float:left;width:100%;background:#fff;line-height:48px;border-top:1px dashed #e5e5e5;border-bottom:1px dashed #e5e5e5; }
+.select-form li.noborder{ background:none;border:none;text-align:center; }
+.select-form .label{ float:left;padding:0 10px 0 0;text-align:right;font-size:16px;color:#333333 }
+.select-form .label-for{ float:right;padding:0px; }
+.select-form  input,.select-form .gray-btn{ float:left;border:none;line-height:40px;margin:4px 0;padding:0; }
+::-webkit-input-placeholder{ color:#ccc;font-size:14px; }
+:-moz-placeholder{ color:#ccc;font-size:14px; }
+::-moz-placeholder{ color:#ccc;font-size:14px; }
+:-ms-input-placeholder{ color:#ccc;font-size:14px; }
+.select-form .btn { background:#e1362a;color:#f2f2f2;border:1px solid #e1362a;float:none;margin:0 auto;font-size:16px }
+.layer-bg{ display:none;position: fixed;_position: absolute;pointer-events:auto;top: 0;left: 0;width: 100%;height: 100%;background:#000;opacity: 0.3;filter: alpha(opacity=30);z-index:10000; }
+.layer-ui{ display:none;position: fixed;_position:absolute;pointer-events:auto;top:20%;left:10%;width:80%;border:3px solid #e1362a;background:#fff;padding:5px;z-index:100000;-moz-border-radius:10px;-khtml-border-radius:10px;-webkit-border-radius:10px;-o-border-radius:10px;-ms-border-radius:10px;border-radius:10px; }
+.layer-content{ float:left;width:100%;color:#666666;line-height:30px;padding:10px;border:1px dashed #e1362a;min-height:150px;font-size:14px;-moz-border-radius:10px;-khtml-border-radius:10px;-webkit-border-radius:10px;-o-border-radius:10px;-ms-border-radius:10px;border-radius:10px; }
+.layer-colse{ position:absolute;top:3px;width:20px;height:20px;right:3px;background:url(/assets_v2/img/special/2015_12_15/red-close.png) no-repeat #fff; }
+.layer-btn { background:#e1362a;color:#f2f2f2;border:1px solid #e1362a;float:none;margin:0 auto;font-size:14px;-moz-border-radius:5px;-khtml-border-radius:5px;-webkit-border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;border-radius:5px; }
+.text-center{ text-align:center; }
+</style>
+</head>
+<body>
+<header>
+{if !empty($img)}
+<!--<img src="{utility_cdn::img('/assets_v2/img/special/2015_12_15/banner.ycb.jpg')}">-->
+<img width="100%" src="{$img}">
+{else}
+<h1 style="text-align:center">{$title}</h1>
+{/if}
+</header>
+<section class="container  mb80">
+    <div class="row">
+	<form method="post">
+        <ul class="select-form mb80 ">
+			{foreach $queryRow as $v}
+			<li class="mt20">
+			<div class="label col-sm-3 col-xs-3">{$v['display']}：</div>
+			<div class="label-for col-sm-9 col-xs-9"><input type="text" class="col-sm-10 col-xs-10" name="{$v['name']}" value="{$v['value']}" placeholder=""></div>
+			</li>
+			{/foreach}
+            <li class="mt80 noborder">
+                <button class="btn col-sm-10 col-xs-10" id="submit_btn">开始查询</button>
+            </li>
+        </ul>
+		</form>
+    </div>
+</section>
+<!--弹层-->
+<div class="layer-bg" id="tips"></div>
+<div class="layer-ui" id="layer_ui">
+    <div class="layer-content">
+{if !empty($error)}
+{$error}
+{/if}
+{*	您输入身份证或手机号不正确，请重新输入！*}
+<br />
+{$tips}
+    <p class="text-center"><button class="layer-btn col-xs-5" id="layer_btn">确定</button></p>
+    </div>
+    <span class="layer-colse" id="layer_colse"></span>
+</div>
+</body>
+</html>
+{if !empty($error)}
+<script>
+	$("#tips").show();
+	$("#layer_ui").show();
+</script>
+{/if}
+<script type="text/javascript">
+$(function() {
+    //弹出层
+    //$("#submit_btn").click(function() {
+    //    $("#tips").show();
+    //    $("#layer_ui").show();
+    //});
+    //隐藏
+    $("#layer_colse,#layer_btn").click(function() {
+        $("#tips").hide();
+        $("#layer_ui").hide();
+    });
+});
+//function isCardNo(card){
+//   // 身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
+//   var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+//   if(reg.test(card) === false)
+//   {
+//       alert("您输入身份证或手机号不正确，请重新输入！");
+//       return false;
+//   }
+//}
+//function isMob(mob){
+//    var tel = mob;
+//    var reg = /^0?1[3|4|5|7|8][0-9]\d{8}$/;
+//    if (reg.test(tel)) {
+//      //alert("号码正确~");
+//    }else{
+//      alert("您输入手机号不正确，请重新输入！");
+//    };
+//}
+</script>
+<div style="display:none">
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256969875'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/stat.php%3Fid%3D1256969875%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+</div>

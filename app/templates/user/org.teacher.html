@@ -1,0 +1,324 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>高能100 - 机构教师管理</title>
+		{part "/index.main.headeruser"}
+	</head>
+	<body>
+		<!--top-->
+		{part "/index.main.nav.user"}
+
+		<div class='count'>
+			<div class='container-fluid'>
+				<div class='row'>
+					<div class='col-sm-3 user_menu hidden-xs'>
+						<div id=''>
+							<div id='menu'>
+								{part "/user.home.menu.user"}
+
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class='col-sm-9 user_content'>
+						<div class='container-fluid'>
+							<div class='row'>
+								<div>
+									<h1 class="title">教师管理</h1>
+									{if !empty($tips)}<h3 class="text-danger">{$tips}</h3>{/if}
+								</div>
+							</div>  
+							<table class="table table-condensed">
+								<tr>
+									<th class="active">#</th>
+									<th class="success">教师姓名</td>
+									<th class="warning">手机号</td>
+									<th  title="此数字越大在明星教师页面越靠前"class="active">明星教师位置优先度</td>
+									<th class="active">科目</th>
+									<th class="active">首页显示</th>
+									<th class="info"></td>
+								</tr>
+								{if !empty($user_list)}
+								{foreach $user_list as $_teacher}
+								<tr>
+									<td >...</td>
+									<td >{$_teacher->name}</td>
+									<td >{$_teacher->mobile}</td>
+									<td >{$_teacher->sort}</td>
+									{foreach $major as $mjk=>$mjv}
+									{if($mjk == $_teacher->major)}
+									<td >{$mjv}</td>
+									{/if}
+									{/foreach}
+									<td>
+										{if($_teacher->is_star==1)}
+										是
+										{else}
+										否
+										{/if}	
+									</td>
+									<td uid="{$_teacher->user_id}" sort="{$_teacher->sort}" major="{$_teacher->major}" star="{$_teacher->is_star}">
+										<a class="remove" href="#"><i class="glyphicon glyphicon-remove"></i>删除</a>
+										<a class="edit" href="#"><i class="glyphicon glyphicon-edit"></i>修改教师位置</a>
+									</td>
+								</tr>
+								{/foreach}
+								{/if}
+							</table>
+							<button id="bt_add" type="button" class="btn btn-primary">添加教师</button>
+							<button id="bt_add_all" type="button" class="btn btn-primary">批量添加</button>
+							<script>
+								$(document).ready(function(){
+									$(".remove").click(function(){
+										if(confirm("您确定要删除这位老师么")){
+											var uid = $(this).parents("td").attr("uid");
+											$.post("/user.org.delteacherAjax","uid="+uid,function(r){
+												if(r){
+													location.reload();
+													return false;
+												}
+											},"json");
+										}
+										return false;
+									});
+									$(".edit").click(function(){
+										console.log($(this).parents("td").attr("uid"));
+										return false;
+									});
+									$("#bt_add").click(function(){
+										$("#ct_add").toggle();
+										$("#ct_edit").hide();
+										$("#ct_add_all").hide();
+									});
+									$("#bt_add_all").click(function(){
+										$("#ct_add_all").toggle();
+										$("#ct_edit").hide();
+										$("#ct_add").hide();
+									});
+									$(".edit").click(function(){
+										//	$("#ct_edit").toggle();
+										$("#ct_edit").show();
+										$("#ct_add").hide();
+										$("#ct_edit_all").hide();
+									});
+								});
+							</script>
+						</div>
+						<hr>
+						<div id="ct_add" class='container-fluid' style="display:none">
+							<form id="form" class="form-horizontal" role="form">
+								<div class="form-group red">
+									<label class="col-sm-2 control-label"></label>
+									<h3 class="error">
+										{if (!empty($error))}
+										{$error}
+										{/if}
+									</h3>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">教师姓名:</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" name="name">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">手机号:</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" name="mobile">
+									</div>
+									<span class="help-block">老师凭手机号可以登录本网站，进行授课！</span>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-offset-2 col-sm-10">
+										<button type="submit" class="btn btn-primary">增加教师</button>
+									</div>
+								</div>
+							</form>
+
+						</div>
+						<div id="ct_add_all" class='container-fluid' style="display:none">
+							<form id="form_all" class="form-horizontal" role="form">
+								<div class="form-group red">
+									<label class="col-sm-2 control-label"></label>
+									<h3 class="error">
+										{if (!empty($error))}
+										{$error}
+										{/if}
+									</h3>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">手机号:</label>
+									<div class="col-sm-4">
+										<textarea id="textarea1" class="form-control" rows="10" cols="11" name="mobile"></textarea>
+									</div>
+									<span class="help-block">批量添加时每行输入一个手机号回车结束</span>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-offset-2 col-sm-10">
+										<button type="submit" class="btn btn-primary">增加教师</button>
+									</div>
+								</div>
+							</form>
+						</div>	
+						<script>
+							$(document).ready(function(){
+								/*	var _t = 5;
+								$("#getcode").click(function(){
+										$mo = parseInt($("[name=mobile]").val());
+										if(isNaN($mo) || $mo<13000000000 || $mo>19999999999){
+											$("#error").html("手机号格式错误");
+											$("[name=mobile]").focus();return false;
+											}else{
+											$("#error").html("");
+										}
+										if($("#getcode").attr("disabled"))return;
+										$("#getcode").attr("disabled",true).val("获取验证码 (5)");
+										_(int) = setInterval(function(){
+											$("#getcode").attr("disabled",true).val("获取验证码 ("+(--_t)+")");
+											if(_t==0){
+												clearInterval(_(int));
+												$("#getcode").removeAttr("disabled").val("获取验证码");
+												_t=5;
+											}
+										},1000);
+										$.post("/user.org.addteacherCodeAjax",$("#form").serialize(),function(r){
+											if(r.error){
+												$("#error").html(r.error);
+												$("[name="+r.field+"]").focus();
+												return false;
+											}
+											if(r){
+												return false;
+											}
+										},"json");
+										return false;
+									});
+									*/
+									$("#form").submit(function(){
+										$.post("/user.org.addteacherAjax",$(this).serialize(),function(r){
+											if(r.error){
+												$(".error").html(r.error);
+												$("[name="+r.field+"]").focus();
+												return false;
+											}
+											if(r){
+												location.reload();
+												return false;
+											}
+										},"json");
+										return false;
+									});
+									$("#form_all").submit(function(){
+										$.post("/user.org.addteacherallAjax",$(this).serialize(),function(r){
+											if(r.error){
+												$(".error").html(r.error);
+												return false;
+											}
+											if(r){
+												location.reload();
+												return false;
+											}
+										},"json");
+										return false;
+									});
+								});
+							</script>
+						<div id="ct_edit" class='container-fluid' style="display:none">
+							<form id="form_edit" class="form-horizontal" role="form">
+								<input type="hidden" id="oid" class="form-control" name="oid" value="{$org_info->oid}">
+								<input type="hidden" id="uid" class="form-control" name="uid">
+								<div class="form-group red">
+									<label class="col-sm-2 control-label"></label>
+									<h3 class="error">
+										{if (!empty($error))}
+										{$error}
+										{/if}
+									</h3>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">教师位置:</label>
+									<div class="col-sm-4">
+										<input type="text" id="sort" class="form-control" name="sort" maxlength="4">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">明星教师:</label>
+									<div class="col-sm-4">
+										<select  id="star" name ="star" class="form-control">
+											<option value="0">不在首页显示</option>
+											<option value="1">在首页显示</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">设置科目:</label>
+									<div class="col-sm-4">
+										<select name="major" id="major" class="form-control">
+										{foreach($major as $mak=>$mav)}
+											<option value="{$mak}">{$mav}</option>
+										{/foreach}	
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-offset-2 col-sm-10">
+										<button type="submit" class="btn btn-primary">确定</button>
+									</div>
+								</div>
+							</form>
+						</div>
+						<script type="text/javascript">
+							$(function () {
+								$("#sort").keyup(function () {
+									//如果输入非数字，则替换为''，如果输入数字，则在每4位之后添加一个空格分隔
+									this.value = this.value.replace(/[^\d]/g, '').replace(/(\d{4})(?=\d)/g, "$1");
+								})
+							});
+							$(document).ready(function(){
+								$(".edit").click(function(){
+									var uid=$(this).parents("td").attr("uid");
+									var sort=$(this).parents("td").attr("sort");
+									var major=$(this).parents("td").attr("major");
+									var star=$(this).parents("td").attr("star");
+									console.log("major"+major);
+									console.log("star"+star);
+									$("#uid").val(uid);
+									$("#sort").val(sort);
+									$("#star").val(star);
+									$("#major").val(major);
+									return false;
+								});
+								$("#form_edit").submit(function(){
+									var sort=$("#sort").val();
+									var oid=$("#oid").val();
+									var uid=$("#uid").val();
+									var star=$("#star").val();
+									var major=$("#major").val();
+									$.post("/user.org.SetTeacherSortAjax",{ uid:uid,sort:sort,oid:oid,is_star:star,major:major },function(r){
+										if(r.error){
+											$(".error").html(r.error);
+											$("[name="+r.field+"]").focus();
+											return false;
+										}
+										if(r){
+										location.reload();
+											return false;
+										}
+									},"json");
+									return false;
+								});
+							});
+						</script>
+
+					</div>
+				</div>
+
+			</div>              
+
+
+			{part "/index.main.footer"}
+		</body>
+	</html>

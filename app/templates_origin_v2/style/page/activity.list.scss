@@ -1,0 +1,207 @@
+.activity-box{
+    padding:30px 75px; 
+    background:$main-white-color; 
+    min-height:600px;
+    margin-left:10%;
+    .tab-but-switch {
+        height:42px;
+        border:1px solid $input-border-color;
+        background:$background-color; 
+        position:relative;
+        ul{
+          overflow:hidden;
+          height:42px;  
+        }
+      li{
+        float: left;
+        font-size: 14px;
+        margin:0 15px;
+        line-height: 42px;
+        cursor: pointer;
+        width:95px;
+        height:42px;
+        text-align:center;
+        color:$text-strong-color;
+        a{
+          &.curr{
+             color:$main-theme-color;   
+          }
+          &:hover{
+             color:$main-theme-color;  
+          }
+        }  
+      }
+
+      .table-hv{
+        font-size:14px;
+        padding:0 35px;
+        float:left;
+        line-height: 42px;
+        top:0;
+        right:0;
+        .table-show{
+           z-index:1;
+           display:none;
+           width:100px;
+           text-align: center;
+           line-height:30px;
+           background:$main-white-color;
+           right:0;
+           top:40px;
+           border:1px solid $input-border-color;
+           float: left;
+           a{ 
+              width:100%;
+              color:$text-strong-color;
+              float: left;
+              padding-top: 3px;
+            &:hover{
+              color:$main-theme-color;
+            }
+          }
+        }
+        &:hover{ 
+            .table-show{ display:block; }
+        }
+      }
+    }
+
+.activity-cont-list{
+    ul{
+      display:none;
+      float: left;
+      width:100%;
+      text-align: left;  
+      h1{
+         padding-top:10px;
+         font-size:16px;
+         color:$text-strong-color;
+         font-weight: bold;
+         width:75%;
+         float: left;
+         b{
+           color:$text-orange-color; 
+         }
+         a{
+            color:$text-strong-color;
+         }
+      }
+      div.activity-cont{
+         padding-top: 10px;
+         line-height: 22px;
+         border-bottom:1px dashed $horizontal-border-color;
+         padding-bottom: 15px;
+         float: left; 
+         padding-left:0;  
+        .notice-content{
+           float: left;
+           width:75%; 
+            span.notice-bt{
+             width:100%;
+             float: left;
+             padding-right:20px;
+             color:$text-color;
+             font-size:14px;
+             word-break:break-all;
+             display:-webkit-box;
+             -webkit-line-clamp:3;
+             -moz-line-clamp:3;
+             -webkit-box-orient:vertical;
+             overflow: hidden;       
+            }
+        }
+        .notice-content-text{
+          height:64px;
+          text-overflow:ellipsis; 
+          -o-text-overflow:ellipsis; 
+          overflow: hidden; 
+        }
+        .notice-time{ 
+            color:$text-subsidiary-color;
+            font-size: 12px;
+        }
+      }
+    }
+    span.notice-icon{ 
+        width:25%;
+        float:right;
+        margin-top:10px;
+        height:110px;
+        overflow:hidden;
+        text-align:center;
+        img{
+            max-height:110px;
+        }
+    }    
+}
+
+}
+.activity-empty-cont{
+      text-align:center;
+      p{
+          font-size:14px;
+          color:$text-subsidiary-color;
+      }
+      p.cont-empty{
+          padding:215px 0 28px 0;
+      }
+}
+//适配
+@include screen(320px,760px) {
+      .img_wrapper{
+          img{
+            width:100%;
+          }
+      }
+     .activity-box{
+        padding:0;
+        margin:0;
+       .tab-but-switch{
+          li{
+              padding:0;
+              text-align:left;
+              margin:0;
+          }
+       }
+       .activity-cont-list{
+          span.notice-icon{
+              img{
+                  width:100%;
+                  height:60px;
+              }
+          }
+          ul{
+             h1{
+                padding-top:0;
+                b{
+                  font-size:14px;
+                }
+                a{
+                  font-size:14px;
+                }
+             }
+          }
+          span.notice-icon{
+              margin-top:5px;
+          }
+       }
+       .activity-cont-list{
+          ul{
+              div.activity-cont{
+                padding-bottom:5px;
+               .notice-content{
+                  span.notice-bt{
+                    -webkit-line-clamp: 2;
+                  }
+               }  
+             }  
+          }
+       }
+     } 
+
+}
+@include screen(769px,1024px) {
+    .activity-box{
+        margin-left:0;
+    }
+}

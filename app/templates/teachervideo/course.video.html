@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>云课 - 专业的在线学习平台</title>
+{part "/index.main.header"}
+</head>
+<script src="{utility_cdn::js('/assets_v2/js/player.js')}"></script>
+<script src="{utility_cdn::js('/assets_v2/js/HTML5Player.js')}"></script>
+<script src="{utility_cdn::js('/assets_v2/js/swfobject.js')}"></script>
+<body style="overflow: hidden;">
+<div class="col-xs-20 pd0"  id="playerContent">
+	<div id="player">视频播放区</div>
+</div>
+<script>
+$(document).ready(function(){
+	var planId = location.hash.substring(1);
+	$(window).resize(function(){
+		var w = $("#playerContent").innerWidth();
+		var h = parseInt(w/16*9);
+		var box_h=$(window).height();
+		if(h>box_h){
+			h=box_h;
+		}
+		$("#playerContent").height(h);
+	}).trigger("resize");
+
+	$("#fullscreen").click(function(){
+		FullScreen.toggle();
+	});
+
+	var flashvars = {
+		auto_play:"true",
+		stream_type:"高清",
+		fullscreen_func:"FullScreen.toggle",
+		error_func:"Player.error",
+		plan_id:""+planId+"",
+	};
+		var params = {
+			menu: "true",
+			scale: "noScale",
+			allowFullscreen: "true",
+			allowScriptAccess: "always",
+			bgcolor: "",
+			wmode:"opaque",
+
+		};
+		var attributes = {
+			id:"player",
+			name:"player"
+		};
+		swfobject.embedSWF(
+			"{utility_cdn::swf('/assets/swf/Player.swf')}",
+			"player", "100%", "100%", "13.0.0",
+			"{utility_cdn::swf('/assets/swf/expressInstall.swf')}",
+			flashvars, params, attributes,function(r){
+				if(r.success==false){
+					H5Player.init(planId,"");
+				}
+		});
+});
+</script>
+</body>
+</html>

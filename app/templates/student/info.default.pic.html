@@ -1,0 +1,141 @@
+<html>
+<head>
+<title>系统头像 - {part '/site.main.orgname'} - 云课 - 专业的在线学习平台</title>
+<meta name="title" content="高能100 - 专业的K12在线教育平台 在线直播">
+<meta name="keywords" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线 k12 小学数学 初中数学">
+<meta name="description" content="高能100 - 专业的K12在线教育平台 高能100 - 专业的K12在线教育平台 在线直播">
+{part "/site.main.header"}
+<style>
+.photoDefaultLi li .sel{ border:2px solid red; }
+</style>
+</head>
+<body>
+{part "/site.main.nav3"}
+<!-- mob nav -->
+<div class="g-nav hidden-lg hidden-md">
+	<ul class="swiper-wrapper" id="mob-nav">
+		<li class="swiper-slide"><a href="/student.main.infobase">基础资料</a></li>
+		<li class="swiper-slide"><a href="/student.main.uploadPic/1" class="active">修改头像</a></li>
+		<li class="swiper-slide"><a href="/student.main.address">修改地址</a></li>
+		<li class="swiper-slide"><a href="/student.security.password">安全设置</a></li>
+	</ul>
+</div>
+<section class="org-section">
+	<div class="container">
+    	<div class="row">
+        	{part "/user.main.menu.infouploadpic"}
+        	<div class="right-main col-md-16 col-xs-20">
+			<div class="tab-main">
+				<div class="tab-hd">
+                    <a class="tab-hd-opt" href="/student.main.uploadPic/1">{'自定义头像'|tr:'site.user'}</a>
+                    <a class="tab-hd-opt curr" href="/student.main.uploadPic/2">{'系统头像'|tr:'site.user'}</a>
+                </div>
+            </div>
+			<div class="col-sm-12 mt20">
+			    <input name="big" type="hidden" value="">
+			    <input name="med" type="hidden" value="">
+			    <input name="small" type="hidden" value="">
+			    <div class="col-lg-20 col-md-20 row">
+			      <ul class="row photoDefaultLi">
+			        {if !empty($pics)}
+			        {foreach $pics as $pic}
+			        <li class="col-sm-4">
+			            <img class="de-pic"  med="{$pic->med}" big="{$pic->big}" bigurl="{utility_cdn::file($pic->big)}" small="{$pic->small}" src="{utility_cdn::file($pic->med)}" />
+			        </li>
+			        {/foreach}
+			        {/if}
+			      </ul>
+			    </div>
+			</div>
+			<div class="col-sm-8">
+			    <p class="fs16 mt20">{'预览'|tr:'site.user'}：</p>
+			    <p class="cYellow mt10">{'您上传的头像会自动生成两种尺寸，注意清晰度'|tr:'site.user'}</p>
+			    <ul class="photoView mt20">
+			      <li class="c-fl mr10">
+			      <img id="view_big" src="{$userinfo->avatar->large}" width="128" height="128"  alt=""/>
+			      <p class="tac mt10 cGray hd-lh30">128*128{'像素'|tr:'site.user'}</p></li>
+			      <li class="c-fl"><img id="view_med" src="{$userinfo->avatar->medium}" width="68" height="68"  alt=""/><p class="tac mt10 cGray hd-lh30">68*68{'像素'|tr:'site.user'}</p></li>
+			    </ul>
+			    <div class="clear"></div>
+			    <p class="mt20 clear">{'我使用过的头像'|tr:'site.user'}：</p>
+			    <ul class="mt15">
+			    {if(!empty($user_thumb))}
+			    {foreach($user_thumb as $k=>$to)}
+			      <li {if($k>0)}class="c-fl ml10"{else} class="c-fl ml10"{/if}>
+			      <img class="his-pic" big="{$to->thumb_big}"  med="{$to->thumb_med}" small="{$to->thumb_small}" bigurl="{utility_cdn::file($to->thumb_big)}" medurl="{utility_cdn::file($to->thumb_med)}" src="{utility_cdn::file($to->thumb_small)}" width="30" height="30"  alt=""/></li>
+			    {/foreach}
+			    {/if}
+			    </ul>
+			    <div class="clear"></div>
+			    <div class="mt30 clear">
+			    	<button id="def_save"  class="btn col-sm-6 col-xs-6 mt20">{'保存头像'|tr:'site.user'}</button>
+			    </div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$("#login_form").submit(function(){
+    if ($("#user_name").val()=='' || $("#user_name").val()=="手机号") {
+			$(".x_error").html("请输入手机号");
+			return false;
+	} else if ($("#x_pass").val()=='' || $("#x_pass").val()=="密码") {
+		$(".x_error").html("帐号或密码错误");
+		return false;
+	}else{
+		return true;
+	};
+	parent.layer.close(index);
+})
+
+$(function(){
+    $('.de-pic').click(function(){
+		var med_url = $(this).attr('src');
+        var big_url = $(this).attr('bigurl');
+		$(this).parents('.photoDefaultLi').find('img').removeClass('sel');
+		$(this).addClass('sel');
+        $('#view_big').attr('src', big_url);
+		$('#view_med').attr('src', med_url);
+		$('input[name=big]').val($(this).attr('big'));
+        $('input[name=med]').val($(this).attr('med'));
+		$('input[name=small]').val($(this).attr('small'));
+	});
+
+	$('.his-pic').click(function(){
+		var med_url = $(this).attr('medurl');
+        var big_url = $(this).attr('bigurl');
+		$('#view_big').attr('src', big_url);
+		$('#view_med').attr('src', med_url);
+        $('input[name=big]').val($(this).attr('big'));
+		$('input[name=med]').val($(this).attr('med'));
+		$('input[name=small]').val($(this).attr('small'));
+    });
+	$('#def_save').click(function(){
+		var big = $('input[name=big]').val();
+		var small = $('input[name=small]').val();
+		var med = $('input[name=med]').val();
+        if( !big ){
+			layer.msg("{'请选择头像图片'|tr:'site.user'}");
+			return;
+        }
+		$.ajax({
+			type:'post',
+            url:'/student.main.defaultPicAjax',
+			data:{ big:big,small:small,med:med },
+			dataType:'json',
+			success:function(data){
+                if(data.result.code == 0){
+                    layer.msg("{'保存成功'|tr:'site.user'}");
+					window.parent.location.reload();
+				} else {
+                    layer.msg(data.result.msg);
+			    }
+			}
+		});
+	});
+});
+</script>
+</section>
+{part "/site.main.footer"}
+</body>
+</html>

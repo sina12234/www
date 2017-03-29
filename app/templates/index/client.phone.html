@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>移动端引导页</title>
+    <meta name="title" content="">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
+<style>
+    body{ padding: 0;margin: 0;}
+    img{ width: 100%; }
+    .iphBox{ width: 100%;height: 100%; overflow: hidden;position: relative; }
+    .ipoMain{ position: absolute; top: 0; width: 100%;text-align: center;}
+    .ipoMain .logo{ max-width: 27.5%; margin-top: 25%;}
+    .ipoMain p{ font:normal 16px/20px "Microsoft YaHei"; color: #fff; margin-top: 10px; }
+    .ipoMain .edi{ margin-top: 8%;}
+    .ipoMain .edi img{ max-width: 41.5%;}
+    #mask{ background: #000;opacity: 0.6;width: 100%;height: 100%; position: fixed;left: 0;top: 0;}
+    .guide{ position: fixed; top: 5%; right: 12%;}
+    .guide img{ max-width: 150px;}
+
+
+
+</style>
+</head>
+
+<body >
+    <div class="iphBox">
+        <img src="{utility_cdn::img('/assets_v2/img/iph_pic.jpg')}">
+        <div class="ipoMain">
+            <img class="logo" src="{utility_cdn::img('/assets_v2/img/ipo_logo.png')}"  alt="logo"/>
+            <div class="edi" >
+                <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.yunke.android" class="android"> <img src="{utility_cdn::img('/assets_v2/img/android.png')}"></a><a href=""></a>
+            </div>
+            <p>iOS版暂不支持下载</p>
+        </div>
+    </div>
+<!--蒙版-->
+<!--
+<div id="mask"></div>
+<div class="guide"><img src="{utility_cdn::img('/assets_v2/img/yindao.png')}"/></div>
+-->
+
+<script>
+    window.onload=function(){
+        var w_h=document.body.clientHeight  ;
+        var maskId=document.getElementById("mask");
+        maskId.style.height=w_h+'px';
+    };
+  //终端判断
+    var u = navigator.userAgent;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    
+
+</script>
+</body>
+</html>

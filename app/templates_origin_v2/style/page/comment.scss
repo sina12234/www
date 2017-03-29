@@ -1,0 +1,102 @@
+//评论
+/*pinglun*/
+#score_comment{
+	display:none;
+	.comment-layer{
+		float:left;
+		padding:20px;
+		background:#fff;
+		height:245px;
+		overflow-y:auto;
+		.rate{
+			float:left;
+			padding:20px 0 0;
+			text-align:center;
+			border-right:3px solid #ccc;
+			strong{
+				font:400 40px/20px arial;
+				color:#000;
+			}
+		}
+		.percent{
+			span{
+				float:left;
+				width:21px;
+				height:21px;
+				background:url(/assets_v2/img/star.png) -4px -3px no-repeat;
+				cursor:pointer;
+				&.sel{
+					float:left;
+					background:url(/assets_v2/img/star.png) -4px -33px no-repeat;
+				}
+			}
+		}
+		.comment-c{
+			float:left;
+			border:1px solid #ccc;
+			padding:10px 0;
+		}
+		textarea{
+			height:100px;
+		}
+	}
+	.percent{
+		float:left;
+		padding:0 10px;
+		dl{
+			float:left;
+			padding:0 0 10px 0;
+			width:100%;
+			overflow:hidden;
+			zoom:1;
+		}
+		dt{
+			float:left;
+			width:120px;
+			text-align:right;
+		}
+		dd{
+			float:left;
+			color:#ff7800;
+		}
+	}
+	.text-num{
+		position:absolute;
+		bottom:5px;
+		right:20px;
+	}
+	.comment-layer{
+		.comment-btn{
+			padding:0;
+			text-align:center;
+			padding-top:10px;
+		}
+		button{
+			width:75px;
+			height:25px;
+			line-height:20px;
+			margin:0 10px;
+			background:#ffa819;
+			border:none;
+			color:#fff;
+		}
+	}
+}
+#course_sign_add{
+	top:38%;
+	left:40%;
+}
+.i-comment{
+	 .percent{
+	 	span{
+	 		float:left;
+	 		width:21px;
+	 		height:21px;
+	 		background:url(../img/star.png) -4px -3px no-repeat;
+	 		&.sel{
+	 			float:left;
+	 			background:url(../img/star.png) -4px -33px no-repeat;
+	 		}
+	 	}
+	 }
+}
